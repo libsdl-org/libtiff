@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.6 2004-08-25 18:34:55 dron Exp $
+/* $Id: bmp2tiff.c,v 1.7 2004-09-03 07:59:54 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -35,6 +35,10 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tiffio.h"
 
@@ -725,3 +729,5 @@ usage(void)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);
 }
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
