@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.10 2004-09-03 07:53:29 dron Exp $ */
+/* $Id: ras2tiff.c,v 1.11 2004-09-21 12:37:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -236,7 +236,7 @@ processCompressOptions(char* opt)
 		compression = COMPRESSION_PACKBITS;
 	else if (strneq(opt, "jpeg", 4)) {
 		char* cp = strchr(opt, ':');
-		if (cp && isdigit(cp[1]))
+		if (cp && isdigit((int)cp[1]))
 			quality = atoi(cp+1);
 		if (cp && strchr(cp, 'r'))
 			jpegcolormode = JPEGCOLORMODE_RAW;
