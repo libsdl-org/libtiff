@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/Makefile,v 1.6 2000-03-29 04:35:28 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/Makefile,v 1.7 2000-04-04 14:43:35 mwelles Exp $
 #
 # Tag Image File Format Library
 #
@@ -29,7 +29,7 @@ SRCDIR	= ../libtiff
 
 #
 # VERSION:	v3.5.5
-# DATE:		Tue Mar 28 23:28:13 EST 2000
+# DATE:		Tue Mar 28 23:36:39 EST 2000
 # TARGET:	i586-unknown-linux
 # CCOMPILER:	/usr/bin/gcc
 #
