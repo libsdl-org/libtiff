@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.12 2004-04-20 18:24:02 dron Exp $ */
+/* $Id: tif_dir.h,v 1.13 2004-06-05 08:09:28 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -249,10 +249,12 @@ extern  const TIFFFieldInfo* _TIFFFindOrRegisterFieldInfo( TIFF *tif,
 extern  TIFFFieldInfo* _TIFFCreateAnonFieldInfo( TIFF *tif, ttag_t tag,
                                                  TIFFDataType dt );
 
-#define _TIFFMergeFieldInfo TIFFMergeFieldInfo
-#define _TIFFFindFieldInfo  TIFFFindFieldInfo
-#define _TIFFFieldWithTag   TIFFFieldWithTag
-    
+#define _TIFFMergeFieldInfo	    TIFFMergeFieldInfo
+#define _TIFFFindFieldInfo	    TIFFFindFieldInfo
+#define _TIFFFindFieldInfoByName    TIFFFindFieldInfoByName
+#define _TIFFFieldWithTag	    TIFFFieldWithTag
+#define _TIFFFieldWithName	    TIFFFieldWithName
+
 #if defined(__cplusplus)
 }
 #endif

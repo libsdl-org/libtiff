@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.31 2004-05-20 19:15:54 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.32 2004-06-05 08:09:28 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -457,7 +457,10 @@ typedef struct _TIFFTagValue {
 
 extern	void TIFFMergeFieldInfo(TIFF*, const TIFFFieldInfo[], int);
 extern	const TIFFFieldInfo* TIFFFindFieldInfo(TIFF*, ttag_t, TIFFDataType);
+extern  const TIFFFieldInfo* TIFFFindFieldInfoByName(TIFF* , const char *,
+						     TIFFDataType);
 extern	const TIFFFieldInfo* TIFFFieldWithTag(TIFF*, ttag_t);
+extern	const TIFFFieldInfo* TIFFFieldWithName(TIFF*, const char *);
 
 typedef	int (*TIFFVSetMethod)(TIFF*, ttag_t, va_list);
 typedef	int (*TIFFVGetMethod)(TIFF*, ttag_t, va_list);
