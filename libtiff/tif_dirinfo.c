@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.19 2002-08-22 18:31:40 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.20 2002-09-12 12:50:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -381,7 +381,7 @@ TIFFDataWidth(TIFFDataType type)
 	case 12: /* TIFF_DOUBLE */
 		return 8;
 	default:
-		return 1; /* will return safe value for unknown sizes */
+		return 1; /* will return safe value for unknown types */
 	}
 }
 
