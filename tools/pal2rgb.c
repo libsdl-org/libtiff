@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/pal2rgb.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/pal2rgb.c,v 1.4 2003-03-12 14:05:05 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -380,6 +380,7 @@ usage(void)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);

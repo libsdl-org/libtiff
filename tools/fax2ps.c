@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.6 2002-12-19 23:06:18 dron Exp $" */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.7 2003-03-12 14:05:05 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -425,6 +425,7 @@ usage(int code)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(code);

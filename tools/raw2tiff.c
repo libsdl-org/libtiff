@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.3 2003-02-04 08:51:38 dron Exp $
+/* $Id: raw2tiff.c,v 1.4 2003-03-12 14:05:06 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -378,6 +378,7 @@ usage(void)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/thumbnail.c,v 1.2 2001-05-13 14:49:27 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/thumbnail.c,v 1.3 2003-03-12 14:05:06 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -566,6 +566,7 @@ usage(void)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);

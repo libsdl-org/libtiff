@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/ppm2tiff.c,v 1.4 2003-02-06 22:05:47 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/ppm2tiff.c,v 1.5 2003-03-12 14:05:06 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -241,6 +241,7 @@ usage(void)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffmedian.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffmedian.c,v 1.4 2003-03-12 14:05:06 dron Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -332,6 +332,7 @@ usage(void)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.8 2002-08-18 17:29:17 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.9 2003-03-12 14:05:06 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -402,6 +402,7 @@ usage(void)
 	int i;
 
 	setbuf(stderr, buf);
+        fprintf(stderr, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);
