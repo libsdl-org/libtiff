@@ -1,4 +1,4 @@
-/* $Id: ascii_tag.c,v 1.2 2004-09-10 12:59:57 dron Exp $ */
+/* $Id: ascii_tag.c,v 1.3 2004-09-10 13:08:03 dron Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@remotesensing.org>
@@ -32,6 +32,7 @@
 #include "tif_config.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #ifdef HAVE_UNISTD_H 
 # include <unistd.h> 
@@ -107,8 +108,8 @@ main(int argc, char **argv)
 	for (i = 0; i < NTAGS; i++) {
 		if (!TIFFSetField(tif, ascii_tags[i].tag,
 				  ascii_tags[i].value)) {
-			fprintf (stderr, "Can't set tag %d.\n",
-				 ascii_tags[i].tag);
+			fprintf(stderr, "Can't set tag %d.\n",
+				(int)ascii_tags[i].tag);
 			goto failure;
 		}
 	}
@@ -141,8 +142,8 @@ main(int argc, char **argv)
 	for (i = 0; i < NTAGS; i++) {
 		if (!TIFFGetField(tif, ascii_tags[i].tag, &value)
 		    && !strcmp(value, ascii_tags[i].value)) {
-			fprintf (stderr, "Can't get tag %d.\n",
-				 ascii_tags[i].tag);
+			fprintf(stderr, "Can't get tag %d.\n",
+				(int)ascii_tags[i].tag);
 			goto failure;
 		}
 	}
