@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/pal2rgb.c,v 1.4 2003-03-12 14:05:05 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/pal2rgb.c,v 1.5 2004-06-04 13:18:25 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -180,9 +180,9 @@ main(int argc, char* argv[])
 				goto done;
 			pp = obuf;
 			for (x = 0; x < imagewidth; x++) {
-				*pp++ = rmap[ibuf[x]];
-				*pp++ = gmap[ibuf[x]];
-				*pp++ = bmap[ibuf[x]];
+				*pp++ = (unsigned char) rmap[ibuf[x]];
+				*pp++ = (unsigned char) gmap[ibuf[x]];
+				*pp++ = (unsigned char) bmap[ibuf[x]];
 			}
 			if (!TIFFWriteScanline(out, obuf, row, 0))
 				goto done;
@@ -193,15 +193,15 @@ main(int argc, char* argv[])
 			if (!TIFFReadScanline(in, ibuf, row, 0))
 				goto done;
 			for (pp = obuf, x = 0; x < imagewidth; x++)
-				*pp++ = rmap[ibuf[x]];
+				*pp++ = (unsigned char) rmap[ibuf[x]];
 			if (!TIFFWriteScanline(out, obuf, row, 0))
 				goto done;
 			for (pp = obuf, x = 0; x < imagewidth; x++)
-				*pp++ = gmap[ibuf[x]];
+				*pp++ = (unsigned char) gmap[ibuf[x]];
 			if (!TIFFWriteScanline(out, obuf, row, 0))
 				goto done;
 			for (pp = obuf, x = 0; x < imagewidth; x++)
-				*pp++ = bmap[ibuf[x]];
+				*pp++ = (unsigned char) bmap[ibuf[x]];
 			if (!TIFFWriteScanline(out, obuf, row, 0))
 				goto done;
 		}

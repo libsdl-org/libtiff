@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.10 2004-06-04 11:50:09 dron Exp $" */
+/* $Id: fax2ps.c,v 1.11 2004-06-04 13:18:25 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -333,9 +333,9 @@ main(int argc, char** argv)
 		usage(-1);
 	    }
 	    if (pages)
-		pages = (tdir_t*) realloc((char*)pages, (npages+1)*sizeof(int));
+		pages = (tdir_t*) realloc((char*)pages, (npages+1)*sizeof(tdir_t));
 	    else
-		pages = (tdir_t*) malloc(sizeof(int));
+		pages = (tdir_t*) malloc(sizeof(tdir_t));
 	    pages[npages++] = pageNumber;
 	    break;
 	case 'w':
