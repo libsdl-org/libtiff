@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFRGBAImage.3t,v 1.1 1999-07-27 21:50:27 mike Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFRGBAImage.3t,v 1.2 1999-08-16 17:29:55 warmerda Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -272,4 +272,6 @@ not handled correctly.
 .SH "SEE ALSO"
 .IR libtiff (3T),
 .IR TIFFOpen (3T),
-.IR TIFFReadRGBAImage (3T)
+.IR TIFFReadRGBAImage (3T),
+.IR TIFFReadRGBAStrip (3T),
+.IR TIFFReadRGBATile (3T)
