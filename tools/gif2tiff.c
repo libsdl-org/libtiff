@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.7 2004-09-02 14:33:55 dron Exp $ */
+/* $Id: gif2tiff.c,v 1.8 2004-09-02 14:36:33 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -33,12 +33,14 @@
  *	if input is 640 350 pixel aspect is probably 1.37
  *
  */
+#include "tif_config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 

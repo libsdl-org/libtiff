@@ -1,4 +1,4 @@
-/* "$Id: mkg3states.c,v 1.7 2004-09-02 14:27:49 dron Exp $ */
+/* "$Id: mkg3states.c,v 1.8 2004-09-02 14:38:34 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 
