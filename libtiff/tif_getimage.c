@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.19 2002-03-26 10:35:27 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.20 2002-04-08 15:36:03 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -55,7 +55,7 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
     uint16 photometric;
     int colorchannels;
 
-    if (!(*tif->tif_setupdecode)(tif)) {
+    if (!tif->tif_decodestatus) {
 	sprintf(emsg, "Sorry, requested compression method is not configured");
 	return (0);
     }
