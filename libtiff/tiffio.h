@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.33 2004-06-06 10:18:55 dron Exp $ */
+/* $Id: tiffio.h,v 1.34 2004-07-11 20:09:07 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -93,7 +93,7 @@ DECLARE_HANDLE(thandle_t);	/* Win32 file handle */
 typedef	HFILE thandle_t;	/* client data handle */
 #endif
 #else
-typedef	int thandle_t;		/* client data handle */
+typedef	void* thandle_t;	/* client data handle */
 #endif
 
 #ifndef NULL
