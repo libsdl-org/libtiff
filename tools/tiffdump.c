@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdump.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdump.c,v 1.2 2002-01-16 18:04:57 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -446,6 +446,7 @@ static	struct tagname {
     { TIFFTAG_JPEGRESTARTINTERVAL,"JPEGRestartInterval" },
     { TIFFTAG_JPEGLOSSLESSPREDICTORS,"JPEGLosslessPredictors" },
     { TIFFTAG_JPEGPOINTTRANSFORM,"JPEGPointTransform" },
+    { TIFFTAG_JPEGTABLES,       "JPEGTables" },
     { TIFFTAG_JPEGQTABLES,	"JPEGQTables" },
     { TIFFTAG_JPEGDCTABLES,	"JPEGDCTables" },
     { TIFFTAG_JPEGACTABLES,	"JPEGACTables" },
