@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.27 1996/04/22 22:03:26 sam Exp $ */
+/* $Header: /d1/sam/tiff/tools/RCS/gif2tiff.c,v 1.29 1997/08/29 21:46:46 sam Exp $ */
 
 /*
- * Copyright (c) 1990-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1990-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -450,8 +450,8 @@ void
 rasterize(int interleaved, char* mode)
 {
     register long row;
-    register unsigned char *rr;
     unsigned char *newras;
+    unsigned char *ras;
     TIFF *tif;
     tstrip_t strip;
     tsize_t stripsize;
@@ -461,13 +461,12 @@ rasterize(int interleaved, char* mode)
         return;
     }
 #define DRAWSEGMENT(offset, step) {			\
-	register unsigned char* ras = raster;		\
         for (row = offset; row < height; row += step) {	\
-            rr = newras + row*width;			\
-            _TIFFmemcpy(rr, ras, width);		\
+            _TIFFmemcpy(newras + row*width, ras, width);\
             ras += width;                            	\
         }						\
     }
+    ras = raster;
     if (interleaved) {
         DRAWSEGMENT(0, 8);
         DRAWSEGMENT(4, 8);

@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/RCS/TODO,v 1.4 1996/02/09 22:09:00 sam Exp $
+#	$Header: /d1/sam/tiff/RCS/TODO,v 1.4 1996/02/09 22:09:00 sam Exp $
 
 o tiffcmp read data by strip/tile instead of scanline
 o YCbCr sampling support

@@ -1,12 +1,12 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.58 1997/02/21 01:20:19 sam Exp $
+#	$Header: /d1/sam/tiff/RCS/Makefile.in,v 1.62 1997/08/29 23:24:06 sam Exp $
 #
 # @WARNING@
 #
 # Tag Image File Format Library
 #
-# Copyright (c) 1988-1996 Sam Leffler
-# Copyright (c) 1991-1996 Silicon Graphics, Inc.
+# Copyright (c) 1988-1997 Sam Leffler
+# Copyright (c) 1991-1997 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided
@@ -131,6 +131,7 @@ TIFFFILES=\
 	    libtiff/tiffconf.h			\
 	    libtiff/tiffio.h			\
 	    libtiff/tiffiop.h			\
+	    libtiff/uvcode.h			\
 	    libtiff/mkg3states.c		\
 	    libtiff/mkspans.c			\
 	    libtiff/mkversion.c			\
@@ -153,6 +154,7 @@ TIFFFILES=\
 	    libtiff/tif_flush.c			\
 	    libtiff/tif_getimage.c		\
 	    libtiff/tif_jpeg.c			\
+	    libtiff/tif_luv.c			\
 	    libtiff/tif_lzw.c			\
 	    libtiff/tif_msdos.c			\
 	    libtiff/tif_next.c			\
@@ -315,22 +317,69 @@ CONTRIBFILES=\
 		contrib/dbs/xtiff/patchlevel.h	\
 		contrib/dbs/xtiff/xtiff.c	\
 		contrib/dbs/xtiff/xtifficon.h	\
-	contrib/ras/ras2tif.c			\
-	contrib/ras/tif2ras.c			\
+	contrib/ras/README			\
+	    contrib/ras/ras2tif.c		\
+	    contrib/ras/tif2ras.c		\
 	contrib/vms/libtiff/makevms.com		\
 	    contrib/vms/libtiff/tiff.opt	\
 	    contrib/vms/libtiff/tiffshraxp.opt	\
 	    contrib/vms/libtiff/tiffshrvax.opt	\
 	    contrib/vms/libtiff/tiffvec.mar	\
 	    contrib/vms/tools/makevms.com	\
-	contrib/tags				\
-	contrib/mac-mpw				\
-	contrib/acorn				\
-	contrib/win32				\
-	contrib/win95				\
-	contrib/winnt				\
-	contrib/mac-cw				\
-	contrib/dosdjgpp			\
+	contrib/tags/README			\
+	    contrib/tags/Makefile.gcc		\
+	    contrib/tags/Makefile.mpw		\
+	    contrib/tags/listtif.c		\
+	    contrib/tags/maketif.c		\
+	    contrib/tags/xtif_dir.c		\
+	    contrib/tags/xtiffio.h		\
+	    contrib/tags/xtiffiop.h		\
+	contrib/mac-mpw/README			\
+	    contrib/mac-mpw/BUILD.mpw		\
+	    contrib/mac-mpw/libtiff.make	\
+	    contrib/mac-mpw/mactrans.c		\
+	    contrib/mac-mpw/port.make		\
+	    contrib/mac-mpw/tools.make		\
+	    contrib/mac-mpw/top.make		\
+	contrib/acorn/ReadMe			\
+	    contrib/acorn/Makefile		\
+	    contrib/acorn/SetVars		\
+	    contrib/acorn/cleanlib		\
+	    contrib/acorn/convert		\
+	    contrib/acorn/install		\
+	contrib/win32/README			\
+	    contrib/win32/dllshell.c		\
+	    contrib/win32/libtiff.def		\
+	contrib/win95/README			\
+	    contrib/win95/Makefile.w95		\
+	    contrib/win95/tiff2dib.c		\
+	contrib/winnt/README			\
+	    contrib/winnt/README.console	\
+	    contrib/winnt/fax3sm.c		\
+	    contrib/winnt/libtiff.def		\
+	    contrib/winnt/libtiff.mak		\
+	    contrib/winnt/libtiff.vcp		\
+	    contrib/winnt/version.h		\
+	contrib/mac-cw/README			\
+	    contrib/mac-cw/Makefile.script	\
+	    contrib/mac-cw/mac_main.c		\
+	    contrib/mac-cw/mac_main.h		\
+	    contrib/mac-cw/metrowerks.note	\
+	    contrib/mac-cw/mkg3_main.c		\
+	    contrib/mac-cw/version.h		\
+	contrib/dosdjgpp/README			\
+	    contrib/dosdjgpp/Makefile.lib	\
+	    contrib/dosdjgpp/Makefile.tools	\
+	    contrib/dosdjgpp/Makefile.top	\
+	    contrib/dosdjgpp/conf.bat		\
+	    contrib/dosdjgpp/port.h		\
+	contrib/mfs/README			\
+	    contrib/mfs/mfs_file.c		\
+	contrib/pds/README			\
+	    contrib/pds/tif_imageiter.c		\
+	    contrib/pds/tif_imageiter.h		\
+	    contrib/pds/tif_pdsdirread.c	\
+	    contrib/pds/tif_pdsdirwrite.c	\
 	${NULL}
 DISTFILES=\
 	${TIFFFILES}				\

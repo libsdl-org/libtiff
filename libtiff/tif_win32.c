@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_win32.c,v 1.3 1996/01/10 19:33:18 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_win32.c,v 1.6 1997/08/29 21:46:04 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -83,43 +83,39 @@ _tiffSizeProc(thandle_t fd)
 	return ((toff_t)GetFileSize(fd, NULL));
 }
 
-/*
- * Because Windows uses both a handle and a pointer for file mapping, and only
- * the pointer is returned, the handle must be saved for later use (by the
- * unmap function).  To do this, the tiff structure has an extra member,
- * pv_map_handle, which is contiguous with (4 bytes or one 32-bit word above)
- * the tif_base parameter which is passed as *pbase to the map function.
- * pv_map_handle is then accessed indirectly (and perhaps somewhat unsafely)
- * as an offset from the *pbase parameter by _tiffMapProc.  The handle thus
- * created and saved is destroyed by _tiffUnmapProc, which does not need size
- * in Win32 but receives the map handle value in the size parameter instead.
- */
-
 #pragma argsused
 static int
 _tiffDummyMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 {
-	return(0);
+	return (0);
 }
 
+/*
+ * From "Hermann Josef Hill" <lhill@rhein-zeitung.de>:
+ *
+ * Windows uses both a handle and a pointer for file mapping,
+ * but according to the SDK documentation and Richter's book
+ * "Advanced Windows Programming" it is safe to free the handle
+ * after obtaining the file mapping pointer
+ *
+ * This removes a nasty OS dependency and cures a problem
+ * with Visual C++ 5.0
+ */
 static int
 _tiffMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 {
 	toff_t size;
-	HANDLE *phMapFile;
+	HANDLE hMapFile;
+
 	if ((size = _tiffSizeProc(fd)) == (toff_t)-1)
-		return(0);
-	phMapFile = (HANDLE *)(((BYTE *)pbase) + 4);
-	if ((*phMapFile = CreateFileMapping(fd, NULL, PAGE_READONLY, 0, size, NULL))
-			== NULL)
-		return(0);
-	if ((*pbase = MapViewOfFile(*phMapFile, FILE_MAP_READ, 0, 0, 0)) ==
-			NULL)
-	{
-		CloseHandle(*phMapFile);
-		*phMapFile = NULL;
-		return(0);
-	}
+		return (0);
+	hMapFile = CreateFileMapping(fd, NULL, PAGE_READONLY, 0, size, NULL);
+	if (hMapFile == NULL)
+		return (0);
+	*pbase = MapViewOfFile(hMapFile, FILE_MAP_READ, 0, 0, 0);
+	CloseHandle(hMapFile);
+	if (*pbase == NULL)
+		return (0);
 	*psize = size;
 	return(1);
 }
@@ -128,15 +124,12 @@ _tiffMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 static void
 _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 {
-	return;
 }
 
 static void
-_tiffUnmapProc(thandle_t fd, tdata_t base, toff_t map_handle)
+_tiffUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 {
 	UnmapViewOfFile(base);
-	CloseHandle((HANDLE)map_handle);
-	return;
 }
 
 /*
@@ -223,7 +216,7 @@ _TIFFrealloc(tdata_t p, tsize_t s)
 	void* pvTmp;
 	if ((pvTmp = GlobalReAlloc(p, s, 0)) == NULL) {
 		if ((pvTmp = GlobalAlloc(GMEM_FIXED, s)) != NULL) {
-			CopyMemory(pvTmp, p, s);
+			CopyMemory(pvTmp, p, GlobalSize(p));
 			GlobalFree(p);
 		}
 	}

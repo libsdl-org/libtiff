@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_write.c,v 1.72 1996/01/10 19:33:19 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_write.c,v 1.76 1997/08/29 21:46:04 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -215,13 +215,13 @@ TIFFWriteEncodedStrip(TIFF* tif, tstrip_t strip, tdata_t data, tsize_t cc)
 	if (!(*tif->tif_encodestrip)(tif, (tidata_t) data, cc, sample))
 		return ((tsize_t) 0);
 	if (!(*tif->tif_postencode)(tif))
-		return (-1);
+		return ((tsize_t) -1);
 	if (!isFillOrder(tif, td->td_fillorder) &&
 	    (tif->tif_flags & TIFF_NOBITREV) == 0)
 		TIFFReverseBits(tif->tif_rawdata, tif->tif_rawcc);
 	if (tif->tif_rawcc > 0 &&
 	    !TIFFAppendToStrip(tif, strip, tif->tif_rawdata, tif->tif_rawcc))
-		return (-1);
+		return ((tsize_t) -1);
 	tif->tif_rawcc = 0;
 	tif->tif_rawcp = tif->tif_rawdata;
 	return (cc);
@@ -395,8 +395,8 @@ TIFFWriteRawTile(TIFF* tif, ttile_t tile, tdata_t data, tsize_t cc)
 	    cc : (tsize_t) -1);
 }
 
-#define	isUnspecified(td, v) \
-    (td->v == (uint32) -1 || (td)->td_imagelength == 0)
+#define	isUnspecified(tif, f) \
+    (TIFFFieldSet(tif,f) && (tif)->tif_dir.td_imagelength == 0)
 
 static int
 TIFFSetupStrips(TIFF* tif)
@@ -404,11 +404,13 @@ TIFFSetupStrips(TIFF* tif)
 	TIFFDirectory* td = &tif->tif_dir;
 
 	if (isTiled(tif))
-		td->td_stripsperimage = isUnspecified(td, td_tilelength) ?
-		    td->td_samplesperpixel : TIFFNumberOfTiles(tif);
+		td->td_stripsperimage =
+		    isUnspecified(tif, FIELD_TILEDIMENSIONS) ?
+			td->td_samplesperpixel : TIFFNumberOfTiles(tif);
 	else
-		td->td_stripsperimage = isUnspecified(td, td_rowsperstrip) ?
-		    td->td_samplesperpixel : TIFFNumberOfStrips(tif);
+		td->td_stripsperimage =
+		    isUnspecified(tif, FIELD_ROWSPERSTRIP) ?
+			td->td_samplesperpixel : TIFFNumberOfStrips(tif);
 	td->td_nstrips = td->td_stripsperimage;
 	if (td->td_planarconfig == PLANARCONFIG_SEPARATE)
 		td->td_stripsperimage /= td->td_samplesperpixel;

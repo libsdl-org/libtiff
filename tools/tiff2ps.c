@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2ps.c,v 1.51 1997/02/20 20:15:03 sam Exp $ */
+/* $Header: /d1/sam/tiff/tools/RCS/tiff2ps.c,v 1.53 1997/08/29 21:46:51 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -174,15 +174,6 @@ static	int alpha;
 static int
 checkImage(TIFF* tif)
 {
-	switch (bitspersample) {
-	case 1: case 2:
-	case 4: case 8:
-		break;
-	default:
-		TIFFError(filename, "Can not handle %d-bit/sample image",
-		    bitspersample);
-		return (0);
-	}
 	switch (photometric) {
 	case PHOTOMETRIC_YCBCR:
 		if (compression == COMPRESSION_JPEG &&
@@ -212,12 +203,38 @@ checkImage(TIFF* tif)
 	case PHOTOMETRIC_MINISBLACK:
 	case PHOTOMETRIC_MINISWHITE:
 		break;
+	case PHOTOMETRIC_LOGL:
+	case PHOTOMETRIC_LOGLUV:
+		if (compression != COMPRESSION_SGILOG &&
+		    compression != COMPRESSION_SGILOG24) {
+			TIFFError(filename,
+		    "Can not handle %s data with compression other than SGILog",
+			    (photometric == PHOTOMETRIC_LOGL) ?
+				"LogL" : "LogLuv"
+			);
+			return (0);
+		}
+		/* rely on library to convert to RGB/greyscale */
+		TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
+		photometric = (photometric == PHOTOMETRIC_LOGL) ?
+		    PHOTOMETRIC_MINISBLACK : PHOTOMETRIC_RGB;
+		bitspersample = 8;
+		break;
 	case PHOTOMETRIC_CIELAB:
 		/* fall thru... */
 	default:
 		TIFFError(filename,
 		    "Can not handle image with PhotometricInterpretation=%d",
 		    photometric);
+		return (0);
+	}
+	switch (bitspersample) {
+	case 1: case 2:
+	case 4: case 8:
+		break;
+	default:
+		TIFFError(filename, "Can not handle %d-bit/sample image",
+		    bitspersample);
 		return (0);
 	}
 	if (planarconfiguration == PLANARCONFIG_SEPARATE && extrasamples > 0)
@@ -336,7 +353,6 @@ TIFF2PS(FILE* fd, TIFF* tif, float pw, float ph)
 		setupPageState(tif, &w, &h, &prw, &prh);
 		if (!npages)
 		        PSHead(fd, tif, w, h, prw, prh, ox, oy);
-		tf_bytesperrow = TIFFScanlineSize(tif);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE,
 		    &bitspersample);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL,
@@ -362,6 +378,7 @@ TIFF2PS(FILE* fd, TIFF* tif, float pw, float ph)
 			}
 		}
 		if (checkImage(tif)) {
+			tf_bytesperrow = TIFFScanlineSize(tif);
 			npages++;
 			fprintf(fd, "%%%%Page: %d %d\n", npages, npages);
 			fprintf(fd, "gsave\n");
@@ -688,7 +705,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 
 	use_rawdata = TRUE;
 	switch (compression) {
-	case COMPRESSION_NONE:	/* 1: uncompressed */
+	case COMPRESSION_NONE:		/* 1: uncompressed */
 		break;
 	case COMPRESSION_CCITTRLE:	/* 2: CCITT modified Huffman RLE */
 	case COMPRESSION_CCITTRLEW:	/* 32771: #1 w/ word alignment */
@@ -746,12 +763,12 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		}
 		fputs(" /LZWDecode filter", fd);
 		break;
-	case COMPRESSION_PACKBITS:		/* 32773: Macintosh RLE */
+	case COMPRESSION_PACKBITS:	/* 32773: Macintosh RLE */
 		fputs(" /RunLengthDecode filter", fd);
 		use_rawdata = TRUE;
 	    break;
-	case COMPRESSION_OJPEG:	/* 6: !6.0 JPEG */
-	case COMPRESSION_JPEG:	/* 7: %JPEG DCT compression */
+	case COMPRESSION_OJPEG:		/* 6: !6.0 JPEG */
+	case COMPRESSION_JPEG:		/* 7: %JPEG DCT compression */
 #ifdef notdef
 		/*
 		 * Code not tested yet
@@ -767,6 +784,10 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	case COMPRESSION_PIXARFILM:	/* 32908: Pixar companded 10bit LZW */
 	case COMPRESSION_DEFLATE:	/* 32946: Deflate compression */
 	case COMPRESSION_JBIG:		/* 34661: ISO JBIG */
+		use_rawdata = FALSE;
+		break;
+	case COMPRESSION_SGILOG:	/* 34676: SGI LogL or LogLuv */
+	case COMPRESSION_SGILOG24:	/* 34677: SGI 24-bit LogLuv */
 		use_rawdata = FALSE;
 		break;
 	default:

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcp.c,v 1.51 1996/12/13 05:22:37 sam Exp $ */
+/* $Header: /d1/sam/tiff/tools/RCS/tiffcp.c,v 1.54 1997/09/01 03:22:05 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -205,11 +205,11 @@ processG3Options(char* cp)
 static int
 processCompressOptions(char* opt)
 {
-	if (streq(opt, "none"))
+	if (streq(opt, "none")) {
 		defcompression = COMPRESSION_NONE;
-	else if (streq(opt, "packbits"))
+	} else if (streq(opt, "packbits")) {
 		defcompression = COMPRESSION_PACKBITS;
-	else if (strneq(opt, "jpeg", 4)) {
+	} else if (strneq(opt, "jpeg", 4)) {
 		char* cp = strchr(opt, ':');
 		if (cp && isdigit(cp[1]))
 			quality = atoi(cp+1);
@@ -219,9 +219,9 @@ processCompressOptions(char* opt)
 	} else if (strneq(opt, "g3", 2)) {
 		processG3Options(opt);
 		defcompression = COMPRESSION_CCITTFAX3;
-	} else if (streq(opt, "g4"))
+	} else if (streq(opt, "g4")) {
 		defcompression = COMPRESSION_CCITTFAX4;
-	else if (strneq(opt, "lzw", 3)) {
+	} else if (strneq(opt, "lzw", 3)) {
 		char* cp = strchr(opt, ':');
 		if (cp)
 			defpredictor = atoi(cp+1);
@@ -410,6 +410,7 @@ static struct cpTag {
 	{ TIFFTAG_EXTRASAMPLES,		(uint16) -1, TIFF_SHORT },
 	{ TIFFTAG_SMINSAMPLEVALUE,	1, TIFF_DOUBLE },
 	{ TIFFTAG_SMAXSAMPLEVALUE,	1, TIFF_DOUBLE },
+	{ TIFFTAG_STONITS,		1, TIFF_DOUBLE },
 };
 #define	NTAGS	(sizeof (tags) / sizeof (tags[0]))
 
@@ -430,19 +431,23 @@ tiffcp(TIFF* in, TIFF* out)
 	CopyField(TIFFTAG_IMAGEWIDTH, w);
 	CopyField(TIFFTAG_IMAGELENGTH, l);
 	CopyField(TIFFTAG_BITSPERSAMPLE, bitspersample);
+	CopyField(TIFFTAG_SAMPLESPERPIXEL, samplesperpixel);
 	if (compression != (uint16)-1)
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	else
 		CopyField(TIFFTAG_COMPRESSION, compression);
 	if (compression == COMPRESSION_JPEG && jpegcolormode == JPEGCOLORMODE_RGB)
 		TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_YCBCR);
+	else if (compression == COMPRESSION_SGILOG || compression == COMPRESSION_SGILOG24)
+		TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
+		    samplesperpixel == 1 ?
+			PHOTOMETRIC_LOGL : PHOTOMETRIC_LOGLUV);
 	else
 		CopyTag(TIFFTAG_PHOTOMETRIC, 1, TIFF_SHORT);
 	if (fillorder != 0)
 		TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
 	else
 		CopyTag(TIFFTAG_FILLORDER, 1, TIFF_SHORT);
-	CopyField(TIFFTAG_SAMPLESPERPIXEL, samplesperpixel);
 	/*
 	 * Choose tiles/strip for the output image according to
 	 * the command line arguments (-tiles, -strips) and the
@@ -882,35 +887,44 @@ done:
 
 DECLAREwriteFunc(writeBufferToContigStrips)
 {
-	tsize_t scanline = TIFFScanlineSize(out);
-	uint32 row;
+	uint32 row, rowsperstrip;
+	tstrip_t strip = 0;
 
 	(void) imagewidth; (void) spp;
-	for (row = 0; row < imagelength; row++) {
-		if (TIFFWriteScanline(out, buf, row, 0) < 0)
+	(void) TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
+	for (row = 0; row < imagelength; row += rowsperstrip) {
+		uint32 nrows = (row+rowsperstrip > imagelength) ?
+		    imagelength-row : rowsperstrip;
+		tsize_t stripsize = TIFFVStripSize(out, nrows);
+		if (TIFFWriteEncodedStrip(out, strip++, buf, stripsize) < 0)
 			return (FALSE);
-		buf += scanline;
+		row += rowsperstrip, buf += stripsize;
 	}
 	return (TRUE);
 }
 
 DECLAREwriteFunc(writeBufferToSeparateStrips)
 {
-	tdata_t obuf = _TIFFmalloc(TIFFScanlineSize(out));
+	uint32 rowsize = imagewidth * spp;
+	uint32 rowsperstrip;
+	tdata_t obuf = _TIFFmalloc(TIFFStripSize(out));
+	tstrip_t strip = 0;
 	tsample_t s;
 
 	if (obuf == NULL)
 		return (0);
+	(void) TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
 	for (s = 0; s < spp; s++) {
 		uint32 row;
-		for (row = 0; row < imagelength; row++) {
-			uint8* inp = ((uint8*) buf) + s;
-			uint8* outp = (uint8*) obuf;
-			uint32 n = imagewidth;
+		for (row = 0; row < imagelength; row += rowsperstrip) {
+			uint32 nrows = (row+rowsperstrip > imagelength) ?
+			    imagelength-row : rowsperstrip;
+			tsize_t stripsize = TIFFVStripSize(out, nrows);
 
-			while (n-- > 0)
-				*outp++ = *inp, inp += spp;
-			if (TIFFWriteScanline(out, obuf, row, s) < 0) {
+			cpContigBufToSeparateBuf(
+			    obuf, (uint8*) buf + row*rowsize + s, 
+			    nrows, imagewidth, 0, 0, spp);
+			if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0) {
 				_TIFFfree(obuf);
 				return (FALSE);
 			}
@@ -970,7 +984,8 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 {
 	uint32 imagew = TIFFScanlineSize(out);
 	tsize_t tilew  = TIFFTileRowSize(out);
-	int iskew = imagew - tilew;
+	uint32 iimagew = TIFFRasterScanlineSize(out);
+	int iskew = iimagew - tilew*spp;
 	tdata_t obuf = _TIFFmalloc(TIFFTileSize(out));
 	uint8* bufp = (uint8*) buf;
 	uint32 tl, tw;
@@ -997,12 +1012,12 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 					int oskew = tilew - width;
 
 					cpContigBufToSeparateBuf(obuf,
-					    bufp + colb + s,
+					    bufp + (colb*spp) + s,
 					    nrow, width,
-					    oskew/spp, oskew + imagew, spp);
+					    oskew, (oskew*spp)+iskew, spp);
 				} else
 					cpContigBufToSeparateBuf(obuf,
-					    bufp + colb + s,
+					    bufp + (colb*spp) + s,
 					    nrow, tilewidth,
 					    0, iskew, spp);
 				if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0) {
@@ -1012,7 +1027,7 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 			}
 			colb += tilew;
 		}
-		bufp += nrow * imagew;
+		bufp += nrow * iimagew;
 	}
 	_TIFFfree(obuf);
 	return (TRUE);

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_jpeg.c,v 1.26 1997/01/27 19:36:58 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_jpeg.c,v 1.27 1997/08/29 21:45:53 sam Exp $ */
 
 /*
- * Copyright (c) 1994-1996 Sam Leffler
- * Copyright (c) 1994-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1994-1997 Sam Leffler
+ * Copyright (c) 1994-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

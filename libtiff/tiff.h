@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.75 1996/12/13 05:25:39 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tiff.h,v 1.78 1997/08/29 21:45:38 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -162,6 +162,8 @@ typedef	enum {
 /* compression code 32947 is reserved for Oceana Matrix <dev@oceana.com> */
 #define     COMPRESSION_DCS             32947   /* Kodak DCS encoding */
 #define	    COMPRESSION_JBIG		34661	/* ISO JBIG */
+#define     COMPRESSION_SGILOG		34676	/* SGI Log Luminance RLE */
+#define     COMPRESSION_SGILOG24	34677	/* SGI Log 24-bit packed */
 #define	TIFFTAG_PHOTOMETRIC		262	/* photometric interpretation */
 #define	    PHOTOMETRIC_MINISWHITE	0	/* min value is white */
 #define	    PHOTOMETRIC_MINISBLACK	1	/* min value is black */
@@ -171,6 +173,8 @@ typedef	enum {
 #define	    PHOTOMETRIC_SEPARATED	5	/* !color separations */
 #define	    PHOTOMETRIC_YCBCR		6	/* !CCIR 601 */
 #define	    PHOTOMETRIC_CIELAB		8	/* !1976 CIE L*a*b* */
+#define     PHOTOMETRIC_LOGL		32844	/* CIE Log2(L) */
+#define     PHOTOMETRIC_LOGLUV		32845	/* CIE Log2(L) (u',v') */
 #define	TIFFTAG_THRESHHOLDING		263	/* +thresholding used on data */
 #define	    THRESHHOLD_BILEVEL		1	/* b&w art scan */
 #define	    THRESHHOLD_HALFTONE		2	/* or dithered scan */
@@ -342,6 +346,10 @@ typedef	enum {
 #define	TIFFTAG_FAXRECVPARAMS		34908	/* encoded Class 2 ses. parms */
 #define	TIFFTAG_FAXSUBADDRESS		34909	/* received SubAddr string */
 #define	TIFFTAG_FAXRECVTIME		34910	/* receive time (secs) */
+/* tags 37439-37443 are registered to SGI <gregl@sgi.com> */
+#define TIFFTAG_STONITS			37439	/* Sample value to Nits */
+/* tag 34929 is a private tag registered to FedEx */
+#define	TIFFTAG_FEDEX_EDR		34929	/* unknown use */
 /* tag 65535 is an undefined tag used by Eastman Kodak */
 #define TIFFTAG_DCSHUESHIFTVALUES       65535   /* hue shift correction data */
 
@@ -402,4 +410,9 @@ typedef	enum {
 #define	TIFFTAG_PIXARLOGQUALITY		65558	/* PixarLog uses same scale */
 /* 65559 is allocated to Oceana Matrix <dev@oceana.com> */
 #define TIFFTAG_DCSCLIPRECTANGLE	65559	/* area of image to acquire */
+#define TIFFTAG_SGILOGDATAFMT		65560	/* SGILog user data format */
+#define     SGILOGDATAFMT_FLOAT		0	/* IEEE float samples */
+#define     SGILOGDATAFMT_16BIT		1	/* 16-bit samples */
+#define     SGILOGDATAFMT_RAW		2	/* uninterpreted data */
+#define     SGILOGDATAFMT_8BIT		3	/* 8-bit RGB monitor values */
 #endif /* _TIFF_ */

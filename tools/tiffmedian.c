@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffmedian.c,v 1.18 1995/10/10 00:35:22 sam Exp $ */
+/* $Header: /d1/sam/tiff/tools/RCS/tiffmedian.c,v 1.19 1997/08/29 22:35:33 sam Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -806,10 +806,11 @@ quant_fsdither(TIFF* in, TIFF* out)
 	outline = (unsigned char *) _TIFFmalloc(TIFFScanlineSize(out));
 
 	GetInputLine(in, 0, goto bad);		/* get first line */
-	for (i = 1; i < imagelength; ++i) {
+	for (i = 1; i <= imagelength; ++i) {
 		SWAP(short *, thisline, nextline);
-		lastline = (i == imax);
-		GetInputLine(in, i, break);
+		lastline = (i >= imax);
+		if (i <= imax)
+			GetInputLine(in, i, break);
 		thisptr = thisline;
 		nextptr = nextline;
 		outptr = outline;

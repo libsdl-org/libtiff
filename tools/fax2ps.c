@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.10 1996/04/29 21:58:49 sam Exp $" */
+/* $Header: /d1/sam/tiff/tools/RCS/fax2ps.c,v 1.11 1997/08/29 21:46:46 sam Exp $" */
 
 /*
- * Copyright (c) 1991-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1991-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

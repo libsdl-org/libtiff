@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_zip.c,v 1.9 1997/01/27 19:36:58 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_zip.c,v 1.11 1997/08/29 21:46:05 sam Exp $ */
 
 /*
- * Copyright (c) 1995-1996 Sam Leffler
- * Copyright (c) 1995-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1995-1997 Sam Leffler
+ * Copyright (c) 1995-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -250,10 +250,13 @@ ZIPCleanup(TIFF* tif)
 {
 	ZIPState* sp = ZState(tif);
 	if (sp) {
-		if (tif->tif_mode == O_RDONLY)
-			inflateEnd(&sp->stream);
-		else
-			deflateEnd(&sp->stream);
+		if (sp->state&ZSTATE_INIT) {
+			/* NB: avoid problems in the library */
+			if (tif->tif_mode == O_RDONLY)
+				inflateEnd(&sp->stream);
+			else
+				deflateEnd(&sp->stream);
+		}
 		_TIFFfree(sp);
 		tif->tif_data = NULL;
 	}

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.81 1997/01/27 19:09:09 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tiffiop.h,v 1.84 1997/08/29 21:45:41 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -134,13 +134,6 @@ struct tiff {
 	tsize_t		tif_rawcc;	/* bytes unread from raw buffer */
 /* memory-mapped file support */
 	tidata_t	tif_base;	/* base of mapped file */
-#ifdef __WIN32__
-	void*		pv_map_handle;	/* WIN32 file mapping handle;
-					 * must be contiguous with tif_base
-					 * since map & unmap only get tif_base
-					 * and assume 4 byte offset to
-					 * pv_map_handle. */
-#endif
 	toff_t		tif_size;	/* size of mapped file region (bytes) */
 	TIFFMapFileProc	tif_mapproc;	/* map file method */
 	TIFFUnmapFileProc tif_unmapproc;/* unmap file method */
@@ -179,14 +172,8 @@ struct tiff {
 	((*(tif)->tif_sizeproc)((tif)->tif_clientdata))
 #define	TIFFMapFileContents(tif, paddr, psize) \
 	((*(tif)->tif_mapproc)((tif)->tif_clientdata,paddr,psize))
-#ifdef __WIN32__
-#define	TIFFUnmapFileContents(tif, addr, dummy) \
-	((*(tif)->tif_unmapproc)((tif)->tif_clientdata,addr,\
-	    (toff_t)(tif)->pv_map_handle))
-#else
 #define	TIFFUnmapFileContents(tif, addr, size) \
 	((*(tif)->tif_unmapproc)((tif)->tif_clientdata,addr,size))
-#endif
 
 /*
  * Default Read/Seek/Write definitions.
@@ -275,6 +262,9 @@ extern	int TIFFInitZIP(TIFF*, int);
 #endif
 #ifdef PIXARLOG_SUPPORT
 extern	int TIFFInitPixarLog(TIFF*, int);
+#endif
+#ifdef LOGLUV_SUPPORT
+extern	int TIFFInitSGILog(TIFF*, int);
 #endif
 #ifdef VMS
 extern	const TIFFCodec _TIFFBuiltinCODECS[];

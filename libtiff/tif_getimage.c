@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_getimage.c,v 1.41 1997/01/27 23:27:39 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_getimage.c,v 1.43 1997/08/29 21:45:52 sam Exp $ */
 
 /*
- * Copyright (c) 1991-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1991-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -118,6 +118,26 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 	}
 	break;
 #endif
+    case PHOTOMETRIC_LOGL:
+	if (td->td_compression != COMPRESSION_SGILOG) {
+	    sprintf(emsg, "Sorry, LogL data must have %s=%d",
+		"Compression", COMPRESSION_SGILOG);
+	    return (0);
+	}
+	break;
+    case PHOTOMETRIC_LOGLUV:
+	if (td->td_compression != COMPRESSION_SGILOG &&
+		td->td_compression != COMPRESSION_SGILOG24) {
+	    sprintf(emsg, "Sorry, LogLuv data must have %s=%d or %d",
+		"Compression", COMPRESSION_SGILOG, COMPRESSION_SGILOG24);
+	    return (0);
+	}
+	if (td->td_planarconfig != PLANARCONFIG_CONTIG) {
+	    sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
+		"Planarconfiguration", td->td_planarconfig);
+	    return (0);
+	}
+	break;
     default:
 	sprintf(emsg, "Sorry, can not handle image with %s=%d",
 	    photoTag, photometric);
@@ -156,6 +176,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
     uint16* sampleinfo;
     uint16 extrasamples;
     uint16 planarconfig;
+    uint16 compress;
     int colorchannels;
 
     img->tif = tif;
@@ -182,6 +203,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 	    break;
 	}
     colorchannels = img->samplesperpixel - extrasamples;
+    TIFFGetFieldDefaulted(tif, TIFFTAG_COMPRESSION, &compress);
     TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG, &planarconfig);
     if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &img->photometric)) {
 	switch (colorchannels) {
@@ -224,14 +246,11 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 	    return (0);
 	}
 	/* It would probably be nice to have a reality check here. */
-	{ uint16 compress;
-	  TIFFGetField(tif, TIFFTAG_COMPRESSION, &compress);
-	  if (compress == COMPRESSION_JPEG && planarconfig == PLANARCONFIG_CONTIG) {
+	if (compress == COMPRESSION_JPEG && planarconfig == PLANARCONFIG_CONTIG) {
 	    /* can rely on libjpeg to convert to RGB */
 	    /* XXX should restore current state on exit */
 	    TIFFSetField(tif, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
 	    img->photometric = PHOTOMETRIC_RGB;
-	  }
 	}
 	break;
     case PHOTOMETRIC_RGB: 
@@ -256,6 +275,31 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 	}
 	break;
     }
+    case PHOTOMETRIC_LOGL:
+	if (compress != COMPRESSION_SGILOG) {
+	    sprintf(emsg, "Sorry, LogL data must have %s=%d",
+		"Compression", COMPRESSION_SGILOG);
+	    return (0);
+	}
+	TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
+	img->photometric = PHOTOMETRIC_MINISBLACK;	/* little white lie */
+	img->bitspersample = 8;
+	break;
+    case PHOTOMETRIC_LOGLUV:
+	if (compress != COMPRESSION_SGILOG && compress != COMPRESSION_SGILOG24) {
+	    sprintf(emsg, "Sorry, LogLuv data must have %s=%d or %d",
+		"Compression", COMPRESSION_SGILOG, COMPRESSION_SGILOG24);
+	    return (0);
+	}
+	if (planarconfig != PLANARCONFIG_CONTIG) {
+	    sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
+		"Planarconfiguration", planarconfig);
+	    return (0);
+	}
+	TIFFSetField(tif, TIFFTAG_SGILOGDATAFMT, SGILOGDATAFMT_8BIT);
+	img->photometric = PHOTOMETRIC_RGB;		/* little white lie */
+	img->bitspersample = 8;
+	break;
     default:
 	sprintf(emsg, "Sorry, can not handle image with %s=%d",
 	    photoTag, img->photometric);

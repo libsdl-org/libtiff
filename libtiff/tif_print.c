@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.69 1996/12/13 05:25:39 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_print.c,v 1.71 1997/08/29 21:45:58 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -168,9 +168,20 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		fprintf(fd, "  Photometric Interpretation: ");
 		if (td->td_photometric < NPHOTONAMES)
 			fprintf(fd, "%s\n", photoNames[td->td_photometric]);
-		else
-			fprintf(fd, "%u (0x%x)\n",
-			    td->td_photometric, td->td_photometric);
+		else {
+			switch (td->td_photometric) {
+			case PHOTOMETRIC_LOGL:
+				fprintf(fd, "CIE Log2(L)\n");
+				break;
+			case PHOTOMETRIC_LOGLUV:
+				fprintf(fd, "CIE Log2(L) (u',v')\n");
+				break;
+			default:
+				fprintf(fd, "%u (0x%x)\n",
+				    td->td_photometric, td->td_photometric);
+				break;
+			}
+		}
 	}
 	if (TIFFFieldSet(tif,FIELD_EXTRASAMPLES) && td->td_extrasamples) {
 		fprintf(fd, "  Extra Samples: %u<", td->td_extrasamples);
@@ -194,6 +205,10 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 			sep = ", ";
 		}
 		fprintf(fd, ">\n");
+	}
+	if (TIFFFieldSet(tif,FIELD_STONITS)) {
+		fprintf(fd, "  Sample to Nits conversion factor: %.4e\n",
+				td->td_stonits);
 	}
 #ifdef CMYK_SUPPORT
 	if (TIFFFieldSet(tif,FIELD_INKSET)) {

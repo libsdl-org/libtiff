@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_read.c,v 1.71 1996/07/18 22:48:25 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_read.c,v 1.73 1997/08/29 21:45:59 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -109,7 +109,7 @@ TIFFReadScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
 			(*tif->tif_postdecode)(tif, (tidata_t) buf,
 			    tif->tif_scanlinesize);
 	}
-	return (e ? 1 : -1);
+	return (e > 0 ? 1 : -1);
 }
 
 /*

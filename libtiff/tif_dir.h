@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.h,v 1.6 1996/12/13 05:25:17 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_dir.h,v 1.10 1997/08/29 21:45:37 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -61,6 +61,7 @@ typedef	struct {
 	uint16	td_halftonehints[2];
 	uint16	td_extrasamples;
 	uint16*	td_sampleinfo;
+	double	td_stonits;
 	char*	td_documentname;
 	char*	td_artist;
 	char*	td_datetime;
@@ -93,6 +94,7 @@ typedef	struct {
 	uint16	td_inkset;
 	uint16	td_ninks;
 	uint16	td_dotrange[2];
+	int	td_inknameslen;
 	char*	td_inknames;
 	char*	td_targetprinter;
 #endif
@@ -172,8 +174,9 @@ typedef	struct {
 #define	FIELD_SUBIFD			49
 #define	FIELD_NUMBEROFINKS		50
 #define FIELD_ICCPROFILE		51
+#define FIELD_STONITS			52
 /* end of support for well-known tags; codec-private tags follow */
-#define	FIELD_CODEC			51	/* base of codec-private tags */
+#define	FIELD_CODEC			53	/* base of codec-private tags */
 /*
  * Pseudo-tags don't normally need field bits since they
  * are not written to an output file (by definition).

@@ -1,10 +1,10 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.56 1997/01/28 00:39:52 sam Exp $
+#	$Header: /d1/sam/tiff/RCS/configure,v 1.58 1997/08/29 22:30:51 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
-# Copyright (c) 1988-1996 Sam Leffler
-# Copyright (c) 1991-1996 Silicon Graphics, Inc.
+# Copyright (c) 1988-1997 Sam Leffler
+# Copyright (c) 1991-1997 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided
@@ -147,7 +147,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.56 $"
+	echo "This is TIFF configure $Revision: 1.58 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1117,12 +1117,12 @@ if [ "$DSO" = auto ]; then
         DSOOPTS='-fpic -shared'
         LIBCOPTS=-fpic
         DSO=HPUX
+	TIFFLIBREF="-Wl,+s,+b${DIR_LIB}"' -L${DEPTH}/libtiff -ltiff'
         ;;		 
     *-hpux*)
 	DSOSUF=sl
 	DSOOPTS='-b'
 	LIBCOPTS="+Z"
-#	LIBPORT="-Wl,+b${DIR_LIB}"
 	DSO=HPUX
 	TIFFLIBREF="-Wl,+s,+b${DIR_LIB}"' -L${DEPTH}/libtiff -ltiff'
 	;;

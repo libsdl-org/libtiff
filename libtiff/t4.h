@@ -1,8 +1,8 @@
-/* $Id: t4.h,v 1.16 1996/06/24 03:00:54 sam Exp $ */
+/* $Id: t4.h,v 1.17 1997/08/29 21:45:36 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.c,v 1.158 1996/12/13 05:25:39 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_dir.c,v 1.162 1997/08/29 21:45:47 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -84,6 +84,34 @@ setExtraSamples(TIFFDirectory* td, va_list ap, int* v)
 	return (1);
 }
 
+#ifdef CMYK_SUPPORT
+static int
+checkInkNamesString(TIFF* tif, int slen, const char* s)
+{
+	TIFFDirectory* td = &tif->tif_dir;
+	int i = td->td_samplesperpixel;
+
+	if (slen > 0) {
+		const char* ep = s+slen;
+		const char* cp = s;
+		for (; i > 0; i--) {
+			for (; *cp != '\0'; cp++)
+				if (cp >= ep)
+					goto bad;
+			cp++;				/* skip \0 */
+		}
+		return (cp-s);
+	}
+bad:
+	TIFFError("TIFFSetField",
+	    "%s: Invalid InkNames value; expecting %d names, found %d",
+	    tif->tif_name,
+	    td->td_samplesperpixel,
+	    td->td_samplesperpixel-i);
+	return (0);
+}
+#endif
+
 static int
 _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 {
@@ -91,6 +119,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 	int status = 1;
 	uint32 v32;
 	int i, v;
+	double d;
+	char* s;
 
 	switch (tag) {
 	case TIFFTAG_SUBFILETYPE:
@@ -314,6 +344,12 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 	case TIFFTAG_IMAGEDEPTH:
 		td->td_imagedepth = va_arg(ap, uint32);
 		break;
+	case TIFFTAG_STONITS:
+		d = va_arg(ap, dblparam_t);
+		if (d <= 0.)
+			goto badvaluedbl;
+		td->td_stonits = d;
+		break;
 #if SUBIFD_SUPPORT
 	case TIFFTAG_SUBIFD:
 		if ((tif->tif_flags & TIFF_INSUBIFD) == 0) {
@@ -367,7 +403,12 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		break;
 	case TIFFTAG_INKNAMES:
 		i = va_arg(ap, int);
-		_TIFFsetNString(&td->td_inknames, va_arg(ap, char*), i);
+		s = va_arg(ap, char*);
+		i = checkInkNamesString(tif, i, s);
+		if (status = (i > 0)) {
+			_TIFFsetNString(&td->td_inknames, s, i);
+			td->td_inknameslen = i;
+		}
 		break;
 	case TIFFTAG_NUMBEROFINKS:
 		td->td_ninks = (uint16) va_arg(ap, int);
@@ -415,6 +456,11 @@ badvalue:
 	return (0);
 badvalue32:
 	TIFFError(tif->tif_name, "%ld: Bad value for \"%s\"", v32,
+	    _TIFFFieldWithTag(tif, tag)->field_name);
+	va_end(ap);
+	return (0);
+badvaluedbl:
+	TIFFError(tif->tif_name, "%f: Bad value for \"%s\"", d,
 	    _TIFFFieldWithTag(tif, tag)->field_name);
 	va_end(ap);
 	return (0);
@@ -642,6 +688,9 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 		break;
 	case TIFFTAG_IMAGEDEPTH:
 		*va_arg(ap, uint32*) = td->td_imagedepth;
+		break;
+	case TIFFTAG_STONITS:
+		*va_arg(ap, double*) = td->td_stonits;
 		break;
 #if SUBIFD_SUPPORT
 	case TIFFTAG_SUBIFD:
@@ -900,6 +949,20 @@ TIFFAdvanceDirectory(TIFF* tif, uint32* nextdir, toff_t* off)
 	if (tif->tif_flags & TIFF_SWAB)
 		TIFFSwabLong(nextdir);
 	return (1);
+}
+
+/*
+ * Count the number of directories in a file.
+ */
+tdir_t
+TIFFNumberOfDirectories(TIFF* tif)
+{
+	uint32 nextdir = tif->tif_header.tiff_diroff;
+	tdir_t n = 0;
+
+	while (nextdir != 0 && TIFFAdvanceDirectory(tif, &nextdir, NULL))
+		n++;
+	return (n);
 }
 
 /*

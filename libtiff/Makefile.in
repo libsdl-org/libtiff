@@ -1,9 +1,9 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.40 1996/11/11 16:15:16 sam Exp $
+#	$Header: /d1/sam/tiff/libtiff/RCS/Makefile.in,v 1.43 1997/08/29 22:47:50 sam Exp $
 #
 # Tag Image File Format Library
 #
-# Copyright (c) 1988-1996 Sam Leffler
-# Copyright (c) 1991-1996 Silicon Graphics, Inc.
+# Copyright (c) 1988-1997 Sam Leffler
+# Copyright (c) 1991-1997 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided
@@ -81,6 +81,7 @@ SRCS	= \
 	tif_getimage.c \
 	tif_jpeg.c \
 	tif_flush.c \
+	tif_luv.c \
 	tif_lzw.c \
 	tif_next.c \
 	tif_open.c \
@@ -115,6 +116,7 @@ OBJS	= \
 	tif_getimage.o \
 	tif_jpeg.o \
 	tif_flush.o \
+	tif_luv.o \
 	tif_lzw.o \
 	tif_next.o \
 	tif_open.o \
@@ -169,7 +171,7 @@ IRIX52dso: ${OBJS}
 	${LD} -elf -o libtiff.@DSOSUF@ -shared -no_unresolved -all ${OBJS} \
 	    @LIBJPEG@ @LIBGZ@ -lc -lm
 	touch $@
-# Solaris 2.4
+# Solaris 2.x
 SOLARISdso: ${OBJS}
 	${LD} -L@DIR_LIB@ -G -h libtiff.@DSOSUF@ -o libtiff.@DSOSUF@ ${OBJS}
 	touch $@
@@ -257,6 +259,8 @@ tif_jpeg.o: ${SRCDIR}/tif_jpeg.c @DEPEND_JPEGLIB@
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_jpeg.c
 tif_flush.o: ${SRCDIR}/tif_flush.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_flush.c
+tif_luv.o: ${SRCDIR}/tif_luv.c
+	${CC} -c ${CFLAGS} ${SRCDIR}/tif_luv.c
 tif_lzw.o: ${SRCDIR}/tif_lzw.c ${SRCDIR}/tif_predict.h
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_lzw.c
 tif_next.o: ${SRCDIR}/tif_next.c

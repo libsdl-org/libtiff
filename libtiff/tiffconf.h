@@ -1,7 +1,7 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffconf.h,v 1.15 1997/01/27 23:05:36 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tiffconf.h,v 1.17 1997/08/29 21:45:40 sam Exp $ */
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -93,12 +93,14 @@
  *    ZIP_SUPPORT	enable support for Deflate algorithm
  *			(requires freely available zlib software, see tif_zip.c)
  *    PIXARLOG_SUPPORT	enable support for Pixar log-format algorithm
+ *    LOGLUV_SUPPORT	enable support for LogLuv high dynamic range encoding
  */
 #define	CCITT_SUPPORT
 #define	PACKBITS_SUPPORT
 #define	LZW_SUPPORT
 #define	THUNDER_SUPPORT
 #define	NEXT_SUPPORT
+#define LOGLUV_SUPPORT
 #endif /* COMPRESSION_SUPPORT */
 
 /*

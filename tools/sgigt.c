@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.67 1996/11/11 16:18:16 sam Exp $ */
+/* $Header: /d1/sam/tiff/tools/RCS/sgigt.c,v 1.70 1997/08/31 23:54:02 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -183,7 +183,8 @@ main(int argc, char* argv[])
 		(img.photometric == PHOTOMETRIC_RGB ||
 		 img.photometric == PHOTOMETRIC_YCBCR ||
 		 img.photometric == PHOTOMETRIC_SEPARATED ||
-		 img.photometric == PHOTOMETRIC_PALETTE));
+		 img.photometric == PHOTOMETRIC_PALETTE ||
+		 img.photometric == PHOTOMETRIC_LOGLUV));
 	/*
 	 * Check to see if the hardware can display 24-bit RGB.
 	 */
@@ -545,6 +546,10 @@ photoArg(const char* arg)
 	return (PHOTOMETRIC_YCBCR);
     else if (strcmp(arg, "cielab") == 0)
 	return (PHOTOMETRIC_CIELAB);
+    else if (strcmp(arg, "logl") == 0)
+	return (PHOTOMETRIC_LOGL);
+    else if (strcmp(arg, "logluv") == 0)
+	return (PHOTOMETRIC_LOGLUV);
     else
 	return ((uint16) -1);
 }
@@ -575,9 +580,9 @@ putSeparateAndDraw(TIFFRGBAImage* img, uint32* raster,
     if (x+w == width) {
 	w = width;
 	if (img->orientation == ORIENTATION_TOPLEFT)
-	    lrectwrite(x, y-(h-1), w-1, y, raster-x-(h-1)*w);
+	    lrectwrite(0, y-(h-1), w-1, y, raster-x-(h-1)*w);
 	else
-	    lrectwrite(x, y, w-1, y+h-1, raster);
+	    lrectwrite(0, y, w-1, y+h-1, raster);
     }
 }
 
@@ -938,6 +943,7 @@ setupColormapSupport(TIFFRGBAImage* img)
     } else if (img->isContig) {
 	switch (img->photometric) {
 	case PHOTOMETRIC_RGB:
+	case PHOTOMETRIC_LOGLUV:
 		switch (bitspersample) {
 		case 8:  img->put.contig = putcontig8bittile; break;
 		case 16: img->put.contig = putcontig16bittile; break;

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.58 1997/01/15 19:01:24 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.60 1997/08/29 21:45:49 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -60,6 +60,9 @@ static	int TIFFWriteAnyArray(TIFF*,
 	    TIFFDataType, ttag_t, TIFFDirEntry*, uint32, double*);
 #ifdef COLORIMETRY_SUPPORT
 static	int TIFFWriteTransferFunction(TIFF*, TIFFDirEntry*);
+#endif
+#ifdef CMYK_SUPPORT
+static	int TIFFWriteInkNames(TIFF*, TIFFDirEntry*);
 #endif
 static	int TIFFWriteData(TIFF*, TIFFDirEntry*, char*);
 static	int TIFFLinkDirectory(TIFF*);
@@ -265,6 +268,12 @@ TIFFWriteDirectory(TIFF* tif)
 			if (!TIFFSetupShortPair(tif, fip->field_tag, dir))
 				goto bad;
 			break;
+#ifdef CMYK_SUPPORT
+		case FIELD_INKNAMES:
+			if (!TIFFWriteInkNames(tif, dir))
+				goto bad;
+			break;
+#endif
 #ifdef COLORIMETRY_SUPPORT
 		case FIELD_TRANSFERFUNCTION:
 			if (!TIFFWriteTransferFunction(tif, dir))
@@ -852,6 +861,19 @@ TIFFWriteTransferFunction(TIFF* tif, TIFFDirEntry* dir)
 	}
 	return (TIFFWriteShortTable(tif,
 	    TIFFTAG_TRANSFERFUNCTION, dir, ncols, tf));
+}
+#endif
+
+#ifdef CMYK_SUPPORT
+static int
+TIFFWriteInkNames(TIFF* tif, TIFFDirEntry* dir)
+{
+	TIFFDirectory* td = &tif->tif_dir;
+
+	dir->tdir_tag = TIFFTAG_INKNAMES;
+	dir->tdir_type = (short) TIFF_ASCII;
+	dir->tdir_count = td->td_inknameslen;
+	return (TIFFWriteByteArray(tif, dir, td->td_inknames));
 }
 #endif
 

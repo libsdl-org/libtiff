@@ -1,12 +1,12 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.6 1996/03/18 20:55:51 sam Exp $
+#	$Header: /d1/sam/tiff/port/RCS/Makefile.in,v 1.7 1997/08/29 21:48:53 sam Exp $
 #
 # @WARNING@
 #
 # Tag Image File Format Library
 #
-# Copyright (c) 1995-1996 Sam Leffler
-# Copyright (c) 1995-1996 Silicon Graphics, Inc.
+# Copyright (c) 1995-1997 Sam Leffler
+# Copyright (c) 1995-1997 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided

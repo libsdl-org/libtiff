@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_predict.h,v 1.2 1996/01/10 19:33:22 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tif_predict.h,v 1.3 1997/08/29 21:45:38 sam Exp $ */
 
 /*
- * Copyright (c) 1995-1996 Sam Leffler
- * Copyright (c) 1995-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1995-1997 Sam Leffler
+ * Copyright (c) 1995-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

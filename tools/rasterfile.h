@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/rasterfile.h,v 1.1 1990/10/08 17:24:23 sam Exp $ */
+/* $Header: /d1/sam/tiff/tools/RCS/rasterfile.h,v 1.1 1990/10/08 17:24:23 sam Exp $ */
 
 /*
  * Description of header for files containing raster images

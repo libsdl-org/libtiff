@@ -1,8 +1,8 @@
-/* $Id: tif_fax3.h,v 1.33 1996/08/22 18:17:39 sam Exp $ */
+/* $Id: tif_fax3.h,v 1.34 1997/08/29 21:45:37 sam Exp $ */
 
 /*
- * Copyright (c) 1990-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1990-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

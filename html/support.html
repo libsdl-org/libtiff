@@ -11,16 +11,6 @@ TIFF 6.0 Specification Coverage
 </H1>
 
 
-<H5>
-This documentation is best viewed using a graphical browser that supports
-the latest HTML directives for formatting documents.  In particular,
-this document was authored
-for viewing with version 1.1 or newer of the
-<A HREF="http://home.mcom.com/comprod/products/navigator/index.html">Netscape Navigator</A>.
-</H5>
-
-<BR CLEAR=left>
-
 <P>
 The library is capable of dealing with images that are written to
 follow the 5.0 or 6.0 TIFF spec.  There is also considerable support
@@ -179,12 +169,28 @@ that are, in some cases, of dubious value.
     Compression = 32766	NeXT 2-bit encoding
     Compression = 32809	ThunderScan 4-bit encoding
     Compression = 32909	Pixar companded 11-bit ZIP encoding
-    Compression = 34999	PKZIP-style Deflate encoding (experimental)
+    Compression = 32946	PKZIP-style Deflate encoding (experimental)
+    Compression = 34676	SGI 32-bit Log Luminance encoding (experimental)
+    Compression = 34677	SGI 24-bit Log Luminance encoding (experimental)
 </PRE>
 
 Note that there is no support for the JPEG-related tags defined
 in the 6.0 specification; the JPEG support is based on the post-6.0
 proposal given in TIFF Technical Note #2.
+
+<P>
+<TABLE>
+<TR>
+<TD VALIGN=top><IMG SRC="images/info.gif"></TD>
+<TD>
+<EM>
+For more information on the experimental Log Luminance encoding
+consult the materials available at
+<A HREF=http://www.sgi.com/Technology/pixformat>http://www.sgi.com/Technology/pixformat</A>.
+</EM>
+</TD>
+</TR>
+</TABLE>
 
 <P>
 The following table shows the tags that are recognized
@@ -623,6 +629,12 @@ reads and writes the tag, but does not use it internally.
 <TD ALIGN=center>R/W</TD>
 <TD>tile/strip calculations</TD>
 </TR>
+<TR>
+<TD><TT>StoNits</TT></TD>
+<TD ALIGN=center>37439</TD>
+<TD ALIGN=center>R/W</TD>
+<TD>&nbsp;</TD>
+</TR>
 </TABLE>
 
 <P>
@@ -665,7 +677,7 @@ part of the TIFF 6.0 specification).
 
 <ADDRESS>
 <A HREF="sam.html">Sam Leffler</A> / <A HREF="mailto:sam@engr.sgi.com">sam@engr.sgi.com</A>.
-Last updated: $Date: 1996/04/29 19:18:06 $
+Last updated: $Date: 1997/09/02 00:11:22 $
 </ADDRESS>
 
 </BODY>

@@ -11,20 +11,6 @@ Modifying The TIFF Library
 </H1>
 
 
-<H5>
-This documentation is best viewed using a graphical browser that supports
-the latest HTML directives for formatting documents.  In particular,
-this document was authored
-for viewing with version 1.1 or newer of the
-<A HREF="http://home.mcom.com/comprod/products/navigator/index.html">Netscape Navigator</A>.
-</H5>
-
-<BR CLEAR=left>
-
-<PRE>
-
-</PRE>
-
 <P>
 This chapter provides information about the internal structure of
 the library, how to control the configuration when building it, and
@@ -67,11 +53,17 @@ Configuration defines are split into three areas:
 <P>
 If the define <TT>COMPRESSION_SUPPORT</TT> is <STRONG>not defined</STRONG>
 then a default set of compression schemes is automatically
-configured: CCITT Group 3 and 4 algorithms (compression codes 2, 3, 4,
-and 32771), the Macintosh PackBits algorithm (compression 32773),
-a Lempel-Ziv & Welch (LZW) algorithm (compression 5), a 4-bit
-run-length encoding scheme from ThunderScan (compression 32809),
-and a 2-bit encoding scheme used by NeXT (compression 32766).
+configured:
+<UL>
+<LI>CCITT Group 3 and 4 algorithms (compression codes 2, 3, 4, and 32771),
+<LI>the Macintosh PackBits algorithm (compression 32773),
+<LI>a Lempel-Ziv & Welch (LZW) algorithm (compression 5),
+<LI>a 4-bit run-length encoding scheme from ThunderScan (compression 32809),
+<LI>a 2-bit encoding scheme used by NeXT (compression 32766), and
+<LI>two experimental schemes intended for images with high dynamic range
+(compression 34676 and 34677).
+</UL>
+
 To override this behaviour define <TT>COMPRESSION_SUPPORT</TT>
 and then one or more additional defines to enable configuration of
 the appropriate codecs (see the table below); e.g.
@@ -182,6 +174,11 @@ run-length encoding scheme from ThunderScan (compression 32809)</TD>
 <TR>
 <TD VALIGN=top><TT>PIXARLOG_SUPPORT</TT></TD>
 <TD>Pixar's compression scheme for high-resolution color images (compression 32909)</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top><TT>SGILOG_SUPPORT</TT></TD>
+<TD>SGI's compression scheme for high-resolution color images (compression 34676 and 34677)</TD>
 </TR>
 
 <TR>
@@ -453,7 +450,8 @@ their type is presumed.
 
 <P><HR WIDTH=65% ALIGN=right><H3>General Comments</H3></A>
 
-The library is designed to hide as much of the details of TIFF as
+The library is designed to hide as much of the details of TIFF from
+applications as
 possible.  In particular, TIFF directories are read in their entirety
 into an internal format.  Only the tags known by the library are
 available to a user and certain tag data may be maintained that a user
@@ -471,7 +469,8 @@ the following guidelines to add support to the ``core library''.
 <OL>
 <LI>Define the tag in <B>tiff.h</B>.
 <LI>Add a field to the directory structure in <B>tif_dir.h</B>
-   and define a <TT>FIELD_*</TT> bit.
+   and define a <TT>FIELD_*</TT> bit (also update the definition of
+   <TT>FIELD_CODEC</TT> to reflect your addition).
 <LI>Add an entry in the <TT>TIFFFieldInfo</TT> array defined at the top of
    <B>tif_dirinfo.c</B>. 
    Note that you must keep this array sorted by tag
@@ -649,7 +648,7 @@ the portability of your TIFF files.
 
 <ADDRESS>
 <A HREF="sam.html">Sam Leffler</A> / <A HREF="mailto:sam@engr.sgi.com">sam@engr.sgi.com</A>.
-Last updated: $Date: 1996/12/13 05:31:06 $
+Last updated: $Date: 1997/08/27 23:34:39 $
 </ADDRESS>
 
 </BODY>

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.95 1997/01/27 23:05:10 sam Exp $ */
+/* $Header: /d1/sam/tiff/libtiff/RCS/tiffio.h,v 1.97 1997/08/29 21:45:40 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1996 Sam Leffler
- * Copyright (c) 1991-1996 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -242,6 +242,7 @@ extern	int TIFFIsUpSampled(TIFF*);
 extern	int TIFFIsMSB2LSB(TIFF*);
 extern	uint32 TIFFCurrentRow(TIFF*);
 extern	tdir_t TIFFCurrentDirectory(TIFF*);
+extern	tdir_t TIFFNumberOfDirectories(TIFF*);
 extern	uint32 TIFFCurrentDirOffset(TIFF*);
 extern	tstrip_t TIFFCurrentStrip(TIFF*);
 extern	ttile_t TIFFCurrentTile(TIFF*);
