@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2bw.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2bw.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -375,7 +375,7 @@ char* stuff[] = {
 " -r #		make each strip have no more than # rows",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-"               (no longer supported due to Unisys patent enforcement)", 
+"               (no longer supported by default due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c packbits	compress output with packbits encoding",
 " -c g3[:opts]	compress output with CCITT Group 3 encoding",

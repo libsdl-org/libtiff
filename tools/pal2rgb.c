@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/pal2rgb.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/pal2rgb.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -362,7 +362,7 @@ char* stuff[] = {
 " -C 16		assume 16-bit colormap values",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-"               (no longer supported due to Unisys patent enforcement)",
+"               (no longer supported by default due to Unisys patent enforcement)",
 " -c zip[:opts]	compress output with deflate encoding",
 " -c packbits	compress output with packbits encoding",
 " -c none	use no compression algorithm on output",

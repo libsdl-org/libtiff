@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2rgba.c,v 1.2 1999-12-04 20:48:27 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2rgba.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -434,6 +434,7 @@ static char* usageMsg[] = {
     "where comp is one of the following compression algorithms:\n",
     " jpeg\t\tJPEG encoding\n",
     " lzw\t\tLempel-Ziv & Welch encoding\n",
+    " (lzw compression unsupported by default due to Unisys patent enforcement)\n",
     " packbits\tPackBits encoding\n",
     " none\t\tno compression\n",
     "and the other options are:\n",
