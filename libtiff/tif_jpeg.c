@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.22 2004-09-29 07:44:26 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.23 2004-10-02 13:29:41 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -38,7 +38,6 @@
  *
  * Contributed by Tom Lane <tgl@sss.pgh.pa.us>.
  */
-#include <assert.h>
 #include <stdio.h>
 #include <setjmp.h>
 

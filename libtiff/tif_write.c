@@ -1,4 +1,4 @@
-/* $Id: tif_write.c,v 1.14 2004-09-26 09:49:53 dron Exp $ */
+/* $Id: tif_write.c,v 1.15 2004-10-02 13:29:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,7 +30,6 @@
  * Scanline-oriented Write Support
  */
 #include "tiffiop.h"
-#include <assert.h>
 #include <stdio.h>
 
 #define	STRIPINCR	20		/* expansion factor on strip array */
@@ -593,6 +592,10 @@ TIFFGrowStrips(TIFF* tif, int delta, const char* module)
 	new_stripbytecount = (uint32*)_TIFFrealloc(td->td_stripbytecount,
 		(td->td_nstrips + delta) * sizeof (uint32));
 	if (new_stripoffset == NULL || new_stripbytecount == NULL) {
+		if (new_stripoffset)
+			_TIFFfree(new_stripoffset);
+		if (new_stripbytecount)
+			_TIFFfree(new_stripbytecount);
 		td->td_nstrips = 0;
 		TIFFError(module, "%s: No space to expand strip arrays",
 			  tif->tif_name);

@@ -1,4 +1,4 @@
-/* $Id: tif_compress.c,v 1.7 2004-09-24 15:18:57 dron Exp $ */
+/* $Id: tif_compress.c,v 1.8 2004-10-02 13:29:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -203,9 +203,11 @@ TIFFRegisterCODEC(uint16 scheme, const char* name, TIFFInitMethod init)
 		cd->info->init = init;
 		cd->next = registeredCODECS;
 		registeredCODECS = cd;
-	} else
+	} else {
 		TIFFError("TIFFRegisterCODEC",
 		    "No space to register compression scheme %s", name);
+		return NULL;
+	}
 	return (cd->info);
 }
 
@@ -246,18 +248,21 @@ TIFFGetConfiguredCODECs()
 
         for (cd = registeredCODECS; cd; cd = cd->next) {
                 codecs = _TIFFrealloc(codecs, i * sizeof(TIFFCodec));
-		_TIFFmemcpy(codecs + i - 1, cd->next, sizeof(TIFFCodec));
+		assert (codecs == NULL);
+		_TIFFmemcpy(codecs + i - 1, cd, sizeof(TIFFCodec));
 		i++;
 	}
         for (c = _TIFFBuiltinCODECS; c->name; c++) {
                 if (TIFFIsCODECConfigured(c->scheme)) {
                         codecs = _TIFFrealloc(codecs, i * sizeof(TIFFCodec));
+			assert (codecs == NULL);
 			_TIFFmemcpy(codecs + i - 1, (const tdata_t)c, sizeof(TIFFCodec));
 			i++;
 		}
 	}
 
 	codecs = _TIFFrealloc(codecs, i * sizeof(TIFFCodec));
+	assert (codecs == NULL);
 	_TIFFmemset(codecs + i - 1, 0, sizeof(TIFFCodec));
 
         return codecs;

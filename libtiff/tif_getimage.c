@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.40 2004-09-28 17:15:25 dron Exp $ */
+/* $Id: tif_getimage.c,v 1.41 2004-10-02 13:29:41 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -30,7 +30,6 @@
  * Read and return a packed RGBA image.
  */
 #include "tiffiop.h"
-#include <assert.h>
 #include <stdio.h>
 
 static	int gtTileContig(TIFFRGBAImage*, uint32*, uint32, uint32);
