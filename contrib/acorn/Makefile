@@ -13,25 +13,78 @@ Squeezeflags = -o $@
 
 
 # Final targets:
-@.o.LIBTIFF:   @.o.tif_acorn @.o.tif_aux @.o.tif_close @.o.tif_codec \
-	@.o.tif_compress @.o.tif_dir @.o.tif_dirinfo @.o.tif_dirread @.o.tif_dirwrite @.o.tif_dumpmode \
-	@.o.tif_error @.o.tif_fax3 @.o.tif_flush @.o.tif_getimage @.o.tif_jpeg @.o.tif_lzw \
-	@.o.tif_next @.o.tif_open @.o.tif_packbits @.o.tif_predict @.o.tif_print @.o.tif_read \
-	@.o.tif_strip @.o.tif_swab @.o.tif_thunder @.o.tif_tile @.o.tif_version @.o.tif_warning \
-	@.o.tif_write @.o.tif_zip @.o.tif_fax3sm @.h.version 
-	LibFile $(LibFileflags) @.o.tif_acorn @.o.tif_aux @.o.tif_close \
-	@.o.tif_codec @.o.tif_compress @.o.tif_dir @.o.tif_dirinfo @.o.tif_dirread @.o.tif_dirwrite \
-	@.o.tif_dumpmode @.o.tif_error @.o.tif_fax3 @.o.tif_flush @.o.tif_getimage @.o.tif_jpeg \
-	@.o.tif_lzw @.o.tif_next @.o.tif_open @.o.tif_packbits @.o.tif_predict @.o.tif_print \
-	@.o.tif_read @.o.tif_strip @.o.tif_swab @.o.tif_thunder @.o.tif_tile @.o.tif_version \
-	@.o.tif_warning @.o.tif_write @.o.tif_zip @.o.tif_fax3sm 
+@.o.LIBTIFF:   \
+        @.o.tif_acorn \
+        @.o.tif_aux \
+        @.o.tif_close \
+        @.o.tif_codec \
+	@.o.tif_compress \
+	@.o.tif_dir \
+	@.o.tif_dirinfo \
+	@.o.tif_dirread \
+	@.o.tif_dirwrite \
+	@.o.tif_dumpmode \
+	@.o.tif_error \
+	@.o.tif_fax3 \
+	@.o.tif_flush \
+	@.o.tif_getimage \
+	@.o.tif_jpeg \
+	@.o.tif_lzw \
+	@.o.tif_next \
+	@.o.tif_open \
+	@.o.tif_packbits \
+	@.o.tif_predict \
+	@.o.tif_print \
+	@.o.tif_read \
+	@.o.tif_strip \
+	@.o.tif_swab \
+	@.o.tif_thunder \
+	@.o.tif_tile \
+	@.o.tif_version \
+	@.o.tif_warning \
+	@.o.tif_write \
+	@.o.tif_zip \
+	@.o.tif_fax3sm \
+	@.h.version 
+	LibFile $(LibFileflags) \
+	@.o.tif_acorn \
+	@.o.tif_aux \
+	@.o.tif_close \
+	@.o.tif_codec \
+	@.o.tif_compress \
+	@.o.tif_dir \
+	@.o.tif_dirinfo \
+	@.o.tif_dirread \
+	@.o.tif_dirwrite \
+	@.o.tif_dumpmode \
+	@.o.tif_error \
+	@.o.tif_fax3 \
+	@.o.tif_flush \
+	@.o.tif_getimage \
+	@.o.tif_jpeg \
+	@.o.tif_lzw \
+	@.o.tif_next \
+	@.o.tif_open \
+	@.o.tif_packbits \
+	@.o.tif_predict \
+	@.o.tif_print \
+	@.o.tif_read \
+	@.o.tif_strip \
+	@.o.tif_swab \
+	@.o.tif_thunder \
+	@.o.tif_tile \
+	@.o.tif_version \
+	@.o.tif_warning \
+	@.o.tif_write \
+	@.o.tif_zip \
+	@.o.tif_fax3sm 
 
 
 # User-editable dependencies:
 @.mkversion:   @.o.mkversion C:o.Stubs 
 	Link $(linkflags) @.o.mkversion C:o.Stubs 
 @.h.version:   @.VERSION @.mkversion 
-	<Prefix$Dir>.mkversion @.VERSION @.h.version 
+	<Prefix$Dir>.mkversion -v @.VERSION -a @.tiff/alpha @.h.version 
 @.mkg3states:   @.o.mkg3states @.o.getopt C:o.Stubs 
 	link $(linkflags) @.o.mkg3states C:o.Stubs @.o.getopt 
 @.c.tif_fax3sm:   @.mkg3states 

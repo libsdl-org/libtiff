@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.45 1996/03/19 18:26:58 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.47 1996/04/09 16:41:22 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -33,30 +33,39 @@
 # preparation for building TIFF source.
 #
 
+POSIXLY_CORRECT=1; export POSIXLY_CORRECT	# disable GNU extensions
+
+QUIET=no				# suppress messages to tty
+NONINTERACTIVE=no			# control prompting of config params
+SITE=					# dir where config.site is located
+TARGET=					# target system identity
+SRCDIR=					# dir where source is located
+
 #
 # Setup general configuration parameters.
 #
-DIR_BIN=/usr/local/bin
-DIR_LIB=/usr/local/lib
-DIR_INC=/usr/local/include
-DIRS_LIBINC=
-DIR_JPEGLIB=
-DIR_GZLIB=
-DSO=auto
+DIR_BIN=/usr/local/bin			# destination for applications
+DIR_LIB=/usr/local/lib			# destination for library
+DIR_INC=/usr/local/include		# destination for include files
+DIRS_LIBINC=				# dirs to search for ancillary includes
+DIR_JPEGLIB=				# dir for IJG -ljpeg
+DIR_GZLIB=				# dir for zlib -lgz
+DSO=auto				# auto-enable DSO support
 LIBCOPTS=				# library-specific C-compiler options
-JPEG=no
-ZIP=no
-PORT=auto
-LIBGL=auto
-LIBIMAGE=auto
-MACHDEPLIBS=-lm
-
+JPEG=no					# configure JPEG support
+ZIP=no					# configure ZIP/Deflate support
+PORT=auto				# enable portability emulations
+LIBGL=auto				# auto-enable build of SGI -lgl apps
+LIBIMAGE=auto				# auto-enable build of SGI -limage apps
+MACHDEPLIBS=-lm				# machine-dependent libraries for apps
+: ${CC=}				# name of C compiler to use
+: ${CCOMPILER=}				# full pathname of C compiler
+: ${ENVOPTS=}				# CC opts for ANSI C compilation
 : ${MAKE=make}				# make to use
+
 # screws up the test of `-f -'
 : ${MAKEFLAGS=}				# unset MAKEFLAGS
 RM="rm -f"
-
-POSIXLY_CORRECT=1; export POSIXLY_CORRECT		# disable GNU extensions
 
 #
 # Error diagnostics that should go to the terminal are
@@ -94,11 +103,6 @@ Options: [defaults in brackets after descriptions]
 EOF
 }
 
-QUIET=no
-NONINTERACTIVE=no
-SITE=
-TARGET=
-SRCDIR=
 #
 # Crack command line arguments.  We purposely
 # use syntax and options that are compatible
@@ -141,7 +145,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.45 $"
+	echo "This is TIFF configure $Revision: 1.47 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -227,6 +231,8 @@ captureX()
 }
 
 date >&5
+echo Running "$0" with arguments: "$@" >&5
+
 cat 1>&5 <<'EOF'
 
 This file contains information that is captured from running the configure
@@ -293,26 +299,30 @@ fi
 #
 # Emulate old-style settups...
 #
-test -z "${DIR_JPEG:-}"  || {
+test -z "${DIR_JPEG-}"  || {
     DIRS_LIBINC="${DIRS_LIBINC} ${DIR_JPEG}"
-    DIR_JPEGLIB=${DIR_JPEG}
+    DIR_JPEGLIB="${DIR_JPEG}"
 }
-test -z "${DIR_LIBGZ:-}" || {
+test -z "${DIR_LIBGZ-}" || {
     DIRS_LIBINC="${DIRS_LIBINC} ${DIR_LIBGZ}"
-    DIR_GZLIB=${DIR_LIBGZ}
+    DIR_GZLIB="${DIR_LIBGZ}"
 }
 
 identifyTarget()
 {
     random=`date | awk '{print $4}' | sed -e 's/.*://'` 2>/dev/null
     case "$random" in
-    1*)	Note "Wow, you've got a $1 system!";;
-    2*)	Note "Hmm, looks like a $1 system.";;
-    3*)	Note "Oh no, not another $1 system...";;
-    4*)	Note "Well I'll be, a $1 system.";;
-    5*)	Note "Fee, fie, foe, this smells like a $1 system.";;
-    *)	Note "Gosh, aren't you lucky to have a $1 system!";;
-    esac
+    *0) Note "Wow, you've got a $1 system!";;
+    *1) Note "Hmm, looks like a $1 system.";;
+    *2) Note "Oh no, not another $1 system...";;
+    *3) Note "Well I'll be, a $1 system.";;
+    *4) Note "Fee, fie, foe, this smells like a $1 system.";;
+    *5)	Note "Gosh, aren't you lucky to have a $1 system!";;
+    *6)	Note "YOW!!  Did something bad happen or am I on a $1 system?";;
+    *7)	Note "Do they really still make $1 systems?!";;
+    *8)	Note "I'm always happy to encounter another $1 system.";;
+    *9)	Note "Here we are again, this time on a $1 system.";;
+esac
 }
 
 #
@@ -335,7 +345,7 @@ else
     Note "Warning, I don't seem to have the GNU config.sub script to canonicalize"
     Note "your target specification; this may cause problems later on..."
 fi
-if [ -z "${FILLORDER:-}" ]; then
+if [ -z "${FILLORDER-}" ]; then
     #
     # Host bit order within a word.
     #
@@ -352,15 +362,16 @@ fi
 #
 findThing()
 {
-    t="$1"; app=$2; path=$3;
-    case $app in
-    /*) eval $t $app && { echo $app; return; };;
+    t="$1"; app="$2"; path="$3";
+    case "$app" in
+    /*) eval "$t" "$app" && { echo "$app"; return; };;
     esac
-    IFS=:
+    (IFS=:
     for i in $path; do
-	eval $t $i/$app && { echo $i/$app; return 0; }
+	eval "$t" "$i/$app" && { echo "$i/$app"; return 0; }
     done
     return 1
+    )
 }
 
 #
@@ -368,7 +379,7 @@ findThing()
 #
 findFile()
 {
-    findThing "test -f" $1 $2
+    findThing "test -f" "$1" "$2"
 }
 
 #
@@ -483,7 +494,7 @@ checkCompiler()
     # be combined with above checks so we only
     # select an ANSI C compiler.
     #
-    if [ -z "${ENVOPTS:-}" ]; then
+    if [ -z "${ENVOPTS-}" ]; then
 	case $ISGCC-$TARGET in
 	no-*-irix*)	C_ANSI="-ansi";;
 	no-*-hp*)	C_ANSI="-Aa -D_HPUX_SOURCE -Dhpux";;
@@ -497,8 +508,8 @@ checkCompiler()
     $RM dummy dummy.o
     capture $compiler -o dummy ${C_ANSI} dummy.c && {
 	CC=$compiler;
-	test -z "${CCOMPILER:-}" && CCOMPILER=`findApp $compiler $PATH`
-	test -z "${ENVOPTS:-}"   && ENVOPTS="${C_ANSI:-}"
+	test -z "${CCOMPILER-}" && CCOMPILER=`findApp $compiler $PATH`
+	test -z "${ENVOPTS-}"   && ENVOPTS="${C_ANSI-}"
 	return 0
     }
     return 1
@@ -506,7 +517,7 @@ checkCompiler()
 
 CCtested=
 capture cat dummy.c
-if [ -z "${CC:-}" ]; then
+if [ -z "${CC-}" ]; then
     CCOMPILER=
     for i in gcc cc ncc dcc xlc c89 gcc2; do
 	CCtested="$CCtested $i"
@@ -550,7 +561,7 @@ this script.
 EOF
     boom
 fi
-Note "Using $CCOMPILER for a C compiler (set CC to override)."
+Note "Using $CCOMPILER for a C compiler (use -with-CC=compilername to override)."
 
 test "$ENVOPTS" && {
     Note "Using $ENVOPTS to get the appropriate compilation environment."
@@ -571,7 +582,7 @@ CheckForGandO()
     return 0
 }
 
-if [ -z "${GCOPTS:-}" ]; then
+if [ -z "${GCOPTS-}" ]; then
     if capture $CCOMPILER $ENVOPTS -g -c dummy.c; then
 	Note "Looks like $CCOMPILER supports the -g option."
 	# NB: cannot use captureX here 'cuz we lose stderr
@@ -637,13 +648,13 @@ EOF
     fi
 fi
 
-test -z "${AR:-}" && AR=`findApp ar $PATH`
+test -z "${AR-}" && AR=`findApp ar $PATH`
 if [ -z "$AR" ]; then
     Note "*** Warning, could not locate a suitable ar command; using a default."
     AR=ar
 fi
-test -z "${AROPTS:-}" && AROPTS=rc
-test -z "${RANLIB:-}" && RANLIB=`findApp ranlib $PATH`
+test -z "${AROPTS-}" && AROPTS=rc
+test -z "${RANLIB-}" && RANLIB=`findApp ranlib $PATH`
 if [ -z "$RANLIB" ]; then
     Note "Warning, no ranlib, assuming it's not needed."
     RANLIB=":"
@@ -990,7 +1001,7 @@ BuildPortDotH()
     echo 'typedef double dblparam_t;'
 	Note "... using double for promoted floating point parameters"
 
-    if [ -z "${INLINE:-}" ]; then
+    if [ -z "${INLINE-}" ]; then
 	if [ $ISGCC = yes ]; then
 	    echo '#ifdef __STRICT_ANSI__'
 	    echo '#define	INLINE	__inline__'
@@ -1049,10 +1060,10 @@ if [ "$PORT" = auto ]; then
     for i in $FUNCS; do
         CheckForFunc $i || {
             Note "... emulate $i"
-            PORTFUNCS="${PORTFUNCS:-} $i.c"
+            PORTFUNCS="${PORTFUNCS-} $i.c"
         }
     done
-    if [ "${PORTFUNCS:-}" ]; then
+    if [ "${PORTFUNCS-}" ]; then
         LIBPORT='../port/libport.a'
         PORT=yes
     else
@@ -1069,7 +1080,7 @@ Note ""
 Note "Checking for Dynamic Shared Object (DSO) support."
 if [ "$DSO" = auto ]; then
     DSOSUF_VERSION=
-    case $TARGET-$CC in
+    case $TARGET-$CC-$ISGCC in
     *-irix5.2*)
 	if (findApp rld /lib:/usr/lib:$PATH) >/dev/null 2>&1; then
 	    DSOSUF=so
@@ -1100,6 +1111,13 @@ if [ "$DSO" = auto ]; then
 	LIBCOPTS="+Z"
 #	LIBPORT="-Wl,+b${DIR_LIB}"
 	DSO=HPUX
+	;;
+    *-solaris*-yes)
+	DSOSUF=so
+	DSOLD='${LD}'
+	DSOOPTS='-G'
+	LIBCOPTS="-fpic"
+	DSO=SOLARIS
 	;;
     *-solaris*)
 	DSOSUF=so
@@ -1179,16 +1197,16 @@ Note "Selecting programs used during installation."
 #
 # Miscellaneous ``little'' programs.
 #
-test -z "${CHMOD:-}"	&& CHMOD=`findAppDef chmod $PATH chmod`
-test -z "${LN:-}"	&& LN=`findAppDef ln $PATH ln`
-test -z "${SCRIPT_SH:-}" && SCRIPT_SH=`findAppDef sh $PATH sh`
-test -z "${SED:-}"	&& SED=`findAppDef sed $PATH sed`
-test -z "${STRIP:-}"	&& STRIP=`findAppDef strip $PATH strip`
+test -z "${CHMOD-}"	&& CHMOD=`findAppDef chmod $PATH chmod`
+test -z "${LN-}"	&& LN=`findAppDef ln $PATH ln`
+test -z "${SCRIPT_SH-}" && SCRIPT_SH=`findAppDef sh $PATH sh`
+test -z "${SED-}"	&& SED=`findAppDef sed $PATH sed`
+test -z "${STRIP-}"	&& STRIP=`findAppDef strip $PATH strip`
 
 #
 # Check if mv -f is supported
 #
-if [ -z "${MV_F:-}" ]; then
+if [ -z "${MV_F-}" ]; then
     $RM t.c; echo "">t.c
     if mv -f t.c t.o; then
 	Note "Looks like mv supports the -f option to force a move."
@@ -1203,7 +1221,7 @@ fi
 #
 # Check if ln -s creates a symbolic link.
 #
-if [ -z "${LN_S:-}" ]; then
+if [ -z "${LN_S-}" ]; then
     $RM t.c; $LN -s foo t.c && LN_S=-s
 fi
 if [ -n "$LN_S" ]; then
@@ -1216,7 +1234,7 @@ fi
 #
 # Pick install mechanism.
 #
-if [ -z "${INSTALL:-}" ]; then
+if [ -z "${INSTALL-}" ]; then
     case $TARGET in
     *-irix*)	INSTALL=`findApp install /sbin:$PATH`;;
     *)		INSTALL='${SHELL} ../port/install.sh';;
@@ -1258,7 +1276,7 @@ bitchExecutable()
 # 4. Whether or not the FlexFAX ``F'' suffix must be
 #    stripped for pages to be found (only for 4F pages).
 #
-if [ -z "${DIR_MAN:-}" ]; then
+if [ -z "${DIR_MAN-}" ]; then
     MANPATH="
 	$MANPATH
 	/usr/local/man
@@ -1272,7 +1290,7 @@ if [ -z "${DIR_MAN:-}" ]; then
     test -z "$DIR_MAN" && DIR_MAN=/usr/local/man
 fi
 Note "Looks like manual pages go in $DIR_MAN."
-if [ -z "${MANSCHEME:-}" ]; then
+if [ -z "${MANSCHEME-}" ]; then
     case $TARGET in
     *-bsdi*|*-netbsd*)		MANSCHEME=bsd-nroff-gzip-0.gz;;
     *-freebsd*)			MANSCHEME=bsd-source-cat;;
@@ -1336,7 +1354,7 @@ fi
 promptForNonNullStringParameter()
 {
     x="" val="$1" desc="$2"
-    while [ -z "${x:-}" ]; do
+    while [ -z "$x" ]; do
 	prompt "$desc [$val]?"; read x
 	if [ "$x" ]; then
 	    # strip leading and trailing white space
@@ -1351,7 +1369,7 @@ promptForNonNullStringParameter()
 promptForManPageScheme()
 {
     x=""
-    while [ -z "${x:-}" ]; do
+    while [ -z "$x" ]; do
 	prompt "Manual page installation scheme [$MANSCHEME]?"; read x
 	if [ "$x" ]; then
 	    # strip leading and trailing white space
@@ -1461,10 +1479,11 @@ Either fix the pathname or disable the JPEG support.
 
 EOF
 	}
-        test -d "${DIR_JPEGLIB}" || {
-            cat<<EOF
+        test $SRCDIR_IS_LIBTIFF = yes || \
+	  test -d "${DIR_JPEGLIB:-/dev/null/no-such-file}" || {
+	    cat<<EOF
 
-The JPEG library directory, ${DIR_JPEGLIB}, does not seem to exist.
+The JPEG library directory, "${DIR_JPEGLIB}", does not seem to exist.
 This must be corrected if the JPEG support is to be enabled.
 Either fix the pathname or disable the JPEG support.
 
@@ -1489,11 +1508,12 @@ Either fix the pathname or disable the (G)ZIP support.
 
 EOF
         }
-        test -d "${DIR_GZLIB}" || {
-            cat<<EOF
+        test $SRCDIR_IS_LIBTIFF = yes \
+          || test -d "${DIR_GZLIB:-/dev/null/no-such-file}" || {
+	    cat<<EOF
 
-The libgz source directory, ${DIR_GZLIB}, does not seem to be setup
-correctly.  This must be corrected if the ZIP support is to be enabled.
+The libgz library directory, "${DIR_GZLIB}", does not seem to exist.
+This must be corrected if the ZIP support is to be enabled.
 Either fix the pathname or disable the ZIP support.
 
 EOF
@@ -1562,15 +1582,21 @@ case $MANSCHEME in
 esac
 
 if [ "${JPEG}" = yes ]; then
-    test -z "${CONF_JPEG:-}"	&& CONF_JPEG="-DJPEG_SUPPORT"
-    test -z "${LIBJPEG:-}"	&& LIBJPEG="-L${DIR_JPEGLIB} -ljpeg"
+    test -z "${CONF_JPEG-}"	&& CONF_JPEG="-DJPEG_SUPPORT"
+    if test -z "${LIBJPEG-}" ; then
+      LIBJPEG="-ljpeg"
+      test -z "${DIR_JPEGLIB-}" || LIBJPEG="-L${DIR_JPEGLIB} ${LIBJPEG}"
+    fi
 else
     CONF_JPEG=
     LIBJPEG=
 fi
 if [ "${ZIP}" = yes ]; then
-    test -z "${CONF_ZIP:-}"	&& CONF_ZIP="-DZIP_SUPPORT"
-    test -z "${LIBGZ:-}"	&& LIBGZ="-L${DIR_GZLIB} -lz"
+    test -z "${CONF_ZIP-}"	&& CONF_ZIP="-DZIP_SUPPORT"
+    if test -z "${LIBGZ-}" ; then
+      LIBGZ="-lz"
+      test -z "${DIR_GZLIB-}" || LIBGZ="-L${DIR_GZLIB} ${LIBGZ}"
+    fi
 else
     CONF_ZIP=
     LIBGZ=
@@ -1593,8 +1619,10 @@ relativize()
 	(for i do
 	    case "$i" in
 	    /*|-l*)	echo "$i" ;;
-	    -L|-L/*)	echo "$i" ;;
-	    -L*)	echo "$i" | sed 's;-L;-L../;' ;;
+	    -[LR])	;;				# XXX???
+	    -[LR]/*)	echo "$i" ;;
+	    -L*)	echo "$i" | sed 's;^-L;-L../;' ;;
+	    -R*)	echo "$i" | sed 's;^-R;-R../;' ;;
 	    *)		echo "../$i" ;;
 	    esac
 	done) | tr '\012' ' '

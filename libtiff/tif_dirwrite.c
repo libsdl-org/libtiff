@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.54 1996/01/10 19:33:00 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.55 1996/04/09 17:13:34 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -445,15 +445,20 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
 		}
 		break;
 	case TIFF_DOUBLE:
-		{ double* dp;
-		  if (wc == (u_short) TIFF_VARIABLE) {
-			TIFFGetField(tif, fip->field_tag, &wc, &dp);
-			dir->tdir_count = wc;
-		  } else
-			TIFFGetField(tif, fip->field_tag, &dp);
-		  TIFFCvtNativeToIEEEDouble(tif, wc, dp);
-		  if (!TIFFWriteData(tif, dir, (char*) dp))
-			return (0);
+		if (wc > 1) {
+			double* dp;
+			if (wc == (u_short) TIFF_VARIABLE) {
+				TIFFGetField(tif, fip->field_tag, &wc, &dp);
+				dir->tdir_count = wc;
+			} else
+				TIFFGetField(tif, fip->field_tag, &dp);
+			if (!WRITEF(TIFFWriteDoubleArray, dp))
+				return (0);
+		} else {
+			double dv;
+			TIFFGetField(tif, fip->field_tag, &dv);
+			if (!WRITEF(TIFFWriteDoubleArray, &dv))
+				return (0);
 		}
 		break;
 	case TIFF_ASCII:

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.79 1996/01/10 19:33:26 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.80 1996/04/05 17:36:53 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -271,6 +271,9 @@ extern	int TIFFInitJBIG(TIFF*, int);
 #endif
 #ifdef ZIP_SUPPORT
 extern	int TIFFInitZIP(TIFF*, int);
+#endif
+#ifdef PIXARLOG_SUPPORT
+extern	int TIFFInitPixarLog(TIFF*, int);
 #endif
 #ifdef VMS
 extern	const TIFFCodec _TIFFBuiltinCODECS[];

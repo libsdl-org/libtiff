@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.67 1996/03/04 17:46:53 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.68 1996/04/05 17:36:53 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -42,6 +42,8 @@
 #define	TIFF_BIGENDIAN		0x4d4d
 #define	TIFF_LITTLEENDIAN	0x4949
 
+#ifndef _TIFF_DATA_TYPEDEFS_
+#define _TIFF_DATA_TYPEDEFS_
 /*
  * Intrinsic data types required by the file format:
  *
@@ -61,6 +63,7 @@ typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
 typedef	long int32;
 typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
 #endif
+#endif /* _TIFF_DATA_TYPEDEFS_ */
 
 typedef	struct {
 	uint16	tiff_magic;	/* magic number (defines byte order) */
@@ -144,7 +147,8 @@ typedef	enum {
 #define	    COMPRESSION_PACKBITS	32773	/* Macintosh RLE */
 #define	    COMPRESSION_THUNDERSCAN	32809	/* ThunderScan RLE */
 /* compression codes 32908-32911 are reserved for Pixar */
-#define     COMPRESSION_PIXARFILM       32908   /* Pixar companded 10bit LZW */
+#define     COMPRESSION_PIXARFILM	32908   /* Pixar companded 10bit LZW */
+#define	    COMPRESSION_PIXARLOG	32909   /* Pixar companded 11bit ZIP */
 #define	    COMPRESSION_DEFLATE		32946	/* Deflate compression */
 #define	    COMPRESSION_JBIG		34661	/* ISO JBIG */
 #define	TIFFTAG_PHOTOMETRIC		262	/* photometric interpretation */
@@ -343,7 +347,7 @@ typedef	enum {
 #define	TIFFTAG_PIXARLOGDATAFMT		65549	/* PixarLogCodec I/O data sz */
 #define	    PIXARLOGDATAFMT_8BIT	0	/* regular u_char samples */
 #define	    PIXARLOGDATAFMT_8BITABGR	1	/* ABGR-order u_chars */
-#define	    PIXARLOGDATAFMT_10BITLOG	2	/* 10-bit log-encoded (raw) */
+#define	    PIXARLOGDATAFMT_11BITLOG	2	/* 11-bit log-encoded (raw) */
 #define	    PIXARLOGDATAFMT_12BITPICIO	3	/* as per PICIO (1.0==2048) */
 #define	    PIXARLOGDATAFMT_16BIT	4	/* signed short samples */
 #define	    PIXARLOGDATAFMT_FLOAT	5	/* IEEE float samples */
@@ -366,4 +370,5 @@ typedef	enum {
 #define TIFFTAG_DCSCALIBRATIONFD        65556   /* calibration file desc */
 /* Note: quality level is on the ZLIB 1-9 scale. Default value is -1 */
 #define	TIFFTAG_ZIPQUALITY		65557	/* compression quality level */
+#define	TIFFTAG_PIXARLOGQUALITY		65558	/* PixarLog uses same scale */
 #endif /* _TIFF_ */

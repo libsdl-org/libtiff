@@ -104,7 +104,7 @@ the TIFF 6.0 colorimetry and YCbCr-related tags.</EM>
 Experimental support for the deflate algorithm is controlled by
 <TT>DEFLATE_SUPPORT</TT>.
 The deflate codec that comes with <TT>libtiff</TT> is designed
-for use with version 0.92 or later of the freely available
+for use with version 0.99 or later of the freely available
 <TT>libz</TT> library written by Jean-loup Gailly and Mark Adler.
 The data format used by this library is described
 in the files
@@ -177,6 +177,11 @@ run-length encoding scheme from ThunderScan (compression 32809)</TD>
 <TR>
 <TD VALIGN=top><TT>ZIP_SUPPORT</TT></TD>
 <TD>experimental Deflate scheme (compression 32946)</TD>
+</TR>
+
+<TR>
+<TD VALIGN=top><TT>PIXARLOG_SUPPORT</TT></TD>
+<TD>Pixar's compression scheme for high-resolution color images (compression 32909)</TD>
 </TR>
 
 <TR>
@@ -276,7 +281,8 @@ The following defines control general portability:
 
 <TR>
 <TD VALIGN=top><TT>HAVE_MMAP</TT></TD>
-<TD>Define this if there is support for memory mapping files.</TD>
+<TD>Define this if there is <I>mmap-style</I> support for
+mapping files into memory (used only to read data).</TD>
 </TR>
 
 <TR>
@@ -633,7 +639,7 @@ the portability of your TIFF files.
 
 <ADDRESS>
 <A HREF="sam.html">Sam Leffler</A> / <A HREF="mailto:sam@engr.sgi.com">sam@engr.sgi.com</A>.
-Last updated: $Date: 1995/10/16 21:56:24 $
+Last updated: $Date: 1996/04/09 16:53:39 $
 </ADDRESS>
 
 </BODY>

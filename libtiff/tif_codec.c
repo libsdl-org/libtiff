@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.8 1996/02/16 05:54:21 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.9 1996/04/05 17:36:53 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -63,6 +63,9 @@ static	int NotConfigured(TIFF*, int);
 #ifndef	ZIP_SUPPORT
 #define	TIFFInitZIP		NotConfigured
 #endif
+#ifndef	PIXARLOG_SUPPORT
+#define	TIFFInitPixarLog	NotConfigured
+#endif
 
 /*
  * Compression schemes statically built into the library.
@@ -85,6 +88,7 @@ TIFFCodec _TIFFBuiltinCODECS[] = {
     { "CCITT Group 4",	COMPRESSION_CCITTFAX4,	TIFFInitCCITTFax4 },
     { "ISO JBIG",	COMPRESSION_JBIG,	TIFFInitJBIG },
     { "Deflate",	COMPRESSION_DEFLATE,	TIFFInitZIP },
+    { "PixarLog",	COMPRESSION_PIXARLOG,	TIFFInitPixarLog },
     { NULL },
 };
 

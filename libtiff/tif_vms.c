@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_vms.c,v 1.20 1996/01/10 19:33:16 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_vms.c,v 1.21 1996/03/29 16:37:53 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -281,7 +281,7 @@ _TIFFmemset(tdata_t p, int v, tsize_t c)
 }
 
 void
-_TIFFmemcpy(tdata_t d, const void* s, tsize_t c)
+_TIFFmemcpy(tdata_t d, const tdata_t s, tsize_t c)
 {
 	memcpy(d, s, (size_t) c);
 }
@@ -339,16 +339,21 @@ asm("_$$PsectAttributes_NOSHR$$_TIFFerrorHandler")
 /* IEEE floting point handling */
 
 typedef	struct ieeedouble {
+	u_long	mant2;			/* fix NDR: full 8-byte swap */
 	u_long	mant	: 20,
 		exp	: 11,
 		sign	: 1;
-	u_long	mant2;
 } ieeedouble;
 typedef	struct ieeefloat {
 	u_long	mant	: 23,
 		exp	: 8,
 		sign	: 1;
 } ieeefloat;
+
+/* 
+ * NB: These are D_FLOAT's, not G_FLOAT's. A G_FLOAT is
+ *  simply a reverse-IEEE float/double.
+ */
 
 typedef	struct {
 	u_long	mant1	: 7,
@@ -418,7 +423,7 @@ ieeetod(double *dp)
 	long sign,exp,mant;
 	double dmant;
 
-	source.d = *dp;
+	source.ieee = ((double_t*)dp)->ieee;
 	sign = source.ieee.sign;
 	exp = source.ieee.exp;
 	mant = source.ieee.mant;
@@ -489,7 +494,7 @@ dtoieee(double *dp)
 	} else {			/* Get rid of most significant bit */
 		x *= 2;
 		x -= 1;
-		exp += 1023;
+		exp += 1022; /* fix NDR: 1.0 -> x=0.5, exp=1 -> ieee.exp = 1023 */
 	}
 	num.ieee.exp = exp;
 
@@ -502,7 +507,7 @@ dtoieee(double *dp)
 		/* Avoid negative zero */
 		num.ieee.sign = 0;
 	}
-	*dp = num.d;
+	((double_t*)dp)->ieee = num.ieee;
 }
 
 /*
@@ -560,9 +565,9 @@ TIFFCvtNativeToIEEEFloat(TIFF* tif, u_int n, float* f)
 	}
 }
 void
-TIFFCvtIEEEDoubleToNative(TIFF* tif, u_int n, float* f)
+TIFFCvtIEEEDoubleToNative(TIFF* tif, u_int n, double* f)
 {
-	float_t* fp = (float_t*) f;
+	double_t* fp = (double_t*) f;
 
 	while (n-- > 0) {
 		IEEEDOUBLE2NATIVE(fp);
@@ -571,9 +576,9 @@ TIFFCvtIEEEDoubleToNative(TIFF* tif, u_int n, float* f)
 }
 
 void
-TIFFCvtNativeToIEEEDouble(TIFF* tif, u_int n, float* f)
+TIFFCvtNativeToIEEEDouble(TIFF* tif, u_int n, double* f)
 {
-	float_t* fp = (float_t*) f;
+	double_t* fp = (double_t*) f;
 
 	while (n-- > 0) {
 		NATIVE2IEEEDOUBLE(fp);

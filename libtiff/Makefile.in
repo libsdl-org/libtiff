@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.32 1996/03/14 00:54:03 sam Exp $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.33 1996/04/05 17:36:53 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -85,6 +85,7 @@ SRCS	= \
 	tif_next.c \
 	tif_open.c \
 	tif_packbits.c \
+	tif_pixarlog.c \
 	tif_predict.c \
 	tif_print.c \
 	tif_read.c \
@@ -118,6 +119,7 @@ OBJS	= \
 	tif_next.o \
 	tif_open.o \
 	tif_packbits.o \
+	tif_pixarlog.o \
 	tif_predict.o \
 	tif_print.o \
 	tif_read.o \
@@ -252,6 +254,8 @@ tif_open.o: ${SRCDIR}/tif_open.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_open.c
 tif_packbits.o: ${SRCDIR}/tif_packbits.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_packbits.c
+tif_pixarlog.o: ${SRCDIR}/tif_pixarlog.c
+	${CC} -c ${CFLAGS} ${SRCDIR}/tif_pixarlog.c
 tif_predict.o: ${SRCDIR}/tif_predict.c ${SRCDIR}/tif_predict.h
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_predict.c
 tif_print.o: ${SRCDIR}/tif_print.c

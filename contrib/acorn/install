@@ -2,7 +2,7 @@ If "%0" = "" Then Error Syntax: install |<source_dir> |<dest_dir>
 If "%1" = "" Then Error Syntax: install |<source_dir> |<dest_dir>
 Set LibTiffInstall$Dir %0
 Set LibTiff$Dir %1
-Set Alias$CPY Copy <LibTiffInstall$Dir>.%%0 <LibTiff$Dir>.%%1 ~C~DF~NQRV
+Set Alias$CPY Copy <LibTiffInstall$Dir>.%%0 <LibTiff$Dir>.%%1 ~C~DF~NRV
 CDir <LibTiff$Dir>
 CDir <LibTiff$Dir>.c
 CDir <LibTiff$Dir>.h
@@ -10,9 +10,11 @@ CDir <LibTiff$Dir>.o
 CPY COPYRIGHT			COPYRIGHT
 CPY README			README
 CPY VERSION			VERSION
+CPY dist.tiff/alpha             tiff/alpha
 CPY contrib.acorn.SetVars	SetVars
+CPY contrib.acorn.Makefile	Makefile
+CPY contrib.acorn.cleanlib      cleanlib
 CPY port.getopt/c		c.getopt
-CPY libtiff.Makefile/acorn	Makefile
 CPY libtiff.mkg3states/c	c.mkg3states
 CPY libtiff.mkspans/c		c.mkspans
 CPY libtiff.mkversion/c		c.mkversion
@@ -58,8 +60,10 @@ CPY libtiff.tif_predict/h	h.tif_predic
 SetType <LibTiff$Dir>.COPYRIGHT		Text
 SetType <LibTiff$Dir>.README		Text
 SetType <LibTiff$Dir>.VERSION		Text
+SetType <LibTiff$Dir>.tiff/alpha        Text
 SetType <LibTiff$Dir>.SetVars		Obey
 SetType <LibTiff$Dir>.Makefile		fe1
+SetType <LibTiff$Dir>.cleanlib          Obey
 SetType <LibTiff$Dir>.c.getopt		Text
 SetType <LibTiff$Dir>.c.mkg3states	Text
 SetType <LibTiff$Dir>.c.mkspans		Text

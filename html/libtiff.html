@@ -96,6 +96,9 @@ what you get from <KBD>"cat dist/tiff.alpha"</KBD>.
 Within an application that uses <TT>libtiff</TT> the <TT>TIFFGetVersion</TT>
 routine will return a pointer to a string that contains software version
 information.
+The library include file <TT>&lt;tiffio.h&gt;</TT> contains a C pre-processor
+define <TT>TIFFLIB_VERSION</TT> that can be used to check library
+version compatiblity at compile time.
 
 <A NAME="Typedefs"><P><HR WIDTH=65% ALIGN=right><H3>Library Datatypes</H3></A>
 
@@ -735,7 +738,7 @@ main()
 
 <ADDRESS>
 <A HREF="sam.html">Sam Leffler</A> / <A HREF="mailto:sam@engr.sgi.com">sam@engr.sgi.com</A>.
-Last updated: $Date: 1995/10/16 21:46:15 $
+Last updated: $Date: 1996/04/09 16:53:39 $
 </ADDRESS>
 
 </BODY>

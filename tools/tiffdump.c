@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.48 1996/01/10 19:35:38 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.49 1996/03/29 16:38:33 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -684,13 +684,17 @@ TIFFFetchData(int fd, TIFFDirEntry* dir, void* cp)
 				break;
 			case TIFF_LONG:
 			case TIFF_SLONG:
+			case TIFF_FLOAT:
 				TIFFSwabArrayOfLong((uint32*) cp,
 				    dir->tdir_count);
 				break;
 			case TIFF_RATIONAL:
-			case TIFF_DOUBLE:
 				TIFFSwabArrayOfLong((uint32*) cp,
 				    2*dir->tdir_count);
+				break;
+			case TIFF_DOUBLE:
+				TIFFSwabArrayOfDouble((double*) cp,
+				    dir->tdir_count);
 				break;
 			}
 		}
