@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.32 2004-10-02 13:29:41 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.33 2004-10-08 14:06:16 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -303,6 +303,8 @@ _TIFFMergeFieldInfo(TIFF* tif, const TIFFFieldInfo info[], int n)
 {
 	TIFFFieldInfo** tp;
 	int i;
+
+        tif->tif_foundfield = NULL;
 
 	if (tif->tif_nfields > 0) {
 		tif->tif_fieldinfo = (TIFFFieldInfo**)
