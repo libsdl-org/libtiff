@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.10 2005-01-15 17:24:53 dron Exp $
+# $Id: Makefile.am,v 1.11 2005-01-23 09:43:26 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -25,7 +25,7 @@
 
 # Process this file with automake to produce Makefile.in.
 
-docdir = $(LIBTIFF_DOCDIR)
+docdir = $(LIBTIFF_DOCDIR)/html
 
 docfiles = \
 	addingtags.html \
