@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.2 2000-01-28 21:18:16 warmerda Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -288,7 +288,8 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 	row = 0;
 	badrun = 0;		/* current run of bad lines */
 	while (tifin->tif_rawcc > 0) {
-		ok = (*tifin->tif_decoderow)(tifin, rowbuf, sizeof (rowbuf), 0);
+		ok = (*tifin->tif_decoderow)(tifin, (tdata_t) rowbuf, 
+					     sizeof (rowbuf), 0);
 		if (!ok) {
 			badfaxlines++;
 			badrun++;
