@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2bw.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2bw.c,v 1.4 2000-10-12 14:16:22 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -34,8 +34,8 @@
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
 /* x% weighting -> fraction of full color */
-#define	PCT(x)	(((x)*255)/100)
-int	RED = PCT(28);		/* 28% */
+#define	PCT(x)	(((x)*255+127)/100)
+int	RED = PCT(30);		/* 30% */
 int	GREEN = PCT(59);	/* 59% */
 int	BLUE = PCT(11);		/* 11% */
 
