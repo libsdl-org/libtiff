@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/libtiff.3t,v 1.2 1999-09-06 15:25:10 mwelles Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/libtiff.3t,v 1.3 2002-03-01 04:10:11 warmerda Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -258,6 +258,7 @@ ColorMap	320	R/W
 ColorResponseUnit	300		parsed but ignored
 Compression	259	R/W	choosing codec
 ConsecutiveBadFaxLines	328	R/W
+Copyright       33432   R/W
 DataType	32996	R	obsoleted by SampleFormat tag
 DateTime	306	R/W
 DocumentName	269	R/W
