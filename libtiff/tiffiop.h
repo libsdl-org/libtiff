@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.7 2003-09-25 08:36:21 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.8 2003-11-09 10:19:06 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -200,6 +200,10 @@ struct tiff {
 /* NB: the uint32 casts are to silence certain ANSI-C compilers */
 #define	TIFFhowmany(x, y) ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y)))
 #define	TIFFroundup(x, y) (TIFFhowmany(x,y)*((uint32)(y)))
+
+#define TIFFmax(A,B) ((A)>(B)?(A):(B))
+#define TIFFmin(A,B) ((A)<(B)?(A):(B))
+#define TIFFrint( R ) ((int)((R)>0?((R)+0.5):((R)-0.5)))
 
 #if defined(__cplusplus)
 extern "C" {
