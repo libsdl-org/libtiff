@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.13 2002-10-10 14:19:26 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.14 2002-10-15 02:39:09 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1290,7 +1290,7 @@ PSpage(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		fprintf(fd, "%s", RGBcolorimage);
 		PhotoshopBanner(fd, w, h, 1, 3, "false 3 colorimage");
 		fprintf(fd, "/scanLine %ld string def\n",
-		    (long) ps_bytesperrow);
+		    (long) ps_bytesperrow * 3L);
 		fprintf(fd, "%lu %lu 8\n",
 		    (unsigned long) w, (unsigned long) h);
 		fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
