@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_jpeg.c,v 1.19 2004-04-06 08:42:30 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_jpeg.c,v 1.20 2004-04-20 14:21:58 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1446,7 +1446,7 @@ JPEGVSetField(TIFF* tif, ttag_t tag, va_list ap)
 static void 
 JPEGFixupTestSubsampling( TIFF * tif )
 {
-#if CHECK_JPEG_YCBCR_SUBSAMPLING == 1
+#ifdef CHECK_JPEG_YCBCR_SUBSAMPLING
     JPEGState *sp = JState(tif);
     TIFFDirectory *td = &tif->tif_dir;
 
@@ -1477,7 +1477,7 @@ JPEGFixupTestSubsampling( TIFF * tif )
 
     TIFFSetField( tif, TIFFTAG_YCBCRSUBSAMPLING, 
                   (uint16) sp->h_sampling, (uint16) sp->v_sampling );
-#endif /* CHECK_JPEG_YCBCR_SUBSAMPLING == 1 */
+#endif /* CHECK_JPEG_YCBCR_SUBSAMPLING */
 }
 
 static int

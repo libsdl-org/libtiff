@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.14 2004-04-20 11:04:14 dron Exp $ */
+/* $Id: tiffiop.h,v 1.15 2004-04-20 14:25:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -37,11 +37,9 @@
  */
 #if defined(_MSC_VER)
 # include "config.h.vc"
-# include "tiffconf.h"
 # include "tiffcomp.h"
 #else
 # include "config.h"
-# include "tiffconf.h"
 #endif
 
 #if HAVE_FCNTL_H
