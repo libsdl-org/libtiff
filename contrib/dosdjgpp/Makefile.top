@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/local/cvs/internal/libtiff/contrib/dosdjgpp/Makefile.top,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
+#	$Header: /cvsroot/osrs/libtiff/contrib/dosdjgpp/Makefile.top,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
 #
 # manually derived from Makefile.in (though basically nothing remains)
 # for DJGPP v2.x (GNU C for DOS/386).

@@ -1,4 +1,4 @@
-#       $Header: /usr/local/cvs/internal/libtiff/contrib/dosdjgpp/Makefile.lib,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
+#       $Header: /cvsroot/osrs/libtiff/contrib/dosdjgpp/Makefile.lib,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
 #
 # manually derived from Makefile.in for DJGPP v2.x (GNU C for DOS/386).
 #

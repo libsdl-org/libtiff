@@ -1,4 +1,4 @@
-/* $Header: /usr/local/cvs/internal/libtiff/libtiff/tif_dir.c,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
+/* $Header: /cvsroot/osrs/libtiff/libtiff/tif_dir.c,v 1.3 1999/09/08 19:07:02 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -167,7 +167,7 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		/*
 		 * Setup new compression routine state.
 		 */
-		if (status = TIFFSetCompressionScheme(tif, v))
+		if( (status = TIFFSetCompressionScheme(tif, v)) != 0 )
 			td->td_compression = v;
 		break;
 	case TIFFTAG_PHOTOMETRIC:
@@ -405,7 +405,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		i = va_arg(ap, int);
 		s = va_arg(ap, char*);
 		i = checkInkNamesString(tif, i, s);
-		if (status = (i > 0)) {
+                status = i > 0;
+		if( i > 0 ) {
 			_TIFFsetNString(&td->td_inknames, s, i);
 			td->td_inknameslen = i;
 		}
@@ -1128,4 +1129,55 @@ TIFFUnlinkDirectory(TIFF* tif, tdir_t dirn)
 	tif->tif_row = (uint32) -1;
 	tif->tif_curstrip = (tstrip_t) -1;
 	return (1);
+}
+
+/*			[BFC]
+ *
+ * Author: Bruce Cameron <cameron@petris.com>
+ *
+ * Set a table of tags that are to be replaced during directory process by the
+ * 'IGNORE' state - or return TRUE/FALSE for the requested tag such that
+ * 'ReadDirectory' can use the stored information.
+ */
+int
+TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
+{
+    static int TIFFignoretags [FIELD_LAST];
+    static int tagcount = 0 ;
+    int		i;					/* Loop index */
+    int		j;					/* Loop index */
+
+    switch (task)
+    {
+      case TIS_STORE:
+        if ( tagcount < (FIELD_LAST - 1) )
+        {
+            for ( j = 0 ; j < tagcount ; ++j )
+            {					/* Do not add duplicate tag */
+                if ( TIFFignoretags [j] == TIFFtagID )
+                    return (TRUE) ;
+            }
+            TIFFignoretags [tagcount++] = TIFFtagID ;
+            return (TRUE) ;
+        }
+        break ;
+        
+      case TIS_EXTRACT:
+        for ( i = 0 ; i < tagcount ; ++i )
+        {
+            if ( TIFFignoretags [i] == TIFFtagID )
+                return (TRUE) ;
+        }
+        break;
+        
+      case TIS_EMPTY:
+        tagcount = 0 ;			/* Clear the list */
+        return (TRUE) ;
+        break;
+        
+      default:
+        break;
+    }
+    
+    return (FALSE);
 }

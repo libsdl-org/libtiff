@@ -1,4 +1,4 @@
-#	$Header: /usr/local/cvs/internal/libtiff/TODO,v 1.1.1.1 1999/07/27 21:50:26 mike Exp $
+#	$Header: /cvsroot/osrs/libtiff/TODO,v 1.1.1.1 1999/07/27 21:50:26 mike Exp $
 
 o tiffcmp read data by strip/tile instead of scanline
 o YCbCr sampling support

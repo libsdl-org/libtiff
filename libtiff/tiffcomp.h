@@ -1,4 +1,4 @@
-/* $Header: /usr/local/cvs/internal/libtiff/libtiff/tiffcomp.h,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
+/* $Header: /cvsroot/osrs/libtiff/libtiff/tiffcomp.h,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler

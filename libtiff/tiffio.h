@@ -1,4 +1,4 @@
-/* $Header: /usr/local/cvs/internal/libtiff/libtiff/tiffio.h,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
+/* $Header: /cvsroot/osrs/libtiff/libtiff/tiffio.h,v 1.3 1999/09/08 12:21:13 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -164,6 +164,9 @@ struct _TIFFRGBAImage {
 	uint32** BWmap;				/* black&white map */
 	uint32** PALmap;			/* palette image map */
 	TIFFYCbCrToRGB* ycbcr;			/* YCbCr conversion state */
+
+        int	row_offset;
+        int     col_offset;
 };
 
 /*
@@ -255,6 +258,8 @@ extern	int TIFFUnlinkDirectory(TIFF*, tdir_t);
 extern	int TIFFSetField(TIFF*, ttag_t, ...);
 extern	int TIFFVSetField(TIFF*, ttag_t, va_list);
 extern	int TIFFWriteDirectory(TIFF *);
+extern	int TIFFReassignTagToIgnore(enum TIFFIgnoreSense, int);
+
 #if defined(c_plusplus) || defined(__cplusplus)
 extern	void TIFFPrintDirectory(TIFF*, FILE*, long = 0);
 extern	int TIFFReadScanline(TIFF*, tdata_t, uint32, tsample_t = 0);
@@ -266,6 +271,9 @@ extern	int TIFFReadScanline(TIFF*, tdata_t, uint32, tsample_t);
 extern	int TIFFWriteScanline(TIFF*, tdata_t, uint32, tsample_t);
 extern	int TIFFReadRGBAImage(TIFF*, uint32, uint32, uint32*, int);
 #endif
+
+extern	int TIFFReadRGBAStrip(TIFF*, tstrip_t, uint32 * );
+extern	int TIFFReadRGBATile(TIFF*, uint32, uint32, uint32 * );
 extern	int TIFFRGBAImageOK(TIFF*, char [1024]);
 extern	int TIFFRGBAImageBegin(TIFFRGBAImage*, TIFF*, int, char [1024]);
 extern	int TIFFRGBAImageGet(TIFFRGBAImage*, uint32*, uint32, uint32);

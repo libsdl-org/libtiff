@@ -1,5 +1,5 @@
 #! /bin/sh
-#	$Header: /usr/local/cvs/internal/libtiff/dist/newalpha,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
+#	$Header: /cvsroot/osrs/libtiff/dist/newalpha,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
 if test -r tiff.alpha; then
     ALPHA=`cat tiff.alpha`; rm -f tiff.alpha
     echo "$ALPHA" | awk '{ printf "define ALPHA %03d\n", $3+1}' > tiff.alpha

@@ -1,4 +1,4 @@
-/* $Header: /usr/local/cvs/internal/libtiff/tools/rgb2ycbcr.c,v 1.1.1.1 1999/07/27 21:50:28 mike Exp $ */
+/* $Header: /cvsroot/osrs/libtiff/tools/rgb2ycbcr.c,v 1.1.1.1 1999/07/27 21:50:28 mike Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
