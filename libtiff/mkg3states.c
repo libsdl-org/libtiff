@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/mkg3states.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/mkg3states.c,v 1.2 1999-11-27 21:50:41 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -348,7 +348,7 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
 	sep = "\n";
 	for (i = 0; i < Size; i++) {
 	    fprintf(fd, "%s%s%d,%d,%d%s",
-		sep, prebrace, T->State, T->Width, T->Param, postbrace);
+		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
 	    if (((i+1) % 12) == 0)
 		    sep = ",\n";
 	    else
@@ -359,7 +359,7 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
 	sep = "\n ";
 	for (i = 0; i < Size; i++) {
 	    fprintf(fd, "%s%s%3d,%3d,%4d%s",
-		sep, prebrace, T->State, T->Width, T->Param, postbrace);
+		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
 	    if (((i+1) % 6) == 0)
 		    sep = ",\n ";
 	    else
