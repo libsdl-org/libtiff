@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_codec.c,v 1.7 2003-12-05 14:10:58 rossf Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_codec.c,v 1.8 2004-02-17 15:50:28 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -37,7 +37,7 @@ static	int NotConfigured(TIFF*, int);
 #define	TIFFInitLZW		NotConfigured
 #endif
 #ifndef	PACKBITS_SUPPORT
-#define	TIFFInitPackbits	NotConfigured
+#define	TIFFInitPackBits	NotConfigured
 #endif
 #ifndef	THUNDER_SUPPORT
 #define	TIFFInitThunderScan	NotConfigured
