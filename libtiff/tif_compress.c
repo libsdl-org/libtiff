@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_compress.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_compress.c,v 1.2 1999-11-27 20:01:23 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -147,7 +147,7 @@ _TIFFSetDefaultCompressionState(TIFF* tif)
 int
 TIFFSetCompressionScheme(TIFF* tif, int scheme)
 {
-	const TIFFCodec *c = TIFFFindCODEC(scheme);
+	const TIFFCodec *c = TIFFFindCODEC((uint16) scheme);
 
 	_TIFFSetDefaultCompressionState(tif);
 	/*
