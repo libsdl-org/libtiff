@@ -1,4 +1,4 @@
-/* $Id: iptcutil.c,v 1.3 2004-09-03 08:56:06 dron Exp $ */
+/* $Id: iptcutil.c,v 1.4 2004-09-21 13:34:39 dron Exp $ */
 
 #include "tif_config.h"
 
@@ -98,7 +98,7 @@ void formatString(FILE *ofile, const char *s, int len)
 {
   putc('"', ofile);
   for (; len > 0; --len, ++s) {
-    char c = *s;
+    int c = *s;
     switch (c) {
     case '&':
       fputs("&amp;", ofile);
