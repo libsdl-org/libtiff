@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.8 2002-03-27 06:33:59 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.9 2002-08-15 12:59:08 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -207,9 +207,10 @@ typedef	struct {
 #define FIELD_MATRIX_WORLDTOCAMERA	61
 #define FIELD_COPYRIGHT			62
 #define FIELD_XMLPACKET			63
-/* end of support for well-known tags; codec-private tags follow */
-#define	FIELD_CODEC			64	/* base of codec-private tags */
 /*      FIELD_CUSTOM (see tiffio.h)     65 */
+/* end of support for well-known tags; codec-private tags follow */
+#define	FIELD_CODEC			66	/* base of codec-private tags */
+
 
 /*
  * Pseudo-tags don't normally need field bits since they
