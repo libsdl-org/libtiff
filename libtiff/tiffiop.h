@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.2 1999-11-22 22:47:24 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.3 2000-01-28 20:56:59 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -180,7 +180,7 @@ struct tiff {
  */
 #ifndef ReadOK
 #define	ReadOK(tif, buf, size) \
-	(TIFFReadFile(tif, (tdata_t) buf, (tsize_t) size) == (tsize_t) size)
+	(TIFFReadFile(tif, (tdata_t) buf, (tsize_t)(size)) == (tsize_t)(size))
 #endif
 #ifndef SeekOK
 #define	SeekOK(tif, off) \
