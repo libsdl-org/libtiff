@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/mkversion.c,v 1.4 2001-11-28 17:07:13 warmerda Exp $ */
+/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/mkversion.c,v 1.5 2003-05-11 19:55:06 dron Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -131,7 +131,7 @@ main(int argc, char* argv[])
      * Read the RELEASE-DATE, and translate format to emit TIFFLIB_VERSION.
      */
     fd = openFile(releaseDateFile);
-    if (fgets(rawReleaseDate, sizeof (version)-1, fd) == NULL) {
+    if (fgets(rawReleaseDate, sizeof (rawReleaseDate)-1, fd) == NULL) {
 	fprintf(stderr, "mkversion: No release date information in %s.\n",
                 releaseDateFile);
 	exit(-1);
@@ -144,7 +144,7 @@ main(int argc, char* argv[])
              rawReleaseDate+3 );
     
     /*
-     * Emit the version.h file.
+     * Emit the tiffvers.h file.
      */
     if (argc > 0) {
 	fd = fopen(argv[0], "w");
