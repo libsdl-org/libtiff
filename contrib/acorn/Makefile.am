@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.2 2004-04-20 10:34:04 dron Exp $
+# $Id: Makefile.am,v 1.1 2004-04-20 10:33:25 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -25,7 +25,5 @@
 
 # Process this file with automake to produce Makefile.in.
 
-EXTRA_DIST = README
-
-SUBDIRS = acorn addtiffo
+EXTRA_DIST = Makefile.acorn ReadMe SetVars cleanlib convert install
 
