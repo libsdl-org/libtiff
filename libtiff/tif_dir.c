@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.8 2000-01-28 15:40:00 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.9 2000-01-28 18:46:41 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1286,7 +1286,6 @@ TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
       case TIS_EMPTY:
         tagcount = 0 ;			/* Clear the list */
         return (TRUE) ;
-        break;
         
       default:
         break;
