@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffsplit.c,v 1.5 2004-02-26 10:14:19 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.6 2004-05-20 19:20:52 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -63,7 +63,7 @@ main(int argc, char* argv[])
 			newfilename();
 			strcpy(path, fname);
 			strcat(path, ".tif");
-			out = TIFFOpen(path, "w");
+			out = TIFFOpen(path, TIFFIsBigEndian(in)?"wb":"wl");
 			if (out == NULL)
 				return (-2);
 			if (!tiffcp(in, out))
