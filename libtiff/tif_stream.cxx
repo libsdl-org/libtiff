@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.1 2004-11-07 18:20:05 dron Exp $ */
+/* $Id: tif_stream.cxx,v 1.2 2004-11-13 11:19:15 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -27,15 +27,17 @@
 /*
  * TIFF Library UNIX-specific Routines.
  */
-#include <iostream.h>
+#include <iostream>
 #include "tiffiop.h"
+
+using namespace std;
 
 class tiffis_data
 {
   public:
 
-        istream	*myIS;
-        long	 myStreamStartPos;
+	istream	*myIS;
+        long	myStreamStartPos;
 };
 
 static tsize_t
@@ -49,7 +51,7 @@ _tiffisReadProc(thandle_t fd, tdata_t buf, tsize_t size)
 {
         tiffis_data	*data = (tiffis_data *)fd;
 
-        data->myIS->read((char *)buf, size);
+        data->myIS->read((char *)buf, (int)size);
 
         return data->myIS->gcount();
 }
@@ -129,8 +131,8 @@ static toff_t
 _tiffisSizeProc(thandle_t fd)
 {
 	tiffis_data	*data = (tiffis_data *)fd;
-	int	pos = data->myIS->tellg();
-	int	len;
+	int		pos = data->myIS->tellg();
+	int		len;
 
 	data->myIS->seekg(0, ios::end);
 	len = data->myIS->tellg();
