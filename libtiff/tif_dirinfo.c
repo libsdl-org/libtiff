@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.3 2001-02-17 03:20:39 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.4 2001-03-02 04:59:52 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -131,6 +131,8 @@ const TIFFFieldInfo tiffFieldInfo[] = {
 #endif
     { TIFFTAG_SOFTWARE,		-1,-1, TIFF_ASCII,	FIELD_SOFTWARE,
       TRUE,	FALSE,	"Software" },
+    { TIFFTAG_COPYRIGHT,	-1,-1, TIFF_ASCII,	FIELD_COPYRIGHT,
+      TRUE,	FALSE,	"Copyright" },
     { TIFFTAG_DATETIME,		20,20, TIFF_ASCII,	FIELD_DATETIME,
       TRUE,	FALSE,	"DateTime" },
     { TIFFTAG_ARTIST,		-1,-1, TIFF_ASCII,	FIELD_ARTIST,
