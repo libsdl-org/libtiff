@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFWriteEncodedStrip.3t,v 1.1 1999-07-27 21:50:27 mike Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFWriteEncodedStrip.3t,v 1.2 2004-09-14 11:52:49 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -43,7 +43,7 @@ Note that the value of
 .I strip
 is a ``raw strip number.''
 That is, the caller must take into account whether or not the
-data are organized in separate places (\c
+data are organized in separate planes (\c
 .IR PlanarConfiguration =2).
 .SH NOTES
 The library writes encoded data using the native machine byte order.
