@@ -1,4 +1,4 @@
-# $Id: nmake.opt,v 1.4 2004-05-19 10:49:33 dron Exp $
+# $Id: nmake.opt,v 1.5 2004-07-03 16:01:29 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -103,10 +103,12 @@ CHECK_JPEG_YCBCR_SUBSAMPLING = 1
 
 MAKE	=	nmake /nologo
 CC	=	cl /nologo
+AR	=	lib /nologo
+LD	=	link /nologo
 
-CFLAGS  = /W3 $(INCL) $(WINMODE) $(EXTRAFLAGS)
+CFLAGS  =	/W3 $(INCL) $(WINMODE) $(EXTRAFLAGS)
 EXTRAFLAGS	=
-LIBS		=
+LIBS	=
 
 # Set the native cpu bit order
 EXTRAFLAGS	= -DFILLODER_LSB2MSB $(EXTRAFLAGS)
