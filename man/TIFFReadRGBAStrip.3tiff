@@ -1,4 +1,4 @@
-.\" $Id: TIFFReadRGBAStrip.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFReadRGBAStrip.3tiff,v 1.2 2005-03-11 10:05:50 dron Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -29,13 +29,13 @@ TIFFReadRGBAStrip \- read and decode an image strip into a fixed-format raster
 .SH SYNOPSIS
 .B "#include <tiffio.h>"
 .sp
-.B "#define TIFFGetR(abgr)	((abgr) & 0xff)"
+.B "#define TIFFGetR(abgr) ((abgr) & 0xff)"
 .br
-.B "#define TIFFGetG(abgr)	(((abgr) >> 8) & 0xff)"
+.B "#define TIFFGetG(abgr) (((abgr) >> 8) & 0xff)"
 .br
-.B "#define TIFFGetB(abgr)	(((abgr) >> 16) & 0xff)"
+.B "#define TIFFGetB(abgr) (((abgr) >> 16) & 0xff)"
 .br
-.B "#define TIFFGetA(abgr)	(((abgr) >> 24) & 0xff)"
+.B "#define TIFFGetA(abgr) (((abgr) >> 24) & 0xff)"
 .sp
 .BI "int TIFFReadRGBAStrip(TIFF *" tif ", uint32 " row ", uint32 *" raster ")"
 .SH DESCRIPTION
