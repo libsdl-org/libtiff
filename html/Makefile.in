@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/html/Makefile.in,v 1.5 2001-07-17 13:13:37 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/html/Makefile.in,v 1.6 2001-12-07 16:33:52 warmerda Exp $
 #
 # @WARNING@
 #
@@ -86,6 +86,8 @@ IMAGES=\
 	images/cat.gif		\
 	images/cover.jpg	\
 	images/cramps.gif	\
+	images/dave.gif	\
+	images/info.gif	\
 	images/jello.jpg	\
 	images/jim.gif		\
 	images/note.gif		\
