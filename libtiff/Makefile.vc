@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.8 2004-08-01 10:37:42 dron Exp $
+# $Id: Makefile.vc,v 1.9 2004-09-12 15:03:54 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -73,6 +73,9 @@ all:	libtiff.lib libtiff.dll
 
 tif_config.h:
 	copy tif_config.h.vc tif_config.h
+
+tiffconf.h:
+	copy tiffconf.h.vc tiffconf.h
 
 libtiff.lib:	tif_config.h $(OBJ)
 	$(AR) /out:libtiff.lib $(OBJ) $(LIBS)
