@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.42 2004-12-15 22:40:28 fwarmerdam Exp $ */
+/* $Id: tif_getimage.c,v 1.43 2004-12-19 17:11:17 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -247,11 +247,11 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &img->samplesperpixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
 	&extrasamples, &sampleinfo);
-    if (extrasamples == 1)
+    if (extrasamples > 1)
     {
 	switch (sampleinfo[0]) {
 	case EXTRASAMPLE_UNSPECIFIED:	/* Workaround for some images without */
-		if (img->samplesperpixel == 4)	/* correct info about alpha channel */
+		if (img->samplesperpixel > 3)	/* correct info about alpha channel */
 			img->alpha = EXTRASAMPLE_ASSOCALPHA;
 		break;
 	case EXTRASAMPLE_ASSOCALPHA:	/* data is pre-multiplied */
