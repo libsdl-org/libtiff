@@ -1,4 +1,4 @@
-$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.4 2001-05-08 12:34:14 morourke Exp $
+$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.5 2004-10-30 13:44:45 dron Exp $
 
 
 TIFF Software Distribution
@@ -23,7 +23,7 @@ want to do is:
     # make install
 
 More information, email contacts, and mailing list information can be 
-found online at http://www.libtiff.org/.
+found online at http://www.remotesensing.org/libtiff/.
 
 
 Use and Copyright
