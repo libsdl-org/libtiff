@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2rgba.c,v 1.4 2001-06-13 15:24:37 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2rgba.c,v 1.5 2001-08-11 03:13:59 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -56,7 +56,7 @@ main(int argc, char* argv[])
     extern int optind;
     extern char *optarg;
 
-    while ((c = getopt(argc, argv, "c:r:t:b:n")) != -1)
+    while ((c = getopt(argc, argv, "c:r:t:bn")) != -1)
         switch (c) {
           case 'b':
             process_by_block = 1;
