@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_print.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_print.c,v 1.3 2000-01-28 21:05:40 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -72,7 +72,7 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 	uint16 i;
 	long l, n;
 
-	fprintf(fd, "TIFF Directory at offset 0x%lx\n", (long) tif->tif_diroff);
+	fprintf(fd, "TIFF Directory at offset 0x%lx\n", tif->tif_diroff);
 	td = &tif->tif_dir;
 	if (TIFFFieldSet(tif,FIELD_SUBFILETYPE)) {
 		fprintf(fd, "  Subfile Type:");
