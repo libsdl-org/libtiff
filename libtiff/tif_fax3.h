@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.h,v 1.2 1999-09-17 04:08:59 mwelles Exp $ */
+/* $Id: tif_fax3.h,v 1.3 2000-09-26 12:59:19 warmerda Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -360,6 +360,8 @@ static const char* StateNames[] = {
     doneBlack1d:							\
 	if (a0 >= lastx)						\
 	    goto done1d;						\
+        if( *(pa-1) == 0 && *(pa-2) == 0 )				\
+            pa -= 2;                                                    \
     }									\
 eof1d:									\
     prematureEOF(a0);							\
