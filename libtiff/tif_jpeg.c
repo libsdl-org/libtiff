@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.24 2004-10-12 18:50:48 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.25 2004-10-15 14:49:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -38,7 +38,6 @@
  *
  * Contributed by Tom Lane <tgl@sss.pgh.pa.us>.
  */
-#include <stdio.h>
 #include <setjmp.h>
 
 int TIFFFillStrip(TIFF*, tstrip_t);
