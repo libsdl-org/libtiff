@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.10 2002-04-03 20:18:16 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.11 2002-04-04 14:35:35 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -396,7 +396,11 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 		/*
 	 	 * Add the new entry to the code table.
 	 	 */
-		assert(&sp->dec_codetab[0] <= free_entp && free_entp < &sp->dec_codetab[CSIZE]);
+		if (&sp->dec_codetab[0] > free_entp || free_entp >= &sp->dec_codetab[CSIZE]) {
+			TIFFError(tif->tif_name, "LZWDecode: Unexpected end of code table");
+			return (0);
+		}
+
 		free_entp->next = oldcodep;
 		free_entp->firstchar = free_entp->next->firstchar;
 		free_entp->length = free_entp->next->length+1;
@@ -571,7 +575,11 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 		/*
 	 	 * Add the new entry to the code table.
 	 	 */
-		assert(&sp->dec_codetab[0] <= free_entp && free_entp < &sp->dec_codetab[CSIZE]);
+		if (&sp->dec_codetab[0] > free_entp || free_entp >= &sp->dec_codetab[CSIZE]) {
+			TIFFError(tif->tif_name, "LZWDecode: Unexpected end of code table");
+			return (0);
+		}
+
 		free_entp->next = oldcodep;
 		free_entp->firstchar = free_entp->next->firstchar;
 		free_entp->length = free_entp->next->length+1;
