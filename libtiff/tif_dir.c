@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.23 2002-06-14 11:13:14 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.24 2002-11-30 20:12:54 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -943,6 +943,7 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
                 {
                     *va_arg(ap, void **) = tv->value;
                     ret_val = 1;
+                    break;
                 }
                 else
                 {
