@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/html/Makefile.in,v 1.8 2002-10-02 15:09:14 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/html/Makefile.in,v 1.9 2003-12-31 09:12:30 dron Exp $
 #
 # @WARNING@
 #
@@ -86,6 +86,8 @@ HTMLFILES=\
 	v3.5.5.html		\
 	v3.5.6-beta.html	\
 	v3.5.7.html		\
+	v3.6.0.html		\
+	v3.6.1.html		\
 	${NULL}
 IMAGES=\
 	images/back.gif		\
