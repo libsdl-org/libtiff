@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.6 2000-04-21 21:45:33 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.7 2002-02-24 15:01:15 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -239,12 +239,19 @@ TIFFReadDirectory(TIFF* tif)
 			fix++;
 		if (fix == tif->tif_nfields ||
 		    tif->tif_fieldinfo[fix]->field_tag != dp->tdir_tag) {
-			TIFFWarning(tif->tif_name,
-			    "unknown field with tag %d (0x%x) ignored",
-			    dp->tdir_tag,  dp->tdir_tag);
-			dp->tdir_tag = IGNORE;
-			fix = 0;			/* restart search */
-			continue;
+
+                    TIFFWarning(tif->tif_name,
+                                "unknown field with tag %d (0x%x) encountered",
+                                dp->tdir_tag,  dp->tdir_tag);
+
+                    TIFFMergeFieldInfo( tif,
+                                        _TIFFCreateAnonFieldInfo( tif,
+                                              dp->tdir_tag, dp->tdir_type ),
+                                        1 );
+                    fix = 0;
+                    while (fix < tif->tif_nfields &&
+                           tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
+			fix++;
 		}
 		/*
 		 * Null out old tags that we ignore.
