@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.14 2002-03-27 06:33:59 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.15 2002-04-03 20:14:20 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -451,7 +451,6 @@ TIFFFieldInfo*
 _TIFFCreateAnonFieldInfo(TIFF *tif, ttag_t tag, TIFFDataType field_type)
 {
     TIFFFieldInfo *fld;
-    int            field_id;
 
     fld = _TIFFmalloc(sizeof (TIFFFieldInfo));
     _TIFFmemset( fld, 0, sizeof(TIFFFieldInfo) );
@@ -464,7 +463,7 @@ _TIFFCreateAnonFieldInfo(TIFF *tif, ttag_t tag, TIFFDataType field_type)
     fld->field_oktochange = TRUE;
     fld->field_passcount = TRUE;
     fld->field_name = (char *) _TIFFmalloc(32);
-    sprintf( fld->field_name, "Tag %d", tag );
+    sprintf( fld->field_name, "Tag %d", (int) tag );
 
     return fld;    
 }
