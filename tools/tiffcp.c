@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.13 2003-06-10 06:15:36 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.14 2003-07-26 03:50:08 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -173,7 +173,7 @@ main(int argc, char* argv[])
                           exit (-2);
                         }
                         {
-                          uint16    samples = -1;
+                          uint16    samples = (uint16) -1;
                           char **biasFn = &optarg;
                           bias = openSrcImage (biasFn);
                           if (!bias) exit (-5);
