@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.17 2004-06-04 11:27:08 dron Exp $ */
+/* $Id: tiffiop.h,v 1.18 2004-06-04 22:03:10 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -38,6 +38,24 @@
 
 #include "tiffio.h"
 #include "tif_dir.h"
+
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+
+/* Define BSDTYPES if we don't have the ones */
+# ifndef HAVE_U_CHAR
+typedef unsigned char u_char;
+# endif
+# ifndef HAVE_U_SHORT
+typedef unsigned short u_short;
+# endif
+# ifndef HAVE_U_INT
+typedef unsigned int u_int;
+# endif
+# ifndef HAVE_U_LONG
+typedef unsigned long u_long;
+# endif
 
 typedef double dblparam_t;
 
