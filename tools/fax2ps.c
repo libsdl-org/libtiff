@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.16 2004-09-02 14:37:29 dron Exp $" */
+/* $Id: fax2ps.c,v 1.17 2004-09-09 18:02:13 fwarmerdam Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
