@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.10 2000-01-28 20:59:06 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.11 2000-03-03 15:15:57 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1010,7 +1010,7 @@ TIFFDefaultDirectory(TIFF* tif)
 	td->td_tilelength = (uint32) -1;
 	td->td_tiledepth = 1;
 	td->td_resolutionunit = RESUNIT_INCH;
-	td->td_sampleformat = SAMPLEFORMAT_VOID;
+	td->td_sampleformat = SAMPLEFORMAT_UINT;
 	td->td_imagedepth = 1;
 #ifdef YCBCR_SUPPORT
 	td->td_ycbcrsubsampling[0] = 2;
