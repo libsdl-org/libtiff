@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.31 2005-01-12 12:51:26 dron Exp $ */
+/* $Id: tiff2ps.c,v 1.32 2005-02-03 17:02:19 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -599,8 +599,8 @@ TIFF2PS(FILE* fd, TIFF* tif,
 			if (!generateEPSF && ( level2 || level3 )) {
 				fprintf(fd,
 	"1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
-					pw ? pw : (rotate ? prh : prw),
-					ph ? ph : (rotate ? prw : prh));
+					pw ? pw * PS_UNIT_SIZE : (rotate ? prh : prw),
+					ph ? ph * PS_UNIT_SIZE : (rotate ? prw : prh));
 				fputs(
 	"<<\n  /Policies <<\n    /PageSize 3\n  >>\n>> setpagedevice\n",
 				      fd);
