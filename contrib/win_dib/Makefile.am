@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.5 2004-05-19 18:09:49 dron Exp $
+# $Id: Makefile.am,v 1.1 2004-05-19 18:05:47 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -25,7 +25,5 @@
 
 # Process this file with automake to produce Makefile.in.
 
-EXTRA_DIST = README
-
-SUBDIRS = acorn addtiffo dbs iptcutil mac-cw mac-mpw mfs ojpeg pds ras stream tags win_dib
+EXTRA_DIST = Makefile.w95 README.Tiffile README.tiff2dib Tiffile.cpp tiff2dib.c
 
