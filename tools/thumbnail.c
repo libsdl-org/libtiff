@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/thumbnail.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/thumbnail.c,v 1.2 2001-05-13 14:49:27 warmerda Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -529,7 +529,7 @@ generateThumbnail(TIFF* in, TIFF* out)
     TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32) tnh);
     TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, (uint16) 8);
     TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, (uint16) 1);
-    TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+    TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_PACKBITS);
     TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISWHITE);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
