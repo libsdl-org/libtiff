@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.7 2001-04-03 05:17:02 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.8 2001-04-06 03:02:33 warmerda Exp $
 #
 # @WARNING@
 #
@@ -38,6 +38,7 @@ LIBDIR	= @RELSRCDIR@/libtiff
 # CCOMPILER:	@CCOMPILER@
 #
 SHELL	= @SCRIPT_SH@
+SCRIPT_SH = @SCRIPT_SH@
 NULL	=
 CC	= @CCOMPILER@
 INSTALL	= @INSTALL@

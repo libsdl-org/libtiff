@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.10 2001-04-03 05:17:02 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.11 2001-04-06 03:02:33 warmerda Exp $
 #
 # Tag Image File Format Library
 #
@@ -34,6 +34,7 @@ SRCDIR	= @LIBSRCDIR@
 # CCOMPILER:	@CCOMPILER@
 #
 SHELL	= @SCRIPT_SH@
+SCRIPT_SH = @SCRIPT_SH@
 NULL	=
 CC	= @CCOMPILER@
 AR	= @AR@
