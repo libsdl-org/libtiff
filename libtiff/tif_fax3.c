@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.3 1999-09-17 04:08:59 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.4 1999-09-29 16:09:59 mwelles Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -499,7 +499,7 @@ Fax3SetupState(TIFF* tif)
 		uint32 nruns = needsRefLine ?
 		     2*TIFFroundup(rowpixels,32) : rowpixels;
 
-		dsp->runs = (uint32*) _TIFFmalloc(nruns*sizeof (uint16));
+		dsp->runs = (uint32*) _TIFFmalloc(nruns*sizeof (uint32));
 		if (dsp->runs == NULL) {
 			TIFFError("Fax3SetupState",
 			    "%s: No space for Group 3/4 run arrays",
