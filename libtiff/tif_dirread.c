@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.23 2003-09-25 08:36:21 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.24 2003-09-30 09:38:55 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -248,9 +248,9 @@ TIFFReadDirectory(TIFF* tif)
 		if( TIFFReassignTagToIgnore(TIS_EXTRACT, dp->tdir_tag) )
                     dp->tdir_tag = IGNORE;
 
-		if (dp->tdir_tag == IGNORE)
-                    continue;
-                
+		if (fix >= tif->tif_nfields || dp->tdir_tag == IGNORE)
+			continue;
+               
 		/*
 		 * Silicon Beach (at least) writes unordered
 		 * directory tags (violating the spec).  Handle
@@ -266,9 +266,9 @@ TIFFReadDirectory(TIFF* tif)
 			fix = 0;			/* O(n^2) */
 		}
 		while (fix < tif->tif_nfields &&
-		    tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
+		       tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
 			fix++;
-		if (fix == tif->tif_nfields ||
+		if (fix >= tif->tif_nfields ||
 		    tif->tif_fieldinfo[fix]->field_tag != dp->tdir_tag) {
 
                     TIFFWarning(module,
@@ -305,7 +305,8 @@ TIFFReadDirectory(TIFF* tif)
 			    fip->field_tag != dp->tdir_tag) {
 				TIFFWarning(module,
 			"%.1000s: wrong data type %d for \"%s\"; tag ignored",
-				    tif->tif_name, dp->tdir_type, fip[-1].field_name);
+					    tif->tif_name, dp->tdir_type,
+					    fip[-1].field_name);
 				goto ignore;
 			}
 		}
