@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_aux.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_aux.c,v 1.2 2000-03-02 19:59:52 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -141,6 +141,7 @@ TIFFVGetFieldDefaulted(TIFF* tif, ttag_t tag, va_list ap)
 		*va_arg(ap, uint32 *) = td->td_tiledepth;
 		return (1);
 	case TIFFTAG_DATATYPE:
+	case TIFFTAG_SAMPLEFORMAT:
 		*va_arg(ap, uint16 *) = td->td_sampleformat-1;
 		return (1);
 	case TIFFTAG_IMAGEDEPTH:
