@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.43 2004-12-19 17:11:17 dron Exp $ */
+/* $Id: tif_getimage.c,v 1.44 2004-12-25 20:20:57 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -247,7 +247,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
     TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &img->samplesperpixel);
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
 	&extrasamples, &sampleinfo);
-    if (extrasamples > 1)
+    if (extrasamples >= 1)
     {
 	switch (sampleinfo[0]) {
 	case EXTRASAMPLE_UNSPECIFIED:	/* Workaround for some images without */
