@@ -1,5 +1,5 @@
 dnl                                               -*- Autoconf -*-
-dnl $Id: configure.ac,v 1.1 2004-03-19 17:26:22 dron Exp $
+dnl $Id: configure.ac,v 1.2 2004-03-26 11:48:29 dron Exp $
 dnl
 dnl Tag Image File Format (TIFF) Software
 dnl
@@ -86,6 +86,8 @@ AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([floor gettimeofday isascii memmove memset munmap pow sqrt strcasecmp strchr strncasecmp strrchr strstr strtol strtoul])
+
+AC_SUBST(LIBTIFF,../libtiff/libtiff.la)
 
 AC_CONFIG_FILES([Makefile \
                  html/Makefile \
