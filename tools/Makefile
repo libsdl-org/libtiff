@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/Makefile,v 1.2 1999-08-16 18:27:51 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/Makefile,v 1.3 1999-09-28 17:22:20 mwelles Exp $
 #
 # Warning, this file was automatically created by the TIFF configure script
 #
@@ -32,14 +32,14 @@ SRCDIR	= ../tools
 LIBDIR	= ../libtiff
 
 #
-# VERSION:	v3.5.1
-# DATE:		Mon Aug 16 13:54:45 EDT 1999
+# VERSION:	v3.5.2
+# DATE:		Tue Sep 28 13:26:51 CEST 1999
 # TARGET:	i586-unknown-linux
-# CCOMPILER:	/usr/local/bin/gcc
+# CCOMPILER:	/usr/bin/gcc
 #
 SHELL	= /bin/sh
 NULL	=
-CC	= /usr/local/bin/gcc
+CC	= /usr/bin/gcc
 INSTALL	= ${SHELL} ../port/install.sh
 #
 COPTS	= -g
