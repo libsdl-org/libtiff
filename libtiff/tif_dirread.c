@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.35 2004-09-10 10:55:10 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.36 2004-09-14 06:50:22 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -298,7 +298,7 @@ TIFFReadDirectory(TIFF* tif)
 		 * Check data type.
 		 */
 		fip = tif->tif_fieldinfo[fix];
-		while (dp->tdir_type != (u_short) fip->field_type
+		while (dp->tdir_type != (unsigned short) fip->field_type
                        && fix < tif->tif_nfields) {
 			if (fip->field_type == TIFF_ANY)	/* wildcard */
 				break;

@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.24 2004-08-19 08:22:01 dron Exp $ */
+/* $Id: tiffiop.h,v 1.25 2004-09-14 07:01:49 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -43,20 +43,6 @@
 #if HAVE_STRING_H
 # include <string.h>
 #endif
-
-/* Define BSDTYPES if we don't have the ones */
-# ifndef HAVE_U_CHAR
-typedef unsigned char u_char;
-# endif
-# ifndef HAVE_U_SHORT
-typedef unsigned short u_short;
-# endif
-# ifndef HAVE_U_INT
-typedef unsigned int u_int;
-# endif
-# ifndef HAVE_U_LONG
-typedef unsigned long u_long;
-# endif
 
 #include "tiffio.h"
 #include "tif_dir.h"
@@ -309,3 +295,5 @@ extern	TIFFCodec _TIFFBuiltinCODECS[];
 }
 #endif
 #endif /* _TIFFIOP_ */
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
