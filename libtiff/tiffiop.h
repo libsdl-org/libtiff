@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.16 2004-06-04 10:25:58 dron Exp $ */
+/* $Id: tiffiop.h,v 1.17 2004-06-04 11:27:08 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,11 +30,7 @@
  * ``Library-private'' definitions.
  */
 
-#if defined(_MSC_VER)
-# include "config.h.vc"
-#else
-# include "config.h"
-#endif
+#include "config.h"
 
 #if HAVE_FCNTL_H
 # include <fcntl.h>
