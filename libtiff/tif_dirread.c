@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.9 2002-03-27 14:46:45 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.10 2002-04-08 17:07:19 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -252,6 +252,7 @@ TIFFReadDirectory(TIFF* tif)
                     while (fix < tif->tif_nfields &&
                            tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
 			fix++;
+		    dp->tdir_tag = IGNORE;
 		}
 		/*
 		 * Null out old tags that we ignore.
