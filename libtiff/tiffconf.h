@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffconf.h,v 1.4 2001-12-15 15:11:22 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffconf.h,v 1.5 2002-03-24 15:47:03 dbmalloc Exp $ */
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -78,6 +78,7 @@
  *    ICC_SUPPORT	enable support for ICC profile tag
  *    PHOTOSHOP_SUPPORT enable support for PHOTOSHOP resource tag
  *    IPTC_SUPPORT  enable support for RichTIFF IPTC tag
+ *    XML_SUPPORT  enable support for XML Packet tag
  */
 #define	COLORIMETRY_SUPPORT
 #define	YCBCR_SUPPORT
@@ -85,6 +86,7 @@
 #define	ICC_SUPPORT
 #define PHOTOSHOP_SUPPORT
 #define IPTC_SUPPORT
+#define XML_SUPPORT
 #endif /* FEATURE_SUPPORT */
 
 #ifndef COMPRESSION_SUPPORT
