@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.23 2004-06-05 08:13:06 dron Exp $ */
+/* $Id: tiff2ps.c,v 1.24 2004-08-23 13:16:54 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -405,7 +405,7 @@ PhotoshopBanner(FILE* fd, uint32 w, uint32 h, int bs, int nc, char* startline)
 static void
 setupPageState(TIFF* tif, uint32* pw, uint32* ph, double* pprw, double* pprh)
 {
-	double xres, yres;
+	double xres = 0.0, yres = 0.0;
 
 	TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, pw);
 	TIFFGetField(tif, TIFFTAG_IMAGELENGTH, ph);
