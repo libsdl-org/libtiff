@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.16 2000-12-22 22:33:41 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.17 2000-12-28 22:59:43 warmerda Exp $
 #
 # @WARNING@
 #
@@ -121,6 +121,7 @@ TIFFFILES=\
 	Makefile.in				\
 	README					\
 	VERSION					\
+	RELEASE-DATE				\
 	COPYRIGHT				\
 	TODO					\
 	test_pics.sh				\
