@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.19 2001-04-03 05:17:02 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.20 2001-04-06 02:53:24 warmerda Exp $
 #
 # @WARNING@
 #
@@ -38,6 +38,7 @@ SRCDIR	= @SRCDIR@
 #
 @SETMAKE@
 SHELL	= @SCRIPT_SH@
+SCRIPT_SH = @SCRIPT_SH@
 NULL	=
 ECHO	= echo
 GENDIST	= ${TOOLROOT}/usr/sbin/gendist
