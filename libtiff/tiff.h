@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.23 2004-06-06 10:20:12 dron Exp $ */
+/* $Id: tiff.h,v 1.24 2004-09-10 10:02:03 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -50,6 +50,9 @@
  * 32-bit quantities	int32/uint32
  * strings		unsigned char*
  */
+#ifndef _TIFF_DATA_TYPEDEFS_
+#define _TIFF_DATA_TYPEDEFS_
+
 #ifndef HAVE_INT8
 # ifdef __STDC__
 typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
@@ -74,6 +77,8 @@ typedef	int int32;
 # endif
 typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
 #endif
+
+#endif /* _TIFF_DATA_TYPEDEFS_ */
 
 /* For TIFFReassignTagToIgnore */
 enum TIFFIgnoreSense /* IGNORE tag table */
