@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.23 2002-02-05 17:46:57 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.24 2002-02-11 13:50:26 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.23 $"
+	echo "This is TIFF configure $Revision: 1.24 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1196,6 +1196,12 @@ if [ "$DSO" = auto ]; then
     *-openbsd*)
 	DSOSUF=so.${DIST_MAJOR}.${DIST_MINOR}
 	LIBCOPTS='-fpic'
+	DSOSUF=so.${DIST_MAJOR}${DIST_MINOR}.${DIST_POINT}
+	if [ "`uname -m`" = "sparc64" ]; then
+	  LIBCOPTS='-fPIC'
+	else
+	  LIBCOPTS='-fpic'
+	fi
 	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
 	case "$TARGET" in
 	   *-openbsd[01].* | *-openbsd2.[0-7] | *-openbsd2.[0-7].*)
