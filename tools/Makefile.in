@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.2 1999-08-16 18:26:37 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.3 1999-12-20 23:46:11 mwelles Exp $
 #
 # @WARNING@
 #
@@ -108,8 +108,8 @@ all:	${TARGETS}
 	    true; \
 	fi
 install: all
-	${INSTALL} -idb tiff.sw.tools -m 755 -dir @DIR_BIN@
-	${INSTALL} -idb tiff.sw.tools -m 755 -F @DIR_BIN@ -O ${TARGETS}
+	${INSTALL} -idb nostrip tiff.sw.tools -m 755 -dir @DIR_BIN@
+	${INSTALL} -idb nostrip tiff.sw.tools -m 755 -F @DIR_BIN@ -O ${TARGETS}
 	@if [ "@LIBIMAGE@" = yes ]; then \
 	    ${INSTALL} -idb tiff.sw.tools -m 755 -F @DIR_BIN@ -O sgi2tiff; \
 	else \

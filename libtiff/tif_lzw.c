@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.4 1999-11-27 21:35:19 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.5 1999-12-20 23:46:11 mwelles Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -665,12 +665,12 @@ TIFFInitLZW(TIFF* tif, int scheme)
 	/*
 	 * Allocate state block so tag methods have storage to record values.
 	 */
+	tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (LZWDecodeState));
+	if (tif->tif_data == NULL)
+	  goto bad;
 	if (tif->tif_mode == O_RDONLY) {
-		tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (LZWDecodeState));
-		if (tif->tif_data == NULL)
-			goto bad;
-		DecoderState(tif)->dec_codetab = NULL;
-		DecoderState(tif)->dec_decode = NULL;
+	  DecoderState(tif)->dec_codetab = NULL;
+	  DecoderState(tif)->dec_decode = NULL;
 	} 
 	/*
 	 * Install codec methods.

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_compress.c,v 1.2 1999-11-27 20:01:23 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_compress.c,v 1.3 1999-12-20 23:46:11 mwelles Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -36,13 +36,21 @@ TIFFNoEncode(TIFF* tif, char* method)
 {
 	const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
 
-	if (c)
-		TIFFError(tif->tif_name, "%s %s encoding is not implemented",
-		    c->name, method);
-	else
+	if (c) { 
+	  if (! strncmp(c->name, "LZW", 3) ){ 
+	    TIFFError(tif->tif_name, 
+		      "%s %s encoding is no longer implemented due to Unisys patent enforcement.", 
+		      c->name, method); 
+	  } else { 
+	    TIFFError(tif->tif_name, "%s %s encoding is not implemented",
+		      c->name, method);
+	  }
+	}
+	else { 
 		TIFFError(tif->tif_name,
-		    "Compression scheme %u %s encoding is not implemented",
+			  "Compression scheme %u %s encoding is not implemented",
 		    tif->tif_dir.td_compression, method);
+	}
 	return (-1);
 }
 
