@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.20 2004-06-05 09:02:03 dron Exp $ */
+/* $Id: tiffiop.h,v 1.21 2004-06-07 19:35:34 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -65,7 +65,7 @@ typedef double dblparam_t;
 
 #define GLOBALDATA(TYPE,NAME)	extern TYPE NAME
 
-#define    streq(a,b)      (strcasecmp(a,b) == 0)
+#define    streq(a,b)      (strcmp(a,b) == 0)
 
 #ifndef TRUE
 #define	TRUE	1
