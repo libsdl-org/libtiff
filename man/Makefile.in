@@ -1,0 +1,206 @@
+#	$Header: /usr/people/sam/tiff/man/RCS/Makefile.in,v 1.4 1995/06/28 04:40:37 sam Exp $
+#
+# @WARNING@
+#
+# Tag Image File Format Library Manual Pages
+#
+# Copyright (c) 1991-1995 Sam Leffler
+# Copyright (c) 1991-1995 Silicon Graphics, Inc.
+# 
+# Permission to use, copy, modify, distribute, and sell this software and 
+# its documentation for any purpose is hereby granted without fee, provided
+# that (i) the above copyright notices and this permission notice appear in
+# all copies of the software and related documentation, and (ii) the names of
+# Sam Leffler and Silicon Graphics may not be used in any advertising or
+# publicity relating to the software without the specific, prior written
+# permission of Stanford and Silicon Graphics.
+# 
+# THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+# EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+# WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+# 
+# IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+# ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+# OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+# WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+# LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+# OF THIS SOFTWARE.
+#
+DEPTH	= ..
+
+SRCDIR	= ${DEPTH}/@SRCDIR@/man
+VPATH	= ../@SRCDIR@/man
+
+PORT	= ${DEPTH}/port
+
+#
+# VERSION:	@VERSION@
+# DATE:		@DATE@
+# TARGET:	@TARGET@
+# CCOMPILER:	@CCOMPILER@
+#
+SHELL	= /bin/sh
+NULL	=
+ECHO	= echo
+MV	= mv
+RM	= rm -f
+INSTALL	= @INSTALL@
+
+MAN	= @DIR_MAN@
+
+MANTOOLS=\
+	fax2tiff.1 \
+	fax2ps.1 \
+	gif2tiff.1 \
+	pal2rgb.1 \
+	ppm2tiff.1 \
+	ras2tiff.1 \
+	rgb2ycbcr.1 \
+	sgi2tiff.1 \
+	thumbnail.1 \
+	tiff2bw.1 \
+	tiff2ps.1 \
+	tiffcmp.1 \
+	tiffcp.1 \
+	tiffdither.1 \
+	tiffdump.1 \
+	tiffgt.1 \
+	tiffinfo.1 \
+	tiffmedian.1 \
+	tiffsplit.1 \
+	tiffsv.1 \
+	${NULL}
+MANDEVLINKS=\
+	TIFFComputeTile.3t \
+	TIFFCheckTile.3t \
+	TIFFNumberOfTiles.3t \
+	TIFFComputeStrip.3t \
+	TIFFNumberOfStrips.3t \
+	TIFFCurrentDirectory.3t \
+	TIFFCurrentRow.3t \
+	TIFFCurrentStrip.3t \
+	TIFFCurrentTile.3t \
+	TIFFFdOpen.3t \
+	TIFFFileName.3t \
+	TIFFFileno.3t \
+	TIFFFlushData.3t \
+	TIFFGetMode.3t \
+	TIFFIsTiled.3t \
+	TIFFReverseBits.3t \
+	TIFFSetErrorHandler.3t \
+	TIFFSetWarningHandler.3t \
+	TIFFSwabArrayOfLong.3t \
+	TIFFSwabArrayOfShort.3t \
+	TIFFSwabLong.3t \
+	TIFFSwabShort.3t \
+	TIFFScanlineSize.3t \
+	TIFFStripSize.3t \
+	TIFFTileSize.3t \
+	TIFFVGetField.3t \
+	TIFFVSetField.3t \
+	${NULL}
+MANDEV=\
+	TIFFClose.3t \
+	TIFFError.3t \
+	TIFFFlush.3t \
+	TIFFGetField.3t \
+	TIFFOpen.3t \
+	TIFFPrintDirectory.3t \
+	TIFFReadDirectory.3t \
+	TIFFReadEncodedStrip.3t \
+	TIFFReadEncodedTile.3t \
+	TIFFReadRGBAImage.3t \
+	TIFFReadRawStrip.3t \
+	TIFFReadRawTile.3t \
+	TIFFReadScanline.3t \
+	TIFFReadTile.3t \
+	TIFFSetDirectory.3t \
+	TIFFSetField.3t \
+	TIFFWarning.3t \
+	TIFFWriteDirectory.3t \
+	TIFFWriteEncodedStrip.3t \
+	TIFFWriteEncodedTile.3t \
+	TIFFWriteRawStrip.3t \
+	TIFFWriteRawTile.3t \
+	TIFFWriteScanline.3t \
+	intro.3t \
+	query.3t \
+	size.3t \
+	strip.3t \
+	swab.3t \
+	tile.3t \
+	${NULL}
+TARGETS	= ${MANTOOLS} ${MANDEV} ${MANDEVLINKS}
+
+all:	${TARGETS}
+
+install: all
+	${INSTALL} -m 755 -dir -idb tiff.man.tools ${MAN}
+	${INSTALL} -m 755 -dir -idb tiff.man.tools ${MAN}/man1
+	for i in ${MANTOOLS}; do \
+	    ${INSTALL} -idb tiff.man.tools -m 444 -F ${MAN}/man1 \
+		-src ${SRCDIR}/$$i -O $$i; \
+	done
+	${INSTALL} -m 755 -dir -idb tiff.man.dev ${MAN}/man3
+	for i in ${MANDEV}; do \
+	    ${INSTALL} -idb tiff.man.dev -m 444 -F ${MAN}/man3 \
+		-src ${SRCDIR}/$$i -O $$i; \
+	done
+	${INSTALL} -idb tiff.man.dev -m 444 -F ${MAN}/man3 -O ${MANDEVLINKS}
+
+clean:
+	${RM} ${MANDEVLINKS}
+
+TIFFComputeTile.3t:;		${ECHO} ".so tile.3t" > $@
+TIFFCheckTile.3t:;		${ECHO} ".so tile.3t" > $@
+TIFFNumberOfTiles.3t:;		${ECHO} ".so tile.3t" > $@
+TIFFComputeStrip.3t:;		${ECHO} ".so strip.3t" > $@
+TIFFNumberOfStrips.3t:;		${ECHO} ".so strip.3t" > $@
+TIFFCurrentDirectory.3t:;	${ECHO} ".so query.3t" > $@
+TIFFCurrentRow.3t:;		${ECHO} ".so query.3t" > $@
+TIFFCurrentStrip.3t:;		${ECHO} ".so query.3t" > $@
+TIFFCurrentTile.3t:;		${ECHO} ".so query.3t" > $@
+TIFFFdOpen.3t:;			${ECHO} ".so TIFFOpen.3t" > $@
+TIFFFileName.3t:;		${ECHO} ".so query.3t" > $@
+TIFFFileno.3t:;			${ECHO} ".so query.3t" > $@
+TIFFFlushData.3t:;		${ECHO} ".so TIFFFlush.3t" > $@
+TIFFGetMode.3t:;		${ECHO} ".so query.3t" > $@
+TIFFIsTiled.3t:;		${ECHO} ".so query.3t" > $@
+TIFFReverseBits.3t:;		${ECHO} ".so swab.3t" > $@
+TIFFSetErrorHandler.3t:;	${ECHO} ".so TIFFError.3t" > $@
+TIFFSetWarningHandler.3t:;	${ECHO} ".so TIFFWarning.3t" > $@
+TIFFSwabArrayOfLong.3t:;	${ECHO} ".so swab.3t" > $@
+TIFFSwabArrayOfShort.3t:;	${ECHO} ".so swab.3t" > $@
+TIFFSwabLong.3t:;		${ECHO} ".so swab.3t" > $@
+TIFFSwabShort.3t:;		${ECHO} ".so swab.3t" > $@
+TIFFScanlineSize.3t:;		${ECHO} ".so size.3t" > $@
+TIFFStripSize.3t:;		${ECHO} ".so size.3t" > $@
+TIFFTileSize.3t:;		${ECHO} ".so size.3t" > $@
+TIFFVGetField.3t:;		${ECHO} ".so TIFFGetField.3t" > $@
+TIFFVSetField.3t:;		${ECHO} ".so TIFFSetField.3t" > $@
+
+links:	${MANDEVLINKS}
+
+short:
+	${MV} TIFFClose.3t close.3t
+	${MV} TIFFError.3t error.3t
+	${MV} TIFFFlush.3t flush.3t
+	${MV} TIFFGetField.3t getfield.3t
+	${MV} TIFFOpen.3t open.3t
+	${MV} TIFFPrintDirectory.3t print.3t
+	${MV} TIFFReadEncodedStrip.3t rdestrip.3t
+	${MV} TIFFReadencodedTile.3t rdetile.3t
+	${MV} TIFFReadRawStrip.3t rdrstrip.3t
+	${MV} TIFFReadRawTile.3t rdrtile.3t
+	${MV} TIFFReadDirectory.3t readdir.3t
+	${MV} TIFFReadScanline.3t readline.3t
+	${MV} TIFFReadTile.3t readtile.3t
+	${MV} TIFFSetDirectory.3t setdir.3t
+	${MV} TIFFSetField.3t setfield.3t
+	${MV} TIFFWarning.3t warning.3t
+	${MV} TIFFWriteEncodedStrip.3t wrestrip.3t
+	${MV} TIFFWriteEncodedTile.3t wretile.3t
+	${MV} TIFFWriteDirectory.3t writedir.3t
+	${MV} TIFFWriteRawStrip.3t wrrstrip.3t
+	${MV} TIFFWriteRawTile.3t wrrtile.3t
+	${MV} TIFFWriteScanline.3t writeline.3t

@@ -1,0 +1,57 @@
+.\" $Header: /usr/people/sam/tiff/man/RCS/strip.3t,v 1.4 1995/07/07 23:29:04 sam Exp $
+.\"
+.\" Copyright (c) 1992, 1993, 1994 Sam Leffler
+.\" Copyright (c) 1992, 1993, 1994 Silicon Graphics, Inc.
+.\"
+.\" Permission to use, copy, modify, distribute, and sell this software and 
+.\" its documentation for any purpose is hereby granted without fee, provided
+.\" that (i) the above copyright notices and this permission notice appear in
+.\" all copies of the software and related documentation, and (ii) the names of
+.\" Sam Leffler and Silicon Graphics may not be used in any advertising or
+.\" publicity relating to the software without the specific, prior written
+.\" permission of Sam Leffler and Silicon Graphics.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+.\" EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+.\" WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+.\" 
+.\" IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+.\" ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+.\" OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+.\" WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+.\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+.\" OF THIS SOFTWARE.
+.\"
+.if n .po 0
+.TH TIFFComputeStrip 3T "February 14, 1992"
+.SH NAME
+TIFFComputeStrip, TIFFNumberOfStrips \- strip-related utility routines
+.SH SYNOPSIS
+.B "#include <tiffio.h>"
+.br
+.B "tstrip_t TIFFComputeStrip(TIFF* tif, uint32 row, tsample_t sample)"
+.br
+.B "tstrip_t TIFFNumberOfStrips(TIFF* tif)"
+.SH DESCRIPTION
+.IR TIFFComputeStrip
+returns the strip that contains the specified coordinates.
+A valid strip is always returned;
+out-of-range coordinate values are clamped to the bounds of the image.
+The
+.I row
+parameter is always used in calculating a strip.
+The
+.I sample
+parameter is used only if data are organized in separate planes (\c
+.IR PlanarConfiguration =2).
+.PP
+.IR TIFFNumberOfStrips
+returns the number of strips in the image.
+.SH DIAGNOSTICS
+None.
+.SH "SEE ALSO"
+.IR intro (3T),
+.IR TIFFReadEncodedStrip (3T),
+.IR TIFFReadRawStrip (3T),
+.IR TIFFWriteEncodedStrip (3T),
+.IR TIFFWriteRawStrip (3T)

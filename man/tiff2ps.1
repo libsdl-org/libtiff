@@ -1,0 +1,169 @@
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiff2ps.1,v 1.16 1995/07/07 23:29:04 sam Exp $
+.\"
+.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
+.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\"
+.\" Permission to use, copy, modify, distribute, and sell this software and 
+.\" its documentation for any purpose is hereby granted without fee, provided
+.\" that (i) the above copyright notices and this permission notice appear in
+.\" all copies of the software and related documentation, and (ii) the names of
+.\" Sam Leffler and Silicon Graphics may not be used in any advertising or
+.\" publicity relating to the software without the specific, prior written
+.\" permission of Sam Leffler and Silicon Graphics.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+.\" EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+.\" WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+.\" 
+.\" IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+.\" ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+.\" OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+.\" WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+.\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+.\" OF THIS SOFTWARE.
+.\"
+.if n .po 0
+.TH TIFF2PS 1 "September 26, 1994"
+.SH NAME
+tiff2ps \- convert a
+.SM TIFF
+image to PostScript\(tm
+.SH SYNOPSIS
+.B tiff2ps
+[
+.I options
+]
+.I input.tif
+.SH DESCRIPTION
+.I tiff2ps
+reads a
+.SM TIFF
+image and writes PostScript or Encapsulated PostScript (EPS)
+on the standard output.
+By default,
+.I tiff2ps
+writes Encapsulated PostScript for the first image in the specified
+.SM TIFF
+image file.
+.PP
+By default,
+.I tiff2ps
+will generate PostScript that fills a printed area specified
+by the 
+.SM TIFF
+tags in the input file.
+If the file does not contain
+.I XResolution
+or
+.I YResolution
+tags, then the printed area is set according to the image dimensions.
+The
+.B \-w
+and
+.B \-h
+options (see below)
+can be used to set the dimensions of the printed area in inches;
+overriding any relevant
+.SM TIFF
+tags.
+.PP
+The PostScript generated for
+.SM RGB,
+palette, and
+.SM CMYK
+images uses the
+.I colorimage
+operator.
+The PostScript generated for
+greyscale and bilevel images
+uses the
+.I image
+operator.
+When the
+.I colorimage
+operator is used, PostScript code to emulate this operator
+on older PostScript printers is also generated.
+Note that this emulation code can be very slow.
+.PP
+Color images with associated alpha data are composited over
+a white background.
+.SH OPTIONS
+.TP
+.B \-1
+Generate PostScript Level I (the default).
+.TP
+.B \-2
+Generate PostScript Level II.
+.TP
+.B \-a
+Generate output for all IFDs (pages) in the input file.
+.TP
+.B \-d
+Set the initial
+.SM TIFF
+directory to the specified directory number.
+(NB: directories are numbered starting at zero.)
+This option is useful for selecting individual pages in a
+multi-page (e.g. facsimile) file.
+.TP
+.B \-e
+Force the generation of Encapsulated PostScript.
+.TP
+.B \-h
+Specify the vertical size of the printed area (in inches).
+.TP
+.B \-o
+Set the initial
+.SM TIFF
+directory to the
+.SM IFD
+at the specified file offset.
+This option is useful for selecting thumbnail images and the
+like which are hidden using the SubIFD tag.
+.TP
+.B \-p
+Force the generation of (non-Encapsulated) PostScript.
+.TP
+.B \-s
+Generate output for a single IFD (page) in the input file.
+.TP
+.B \-w
+Specify the horizontal size of the printed area (in inches).
+.SH EXAMPLES
+The following generates PostScript Level II for all pages of a facsimile:
+.RS
+.nf
+tiff2ps -a2 fax.tif | lpr
+.fi
+.RE
+Note also that if you have version 2.6.1 or newer of Ghostscript then you
+can efficiently preview facsimile generated with the above command.
+.PP
+To generate Encapsulated PostScript for a the image at directory 2
+of an image use:
+.RS
+.nf
+tiff2ps -d 1 foo.tif
+.fi
+.RE
+(notice that directories are numbered starting at zero.)
+.SH BUGS
+Because PostScript does not support the notion of a colormap,
+8-bit palette images produce 24-bit PostScript images.
+This conversion results in output that is six times
+bigger than the original image and which takes a long time
+to send to a printer over a serial line.
+Matters are even worse for 4-, 2-, and 1-bit palette images.
+.SH BUGS
+Does not use PostScript Level II support for printing color images
+(only bilevel and greyscale images).
+Does not handle tiled images.
+.SH "SEE ALSO"
+.IR pal2rgb (1),
+.IR tiffinfo (1),
+.IR tiffcp (1),
+.IR tiffgt (1),
+.IR tiffmedian (1),
+.IR tiff2bw (1),
+.IR tiffsv (1),
+.IR libtiff (3)

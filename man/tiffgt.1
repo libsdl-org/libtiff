@@ -1,0 +1,143 @@
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffgt.1,v 1.18 1995/07/07 23:29:04 sam Exp $
+.\"
+.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
+.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\"
+.\" Permission to use, copy, modify, distribute, and sell this software and 
+.\" its documentation for any purpose is hereby granted without fee, provided
+.\" that (i) the above copyright notices and this permission notice appear in
+.\" all copies of the software and related documentation, and (ii) the names of
+.\" Sam Leffler and Silicon Graphics may not be used in any advertising or
+.\" publicity relating to the software without the specific, prior written
+.\" permission of Sam Leffler and Silicon Graphics.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+.\" EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+.\" WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+.\" 
+.\" IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+.\" ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+.\" OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+.\" WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+.\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+.\" OF THIS SOFTWARE.
+.\"
+.if n .po 0
+.TH TIFFGT 1 "September 26, 1994"
+.SH NAME
+tiffgt \- display an image stored in a
+.SM TIFF
+file (Silicon Graphics version)
+.SH SYNOPSIS
+.B tiffgt
+[
+.I options
+]
+.I input.tif
+.SH DESCRIPTION
+.I tiffgt
+displays an image stored in a file with the
+Tag Image File Format, Revision 6.0.
+The image is placed in a fixed size window that the
+user must position on the display.
+If the display has fewer than 24 bitplanes, or if the
+image does not warrant full color, then
+.SM RGB
+color values are mapped to the closest values that exist in
+the colormap (this is done using the
+.I rgbi
+routine found in the graphics utility library
+.BR \-lgutil .)
+.PP
+.I tiffgt
+correctly handles files with any of the following characteristics:
+.sp .5
+.in +0.5i
+.ta \w'\fIPhotometricInterpretation\fP  'u
+.nf
+BitsPerSample	1, 2, 4, 8, 16
+SamplesPerPixel	1, 3, 4 (the 4th sample is ignored)
+PhotometricInterpretation	0 (min-is-white), 1 (min-is-black), 2 (RGB), 3 (palette), 6 (YCbCr)
+PlanarConfiguration	1 (contiguous), 2 (separate)
+Orientation	1 (top-left), 4 (bottom-left)
+.fi
+.in -0.5i
+.sp .5
+Data may be organized as strips or tiles and may be
+compressed with any of the compression algorithms supported
+by the 
+.IR libtiff (3)
+library.
+.PP
+For palette images (\c
+.IR PhotomatricInterpretation =3),
+.I tiffgt
+inspects the colormap values and assumes either 16-bit
+or 8-bit values according to the maximum value.
+That is, if no colormap entry greater than 255 is found,
+.I tiffgt
+assumes the colormap has only 8-bit values; otherwise
+it assumes 16-bit values.
+This inspection is done to handle old images written by
+previous (incorrect) versions of
+.IR libtiff .
+.SH OPTIONS
+.TP
+.B \-c
+Force image display in a colormap window.
+.TP
+.B \-d
+Specify an image to display by directory number.
+By default the first image in the file is displayed.
+Directories are numbered starting at zero.
+.TP
+.B \-f
+Force 
+.I tiffgt
+to run as a foreground process.
+By default
+.I tiffgt
+will place itself in the background once it has opened the
+requested image file.
+.TP
+.B \-l
+Force the presumed bit ordering to be
+.SM LSB
+to
+.SM MSB.
+.TP
+.B \-m
+Force the presumed bit ordering to be
+.SM MSB
+to
+.SM LSB.
+.TP
+.B \-o
+Specify an image to display by directory offset.
+By default the first image in the file is displayed.
+Directories offsets may be specified using C-style syntax;
+i.e. a leading ``0x'' for hexadecimal and a leading ``0'' for octal.
+.TP
+.B \-r
+Force image display in a full color window.
+.TP
+.B \-s
+Stop on the first read error.
+By default all errors in the input data are ignored and 
+.I tiffgt
+does it's best to display as much of an image as possible.
+.TP
+.B \-v
+Place information in the title bar describing
+what type of window (full color or colormap) is being
+used, the name of the input file, and the directory
+index of the image (if non-zero).
+By default, the window type is not shown in the title bar.
+.SH BUGS
+Images wider and taller than the display are silently truncated to avoid
+crashing old versions of the window manager.
+.SH "SEE ALSO"
+.IR tiffdump (1),
+.IR tiffinfo (1),
+.IR tiffcp (1),
+.IR libtiff (3)

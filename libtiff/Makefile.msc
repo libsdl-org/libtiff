@@ -1,0 +1,151 @@
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.msc,v 1.2 1994/11/28 06:13:31 sam Exp $
+#
+# Tag Image File Format Library
+#
+# Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
+# Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+# 
+# Permission to use, copy, modify, distribute, and sell this software and 
+# its documentation for any purpose is hereby granted without fee, provided
+# that (i) the above copyright notices and this permission notice appear in
+# all copies of the software and related documentation, and (ii) the names of
+# Sam Leffler and Silicon Graphics may not be used in any advertising or
+# publicity relating to the software without the specific, prior written
+# permission of Sam Leffler and Silicon Graphics.
+# 
+# THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+# EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+# WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+# 
+# IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+# ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+# OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+# WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+# LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+# OF THIS SOFTWARE.
+#
+# This Makefile is for use with msc (7.0) using dmake.
+#
+DESTDIR=.
+#
+IPATH=	-I. -I../jpeg
+CONF_LIBRARY=\
+	${NULL}
+COPTS=	-Oxaz -AL -DBSDTYPES -Zi -Zd
+CFLAGS=	${COPTS} ${IPATH} ${CONF_LIBRARY}
+#
+INCS=	tiff.h tiffio.h
+SRCS=	tif_fax3.c \
+	tif_fax4.c \
+	tif_aux.c \
+	tif_ccit.c \
+	tif_clos.c \
+	tif_comp.c \
+	tif_dir.c \
+	tif_diri.c \
+	tif_dirr.c \
+	tif_dirw.c \
+	tif_dump.c \
+	tif_erro.c \
+	tif_geti.c \
+	tif_jpeg.c \
+	tif_flus.c \
+	tif_lzw.c \
+	tif_next.c \
+	tif_open.c \
+	tif_pack.c \
+	tif_prin.c \
+	tif_read.c \
+	tif_swab.c \
+	tif_stri.c \
+	tif_thun.c \
+	tif_tile.c \
+	tif_unix.c \
+	tif_vers.c \
+	tif_warn.c \
+	tif_writ.c \
+	${NULL}
+OBJS=	tif_fax3.obj \
+	tif_fax4.obj \
+	tif_aux.obj \
+	tif_ccit.obj \
+	tif_clos.obj \
+	tif_comp.obj \
+	tif_dir.obj \
+	tif_diri.obj \
+	tif_dirr.obj \
+	tif_dirw.obj \
+	tif_dump.obj \
+	tif_erro.obj \
+	tif_geti.obj \
+	tif_jpeg.obj \
+	tif_flus.obj \
+	tif_lzw.obj \
+	tif_msdo.obj \
+	tif_next.obj \
+	tif_open.obj \
+	tif_pack.obj \
+	tif_prin.obj \
+	tif_read.obj \
+	tif_stri.obj \
+	tif_swab.obj \
+	tif_thun.obj \
+	tif_tile.obj \
+	tif_vers.obj \
+	tif_warn.obj \
+	tif_writ.obj \
+	${NULL}
+ALL=	libtiff.lib
+
+all:	 ${ALL}
+
+%.obj : %.c
+	$(CC) $(CFLAGS) -c $*.c
+
+#.INCLUDE .IGNORE : depend
+
+${ALL}:	${OBJS}
+	lib libtiff /NOIGNO /NOLOGO -+tif_fax3.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_fax4.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_aux.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_ccit.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_clos.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_comp.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_dir.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_diri.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_dirr.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_dirw.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_dump.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_erro.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_geti.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_jpeg.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_flus.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_lzw.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_msdo.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_next.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_open.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_pack.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_prin.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_read.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_stri.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_swab.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_thun.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_tile.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_vers.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_warn.obj;
+        lib libtiff /NOIGNO /NOLOGO -+tif_writ.obj;
+
+${OBJS}: tiffio.h tiff.h tiffcomp.h tiffiop.h tiffconf.h
+tif_fax3.obj: tif_fax3.c g3states.h t4.h tif_fax3.h
+
+g3states.h: mkg3states.c t4.h
+	${CC} ${CFLAGS} mkg3states.c
+	mkg3states -c > g3states.h
+
+clean:
+	del *.obj
+        del mkg3stat
+        del g3states.h
+
+tags:	${SRCS}
+	${CTAGS} ${SRCS}

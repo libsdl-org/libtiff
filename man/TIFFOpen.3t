@@ -1,0 +1,189 @@
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFOpen.3t,v 1.11 1995/07/07 23:29:04 sam Exp $
+.\"
+.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
+.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\"
+.\" Permission to use, copy, modify, distribute, and sell this software and 
+.\" its documentation for any purpose is hereby granted without fee, provided
+.\" that (i) the above copyright notices and this permission notice appear in
+.\" all copies of the software and related documentation, and (ii) the names of
+.\" Sam Leffler and Silicon Graphics may not be used in any advertising or
+.\" publicity relating to the software without the specific, prior written
+.\" permission of Sam Leffler and Silicon Graphics.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+.\" EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+.\" WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+.\" 
+.\" IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+.\" ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+.\" OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+.\" WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+.\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+.\" OF THIS SOFTWARE.
+.\"
+.if n .po 0
+.TH TIFFOpen 3T "February 14, 1992"
+.SH NAME
+TIFFOpen, TIFFFdOpen, TIFFClientOpen \- open a
+.SM TIFF
+file for reading or writing
+.SH SYNOPSIS
+.nf
+.B "#include <tiffio.h>"
+.B "TIFF* TIFFOpen(const char* filename, const char* mode)"
+.sp 5p
+.B "TIFF* TIFFFdOpen(const int fd, const char* filename, const char* mode)"
+.sp 5p
+.B "typedef tsize_t (*TIFFReadWriteProc)(thandle_t, tdata_t, tsize_t);"
+.B "typedef toff_t (*TIFFSeekProc)(thandle_t, toff_t, int);"
+.B "typedef int (*TIFFCloseProc)(thandle_t);"
+.B "typedef toff_t (*TIFFSizeProc)(thandle_t);"
+.B "typedef int (*TIFFMapFileProc)(thandle_t, tdata_t*, toff_t*);"
+.B "typedef void (*TIFFUnmapFileProc)(thandle_t, tdata_t, toff_t);"
+.sp 5p
+.B "TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdata,"
+.B "    TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc,"
+.B "    TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc,"
+.B "    TIFFUnmapFileProc unmapproc)"
+.fi
+.SH DESCRIPTION
+.IR TIFFOpen
+opens a
+.SM TIFF
+file whose name is
+.I filename
+and returns a handle to be used in subsequent calls to routines in
+.IR libtiff .
+If the open operation fails, then zero is returned.
+The
+.I mode
+parameter specifies if the file is to be opened for reading (``r''),
+writing (``w''), or appending (``a'').
+When a file is opened for appending, existing data will not
+be touched; instead new data will be written as additional subfiles.
+If an existing file is opened for writing, all previous data is
+overwritten.
+.PP
+If a file is opened for reading, the first
+.SM TIFF
+directory in the file is automatically read
+(also see
+.IR TIFFSetDirectory (3T)
+for reading directories other than the first).
+If a file is opened for writing or appending, a default directory
+is automatically created for writing subsequent data.
+This directory has all the default values specified in
+.SM TIFF
+Revision 6.0:
+.IR BitsPerSample =1,
+.IR ThreshHolding "=bilevel art scan,"
+.IR FillOrder =1
+(most significant bit of each data byte is filled first),
+.IR Orientation =1
+(the 0th row represents the visual top of the image, and the 0th
+column represents the visual left hand side),
+.IR SamplesPerPixel =1,
+.IR RowsPerStrip =infinity,
+.IR ResolutionUnit =2
+(inches), and
+.IR Compression =1
+(no compression).
+To alter these values, or to define values for additional fields,
+.IR TIFFSetField (3T)
+must be used.
+.PP
+It is not possible to append data to a file that has a
+byte ordering opposite to the native byte ordering of a machine.
+That is, for example, the library will not allow
+a file with little-endian byte ordering to be appended to
+on a machine that has a native big-endian byte ordering.
+.PP
+.IR TIFFFdOpen
+is like
+.IR TIFFOpen
+except that it opens a
+.SM TIFF
+file given an open file descriptor
+.IR fd .
+The file's name and mode must reflect that of the open descriptor.
+The object associated with the file descriptor
+.BR "must support random access" .
+.PP
+.IR TIFFClientOpen
+is like
+.IR TIFFOpen
+except that the caller supplies a collection of functions that the
+library will use to do \s-1UNIX\s+1-like I/O operations. 
+The
+.I readproc
+and
+.I writeproc
+are called to read and write data at the current file position.
+.I seekproc
+is called to change the current file position a la
+.IR lseek (2).
+.I closeproc
+is invoked to release any resources associated with an open file.
+.I sizeproc
+is invoked to obtain the size in bytes of a file.
+.I mapproc
+and
+.I unmapproc
+are called to map and unmap a file's contents in memory; c.f.
+.IR mmap (2)
+and
+.IR munmap (2).
+The
+.I clientdata
+parameter is an opaque ``handle'' passed to the client-specified
+routines passed as parameters to
+.IR TIFFClientOpen .
+.SH "RETURN VALUES"
+Upon successful completion 
+.IR TIFFOpen ,
+.IR TIFFFdOpen ,
+and
+.IR TIFFClientOpen
+return a 
+.SM TIFF
+pointer.
+Otherwise, NULL is returned.
+.SH DIAGNOSTICS
+All error messages are directed to the
+.IR TIFFError (3T)
+routine.
+Likewise, warning messages are directed to the
+.IR TIFFWarning (3T)
+routine.
+.PP
+\fB"%s": Bad mode\fP.
+The specified
+.I mode
+parameter was not one of ``r'' (read), ``w'' (write), or ``a'' (append).
+.PP
+.BR "%s: Cannot open" .
+.IR TIFFOpen ()
+was unable to open the specified filename for read/writing.
+.PP
+.BR "Cannot read TIFF header" .
+An error occurred while attempting to read the header information.
+.PP
+.BR "Error writing TIFF header" .
+An error occurred while writing the default header information
+for a new file.
+.PP
+.BR "Not a TIFF file, bad magic number %d (0x%x)" .
+The magic number in the header was not (hex)
+0x4d4d or (hex) 0x4949.
+.PP
+.BR "Not a TIFF file, bad version number %d (0x%x)" .
+The version field in the header was not 42 (decimal).
+.PP
+.BR "Cannot append to file that has opposite byte ordering" .
+A file with a byte ordering opposite to the native byte
+ordering of the current machine was opened for appending (``a'').
+This is a limitation of the library.
+.SH "SEE ALSO"
+.IR intro (3T),
+.IR TIFFClose (3T)

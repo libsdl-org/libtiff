@@ -1,0 +1,99 @@
+.\"	$Header: /usr/people/sam/tiff/man/RCS/rgb2ycbcr.1,v 1.5 1995/07/07 23:29:04 sam Exp $
+.\"
+.\" Copyright (c) 1991, 1992, 1993, 1994 Sam Leffler
+.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\"
+.\" Permission to use, copy, modify, distribute, and sell this software and 
+.\" its documentation for any purpose is hereby granted without fee, provided
+.\" that (i) the above copyright notices and this permission notice appear in
+.\" all copies of the software and related documentation, and (ii) the names of
+.\" Sam Leffler and Silicon Graphics may not be used in any advertising or
+.\" publicity relating to the software without the specific, prior written
+.\" permission of Sam Leffler and Silicon Graphics.
+.\" 
+.\" THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+.\" EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+.\" WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+.\" 
+.\" IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+.\" ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+.\" OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+.\" WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+.\" LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+.\" OF THIS SOFTWARE.
+.\"
+.if n .po 0
+.TH RGB2YCBCR 1 "September 26, 1994"
+.SH NAME
+rgb2ycbcr \- convert non-YCbCr
+.SM TIFF
+images to a YCbCr
+.SM TIFF
+image
+.SH SYNOPSIS
+.B rgb2ycbcr
+[
+.B \-c
+.I compression
+] [
+.B \-h
+.I hsample
+] [
+.B \-v
+.I vsample
+] [
+.B \-r
+.I rows/strip
+]
+.I "src1.tif src2.tif ... dst.tif"
+.SH DESCRIPTION
+.I Rgb2ycbcr
+converts
+.SM RGB
+color, greyscale, or bi-level
+.SM TIFF
+images to YCbCr images by
+transforming and sampling pixel data.
+If multiple files are specified on the command line,
+.I rgb2ycbcr
+converts all but the last file, writing a
+separate directory for each source
+in the destination file.
+.PP
+By default, chrominance samples are created by sampling
+2 by 2 blocks of luminance values.
+The
+.B \-h
+and
+.B \-v
+options can be used to specify alternate horizontal
+and vertical sampling dimensions, respectively.
+Note that only 1, 2, and 4 should be used for portability.
+.PP
+By default, output data are compressed with the
+.SM LZW
+compression scheme.
+A different scheme can be selected with the
+.B \-c
+option; one of:
+.I none
+(for no compression),
+.I packbits
+(for PackBits compression),
+and
+.I lzw
+(for
+.SM LZW
+compression).
+.PP
+By default, output data are compressed in strips with
+the number of rows in each strip selected so that the
+size of a strip is never more than 8 kilobytes.
+The
+.B \-r
+option can be used to explicitly set the number of
+rows per strip.
+.SH "SEE ALSO"
+.IR tiffinfo (1),
+.IR tiffcp (1),
+.IR libtiff (3)
