@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.7 2000-01-28 15:12:17 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.8 2000-01-28 15:40:00 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -980,12 +980,14 @@ TIFFSetTagExtender(TIFFExtendProc extender)
 int
 TIFFCreateDirectory(TIFF* tif)
 {
-	TIFFDefaultDirectory(tif);
-	tif->tif_diroff = 0;
-        tif->tif_nextdiroff = 0;
-	tif->tif_curoff = 0;
-	tif->tif_row = (uint32) -1;
-	tif->tif_curstrip = (tstrip_t) -1;
+    TIFFDefaultDirectory(tif);
+    tif->tif_diroff = 0;
+    tif->tif_nextdiroff = 0;
+    tif->tif_curoff = 0;
+    tif->tif_row = (uint32) -1;
+    tif->tif_curstrip = (tstrip_t) -1;
+
+    return 0;
 }
 
 /*
