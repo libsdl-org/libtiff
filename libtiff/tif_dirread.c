@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.38 2004-09-23 08:58:11 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.39 2004-09-24 08:10:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -64,8 +64,8 @@ static	void ChopUpSingleUncompressedStrip(TIFF*);
 static char *
 CheckMalloc(TIFF* tif, size_t nmemb, size_t elem_size, const char* what)
 {
-	char *cp = NULL;
-	size_t bytes = nmemb * elem_size;
+	char	*cp = NULL;
+	tsize_t	bytes = nmemb * elem_size;
 
 	/*
 	 * XXX: Check for integer overflow.
