@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.5 1999-11-27 21:23:42 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.6 1999-11-28 20:15:36 mwelles Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -659,7 +659,7 @@ Fax3PutEOL(TIFF* tif)
 	Fax3EncodeState* sp = EncoderState(tif);
 	u_int bit = sp->bit;
 	int data = sp->data;
-	u_int code, length;
+	u_int code, length, tparm;
 
 	if (sp->b.groupoptions & GROUP3OPT_FILLBITS) {
 		/*
@@ -674,7 +674,8 @@ Fax3PutEOL(TIFF* tif)
 			else
 				align = sp->bit - align;
 			code = 0;
-			_PutBits(tif, ((u_int)0), ((u_int)align));
+			tparm=align; 
+			_PutBits(tif, 0, tparm);
 		}
 	}
 	code = EOL, length = 12;
