@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.3 2004-04-15 10:44:32 dron Exp $ */
+/* $Id: tiffinfo.c,v 1.4 2004-06-04 11:50:09 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -44,7 +44,8 @@ static	void tiffinfo(TIFF*, uint16, long);
 int
 main(int argc, char* argv[])
 {
-	int dirnum = -1, multiplefiles, c;
+	tdir_t dirnum = -1;
+	int multiplefiles, c;
 	uint16 order = 0;
 	TIFF* tif;
 	extern int optind;

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.9 2003-05-25 05:56:26 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.10 2004-06-04 11:50:09 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -118,10 +118,10 @@ main(int argc, char* argv[])
 			fillorder_in = FILLORDER_MSB2LSB;
 			break;
 		case 'R':		/* input resolution */
-			resY = atof(optarg);
+			resY = (float) atof(optarg);
 			break;
 		case 'X':		/* input width */
-			xsize = atof(optarg);
+			xsize = atoi(optarg);
 			break;
 
 			/* output-related options */
