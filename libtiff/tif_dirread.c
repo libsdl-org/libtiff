@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.19 2003-06-30 18:25:50 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.20 2003-07-08 16:40:46 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1296,14 +1296,14 @@ TIFFFetchStripThing(TIFF* tif, TIFFDirEntry* dir, long nstrips, uint32** lpp)
 		if( (status = TIFFFetchShortArray(tif, dir, dp)) != 0 ) {
                     int i;
                     
-                    for( i = 0; i < nstrips && i < dir->tdir_count; i++ )
+                    for( i = 0; i < nstrips && i < (int) dir->tdir_count; i++ )
                     {
                         lp[i] = dp[i];
                     }
 		}
 		_TIFFfree((char*) dp);
 
-        } else if( nstrips != dir->tdir_count ) {
+        } else if( nstrips != (int) dir->tdir_count ) {
             /* Special case to correct length */
 
             uint32* dp = (uint32*) CheckMalloc(tif,
@@ -1315,7 +1315,7 @@ TIFFFetchStripThing(TIFF* tif, TIFFDirEntry* dir, long nstrips, uint32** lpp)
             if( status != 0 ) {
                 int i;
 
-                for( i = 0; i < nstrips && i < dir->tdir_count; i++ )
+                for( i = 0; i < nstrips && i < (int) dir->tdir_count; i++ )
                 {
                     lp[i] = dp[i];
                 }

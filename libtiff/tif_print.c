@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_print.c,v 1.9 2003-06-19 21:37:01 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_print.c,v 1.10 2003-07-08 16:40:46 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -497,7 +497,7 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
             int  i;
             short count;
 
-            count = TIFFGetTagListCount( tif );
+            count = (short) TIFFGetTagListCount( tif );
             for( i = 0; i < count; i++ )
             {
                 ttag_t  tag = TIFFGetTagListEntry( tif, i );
