@@ -1,4 +1,4 @@
-/* $Id: thumbnail.c,v 1.7 2004-11-13 18:50:24 dron Exp $ */
+/* $Id: thumbnail.c,v 1.8 2004-11-28 14:44:31 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -95,16 +95,19 @@ main(int argc, char* argv[])
     }
     if (argc-optind != 2)
 	usage();
+
+    out = TIFFOpen(argv[optind+1], "w");
+    if (out == NULL)
+	return 2;
+    in = TIFFOpen(argv[optind], "r");
+
     thumbnail = (uint8*) _TIFFmalloc(tnw * tnh);
     if (!thumbnail) {
 	    TIFFError(TIFFFileName(in),
 		      "Can't allocate space for thumbnail buffer.");
 	    return 1;
     }
-    out = TIFFOpen(argv[optind+1], "w");
-    if (out == NULL)
-	return 2;
-    in = TIFFOpen(argv[optind], "r");
+
     if (in != NULL) {
 	initScale();
 	do {
