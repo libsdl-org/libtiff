@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.28 2003-05-06 12:58:19 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.29 2003-05-20 15:22:52 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.28 $"
+	echo "This is TIFF configure $Revision: 1.29 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1699,7 +1699,6 @@ if [ "${JPEG}" = yes ]; then
     fi
     if [ "${OJPEG}" = yes ]; then
       CONF_JPEG="$CONF_JPEG -DOJPEG_SUPPORT"
-      LIBJPEG="${LIBJPEG} -Lcontrib/ojpeg -lojpeg"
     fi
 else
     CONF_JPEG=
@@ -1911,7 +1910,6 @@ if [ $SRCDIR_IS_LIBTIFF != yes ] ; then
         "
     test $HTML = yes &&		CONF_FILES="$CONF_FILES html/Makefile"
     test $PORT = yes &&		CONF_FILES="$CONF_FILES port/Makefile"
-    test $OJPEG = yes &&	CONF_FILES="$CONF_FILES contrib/ojpeg/Makefile"
 fi
 SedConfigFiles $CONF_FILES
 
