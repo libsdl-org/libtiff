@@ -1,7 +1,7 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/ras2tiff.1,v 1.11 1995/07/07 23:29:04 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/ras2tiff.1,v 1.13 1995/10/11 19:42:00 sam Exp $
 .\"
-.\" Copyright (c) 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1990-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH RAS2TIFF 1 "May 2, 1989"
+.TH RAS2TIFF 1 "October 15, 1995"
 .SH NAME
 ras2tiff \- create a
 .SM TIFF
@@ -32,6 +32,7 @@ file from a Sun rasterfile
 .B ras2tiff
 [
 .I options
+]
 .I input.ras
 .I output.tif
 .SH DESCRIPTION
@@ -65,7 +66,11 @@ Specify a compression scheme to use when writing image data:
 .B "\-c none"
 for no compression,
 .B "-c packbits"
-for the PackBits compression algorithm),
+for the PackBits compression algorithm,
+.B "-c jpeg"
+for the baseline JPEG compression algorithm,
+.B "-c zip
+for the Deflate compression algorithm,
 and
 .B "\-c lzw"
 for Lempel-Ziv & Welch (the default).

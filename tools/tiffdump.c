@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.44 1995/07/19 00:39:51 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.46 1995/10/10 23:24:44 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -24,13 +24,9 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 
 #if defined(VMS)
 #include <unixio.h>
@@ -61,7 +57,8 @@ typedef unsigned int off_t;
 
 #include "tiffio.h"
 
-char	*curfile;
+char*	appname;
+char*	curfile;
 int	swabflag;
 int	bigendian;
 int	typeshift[13];	/* data type shift counts */
@@ -82,6 +79,13 @@ static	void dump(int, uint32);
 extern	int optind;
 extern	char* optarg;
 
+void
+usage()
+{
+	fprintf(stderr, "usage: %s [-h] [-o offset] file.tif ...\n", appname);
+	exit(-1);
+}
+
 int
 main(int argc, char* argv[])
 {
@@ -91,6 +95,7 @@ main(int argc, char* argv[])
 	uint32 diroff = (uint32) 0;
 	bigendian = (*(char *)&one == 0);
 
+	appname = argv[0];
 	while ((c = getopt(argc, argv, "o:h")) != -1) {
 		switch (c) {
 		case 'h':			/* print values in hex */
@@ -103,10 +108,11 @@ main(int argc, char* argv[])
 			diroff = (uint32) strtoul(optarg, NULL, 0);
 			break;
 		default:
-			fprintf(stderr, "usage: %s [-h] [files]\n", argv[0]);
-			return (-1);
+			usage();
 		}
 	}
+	if (optind >= argc)
+		usage();
 	for (; optind < argc; optind++) {
 		fd = open(argv[optind], O_RDONLY|O_BINARY, 0);
 		if (fd < 0) {
@@ -286,7 +292,8 @@ ReadDirectory(int fd, unsigned ix, uint32 off)
 	if (swabflag)
 		TIFFSwabLong(&nextdiroff);
 	printf("Directory %u: offset %lu (%#lx) next %lu (%#lx)\n", ix,
-	    off, off, nextdiroff, nextdiroff);
+	    (unsigned long) off, (unsigned long) off,
+	    (unsigned long) nextdiroff, (unsigned long) nextdiroff);
 	for (dp = dir, n = dircount; n > 0; n--, dp++) {
 		if (swabflag) {
 			TIFFSwabArrayOfShort(&dp->tdir_tag, 2);
@@ -296,7 +303,7 @@ ReadDirectory(int fd, unsigned ix, uint32 off)
 		putchar(' ');
 		PrintType(stdout, dp->tdir_type);
 		putchar(' ');
-		printf("%u<", dp->tdir_count);
+		printf("%lu<", (unsigned long) dp->tdir_count);
 		if (dp->tdir_type >= NWIDTHS) {
 			printf(">\n");
 			continue;
@@ -614,7 +621,8 @@ PrintData(FILE* fd, uint16 type, uint32 count, unsigned char* data)
 		while (count-- > 0) {
 			if (lp[1] == 0)
 				fprintf(fd, "%sNan (%lu/%lu)", sep,
-				    lp[0], lp[1]);
+				    (unsigned long) lp[0],
+				    (unsigned long) lp[1]);
 			else
 				fprintf(fd, rationalfmt, sep,
 				    (double)lp[0] / (double)lp[1]);
@@ -628,7 +636,7 @@ PrintData(FILE* fd, uint16 type, uint32 count, unsigned char* data)
 		while (count-- > 0) {
 			if (lp[1] == 0)
 				fprintf(fd, "%sNan (%ld/%ld)", sep,
-				    lp[0], lp[1]);
+				    (long) lp[0], (long) lp[1]);
 			else
 				fprintf(fd, srationalfmt, sep,
 				    (double)lp[0] / (double)lp[1]);

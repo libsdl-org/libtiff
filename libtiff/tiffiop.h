@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.73 1995/07/07 02:30:23 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.75 1995/10/12 18:45:02 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -133,6 +133,13 @@ struct tiff {
 	tsize_t		tif_rawcc;	/* bytes unread from raw buffer */
 /* memory-mapped file support */
 	tidata_t	tif_base;	/* base of mapped file */
+#ifdef WIN32
+	void*		pv_map_handle;	/* WIN32 file mapping handle;
+					 * must be contiguous with tif_base
+					 * since map & unmap only get tif_base
+					 * and assume 4 byte offset to
+					 * pv_map_handle. */
+#endif
 	toff_t		tif_size;	/* size of mapped file region (bytes) */
 	TIFFMapFileProc	tif_mapproc;	/* map file method */
 	TIFFUnmapFileProc tif_unmapproc;/* unmap file method */
@@ -169,8 +176,14 @@ struct tiff {
 	((*(tif)->tif_sizeproc)((tif)->tif_clientdata))
 #define	TIFFMapFileContents(tif, paddr, psize) \
 	((*(tif)->tif_mapproc)((tif)->tif_clientdata,paddr,psize))
+#ifdef WIN32
+#define	TIFFUnmapFileContents(tif, addr, dummy) \
+	((*(tif)->tif_unmapproc)((tif)->tif_clientdata,addr,\
+	    (toff_t)(tif)->pv_map_handle))
+#else
 #define	TIFFUnmapFileContents(tif, addr, size) \
 	((*(tif)->tif_unmapproc)((tif)->tif_clientdata,addr,size))
+#endif
 
 /*
  * Default Read/Seek/Write definitions.
@@ -256,7 +269,11 @@ extern	int TIFFInitJBIG(TIFF*, int);
 #ifdef ZIP_SUPPORT
 extern	int TIFFInitZIP(TIFF*, int);
 #endif
+#ifdef VMS
+extern	const TIFFCodec _TIFFBuiltinCODECS[];
+#else
 extern	TIFFCodec _TIFFBuiltinCODECS[];
+#endif
 
 #if defined(__cplusplus)
 }

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.64 1995/06/21 15:40:54 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.65 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -24,15 +24,11 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-typedef	unsigned char u_char;
-#endif
 #include <gl.h>
 #include <device.h>
 
@@ -65,6 +61,9 @@ static	int nextImage(char* argv[], int ix, int b, int e, int wrap);
 static	void usage(void);
 static	uint16 photoArg(const char*);
 static	void beep(void);
+
+extern	char* optarg;
+extern	int optind;
 
 int
 main(int argc, char* argv[])
@@ -869,7 +868,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr22tile)
 {
     YCbCrSetup;
     uint32* cp1 = cp+w+toskew;
-    u_int incr = 2*toskew+w;
+    unsigned int incr = 2*toskew+w;
 
     (void) y;
     /* XXX adjust fromskew */

@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/strip.3t,v 1.4 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFstrip.3t,v 1.7 1995/10/12 00:44:17 sam Exp $
 .\"
-.\" Copyright (c) 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1992-1995 Sam Leffler
+.\" Copyright (c) 1992-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,16 +23,55 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFComputeStrip 3T "February 14, 1992"
+.TH TIFFSTRIP 3T "October 15, 1995"
 .SH NAME
-TIFFComputeStrip, TIFFNumberOfStrips \- strip-related utility routines
+TIFFDefaultStripSize,
+TIFFStripSize,
+TIFFVStripSize,
+TIFFComputeStrip,
+TIFFNumberOfStrips
+\- strip-related utility routines
 .SH SYNOPSIS
+.nf
 .B "#include <tiffio.h>"
-.br
+.B "uint32 TIFFDefaultStripSize(TIFF* tif, uint32 estimate)"
+.B "tsize_t TIFFStripSize(TIFF* tif)"
+.B "tsize_t TIFFVStripSize(TIFF* tif, uint32 nrows)"
 .B "tstrip_t TIFFComputeStrip(TIFF* tif, uint32 row, tsample_t sample)"
-.br
 .B "tstrip_t TIFFNumberOfStrips(TIFF* tif)"
+.fi
 .SH DESCRIPTION
+.I TIFFDefaultStripSize
+returns the number of rows for a reasonable-sized strip according
+to the current settings of the
+.IR ImageWidth ,
+.IR BitsPerSample ,
+.IR SamplesPerPixel ,
+tags and any compression-specific requirements.
+If the
+.I estimate
+parameter, if non-zero, then it is taken as an estimate of the desired
+strip size and adjusted according to any compression-specific requirements.
+The value returned by this function is typically used to define the
+.I RowsPerStrip
+tag.
+In lieu of any unusual requirements
+.I TIFFDefaultStripSize
+tries to create strips that have approximately
+8 kilobytes of uncompressed data.
+.PP
+.IR TIFFStripSize
+returns the equivalent size for a strip of data as it would
+be returned in a call to
+.IR TIFFReadEncodedStrip
+or as it would be expected in a call to
+.IR TIFFWriteEncodedStrip .
+.PP
+.I TIFFVStripSize
+returns the number of bytes in a strip with
+.I nrows
+rows of data.
+.PP
 .IR TIFFComputeStrip
 returns the strip that contains the specified coordinates.
 A valid strip is always returned;
@@ -50,7 +89,7 @@ returns the number of strips in the image.
 .SH DIAGNOSTICS
 None.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFReadEncodedStrip (3T),
 .IR TIFFReadRawStrip (3T),
 .IR TIFFWriteEncodedStrip (3T),

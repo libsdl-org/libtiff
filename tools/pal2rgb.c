@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/pal2rgb.c,v 1.27 1995/06/30 00:27:07 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/pal2rgb.c,v 1.28 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -24,13 +24,9 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#endif
 #include <ctype.h>
 
 #include "tiffio.h"

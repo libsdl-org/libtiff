@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.c,v 1.128 1995/07/17 01:27:30 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.c,v 1.129 1995/09/30 18:36:43 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1995 Sam Leffler
@@ -1092,6 +1092,16 @@ static const TIFFFieldInfo fax4FieldInfo[] = {
       FALSE,	FALSE,	"" },
     { TIFFTAG_GROUP4OPTIONS,	 1, 1,	TIFF_LONG,	FIELD_OPTIONS,
       FALSE,	FALSE,	"Group4Options" },
+    { TIFFTAG_BADFAXLINES,	 1, 1,	TIFF_LONG,	FIELD_BADFAXLINES,
+      TRUE,	FALSE,	"BadFaxLines" },
+    { TIFFTAG_BADFAXLINES,	 1, 1,	TIFF_SHORT,	FIELD_BADFAXLINES,
+      TRUE,	FALSE,	"BadFaxLines" },
+    { TIFFTAG_CLEANFAXDATA,	 1, 1,	TIFF_SHORT,	FIELD_CLEANFAXDATA,
+      TRUE,	FALSE,	"CleanFaxData" },
+    { TIFFTAG_CONSECUTIVEBADFAXLINES,1,1, TIFF_LONG,	FIELD_BADFAXRUN,
+      TRUE,	FALSE,	"ConsecutiveBadFaxLines" },
+    { TIFFTAG_CONSECUTIVEBADFAXLINES,1,1, TIFF_SHORT,	FIELD_BADFAXRUN,
+      TRUE,	FALSE,	"ConsecutiveBadFaxLines" },
 };
 #define	N(a)	(sizeof (a) / sizeof (a[0]))
 

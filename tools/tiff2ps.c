@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2ps.c,v 1.45 1995/06/06 23:45:26 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2ps.c,v 1.47 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -24,12 +24,8 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>			/* for atof */
-#endif
 #include <math.h>
 #include <time.h>
 
@@ -38,16 +34,26 @@
 /*
  * NB: this code assumes uint32 works with printf's %l[ud].
  */
+#ifndef TRUE
 #define	TRUE	1
 #define	FALSE	0
+#endif
 
 int     ascii85 = FALSE;		/* use ASCII85 encoding */
+int	interpolate = TRUE;		/* interpolate level2 image */
 int	level2 = FALSE;			/* generate PostScript level 2 */
 int	printAll = FALSE;		/* print all images in file */
 int	generateEPSF = TRUE;		/* generate Encapsulated PostScript */
 int 	PSduplex = FALSE;		/* enable duplex printing */
 int	PStumble = FALSE;		/* enable top edge binding */
 char	*filename;			/* input filename */
+
+/*
+ * ASCII85 Encoding Support.
+ */
+unsigned char ascii85buf[10];
+int	ascii85count;
+int	ascii85breaklen;
 
 int	TIFF2PS(FILE*, TIFF*, float, float);
 void	PSpage(FILE*, TIFF*, uint32, uint32);
@@ -182,8 +188,10 @@ checkImage(TIFF* tif)
 				     JPEGCOLORMODE_RGB);
 			photometric = PHOTOMETRIC_RGB;
 		} else {
-			TIFFError(filename,
-				  "Can not handle image with PhotometricInterpretation=YCbCr");
+			if (level2)
+				break;
+			TIFFError(filename, "Can not handle image with %s",
+			    "PhotometricInterpretation=YCbCr");
 			return (0);
 		}
 		/* fall thru... */
@@ -200,6 +208,8 @@ checkImage(TIFF* tif)
 	case PHOTOMETRIC_MINISBLACK:
 	case PHOTOMETRIC_MINISWHITE:
 		break;
+	case PHOTOMETRIC_CIELAB:
+		/* fall thru... */
 	default:
 		TIFFError(filename,
 		    "Can not handle image with PhotometricInterpretation=%d",
@@ -247,7 +257,7 @@ static void
 PhotoshopBanner(FILE* fd, uint32 w, uint32 h, int bs, int nc, char* startline)
 {
 	fprintf(fd, "%%ImageData: %ld %ld %d %d 0 %d 2 \"",
-	    w, h, bitspersample, nc, bs);
+	    (long) w, (long) h, bitspersample, nc, bs);
 	fprintf(fd, startline, nc);
 	fprintf(fd, "\"\n");
 }
@@ -280,6 +290,17 @@ setupPageState(TIFF* tif, uint32* pw, uint32* ph, float* pprw, float* pprh)
 	*pprw = PSUNITS(*pw, xres);
 }
 
+static int
+isCCITTCompression(TIFF* tif)
+{
+    uint16 compress;
+    TIFFGetField(tif, TIFFTAG_COMPRESSION, &compress);
+    return (compress == COMPRESSION_CCITTFAX3 ||
+	    compress == COMPRESSION_CCITTFAX4 ||
+	    compress == COMPRESSION_CCITTRLE ||
+	    compress == COMPRESSION_CCITTRLEW);
+}
+
 static	tsize_t tf_bytesperrow;
 static	tsize_t ps_bytesperrow;
 static 	tsize_t	tf_rowsperstrip;
@@ -305,7 +326,8 @@ TIFF2PS(FILE* fd, TIFF* tif, float pw, float ph)
 
 	do {
 	        tf_numberstrips = TIFFNumberOfStrips(tif);
-		TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &tf_rowsperstrip);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP,
+		    &tf_rowsperstrip);
 		setupPageState(tif, &w, &h, &prw, &prh);
 		if (!npages)
 		        PSHead(fd, tif, w, h, prw, prh, ox, oy);
@@ -314,13 +336,26 @@ TIFF2PS(FILE* fd, TIFF* tif, float pw, float ph)
 		    &bitspersample);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL,
 		    &samplesperpixel);
-		TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &planarconfiguration);
-		TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric);
+		TIFFGetFieldDefaulted(tif, TIFFTAG_PLANARCONFIG,
+		    &planarconfiguration);
 		TIFFGetField(tif, TIFFTAG_COMPRESSION, &compression);
 		TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
 		    &extrasamples, &sampleinfo);
 		alpha = (extrasamples == 1 &&
 			 sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
+		if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric)) {
+			switch (samplesperpixel - extrasamples) {
+			case 1:
+				if (isCCITTCompression(tif))
+					photometric = PHOTOMETRIC_MINISWHITE;
+				else
+					photometric = PHOTOMETRIC_MINISBLACK;
+				break;
+			case 3:
+				photometric = PHOTOMETRIC_RGB;
+				break;
+			}
+		}
 		if (checkImage(tif)) {
 			npages++;
 			fprintf(fd, "%%%%Page: %d %d\n", npages, npages);
@@ -368,9 +403,9 @@ end\n\
 %%EndFeature\n\
 ";
 
-void 
-PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h, float pw, float ph, 
-	float ox, float oy) 
+void
+PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h, float pw, float ph,
+	float ox, float oy)
 {
         time_t t;
 
@@ -380,10 +415,12 @@ PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h, float pw, float ph,
 	fprintf(fd, "%%%%Creator: tiff2ps\n");
 	fprintf(fd, "%%%%Title: %s\n", filename);
 	fprintf(fd, "%%%%CreationDate: %s", ctime(&t));
+	fprintf(fd, "%%%%DocumentData: Clean7Bit\n");
 	fprintf(fd, "%%%%Origin: %ld %ld\n", (long) ox, (long) oy);
 	/* NB: should use PageBoundingBox */
 	fprintf(fd, "%%%%BoundingBox: 0 0 %ld %ld\n",
 	    (long) ceil(pw), (long) ceil(ph));
+	fprintf(fd, "%%%%LanguageLevel: %d\n", level2 ? 2 : 1);
 	fprintf(fd, "%%%%Pages: (atend)\n");
 	fprintf(fd, "%%%%EndComments\n");
 	fprintf(fd, "%%%%BeginSetup\n");
@@ -397,50 +434,477 @@ PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h, float pw, float ph,
 void
 PSTail(FILE *fd, int npages)
 {
+	fprintf(fd, "%%%%Trailer\n");
         fprintf(fd, "%%%%Pages: %d\n", npages);
-	fprintf(fd, "%%%%Trailer\n%%%%EOF\n");
+	fprintf(fd, "%%%%EOF\n");
 }
 
 static int
-emitPSLevel2FilterFunction(FILE* fd, TIFF* tif, uint32 w, uint32 h)
+checkcmap(TIFF* tif, int n, uint16* r, uint16* g, uint16* b)
 {
-	uint32 group3opts;
-	int K;
+	(void) tif;
+	while (n-- > 0)
+		if (*r++ >= 256 || *g++ >= 256 || *b++ >= 256)
+			return (16);
+	TIFFWarning(filename, "Assuming 8-bit colormap");
+	return (8);
+}
 
-#define	P(a,b)	(((a)<<4)|((b)&0xf))
-	switch (P(compression, photometric)) {
-	case P(COMPRESSION_CCITTRLE, PHOTOMETRIC_MINISBLACK):
-	case P(COMPRESSION_CCITTRLE, PHOTOMETRIC_MINISWHITE):
-		K = 0;
-		break;
-	case P(COMPRESSION_CCITTFAX3, PHOTOMETRIC_MINISBLACK):
-	case P(COMPRESSION_CCITTFAX3, PHOTOMETRIC_MINISWHITE):
-		TIFFGetField(tif, TIFFTAG_GROUP3OPTIONS, &group3opts);
-		K = group3opts&GROUP3OPT_2DENCODING;
-		break;
-	case P(COMPRESSION_CCITTFAX4, PHOTOMETRIC_MINISBLACK):
-	case P(COMPRESSION_CCITTFAX4, PHOTOMETRIC_MINISWHITE):
-		K = -1;
-		break;
-	case P(COMPRESSION_LZW, PHOTOMETRIC_MINISBLACK):
-		fprintf(fd, "    /LZWDecode filter\n");
-		return (TRUE);
-	default:
-		return (FALSE);
+static void
+PS_Lvl2colorspace(FILE* fd, TIFF* tif)
+{
+	uint16 *rmap, *gmap, *bmap;
+	int i, num_colors;
+
+	/*
+	 * Set up PostScript Level 2 colorspace according to
+	 * section 4.8 in the PostScript refenence manual.
+	 */
+	fputs("% PostScript Level 2 only.\n", fd);
+	if (photometric != PHOTOMETRIC_PALETTE) {
+		if (photometric == PHOTOMETRIC_YCBCR) {
+		    /* MORE CODE HERE */
+		}
+		fprintf(fd, "/Device%s",
+		    samplesperpixel > 2 ? "RGB" : "Gray");
+		fputs(" setcolorspace\n", fd);
+		return;
 	}
-#undef P
-	fprintf(fd, "    <<");
-	fprintf(fd, "/K %d", K);
-	fprintf(fd, " /Columns %d /Rows %d", w, h);
-	fprintf(fd, " /EndOfBlock false /BlackIs1 %s",
-	    (photometric == PHOTOMETRIC_MINISBLACK) ? "true" : "false");
-	fprintf(fd, ">>\n    /CCITTFaxDecode filter\n");
-	return (TRUE);
+
+	/*
+	 * Set up an indexed/palette colorspace
+	 */
+	num_colors = (1 << bitspersample);
+	if (!TIFFGetField(tif, TIFFTAG_COLORMAP, &rmap, &gmap, &bmap)) {
+		TIFFError(filename,
+			"Palette image w/o \"Colormap\" tag");
+		return;
+	}
+	if (checkcmap(tif, num_colors, rmap, gmap, bmap) == 16) {
+		/*
+		 * Convert colormap to 8-bits values.
+		 */
+#define	CVT(x)		(((x) * 255) / ((1L<<16)-1))
+		for (i = 0; i < num_colors; i++) {
+			rmap[i] = CVT(rmap[i]);
+			gmap[i] = CVT(gmap[i]);
+			bmap[i] = CVT(bmap[i]);
+		}
+#undef CVT
+	}
+	fprintf(fd, "[ /Indexed /DeviceRGB %d", num_colors - 1);
+	if (ascii85) {
+		Ascii85Init();
+		fputs("\n<~", fd);
+		ascii85breaklen -= 2;
+	} else
+		fputs(" <", fd);
+	for (i = 0; i < num_colors; i++) {
+		if (ascii85) {
+			Ascii85Put(rmap[i], fd);
+			Ascii85Put(gmap[i], fd);
+			Ascii85Put(bmap[i], fd);
+		} else {
+			fputs((i % 8) ? " " : "\n  ", fd);
+			fprintf(fd, "%02x%02x%02x",
+			    rmap[i], gmap[i], bmap[i]);
+		}
+	}
+	if (ascii85)
+		Ascii85Flush(fd);
+	else
+		fputs(">\n", fd);
+	fputs("] setcolorspace\n", fd);
+}
+
+static int
+PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
+{
+	int use_rawdata;
+	uint32 tile_width, tile_height;
+	uint16 predictor, minsamplevalue, maxsamplevalue;
+	int repeat_count;
+	char im_h[64], im_x[64], im_y[64];
+
+	(void)strcpy(im_x, "0");
+	(void)sprintf(im_y, "%lu", (long) h);
+	(void)sprintf(im_h, "%lu", (long) h);
+	tile_width = w;
+	tile_height = h;
+	if (TIFFIsTiled(tif)) {
+		repeat_count = TIFFNumberOfTiles(tif);
+		TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tile_width);
+		TIFFGetField(tif, TIFFTAG_TILELENGTH, &tile_height);
+		if (tile_width > w || tile_height > h ||
+		    (w % tile_width) != 0 || (h % tile_height != 0)) {
+			/*
+			 * The tiles does not fit image width and height.
+			 * Set up a clip rectangle for the image unit square.
+			 */
+			fputs("0 0 1 1 rectclip\n", fd);
+		}
+		if (tile_width < w) {
+			fputs("/im_x 0 def\n", fd);
+			(void)strcpy(im_x, "im_x neg");
+		}
+		if (tile_height < h) {
+			fputs("/im_y 0 def\n", fd);
+			(void)sprintf(im_y, "%lu im_y sub", (unsigned long) h);
+		}
+	} else {
+		repeat_count = tf_numberstrips;
+		tile_height = tf_rowsperstrip;
+		if (tile_height > h)
+			tile_height = h;
+		if (repeat_count > 1) {
+			fputs("/im_y 0 def\n", fd);
+			fprintf(fd, "/im_h %lu def\n",
+			    (unsigned long) tile_height);
+			(void)strcpy(im_h, "im_h");
+			(void)sprintf(im_y, "%lu im_y sub", (unsigned long) h);
+		}
+	}
+
+	/*
+	 * Output start of exec block
+	 */
+	fputs("{ % exec\n", fd);
+
+	if (repeat_count > 1)
+		fprintf(fd, "%d { %% repeat\n", repeat_count);
+
+	/*
+	 * Output filter options and image dictionary.
+	 */
+	if (ascii85)
+		fputs(" /im_stream currentfile /ASCII85Decode filter def\n",
+		    fd);
+	fputs(" <<\n", fd);
+	fputs("  /ImageType 1\n", fd);
+	fprintf(fd, "  /Width %lu\n", (unsigned long) tile_width);
+	fprintf(fd, "  /Height %lu\n", (unsigned long) tile_height);
+	if (planarconfiguration == PLANARCONFIG_SEPARATE)
+		fputs("  /MultipleDataSources true\n", fd);
+	fprintf(fd, "  /ImageMatrix [ %lu 0 0 %ld %s %s ]\n",
+	    (unsigned long) w, - (long)h, im_x, im_y);
+	fprintf(fd, "  /BitsPerComponent %d\n", bitspersample);
+	fprintf(fd, "  /Interpolate %s\n", interpolate ? "true" : "false");
+
+	switch (samplesperpixel) {
+	case 1:
+		switch (photometric) {
+		case PHOTOMETRIC_MINISBLACK:
+			fputs("  /Decode [0 1]\n", fd);
+			break;
+		case PHOTOMETRIC_MINISWHITE:
+			switch (compression) {
+			case COMPRESSION_CCITTRLE:
+			case COMPRESSION_CCITTRLEW:
+			case COMPRESSION_CCITTFAX3:
+			case COMPRESSION_CCITTFAX4:
+				/*
+				 * Manage inverting with /Blackis1 flag
+				 * since there migth be uncompressed parts
+				 */
+				fputs("  /Decode [0 1]\n", fd);
+				break;
+			default:
+				/*
+				 * ERROR...
+				 */
+				fputs("  /Decode [1 0]\n", fd);
+				break;
+			}
+			break;
+		case PHOTOMETRIC_PALETTE:
+			TIFFGetFieldDefaulted(tif, TIFFTAG_MINSAMPLEVALUE,
+			    &minsamplevalue);
+			TIFFGetFieldDefaulted(tif, TIFFTAG_MAXSAMPLEVALUE,
+			    &maxsamplevalue);
+			fprintf(fd, "  /Decode [%u %u]\n",
+				    minsamplevalue, maxsamplevalue);
+			break;
+		default:
+			/*
+			 * ERROR ?
+			 */
+			fputs("  /Decode [0 1]\n", fd);
+			break;
+		}
+		break;
+	case 3:
+		switch (photometric) {
+		case PHOTOMETRIC_RGB:
+			fputs("  /Decode [0 1 0 1 0 1]\n", fd);
+			break;
+		case PHOTOMETRIC_MINISWHITE:
+		case PHOTOMETRIC_MINISBLACK:
+		default:
+			/*
+			 * ERROR??
+			 */
+			fputs("  /Decode [0 1 0 1 0 1]\n", fd);
+			break;
+		}
+		break;
+	case 4:
+		/*
+		 * ERROR??
+		 */
+		fputs("  /Decode [0 1 0 1 0 1 0 1]\n", fd);
+		break;
+	}
+	fputs("  /DataSource", fd);
+	if (planarconfiguration == PLANARCONFIG_SEPARATE &&
+	    samplesperpixel > 1)
+		fputs(" [", fd);
+	if (ascii85)
+		fputs(" im_stream", fd);
+	else
+		fputs(" currentfile /ASCIIHexDecode filter", fd);
+
+	use_rawdata = TRUE;
+	switch (compression) {
+	case COMPRESSION_NONE:	/* 1: uncompressed */
+		break;
+	case COMPRESSION_CCITTRLE:	/* 2: CCITT modified Huffman RLE */
+	case COMPRESSION_CCITTRLEW:	/* 32771: #1 w/ word alignment */
+	case COMPRESSION_CCITTFAX3:	/* 3: CCITT Group 3 fax encoding */
+	case COMPRESSION_CCITTFAX4:	/* 4: CCITT Group 4 fax encoding */
+		fputs("\n\t<<\n", fd);
+		if (compression == COMPRESSION_CCITTFAX3) {
+			uint32 g3_options;
+
+			fputs("\t /EndOfLine true\n", fd);
+			fputs("\t /EndOfBlock false\n", fd);
+			if (!TIFFGetField(tif, TIFFTAG_GROUP3OPTIONS,
+					    &g3_options))
+				g3_options = 0;
+			if (g3_options & GROUP3OPT_2DENCODING)
+				fprintf(fd, "\t /K %s\n", im_h);
+			if (g3_options & GROUP3OPT_UNCOMPRESSED)
+				fputs("\t /Uncompressed true\n", fd);
+			if (g3_options & GROUP3OPT_FILLBITS)
+				fputs("\t /EncodedByteAlign true\n", fd);
+		}
+		if (compression == COMPRESSION_CCITTFAX4) {
+			uint32 g4_options;
+
+			fputs("\t /K -1\n", fd);
+			TIFFGetFieldDefaulted(tif, TIFFTAG_GROUP4OPTIONS,
+					       &g4_options);
+			if (g4_options & GROUP4OPT_UNCOMPRESSED)
+				fputs("\t /Uncompressed true\n", fd);
+		}
+		if (!(tile_width == w && w == 1728U))
+			fprintf(fd, "\t /Columns %lu\n",
+			    (unsigned long) tile_width);
+		fprintf(fd, "\t /Rows %s\n", im_h);
+		if (compression == COMPRESSION_CCITTRLE ||
+		    compression == COMPRESSION_CCITTRLEW) {
+			fputs("\t /EncodedByteAlign true\n", fd);
+			fputs("\t /EndOfBlock false\n", fd);
+		}
+		if (photometric == PHOTOMETRIC_MINISBLACK)
+			fputs("\t /BlackIs1 true\n", fd);
+		fprintf(fd, "\t>> /CCITTFaxDecode filter");
+		break;
+	case COMPRESSION_LZW:	/* 5: Lempel-Ziv  & Welch */
+		TIFFGetFieldDefaulted(tif, TIFFTAG_PREDICTOR, &predictor);
+		if (predictor == 2) {
+			fputs("\n\t<<\n", fd);
+			fprintf(fd, "\t /Predictor %u\n", predictor);
+			fprintf(fd, "\t /Columns %lu\n",
+			    (unsigned long) tile_width);
+			fprintf(fd, "\t /Colors %u\n", samplesperpixel);
+			fprintf(fd, "\t /BitsPerComponent %u\n",
+			    bitspersample);
+			fputs("\t>>", fd);
+		}
+		fputs(" /LZWDecode filter", fd);
+		break;
+	case COMPRESSION_PACKBITS:		/* 32773: Macintosh RLE */
+		fputs(" /RunLengthDecode filter", fd);
+		use_rawdata = TRUE;
+	    break;
+	case COMPRESSION_OJPEG:	/* 6: !6.0 JPEG */
+	case COMPRESSION_JPEG:	/* 7: %JPEG DCT compression */
+#ifdef notdef
+		/*
+		 * Code not tested yet
+		 */
+		fputs(" /DCTDecode filter", fd);
+		use_rawdata = TRUE;
+#else
+		use_rawdata = FALSE;
+#endif
+		break;
+	case COMPRESSION_NEXT:		/* 32766: NeXT 2-bit RLE */
+	case COMPRESSION_THUNDERSCAN:	/* 32809: ThunderScan RLE */
+	case COMPRESSION_PIXARFILM:	/* 32908: Pixar companded 10bit LZW */
+	case COMPRESSION_DEFLATE:	/* 32946: Deflate compression */
+	case COMPRESSION_JBIG:		/* 34661: ISO JBIG */
+		use_rawdata = FALSE;
+		break;
+	default:
+		/*
+		 * ERROR...
+		 */
+		use_rawdata = FALSE;
+		break;
+	}
+	if (planarconfiguration == PLANARCONFIG_SEPARATE &&
+	    samplesperpixel > 1) {
+		uint16 i;
+
+		/*
+		 * NOTE: This code does not work yet...
+		 */
+		for (i = 1; i < samplesperpixel; i++)
+			fputs(" dup", fd);
+		fputs(" ]", fd);
+	}
+	fputs("\n >> image\n", fd);
+	if (ascii85)
+		fputs(" im_stream flushfile\n", fd);
+	if (repeat_count > 1) {
+		if (tile_width < w) {
+			fprintf(fd, " /im_x im_x %lu add def\n",
+			    (unsigned long) tile_width);
+			if (tile_height < h) {
+				fprintf(fd, " im_x %lu ge {\n",
+				    (unsigned long) w);
+				fputs("  /im_x 0 def\n", fd);
+				fprintf(fd, " /im_y im_y %lu add def\n",
+				    (unsigned long) tile_height);
+				fputs(" } if\n", fd);
+			}
+		}
+		if (tile_height < h) {
+			if (tile_width >= w) {
+				fprintf(fd, " /im_y im_y %lu add def\n",
+				    (unsigned long) tile_height);
+				if (!TIFFIsTiled(tif)) {
+					fprintf(fd, " /im_h %lu im_y sub",
+					    (unsigned long) h);
+					fprintf(fd, " dup %lu gt { pop",
+					    (unsigned long) tile_height);
+					fprintf(fd, " %lu } if def\n",
+					    (unsigned long) tile_height);
+				}
+			}
+		}
+		fputs("} repeat\n", fd);
+	}
+	/*
+	 * End of exec function
+	 */
+	fputs("}\n", fd);
+
+	return(use_rawdata);
+}
+
+int
+PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
+{
+	uint16 fillorder;
+	int use_rawdata, tiled_image, breaklen;
+	uint32 chunk_no, num_chunks, *bc;
+	unsigned char *buf_data, *cp;
+	tsize_t chunk_size, byte_count;
+
+	PS_Lvl2colorspace(fd, tif);
+	use_rawdata = PS_Lvl2ImageDict(fd, tif, w, h);
+
+	fputs("%%BeginData:\n", fd);
+	fputs("exec\n", fd);
+
+	tiled_image = TIFFIsTiled(tif);
+	if (tiled_image) {
+		num_chunks = TIFFNumberOfTiles(tif);
+		TIFFGetField(tif, TIFFTAG_TILEBYTECOUNTS, &bc);
+	} else {
+		num_chunks = TIFFNumberOfStrips(tif);
+		TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc);
+	}
+
+	if (use_rawdata) {
+		chunk_size = bc[0];
+		for (chunk_no = 1; chunk_no < num_chunks; chunk_no++)
+			if (bc[chunk_no] > chunk_size)
+				chunk_size = bc[chunk_no];
+	} else {
+		if (tiled_image)
+			chunk_size = TIFFTileSize(tif);
+		else
+			chunk_size = TIFFStripSize(tif);
+	}
+	buf_data = (unsigned char *)_TIFFmalloc(chunk_size);
+	if (!buf_data) {
+		TIFFError(filename, "Can't alloc %u bytes for %s.",
+			chunk_size, tiled_image ? "tiles" : "strips");
+		return(FALSE);
+	}
+
+	TIFFGetFieldDefaulted(tif, TIFFTAG_FILLORDER, &fillorder);
+	for (chunk_no = 0; chunk_no < num_chunks; chunk_no++) {
+		if (ascii85)
+			Ascii85Init();
+		else
+			breaklen = 36;
+		if (use_rawdata) {
+			if (tiled_image)
+				byte_count = TIFFReadRawTile(tif, chunk_no,
+						  buf_data, chunk_size);
+			else
+				byte_count = TIFFReadRawStrip(tif, chunk_no,
+						  buf_data, chunk_size);
+			if (fillorder == FILLORDER_LSB2MSB)
+			    TIFFReverseBits(buf_data, byte_count);
+		} else {
+			if (tiled_image)
+				byte_count = TIFFReadEncodedTile(tif,
+						chunk_no, buf_data,
+						chunk_size);
+			else
+				byte_count = TIFFReadEncodedStrip(tif,
+						chunk_no, buf_data,
+						chunk_size);
+		}
+		if (byte_count < 0) {
+			TIFFError(filename, "Can't read %s %d.",
+				tiled_image ? "tile" : "strip", chunk_no);
+			if (ascii85)
+				Ascii85Put('\0', fd);
+		}
+		for (cp = buf_data; byte_count > 0; byte_count--) {
+			if (ascii85)
+				Ascii85Put(*cp++, fd);
+			else {
+				if (--breaklen <= 0) {
+					putc('\n', fd);
+					breaklen = 36;
+				}
+				putc(hex[((*cp)>>4)&0xf], fd);
+				putc(hex[(*cp)&0xf], fd);
+				cp++;
+			}
+		}
+		if (ascii85)
+			Ascii85Flush(fd);
+		else
+			putc('\n', fd);
+	}
+	_TIFFfree(buf_data);
+	fputs("%%EndData\n", fd);
+	return(TRUE);
 }
 
 void
 PSpage(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 {
+	if (level2 && PS_Lvl2page(fd, tif, w, h))
+		return;
 	ps_bytesperrow = tf_bytesperrow;
 	switch (photometric) {
 	case PHOTOMETRIC_RGB:
@@ -466,51 +930,29 @@ PSpage(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	case PHOTOMETRIC_PALETTE:
 		fprintf(fd, "%s", RGBcolorimage);
 		PhotoshopBanner(fd, w, h, 1, 3, "false 3 colorimage");
-		fprintf(fd, "/scanLine %d string def\n", ps_bytesperrow);
-		fprintf(fd, "%lu %lu 8\n", w, h);
-		fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n", w, h, h);
+		fprintf(fd, "/scanLine %ld string def\n",
+		    (long) ps_bytesperrow);
+		fprintf(fd, "%lu %lu 8\n",
+		    (unsigned long) w, (unsigned long) h);
+		fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
+		    (unsigned long) w, (unsigned long) h, (unsigned long) h);
 		fprintf(fd, "{currentfile scanLine readhexstring pop} bind\n");
 		fprintf(fd, "false 3 colorimage\n");
 		PSDataPalette(fd, tif, w, h);
 		break;
 	case PHOTOMETRIC_MINISBLACK:
 	case PHOTOMETRIC_MINISWHITE:
-		if (level2) {
-			int rawdata;
-			fprintf(fd, "{ %lu { %lu %lu %d\n", tf_numberstrips, 
-				w, tf_rowsperstrip, bitspersample);
-			fprintf(fd, "    [%lu 0 0 -%lu 0 %lu]\n", w, h, h);
-			fprintf(fd, "    currentfile /ASCII%sDecode filter\n",
-			    ascii85 ? "85" : "Hex");
-			rawdata = emitPSLevel2FilterFunction(fd, tif, w, h);
-			fprintf(fd, "    image\n");
-			fprintf(fd, "    0 -%f translate\n", 
-				(float)tf_rowsperstrip/(float)h);
-			fprintf(fd, "  } repeat\n}\n");
-			PhotoshopBanner(fd, w, h, 1, 1, "image");
-			fprintf(fd, "%%%%BeginData\nexec\n");
-			if (ascii85) {
-				if (rawdata)
-					PSRawDataBW(fd, tif, w, tf_rowsperstrip);
-				else 
-					PSDataBW(fd, tif, w, h);
-			} else {
-				if (rawdata)
-					PSRawDataBW(fd, tif, w, h);
-				else
-					PSDataBW(fd, tif, w, h);
-			}
-			fprintf(fd, "%%%%EndData\n");
-		} else {
-		        PhotoshopBanner(fd, w, h, 1, 1, "image");
-			fprintf(fd, "/scanLine %d string def\n",ps_bytesperrow);
-			fprintf(fd, "%lu %lu %d\n", w, h, bitspersample);
-			fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n", w, h, h);
-			fprintf(fd,
-			    "{currentfile scanLine readhexstring pop} bind\n");
-			fprintf(fd, "image\n");
-			PSDataBW(fd, tif, w, h);
-		}
+		PhotoshopBanner(fd, w, h, 1, 1, "image");
+		fprintf(fd, "/scanLine %ld string def\n",
+		    (long) ps_bytesperrow);
+		fprintf(fd, "%lu %lu %d\n",
+		    (unsigned long) w, (unsigned long) h, bitspersample);
+		fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
+		    (unsigned long) w, (unsigned long) h, (unsigned long) h);
+		fprintf(fd,
+		    "{currentfile scanLine readhexstring pop} bind\n");
+		fprintf(fd, "image\n");
+		PSDataBW(fd, tif, w, h);
 		break;
 	}
 	putc('\n', fd);
@@ -521,9 +963,11 @@ PSColorContigPreamble(FILE* fd, uint32 w, uint32 h, int nc)
 {
 	ps_bytesperrow = nc * (tf_bytesperrow / samplesperpixel);
 	PhotoshopBanner(fd, w, h, 1, nc, "false %d colorimage");
-	fprintf(fd, "/line %d string def\n", ps_bytesperrow);
-	fprintf(fd, "%lu %lu %d\n", w, h, bitspersample);
-	fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n", w, h, h);
+	fprintf(fd, "/line %ld string def\n", (long) ps_bytesperrow);
+	fprintf(fd, "%lu %lu %d\n",
+	    (unsigned long) w, (unsigned long) h, bitspersample);
+	fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
+	    (unsigned long) w, (unsigned long) h, (unsigned long) h);
 	fprintf(fd, "{currentfile line readhexstring pop} bind\n");
 	fprintf(fd, "false %d colorimage\n", nc);
 }
@@ -535,9 +979,12 @@ PSColorSeparatePreamble(FILE* fd, uint32 w, uint32 h, int nc)
 
 	PhotoshopBanner(fd, w, h, ps_bytesperrow, nc, "true %d colorimage");
 	for (i = 0; i < nc; i++)
-		fprintf(fd, "/line%d %d string def\n", i, ps_bytesperrow);
-	fprintf(fd, "%lu %lu %d\n", w, h, bitspersample);
-	fprintf(fd, "[%lu 0 0 -%lu 0 %lu] \n", w, h, h);
+		fprintf(fd, "/line%d %ld string def\n",
+		    i, (long) ps_bytesperrow);
+	fprintf(fd, "%lu %lu %d\n",
+	    (unsigned long) w, (unsigned long) h, bitspersample);
+	fprintf(fd, "[%lu 0 0 -%lu 0 %lu] \n",
+	    (unsigned long) w, (unsigned long) h, (unsigned long) h);
 	for (i = 0; i < nc; i++)
 		fprintf(fd, "{currentfile line%d readhexstring pop}bind\n", i);
 	fprintf(fd, "true %d colorimage\n", nc);
@@ -638,17 +1085,6 @@ PSDataColorSeparate(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 #define	PUTRGBHEX(c,fd) \
 	PUTHEX(rmap[c],fd); PUTHEX(gmap[c],fd); PUTHEX(bmap[c],fd)
 
-static int
-checkcmap(TIFF* tif, int n, uint16* r, uint16* g, uint16* b)
-{
-	(void) tif;
-	while (n-- > 0)
-		if (*r++ >= 256 || *g++ >= 256 || *b++ >= 256)
-			return (16);
-	TIFFWarning(filename, "Assuming 8-bit colormap");
-	return (8);
-}
-
 void
 PSDataPalette(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 {
@@ -678,7 +1114,7 @@ PSDataPalette(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	}
 	if (checkcmap(tif, 1<<bitspersample, rmap, gmap, bmap) == 16) {
 		int i;
-#define	CVT(x)		(((x) * 255L) / ((1L<<16)-1))
+#define	CVT(x)		(((x) * 255) / ((1U<<16)-1))
 		for (i = (1<<bitspersample)-1; i >= 0; i--) {
 			rmap[i] = CVT(rmap[i]);
 			gmap[i] = CVT(gmap[i]);
@@ -780,7 +1216,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	tstrip_t s;
 
 	(void) w; (void) h;
-	TIFFGetField(tif, TIFFTAG_FILLORDER, &fillorder);
+	TIFFGetFieldDefaulted(tif, TIFFTAG_FILLORDER, &fillorder);
 	TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc);
 	bufsize = bc[0];
 	tf_buf = (unsigned char*) _TIFFmalloc(bufsize);
@@ -822,13 +1258,6 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	}
 	_TIFFfree((char *) tf_buf);
 }
-
-/*
- * ASCII85 Encoding Support.
- */
-unsigned char ascii85buf[10];
-int	ascii85count;
-int	ascii85breaklen;
 
 void
 Ascii85Init(void)

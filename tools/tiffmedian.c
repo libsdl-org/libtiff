@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffmedian.c,v 1.17 1995/07/01 01:16:55 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffmedian.c,v 1.18 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -40,13 +40,9 @@
  *	Siggraph '82 proceedings, pp. 297-307
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 
 #include "tiffio.h"
 

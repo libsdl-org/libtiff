@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.22 1995/07/01 01:16:55 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.23 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1995 Sam Leffler
@@ -24,13 +24,9 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <ctype.h>
 
 #include "tiffio.h"
@@ -128,7 +124,7 @@ main(int argc, char* argv[])
 	default:
 		BadPPM(infile);
 	}
-	if (fscanf(in, " %ld %d %d", &w, &h, &prec) != 3)
+	if (fscanf(in, " %ld %ld %d", &w, &h, &prec) != 3)
 		BadPPM(infile);
 	if (getc(in) != '\n' || w <= 0 || h <= 0 || prec != 255)
 		BadPPM(infile);

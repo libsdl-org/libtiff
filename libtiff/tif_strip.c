@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_strip.c,v 1.23 1995/06/06 23:49:31 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_strip.c,v 1.24 1995/08/03 20:54:54 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1995 Sam Leffler
@@ -146,6 +146,8 @@ _TIFFDefaultStripSize(TIFF* tif, uint32 s)
 		 */
 		tsize_t scanline = TIFFScanlineSize(tif);
 		s = (uint32)(8*1024) / (scanline == 0 ? 1 : scanline);
+		if (s == 0)		/* very wide images */
+			s = 1;
 	}
 	return (s);
 }

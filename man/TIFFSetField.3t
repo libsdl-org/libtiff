@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFSetField.3t,v 1.12 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFSetField.3t,v 1.15 1995/10/11 19:45:29 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFSetField 3T "February 14, 1992"
+.TH TIFFSetField 3T "October 15, 1995"
 .SH NAME
 TIFFSetField \- set the value(s) of a tag in a
 .SM TIFF
@@ -38,11 +38,17 @@ file open for writing
 .B "int TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)"
 .SH DESCRIPTION
 .IR TIFFSetField
-sets the value of a field in the current directory associated with
+sets the value of a field
+or pseudo-tag in the current directory associated with
 the open
 .SM TIFF
 file
 .IR tif .
+(A
+.I pseudo-tag 
+is a parameter that is used to control the operation of the
+.SM TIFF
+library but whose value is not read or written to the underlying file.)
 The file must have been previously opened for writing with
 .IR TIFFOpen (3T).
 The field is identified by
@@ -88,7 +94,7 @@ Consult the
 specification for information on the meaning of each tag.
 .PP
 .nf
-.ta \w'TIFFTAG_CONSECUTIVEBADFAXLINES'u+2n +\w'Count'u+2n +\w'uint16,uint16* \(dg'u+2n
+.ta \w'TIFFTAG_CONSECUTIVEBADFAXLINES'u+2n +\w'Count'u+2n +\w'TIFFFaxFillFunc \(dg'u+2n
 \fITag Name\fP	\fICount\fP	\fITypes\fP	\fINotes\fP
 .sp 5p
 TIFFTAG_ARTIST	1	char*
@@ -101,7 +107,9 @@ TIFFTAG_CONSECUTIVEBADFAXLINES	1	uint32
 TIFFTAG_DATETIME	1	char*
 TIFFTAG_DOCUMENTNAME	1	char*
 TIFFTAG_DOTRANGE	2	uint16
-TIFFTAG_EXTRASAMPLES	2	uint16,uint16* \(dg	count & types array
+TIFFTAG_EXTRASAMPLES	2	uint16,uint16*	\(dg count & types array
+TIFFTAG_FAXMODE	1	int	\(dg G3/G4 compression pseudo-tag
+TIFFTAG_FAXFILLFUNC	1	TIFFFaxFillFunc	G3/G4 compression pseudo-tag
 TIFFTAG_FILLORDER	1	uint16	\(dg
 TIFFTAG_GROUP3OPTIONS	1	uint32	\(dg
 TIFFTAG_GROUP4OPTIONS	1	uint32	\(dg
@@ -113,11 +121,10 @@ TIFFTAG_IMAGELENGTH	1	uint32
 TIFFTAG_IMAGEWIDTH	1	uint32	\(dg
 TIFFTAG_INKNAMES	1	char*
 TIFFTAG_INKSET	1	uint16	\(dg
-TIFFTAG_JPEGPROC	1	uint16	\(dg
-TIFFTAG_JPEGRESTARTINTERVAL	1	uint16	\(dg
-TIFFTAG_JPEGACTABLES	1	u_char**	\(dg SamplesPerPixel arrays
-TIFFTAG_JPEGDCTABLES	1	u_char**	\(dg SamplesPerPixel arrays
-TIFFTAG_JPEGQTABLES	1	uint16**	\(dg SamplesPerPixel 64-entry arrays
+TIFFTAG_JPEGTABLES	2	uint32*,void*	\(dg count & tables
+TIFFTAG_JPEGQUALITY	1	int	JPEG pseudo-tag
+TIFFTAG_JPEGCOLORMODE	1	int	\(dg JPEG pseudo-tag
+TIFFTAG_JPEGTABLESMODE	1	int	\(dg JPEG pseudo-tag
 TIFFTAG_MAKE	1	char*
 TIFFTAG_MATTEING	1	uint16	\(dg
 TIFFTAG_MAXSAMPLEVALUE	1	uint16
@@ -135,8 +142,11 @@ TIFFTAG_RESOLUTIONUNIT	1	uint16
 TIFFTAG_ROWSPERSTRIP	1	uint32	\(dg must be > 0
 TIFFTAG_SAMPLEFORMAT	1	uint16	\(dg
 TIFFTAG_SAMPLESPERPIXEL	1	uint16	\(dg value must be <= 4
+TIFFTAG_SMAXSAMPLEVALUE	1	double
+TIFFTAG_SMINSAMPLEVALUE	1	double
 TIFFTAG_SOFTWARE	1	char*
 TIFFTAG_SUBFILETYPE	1	uint32
+TIFFTAG_SUBIFD	2	uint16,uint32*	count & offsets array
 TIFFTAG_TARGETPRINTER	1	char*
 TIFFTAG_THRESHHOLDING	1	uint16
 TIFFTAG_TILEDEPTH	1	uint32	\(dg
@@ -153,12 +163,16 @@ TIFFTAG_YPOSITION	1	float
 TIFFTAG_YRESOLUTION	1	float
 .fi
 .sp 5p
-(\(dg Tag may not have its values changed once data is written.)
-(\(dd
+\(dg Tag may not have its values changed once data is written.
+.br
+\(dd
 If
 .I SamplesPerPixel
 is one, then a single array is passed; otherwise three arrays should be
-passed.)
+passed.
+.SH "RETURN VALUES"
+1 is returned if the tag is defined in the current
+directory; otherwise a 0 is returned.
 .SH "RETURN VALUES"
 1 is returned if the operation was successful.
 Otherwise, 0 is returned if an error was detected.
@@ -176,7 +190,7 @@ the format of written data.
 \fB%d: Bad value for "%s"\fP.
 An invalid value was supplied for the named tag.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFOpen (3T),
 .IR TIFFGetField (3T),
 .IR TIFFSetDirectory (3T),

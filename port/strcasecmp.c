@@ -1,4 +1,3 @@
-#include "port.h"
 /*
  * Copyright (c) 1987 Regents of the University of California.
  * All rights reserved.
@@ -17,7 +16,7 @@
  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
-
+#include <sys/types.h>
 #include <string.h>
 
 #if defined(LIBC_SCCS) && !defined(lint)
@@ -29,7 +28,7 @@ static const char sccsid[] = "@(#)strcasecmp.c	5.9 (Berkeley) 6/1/90";
  * together for a case independent comparison.  The mappings are
  * based upon ascii character sequences.
  */
-static const u_char charmap[] = {
+static const unsigned char charmap[] = {
 	'\000', '\001', '\002', '\003', '\004', '\005', '\006', '\007',
 	'\010', '\011', '\012', '\013', '\014', '\015', '\016', '\017',
 	'\020', '\021', '\022', '\023', '\024', '\025', '\026', '\027',
@@ -68,9 +67,9 @@ int
 strcasecmp(s1, s2)
 	const char *s1, *s2;
 {
-	register const u_char *cm = charmap,
-			*us1 = (const u_char *)s1,
-			*us2 = (const u_char *)s2;
+	register const unsigned char *cm = charmap,
+			*us1 = (const unsigned char *)s1,
+			*us2 = (const unsigned char *)s2;
 
 	while (cm[*us1] == cm[*us2++])
 		if (*us1++ == '\0')
@@ -84,9 +83,9 @@ strncasecmp(s1, s2, n)
 	register size_t n;
 {
 	if (n != 0) {
-		register const u_char *cm = charmap,
-				*us1 = (const u_char *)s1,
-				*us2 = (const u_char *)s2;
+		register const unsigned char *cm = charmap,
+				*us1 = (const unsigned char *)s1,
+				*us2 = (const unsigned char *)s2;
 
 		do {
 			if (cm[*us1] != cm[*us2++])

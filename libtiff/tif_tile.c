@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_tile.c,v 1.24 1995/06/06 23:49:31 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_tile.c,v 1.26 1995/10/11 23:47:23 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1995 Sam Leffler
@@ -71,6 +71,7 @@ TIFFComputeTile(TIFF* tif, uint32 x, uint32 y, uint32 z, tsample_t s)
  * Check an (x,y,z,s) coordinate
  * against the image bounds.
  */
+int
 TIFFCheckTile(TIFF* tif, uint32 x, uint32 y, uint32 z, tsample_t s)
 {
 	TIFFDirectory *td = &tif->tif_dir;
@@ -210,4 +211,9 @@ _TIFFDefaultTileSize(TIFF* tif, uint32* tw, uint32* th)
 		*tw = 256;
 	if (*(int32*) th < 1)
 		*th = 256;
+	/* roundup to a multiple of 16 per the spec */
+	if (*tw & 0xf)
+		*tw = TIFFroundup(*tw, 16);
+	if (*th & 0xf)
+		*th = TIFFroundup(*th, 16);
 }

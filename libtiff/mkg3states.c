@@ -1,4 +1,4 @@
-/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkg3states.c,v 1.31 1995/07/17 01:27:30 sam Exp $ */
+/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkg3states.c,v 1.33 1995/10/16 19:14:33 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1995 Sam Leffler
@@ -333,7 +333,10 @@ FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
 static	char* storage_class = "";
 static	char* const_class = "";
 static	int packoutput = 1;
+static	char* prebrace = "";
+static	char* postbrace = "";
 
+void
 WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
 {
     int i;
@@ -344,7 +347,8 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
     if (packoutput) {
 	sep = "\n";
 	for (i = 0; i < Size; i++) {
-	    fprintf(fd, "%s%d,%d,%d", sep, T->State, T->Width, T->Param);
+	    fprintf(fd, "%s%s%d,%d,%d%s",
+		sep, prebrace, T->State, T->Width, T->Param, postbrace);
 	    if (((i+1) % 12) == 0)
 		    sep = ",\n";
 	    else
@@ -354,7 +358,8 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
     } else {
 	sep = "\n ";
 	for (i = 0; i < Size; i++) {
-	    fprintf(fd, "%s%3d,%3d,%4d", sep, T->State, T->Width, T->Param);
+	    fprintf(fd, "%s%s%3d,%3d,%4d%s",
+		sep, prebrace, T->State, T->Width, T->Param, postbrace);
 	    if (((i+1) % 6) == 0)
 		    sep = ",\n ";
 	    else
@@ -366,6 +371,7 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
 }
 
 /* initialise the huffman code tables */
+int
 main(int argc, char* argv[])
 {
     FILE* fd;
@@ -374,7 +380,7 @@ main(int argc, char* argv[])
     extern int optind;
     extern char* optarg;
 
-    while ((c = getopt(argc, argv, "c:s:p")) != -1)
+    while ((c = getopt(argc, argv, "c:s:bp")) != -1)
 	switch (c) {
 	case 'c':
 	    const_class = optarg;
@@ -385,17 +391,22 @@ main(int argc, char* argv[])
 	case 'p':
 	    packoutput = 0;
 	    break;
+	case 'b':
+	    prebrace = "{";
+	    postbrace = "}";
+	    break;
 	case '?':
-	    fprintf(stderr, "usage: %s [-c const] [-s storage] [-p] file\n",
+	    fprintf(stderr,
+		"usage: %s [-c const] [-s storage] [-p] [-b] file\n",
 		argv[0]);
-	    exit(-1);
+	    return (-1);
 	}
     outputfile = optind < argc ? argv[optind] : "g3states.h";
     fd = fopen(outputfile, "w");
     if (fd == NULL) {
 	fprintf(stderr, "%s: %s: Cannot create output file.\n",
 	    argv[0], outputfile);
-	exit(-2);
+	return (-2);
     }
     FillTable(MainTable, 7, Pass, S_Pass);
     FillTable(MainTable, 7, Horiz, S_Horiz);
@@ -421,5 +432,5 @@ main(int argc, char* argv[])
     WriteTable(fd, WhiteTable, 4096, "TIFFFaxWhiteTable");
     WriteTable(fd, BlackTable, 8192, "TIFFFaxBlackTable");
     fclose(fd);
-    exit(0);
+    return (0);
 }

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_apple.c,v 1.19 1995/06/06 23:49:31 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_apple.c,v 1.20 1995/10/12 18:29:18 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -46,7 +46,7 @@
 #include <Files.h>
 #include <Memory.h>
 
-#ifdef applec
+#if defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #define	CtoPstr	c2pstr
 #endif
 

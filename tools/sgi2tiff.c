@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgi2tiff.c,v 1.23 1995/07/01 01:16:55 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgi2tiff.c,v 1.25 1995/10/12 17:57:38 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1995 Sam Leffler
@@ -24,13 +24,9 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <gl/image.h>
 #include <ctype.h>
 
@@ -130,6 +126,11 @@ main(int argc, char* argv[])
 		TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
 	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
 	TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, in->zsize);
+	if (in->zsize > 3) {
+	    uint16 v[1];
+	    v[0] = EXTRASAMPLE_UNASSALPHA;
+	    TIFFSetField(out, TIFFTAG_EXTRASAMPLES, 1, v);
+	}
 	TIFFSetField(out, TIFFTAG_MINSAMPLEVALUE, (uint16) in->min);
 	TIFFSetField(out, TIFFTAG_MAXSAMPLEVALUE, (uint16) in->max);
 	TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
@@ -181,7 +182,7 @@ processCompressOptions(char* opt)
 static int
 cpContig(IMAGE* in, TIFF* out)
 {
-	unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+	tdata_t buf = _TIFFmalloc(TIFFScanlineSize(out));
 	short *r = NULL;
 	int x, y;
 
@@ -192,25 +193,52 @@ cpContig(IMAGE* in, TIFF* out)
 		g = r + in->xsize;
 		b = g + in->xsize;
 		for (y = in->ysize-1; y >= 0; y--) {
-			unsigned char* pp = buf;
+			uint8* pp = (uint8*) buf;
 
 			getrow(in, r, y, 0);
 			getrow(in, g, y, 1);
 			getrow(in, b, y, 2);
 			for (x = 0; x < in->xsize; x++) {
-				*pp++ = r[x];
-				*pp++ = g[x];
-				*pp++ = b[x];
+				pp[0] = r[x];
+				pp[1] = g[x];
+				pp[2] = b[x];
+				pp += 3;
+			}
+			if (TIFFWriteScanline(out, buf, in->ysize-y-1, 0) < 0)
+				goto bad;
+		}
+	} else if (in->zsize == 4) {
+		short *g, *b, *a;
+
+		r = (short *)_TIFFmalloc(4 * in->xsize * sizeof (short));
+		g = r + in->xsize;
+		b = g + in->xsize;
+		a = b + in->xsize;
+		for (y = in->ysize-1; y >= 0; y--) {
+			uint8* pp = (uint8*) buf;
+
+			getrow(in, r, y, 0);
+			getrow(in, g, y, 1);
+			getrow(in, b, y, 2);
+			getrow(in, a, y, 3);
+			for (x = 0; x < in->xsize; x++) {
+				pp[0] = r[x];
+				pp[1] = g[x];
+				pp[2] = b[x];
+				pp[3] = a[x];
+				pp += 4;
 			}
 			if (TIFFWriteScanline(out, buf, in->ysize-y-1, 0) < 0)
 				goto bad;
 		}
 	} else {
+		uint8* pp = (uint8*) buf;
+
 		r = (short *)_TIFFmalloc(in->xsize * sizeof (short));
 		for (y = in->ysize-1; y >= 0; y--) {
 			getrow(in, r, y, 0);
-			for (x = 0; x < in->xsize; x++)
-				buf[x] = r[x];
+			for (x = in->xsize-1; x >= 0; x--)
+				pp[x] = r[x];
 			if (TIFFWriteScanline(out, buf, in->ysize-y-1, 0) < 0)
 				goto bad;
 		}
@@ -229,15 +257,16 @@ bad:
 static int
 cpSeparate(IMAGE* in, TIFF* out)
 {
-	unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+	tdata_t buf = _TIFFmalloc(TIFFScanlineSize(out));
 	short *r = (short *)_TIFFmalloc(in->xsize * sizeof (short));
+	uint8* pp = (uint8*) buf;
 	int x, y, z;
 
 	for (z = 0; z < in->zsize; z++) {
 		for (y = in->ysize-1; y >= 0; y--) {
 			getrow(in, r, y, z);
 			for (x = 0; x < in->xsize; x++)
-				buf[x] = r[x];
+				pp[x] = r[x];
 			if (TIFFWriteScanline(out, buf, in->ysize-y-1, z) < 0)
 				goto bad;
 		}

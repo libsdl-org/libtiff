@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFReadRGBAImage.3t,v 1.6 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFReadRGBAImage.3t,v 1.10 1995/10/11 22:53:44 sam Exp $
 .\"
-.\" Copyright (c) 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1991-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -71,7 +71,9 @@ Alpha of 1.0 (255).
 .PP
 .I TIFFReadRGBAImage
 converts non-8-bit images by scaling sample values.
-Palette, grayscale, bilevel, CMYK, and YCbCr images are converted to
+Palette, grayscale, bilevel, 
+.SM CMYK\c
+, and YCbCr images are converted to
 .SM RGB
 transparently.
 Raster pixels are returned uncorrected by any colorimetry information
@@ -93,12 +95,20 @@ In C++ the
 parameter defaults to 0.
 .PP
 Samples must be either 1, 2, 4, 8, or 16 bits.
-Samples/pixel must be either 1, 3, or 4.
+Colorimetric samples/pixel must be either 1, 3, or 4 (i.e.
+.I SamplesPerPixel
+minus
+.IR ExtraSamples ).
 .PP
 Palettte image colormaps that appear to be incorrectly written
 as 8-bit values are automatically scaled to 16-bits.
+.PP
+.I TIFFReadRGBAImage
+is just a wrapper around the more general
+.IR TIFFRGBAImage (3T)
+facilities.
 .SH "RETURN VALUES"
-1 is returned 1 if the image was successfully read and converted.
+1 is returned if the image was successfully read and converted.
 Otherwise, 0 is returned if an error was encountered and
 .I stopOnError
 is zero.
@@ -167,11 +177,9 @@ There was insufficient memory to allocate a table used to map
 data to 8-bit
 .SM RGB.
 .SH BUGS
-Alpha is not currently returned or set to 1.0.
 Orientations other than bottom-left, or top-left are
 not handled correctly.
-The pixel packing organization is optimized for a specific machine
-architecture.
 .SH "SEE ALSO"
-.IR intro (3T),
-.IR TIFFOpen (3T)
+.IR libtiff (3T),
+.IR TIFFOpen (3T),
+.IR TIFFRGBAImage (3T)

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.2 1995/06/06 23:21:41 sam Exp $" */
+/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.6 1995/10/16 22:32:45 sam Exp $" */
 
 /*
  * Copyright (c) 1991-1995 Sam Leffler
@@ -26,10 +26,18 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+
 #include "tiffio.h"
 
 float	defxres = 204.;		/* default x resolution (pixels/inch) */
 float	defyres = 98.;		/* default y resolution (lines/inch) */
+const float basePageWidth = 8.5;
+const float basePageHeight = 11.0;
+const float half = 0.5;
+const float points = 72.0;
 float	pageWidth = 8.5;	/* image page width (inches) */
 float	pageHeight = 11.0;	/* image page length (inches) */
 int	scaleToPage = 0;	/* if true, scale raster to page dimensions */
@@ -165,10 +173,16 @@ printTIF(TIFF* tif, int pageNumber)
     if (scaleToPage) {
 	float yscale = pageHeight / (h/yres);
 	float xscale = pageWidth / (w/xres);
-	printf("0 %d translate\n", (int)(yscale*(h/yres)*72.));
+	printf("%d %d translate\n",
+               (int) (((basePageWidth - pageWidth) * points) * half),
+               (int)((yscale*(h/yres)*points) +
+               (basePageHeight - pageHeight) * points * half)  );
 	printf("%g %g scale\n", (72.*xscale)/xres, -(72.*yscale)/yres);
     } else {
-	printf("0 %d translate\n", (int)(72.*h/yres));
+	printf("%d %d translate\n",
+               (int) ((basePageWidth - pageWidth) * points * half),
+               (int)((72.*h/yres) +
+               (basePageHeight - pageHeight) * points * half) );
 	printf("%g %g scale\n", 72./xres, -72./yres);
     }
     printf("0 setgray\n");
@@ -262,16 +276,17 @@ emitFont(FILE* fd)
 }
 
 static int
-pcompar(void* va, void* vb)
+pcompar(const void* va, const void* vb)
 {
-    int* pa = (int*) va;
-    int* pb = (int*) vb;
+    const int* pa = (const int*) va;
+    const int* pb = (const int*) vb;
     return (*pa - *pb);
 }
 
 extern	double atof();
 static	void usage(int code);
 
+int
 main(int argc, char** argv)
 {
     extern int optind;
@@ -279,7 +294,7 @@ main(int argc, char** argv)
     int c, pageNumber;
     int* pages = 0, npages = 0;
     int dowarnings = 0;		/* if 1, enable library warnings */
-    long t;
+    time_t t;
     TIFF* tif;
 
     while ((c = getopt(argc, argv, "l:p:x:y:W:H:wS")) != -1)
@@ -355,17 +370,19 @@ main(int argc, char** argv)
 		    argv[optind]);
 	} while (++optind < argc);
     } else {
-	int n, fd;
+	int n;
+	FILE* fd;
 	char temp[1024], buf[16*1024];
 
 	strcpy(temp, "/tmp/fax2psXXXXXX");
-	fd = mkstemp(temp);
-	if (fd == -1) {
+	(void) mktemp(temp);
+	fd = fopen(temp, "w");
+	if (fd == NULL) {
 	    fprintf(stderr, "Could not create temp file \"%s\"\n", temp);
 	    exit(-2);
 	}
 	while ((n = read(fileno(stdin), buf, sizeof (buf))) > 0)
-	    write(fd, buf, n);
+	    write(fileno(fd), buf, n);
 	tif = TIFFOpen(temp, "r");
 	unlink(temp);
 	if (tif) {
@@ -373,13 +390,13 @@ main(int argc, char** argv)
 	    TIFFClose(tif);
 	} else
 	    fprintf(stderr, "%s: Can not open, or not a TIFF file.\n", temp);
-	close(fd);
+	fclose(fd);
     }
     printf("%%%%Trailer\n");
     printf("%%%%Pages: %u\n", totalPages);
     printf("%%%%EOF\n");
 
-    exit(0);
+    return (0);
 }
 
 char* stuff[] = {

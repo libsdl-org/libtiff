@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_compress.c,v 1.48 1995/07/07 02:30:16 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_compress.c,v 1.49 1995/10/12 16:41:08 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -184,7 +184,7 @@ TIFFRegisterCODEC(uint16 scheme, const char* name, TIFFInitMethod init)
 		registeredCODECS = cd;
 	} else
 		TIFFError("TIFFRegisterCODEC",
-		    "No space to registere compression scheme %s", name);
+		    "No space to register compression scheme %s", name);
 	return (cd->info);
 }
 

@@ -105,7 +105,7 @@ Experimental support for the deflate algorithm is controlled by
 <TT>DEFLATE_SUPPORT</TT>.
 The deflate codec that comes with <TT>libtiff</TT> is designed
 for use with version 0.92 or later of the freely available
-<TT>libgz</TT> library written by Jean-loup Gailly and Mark Adler.
+<TT>libz</TT> library written by Jean-loup Gailly and Mark Adler.
 The data format used by this library is described
 in the files
 <A HREF=ftp://ftp.uu.net/pub/archiving/zip/doc/zlib-3.1.doc>zlib-3.1.doc</A>,
@@ -114,7 +114,8 @@ and
 available in the directory
 <A HREF=ftp://ftp.uu.net/pub/archiving/zip/doc>ftp.uu.net:/pub/archiving/zip/doc</A>.</EM>
 The library can be retried from the directory
-<A HREF=ftp://ftp.uu.net/graphics/jpeg>ftp.uu.net:/graphics/jpeg/</A>.
+<A HREF=ftp://ftp.uu.net/pub/archiving/zip/zlib/>ftp.uu.net:/pub/archiving/zip/zlib/</A>
+(or try <A HREF=ftp://quest.jpl.nasa.gov/beta/zlib/>quest.jpl.nasa.gov:/beta/zlib/</A>).
 
 <P>
 <IMG SRC="images/warning.gif" ALT="NOTE: " ALIGN=left HSPACE=8 VSPACE=6>
@@ -235,7 +236,7 @@ The UNIX (<B>tif_unix.c</B>),
 Macintosh (<B>tif_apple.c</B>),
 and VMS (<B>tif_vms.c</B>)
 code has had the most use;
-the MS/DOS support (<TT>tif_msdos.c</TT>) assumes
+the MS/DOS support (<B>tif_msdos.c</B>) assumes
 some level of UNIX system call emulation (i.e.
 <TT>open</TT>,
 <TT>read</TT>,
@@ -312,6 +313,18 @@ purely by fiddling with the following machine-dependent typedefs:
 
 <P>
 <TABLE BORDER CELLPADDING=3 WIDTH=100%>
+
+<TR>
+<TD>uint8</TD>
+<TD>8-bit unsigned integer</TD>
+<TD>tiff.h</TD>
+</TR>
+
+<TR>
+<TD>int8</TD>
+<TD>8-bit signed integer</TD>
+<TD>tiff.h</TD>
+</TR>
 
 <TR>
 <TD>uint16</TD>
@@ -606,7 +619,7 @@ for example, to decode/encode entire strips of data.
 <P>
 In general, if you have a new compression algorithm to add, work from
 the code for an existing routine.  In particular,
-<B>libitff/tif_dumpmode.c</B>
+<B>tif_dumpmode.c</B>
 has the trivial code for the "nil" compression scheme,
 <B>tif_packbits.c</B> is a
 simple byte-oriented scheme that has to watch out for buffer
@@ -620,7 +633,7 @@ the portability of your TIFF files.
 
 <ADDRESS>
 <A HREF="sam.html">Sam Leffler</A> / <A HREF="mailto:sam@engr.sgi.com">sam@engr.sgi.com</A>.
-Last updated: $Date: 1995/07/07 02:34:32 $
+Last updated: $Date: 1995/10/16 21:56:24 $
 </ADDRESS>
 
 </BODY>

@@ -1,4 +1,4 @@
-# $Header: /usr/people/sam/tiff/RCS/config.site,v 1.5 1995/07/17 14:53:35 sam Exp $
+# $Header: /usr/people/sam/tiff/RCS/config.site,v 1.7 1995/10/10 01:03:54 sam Exp $
 #
 # TIFF Software
 #
@@ -40,8 +40,7 @@
 #
 # Package controls.
 #
-#DSO="auto"			# yes|no|auto configure DSO support
-#HTML="no"			# yes|no configure HTML documentation
+#DSO="auto"			# auto|IRIX configure DSO support for system
 #JPEG="no"			# yes|no configure JPEG support
 #ZIP="no"			# yes|no configure Deflate support
 #LIBGL="auto"			# yes|no|auto configure IRIS GL-based tools
@@ -61,31 +60,23 @@
 # NB: JPEG support requires release 5 or later of the IJG code,
 #     which you can find on the Internet at ftp.uu.net:/graphics/jpeg/.
 #
-#DIR_JPEG="../jpeg"			# directory for JPEG include files
-#LIBJPEG="-L \${JPEGDIR} -ljpeg"	# JPEG library to load
+#DIRS_LIBINC="$DIRS_LIBINC ../jpeg"	# directory for JPEG include files
+#LIBJPEG="-L ../jpeg -ljpeg"		# JPEG library to load
 
 #
 # Deflate-specific parameters; used when Deflate support is enabled.
 #
-# NB: Deflate support requires version 0.92 or later of the libgz
-#     library written by Jean-loup Gailly and Mark Adler.  The library
-#     was last found at ftp://ftp.uu.net/graphics/png/code/zlib-0.93.tar.gz.
+# NB: Deflate support requires version 0.92 or later of the zlib
+#     library written by Jean-loup Gailly and Mark Adler.  Starting
+#     with about 0.95 the library is called libz.a (previously it was
+#     libgz.a).  The library was last found at
 #
-#DIR_LIBGZ="../zlib"			# directory for libgz include files
-#LIBGZ="-L \${ZIPDIR} -lgz"		# libgz library to load
-
+#        ftp://ftp.uu.net/graphics/png/code/zlib-0.93.tar.gz
 #
-# HTML-specific parameters; only used when the
-# HTML package is configured for installation.
+#     Look for it also at ftp://ftp.uu.net/pub/archiving/zip/zlib.
 #
-# Note that ``PATH''s are the virtual pathnames used
-# in forming URLs; they are not directory pathnames
-# in the filesystem.
-#
-#DIR_HTML="/var/httpd/htdocs/tiff"	# directory for HTML documentation
-#DIR_CGI="/var/httpd/cgi-bin"		# directory for CGI scripts
-#HTMLPATH="/tiff"			# virtual path to HTML materials
-#CGIPATH="/cgi-bin"			# virtual path to CGI scripts
+#DIRS_LIBINC="$DIRS_LIBINC ../zlib"	# directory for zlib include files
+#LIBGZ="-L ../zlib -lz"			# libgz library to load
 
 #
 # Miscellaneous parameters.

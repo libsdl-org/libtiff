@@ -1,7 +1,7 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/pal2rgb.1,v 1.11 1995/07/07 23:29:04 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/pal2rgb.1,v 1.13 1995/10/11 19:41:59 sam Exp $
 .\"
-.\" Copyright (c) 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1990-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH PAL2RGB 1 "September 26, 1994"
+.TH PAL2RGB 1 "October 15, 1995"
 .SH NAME
 pal2rgb \- convert a palette color
 .SM TIFF
@@ -85,6 +85,8 @@ in the output file:
 for Macintosh Packbits,
 .B "\-c lzw"
 for Lempel-Ziv & Welch,
+.B "\-c zip"
+for Deflate,
 .B "\-c none"
 for no compression.
 If no compression-related option is specified, the input

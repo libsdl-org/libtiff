@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_open.c,v 1.58 1995/07/17 01:27:01 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_open.c,v 1.59 1995/07/20 16:38:53 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -175,7 +175,7 @@ TIFFClientOpen(
 	tif->tif_mapproc = mapproc;
 	tif->tif_unmapproc = unmapproc;
 
-	{ union { int i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
+	{ union { int32 i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
 #ifdef ENDIANHACK_SUPPORT
 	/*
 	 * Numerous vendors, typically on the PC, do not correctly

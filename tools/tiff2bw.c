@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2bw.c,v 1.19 1995/07/19 00:39:51 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2bw.c,v 1.20 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -24,13 +24,9 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <ctype.h>
 #include "tiffio.h"
 

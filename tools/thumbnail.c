@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/thumbnail.c,v 1.8 1995/06/06 23:45:26 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/thumbnail.c,v 1.10 1995/10/12 16:40:49 sam Exp $ */
 
 /*
  * Copyright (c) 1994-1995 Sam Leffler
@@ -23,13 +23,9 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <math.h>
 
 #include "tiffio.h"
@@ -53,13 +49,14 @@ typedef enum {
 static	uint32 tnw = 216;		/* thumbnail width */
 static	uint32 tnh = 274;		/* thumbnail height */
 static	Contrast contrast = LINEAR;	/* current contrast */
-static	u_char* thumbnail;
+static	uint8* thumbnail;
 
 static	int cpIFD(TIFF*, TIFF*);
 static	int generateThumbnail(TIFF*, TIFF*);
 static	void initScale();
 static	void usage(void);
 
+extern	char* optarg;
 extern	int optind;
 
 int
@@ -87,7 +84,7 @@ main(int argc, char* argv[])
     }
     if (argc-optind != 2)
 	usage();
-    thumbnail = (u_char*) _TIFFmalloc(tnw * tnh);
+    thumbnail = (uint8*) _TIFFmalloc(tnw * tnh);
     out = TIFFOpen(argv[optind+1], "w");
     if (out == NULL)
 	return (-2);
@@ -295,15 +292,15 @@ cpIFD(TIFF* in, TIFF* out)
 }
 
 static	uint16	photometric;		/* current photometric of raster */
-static	u_short	filterWidth;		/* filter width in pixels */
-static	u_short	stepSrcWidth;		/* src image stepping width */
-static	u_short	stepDstWidth;		/* dest stepping width */
-static	u_char* src0;			/* horizontal bit stepping (start) */
-static	u_char* src1;			/* horizontal bit stepping (middle) */
-static	u_char* src2;			/* horizontal bit stepping (end) */
-static	u_short* rowoff;		/* row offset for stepping */
-static	u_char cmap[256];		/* colormap indexes */
-static	u_char bits[256];		/* count of bits set */
+static	uint16	filterWidth;		/* filter width in pixels */
+static	uint16	stepSrcWidth;		/* src image stepping width */
+static	uint16	stepDstWidth;		/* dest stepping width */
+static	uint8* src0;			/* horizontal bit stepping (start) */
+static	uint8* src1;			/* horizontal bit stepping (middle) */
+static	uint8* src2;			/* horizontal bit stepping (end) */
+static	uint16* rowoff;		/* row offset for stepping */
+static	uint8 cmap[256];		/* colormap indexes */
+static	uint8 bits[256];		/* count of bits set */
 
 static void
 setupBitsTables()
@@ -331,10 +328,10 @@ static int clamp(float v, int low, int high)
 #endif
 
 static void
-expFill(float pct[], u_int p, u_int n)
+expFill(float pct[], uint32 p, uint32 n)
 {
-    u_int i;
-    u_int c = (p * n) / 100;
+    uint32 i;
+    uint32 c = (p * n) / 100;
     for (i = 1; i < c; i++)
 	pct[i] = 1-exp(i/((double)(n-1)))/ M_E;
     for (; i < n; i++)
@@ -345,7 +342,7 @@ static void
 setupCmap()
 {
     float pct[256];			/* known to be large enough */
-    u_int i;
+    uint32 i;
     pct[0] = 1;				/* force white */
     switch (contrast) {
     case EXP50: expFill(pct, 50, 256); break;
@@ -374,10 +371,10 @@ setupCmap()
 static void
 initScale()
 {
-    src0 = (u_char*) _TIFFmalloc(sizeof (u_char) * tnw);
-    src1 = (u_char*) _TIFFmalloc(sizeof (u_char) * tnw);
-    src2 = (u_char*) _TIFFmalloc(sizeof (u_char) * tnw);
-    rowoff = (u_short*) _TIFFmalloc(sizeof (u_short) * tnw);
+    src0 = (uint8*) _TIFFmalloc(sizeof (uint8) * tnw);
+    src1 = (uint8*) _TIFFmalloc(sizeof (uint8) * tnw);
+    src2 = (uint8*) _TIFFmalloc(sizeof (uint8) * tnw);
+    rowoff = (uint16*) _TIFFmalloc(sizeof (uint16) * tnw);
     filterWidth = 0;
     stepDstWidth = stepSrcWidth = 0;
     setupBitsTables();
@@ -388,18 +385,18 @@ initScale()
  * according to the widths of the src and dst images.
  */
 static void
-setupStepTables(u_short sw)
+setupStepTables(uint16 sw)
 {
     if (stepSrcWidth != sw || stepDstWidth != tnw) {
 	int step = sw;
 	int limit = tnw;
 	int err = 0;
-	u_int sx = 0;
-	u_int x;
+	uint32 sx = 0;
+	uint32 x;
 	int fw;
-	u_char b;
+	uint8 b;
 	for (x = 0; x < tnw; x++) {
-	    u_int sx0 = sx;
+	    uint32 sx0 = sx;
 	    err += step;
 	    while (err >= limit) {
 		err -= limit;
@@ -422,19 +419,19 @@ setupStepTables(u_short sw)
 }
 
 static void
-setrow(u_char* row, int nrows, const u_char* rows[])
+setrow(uint8* row, int nrows, const uint8* rows[])
 {
-    u_int x;
-    u_int area = nrows * filterWidth;
+    uint32 x;
+    uint32 area = nrows * filterWidth;
     for (x = 0; x < tnw; x++) {
-	u_int mask0 = src0[x];
-	u_int fw = src1[x];
-	u_int mask1 = src1[x];
-	u_int off = rowoff[x];
-	u_int acc = 0;
-	u_int y, i;
+	uint32 mask0 = src0[x];
+	uint32 fw = src1[x];
+	uint32 mask1 = src1[x];
+	uint32 off = rowoff[x];
+	uint32 acc = 0;
+	uint32 y, i;
 	for (y = 0; y < nrows; y++) {
-	    const u_char* src = rows[y] + off;
+	    const uint8* src = rows[y] + off;
 	    acc += bits[*src++ & mask0];
 	    switch (fw) {
 	    default:
@@ -464,17 +461,17 @@ setrow(u_char* row, int nrows, const u_char* rows[])
  * with a user-selectable contrast curve.
  */
 static void
-setImage1(const u_char* br, u_int rw, u_int rh)
+setImage1(const uint8* br, uint32 rw, uint32 rh)
 {
     int step = rh;
     int limit = tnh;
     int err = 0;
     int bpr = howmany(rw,8);
-    u_int sy = 0;
-    u_char* row = thumbnail;
-    u_int dy;
+    uint32 sy = 0;
+    uint8* row = thumbnail;
+    uint32 dy;
     for (dy = 0; dy < tnh; dy++) {
-	const u_char* rows[256];
+	const uint8* rows[256];
 	int nrows = 1;
 	rows[0] = br + bpr*sy;
 	err += step;
@@ -490,9 +487,9 @@ setImage1(const u_char* br, u_int rw, u_int rh)
 }
 
 static void
-setImage(const u_char* br, u_int rw, u_int rh)
+setImage(const uint8* br, uint32 rw, uint32 rh)
 {
-    filterWidth = (u_short) ceil((double) rw / (double) tnw);
+    filterWidth = (uint16) ceil((double) rw / (double) tnw);
     setupStepTables(rw);
     setImage1(br, rw, rh);
 }

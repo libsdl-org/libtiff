@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffcomp.h,v 1.44 1995/06/06 17:00:43 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffcomp.h,v 1.46 1995/10/12 18:26:54 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1995 Sam Leffler
@@ -38,45 +38,73 @@
 /*
  * Setup basic type definitions and function declaratations.
  */
+
+/*
+ * Simplify Acorn RISC OS identifier (to avoid confusion with Acorn RISC iX
+ * and with defunct Unix Risc OS)
+ * No need to specify __arm - hey, Acorn might port the OS, no problem here!
+ */
+#ifdef __acornriscos
+#undef __acornriscos
+#endif
+#if defined(__acorn) && defined(__riscos)
+#define __acornriscos
+#endif
+
 #if defined(__MWERKS__) || defined(THINK_C)
 #include <unix.h>
 #include <math.h>
 #endif
+
 #include <stdio.h>
-#ifdef applec
+
+#if defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <types.h>
-#else
-#if !defined(__MWERKS__) && !defined(THINK_C)
+#elif !defined(__MWERKS__) && !defined(THINK_C) && !defined(__acornriscos)
 #include <sys/types.h>
 #endif
-#endif
-#ifdef VMS
+
+#if defined(VMS)
 #include <file.h>
 #include <unixio.h>
-#else
+#elif !defined(__acornriscos)
 #include <fcntl.h>
 #endif
-#if defined(__MWERKS__) || defined(THINK_C) || defined(applec)
+
+/*
+ * This maze of checks controls defines or not the
+ * target system has BSD-style typdedefs declared in
+ * an include file and/or whether or not to include
+ * <unistd.h> to get the SEEK_* definitions.  Some
+ * additional includes are also done to pull in the
+ * appropriate definitions we're looking for.
+ */
+#if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <stdlib.h>
 #define	BSDTYPES
-#endif
-#if defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
+#define	HAVE_UNISTD_H	0
+#elif defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
 #define	BSDTYPES
-#endif
-#if defined(OS2_16) || defined(OS2_32)
+#elif defined(OS2_16) || defined(OS2_32)
 #define	BSDTYPES
+#elif defined(__acornriscos)
+#include <stdlib.h>
+#define	BSDTYPES
+#define	HAVE_UNISTD_H	0
+#elif defined(VMS)
+#define	HAVE_UNISTD_H	0
+#else
+#define	HAVE_UNISTD_H	1
 #endif
 
 /*
  * The library uses the ANSI C/POSIX SEEK_*
  * definitions that should be defined in unistd.h
- * (except on VMS or the Mac, where they are in stdio.h and
+ * (except on system where they are in stdio.h and
  * there is no unistd.h).
  */
-#ifndef SEEK_SET
-#if !defined(VMS) && !defined (applec) && !defined(THINK_C) && !defined(__MWERKS__)
+#if !defined(SEEK_SET) && HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 #endif
 
 /*
@@ -90,7 +118,7 @@
  * If your system doesn't have them in <sys/types.h>,
  * then define BSDTYPES in your Makefile.
  */
-#ifdef BSDTYPES
+#if defined(BSDTYPES)
 typedef	unsigned char u_char;
 typedef	unsigned short u_short;
 typedef	unsigned int u_int;
@@ -102,7 +130,8 @@ typedef	unsigned long u_long;
  * floating point value will have on the parameter
  * stack (when coerced by the compiler).
  */
-#ifdef applec
+/* Note: on MacPowerPC "extended" is undefined. So only use it for 68K-Macs */
+#if defined(__SC__) || defined(THINK_C)
 typedef extended dblparam_t;
 #else
 typedef double dblparam_t;
@@ -113,8 +142,8 @@ typedef double dblparam_t;
  * set INLINE appropriately to get the known hotspots
  * in the library expanded inline.
  */
-#ifdef __GNUC__
-#ifdef __STRICT_ANSI__
+#if defined(__GNUC__)
+#if defined(__STRICT_ANSI__)
 #define	INLINE	__inline__
 #else
 #define	INLINE	inline
@@ -136,14 +165,41 @@ typedef double dblparam_t;
  * The GNU C variant is untested.
  */
 #if defined(VAX) && defined(VMS)
-#ifdef VAXC
+#if defined(VAXC)
 #define GLOBALDATA(TYPE,NAME)	extern noshare TYPE NAME
 #endif
-#ifdef __GNUC__
+#if defined(__GNUC__)
 #define GLOBALDATA(TYPE,NAME)	extern TYPE NAME \
 	asm("_$$PsectAttributes_NOSHR$$" #NAME)
 #endif
 #else	/* !VAX/VMS */
 #define GLOBALDATA(TYPE,NAME)	extern TYPE NAME
 #endif
+
+#if defined(__acornriscos)
+/*
+ * osfcn.h is part of C++Lib on Acorn C/C++, and as such can't be used
+ * on C alone. For that reason, the relevant functions are
+ * implemented in tif_acorn.c, and the elements from the header
+ * file are included here.
+ */
+#if defined(__cplusplus)
+#include <osfcn.h>
+#else
+#define	O_RDONLY	0
+#define	O_WRONLY	1
+#define	O_RDWR		2
+#define	O_APPEND	8
+#define	O_CREAT		0x200
+#define	O_TRUNC		0x400
+typedef long off_t;
+extern int open(const char *name, int flags, int mode);
+extern int close(int fd);
+extern int write(int fd, const char *buf, int nbytes);
+extern int read(int fd, char *buf, int nbytes);
+extern off_t lseek(int fd, off_t offset, int whence);
+extern int creat(const char *path, int mode);
+#endif /* __cplusplus */
+#endif /* __acornriscos */
+
 #endif /* _COMPAT_ */

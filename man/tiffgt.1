@@ -1,7 +1,7 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffgt.1,v 1.18 1995/07/07 23:29:04 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffgt.1,v 1.20 1995/10/11 19:42:07 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFGT 1 "September 26, 1994"
+.TH TIFFGT 1 "October 15, 1995"
 .SH NAME
 tiffgt \- display an image stored in a
 .SM TIFF
@@ -33,13 +33,14 @@ file (Silicon Graphics version)
 [
 .I options
 ]
-.I input.tif
+.I "input.tif ..."
 .SH DESCRIPTION
 .I tiffgt
-displays an image stored in a file with the
+displays one or more images stored using the
 Tag Image File Format, Revision 6.0.
-The image is placed in a fixed size window that the
-user must position on the display.
+Each image is placed in a fixed size window that the
+user must position on the display (unless configured
+otherwise through X defaults).
 If the display has fewer than 24 bitplanes, or if the
 image does not warrant full color, then
 .SM RGB
@@ -81,6 +82,74 @@ it assumes 16-bit values.
 This inspection is done to handle old images written by
 previous (incorrect) versions of
 .IR libtiff .
+.PP
+.I tiffgt
+can be used to display multiple images one-at-a-time.
+The left mouse button switches the display to the first image in the
+.I next
+file in the list of files specified on the command line.
+The right mouse button switches to the first image in the
+.I previous
+file in the list.
+The middle mouse button causes the first image in the first file
+specified on the command line to be displayed.
+In addition the following keyboard commands are recognized:
+.TP
+.B b
+Use a
+.I PhotometricIntepretation
+of MinIsBlack in displaying the current image.
+.TP
+.B l
+Use a
+.I FillOrder
+of lsb-to-msb in decoding the current image.
+.TP
+.B m
+Use a
+.I FillOrder
+of msb-tolmsb in decoding the current image.
+.TP
+.B c
+Use a colormap visual to display the current image.
+.TP
+.B r
+Use a true color (24-bit RGB) visual to display the current image.
+.TP
+.B w
+Use a
+.I PhotometricIntepretation
+of MinIsWhite in displaying the current image.
+.TP
+.B W
+Toggle (enable/disable) display of warning messages from the
+.SM TIFF
+library when decoding images.
+.TP
+.B E
+Toggle (enable/disable) display of error messages from the
+.SM TIFF
+library when decoding images.
+.TP
+.B z
+Reset all parameters to their default settings (\c
+.IR FillOrder ,
+.IR PhotometricInterpretation ,
+handling of warnings and errors).
+.TP
+.B PageUp
+Display the previous image in the current file or the last
+image in the previous file.
+.TP
+.B PageDown
+Display the next image in the current file or the first image
+in the next file.
+.TP
+.B Home
+Display the first image in the current file.
+.TP
+.B End
+Display the last image in the current file (unimplemented).
 .SH OPTIONS
 .TP
 .B \-c
@@ -90,6 +159,14 @@ Force image display in a colormap window.
 Specify an image to display by directory number.
 By default the first image in the file is displayed.
 Directories are numbered starting at zero.
+.TP
+.B \-e
+Enable reporting of error messages from the 
+.SM TIFF
+library.
+By default
+.I tiffgt
+silently ignores images that cannot be read.
 .TP
 .B \-f
 Force 
@@ -118,6 +195,20 @@ By default the first image in the file is displayed.
 Directories offsets may be specified using C-style syntax;
 i.e. a leading ``0x'' for hexadecimal and a leading ``0'' for octal.
 .TP
+.B \-p
+Override the value of the
+.I PhotometricInterpretation
+tag; the parameter may be one of:
+.IR miniswhite ,
+.IR minisblack ,
+.IR rgb ,
+.IR palette ,
+.IR mask ,
+.IR separated ,
+.IR ycbcr ,
+and
+.IR cielab .
+.TP
 .B \-r
 Force image display in a full color window.
 .TP
@@ -126,6 +217,14 @@ Stop on the first read error.
 By default all errors in the input data are ignored and 
 .I tiffgt
 does it's best to display as much of an image as possible.
+.TP
+.B \-w
+Enable reporting of warning messages from the 
+.SM TIFF
+library.
+By default
+.I tiffgt
+ignores warning messages generated when reading an image.
 .TP
 .B \-v
 Place information in the title bar describing

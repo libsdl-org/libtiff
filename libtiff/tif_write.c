@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_write.c,v 1.70 1995/07/18 17:55:31 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_write.c,v 1.71 1995/09/30 18:36:18 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -163,9 +163,7 @@ TIFFWriteScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
  * specified strip.  There must be space for the
  * data; we don't check if strips overlap!
  *
- * NB: Image length must be setup before writing; this
- *     interface does not support automatically growing
- *     the image on each write (as TIFFWriteScanline does).
+ * NB: Image length must be setup before writing.
  */
 tsize_t
 TIFFWriteEncodedStrip(TIFF* tif, tstrip_t strip, tdata_t data, tsize_t cc)
@@ -176,10 +174,25 @@ TIFFWriteEncodedStrip(TIFF* tif, tstrip_t strip, tdata_t data, tsize_t cc)
 
 	if (!WRITECHECKSTRIPS(tif, module))
 		return ((tsize_t) -1);
+	/*
+	 * Check strip array to make sure there's space.
+	 * We don't support dynamically growing files that
+	 * have data organized in separate bitplanes because
+	 * it's too painful.  In that case we require that
+	 * the imagelength be set properly before the first
+	 * write (so that the strips array will be fully
+	 * allocated above).
+	 */
 	if (strip >= td->td_nstrips) {
-		TIFFError(module, "%s: Strip %lu out of range, max %lu",
-		    tif->tif_name, (u_long) strip, (u_long) td->td_nstrips);
-		return ((tsize_t) -1);
+		if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {
+			TIFFError(tif->tif_name,
+		"Can not grow image by strips when using separate planes");
+			return ((tsize_t) -1);
+		}
+		if (!TIFFGrowStrips(tif, 1, module))
+			return ((tsize_t) -1);
+		td->td_stripsperimage =
+		    TIFFhowmany(td->td_imagelength, td->td_rowsperstrip);
 	}
 	/*
 	 * Handle delayed allocation of data buffer.  This
@@ -219,23 +232,44 @@ TIFFWriteEncodedStrip(TIFF* tif, tstrip_t strip, tdata_t data, tsize_t cc)
  * There must be space for the data; we don't check
  * if strips overlap!
  *
- * NB: Image length must be setup before writing; this
- *     interface does not support automatically growing
- *     the image on each write (as TIFFWriteScanline does).
+ * NB: Image length must be setup before writing.
  */
 tsize_t
 TIFFWriteRawStrip(TIFF* tif, tstrip_t strip, tdata_t data, tsize_t cc)
 {
 	static const char module[] = "TIFFWriteRawStrip";
+	TIFFDirectory *td = &tif->tif_dir;
 
 	if (!WRITECHECKSTRIPS(tif, module))
 		return ((tsize_t) -1);
-	if (strip >= tif->tif_dir.td_nstrips) {
-		TIFFError(module, "%s: Strip %lu out of range, max %lu",
-		    tif->tif_name, (u_long) strip,
-		    (u_long) tif->tif_dir.td_nstrips);
-		return ((tsize_t) -1);
+	/*
+	 * Check strip array to make sure there's space.
+	 * We don't support dynamically growing files that
+	 * have data organized in separate bitplanes because
+	 * it's too painful.  In that case we require that
+	 * the imagelength be set properly before the first
+	 * write (so that the strips array will be fully
+	 * allocated above).
+	 */
+	if (strip >= td->td_nstrips) {
+		if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {
+			TIFFError(tif->tif_name,
+		"Can not grow image by strips when using separate planes");
+			return ((tsize_t) -1);
+		}
+		/*
+		 * Watch out for a growing image.  The value of
+		 * strips/image will initially be 1 (since it
+		 * can't be deduced until the imagelength is known).
+		 */
+		if (strip >= td->td_stripsperimage)
+			td->td_stripsperimage =
+			    TIFFhowmany(td->td_imagelength,td->td_rowsperstrip);
+		if (!TIFFGrowStrips(tif, 1, module))
+			return ((tsize_t) -1);
 	}
+	tif->tif_curstrip = strip;
+	tif->tif_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
 	return (TIFFAppendToStrip(tif, strip, (tidata_t) data, cc) ?
 	    cc : (tsize_t) -1);
 }

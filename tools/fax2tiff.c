@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/fax2tiff.c,v 1.37 1995/07/17 01:36:52 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/fax2tiff.c,v 1.39 1995/10/12 16:40:06 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1995 Sam Leffler
@@ -27,12 +27,8 @@
 /* 
  * Convert a CCITT Group 3 FAX file to TIFF Group 3 format.
  */
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>		/* should have atof & getopt */
-#endif
 #include "tiffiop.h"
 
 #ifndef BINMODE
@@ -48,8 +44,8 @@
 
 TIFF	*faxTIFF;
 #define XSIZE		1728
-u_char	rowbuf[TIFFhowmany(XSIZE,8)];
-u_char	refbuf[TIFFhowmany(XSIZE,8)];
+char	rowbuf[TIFFhowmany(XSIZE,8)];
+char	refbuf[TIFFhowmany(XSIZE,8)];
 
 int	verbose;
 int	stretch;
@@ -249,7 +245,8 @@ main(int argc, char* argv[])
 		if (verbose) {
 			fprintf(stderr, "%s:\n", argv[optind]);
 			fprintf(stderr, "%d rows in input\n", rows);
-			fprintf(stderr, "%d total bad rows\n", badfaxlines);
+			fprintf(stderr, "%ld total bad rows\n",
+			    (long) badfaxlines);
 			fprintf(stderr, "%d max consecutive bad rows\n", badfaxrun);
 		}
 		if (compression == COMPRESSION_CCITTFAX3 &&
@@ -307,14 +304,14 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 
 		if (TIFFWriteScanline(tifout, rowbuf, row, 0) < 0) {
 			fprintf(stderr, "%s: Write error at row %ld.\n",
-			    tifout->tif_name, row);
+			    tifout->tif_name, (long) row);
 			break;
 		}
 		row++;
 		if (stretch) {
 			if (TIFFWriteScanline(tifout, rowbuf, row, 0) < 0) {
 				fprintf(stderr, "%s: Write error at row %ld.\n",
-				    tifout->tif_name, row);
+				    tifout->tif_name, (long) row);
 				break;
 			}
 			row++;

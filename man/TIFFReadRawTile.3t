@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFReadRawTile.3t,v 1.8 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFReadRawTile.3t,v 1.11 1995/10/11 19:45:29 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFReadRawTile 3T "December 16, 1991"
+.TH TIFFReadRawTile 3T "October 15, 1995"
 .SH NAME
 TIFFReadRawTile \- return an undecoded tile of data from an open
 .SM TIFF
@@ -41,12 +41,12 @@ is a ``raw tile number.''
 That is, the caller must take into account whether or not the
 data is organized in separate planes (\c
 .IR PlanarConfiguration =2).
-.IR TIFFComputeTile ()
+.I TIFFComputeTile
 automatically does this when converting an (x,y,z,sample)
 coordinate quadruple to a tile number.
 To read a full tile of data the data buffer should typically be
 at least as large as the value returned by
-.IR TIFFTileSize ().
+.IR TIFFTileSize .
 .SH "RETURN VALUES"
 The actual number of bytes of data that were placed in
 .I buf
@@ -58,7 +58,8 @@ All error messages are directed to the
 .IR TIFFError (3T)
 routine.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFOpen (3T),
 .IR TIFFReadEncodedTile (3T),
-.IR TIFFReadTile (3T)
+.IR TIFFReadTile (3T),
+.IR TIFFTileSize (3T)

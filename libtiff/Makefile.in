@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.20 1995/07/17 19:26:25 sam Exp $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.24 1995/10/16 19:15:09 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -24,13 +24,8 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
 # OF THIS SOFTWARE.
 #
-DEPTH	= ..
 
-SRCDIR	= ${DEPTH}/@SRCDIR@/libtiff
-
-JPEGDIR	= ${DEPTH}/@DIR_JPEG@
-ZIPDIR	= ${DEPTH}/@DIR_LIBGZ@
-PORT	= ${DEPTH}/port
+SRCDIR	= @LIBSRCDIR@
 
 #
 # VERSION:	@VERSION@
@@ -48,21 +43,24 @@ INSTALL	= @INSTALL@
 
 #
 # If JPEG support is to be included and the Independent JPEG
-# Software distribution is not installed then INC_JPEG will
+# Software distribution is not installed then DIR_JPEG must
 # refer to the directory where the include files reside.
 #
-IPATH	= -I. -I${DEPTH} -I${SRCDIR} -I${JPEGDIR} -I${ZIPDIR}
+# Similarly, if the libgz distribution is not installed, then
+# DIR_LIBGZ must refer to the directory where the include files
+# are located.  Note that recent versions 
 #
-# To enable JPEG support (with the default configuration), include
-# -DJPEG_SUPPORT here, setup the include search path above, and
-# configure the tools to locate the appropriate libjpeg.  Otherwise,
-# consult tiffconf.h for information on controlling the configuration
-# of optional library support.
+IPATH	= -I. -I${SRCDIR} @COPT_LIBINC@
 #
-CONF_LIBRARY=\
-	@CONF_JPEG@ \
-	@CONF_ZIP@ \
-	${NULL}
+# To enable JPEG support include -DJPEG_SUPPORT here.
+# To enable Deflate support add a -DZIP_SUPPORT here.
+# Note that where the configure script is used these defines
+# are automatically setup when JPEG/ZIP is set to "yes".
+#
+# Otherwise, consult tiffconf.h for information on controlling
+# the configuration of optional library support.
+#
+CONF_LIBRARY=@CONF_JPEG@ @CONF_ZIP@
 COPTS	= @GCOPTS@
 OPTIMIZER=-O
 CFLAGS	= @ENVOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH} ${CONF_LIBRARY}
@@ -136,45 +134,34 @@ OBJS	= \
 TARGETS	= libtiff.a
 
 all:	${TARGETS}
-	if [ "@DSO@" = yes ]; then \
-	    ${MAKE} dso; \
+	if [ @DSO@dso != nodso ]; then \
+	    ${MAKE} @DSO@dso; \
 	fi
 
 libtiff.a: ${OBJS}
 	${AR} ${AROPTS} libtiff.a $?
 	${RANLIB} libtiff.a
-dso:	${OBJS}
+
+# default IRIX DSO building rule
+IRIXdso: ${OBJS}
 	${CC} -o libtiff.@DSOSUF@ -shared -rdata_shared ${OBJS} \
 	    @LIBJPEG@ @LIBGZ@
-	touch dso
+	touch IRIXdso
+# special rule for IRIX 5.2
+IRIX52dso: ${OBJS}
+	${LD} -elf -o libtiff.@DSOSUF@ -shared -no_unresolved -all libtiff.a \
+	    @LIBJPEG@ @LIBGZ@ -lc -lm
+	touch IRIX52dso
 
 ${OBJS}: ${SRCDIR}/tiffio.h ${SRCDIR}/tiff.h ${SRCDIR}/tif_dir.h
 ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h
 
-tif_fax3.o: ${SRCDIR}/t4.h ${SRCDIR}/tif_fax3.h
-#
-# NB: can't use these since the software may not be configure
-#     for use with JPEG support.  Really need dynamic include
-#     file dependency support; but that's too much effort.
-#
-#tif_jpeg.o: ${JPEGDIR}/jpeglib.h ${JPEGDIR}/jerror.h
-tif_lzw.o: ${SRCDIR}/tif_predict.h
-tif_predict.o: ${SRCDIR}/tif_predict.h
-tif_zip.o: ${SRCDIR}/tif_predict.h
-#
-# NB: can't use these since the software may not be configure
-#     for use with Deflate support.
-#
-#tif_zip.o: ${ZIPDIR}/zlib.h ${ZIPDIR}/zutil.h
+ALPHA	= @ALPHAFILE@
+VERSION	= @VERSIONFILE@
 
-ALPHA	= ${DEPTH}/@SRCDIR@/dist/tiff.alpha
-VERSION	= ${DEPTH}/@SRCDIR@/VERSION
-
-version.h: ${VERSION} ${ALPHA}
-	VERSION=`cat ${VERSION}`; \
-	VERSION="$${VERSION}`awk '{print $$3}' ${ALPHA}`"; \
-	rm -f version.h; \
-	echo '#define VERSION "LIBTIFF, Version' $$VERSION '\\nCopyright (c) 1988-1995 Sam Leffler\\nCopyright (c) 1991-1995 Silicon Graphics, Inc."' >version.h
+version.h: ${VERSION} ${ALPHA} ${SRCDIR}/mkversion.c
+	${CC} -o mkversion ${CFLAGS} ${SRCDIR}/mkversion.c
+	rm -f version.h; ./mkversion -v ${VERSION} -a ${ALPHA} version.h
 tif_version.o: version.h
 
 #
@@ -206,15 +193,15 @@ tif_dumpmode.o: ${SRCDIR}/tif_dumpmode.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_dumpmode.c
 tif_error.o: ${SRCDIR}/tif_error.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_error.c
-tif_fax3.o: ${SRCDIR}/tif_fax3.c
+tif_fax3.o: ${SRCDIR}/tif_fax3.c ${SRCDIR}/t4.h ${SRCDIR}/tif_fax3.h
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_fax3.c
 tif_getimage.o: ${SRCDIR}/tif_getimage.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_getimage.c
-tif_jpeg.o: ${SRCDIR}/tif_jpeg.c
+tif_jpeg.o: ${SRCDIR}/tif_jpeg.c @DEPEND_JPEGLIB@
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_jpeg.c
 tif_flush.o: ${SRCDIR}/tif_flush.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_flush.c
-tif_lzw.o: ${SRCDIR}/tif_lzw.c
+tif_lzw.o: ${SRCDIR}/tif_lzw.c ${SRCDIR}/tif_predict.h
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_lzw.c
 tif_next.o: ${SRCDIR}/tif_next.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_next.c
@@ -222,7 +209,7 @@ tif_open.o: ${SRCDIR}/tif_open.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_open.c
 tif_packbits.o: ${SRCDIR}/tif_packbits.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_packbits.c
-tif_predict.o: ${SRCDIR}/tif_predict.c
+tif_predict.o: ${SRCDIR}/tif_predict.c ${SRCDIR}/tif_predict.h
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_predict.c
 tif_print.o: ${SRCDIR}/tif_print.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_print.c
@@ -244,7 +231,7 @@ tif_warning.o: ${SRCDIR}/tif_warning.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_warning.c
 tif_write.o: ${SRCDIR}/tif_write.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_write.c
-tif_zip.o: ${SRCDIR}/tif_zip.c
+tif_zip.o: ${SRCDIR}/tif_zip.c ${SRCDIR}/tif_predict.h @DEPEND_ZLIB@
 	${CC} -c ${CFLAGS} ${SRCDIR}/tif_zip.c
 
 tif_apple.o: ${SRCDIR}/tif_apple.c
@@ -267,15 +254,15 @@ installHdrs: ${INCS}
 	    ${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_INC@ \
 		-src $$i -O $$f; \
 	done
-installDSO: dso
+installDSO: @DSO@dso
 	${INSTALL} -idb tiff.sw.tools -m 444 -F @DIR_LIB@ -O libtiff.@DSOSUF@
 install: all installHdrs
 	${INSTALL} -idb tiff.sw.dev -m 755 -dir @DIR_LIB@
 	${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_LIB@ -O libtiff.a
-	if [ "@DSO@" = yes ]; then \
+	if [ @DSO@dso != dso ]; then \
 	    ${MAKE} installDSO; \
 	fi
 
 clean:
 	rm -f ${TARGETS} ${OBJS} core a.out mkg3states tif_fax3sm.c version.h \
-	    libtiff.@DSOSUF@ dso
+	    libtiff.@DSOSUF@ *dso

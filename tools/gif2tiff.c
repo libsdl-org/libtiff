@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.24 1995/06/30 00:27:07 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.25 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1995 Sam Leffler
@@ -33,13 +33,9 @@
  *	if input is 640 350 pixel aspect is probably 1.37
  *
  */
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include <math.h>
 
 #include "tiffio.h"

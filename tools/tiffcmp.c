@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcmp.c,v 1.27 1995/07/19 00:39:51 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcmp.c,v 1.28 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -24,13 +24,9 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 
 #include "tiffio.h"
 
@@ -318,7 +314,8 @@ PrintDiff(uint32 row, int sample, uint32 pix, int w1, int w2)
 			if ((w1 & mask2) ^ (w2 & mask2)) {
 				printf(
 			"Scanline %lu, pixel %lu, sample %d: %01x %01x\n",
-	    				row, pix, sample, (w1 >> s) & mask1,
+	    				(long) row, (long) pix,
+					sample, (w1 >> s) & mask1,
 					(w2 >> s) & mask1 );
 				if (--stopondiff == 0)
 					exit(1);
@@ -327,13 +324,13 @@ PrintDiff(uint32 row, int sample, uint32 pix, int w1, int w2)
 		break;
 	case 8: 
 		printf("Scanline %lu, pixel %lu, sample %d: %02x %02x\n",
-		    row, pix, sample, w1, w2);
+		    (long) row, (long) pix, sample, w1, w2);
 		if (--stopondiff)
 			exit(1);
 		break;
 	case 16:
 		printf("Scanline %lu, pixel %lu, sample %d: %04x %04x\n",
-		    row, pix, sample, w1, w2);
+		    (long) row, (long) pix, sample, w1, w2);
 		if (--stopondiff)
 			exit(1);
 		break;
@@ -349,8 +346,8 @@ SeparateCompare(int reversed, int sample, uint32 row, unsigned char* cp1, unsign
 	cp1 += sample;
 	for (pixel = 0; npixels-- > 0; pixel++, cp1 += samplesperpixel, p2++)
 		if (*cp1 != *p2) {
-			printf("Scanline %lu, pixel %lu, sample %d: ",
-			    row, pixel, sample);
+			printf("Scanline %lu, pixel %lu, sample %ld: ",
+			    (long) row, (long) pixel, (long) sample);
 			if (reversed)
 				printf("%02x %02x\n", *p2, *cp1);
 			else

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.90 1995/06/27 00:54:10 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.91 1995/10/16 19:14:51 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -64,7 +64,11 @@ typedef uint32 ttile_t;		/* tile number */
 typedef	int32 tsize_t;		/* i/o size in bytes */
 #if defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
 #include <windows.h>
+#ifdef __WIN32__
+DECLARE_HANDLE(thandle_t);	/* Win32 file handle */
+#else
 typedef	HFILE thandle_t;	/* client data handle */
+#endif
 #else
 typedef	void* thandle_t;	/* client data handle */
 #endif

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_packbits.c,v 1.47 1995/06/30 15:29:02 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_packbits.c,v 1.48 1995/09/06 00:43:11 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -205,14 +205,13 @@ PackBitsDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 {
 	char *bp;
 	tsize_t cc;
+	long n;
+	int b;
 
 	(void) s;
 	bp = (char*) tif->tif_rawcp;
 	cc = tif->tif_rawcc;
 	while (cc > 0 && (long)occ > 0) {
-		long n;
-		int b;
-		
 		n = (long) *bp++, cc--;
 		/*
 		 * Watch out for compilers that
@@ -221,12 +220,12 @@ PackBitsDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 		if (n >= 128)
 			n -= 256;
 		if (n < 0) {		/* replicate next byte -n+1 times */
-			cc--;
 			if (n == -128)	/* nop */
 				continue;
 			n = -n + 1;
 			occ -= n;
-			for (b = *bp++; n-- > 0;)
+			b = *bp++, cc--;
+			while (n-- > 0)
 				*op++ = b;
 		} else {		/* copy next n+1 bytes literally */
 			_TIFFmemcpy(op, bp, ++n);

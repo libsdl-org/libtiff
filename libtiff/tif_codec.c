@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.4 1995/06/30 00:58:51 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.5 1995/10/10 22:22:44 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -67,7 +67,11 @@ static	int NotConfigured(TIFF*, int);
 /*
  * Compression schemes statically built into the library.
  */
+#ifdef VMS
+const TIFFCodec _TIFFBuiltinCODECS[] = {
+#else
 TIFFCodec _TIFFBuiltinCODECS[] = {
+#endif
     { "Null",		COMPRESSION_NONE,	TIFFInitDumpMode },
     { "LZW",		COMPRESSION_LZW,	TIFFInitLZW },
     { "PackBits",	COMPRESSION_PACKBITS,	TIFFInitPackBits },

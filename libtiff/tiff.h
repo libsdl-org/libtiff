@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.58 1995/06/30 21:08:31 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.60 1995/10/12 16:25:42 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
@@ -45,14 +45,16 @@
 /*
  * Intrinsic data types required by the file format:
  *
- * 8-bit quantities	char/unsigned char
+ * 8-bit quantities	int8/uint8
  * 16-bit quantities	int16/uint16
  * 32-bit quantities	int32/uint32
  * strings		unsigned char*
  */
+typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
+typedef	unsigned char uint8;
 typedef	short int16;
 typedef	unsigned short uint16;	/* sizeof (uint16) must == 2 */
-#if defined(__alpha) || _MIPS_SZLONG == 64
+#if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64)
 typedef	int int32;
 typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
 #else

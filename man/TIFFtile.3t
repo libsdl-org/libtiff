@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/tile.3t,v 1.10 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFtile.3t,v 1.13 1995/10/12 00:44:17 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,18 +23,61 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFComputeTile 3T "February 14, 1992"
+.TH TIFFTILE 3T "February 14, 1992"
 .SH NAME
-TIFFComputeTile, TIFFCheckTile, TIFFNumberOfTiles \- tile-related utility routines
+TIFFTileSize,
+TIFFTileRowSize,
+TIFFVTileSize,
+TIFFDefaultTileSize,
+TIFFComputeTile,
+TIFFCheckTile,
+TIFFNumberOfTiles
+\- tile-related utility routines
 .SH SYNOPSIS
+.nf
 .B "#include <tiffio.h>"
-.br
+.B "void TIFFDefaultTileSize(TIFF* tif, uint32* tw, uint32* th)"
+.B "tsize_t TIFFTileSize(TIFF* tif)"
+.B "tsize_t TIFFTileRowSize(TIFF* tif)"
+.B "tsize_t TIFFVTileSize(TIFF* tif, uint32 nrows)"
 .B "ttile_t TIFFComputeTile(TIFF* tif, uint32 x, uint32 y, uint32 z, tsample_t sample)"
-.br
 .B "int TIFFCheckTile(TIFF* tif, uint32 x, uint32 y, uint32 z, tsample_t sample)"
-.br
 .B "ttile_t TIFFNumberOfTiles(TIFF* tif)"
+.fi
 .SH DESCRIPTION
+.I TIFFDefaultTileSize
+returns the pixel width and height of a reasonable-sized tile;
+suitable for setting up the
+.I TileWidth
+and
+.I TileLength
+tags.
+If the
+.I tw
+and
+.I th
+values passed in are non-zero, then they are adjusted to reflect
+any compression-specific requirements.
+The returned width and height are constrained to be a multiple
+of 16 pixels to conform with the 
+.SM TIFF
+specification.
+.PP
+.I TIFFTileSize
+returns the equivalent size for a tile of data as it would
+be returned in a call to
+.I TIFFReadTile
+or as it would be expected in a call to
+.IR TIFFWriteTile .
+.PP
+.I TIFFVTileSize
+returns the number of bytes in a row-aligned tile with
+.I nrows
+of data.
+.PP
+.I TIFFTileRowSize
+returns the number of bytes of a row of data in a tile.
+.PP
 .IR TIFFComputeTile
 returns the tile that contains the specified coordinates.
 A valid tile is always returned;
@@ -82,7 +125,7 @@ returns the number of tiles in the image.
 .SH DIAGNOSTICS
 None.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFReadEncodedTile (3T),
 .IR TIFFReadRawTile (3T),
 .IR TIFFReadTile (3T),

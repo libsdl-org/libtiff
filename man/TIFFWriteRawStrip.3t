@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFWriteRawStrip.3t,v 1.9 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFWriteRawStrip.3t,v 1.12 1995/10/11 19:45:29 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFWriteRawstrip 3T "December 16, 1991"
+.TH TIFFWriteRawstrip 3T "October 15, 1995"
 .SH NAME
 TIFFWriteRawStrip \- write a strip of raw data to an open
 .SM TIFF
@@ -36,6 +36,17 @@ file
 Append
 .I size
 bytes of raw data to the specified strip.
+.SH NOTES
+The strip number must be valid according to the current settings
+of the
+.I ImageLength
+and
+.I RowsPerStrip
+tags.
+An image may be dynamically grown by increasing the value of
+.I ImageLength
+prior to each call to
+.IR TIFFWriteRawStrip .
 .SH "RETURN VALUES"
 \-1 is returned if an error occurred.
 Otherwise, the value of
@@ -77,7 +88,7 @@ offsets and byte counts.
 The specified strip is not a valid strip according to the
 currently specified image dimensions.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFOpen (3T),
 .IR TIFFWriteEncodedStrip (3T),
 .IR TIFFWriteScanline (3T)

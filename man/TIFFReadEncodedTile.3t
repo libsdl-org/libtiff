@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFReadEncodedTile.3t,v 1.8 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFReadEncodedTile.3t,v 1.11 1995/10/11 19:45:29 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFReadEncodedTile 3T "December 16, 1991"
+.TH TIFFReadEncodedTile 3T "October 15, 1995"
 .SH NAME
 TIFFReadEncodedTile \- read and decode a tile of data from an open
 .SM TIFF
@@ -33,7 +33,7 @@ file
 .br
 .B "int TIFFReadEncodedTile(TIFF* tif, u_long tile, u_char* buf, u_long size)"
 .SH DESCRIPTION
-Read the specified tile of data and place
+Read the specified tile of data and place up to
 .I size
 bytes of decompressed information in the (user supplied) data buffer.
 .SH NOTES
@@ -70,7 +70,7 @@ All error messages are directed to the
 .IR TIFFError (3T)
 routine.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFOpen (3T),
 .IR TIFFReadRawTile (3T),
 .IR TIFFReadTile (3T)

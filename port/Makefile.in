@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.2 1995/05/24 01:54:38 sam Exp $
+#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.3 1995/10/10 00:38:52 sam Exp $
 #
 # @WARNING@
 #
@@ -29,7 +29,7 @@
 #
 DEPTH	= ..
 
-SRCDIR	= ${DEPTH}/${TOPSRCDIR}/port
+SRCDIR	= ${DEPTH}/@SRCDIR@/port
 VPATH	= ../@SRCDIR@/port
 
 #
@@ -46,7 +46,7 @@ AR	= @AR@
 AROPTS	= @AROPTS@
 RANLIB	= @RANLIB@
 
-IPATH	= -I. -I${DEPTH} -I${SRCDIR}
+IPATH	= -I. -I${SRCDIR}
 COPTS	= @GCOPTS@
 OPTIMIZER=-O
 CFLAGS	= @ENVOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH}

@@ -1,7 +1,7 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffcp.1,v 1.20 1995/07/07 23:29:04 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffcp.1,v 1.22 1995/10/11 19:42:05 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFCP 1 "September 26, 1994"
+.TH TIFFCP 1 "October 15, 1995"
 .SH NAME
 tiffcp \- copy (and possibly convert) a
 .SM TIFF
@@ -68,8 +68,13 @@ for no compression,
 for PackBits compression,
 .B lzw
 for Lempel-Ziv & Welch compression,
+.B jpeg
+for baseline JPEG compression,
+.B zip
+for Deflate compression,
 .B g3
 for CCITT Group 3 (T.4) compression,
+and
 .B g4
 for CCITT Group 4 (T.6) compression.
 By default

@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/query.3t,v 1.11 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFquery.3t,v 1.14 1995/10/12 00:44:17 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,31 +23,38 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH QUERY 3T "December 16, 1991"
+.TH QUERY 3T "October 15, 1995"
 .SH NAME
-TIFFCurrentRow, TIFFCurrentStrip, TIFFCurrentTile, TIFFCurrentDirectory, TIFFFileno, TIFFFileName, TIFFGetMode, TIFFIsTiled, TIFFIsByteSwapped  \- query routines
+TIFFCurrentRow,
+TIFFCurrentStrip,
+TIFFCurrentTile,
+TIFFCurrentDirectory,
+TIFFLastDirectory,
+TIFFFileno,
+TIFFFileName,
+TIFFGetMode,
+TIFFIsTiled,
+TIFFIsByteSwapped,
+TIFFIsUpSampled,
+TIFFIsMSB2LSB
+\- query routines
 .SH SYNOPSIS
+.nf
 .B "#include <tiffio.h>"
-.br
 .B "uint32 TIFFCurrentRow(TIFF* tif)"
-.br
 .B "tstrip_t TIFFCurrentStrip(TIFF* tif)"
-.br
 .B "ttile_t TIFFCurrentTile(TIFF* tif)"
-.br
 .B "tdir_t TIFFCurrentDirectory(TIFF* tif)"
-.br
+.B "int TIFFLastDirectory(TIFF* tif)"
 .B "int TIFFFileno(TIFF* tif)"
-.br
 .B "char* TIFFFileName(TIFF* tif)"
-.br
 .B "int TIFFGetMode(TIFF* tif)"
-.br
 .B "int TIFFIsTiled(TIFF* tif)"
-.br
 .B "int TIFFIsByteSwapped(TIFF* tif)"
-.br
+.B "int TIFFIsUpSampled(TIFF* tif)"
+.B "int TIFFIsMSB2LSB(TIFF* tif)"
 .B "const char* TIFFGetVersion(void)"
+.fi
 .SH DESCRIPTION
 The following routines return status information about an open
 .SM TIFF
@@ -59,6 +66,11 @@ are numbered starting at 0).
 This number is suitable for use with the
 .IR TIFFSetDirectory
 routine.
+.PP
+.IR TIFFLastDirectory
+returns a non-zero value if the current directory is the
+last directory in the file;
+otherwise zero is returned.
 .PP
 .IR TIFFCurrentRow ,
 .IR TIFFCurrentStrip ,
@@ -100,6 +112,17 @@ are the same.
 Data samples that are more than 8 bits wide must be byte-swapped
 by the application.
 .PP
+.I TIFFIsUpSampled
+returns a non-zero value if image data returned through the
+read interface routines is being up-sampled.
+This can be useful to applications that want to calculate
+I/O buffer sizes to reflect this usage (though the usual
+strip and tile size routines already do this).
+.PP
+.I TIFFIsMSB2LSB
+returns a non-zero value if the image data is being returned with
+bit 0 as the most significant bit.
+.PP
 .IR TIFFGetVersion
 returns an
 .SM ASCII
@@ -109,6 +132,6 @@ library software.
 .SH DIAGNOSTICS
 None.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFOpen (3T),
 .IR TIFFFdOpen (3T)

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgisv.c,v 1.22 1995/06/06 23:45:26 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgisv.c,v 1.24 1995/10/10 23:53:58 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1995 Sam Leffler
@@ -24,20 +24,17 @@
  * OF THIS SOFTWARE.
  */
 
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef unsigned char u_char;
-typedef unsigned long u_long;
-#endif
 #include <gl.h>
 #include <ctype.h>
 
 #include "tiffio.h"
+
+typedef unsigned char u_char;
+typedef unsigned long u_long;
 
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
@@ -129,8 +126,6 @@ char* stuff[] = {
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
 " -c jpeg[:opts]compress output with JPEG encoding",
 " -c packbits	compress output with packbits encoding",
-" -c g3[:opts]	compress output with CCITT Group 3 encoding",
-" -c g4		compress output with CCITT Group 4 encoding",
 " -c none	use no compression algorithm on output",
 "",
 "JPEG options:",

@@ -1,7 +1,7 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/tiff2ps.1,v 1.16 1995/07/07 23:29:04 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiff2ps.1,v 1.18 1995/10/11 19:42:04 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFF2PS 1 "September 26, 1994"
+.TH TIFF2PS 1 "October 15, 1995"
 .SH NAME
 tiff2ps \- convert a
 .SM TIFF
@@ -33,12 +33,12 @@ image to PostScript\(tm
 [
 .I options
 ]
-.I input.tif
+.I "input.tif ..."
 .SH DESCRIPTION
 .I tiff2ps
-reads a
+reads
 .SM TIFF
-image and writes PostScript or Encapsulated PostScript (EPS)
+images and writes PostScript or Encapsulated PostScript (EPS)
 on the standard output.
 By default,
 .I tiff2ps
@@ -155,9 +155,7 @@ bigger than the original image and which takes a long time
 to send to a printer over a serial line.
 Matters are even worse for 4-, 2-, and 1-bit palette images.
 .SH BUGS
-Does not use PostScript Level II support for printing color images
-(only bilevel and greyscale images).
-Does not handle tiled images.
+Does not handle tiled images when generating PS Level I output.
 .SH "SEE ALSO"
 .IR pal2rgb (1),
 .IR tiffinfo (1),

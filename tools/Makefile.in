@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.13 1995/07/05 21:09:52 sam Exp $
+#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.15 1995/10/10 01:45:08 sam Exp $
 #
 # @WARNING@
 #
@@ -27,12 +27,8 @@
 # OF THIS SOFTWARE.
 #
 DEPTH	= ..
-
 SRCDIR	= ${DEPTH}/@SRCDIR@/tools
-
-JPEGDIR	= ${DEPTH}/@DIR_JPEG@
-ZIPDIR	= ${DEPTH}/@DIR_LIBGZ@
-PORT	= ${DEPTH}/port
+LIBDIR	= ${DEPTH}/@SRCDIR@/libtiff
 
 #
 # VERSION:	@VERSION@
@@ -47,10 +43,10 @@ INSTALL	= @INSTALL@
 #
 COPTS	= @GCOPTS@
 OPTIMIZER=-O
-IPATH	= -I. -I${DEPTH} -I${SRCDIR} -I${DEPTH}/@SRCDIR@/libtiff
+IPATH	= -I. -I${SRCDIR} -I${LIBDIR}
 CFLAGS	= @ENVOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH}
 #
-LIBTIFF	= ../libtiff/libtiff.@DSOSUF@
+LIBTIFF	= ${DEPTH}/libtiff/libtiff.@DSOSUF@
 LIBJPEG	= @LIBJPEG@
 LIBGZ	= @LIBGZ@
 LIBS	= ${LIBTIFF} ${LIBJPEG} ${LIBGZ} @LIBPORT@ @MACHDEPLIBS@
@@ -192,7 +188,7 @@ ppm2tiff.o: ${SRCDIR}/ppm2tiff.c
 fax2tiff: fax2tiff.o ${LIBTIFF}
 	${CC} -o fax2tiff ${CFLAGS} fax2tiff.o ${LIBS}
 fax2tiff.o: ${SRCDIR}/fax2tiff.c
-	${CC} -c ${CFLAGS} ${SRCDIR}/fax2tiff.c
+	${CC} -c -I${LIBDIR} -I${DEPTH}/libtiff ${CFLAGS} ${SRCDIR}/fax2tiff.c
 
 # Group 3/4 FAX to encoded PS converter
 fax2ps: fax2ps.o ${LIBTIFF}

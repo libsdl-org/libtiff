@@ -1,7 +1,7 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFGetField.3t,v 1.13 1995/07/07 23:29:04 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFGetField.3t,v 1.16 1995/10/11 19:45:29 sam Exp $
 .\"
-.\" Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-.\" Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+.\" Copyright (c) 1988-1995 Sam Leffler
+.\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
 .\"
 .\" Permission to use, copy, modify, distribute, and sell this software and 
 .\" its documentation for any purpose is hereby granted without fee, provided
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFGetField 3T "February 14, 1992"
+.TH TIFFGetField 3T "October 15, 1995"
 .SH NAME
 TIFFGetField, TIFFVGetField \- get the value(s) of a tag in an open
 .SM TIFF
@@ -42,11 +42,16 @@ file
 .B "int TIFFVGetFieldDefaulted(TIFF* tif, ttag_t tag, va_list ap)"
 .SH DESCRIPTION
 .IR TIFFGetField
-returns the value of a tag in the current directory associated with
-the open
+returns the value of a tag or pseudo-tag associated with the
+the current directory of the open
 .SM TIFF
 file
 .IR tif .
+(A
+.I pseudo-tag 
+is a parameter that is used to control the operation of the
+.SM TIFF
+library but whose value is not read or written to the underlying file.)
 The file must have been previously opened with
 .IR TIFFOpen (3T).
 The tag is identified by
@@ -59,10 +64,7 @@ on the tag being requested.
 The programming interface uses a variable argument list
 as prescribed by the
 .IR stdarg (3)
-interface (\c
-or, on some machines, the
-.IR varargs (3)
-interface.)
+interface.
 The returned values should only be interpreted if
 .IR TIFFGetField
 returns 1.
@@ -101,10 +103,11 @@ data types are pointers to storage where values
 should be returned.
 Consult the
 .SM TIFF
-specification for information on the meaning of each tag and their possible values.
+specification for information on the meaning of
+each tag and their possible values.
 .PP
 .nf
-.ta \w'TIFFTAG_CONSECUTIVEBADFAXLINES'u+2n +\w'Count'u+2n +\w'uint16*,uint16**'u+2n
+.ta \w'TIFFTAG_CONSECUTIVEBADFAXLINES'u+2n +\w'Count'u+2n +\w'TIFFFaxFillFunc*'u+2n
 \fITag Name\fP	\fICount\fP	\fITypes\fP	\fINotes\fP
 .sp 5p
 TIFFTAG_ARTIST	1	char**
@@ -119,6 +122,8 @@ TIFFTAG_DATETIME	1	char**
 TIFFTAG_DOCUMENTNAME	1	char**
 TIFFTAG_DOTRANGE	2	uint16*
 TIFFTAG_EXTRASAMPLES	2	uint16*,uint16**	count & types array
+TIFFTAG_FAXMODE	1	int*	G3/G4 compression pseudo-tag
+TIFFTAG_FAXFILLFUNC	1	TIFFFaxFillFunc*	G3/G4 compression pseudo-tag
 TIFFTAG_FILLORDER	1	uint16*
 TIFFTAG_GROUP3OPTIONS	1	uint32*
 TIFFTAG_GROUP4OPTIONS	1	uint32*
@@ -130,11 +135,10 @@ TIFFTAG_IMAGELENGTH	1	uint32*
 TIFFTAG_IMAGEWIDTH	1	uint32*
 TIFFTAG_INKNAMES	1	char**
 TIFFTAG_INKSET	1	uint16*
-TIFFTAG_JPEGACTABLES	1	u_char***	SamplesPerPixel arrays
-TIFFTAG_JPEGDCTABLES	1	u_char***	SamplesPerPixel arrays
-TIFFTAG_JPEGPROC	1	uint16*
-TIFFTAG_JPEGRESTARTINTERVAL	1	uint16*
-TIFFTAG_JPEGQTABLES	1	u_char***	SamplesPerPixel 64-entry arrays
+TIFFTAG_JPEGTABLES	2	u_short*,void**	count & tables
+TIFFTAG_JPEGQUALITY	1	int*	JPEG pseudo-tag
+TIFFTAG_JPEGCOLORMODE	1	int*	JPEG pseudo-tag
+TIFFTAG_JPEGTABLESMODE	1	int*	JPEG pseudo-tag
 TIFFTAG_MAKE	1	char**
 TIFFTAG_MATTEING	1	uint16*
 TIFFTAG_MAXSAMPLEVALUE	1	uint16*
@@ -152,10 +156,13 @@ TIFFTAG_RESOLUTIONUNIT	1	uint16*
 TIFFTAG_ROWSPERSTRIP	1	uint32*
 TIFFTAG_SAMPLEFORMAT	1	uint16*
 TIFFTAG_SAMPLESPERPIXEL	1	uint16*
+TIFFTAG_SMAXSAMPLEVALUE	1	double*
+TIFFTAG_SMINSAMPLEVALUE	1	double*
 TIFFTAG_SOFTWARE	1	char**
 TIFFTAG_STRIPBYTECOUNTS	1	uint32**
 TIFFTAG_STRIPOFFSETS	1	uint32**
 TIFFTAG_SUBFILETYPE	1	uint32*
+TIFFTAG_SUBIFD	2	uint16*,uint32**	count & offsets array
 TIFFTAG_TARGETPRINTER	1	char**
 TIFFTAG_THRESHHOLDING	1	uint16*
 TIFFTAG_TILEBYTECOUNTS	1	uint32**
@@ -173,10 +180,10 @@ TIFFTAG_YCBCRSUBSAMPLING	2	uint16*
 TIFFTAG_YPOSITION	1	float*
 TIFFTAG_YRESOLUTION	1	float*
 .fi
-(\(dg If
+\(dg If
 .I SamplesPerPixel
 is one, then a single array is returned; otherwise three arrays are
-returned.)
+returned.
 .SH "RETURN VALUES"
 1 is returned if the tag is defined in the current
 directory; otherwise a 0 is returned.
@@ -188,7 +195,7 @@ routine.
 .BR "Unknown field, tag 0x%x" .
 An unknown tag was supplied.
 .SH "SEE ALSO"
-.IR intro (3T),
+.IR libtiff (3T),
 .IR TIFFOpen (3T),
 .IR TIFFSetField (3T),
 .IR TIFFSetDirectory (3T),
