@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.2 1999-08-16 18:27:51 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.3 1999-12-21 17:03:03 mwelles Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -265,6 +265,7 @@ char* stuff[] = {
 " -f msb2lsb	force msb-to-lsb FillOrder for output",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+"               (no longer supported due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c jpeg[:opts]compress output with JPEG encoding",
 " -c packbits	compress output with packbits encoding",

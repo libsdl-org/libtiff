@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/sgi2tiff.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/sgi2tiff.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -36,7 +36,7 @@
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
 static	short config = PLANARCONFIG_CONTIG;
-static	uint16 compression = COMPRESSION_LZW;
+static	uint16 compression = COMPRESSION_PACKBITS;
 static	uint16 predictor = 0;
 static	uint16 fillorder = 0;
 static	uint32 rowsperstrip = (uint32) -1;
@@ -292,6 +292,7 @@ char* stuff[] = {
 " -f msb2lsb	force msb-to-lsb FillOrder for output",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+"               (no longer supported due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c jpeg[:opts]compress output with JPEG encoding",
 " -c packbits	compress output with packbits encoding",

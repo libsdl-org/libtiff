@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/sgisv.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/sgisv.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -40,7 +40,7 @@ typedef unsigned long u_long;
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
 uint32	rowsperstrip = (uint32) -1;
-uint16	compression = COMPRESSION_LZW;
+uint16	compression = COMPRESSION_PACKBITS;
 uint16	config = PLANARCONFIG_CONTIG;
 uint16	predictor = 0;
 int	xmaxscreen;
@@ -124,6 +124,7 @@ char* stuff[] = {
 " -r #		make each strip have no more than # rows",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+"               (no longer supported due to Unisys patent enforcement)", 
 " -c jpeg[:opts]compress output with JPEG encoding",
 " -c packbits	compress output with packbits encoding",
 " -c none	use no compression algorithm on output",

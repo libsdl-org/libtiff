@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/gif2tiff.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/gif2tiff.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -70,6 +70,7 @@ char* stuff[] = {
 " -r #		make each strip have no more than # rows",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+"               (no longer supported due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c packbits	compress output with packbits encoding",
 " -c none	use no compression algorithm on output",
@@ -113,7 +114,7 @@ unsigned short green[COLSIZE];
 unsigned short blue[COLSIZE];
 char *filename, *imagename;
 
-static	uint16 compression = COMPRESSION_LZW;
+static	uint16 compression = COMPRESSION_PACKBITS;
 static	uint16 predictor = 0;
 static	uint32 rowsperstrip = (uint32) -1;
 static	int processCompressOptions(char*);

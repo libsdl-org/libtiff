@@ -1,5 +1,6 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/TODO,v 1.1 1999-07-27 21:50:26 mike Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/TODO,v 1.2 1999-12-21 17:03:03 mwelles Exp $
 
+o gif2tiff segaulting on selected images
 o tiffcmp read data by strip/tile instead of scanline
 o YCbCr sampling support
 o extracate colorspace conversion support

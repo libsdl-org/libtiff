@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/rgb2ycbcr.c,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/rgb2ycbcr.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -43,7 +43,7 @@
 #define	LumaGreen	ycbcrCoeffs[1]
 #define	LumaBlue	ycbcrCoeffs[2]
 
-uint16	compression = COMPRESSION_LZW;
+uint16	compression = COMPRESSION_PACKBITS;
 uint32	rowsperstrip = (uint32) -1;
 
 uint16	horizSubSampling = 2;		/* YCbCr horizontal subsampling */
@@ -321,6 +321,7 @@ static char* usageMsg[] = {
     "where comp is one of the following compression algorithms:\n",
     " jpeg\t\tJPEG encoding\n",
     " lzw\t\tLempel-Ziv & Welch encoding\n",
+    " (lzw no longer supported due to Unisys patent enforcement)", 
     " packbits\tPackBits encoding\n",
     " none\t\tno compression\n",
     "and the other options are:\n",
