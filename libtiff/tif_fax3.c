@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.14 2001-08-10 02:37:52 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.15 2001-09-09 16:10:37 warmerda Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -43,12 +43,6 @@
 #include "t4.h"
 #include <assert.h>
 #include <stdio.h>
-
-/*
- * NB: define PURIFY if you're using purify and you want
- * to avoid some harmless array bounds complaints that
- * can happen in the _TIFFFax3fillruns routine.
- */
 
 /*
  * Compression+decompression state blocks are
@@ -402,12 +396,8 @@ _TIFFFax3fillruns(u_char* buf, uint32* runs, uint32* erun, uint32 lastx)
 			ZERO(n, cp);
 			run &= 7;
 		    }
-#ifdef PURIFY
 		    if (run)
 			cp[0] &= 0xff >> run;
-#else
-		    cp[0] &= 0xff >> run;
-#endif
 		} else
 		    cp[0] &= ~(_fillmasks[run]>>bx);
 		x += runs[0];
@@ -441,12 +431,8 @@ _TIFFFax3fillruns(u_char* buf, uint32* runs, uint32* erun, uint32 lastx)
 			FILL(n, cp);
 			run &= 7;
 		    }
-#ifdef PURIFY
 		    if (run)
 			cp[0] |= 0xff00 >> run;
-#else
-		    cp[0] |= 0xff00 >> run;
-#endif
 		} else
 		    cp[0] |= _fillmasks[run]>>bx;
 		x += runs[1];
