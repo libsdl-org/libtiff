@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.44 2004-11-05 13:10:33 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.45 2004-12-03 13:16:55 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -255,13 +255,6 @@ TIFFReadDirectory(TIFF* tif)
 	 */
 	fix = 0;
 	for (dp = dir, n = dircount; n > 0; n--, dp++) {
-
-                /*
-                 * Find the field information entry for this tag.
-		 * Added check for tags to ignore ... [BFC]
-                 */
-		if( TIFFReassignTagToIgnore(TIS_EXTRACT, dp->tdir_tag) )
-                    dp->tdir_tag = IGNORE;
 
 		if (fix >= tif->tif_nfields || dp->tdir_tag == IGNORE)
 			continue;

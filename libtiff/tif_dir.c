@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.42 2004-11-29 16:39:13 dron Exp $ */
+/* $Id: tif_dir.c,v 1.43 2004-12-03 13:16:55 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1431,6 +1431,8 @@ TIFFUnlinkDirectory(TIFF* tif, tdir_t dirn)
  * Set a table of tags that are to be replaced during directory process by the
  * 'IGNORE' state - or return TRUE/FALSE for the requested tag such that
  * 'ReadDirectory' can use the stored information.
+ *
+ * FIXME: this is never used properly. Should be removed in the future.
  */
 int
 TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
