@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.9 2003-03-12 14:05:06 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.10 2003-04-16 13:21:09 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -536,8 +536,13 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	else
 		CopyField(TIFFTAG_COMPRESSION, compression);
-	if (compression == COMPRESSION_JPEG && jpegcolormode == JPEGCOLORMODE_RGB)
+	if (compression == COMPRESSION_JPEG) {
+            TIFFSetField(in, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
+            if (jpegcolormode == JPEGCOLORMODE_RGB)
 		TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_YCBCR);
+            else
+                TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+        }
 	else if (compression == COMPRESSION_SGILOG || compression == COMPRESSION_SGILOG24)
 		TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
 		    samplesperpixel == 1 ?
