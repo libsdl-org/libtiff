@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.17 2002-03-13 19:36:36 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.18 2002-03-25 15:43:16 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -55,6 +55,10 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
     uint16 photometric;
     int colorchannels;
 
+    if (!(*tif->tif_setupdecode)(tif)) {
+	sprintf(emsg, "Sorry, requested compression method is not configured");
+	return (0);
+    }
     switch (td->td_bitspersample) {
     case 1: case 2: case 4:
     case 8: case 16:
@@ -417,7 +421,7 @@ TIFFReadRGBAImage(TIFF* tif,
     TIFFRGBAImage img;
     int ok;
 
-    if (TIFFRGBAImageBegin(&img, tif, stop, emsg)) {
+    if (TIFFRGBAImageOK(tif, emsg) && TIFFRGBAImageBegin(&img, tif, stop, emsg)) {
 	/* XXX verify rwidth and rheight against width and height */
 	ok = TIFFRGBAImageGet(&img, raster+(rheight-img.height)*rwidth,
 	    rwidth, img.height);
