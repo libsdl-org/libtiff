@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/TODO,v 1.4 2002-03-07 19:29:58 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/TODO,v 1.5 2002-03-22 04:39:37 dbmalloc Exp $
 
 o remove lzw compression flags from tools, update man pages
 o gif2tiff segaulting on selected images
@@ -7,4 +7,5 @@ o YCbCr sampling support
 o extracate colorspace conversion support
 o look at isolating all codecs from TIFF library
 o JPEG colormode order dependency problem
+
 
