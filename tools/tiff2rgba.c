@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2rgba.c,v 1.1 1999-08-16 17:46:08 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2rgba.c,v 1.2 1999-12-04 20:48:27 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -39,7 +39,7 @@
 #endif
 #define	roundup(x, y)	(howmany(x,y)*((uint32)(y)))
 
-uint16	compression = COMPRESSION_LZW;
+uint16	compression = COMPRESSION_PACKBITS;
 uint32	rowsperstrip = (uint32) -1;
 int	process_by_block = 0; /* default is whole image at once */
 
