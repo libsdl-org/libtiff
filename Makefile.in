@@ -1,5 +1,5 @@
 #! smake
-# $Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.38 2003-10-16 05:58:19 dron Exp $
+# $Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.39 2003-10-25 17:46:14 dron Exp $
 #
 # @WARNING@
 #
@@ -55,11 +55,11 @@ all default:
 	@${ECHO} "= "man; cd man; ${MAKE} -${MAKEFLAGS}
 
 install:
-	@${ECHO} "= "libtiff; cd libtiff; ${MAKE} -${MAKEFLAGS} install
-	@${ECHO} "= "tools; cd tools; ${MAKE} -${MAKEFLAGS} install
-	@${ECHO} "= "man; cd man; ${MAKE} -${MAKEFLAGS} install
+	@${ECHO} "= "libtiff; cd libtiff; ${MAKE} install
+	@${ECHO} "= "tools; cd tools; ${MAKE} install
+	@${ECHO} "= "man; cd man; ${MAKE} install
 	@if [ "@HTML@" = yes ]; then \
-	    ${ECHO} "= "html; cd html; ${MAKE} -${MAKEFLAGS} install; \
+	    ${ECHO} "= "html; cd html; ${MAKE} install; \
 	else \
 	    true; \
 	fi
