@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.13 2002-03-27 03:55:42 dbmalloc Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.14 2002-10-04 13:50:25 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -194,6 +194,7 @@ typedef	enum {
 #define	    COMPRESSION_JBIG		34661	/* ISO JBIG */
 #define     COMPRESSION_SGILOG		34676	/* SGI Log Luminance RLE */
 #define     COMPRESSION_SGILOG24	34677	/* SGI Log 24-bit packed */
+#define     COMPRESSION_JP2000          34712   /* Leadtools JPEG2000 */
 #define	TIFFTAG_PHOTOMETRIC		262	/* photometric interpretation */
 #define	    PHOTOMETRIC_MINISWHITE	0	/* min value is white */
 #define	    PHOTOMETRIC_MINISBLACK	1	/* min value is black */
