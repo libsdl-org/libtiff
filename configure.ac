@@ -1,5 +1,5 @@
 dnl                                               -*- Autoconf -*-
-dnl $Id: configure.ac,v 1.2 2004-03-26 11:48:29 dron Exp $
+dnl $Id: configure.ac,v 1.3 2004-03-28 12:01:23 dron Exp $
 dnl
 dnl Tag Image File Format (TIFF) Software
 dnl
@@ -91,6 +91,8 @@ AC_SUBST(LIBTIFF,../libtiff/libtiff.la)
 
 AC_CONFIG_FILES([Makefile \
                  html/Makefile \
+		 html/images/Makefile \
+		 html/man/Makefile \
                  libtiff/Makefile \
                  man/Makefile \
                  tools/Makefile])
