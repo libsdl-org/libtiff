@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Attic/Makefile,v 1.6 2000-03-27 17:05:55 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Attic/Makefile,v 1.7 2000-03-29 04:35:28 mwelles Exp $
 #
 # Warning, this file was automatically created by the TIFF configure script
 #
@@ -32,7 +32,7 @@ SRCDIR	= .
 
 #
 # VERSION:	v3.5.5
-# DATE:		Mon Mar 27 11:15:15 EST 2000
+# DATE:		Tue Mar 28 23:28:13 EST 2000
 # TARGET:	i586-unknown-linux
 # CCOMPILER:	/usr/bin/gcc
 #
@@ -495,7 +495,7 @@ release:
 # stamp relevant files according to current alpha
 release.stamp:
 	VERSION=`echo v3.5.5 | tr "." "-"`; \
-	cvs tag -R Release-$$VERSION	;
+#	cvs tag -R Release-$$VERSION	;
 	date "+%m/%d/%Y" > RELEASE-DATE
 
 #diffs since last release
