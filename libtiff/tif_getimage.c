@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.20 2002-04-08 15:36:03 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.21 2002-08-15 15:13:33 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -387,12 +387,11 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 	!(planarconfig == PLANARCONFIG_SEPARATE && colorchannels > 1);
     if (img->isContig) {
 	img->get = TIFFIsTiled(tif) ? gtTileContig : gtStripContig;
-	(void) pickTileContigCase(img);
+	return pickTileContigCase(img);
     } else {
 	img->get = TIFFIsTiled(tif) ? gtTileSeparate : gtStripSeparate;
-	(void) pickTileSeparateCase(img);
+	return pickTileSeparateCase(img);
     }
-    return (1);
 }
 
 int
