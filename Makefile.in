@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.8 1999-11-30 19:37:40 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.9 1999-11-30 19:56:27 mwelles Exp $
 #
 # @WARNING@
 #
@@ -488,7 +488,8 @@ release:
 
 # stamp relevant files according to current alpha
 release.stamp:
-	cvs tag -R "Release" 
+	VERSION=`echo @VERSION@ | tr "." "-"`; \
+	cvs tag -R Release-$$VERSION	;
 	date "+%m/%d/%Y" > RELEASE-DATE
 
 #diffs since last release
