@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.8 2004-07-24 19:04:37 dron Exp $ */
+/* $Id: ras2tiff.c,v 1.9 2004-08-16 19:13:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -23,6 +23,8 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
+
+#include "tif_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,7 +93,7 @@ main(int argc, char* argv[])
 		return (-2);
 	}
 	if (strcmp(h.ras_magic, RAS_MAGIC) == 0) {
-#if (HOST_BIGENDIAN == 0)
+#ifndef WORDS_BIGENDIAN
 			TIFFSwabLong(&h.ras_width);
 			TIFFSwabLong(&h.ras_height);
 			TIFFSwabLong(&h.ras_depth);
@@ -101,7 +103,7 @@ main(int argc, char* argv[])
 			TIFFSwabLong(&h.ras_maplength);
 #endif
 	} else if (strcmp(h.ras_magic, RAS_MAGIC_INV) == 0) {
-#if (HOST_BIGENDIAN == 1)
+#ifdef WORDS_BIGENDIAN
 			TIFFSwabLong(&h.ras_width);
 			TIFFSwabLong(&h.ras_height);
 			TIFFSwabLong(&h.ras_depth);
