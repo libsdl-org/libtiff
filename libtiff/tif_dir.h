@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.5 2002-03-15 11:05:56 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.6 2002-03-24 15:48:39 dbmalloc Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -119,8 +119,11 @@ typedef	struct {
  	float*	td_matrixWorldToScreen;
  	float*	td_matrixWorldToCamera;
  	/* End Pixar Tag Values. */
-
-        int     td_customValueCount;
+#ifdef XML_SUPPORT
+	uint32	td_xmlpacketLength;
+	void	*td_xmlpacketData;
+#endif
+		int     td_customValueCount;
         TIFFTagValue *td_customValues;
 } TIFFDirectory;
 
@@ -206,8 +209,9 @@ typedef	struct {
 #define FIELD_MATRIX_WORLDTOSCREEN	60
 #define FIELD_MATRIX_WORLDTOCAMERA	61
 #define FIELD_COPYRIGHT			62
+#define FIELD_XMLPACKET			63
 /* end of support for well-known tags; codec-private tags follow */
-#define	FIELD_CODEC			63	/* base of codec-private tags */
+#define	FIELD_CODEC			64	/* base of codec-private tags */
 /*      FIELD_CUSTOM (see tiffio.h)     64 */
 
 /*
