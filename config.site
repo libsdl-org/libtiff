@@ -1,4 +1,4 @@
-# $Header: /usr/people/sam/tiff/RCS/config.site,v 1.10 1996/02/09 05:53:45 sam Exp $
+# $Header: /usr/people/sam/tiff/RCS/config.site,v 1.12 1996/02/22 18:16:44 sam Exp $
 #
 # TIFF Software
 #
@@ -40,7 +40,7 @@
 #
 # Package controls.
 #
-#DSO="auto"			# auto|IRIX configure DSO support for system
+#DSO="auto"			# auto|IRIX|IRIX52 enable DSO support for system
 #JPEG="no"			# yes|no configure JPEG support (see below)
 #ZIP="no"			# yes|no configure Deflate support (see below)
 #LIBGL="auto"			# yes|no|auto configure IRIS GL-based tools
@@ -134,15 +134,8 @@
 #MACHDEPLIBS=""				# extra libraries for linking
 #PORTFUNCS=""				# non-standard functions to emulate
 #RANLIB=":"				# pathname of suitable ranlib program
-
-#
-# Dynamic Shared Object (DSO) support.
-#
-# Beware that adding new support for DSOs may require some
-# modifications to the */Makefile.dso files.
-#
 #DSOSUF="so"				# DSO filename suffix
-#DSOOPTS="-shared -rdata_shared"	# options for building DSOs
+#LIBCOPTS="-K PIC"			# compiler options for building library
 
 #
 # Makefile construction parameters.

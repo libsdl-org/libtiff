@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.5 1996/02/09 05:54:37 sam Exp $
+#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.6 1996/03/18 20:55:51 sam Exp $
 #
 # @WARNING@
 #
@@ -27,10 +27,8 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
 # OF THIS SOFTWARE.
 #
-DEPTH	= ..
-
-SRCDIR	= ${DEPTH}/@SRCDIR@/port
-VPATH	= ../@SRCDIR@/port
+SRCDIR	= @RELSRCDIR@/port
+VPATH	= @RELSRCDIR@/port
 
 #
 # VERSION:	@VERSION@

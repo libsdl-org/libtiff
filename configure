@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.34 1996/02/09 05:53:45 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.45 1996/03/19 18:26:58 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -43,6 +43,7 @@ DIRS_LIBINC=
 DIR_JPEGLIB=
 DIR_GZLIB=
 DSO=auto
+LIBCOPTS=				# library-specific C-compiler options
 JPEG=no
 ZIP=no
 PORT=auto
@@ -140,7 +141,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.34 $"
+	echo "This is TIFF configure $Revision: 1.45 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -214,6 +215,28 @@ else
 fi
 exec 5>./config.log			# compiler messages and the like
 
+capture()
+{
+    (eval "set -x; $*") >&5 2>&1
+    return
+}
+captureX()
+{
+    (eval "set -x; $*") 2>&5
+    return
+}
+
+date >&5
+cat 1>&5 <<'EOF'
+
+This file contains information that is captured from running the configure
+script.  Lines that begin with a "+" are command lines echoed by the
+shell.  Other lines are the output of commands; usually the contents of
+test case files or the output from compilers.  If configure does the
+wrong thing, you can use the information captured here to aid in debugging.
+
+EOF
+
 if [ -r $SRCDIR/tiff.alpha ] ; then
     VERSIONFILE=$SRCDIR/VERSION
     ALPHAFILE=$SRCDIR/tiff.alpha
@@ -223,6 +246,10 @@ else
 fi
 VERSION="v`cat $VERSIONFILE``awk '{print $3}' $ALPHAFILE`"
 DATE=`date`
+
+DIST_MAJOR=`echo $VERSION | sed 's/v\([0-9][0-9]*\)\..*/\1/'`
+DIST_MINOR=`echo $VERSION | sed 's/v.*\.\([0-9][0-9]*\).*/\1/'`
+DIST_ALPHA=`echo $VERSION | sed -e 's/.*beta//' -e 's/.*release//'`
 
 Note()
 {
@@ -235,6 +262,10 @@ if [ $SRCDIR_IS_LIBTIFF = yes ] ; then
 else
   Note "Configuring TIFF Software $VERSION."
 fi
+
+Note ""
+Note "If configure does the wrong thing, check the file config.log for"
+Note "information that may help you understand what went wrong."
 Note ""
 
 #
@@ -243,16 +274,20 @@ Note ""
 if [ -f $SITE/config.site ]; then
     Note "Reading site-wide parameters from $SITE/config.site."
     . $SITE/config.site
+    capture . $SITE/config.site
 elif [ -f $SRCDIR/config.site ]; then
     Note "Reading site-wide parameters from $SRCDIR/config.site."
     . $SRCDIR/config.site
+    capture . $SRCDIR/config.site
 fi
 if [ -f config.local ]; then
     Note "Reading local parameters from config.local."
     . ./config.local
+    capture . ./config.local
 elif [ -f $SRCDIR/config.local ]; then
     Note "Reading local parameters from $SRCDIR/config.local."
     . $SRCDIR/config.local
+    capture . $SRCDIR/config.local
 fi
 
 #
@@ -310,12 +345,6 @@ if [ -z "${FILLORDER:-}" ]; then
     *)		FILLORDER=MSB2LSB;;
     esac
 fi
-
-cat 1>&5 <<EOF
-This file contains any messages produced by compilers while
-running configure, to aid in debugging if configure makes a mistake.
-
-EOF
 
 #
 # Find the full pathname of a file
@@ -375,7 +404,7 @@ findHeader()
     case "$1" in
     /*) echo "$1"; return ;;
     esac
-    for i in ${DIRS_LIBINC}; do
+    for i in ${DIRS_LIBINC} /usr/include; do
 	test -r $i/$1 && {
 	    case "$i" in
 	    /*) echo "$i/$1"; return ;;
@@ -391,14 +420,14 @@ findHeader()
 }
 
 #
-# Locate a C and C++ compiler and verify they work and
-# satisfy our needs (using assorted heuristics).
+# Locate a C compiler that satisfies our needs (using assorted heuristics).
 #
 JUNK="
     a.out
     confsed
     conftestmmap
     confx confy
+    confMakefile
     core
     dummy
     dummy.a
@@ -430,7 +459,7 @@ EOF
 #
 isGNU()
 {
-    ($1 -E xgnu.c 2>&5 | egrep yes) >/dev/null 2>&1
+    capture "cat xgnu.c; ($1 -E xgnu.c 2>&5 | egrep yes)"
 }
 
 #
@@ -466,7 +495,7 @@ checkCompiler()
 	C_ANSI="$ENVOPTS"
     fi
     $RM dummy dummy.o
-    ($compiler -o dummy ${C_ANSI} dummy.c) >/dev/null 2>&5 && {
+    capture $compiler -o dummy ${C_ANSI} dummy.c && {
 	CC=$compiler;
 	test -z "${CCOMPILER:-}" && CCOMPILER=`findApp $compiler $PATH`
 	test -z "${ENVOPTS:-}"   && ENVOPTS="${C_ANSI:-}"
@@ -475,27 +504,52 @@ checkCompiler()
     return 1
 }
 
+CCtested=
+capture cat dummy.c
 if [ -z "${CC:-}" ]; then
     CCOMPILER=
     for i in gcc cc ncc dcc xlc c89 gcc2; do
+	CCtested="$CCtested $i"
 	checkCompiler $i && break
     done
 else
+    CCtested="$CCtested $CC"
     checkCompiler $CC
 fi
 if [ -z "$CCOMPILER" ]; then
     cat<<EOF
+
 Cannot locate a working ANSI C compiler.
 
-If the compiler is in a non-standard location, set the environment
-variable CC to the absolute pathname of the compiler that is to be used
-and rerun this script.
+We attempted to compile the following test program:
+
+----------------------------------------------------------
+EOF
+    cat dummy.c
+    cat<<EOF
+----------------------------------------------------------
+
+with these compilers:
+
+    $CCtested
+
+but none of them were successful.
+
+If your compiler is in a non-standard location, you can specify its
+location in several ways:
+
+    o set the environment variable CC
+    o create a config.local or config.site file that includes a
+      definition for CC
+    o supply it on the command line using -with-CC=<pathname>
 
 If command line options are required for ANSI C compilation, set the
-variable ENVOPTS to these options and rerun this script.
+ENVOPTS parameter to these options in a similar way (either through
+an environment variable or config.local/config.site) and then rerun
+this script.
 EOF
-        boom
-    fi
+    boom
+fi
 Note "Using $CCOMPILER for a C compiler (set CC to override)."
 
 test "$ENVOPTS" && {
@@ -512,14 +566,15 @@ CheckForGandO()
 {
    f=$1
    if test -s $f; then
-	grep -i \(error\|warning\) $f 1>&5 2>&5 || return 1
+	capture grep -i \(error\|warning\) $f || return 1
     fi
     return 0
 }
 
 if [ -z "${GCOPTS:-}" ]; then
-    if $CCOMPILER $ENVOPTS -g -c dummy.c >/dev/null 2>&5; then
+    if capture $CCOMPILER $ENVOPTS -g -c dummy.c; then
 	Note "Looks like $CCOMPILER supports the -g option."
+	# NB: cannot use captureX here 'cuz we lose stderr
 	if $CCOMPILER $ENVOPTS -c -g -O dummy.c >t 2>&1 && CheckForGandO t; then
 	    GCOPTS="-g"
 	else
@@ -602,13 +657,22 @@ fi
 #
 # runMake target rules ...
 #
-runMake()
+runMakeX()
 {
     target="$1"; shift
     $RM $target
-    (for i in "$@"; do
+    (echo SRCDIR=.
+       for i in "$@"; do
 	  echo "$i";
-     done) | ${MAKE} -f - $target 2>&5
+       done
+    )>confMakefile
+    captureX ${MAKE} -f confMakefile $target
+    return
+}
+runMake()
+{
+    runMakeX "$@" >&5
+    return
 }
 
 #
@@ -622,7 +686,7 @@ CheckForLibrary()
 int t() { $f(); return 0; }
 int main(){ t(); return 0; }
 EOF
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c $libs" >/dev/null
+    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c $libs"
 }
 
 #
@@ -633,7 +697,7 @@ CheckForIncludeFile()
     (for i do
 	echo "#include \"$i\""
      done)>t.c
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" >/dev/null
+    runMake t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c"
 }
 
 #
@@ -679,7 +743,7 @@ EmitCPlusPlusEpilogue()
 CheckForFunc()
 {
     echo "extern int $1(); main(){$1();exit(0);}" >t.c
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c ${MACHDEPLIBS}" >/dev/null
+    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c ${MACHDEPLIBS}"
 }
 
 #
@@ -696,9 +760,10 @@ CheckForFuncDecl()
     (for i do
 	echo "#include \"$i\""
      done)>t.c
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" |\
+    capture cat t.c
+    runMakeX t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" |\
      awk '{while($0~/[,(][ \t]*$/){printf"%s",$0;getline}print}' |\
-     grep "$f[ ]*(.*)" >/dev/null
+     grep "$f[ ]*(.*)" >&5
     return
 }
 CheckFuncDecl()
@@ -717,7 +782,8 @@ CheckForVarDecl()
     (for i do
 	echo "#include \"$i\""
      done)>t.c
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" | grep "$v" >/dev/null
+    capture cat t.c
+    runMakeX t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" | grep "$v" >&5
     return
 }
 CheckVarDecl()
@@ -745,10 +811,11 @@ CheckForDefine()
 	echo "#include \"$i\""
      done
      echo "#ifdef $def"
-     echo "FOUND"
+     echo "FOUND();"
      echo "#endif"
     )>t.c
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" | grep FOUND >/dev/null
+    capture cat t.c
+    runMakeX t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" | grep FOUND >&5
 }
 CheckDefine()
 {
@@ -838,13 +905,15 @@ main()
   exit(0);
 }
 EOF
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c" >/dev/null
+    capture cat t.c
+    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c ${MACHDEPLIBS}" && ./a.out
 }
 
 CheckForBigEndian()
 {
     echo 'main() { int one = 1; char* cp = (char*)&one; exit(*cp!=0); }'>t.c
-    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c">/dev/null && ./a.out
+    capture cat t.c
+    runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c" && ./a.out
 }
 
 #
@@ -951,6 +1020,10 @@ BuildPortDotH()
     CheckFuncDecl free 'extern void free(void*);' stdlib.h
     EmitCPlusPlusEpilogue
     )>xport.h
+    if [ $SRCDIR_IS_LIBTIFF = no -a ! -d libtiff ]; then
+	Note "Creating libtiff directory"
+	mkdir libtiff
+    fi
     mv xport.h $PORTDOTH; chmod 444 $PORTDOTH
     Note "Done creating $PORTDOTH."
 }
@@ -995,23 +1068,58 @@ Note "Done checking system libraries."
 Note ""
 Note "Checking for Dynamic Shared Object (DSO) support."
 if [ "$DSO" = auto ]; then
-    case $TARGET in
+    DSOSUF_VERSION=
+    case $TARGET-$CC in
     *-irix5.2*)
 	if (findApp rld /lib:/usr/lib:$PATH) >/dev/null 2>&1; then
 	    DSOSUF=so
-	    DSOOPTS='-shared -rdata_shared -check_registry ${SRCDIR}/port/irix/so_locations -quickstart_info'
+	    DSOLD='${LD}'
+	    DSOOPTS='-elf -shared -no_unresolved -all'
 	    DSO=IRIX52
 	fi
 	;;
     *-irix*)
 	if (findApp rld /lib:/usr/lib:$PATH) >/dev/null 2>&1; then
 	    DSOSUF=so
+	    DSOLD="${CCOMPILER} ${ENVOPTS}"
 	    DSOOPTS='-shared -rdata_shared -check_registry ${SRCDIR}/port/irix/so_locations -quickstart_info'
 	    DSO=IRIX
 	fi
 	;;
+    *-aix*)
+	DSOSUF=a
+	DSOLD='${LD}'
+	DSOOPTS='-r'
+	LIBCOPTS="-bM\:SRE"
+	DSO=AIX
+	;;
+    *-hpux*)
+	DSOSUF=sl
+	DSOLD='${LD}'
+	DSOOPTS='-b'
+	LIBCOPTS="+Z"
+#	LIBPORT="-Wl,+b${DIR_LIB}"
+	DSO=HPUX
+	;;
+    *-solaris*)
+	DSOSUF=so
+	DSOLD='${LD}'
+	DSOOPTS='-G'
+	LIBCOPTS="-K PIC"
+	DSO=SOLARIS
+	;;
+    *-linux)
+	if [ -x /lib/libc.so.5 ]; then
+	    DSOSUF=so.${DIST_MAJOR}
+	    DSOSUF_VERSION=${DSOSUF}.${DIST_MINOR}.${DIST_ALPHA}
+	    LIBCOPTS='-fPIC'
+	    DSOOPTS='-shared'
+	    DSO=LINUX
+	fi
+	;;
     *)  DSO=no;;
     esac
+    test -z "$DSOSUF_VERSION" && DSOSUF_VERSION=${DSOSUF}
 fi
 if [ "$DSO" != no ]; then
     JUNK="$JUNK t.${DSOSUF}"
@@ -1025,9 +1133,10 @@ if [ "$DSO" != no ]; then
     cat>t.c<<EOF
 int f() { return 0; }
 EOF
+    capture cat t.c
     runMake t \
-	"t.o:; ${CCOMPILER} ${ENVOPTS} -c t.c" \
-	"t: t.o; ${CCOMPILER} ${ENVOPTS} ${DSOOPTS} -o t.${DSOSUF} t.o" >/dev/null
+	"t.o:; ${CCOMPILER} ${ENVOPTS} ${LIBCOPTS} -c t.c" \
+	"t: t.o; ${DSOLD} ${DSOOPTS} -o t.${DSOSUF} t.o"
     }
     if CheckCCDSO; then
 	Note "Looks like your system supports $DSO-style DSOs."
@@ -1040,7 +1149,8 @@ EOF
     fi
 fi
 if [ "$DSO" = no ]; then
-    DSOSUF=a DSOOPTS= 
+    DSOSUF=a DSOOPTS= LIBCOPTS= 
+    DSOSUF_VERSION=$DSOSUF
 fi
 Note "Done checking for DSO support."
 
@@ -1436,7 +1546,7 @@ case $MANSCHEME in
 *-nroff-cat-*)	MANCVT='${MANSED} $? | nroff -man > $@';;
 esac
 case $MANSCHEME in
-*-0.gz|*-0.Z|*-gz|*-Z|*-z)
+*-0|*-0.gz|*-0.Z|*-gz|*-Z|*-z)
     suf=`echo $MANSCHEME | sed 's/.*-/./'`
     A='`echo $$i | sed' B='`'		# workaround shell bugs
     MANAPPNAME="$A s/\\\\.1\$\$/$suf/$B"
@@ -1469,12 +1579,17 @@ fi
 Note ""
 
 #
-# Fixup a list of potentially relative pathnames
-# so that they work when used in a subdirectory.
+# Fixup a list of potentially relative pathnames so
+# that they work when used in a subdirectory.  The
+# string sent to stdout has no extraneous spaces so
+# it can be used, for example, in building pathnames.
+#
+# NB: There's an extra echo done here so we get a
+#     \n-terminated string passed to sed.
 #
 relativize()
 {
-    if [ $SRCDIR_IS_LIBTIFF = no ]; then
+    echo `if [ $SRCDIR_IS_LIBTIFF = no ]; then
 	(for i do
 	    case "$i" in
 	    /*|-l*)	echo "$i" ;;
@@ -1484,12 +1599,12 @@ relativize()
 	    esac
 	done) | tr '\012' ' '
     else
-	(for i do echo "$i" ; done ) | tr '\012' ' '
-    fi
+	echo "$@"
+    fi` | sed -e 's;[ ][ ]*$;;' -e 's;/[.]$;;'
 }
 #
 # Generate a list of compiler include options,
-# relativizing any relative pathnames.
+# prepending ``../'' to any relative pathnames.
 #
 makeIncArgs()
 {
@@ -1514,7 +1629,7 @@ if [ $SRCDIR_IS_LIBTIFF = yes ]; then
     LIBSRCDIR="${SRCDIR}"
 else
     CONFIGDIR=".."
-    LIBSRCDIR="../${SRCDIR}/libtiff"
+    LIBSRCDIR=`relativize ${SRCDIR}`/libtiff
 fi
 
 # NB: these should be sorted alphabetically
@@ -1530,7 +1645,7 @@ cat>>confsed<<EOF
 /@COPT_LIBINC@/s;;`makeIncArgs ${DIRS_LIBINC}`;g
 /@DATE@/s;;${DATE};g
 /@DEPEND_JPEGLIB@/s;;${CONF_JPEG:+`findHeader jpeglib.h` `findHeader jerror.h`};g
-/@DEPEND_ZLIB@/s;;${CONF_ZIP:+`findHeader zlib.h` `findHeader zutil.h`};g
+/@DEPEND_ZLIB@/s;;${CONF_ZIP:+`findHeader zlib.h`};g
 /@DIR_BIN@/s;;${DIR_BIN};g
 /@DIR_JPEGLIB@/s;;`relativize ${DIR_JPEGLIB}`;g
 /@DIR_GZLIB@/s;;`relativize ${DIR_GZLIB}`;g
@@ -1538,9 +1653,12 @@ cat>>confsed<<EOF
 /@DIR_LIB@/s;;${DIR_LIB};g
 /@DIR_MAN@/s;;${DIR_MAN};g
 /@DIRS_LIBINC@/s;;`relativize ${DIRS_LIBINC}`;g
+/@DIST_ALPHA@/s;;${DIST_ALPHA};g
+/@DIST_MAJOR@/s;;${DIST_MAJOR};g
+/@DIST_MINOR@/s;;${DIST_MINOR};g
 /@DSO@/s;;${DSO};g
-/@DSOOPTS@/s;;${DSOOPTS};g
 /@DSOSUF@/s;;${DSOSUF};g
+/@DSOSUF_VERSION@/s;;${DSOSUF_VERSION};g
 /@ENVOPTS@/s;;${ENVOPTS};g
 /@FILLORDER@/s;;${FILLORDER};g
 /@GCOPTS@/s;;${GCOPTS};g
@@ -1550,6 +1668,7 @@ cat>>confsed<<EOF
 /@LIBGZ@/s;;`relativize ${LIBGZ}`;g
 /@LIBSRCDIR@/s;;${LIBSRCDIR};g
 /@LIBIMAGE@/s;;${LIBIMAGE};g
+/@LIBCOPTS@/s;;${LIBCOPTS};g
 /@LIBPORT@/s;;${LIBPORT};g
 /@LN@/s;;${LN};g
 /@LN_S@/s;;${LN_S};g
@@ -1568,6 +1687,7 @@ cat>>confsed<<EOF
 /@SED@/s;;${SED};g
 /@SETMAKE@/s;;${SETMAKE};g
 /@SRCDIR@/s;;${SRCDIR};g
+/@RELSRCDIR@/s;;`relativize ${SRCDIR}`;g
 /@STRIP@/s;;${STRIP};g
 /@TARGET@/s;;${TARGET};g
 /@VERSION@/s;;${VERSION};g

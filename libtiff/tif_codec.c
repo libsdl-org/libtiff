@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.7 1996/01/10 19:32:56 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.8 1996/02/16 05:54:21 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -72,7 +72,7 @@ const TIFFCodec _TIFFBuiltinCODECS[] = {
 #else
 TIFFCodec _TIFFBuiltinCODECS[] = {
 #endif
-    { "Null",		COMPRESSION_NONE,	TIFFInitDumpMode },
+    { "None",		COMPRESSION_NONE,	TIFFInitDumpMode },
     { "LZW",		COMPRESSION_LZW,	TIFFInitLZW },
     { "PackBits",	COMPRESSION_PACKBITS,	TIFFInitPackBits },
     { "ThunderScan",	COMPRESSION_THUNDERSCAN,TIFFInitThunderScan },
@@ -81,8 +81,8 @@ TIFFCodec _TIFFBuiltinCODECS[] = {
     { "Old-style JPEG",	COMPRESSION_OJPEG,	TIFFInitOJPEG },
     { "CCITT RLE",	COMPRESSION_CCITTRLE,	TIFFInitCCITTRLE },
     { "CCITT RLE/W",	COMPRESSION_CCITTRLEW,	TIFFInitCCITTRLEW },
-    { "CCITT Group3",	COMPRESSION_CCITTFAX3,	TIFFInitCCITTFax3 },
-    { "CCITT Group4",	COMPRESSION_CCITTFAX4,	TIFFInitCCITTFax4 },
+    { "CCITT Group 3",	COMPRESSION_CCITTFAX3,	TIFFInitCCITTFax3 },
+    { "CCITT Group 4",	COMPRESSION_CCITTFAX4,	TIFFInitCCITTFax4 },
     { "ISO JBIG",	COMPRESSION_JBIG,	TIFFInitJBIG },
     { "Deflate",	COMPRESSION_DEFLATE,	TIFFInitZIP },
     { NULL },

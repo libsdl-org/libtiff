@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_zip.c,v 1.5 1996/01/10 19:33:20 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_zip.c,v 1.8 1996/03/07 17:00:23 sam Exp $ */
 
 /*
  * Copyright (c) 1995-1996 Sam Leffler
@@ -29,33 +29,57 @@
 /*
  * TIFF Library.
  *
- * ZIP (i.e. Deflate) Compression Support
+ * ZIP (aka Deflate) Compression Support
  *
- * This file is simply an interface to the libgz library written by
- * Jean-loup Gailly and Mark Adler.  Use version 0.92 or later of
- * the library.  The data format used by the zlib library is described
- * in the files zlib-3.1.doc, deflate-1.1.doc and gzip-4.1.doc, available
- * in the directory ftp://ftp.uu.net/pub/archiving/zip/doc.  The library
- * was last found at ftp://ftp.uu.net/graphics/png/code/zlib-0.93.tar.gz.
+ * This file is simply an interface to the zlib library written by
+ * Jean-loup Gailly and Mark Adler.  You must use version 1.0 or later
+ * of the library: this code assumes the 1.0 API and also depends on
+ * the ability to write the zlib header multiple times (one per strip)
+ * which was not possible with versions prior to 0.95.  Note also that
+ * older versions of this codec avoided this bug by supressing the header
+ * entirely.  This means that files written with the old library cannot
+ * be read; they should be converted to a different compression scheme
+ * and then reconverted.
+ *
+ * The data format used by the zlib library is described in the files
+ * zlib-3.1.doc, deflate-1.1.doc and gzip-4.1.doc, available in the
+ * directory ftp://ftp.uu.net/pub/archiving/zip/doc.  The library was
+ * last found at ftp://ftp.uu.net/pub/archiving/zip/zlib/zlib-0.99.tar.gz.
  */
 #include "tif_predict.h"
 #include "zlib.h"
-#include "zutil.h"
 
 #include <stdio.h>
 #include <assert.h>
+
+/*
+ * Sigh, ZLIB_VERSION is defined as a string so there's no
+ * way to do a proper check here.  Instead we guess based
+ * on the presence of #defines that were added between the
+ * 0.95 and 1.0 distributions.
+ */
+#if !defined(Z_NO_COMPRESSION) || !defined(Z_DEFLATED)
+#error "Antiquated ZLIB software; you must use version 1.0 or later"
+#endif
 
 /*
  * State block for each open TIFF
  * file using ZIP compression/decompression.
  */
 typedef	struct {
-	TIFFPredictorState	predict;
-	z_stream		stream;
+	TIFFPredictorState predict;
+	z_stream	stream;
+	int		zipquality;		/* compression level */
+	int		state;			/* state flags */
+#define	ZSTATE_INIT	0x1		/* zlib setup successfully */
+
+	TIFFVGetMethod	vgetparent;		/* super-class method */
+	TIFFVSetMethod	vsetparent;		/* super-class method */
 } ZIPState;
 
-#define	DecoderState(tif)	((ZIPState*) (tif)->tif_data)
-#define	EncoderState(tif)	((ZIPState*) (tif)->tif_data)
+#define	ZState(tif)		((ZIPState*) (tif)->tif_data)
+#define	DecoderState(tif)	ZState(tif)
+#define	EncoderState(tif)	ZState(tif)
 
 static	int ZIPEncode(TIFF*, tidata_t, tsize_t, tsample_t);
 static	int ZIPDecode(TIFF*, tidata_t, tsize_t, tsample_t);
@@ -67,11 +91,13 @@ ZIPSetupDecode(TIFF* tif)
 	static char module[] = "ZIPSetupDecode";
 
 	assert(sp != NULL);
-	if (inflateInit2(&sp->stream, -DEF_WBITS) != Z_OK) {
+	if (inflateInit(&sp->stream) != Z_OK) {
 		TIFFError(module, "%s: %s", tif->tif_name, sp->stream.msg);
 		return (0);
-	} else
+	} else {
+		sp->state |= ZSTATE_INIT;
 		return (1);
+	}
 }
 
 /*
@@ -112,7 +138,7 @@ ZIPDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 			continue;
 		}
 		if (state != Z_OK) {
-			TIFFError(module, "%s: libgz error: %s",
+			TIFFError(module, "%s: zlib error: %s",
 			    tif->tif_name, sp->stream.msg);
 			return (0);
 		}
@@ -133,20 +159,13 @@ ZIPSetupEncode(TIFF* tif)
 	static char module[] = "ZIPSetupEncode";
 
 	assert(sp != NULL);
-	/*
-	 * We use the undocumented feature of a negiatve window
-	 * bits to suppress writing the header in the output
-	 * stream.  This is necessary when the resulting image
-	 * is made up of multiple strips or tiles as otherwise
-	 * libgz will not write a header for each strip/tile and
-	 * the decoder will fail.
-	 */
-	if (deflateInit2(&sp->stream, Z_DEFAULT_COMPRESSION,
-	    DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, 0) != Z_OK) {
+	if (deflateInit(&sp->stream, sp->zipquality) != Z_OK) {
 		TIFFError(module, "%s: %s", tif->tif_name, sp->stream.msg);
 		return (0);
-	} else
+	} else {
+		sp->state |= ZSTATE_INIT;
 		return (1);
+	}
 }
 
 /*
@@ -218,7 +237,7 @@ ZIPPostEncode(TIFF* tif)
 		    }
 		    break;
 		default:
-		    TIFFError(module, "%s: libgz error: %s",
+		    TIFFError(module, "%s: zlib error: %s",
 			tif->tif_name, sp->stream.msg);
 		    return (0);
 		}
@@ -229,7 +248,7 @@ ZIPPostEncode(TIFF* tif)
 static void
 ZIPCleanup(TIFF* tif)
 {
-	ZIPState* sp = (ZIPState*) tif->tif_data;
+	ZIPState* sp = ZState(tif);
 	if (sp) {
 		if (tif->tif_mode == O_RDONLY)
 			inflateEnd(&sp->stream);
@@ -239,6 +258,51 @@ ZIPCleanup(TIFF* tif)
 		tif->tif_data = NULL;
 	}
 }
+
+static int
+ZIPVSetField(TIFF* tif, ttag_t tag, va_list ap)
+{
+	ZIPState* sp = ZState(tif);
+	static char module[] = "ZIPVSetField";
+
+	switch (tag) {
+	case TIFFTAG_ZIPQUALITY:
+		sp->zipquality = va_arg(ap, int);
+		if (tif->tif_mode != O_RDONLY && (sp->state&ZSTATE_INIT)) {
+			if (deflateParams(&sp->stream,
+			    sp->zipquality, Z_DEFAULT_STRATEGY) != Z_OK) {
+				TIFFError(module, "%s: zlib error: %s",
+				    tif->tif_name, sp->stream.msg);
+				return (0);
+			}
+		}
+		return (1);
+	default:
+		return (*sp->vsetparent)(tif, tag, ap);
+	}
+	/*NOTREACHED*/
+}
+
+static int
+ZIPVGetField(TIFF* tif, ttag_t tag, va_list ap)
+{
+	ZIPState* sp = ZState(tif);
+
+	switch (tag) {
+	case TIFFTAG_ZIPQUALITY:
+		*va_arg(ap, int*) = sp->zipquality;
+		break;
+	default:
+		return (*sp->vgetparent)(tif, tag, ap);
+	}
+	return (1);
+}
+
+static const TIFFFieldInfo zipFieldInfo[] = {
+    { TIFFTAG_ZIPQUALITY,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
+      TRUE,	FALSE,	"" },
+};
+#define	N(a)	(sizeof (a) / sizeof (a[0]))
 
 int
 TIFFInitZIP(TIFF* tif, int scheme)
@@ -253,11 +317,25 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (ZIPState));
 	if (tif->tif_data == NULL)
 		goto bad;
-	sp = (ZIPState*) tif->tif_data;
+	sp = ZState(tif);
 	sp->stream.zalloc = NULL;
 	sp->stream.zfree = NULL;
 	sp->stream.opaque = NULL;
 	sp->stream.data_type = Z_BINARY;
+
+	/*
+	 * Merge codec-specific tag information and
+	 * override parent get/set field methods.
+	 */
+	_TIFFMergeFieldInfo(tif, zipFieldInfo, N(zipFieldInfo));
+	sp->vgetparent = tif->tif_vgetfield;
+	tif->tif_vgetfield = ZIPVGetField;	/* hook for codec tags */
+	sp->vsetparent = tif->tif_vsetfield;
+	tif->tif_vsetfield = ZIPVSetField;	/* hook for codec tags */
+
+	/* Default values for codec-specific fields */
+	sp->zipquality = Z_DEFAULT_COMPRESSION;	/* default comp. level */
+	sp->state = 0;
 
 	/*
 	 * Install codec methods.

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.24 1996/01/10 19:35:29 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.25 1996/03/19 16:57:54 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler
@@ -40,7 +40,7 @@
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
-static	uint16 compression = (uint16) -1;
+static	uint16 compression = COMPRESSION_LZW;
 static	uint16 predictor = 0;
 static	int quality = 75;	/* JPEG quality */
 static	int jpegcolormode = JPEGCOLORMODE_RGB;

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.92 1996/01/10 19:33:25 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.93 1996/03/07 17:00:14 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -31,6 +31,15 @@
  * TIFF I/O Library Definitions.
  */
 #include "tiff.h"
+
+/*
+ * This define can be used in code that requires
+ * compilation-related definitions specific to a
+ * version or versions of the library.  Runtime
+ * version checking should be done based on the
+ * string returned by TIFFGetVersion.
+ */
+#define	TIFFLIB_VERSION	19960307	/* March 7, 1996 */
 
 /*
  * TIFF is defined as an incomplete type to hide the

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.66 1996/01/10 19:33:10 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.67 1996/02/16 05:54:21 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -156,53 +156,13 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		}
 	}
 	if (TIFFFieldSet(tif,FIELD_COMPRESSION)) {
+		const TIFFCodec* c = TIFFFindCODEC(td->td_compression);
 		fprintf(fd, "  Compression Scheme: ");
-		switch (td->td_compression) {
-		case COMPRESSION_NONE:
-			fprintf(fd, "none\n");
-			break;
-		case COMPRESSION_CCITTRLE:
-			fprintf(fd, "CCITT modified Huffman encoding\n");
-			break;
-		case COMPRESSION_CCITTFAX3:
-			fprintf(fd, "CCITT Group 3 facsimile encoding\n");
-			break;
-		case COMPRESSION_CCITTFAX4:
-			fprintf(fd, "CCITT Group 4 facsimile encoding\n");
-			break;
-		case COMPRESSION_CCITTRLEW:
-			fprintf(fd, "CCITT modified Huffman encoding %s\n",
-			    "w/ word alignment");
-			break;
-		case COMPRESSION_PACKBITS:
-			fprintf(fd, "Macintosh PackBits encoding\n");
-			break;
-		case COMPRESSION_THUNDERSCAN:
-			fprintf(fd, "ThunderScan 4-bit encoding\n");
-			break;
-		case COMPRESSION_LZW:
-			fprintf(fd, "Lempel-Ziv & Welch encoding\n");
-			break;
-		case COMPRESSION_NEXT:
-			fprintf(fd, "NeXT 2-bit encoding\n");
-			break;
-		case COMPRESSION_OJPEG:
-			fprintf(fd, "Old-style JPEG encoding\n");
-			break;
-		case COMPRESSION_JPEG:
-			fprintf(fd, "JPEG encoding\n");
-			break;
-		case COMPRESSION_JBIG:
-			fprintf(fd, "JBIG encoding\n");
-			break;
-		case COMPRESSION_DEFLATE:
-			fprintf(fd, "Deflate encoding (experimental)\n");
-			break;
-		default:
+		if (c)
+			fprintf(fd, "%s\n", c->name);
+		else
 			fprintf(fd, "%u (0x%x)\n",
 			    td->td_compression, td->td_compression);
-			break;
-		}
 	}
 	if (TIFFFieldSet(tif,FIELD_PHOTOMETRIC)) {
 		fprintf(fd, "  Photometric Interpretation: ");

@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.17 1996/02/09 05:55:00 sam Exp $
+#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.18 1996/03/18 20:56:15 sam Exp $
 #
 # @WARNING@
 #
@@ -27,8 +27,9 @@
 # OF THIS SOFTWARE.
 #
 DEPTH	= ..
-SRCDIR	= ${DEPTH}/@SRCDIR@/tools
-LIBDIR	= ${DEPTH}/@SRCDIR@/libtiff
+
+SRCDIR	= @RELSRCDIR@/tools
+LIBDIR	= @RELSRCDIR@/libtiff
 
 #
 # VERSION:	@VERSION@

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.64 1996/01/10 19:33:23 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.67 1996/03/04 17:46:53 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -297,6 +297,8 @@ typedef	enum {
  */
 #define TIFFTAG_PIXAR_IMAGEFULLWIDTH    33300   /* full image size in x */
 #define TIFFTAG_PIXAR_IMAGEFULLLENGTH   33301   /* full image size in y */
+/* tag 33405 is a private tag registered to Eastman Kodak */
+#define TIFFTAG_WRITERSERIALNUMBER      33405   /* device serial number */
 /* tag 33432 is listed in the 6.0 spec w/ unknown ownership */
 #define	TIFFTAG_COPYRIGHT		33432	/* copyright string */
 /* tags 34232-34236 are private tags registered to Texas Instruments */
@@ -307,6 +309,8 @@ typedef	enum {
 #define	TIFFTAG_FAXRECVPARAMS		34908	/* encoded Class 2 ses. parms */
 #define	TIFFTAG_FAXSUBADDRESS		34909	/* received SubAddr string */
 #define	TIFFTAG_FAXRECVTIME		34910	/* receive time (secs) */
+/* tag 65535 is an undefined tag used by Eastman Kodak */
+#define TIFFTAG_DCSHUESHIFTVALUES       65535   /* hue shift correction data */
 
 /*
  * The following are ``pseudo tags'' that can be
@@ -343,4 +347,23 @@ typedef	enum {
 #define	    PIXARLOGDATAFMT_12BITPICIO	3	/* as per PICIO (1.0==2048) */
 #define	    PIXARLOGDATAFMT_16BIT	4	/* signed short samples */
 #define	    PIXARLOGDATAFMT_FLOAT	5	/* IEEE float samples */
+/* 65550-65556 are allocated to Ken Murchison <ken@oceana.com> */
+#define TIFFTAG_DCSIMAGERTYPE           65550   /* imager model & filter */
+#define     DCSIMAGERMODEL_M3           0       /* M3 chip (1280 x 1024) */
+#define     DCSIMAGERMODEL_M5           1       /* M5 chip (1536 x 1024) */
+#define     DCSIMAGERMODEL_M6           2       /* M6 chip (3072 x 2048) */
+#define     DCSIMAGERFILTER_IR          0       /* infrared filter */
+#define     DCSIMAGERFILTER_MONO        1       /* monochrome filter */
+#define     DCSIMAGERFILTER_CFA         2       /* color filter array */
+#define     DCSIMAGERFILTER_OTHER       3       /* other filter */
+#define TIFFTAG_DCSINTERPMODE           65551   /* interpolation mode */
+#define     DCSINTERPMODE_NORMAL        0x0     /* whole image, default */
+#define     DCSINTERPMODE_PREVIEW       0x1     /* preview of image (384x256) */
+#define TIFFTAG_DCSBALANCEARRAY         65552   /* color balance values */
+#define TIFFTAG_DCSCORRECTMATRIX        65553   /* color correction values */
+#define TIFFTAG_DCSGAMMA                65554   /* gamma value */
+#define TIFFTAG_DCSTOESHOULDERPTS       65555   /* toe & shoulder points */
+#define TIFFTAG_DCSCALIBRATIONFD        65556   /* calibration file desc */
+/* Note: quality level is on the ZLIB 1-9 scale. Default value is -1 */
+#define	TIFFTAG_ZIPQUALITY		65557	/* compression quality level */
 #endif /* _TIFF_ */

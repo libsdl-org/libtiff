@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.28 1996/02/09 05:55:00 sam Exp $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.32 1996/03/14 00:54:03 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -63,7 +63,7 @@ IPATH	= -I. -I${SRCDIR} @COPT_LIBINC@
 CONF_LIBRARY=@CONF_JPEG@ @CONF_ZIP@
 COPTS	= @GCOPTS@
 OPTIMIZER=-O
-CFLAGS	= @ENVOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH} ${CONF_LIBRARY}
+CFLAGS	= @ENVOPTS@ @LIBCOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH} ${CONF_LIBRARY}
 #
 SRCS	= \
 	tif_aux.c \
@@ -144,16 +144,57 @@ libtiff.a: ${OBJS}
 	${AR} ${AROPTS} libtiff.a $?
 	${RANLIB} libtiff.a
 
+#
+# NB: The configure script verifies that the configured
+# tools are capable of producing a DSO before enabling
+# their creation/use.  The following rules are effectively
+# duplicated in the configure script to do this verification.
+# This means that if you want to add support for building a
+# DSO on another system you'll need to modify this file *and*
+# configure if you want the right thing to happen automatically
+# (should probably be fixed up).
+#
+
 # default IRIX DSO building rule
 IRIXdso: ${OBJS}
-	${CC} -o libtiff.@DSOSUF@ -shared -rdata_shared ${OBJS} \
-	    @LIBJPEG@ @LIBGZ@
-	touch IRIXdso
+	${CC} -o libtiff.@DSOSUF@ -shared -rdata_shared \
+	    -check_registry ${SRCDIR}/../port/irix/so_locations \
+	    -quickstart_info \
+	    ${OBJS} @LIBJPEG@ @LIBGZ@
+	touch $@
 # special rule for IRIX 5.2
 IRIX52dso: ${OBJS}
-	${LD} -elf -o libtiff.@DSOSUF@ -shared -no_unresolved -all libtiff.a \
+	${LD} -elf -o libtiff.@DSOSUF@ -shared -no_unresolved -all ${OBJS} \
 	    @LIBJPEG@ @LIBGZ@ -lc -lm
-	touch IRIX52dso
+	touch $@
+# Solaris 2.4
+SOLARISdso: ${OBJS}
+	${LD} -L@DIR_LIB@ -G -o libtiff.@DSOSUF@ ${OBJS}
+	touch $@
+# HP-UX A.09.03
+HPUXdso: ${OBJS}
+	${LD} +b@DIR_LIB@ -b -o libtiff.@DSOSUF@ ${OBJS}
+	touch $@
+# AIX 2.3.5 and 4.1.1
+AIXdso: ${OBJS}
+	rm -f libtiff.syms shr.o
+	echo "#!" > libtiff.syms
+	/bin/dump -g libtiff.a | sed -n -e \
+	      's/^[ 	]*[0-9][0-9]*[	 ]*\([^	 .][^ 	]*\)$$/\1/p' \
+	      >> libtiff.syms
+	${LD} -o shr.o libtiff.a -H512 -T512 -bM\:SRE \
+	    -bE\:libtiff.syms @LIBJPEG@ @LIBGZ@ -lc -lm -L@DIR_LIB@
+	rm -f libtiff.syms libtiff.@DSOSUF@
+	${AR} ${AROPTS} libtiff.@DSOSUF@ shr.o
+	rm -f shr.o
+	touch $@
+# linux ELF shared lib rule
+LINUXdso:  ${OBJS}
+	${CC} -shared -Wl,-soname,libtiff.@DSOSUF@ \
+	    -o libtiff.@DSOSUF_VERSION@  ${OBJS} @LIBJPEG@ @LIBGZ@ 
+	@LN@ @LN_S@ libtiff.@DSOSUF_VERSION@ libtiff.@DSOSUF@
+	touch $@
+
 
 ${OBJS}: ${SRCDIR}/tiffio.h ${SRCDIR}/tiff.h ${SRCDIR}/tif_dir.h
 ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h
@@ -251,22 +292,32 @@ INCS	= ${SRCDIR}/tiff.h ${SRCDIR}/tiffio.h
 
 installHdrs: ${INCS}
 	${INSTALL} -idb tiff.sw.dev -m 755 -dir @DIR_INC@
-	for i in ${INCS}; do \
-	    f=`basename $$i`; \
-	    ${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_INC@ \
-		-src $$i -O $$f; \
+	for i in ${INCS}; do						\
+	    f=`basename $$i`;						\
+	    ${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_INC@		\
+		-src $$i -O $$f;					\
 	done
 installDSO: @DSO@dso
-	${INSTALL} -idb tiff.sw.tools -m 444 -F @DIR_LIB@ -O libtiff.@DSOSUF@
+	if [ @DSOSUF_VERSION@ != @DSOSUF@ ]; then			\
+	    ${INSTALL} -idb tiff.sw.tools -m 555 -F @DIR_LIB@		\
+		-O libtiff.@DSOSUF_VERSION@;				\
+	    ${INSTALL} -idb tiff.sw.tools -F @DIR_LIB@			\
+		-ln libtiff.@DSOSUF_VERSION@ -O libtiff.@DSOSUF@;	\
+	else								\
+	    ${INSTALL} -idb tiff.sw.tools -m 444 -F @DIR_LIB@		\
+		-O libtiff.@DSOSUF@;					\
+	fi
 install: all installHdrs
 	${INSTALL} -idb tiff.sw.dev -m 755 -dir @DIR_LIB@
 	${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_LIB@ -O libtiff.a
-	if [ @DSO@dso != nodso ]; then \
-	    ${MAKE} installDSO; \
-	else \
-	    true; \
+	if [ @DSO@dso != nodso ]; then					\
+	    ${MAKE} installDSO;						\
+	else								\
+	    true;							\
 	fi
 
 clean:
-	rm -f ${TARGETS} ${OBJS} core a.out mkg3states tif_fax3sm.c version.h \
-	    libtiff.@DSOSUF@ *dso mkversion
+	rm -f ${TARGETS} ${OBJS} core a.out \
+	    mkg3states tif_fax3sm.c \
+	    mkversion version.h \
+	    libtiff.a libtiff.@DSOSUF@ libtiff.@DSOSUF_VERSION@ *dso
