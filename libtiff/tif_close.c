@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_close.c,v 1.2 2002-02-24 15:41:41 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_close.c,v 1.3 2002-04-03 20:13:31 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -32,8 +32,6 @@
 void
 TIFFClose(TIFF* tif)
 {
-    int i;
-    
     if (tif->tif_mode != O_RDONLY)
         /*
          * Flush buffered data and directory (if dirty).
