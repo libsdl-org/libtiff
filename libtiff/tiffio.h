@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.25 2003-12-19 12:14:02 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.26 2003-12-21 22:13:14 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -167,8 +167,7 @@ typedef struct {				/* CIE Lab 1976->RGB support */
 	float	Yb2b[CIELABTORGB_TABLE_RANGE + 1];  /* Conversion of Yb to b */
 } TIFFCIELabToRGB;
 
-extern int TIFFCIELabToRGBInit(TIFFCIELabToRGB*, TIFFDisplay *,
-			       float, float, float);
+extern int TIFFCIELabToRGBInit(TIFFCIELabToRGB*, TIFFDisplay *, float*);
 extern void TIFFCIELabToXYZ(TIFFCIELabToRGB *, uint32, int32, int32,
 			    float *, float *, float *);
 extern void TIFFXYZToRGB(TIFFCIELabToRGB *, float, float, float,

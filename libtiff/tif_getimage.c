@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.35 2003-12-19 12:14:02 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.36 2003-12-21 22:13:14 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2049,7 +2049,8 @@ initCIELabConversion(TIFFRGBAImage* img)
 {
 	static char module[] = "initCIELabConversion";
 
-	float *coeffs, X0, Y0, Z0;
+	float   *whitePoint;
+	float   refWhite[3];
 
 	if (!img->cielab) {
 		img->cielab = (TIFFCIELabToRGB *)
@@ -2061,11 +2062,12 @@ initCIELabConversion(TIFFRGBAImage* img)
 		}
 	}
 
-	TIFFGetFieldDefaulted(img->tif, TIFFTAG_WHITEPOINT, &coeffs);
-	Y0 = 100.0F;
-	X0 = coeffs[0] / coeffs[1] * Y0;
-	Z0 = (1.0F - coeffs[0] - coeffs[1]) / coeffs[1] * Y0;
-	if (TIFFCIELabToRGBInit(img->cielab, &display_sRGB, X0, Y0, Z0) < 0) {
+	TIFFGetFieldDefaulted(img->tif, TIFFTAG_WHITEPOINT, &whitePoint);
+	refWhite[1] = 100.0F;
+	refWhite[0] = whitePoint[0] / whitePoint[1] * refWhite[1];
+	refWhite[2] = (1.0F - whitePoint[0] - whitePoint[1])
+		      / whitePoint[1] * refWhite[1];
+	if (TIFFCIELabToRGBInit(img->cielab, &display_sRGB, refWhite) < 0) {
 		TIFFError(module,
 		    "Failed to initialize CIE L*a*b*->RGB conversion state.");
 		_TIFFfree(img->cielab);
