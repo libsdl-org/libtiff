@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.22 2001-07-18 13:37:12 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.23 2001-11-23 13:56:43 warmerda Exp $
 #
 # @WARNING@
 #
@@ -466,6 +466,8 @@ CONTRIBFILES=\
 	    contrib/addtiffo/Makefile.vc	\
 	    contrib/addtiffo/addtiffo.c		\
 	    contrib/addtiffo/tif_overview.c	\
+	    contrib/addtiffo/tif_ovrcache.c	\
+	    contrib/addtiffo/tif_ovrcache.h	\
 	contrib/iptcutil/Makefile		\
 		contrib/iptcutil/iptcutil.c	\
 		contrib/iptcutil/test.iptc	\
