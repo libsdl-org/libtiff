@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/ras2tiff.c,v 1.5 2003-03-12 14:05:06 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/ras2tiff.c,v 1.6 2003-11-12 15:07:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -90,7 +90,7 @@ main(int argc, char* argv[])
 		fprintf(stderr, "%s: Can not read header.\n", argv[optind]);
 		return (-2);
 	}
-	if (h.ras_magic != RAS_MAGIC) {
+	if (h.ras_magic != RAS_MAGIC && h.ras_magic != RAS_MAGIC_INV) {
 		fprintf(stderr, "%s: Not a rasterfile.\n", argv[optind]);
 		return (-3);
 	}

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/rasterfile.h,v 1.1 1999-07-27 21:50:28 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/rasterfile.h,v 1.2 2003-11-12 15:07:21 dron Exp $ */
 
 /*
  * Description of header for files containing raster images
@@ -15,6 +15,7 @@ struct rasterfile {
 	/* color map follows for ras_maplength bytes, followed by image */
 };
 #define	RAS_MAGIC	0x59a66a95
+#define	RAS_MAGIC_INV	0x956aa659
 
 	/* Sun supported ras_type's */
 #define RT_OLD		0	/* Raw pixrect image in 68000 byte order */
