@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.1 2003-11-28 15:10:05 dron Exp $ */
+/* $Id: tiffgt.c,v 1.2 2004-09-12 16:40:40 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -25,6 +25,7 @@
  * OF THIS SOFTWARE.
  */
 
+#include "tif_config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
