@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.9 1999-11-30 19:56:27 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.10 1999-12-21 18:59:45 warmerda Exp $
 #
 # @WARNING@
 #
@@ -152,6 +152,7 @@ TIFFFILES=\
 	    libtiff/tif_dumpmode.c		\
 	    libtiff/tif_error.c			\
 	    libtiff/tif_fax3.c			\
+	    libtiff/fax3sm_winnt.c		\
 	    libtiff/tif_fax3.h			\
 	    libtiff/tif_flush.c			\
 	    libtiff/tif_getimage.c		\
