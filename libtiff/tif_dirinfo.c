@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.2 1999-12-21 17:03:03 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.3 2001-02-17 03:20:39 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -38,7 +38,10 @@
  *     then the LONG must be placed before the SHORT for
  *     writing to work properly.
  */
-static const TIFFFieldInfo tiffFieldInfo[] = {
+#ifndef VMS
+static 
+#endif
+const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_SUBFILETYPE,	 1, 1, TIFF_LONG,	FIELD_SUBFILETYPE,
       TRUE,	FALSE,	"SubfileType" },
 /* XXX SHORT for compatibility w/ old versions of the library */
