@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.29 2005-01-11 15:22:22 dron Exp $ */
+/* $Id: tiff.h,v 1.30 2005-02-01 04:37:15 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -297,8 +297,8 @@ typedef	enum {
 #define	TIFFTAG_PRIMARYCHROMATICITIES	319	/* !primary chromaticities */
 #define	TIFFTAG_COLORMAP		320	/* RGB map for pallette image */
 #define	TIFFTAG_HALFTONEHINTS		321	/* !highlight+shadow info */
-#define	TIFFTAG_TILEWIDTH		322	/* !rows/data tile */
-#define	TIFFTAG_TILELENGTH		323	/* !cols/data tile */
+#define	TIFFTAG_TILEWIDTH		322	/* !tile width in pixels */
+#define	TIFFTAG_TILELENGTH		323	/* !tile height in pixels */
 #define TIFFTAG_TILEOFFSETS		324	/* !offsets to data tiles */
 #define TIFFTAG_TILEBYTECOUNTS		325	/* !byte counts for tiles */
 #define	TIFFTAG_BADFAXLINES		326	/* lines w/ wrong pixel count */
