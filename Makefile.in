@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.1 1999-07-27 21:50:26 mike Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.2 1999-08-25 19:34:25 warmerda Exp $
 #
 # @WARNING@
 #
@@ -473,6 +473,13 @@ release.tar:
 	rm -f tiff-$$VERSION-tar.${ZIPSUF};				\
 	cat $$VERSION-tar | ${COMPRESS} >tiff-$$VERSION-tar.${ZIPSUF};	\
 	rm -f tiff-$$VERSION $$VERSION $$VERSION-tar;
+
+#
+#	Simple rule to run test suite assuming that pics directory is 
+#	just below this one, and that .rpt files are available. 
+#
+test:
+	test_pics.sh pics/*.tif
 
 #
 # Create a package of the test images.
