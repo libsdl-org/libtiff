@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.9 2004-07-24 19:05:57 dron Exp $ */
+/* $Id: tiff2rgba.c,v 1.10 2004-09-03 13:57:34 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -24,9 +24,15 @@
  * OF THIS SOFTWARE.
  */
 
+#include "tif_config.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tiffio.h"
 
@@ -476,3 +482,5 @@ usage(int code)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(code);
 }
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
