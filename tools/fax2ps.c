@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.2 1999-08-17 03:07:43 warmerda Exp $" */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.3 2000-03-27 17:05:55 mwelles Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -62,7 +62,7 @@ int	maxline = 512;		/* max output line of PostScript */
  * March 13-15, 1995.
  */
 static void
-printruns(unsigned char* buf, uint16* runs, uint16* erun, uint32 lastx)
+printruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
 {
     static struct {
 	char white, black;
