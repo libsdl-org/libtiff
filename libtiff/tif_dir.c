@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.4 1999-09-29 16:09:59 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.5 1999-11-27 20:03:47 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -967,7 +967,7 @@ TIFFAdvanceDirectory(TIFF* tif, uint32* nextdir, toff_t* off)
 	if (isMapped(tif))
 	  {
 	    tsize_t poff=*nextdir;
-	    if (poff+sizeof (uint16) > tif->tif_size)
+	    if (((tsize_t) (poff+sizeof(uint16))) > tif->tif_size)
 	      {
 		TIFFError(module, "%s: Error fetching directory count",
 			  tif->tif_name);
@@ -979,7 +979,7 @@ TIFFAdvanceDirectory(TIFF* tif, uint32* nextdir, toff_t* off)
 	    poff+=sizeof (uint16)+dircount*sizeof (TIFFDirEntry);
 	    if (off != NULL)
 	      *off = poff;
-	    if (poff+sizeof (uint32) > tif->tif_size)
+	    if (((tsize_t) (poff+sizeof (uint32))) > tif->tif_size)
 	      {
 		TIFFError(module, "%s: Error fetching directory link",
 			  tif->tif_name);
