@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.14 2001-04-06 02:53:58 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.15 2001-05-10 02:14:16 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.14 $"
+	echo "This is TIFF configure $Revision: 1.15 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -925,7 +925,7 @@ main()
     *(buf1 + j) = rand();
   fd = open("conftestmmap", O_CREAT | O_RDWR, 0666);
   write(fd, buf1, i2);
-  buf2 = mmap(NULL, i, PROT_READ|PROT_WRITE, MAP_VARIABLE|MAP_PRIVATE, fd, 0);
+  buf2 = mmap(0, i, PROT_READ|PROT_WRITE, MAP_VARIABLE|MAP_PRIVATE, fd, 0);
   for (j = 0; j < i; ++j)
     if (*(buf1 + j) != *(buf2 + j))
       exit(1);
