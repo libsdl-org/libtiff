@@ -1,4 +1,4 @@
-/* $Id: tif_thunder.c,v 1.3 2004-09-14 06:42:55 dron Exp $ */
+/* $Id: tif_thunder.c,v 1.4 2004-09-19 10:08:38 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -91,8 +91,10 @@ ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
 			} else
 				lastpixel |= lastpixel << 4;
 			npixels += n;
-			for (; n > 0; n -= 2)
-				*op++ = (tidataval_t) lastpixel;
+			if (npixels < maxpixels) {
+				for (; n > 0; n -= 2)
+					*op++ = (tidataval_t) lastpixel;
+			}
 			if (n == -1)
 				*--op &= 0xf0;
 			lastpixel &= 0xf;

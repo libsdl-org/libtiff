@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.10 2004-09-14 06:02:56 dron Exp $ */
+/* $Id: tif_luv.c,v 1.11 2004-09-19 10:08:38 dron Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -214,11 +214,11 @@ LogL16Decode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 				rc = *bp++ + (2-128);
 				b = (int16)(*bp++ << shft);
 				cc -= 2;
-				while (rc--)
+				while (rc-- && i < npixels)
 					tp[i++] |= b;
 			} else {			/* non-run */
 				rc = *bp++;		/* nul is noop */
-				while (--cc && rc--)
+				while (--cc && rc-- && i < npixels)
 					tp[i++] |= (int16)*bp++ << shft;
 			}
 		if (i != npixels) {
@@ -314,11 +314,11 @@ LogLuvDecode32(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 				rc = *bp++ + (2-128);
 				b = (uint32)*bp++ << shft;
 				cc -= 2;
-				while (rc--)
+				while (rc-- && i < npixels)
 					tp[i++] |= b;
 			} else {			/* non-run */
 				rc = *bp++;		/* nul is noop */
-				while (--cc && rc--)
+				while (--cc && rc-- && i < npixels)
 					tp[i++] |= (uint32)*bp++ << shft;
 			}
 		if (i != npixels) {
