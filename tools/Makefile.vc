@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.8 2004-06-06 17:58:29 dron Exp $
+# $Id: Makefile.vc,v 1.9 2004-06-08 15:54:12 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -28,8 +28,8 @@
 
 !INCLUDE ..\nmake.opt
 
-TARGETS	=	tiffcp.exe tiffinfo.exe tiffdump.exe fax2tiff.exe \
-		fax2ps.exe gif2tiff.exe pal2rgb.exe ppm2tiff.exe \
+TARGETS	=	bmp2tiff.exe tiffcp.exe tiffinfo.exe tiffdump.exe \
+		fax2tiff.exe fax2ps.exe gif2tiff.exe pal2rgb.exe ppm2tiff.exe \
 		rgb2ycbcr.exe thumbnail.exe ras2tiff.exe raw2tiff.exe \
 		tiff2bw.exe tiff2rgba.exe tiff2pdf.exe tiff2ps.exe \
 		tiffcmp.exe tiffdither.exe tiffmedian.exe tiffsplit.exe 
