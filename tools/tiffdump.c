@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdump.c,v 1.2 2002-01-16 18:04:57 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdump.c,v 1.3 2003-09-02 13:28:09 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -86,7 +86,7 @@ extern	char* optarg;
 void
 usage()
 {
-	fprintf(stderr, "usage: %s [-h] [-o offset] file.tif ...\n", appname);
+	fprintf(stderr, "usage: %s [-h] [-o offset] [-m maxitems] file.tif ...\n", appname);
 	exit(-1);
 }
 
