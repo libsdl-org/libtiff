@@ -1,4 +1,4 @@
-/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkversion.c,v 1.4 1996/01/10 19:34:25 sam Rel $ */
+/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkversion.c,v 1.5 1996/05/21 18:19:48 sam Exp $ */
 
 /*
  * Copyright (c) 1995-1996 Sam Leffler
@@ -25,104 +25,39 @@
  */
 
 /*
- * Generate a library version string for systems that
- * do not have a shell (by default this is done with
- * awk and echo from the Makefile).
+ * Generate a library version string.
  *
- * This was written by Peter Greenham for Acorn systems.
- *
- * Syntax: mkversion [-v version-file] [-a alpha-file] [<outfile>]
+ * Syntax: mkversion major minor alpha type [outfile]
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-static void
-usage(void)
-{
-    fprintf(stderr,
-	"usage: mkversion [-v version-file] [-a alpha-file] [outfile]\n");
-    exit(-1);
-}
-
-static FILE*
-openFile(char* filename)
-{
-    FILE* fd = fopen(filename, "r");
-    if (fd == NULL) {
-	fprintf(stderr, "mkversion: %s: Could not open for reading.\n",
-	    filename);
-	exit(-1);
-    }
-    return (fd);
-}
-
 int
 main(int argc, char* argv[])
 {
-    char* versionFile = "../VERSION";
-    char* alphaFile = "../dist/tiff.alpha";
-    char version[128];
-    char alpha[128];
     FILE* fd;
-    char* cp;
 
-    argc--, argv++;
-    while (argc > 0 && argv[0][0] == '-') {
-	if (strcmp(argv[0], "-v") == 0) {
-	    if (argc < 1)
-		usage();
-	    argc--, argv++;
-	    versionFile = argv[0];
-	} else if (strcmp(argv[0], "-a") == 0) {
-	    if (argc < 1)
-		usage();
-	    argc--, argv++;
-	    alphaFile = argv[0];
-	} else
-	    usage();
-	argc--, argv++;
-    }
-    fd = openFile(versionFile);
-    if (fgets(version, sizeof (version)-1, fd) == NULL) {
-	fprintf(stderr, "mkversion: No version information in %s.\n",
-	    versionFile);
+    if (argc != 5 && argc != 6) {
+	fprintf(stderr, "usage: %s major minor alpha type [outfile]\n",
+	    argv[0]);
 	exit(-1);
     }
-    cp = strchr(version, '\n');
-    if (cp)
-	*cp = '\0';
-    fclose(fd);
-    fd = openFile(alphaFile);
-    if (fgets(alpha, sizeof (alpha)-1, fd) == NULL) {
-	fprintf(stderr, "mkversion: No alpha information in %s.\n", alphaFile);
-	exit(-1);
-    }
-    fclose(fd);
-    cp = strchr(alpha, ' ');		/* skip to 3rd blank-separated field */
-    if (cp)
-	cp = strchr(cp+1, ' ');
-    if (cp) {				/* append alpha to version */
-	char* tp;
-	for (tp = strchr(version, '\0'), cp++; *tp = *cp; tp++, cp++)
-	    ;
-	if (tp[-1] == '\n')
-	    tp[-1] = '\0';
-    } else {
-	fprintf(stderr, "mkversion: Malformed alpha information in %s.\n",
-	    alphaFile);
-	exit(-1);
-    }
-    if (argc > 0) {
-	fd = fopen(argv[0], "w");
+    if (argc == 6) {
+	fd = fopen(argv[5], "w");
 	if (fd == NULL) {
-	    fprintf(stderr, "mkversion: %s: Could not open for writing.\n",
-		argv[0]);
+	    fprintf(stderr, "%s: %s: Could not open for writing.\n",
+		argv[0], argv[5]);
 	    exit(-1);
 	}
     } else
 	fd = stdout;
-    fprintf(fd, "#define VERSION \"LIBTIFF, Version %s\\n", version);
+    if (strcmp(argv[4], "beta") == 0)
+	fprintf(fd, "#define VERSION \"LIBTIFF, Version %s.%sbeta%s\\n",
+	    argv[1], argv[2], argv[3]);
+    else
+	fprintf(fd, "#define VERSION \"LIBTIFF, Version %s.%s%s (alpha %s)\\n",
+	    argv[1], argv[2], argv[4], argv[3]);
     fprintf(fd, "Copyright (c) 1988-1996 Sam Leffler\\n");
     fprintf(fd, "Copyright (c) 1991-1996 Silicon Graphics, Inc.\"\n");
 

@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.48 1996/04/26 03:36:20 sam Rel $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.49 1996/05/21 18:30:05 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -145,7 +145,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.48 $"
+	echo "This is TIFF configure $Revision: 1.49 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -250,12 +250,14 @@ else
     VERSIONFILE=$SRCDIR/VERSION
     ALPHAFILE=$SRCDIR/dist/tiff.alpha
 fi
-VERSION="v`cat $VERSIONFILE``awk '{print $3}' $ALPHAFILE`"
 DATE=`date`
 
-DIST_MAJOR=`echo $VERSION | sed 's/v\([0-9][0-9]*\)\..*/\1/'`
-DIST_MINOR=`echo $VERSION | sed 's/v.*\.\([0-9][0-9]*\).*/\1/'`
-DIST_ALPHA=`echo $VERSION | sed -e 's/.*beta//' -e 's/.*release//'`
+eval `cat $VERSIONFILE | sed 's/\([0-9][0-9]*\)\.\([0-9][0-9]*\)\(.*\)/DIST_MAJOR=\1; DIST_MINOR=\2; DIST_TYPE=\3/'`
+DIST_ALPHA=`awk '{print $3}' $ALPHAFILE`
+VERSION="v${DIST_MAJOR}.${DIST_MINOR}${DIST_TYPE}"
+if [ $DIST_TYPE = beta ]; then
+    VERSION="${VERSION}${DIST_ALPHA}"
+fi
 
 Note()
 {
@@ -1080,11 +1082,12 @@ Note ""
 Note "Checking for Dynamic Shared Object (DSO) support."
 if [ "$DSO" = auto ]; then
     DSOSUF_VERSION=
+    DSOLD='${LD}'
+    TIFFLIBREF=
     case $TARGET-$CC-$ISGCC in
     *-irix5.2*)
 	if (findApp rld /lib:/usr/lib:$PATH) >/dev/null 2>&1; then
 	    DSOSUF=so
-	    DSOLD='${LD}'
 	    DSOOPTS='-elf -shared -no_unresolved -all'
 	    DSO=IRIX52
 	fi
@@ -1099,14 +1102,12 @@ if [ "$DSO" = auto ]; then
 	;;
     *-aix*)
 	DSOSUF=a
-	DSOLD='${LD}'
 	DSOOPTS='-r'
 	LIBCOPTS="-bM\:SRE"
 	DSO=AIX
 	;;
     *-hpux*)
 	DSOSUF=sl
-	DSOLD='${LD}'
 	DSOOPTS='-b'
 	LIBCOPTS="+Z"
 #	LIBPORT="-Wl,+b${DIR_LIB}"
@@ -1114,19 +1115,23 @@ if [ "$DSO" = auto ]; then
 	;;
     *-solaris*-yes)
 	DSOSUF=so
-	DSOLD='${LD}'
 	DSOOPTS='-G'
 	LIBCOPTS="-fpic"
 	DSO=SOLARIS
 	;;
     *-solaris*)
 	DSOSUF=so
-	DSOLD='${LD}'
 	DSOOPTS='-G'
 	LIBCOPTS="-K PIC"
 	DSO=SOLARIS
 	;;
-    *-linux)
+    *-netbsd*)
+	DSOSUF=so.${DIST_MAJOR}.0
+	LIBCOPTS='-fPIC'
+	DSO=NETBSD
+	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
+	;;
+    *-linux*)
 	if [ -x /lib/libc.so.5 ]; then
 	    DSOSUF=so.${DIST_MAJOR}
 	    DSOSUF_VERSION=${DSOSUF}.${DIST_MINOR}.${DIST_ALPHA}
@@ -1142,6 +1147,7 @@ if [ "$DSO" = auto ]; then
 	;;
     *)  DSO=no;;
     esac
+    test -z "$TIFFLIBREF" && TIFFLIBREF="\${DEPTH}/libtiff/libtiff.${DSOSUF}"
     test -z "$DSOSUF_VERSION" && DSOSUF_VERSION=${DSOSUF}
 fi
 if [ "$DSO" != no ]; then
@@ -1689,6 +1695,7 @@ cat>>confsed<<EOF
 /@DIST_ALPHA@/s;;${DIST_ALPHA};g
 /@DIST_MAJOR@/s;;${DIST_MAJOR};g
 /@DIST_MINOR@/s;;${DIST_MINOR};g
+/@DIST_TYPE@/s;;${DIST_TYPE};g
 /@DSO@/s;;${DSO};g
 /@DSOSUF@/s;;${DSOSUF};g
 /@DSOSUF_VERSION@/s;;${DSOSUF_VERSION};g
@@ -1723,6 +1730,7 @@ cat>>confsed<<EOF
 /@RELSRCDIR@/s;;`relativize ${SRCDIR}`;g
 /@STRIP@/s;;${STRIP};g
 /@TARGET@/s;;${TARGET};g
+/@TIFFLIBREF@/s;;${TIFFLIBREF};g
 /@VERSION@/s;;${VERSION};g
 /@VERSIONFILE@/s;;`relativize ${VERSIONFILE}`;g
 /@WARNING@/s;;Warning, this file was automatically created by the TIFF configure script;g

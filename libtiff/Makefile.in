@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.34 1996/04/26 03:36:20 sam Rel $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.36 1996/05/21 18:30:39 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -171,7 +171,7 @@ IRIX52dso: ${OBJS}
 	touch $@
 # Solaris 2.4
 SOLARISdso: ${OBJS}
-	${LD} -L@DIR_LIB@ -G -o libtiff.@DSOSUF@ ${OBJS}
+	${LD} -L@DIR_LIB@ -G -h libtiff.@DSOSUF@ -o libtiff.@DSOSUF@ ${OBJS}
 	touch $@
 # HP-UX A.09.03
 HPUXdso: ${OBJS}
@@ -190,6 +190,14 @@ AIXdso: ${OBJS}
 	${AR} ${AROPTS} libtiff.@DSOSUF@ shr.o
 	rm -f shr.o
 	touch $@
+# NetBSD 1.1 and newer
+NETBSDdso: ${OBJS}
+	@rm -f libtiff_pic.a
+	@${AR} cq libtiff_pic.a `lorder ${OBJS} | tsort -q`
+	${RANLIB} libtiff_pic.a
+	${LD} -x -Bshareable -Bforcearchive -o libtiff.@DSOSUF@ libtiff_pic.a
+	rm -f libtiff_pic.a
+	touch $@
 # linux ELF shared lib rule
 LINUXdso:  ${OBJS}
 	${CC} -shared -Wl,-soname,libtiff.@DSOSUF@ \
@@ -204,12 +212,10 @@ OSFdso: ${OBJS}
 ${OBJS}: ${SRCDIR}/tiffio.h ${SRCDIR}/tiff.h ${SRCDIR}/tif_dir.h
 ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h
 
-ALPHA	= @ALPHAFILE@
-VERSION	= @VERSIONFILE@
-
-version.h: ${VERSION} ${ALPHA} ${SRCDIR}/mkversion.c
+version.h: ${SRCDIR}/mkversion.c
 	${CC} -o mkversion ${CFLAGS} ${SRCDIR}/mkversion.c
-	rm -f version.h; ./mkversion -v ${VERSION} -a ${ALPHA} version.h
+	rm -f version.h; ./mkversion \
+	    @DIST_MAJOR@ @DIST_MINOR@ @DIST_ALPHA@ @DIST_TYPE@ version.h
 tif_version.o: version.h
 
 #

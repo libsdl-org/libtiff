@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/dist/RCS/tiff.spec,v 1.3 1996/01/10 19:37:41 sam Rel $
+#	$Header: /usr/people/sam/tiff/dist/RCS/tiff.spec,v 1.3 1996/01/10 19:37:41 sam Exp $
 #
 # TIFF Software
 #

@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.51 1996/04/29 19:51:20 sam Rel $
+#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.54 1996/05/21 18:59:50 sam Exp $
 #
 # @WARNING@
 #
@@ -259,6 +259,7 @@ TIFFFILES=\
 	    html/misc.html			\
 	    html/support.html			\
 	    html/tools.html			\
+	    html/v3.4beta034.html		\
 	    html/v3.4beta033.html		\
 	    html/v3.4beta032.html		\
 	    html/v3.4beta031.html		\
@@ -346,7 +347,7 @@ alpha:
 
 # stamp relevant files according to current alpha
 alpha.stamp:
-	VERSION=`awk '{print "Alpha" $$3}' ${SRCDIR}/dist/tiff.alpha`;\
+	VERSION="Alpha@DIST_ALPHA@";					\
 	NOW=`date`;							\
 	for i in ${TIFFFILES}; do					\
 	    REV=`rlog -h -d"$$NOW" ${SRCDIR}/$$i|fgrep 'head:'|awk '{print $$2}'`;\
@@ -354,8 +355,10 @@ alpha.stamp:
 	done
 
 purge-old-alphas:
-	VERSIONS=`awk '{for (i=1; i<=$$3; i++) printf " -nAlpha%03d",i}'\
-	    ${SRCDIR}/dist/tiff.alpha`;					\
+	VERSIONS=`awk 'BEGIN {						\
+		for (i=1; i<=@DIST_ALPHA@; i++) printf " -nAlpha%03d",i;\
+		exit							\
+	    }'`;							\
 	for i in ${TIFFFILES}; do					\
 	    echo rcs $$VERSIONS ${SRCDIR}/$$i;				\
 	    rcs $$VERSIONS ${SRCDIR}/$$i && co ${SRCDIR}/$$i;		\
@@ -368,7 +371,7 @@ alphadiff:
 
 # create alpha distribution archive
 alpha.tar:
-	VERSION="v`cat ${SRCDIR}/VERSION``awk '{print $$3}' ${SRCDIR}/dist/tiff.alpha`";	\
+	VERSION="@VERSION@";						\
 	rm -f tiff-$$VERSION $$VERSION $$VERSION-tar;			\
 	ln -s ${SRCDIR} tiff-$$VERSION;					\
 	(for i in ${DISTFILES}; do					\
@@ -388,16 +391,15 @@ release:
 	${MAKE} release.tar
 
 release.stamp:
-	VERSION="Release`sed 's/\./_/g' ${SRCDIR}/VERSION`";		\
 	NOW=`date`;							\
 	for i in ${TIFFFILES}; do					\
 	    REV=`rlog -h -d"$$NOW" ${SRCDIR}/$$i|fgrep 'head:'|awk '{print $$2}'`;\
-	    rcs "-N$$VERSION:$$REV" "-sRel:$$REV" ${SRCDIR}/$$i && co -sRel ${SRCDIR}/$$i;	\
+	    rcs "-NRelease@DIST_MAJOR@_@DIST_MINOR@_@DIST_TYPE@:$$REV" "-sRel:$$REV" ${SRCDIR}/$$i && co -sRel ${SRCDIR}/$$i;	\
 	done
 
 # create release distribution archive
 release.tar:
-	VERSION=v`cat ${SRCDIR}/VERSION`;				\
+	VERSION="@VERSION@";						\
 	rm -f tiff-$$VERSION $$VERSION $$VERSION-tar;			\
 	ln -s ${SRCDIR} tiff-$$VERSION;					\
 	(for i in ${DISTFILES}; do					\

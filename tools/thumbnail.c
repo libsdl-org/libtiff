@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/thumbnail.c,v 1.11 1996/01/10 19:35:33 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/thumbnail.c,v 1.11 1996/01/10 19:35:33 sam Exp $ */
 
 /*
  * Copyright (c) 1994-1996 Sam Leffler

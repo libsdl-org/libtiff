@@ -1,4 +1,4 @@
-/* "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_atari.c,v 1.5 1996/01/10 19:32:54 sam Rel $" */
+/* "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_atari.c,v 1.5 1996/01/10 19:32:54 sam Exp $" */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

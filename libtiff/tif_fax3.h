@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.29 1996/02/09 22:51:07 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.30 1996/05/10 14:45:33 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -262,7 +262,7 @@ static const char* StateNames[] = {
 	    NeedBits16(11,eoflab);					\
 	    if (GetBits(11) == 0)					\
 		break;							\
-	    ClrBits(11);						\
+	    ClrBits(1);							\
 	}								\
     }									\
     for (;;) {								\

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgisv.c,v 1.25 1996/01/10 19:35:33 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgisv.c,v 1.25 1996/01/10 19:35:33 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler

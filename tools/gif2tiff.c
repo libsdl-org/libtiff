@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.27 1996/04/22 22:03:26 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.27 1996/04/22 22:03:26 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler

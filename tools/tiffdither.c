@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdither.c,v 1.26 1996/01/10 19:35:37 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdither.c,v 1.26 1996/01/10 19:35:37 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.49 1996/03/29 16:38:33 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.49 1996/03/29 16:38:33 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

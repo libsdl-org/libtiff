@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffsplit.c,v 1.13 1996/01/10 19:35:40 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffsplit.c,v 1.13 1996/01/10 19:35:40 sam Exp $ */
 
 /*
  * Copyright (c) 1992-1996 Sam Leffler

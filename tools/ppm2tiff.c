@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.26 1996/04/22 22:03:26 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.26 1996/04/22 22:03:26 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ras2tiff.c,v 1.29 1996/01/10 19:35:30 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ras2tiff.c,v 1.29 1996/01/10 19:35:30 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.71 1996/04/29 22:16:05 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.72 1996/05/10 14:43:54 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -150,6 +150,11 @@ typedef	enum {
 #define	    COMPRESSION_CCITTRLEW	32771	/* #1 w/ word alignment */
 #define	    COMPRESSION_PACKBITS	32773	/* Macintosh RLE */
 #define	    COMPRESSION_THUNDERSCAN	32809	/* ThunderScan RLE */
+/* codes 32895-32898 are reserved for ANSI IT8 TIFF/IT <dkelly@etsinc.com) */
+#define	    COMPRESSION_IT8CTPAD	32895   /* IT8 CT w/padding */
+#define	    COMPRESSION_IT8LW		32896   /* IT8 Linework RLE */
+#define	    COMPRESSION_IT8MP		32897   /* IT8 Monochrome picture */
+#define	    COMPRESSION_IT8BL		32898   /* IT8 Binary line art */
 /* compression codes 32908-32911 are reserved for Pixar */
 #define     COMPRESSION_PIXARFILM	32908   /* Pixar companded 10bit LZW */
 #define	    COMPRESSION_PIXARLOG	32909   /* Pixar companded 11bit ZIP */
@@ -311,6 +316,21 @@ typedef	enum {
 #define TIFFTAG_WRITERSERIALNUMBER      33405   /* device serial number */
 /* tag 33432 is listed in the 6.0 spec w/ unknown ownership */
 #define	TIFFTAG_COPYRIGHT		33432	/* copyright string */
+/* 34016-34029 are reserved for ANSI IT8 TIFF/IT <dkelly@etsinc.com) */
+#define TIFFTAG_IT8SITE			34016	/* site name */
+#define TIFFTAG_IT8COLORSEQUENCE	34017	/* color seq. [RGB,CMYK,etc] */
+#define TIFFTAG_IT8HEADER		34018	/* DDES Header */
+#define TIFFTAG_IT8RASTERPADDING	34019	/* raster scanline padding */
+#define TIFFTAG_IT8BITSPERRUNLENGTH	34020	/* # of bits in short run */
+#define TIFFTAG_IT8BITSPEREXTENDEDRUNLENGTH 34021/* # of bits in long run */
+#define TIFFTAG_IT8COLORTABLE		34022	/* LW colortable */
+#define TIFFTAG_IT8IMAGECOLORINDICATOR	34023	/* BP/BL image color switch */
+#define TIFFTAG_IT8BKGCOLORINDICATOR	34024	/* BP/BL bg color switch */
+#define TIFFTAG_IT8IMAGECOLORVALUE	34025	/* BP/BL image color value */
+#define TIFFTAG_IT8BKGCOLORVALUE	34026	/* BP/BL bg color value */
+#define TIFFTAG_IT8PIXELINTENSITYRANGE	34027	/* MP pixel intensity value */
+#define TIFFTAG_IT8TRANSPARENCYINDICATOR 34028	/* HC transparency switch */
+#define TIFFTAG_IT8COLORCHARACTERIZATION 34029	/* color character. table */
 /* tags 34232-34236 are private tags registered to Texas Instruments */
 #define TIFFTAG_FRAMECOUNT              34232   /* Sequence Frame Count */
 /* tag 34750 is a private tag registered to Pixel Magic */

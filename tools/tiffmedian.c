@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffmedian.c,v 1.18 1995/10/10 00:35:22 sam Rel $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffmedian.c,v 1.18 1995/10/10 00:35:22 sam Exp $ */
 
 /*
  * Apply median cut on an image.
