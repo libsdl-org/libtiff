@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.50 2005-02-05 13:17:26 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.51 2005-03-03 16:00:01 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -589,6 +589,7 @@ TIFFReadDirectory(TIFF* tif)
       (td->td_compression == COMPRESSION_NONE && \
        td->td_stripbytecount[0] > TIFFGetFileSize(tif) - td->td_stripoffset[0]) || \
       (tif->tif_mode == O_RDONLY && \
+       td->td_compression == COMPRESSION_NONE && \
        td->td_stripbytecount[0] < TIFFScanlineSize(tif) * td->td_imagelength) )
 	} else if (td->td_nstrips == 1 && BYTECOUNTLOOKSBAD) {
 		/*
