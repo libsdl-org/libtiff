@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.14 2002-10-04 13:50:25 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.15 2002-10-06 23:31:21 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -51,7 +51,7 @@
  *
  * See http://bugzilla.remotesensing.org/show_bug.cgi?id=39
  */
-#if defined(_H_INTTYPES) && defined(_ALL_SOURCE)
+#if defined(_H_INTTYPES) && defined(_ALL_SOURCE) && defined(USING_VISUALAGE)
 
 #define _TIFF_DATA_TYPEDEFS_
 typedef unsigned char uint8;
