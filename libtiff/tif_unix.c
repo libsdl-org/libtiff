@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_unix.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_unix.c,v 1.2 1999-09-24 03:05:12 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -139,6 +139,12 @@ TIFFOpen(const char* name, const char* mode)
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
 		return ((TIFF*)0);
+
+/* for cygwin */        
+#ifdef O_BINARY
+        m |= O_BINARY;
+#endif        
+        
 #ifdef _AM29K
 	fd = open(name, m);
 #else
