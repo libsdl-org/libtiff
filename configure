@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.15 2001-05-10 02:14:16 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.16 2001-05-12 03:11:59 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.15 $"
+	echo "This is TIFF configure $Revision: 1.16 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -649,7 +649,7 @@ SHELL=@SHELL@
 all:
 	@if [ -n "${MAKE}" ] ; then echo "make sets make"  ; fi
 EOF
-) | tee out.sh | $MAKE -f - | grep "make sets make" > /dev/null ; then
+) | $MAKE -f - | grep "make sets make" > /dev/null ; then
 	SETMAKE=
     else
 	Note "Looks like $MAKE does not setup MAKE in Makefiles, will compensate."
