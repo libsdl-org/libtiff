@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.2 1999-08-17 02:48:10 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.3 1999-09-15 01:28:47 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -174,7 +174,7 @@ TIFFOpen(const char* name, const char* mode)
 		dwMode = OPEN_ALWAYS;
 		break;
 	case O_RDWR|O_CREAT:
-		dwMode = CREATE_NEW;
+		dwMode = OPEN_ALWAYS;
 		break;
 	case O_RDWR|O_TRUNC:
 		dwMode = CREATE_ALWAYS;
