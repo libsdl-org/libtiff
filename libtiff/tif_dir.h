@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.9 2002-08-15 12:59:08 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.10 2002-09-12 12:33:30 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -248,7 +248,6 @@ typedef	struct {
 #if defined(__cplusplus)
 extern "C" {
 #endif
-extern	int TIFFDataWidth(TIFFDataType);	/* table of tag datatype widths */
 extern	void _TIFFSetupFieldInfo(TIFF*);
 extern	void _TIFFPrintFieldInfo(TIFF*, FILE*);
 extern	TIFFDataType _TIFFSampleToTagType(TIFF*);

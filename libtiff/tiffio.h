@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.14 2002-04-09 19:36:12 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.15 2002-09-12 12:33:30 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -327,6 +327,7 @@ extern	tsize_t TIFFWriteEncodedStrip(TIFF*, tstrip_t, tdata_t, tsize_t);
 extern	tsize_t TIFFWriteRawStrip(TIFF*, tstrip_t, tdata_t, tsize_t);
 extern	tsize_t TIFFWriteEncodedTile(TIFF*, ttile_t, tdata_t, tsize_t);
 extern	tsize_t TIFFWriteRawTile(TIFF*, ttile_t, tdata_t, tsize_t);
+extern	int TIFFDataWidth(TIFFDataType);	/* table of tag datatype widths */
 extern	void TIFFSetWriteOffset(TIFF*, toff_t);
 extern	void TIFFSwabShort(uint16*);
 extern	void TIFFSwabLong(uint32*);
