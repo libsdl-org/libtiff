@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.30 1996/05/10 14:45:33 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.31 1996/06/04 19:04:41 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -141,7 +141,7 @@ extern	const TIFFFaxTabEnt TIFFFaxBlackTable[];
 		goto eoflab;						\
 	    BitsAvail = (n);			/* pad with zeros */	\
 	} else {							\
-	    BitAcc |= bitmap[*cp++]<<BitsAvail;				\
+	    BitAcc |= ((uint32) bitmap[*cp++])<<BitsAvail;		\
 	    BitsAvail += 8;						\
 	}								\
     }									\
@@ -155,13 +155,13 @@ extern	const TIFFFaxTabEnt TIFFFaxBlackTable[];
 		goto eoflab;						\
 	    BitsAvail = (n);			/* pad with zeros */	\
 	} else {							\
-	    BitAcc |= bitmap[*cp++]<<BitsAvail;				\
+	    BitAcc |= ((uint32) bitmap[*cp++])<<BitsAvail;		\
 	    if ((BitsAvail += 8) < (n)) {				\
 		if (EndOfData()) {					\
 		    /* NB: we know BitsAvail is non-zero here */	\
 		    BitsAvail = (n);		/* pad with zeros */	\
 		} else {						\
-		    BitAcc |= bitmap[*cp++]<<BitsAvail;			\
+		    BitAcc |= ((uint32) bitmap[*cp++])<<BitsAvail;	\
 		    BitsAvail += 8;					\
 		}							\
 	    }								\

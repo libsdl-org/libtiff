@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.36 1996/05/21 18:30:39 sam Exp $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.38 1996/06/10 20:48:50 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -190,8 +190,8 @@ AIXdso: ${OBJS}
 	${AR} ${AROPTS} libtiff.@DSOSUF@ shr.o
 	rm -f shr.o
 	touch $@
-# NetBSD 1.1 and newer
-NETBSDdso: ${OBJS}
+# NetBSD 1.1 or FreeBSD
+NETBSDdso FREEBSDdso: ${OBJS}
 	@rm -f libtiff_pic.a
 	@${AR} cq libtiff_pic.a `lorder ${OBJS} | tsort -q`
 	${RANLIB} libtiff_pic.a
@@ -212,10 +212,12 @@ OSFdso: ${OBJS}
 ${OBJS}: ${SRCDIR}/tiffio.h ${SRCDIR}/tiff.h ${SRCDIR}/tif_dir.h
 ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h
 
-version.h: ${SRCDIR}/mkversion.c
+ALPHA	= @ALPHAFILE@
+VERSION	= @VERSIONFILE@
+
+version.h: ${VERSION} ${ALPHA} ${SRCDIR}/mkversion.c
 	${CC} -o mkversion ${CFLAGS} ${SRCDIR}/mkversion.c
-	rm -f version.h; ./mkversion \
-	    @DIST_MAJOR@ @DIST_MINOR@ @DIST_ALPHA@ @DIST_TYPE@ version.h
+	rm -f version.h; ./mkversion -v ${VERSION} -a ${ALPHA} version.h
 tif_version.o: version.h
 
 #

@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.54 1996/05/21 18:59:50 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.57 1996/06/10 22:24:41 sam Exp $
 #
 # @WARNING@
 #
@@ -35,13 +35,13 @@ SRCDIR	= @SRCDIR@
 # DATE:		@DATE@
 # TARGET:	@TARGET@
 # CCOMPILER:	@CCOMPILER@
-# CXXCOMPILER:	@CXXCOMPILER@
 #
 @SETMAKE@
 SHELL	= @SCRIPT_SH@
 NULL	=
 ECHO	= echo
 GENDIST	= ${TOOLROOT}/usr/sbin/gendist
+INSTALL	= @INSTALL@
 
 all default:
 	@if [ "@PORT@" = yes ]; then \
@@ -57,6 +57,11 @@ install:
 	@${ECHO} "= "libtiff; cd libtiff; ${MAKE} install
 	@${ECHO} "= "tools; cd tools; ${MAKE} install
 	@${ECHO} "= "man; cd man; ${MAKE} install
+	@if [ "@HTML@" = yes ]; then \
+	    ${ECHO} "= "html; cd html; ${MAKE} install; \
+	else \
+	    true; \
+	fi
 
 clean:
 	@if [ "@PORT@" = yes ]; then \
@@ -76,14 +81,22 @@ clobber distclean: clean
 	rm -f tools/Makefile
 	rm -f man/Makefile
 	rm -f port/Makefile port/install.sh
+	rm -f html/Makefile
 
 #
 # The folllowing rule creates a binary distribution for IRIX.
 #
+installLink::
+	if [ @DIR_LIB@ != /usr/lib ]; then				\
+	    ${INSTALL} -idb tiff.sw.tools -F /usr/lib			\
+		-lns @DIR_LIB@/libtiff.@DSOSUF@ -O libtiff.@DSOSUF@;	\
+	else								\
+	    true;							\
+	fi
 product::
 	test -d dist || mkdir dist
 	rm -f dist/rawidb
-	SRC=`pwd` RAWIDB=`pwd`/dist/rawidb ${MAKE} install
+	SRC=`pwd` RAWIDB=`pwd`/dist/rawidb ${MAKE} install installLink
 	rm -f dist/idb
 	sort -u +4 dist/rawidb > dist/idb
 	${GENDIST} -v -dist dist -idb dist/idb \

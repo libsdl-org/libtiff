@@ -1,4 +1,4 @@
-# $Header: /usr/people/sam/tiff/RCS/config.site,v 1.12 1996/02/22 18:16:44 sam Exp $
+# $Header: /usr/people/sam/tiff/RCS/config.site,v 1.13 1996/06/05 21:24:33 sam Exp $
 #
 # TIFF Software
 #
@@ -45,6 +45,7 @@
 #ZIP="no"			# yes|no configure Deflate support (see below)
 #LIBGL="auto"			# yes|no|auto configure IRIS GL-based tools
 #LIBIMAGE="auto"		# yes|no|auto configure SGI RGB image tools
+#HTML="no"			# yes|no install HTML documentation
 
 #
 # Directory parameters.
@@ -53,6 +54,7 @@
 #DIR_LIB="/usr/local/lib"		# directory for libraries
 #DIR_INC="/usr/local/include"		# directory for include files
 #DIR_MAN="/usr/local/man"		# directory for manual pages
+#DIR_HTML="/var/httpd/htdocs/tiff"	# directory for HTML documentation
 
 #
 # Configuring supporting libraries.

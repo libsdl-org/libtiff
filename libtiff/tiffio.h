@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.93 1996/03/07 17:00:14 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.94 1996/06/04 19:04:41 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -65,7 +65,7 @@ typedef	struct tiff TIFF;
  * NB: toff_t is not off_t for many reasons; TIFFs max out at
  *     32-bit file offsets being the most important
  */
-typedef	unsigned int ttag_t;	/* directory tag */
+typedef	uint32 ttag_t;		/* directory tag */
 typedef	uint16 tdir_t;		/* directory index */
 typedef	uint16 tsample_t;	/* sample number */
 typedef	uint32 tstrip_t;	/* strip number */

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ras2tiff.c,v 1.29 1996/01/10 19:35:30 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ras2tiff.c,v 1.30 1996/06/10 20:47:54 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -32,7 +32,9 @@
 #include "rasterfile.h"
 #include "tiffio.h"
 
+#ifndef howmany
 #define	howmany(x, y)	(((x)+((y)-1))/(y))
+#endif
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 

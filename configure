@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.49 1996/05/21 18:30:05 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.52 1996/06/10 20:48:14 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -47,6 +47,7 @@ SRCDIR=					# dir where source is located
 DIR_BIN=/usr/local/bin			# destination for applications
 DIR_LIB=/usr/local/lib			# destination for library
 DIR_INC=/usr/local/include		# destination for include files
+DIR_HTML=/var/httpd/htdocs/tiff		# destination for HTML files
 DIRS_LIBINC=				# dirs to search for ancillary includes
 DIR_JPEGLIB=				# dir for IJG -ljpeg
 DIR_GZLIB=				# dir for zlib -lgz
@@ -55,6 +56,7 @@ LIBCOPTS=				# library-specific C-compiler options
 JPEG=no					# configure JPEG support
 ZIP=no					# configure ZIP/Deflate support
 PORT=auto				# enable portability emulations
+HTML=no					# install HTML documentation
 LIBGL=auto				# auto-enable build of SGI -lgl apps
 LIBIMAGE=auto				# auto-enable build of SGI -limage apps
 MACHDEPLIBS=-lm				# machine-dependent libraries for apps
@@ -145,7 +147,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.49 $"
+	echo "This is TIFF configure $Revision: 1.52 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1081,6 +1083,7 @@ Note "Done checking system libraries."
 Note ""
 Note "Checking for Dynamic Shared Object (DSO) support."
 if [ "$DSO" = auto ]; then
+    DSO=no
     DSOSUF_VERSION=
     DSOLD='${LD}'
     TIFFLIBREF=
@@ -1131,6 +1134,12 @@ if [ "$DSO" = auto ]; then
 	DSO=NETBSD
 	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
 	;;
+    *-freebsd*)
+	DSOSUF=so.${DIST_MAJOR}.0
+	LIBCOPTS='-fpic -fPIC'
+	DSO=FREEBSD
+	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
+	;;
     *-linux*)
 	if [ -x /lib/libc.so.5 ]; then
 	    DSOSUF=so.${DIST_MAJOR}
@@ -1145,10 +1154,7 @@ if [ "$DSO" = auto ]; then
 	DSOOPTS='-shared'
 	DSO=OSF
 	;;
-    *)  DSO=no;;
     esac
-    test -z "$TIFFLIBREF" && TIFFLIBREF="\${DEPTH}/libtiff/libtiff.${DSOSUF}"
-    test -z "$DSOSUF_VERSION" && DSOSUF_VERSION=${DSOSUF}
 fi
 if [ "$DSO" != no ]; then
     JUNK="$JUNK t.${DSOSUF}"
@@ -1181,6 +1187,8 @@ if [ "$DSO" = no ]; then
     DSOSUF=a DSOOPTS= LIBCOPTS= 
     DSOSUF_VERSION=$DSOSUF
 fi
+test -z "$TIFFLIBREF" && TIFFLIBREF="\${DEPTH}/libtiff/libtiff.${DSOSUF}"
+test -z "$DSOSUF_VERSION" && DSOSUF_VERSION=${DSOSUF}
 Note "Done checking for DSO support."
 
 Note ""
@@ -1450,7 +1458,8 @@ TIFF configuration parameters are:
 [ 2] Directory for libraries:           $DIR_LIB
 [ 3] Directory for include files:       $DIR_INC
 [ 4] Directory for manual pages:        $DIR_MAN
-[ 5] Manual page installation scheme:   $MANSCHEME
+[ 5] Directory for HTML documents:      $DIR_HTML
+[ 6] Manual page installation scheme:   $MANSCHEME
 
 EOF
 }
@@ -1470,7 +1479,10 @@ promptForParameter()
     4)	promptForNonNullStringParameter "$DIR_MAN" \
 	    "Directory to install manual pages";	DIR_MAN="$param"
 	;;
-    5)	promptForManPageScheme;;
+    5)	promptForNonNullStringParameter "$DIR_HTML" \
+	    "Directory to install HTML documents";	DIR_HTML="$param"
+	;;
+    6)	promptForManPageScheme;;
     esac
 }
 
@@ -1688,6 +1700,7 @@ cat>>confsed<<EOF
 /@DIR_BIN@/s;;${DIR_BIN};g
 /@DIR_JPEGLIB@/s;;`relativize ${DIR_JPEGLIB}`;g
 /@DIR_GZLIB@/s;;`relativize ${DIR_GZLIB}`;g
+/@DIR_HTML@/s;;${DIR_HTML};g
 /@DIR_INC@/s;;${DIR_INC};g
 /@DIR_LIB@/s;;${DIR_LIB};g
 /@DIR_MAN@/s;;${DIR_MAN};g
@@ -1702,6 +1715,7 @@ cat>>confsed<<EOF
 /@ENVOPTS@/s;;${ENVOPTS};g
 /@FILLORDER@/s;;${FILLORDER};g
 /@GCOPTS@/s;;${GCOPTS};g
+/@HTML@/s;;${HTML};g
 /@INSTALL@/s;;${INSTALL};g
 /@LIBJPEG@/s;;`relativize ${LIBJPEG}`;g
 /@LIBGL@/s;;${LIBGL};g
@@ -1797,10 +1811,10 @@ if [ $SRCDIR_IS_LIBTIFF != yes ] ; then
         tools/Makefile
         port/install.sh
         "
+    test $HTML = yes &&		CONF_FILES="$CONF_FILES html/Makefile"
+    test $PORT = yes &&		CONF_FILES="$CONF_FILES port/Makefile"
 fi
-
 SedConfigFiles $CONF_FILES
-test $PORT = yes &&		   SedConfigFiles port/Makefile
 
 Note "Done."
 

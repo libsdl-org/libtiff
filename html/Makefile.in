@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/html/RCS/Makefile.in,v 1.11 1996/05/21 18:57:50 sam Exp $
+#	$Header: /usr/people/sam/tiff/html/RCS/Makefile.in,v 1.13 1996/06/05 21:43:27 sam Exp $
 #
 # @WARNING@
 #
@@ -86,7 +86,6 @@ IMAGES=\
 	images/ring.gif		\
 	images/smallliz.jpg	\
 	images/strike.gif	\
-	images/strike.jpg	\
 	images/warning.gif	\
 	${NULL}
 TARGETS=
@@ -94,9 +93,9 @@ TARGETS=
 all:	${TARGETS}
 
 install: all
-	${INSTALL} -m 755 -dir -idb tiff.html.sw ${HTML} ${HTML}/images
+	${INSTALL} -m 755 -dir -idb tiff.man.html ${HTML} ${HTML}/images
 	for i in ${HTMLFILES} ${IMAGES}; do \
-	    ${INSTALL} -idb tiff.html.sw -m 444 -F ${HTML} \
+	    ${INSTALL} -idb tiff.man.html -m 444 -F ${HTML} \
 		-src ${SRCDIR}/$$i -O $$i; \
 	done
 

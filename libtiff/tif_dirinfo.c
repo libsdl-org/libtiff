@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirinfo.c,v 1.37 1996/01/10 19:32:58 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirinfo.c,v 1.38 1996/06/04 19:04:41 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -232,7 +232,8 @@ tagCompare(const void* a, const void* b)
 {
 	const TIFFFieldInfo* ta = *(const TIFFFieldInfo**) a;
 	const TIFFFieldInfo* tb = *(const TIFFFieldInfo**) b;
- 	int c = ta->field_tag - tb->field_tag;
+	/* NB: width of c must match ttag_t */
+ 	int32 c = ta->field_tag - tb->field_tag;
 	return (c != 0 ? c : tb->field_type - ta->field_type);
 }
 
