@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.21 2001-06-13 15:25:35 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.22 2001-07-18 13:37:12 warmerda Exp $
 #
 # @WARNING@
 #
@@ -399,6 +399,8 @@ CONTRIBFILES=\
 	contrib/ras/README			\
 	    contrib/ras/ras2tif.c		\
 	    contrib/ras/tif2ras.c		\
+	contrib/ojpeg/README			\
+	    contrib/ojpeg/jdhuff_add.c		\
 	contrib/vms/libtiff/makevms.com		\
 	    contrib/vms/libtiff/tiff.opt	\
 	    contrib/vms/libtiff/tiffshraxp.opt	\
