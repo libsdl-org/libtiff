@@ -1,5 +1,5 @@
 #! @SCRIPT_SH@
-#	$Header: /cvs/maptools/cvsroot/libtiff/port/Attic/install.sh.in,v 1.2 2003-03-07 02:37:26 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/port/Attic/install.sh.in,v 1.3 2003-10-25 17:48:09 dron Exp $
 #
 # @WARNING@
 #
@@ -104,7 +104,7 @@ do
     -o)		SaveFirst=yes;;
     -O)		RemoveFirst=yes; SaveFirst=yes;;
     -root)	shift; ROOT=$1;;
-    -dir)	CMD=mkdir; HasSource=no;
+    -dir)	CMD="mkdir -p"; HasSource=no;
 		RM=":"; STRIP=":"
 		;;
     -fifo)	CMD=@MKFIFO@; HasSource=no;
