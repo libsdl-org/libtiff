@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Attic/Makefile,v 1.9 2000-12-22 22:33:41 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Attic/Makefile,v 1.10 2001-01-23 21:41:21 mwelles Exp $
 #
 # Warning, this file was automatically created by the TIFF configure script
 #
@@ -32,7 +32,7 @@ SRCDIR	= .
 
 #
 # VERSION:	v3.5.6
-# DATE:		Fri Dec 22 17:22:51 EST 2000
+# DATE:		Tue Jan 23 16:40:27 EST 2001
 # TARGET:	i686-unknown-linux
 # CCOMPILER:	/usr/bin/gcc
 #
@@ -121,6 +121,7 @@ TIFFFILES=\
 	Makefile.in				\
 	README					\
 	VERSION					\
+	RELEASE-DATE				\
 	COPYRIGHT				\
 	TODO					\
 	test_pics.sh				\
@@ -513,9 +514,8 @@ release.tar.zip:
 	done) | sed "s;.*;tiff-$$VERSIONREL/&;" >$$VERSIONREL;		\
 	tar cvf $$VERSIONREL-tar `cat $$VERSIONREL`;				\
 	zip ../tiff-$$VERSIONREL.zip `cat $$VERSIONREL`; 				\
-#	rm -f tiff-$$VERSIONREL${ZIPSUF};				\
-	cat $$VERSIONREL-tar | ${COMPRESS} >../tiff-$$VERSIONREL.${ZIPSUF};	\
-#	rm -f tiff-$$VERSIONREL $$VERSIONREL $$VERSIONREL-tar;
+	cat $$VERSIONREL-tar | ${COMPRESS} >../tiff-$$VERSIONREL.tar.${ZIPSUF};	\
+	rm -f tiff-$$VERSIONREL $$VERSIONREL $$VERSIONREL-tar;
 #
 #	Simple rule to run test suite assuming that pics directory is 
 #	just below this one, and that .rpt files are available. 
