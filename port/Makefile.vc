@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.6 2004-06-06 17:58:04 dron Exp $
+# $Id: Makefile.vc,v 1.1 2004-06-06 17:57:08 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -24,65 +24,19 @@
 # Makefile for MS Visual C and Watcom C compilers.
 #
 # To build:
-# C:\libtiff\libtiff> nmake /f makefile.vc all
-#
+# C:\libtiff\port> nmake /f makefile.vc 
 
 !INCLUDE ..\nmake.opt
 
-INCL	= -I. $(JPEG_INCLUDE) $(ZLIB_INCLUDE)
-LIBS	= $(LIBS) ..\port\libport.lib
-
 OBJ	= \
-	tif_aux.obj \
-	tif_close.obj \
-	tif_codec.obj \
-	tif_color.obj \
-	tif_compress.obj \
-	tif_dir.obj \
-	tif_dirinfo.obj \
-	tif_dirread.obj \
-	tif_dirwrite.obj \
-	tif_dumpmode.obj \
-	tif_error.obj \
-	tif_extension.obj \
-	tif_fax3.obj \
-	tif_fax3sm.obj \
-	tif_getimage.obj \
-	tif_jpeg.obj \
-	tif_ojpeg.obj \
-	tif_flush.obj \
-	tif_luv.obj \
-	tif_lzw.obj \
-	tif_next.obj \
-	tif_open.obj \
-	tif_packbits.obj \
-	tif_pixarlog.obj \
-	tif_predict.obj \
-	tif_print.obj \
-	tif_read.obj \
-	tif_swab.obj \
-	tif_strip.obj \
-	tif_thunder.obj \
-	tif_tile.obj \
-	tif_win32.obj \
-	tif_version.obj \
-	tif_warning.obj \
-	tif_write.obj \
-	tif_zip.obj
+	strcasecmp.obj \
+	getopt.obj
 
-all:	libtiff.lib libtiff.dll
+all:	libport.lib
 
-config.h:
-	copy config.h.vc config.h
+libport.lib:	$(OBJ)
+	lib /nologo /out:libport.lib $(OBJ)
 
-libtiff.lib:	config.h $(OBJ)
-	lib /nologo /out:libtiff.lib $(OBJ) $(LIBS)
-
-libtiff.dll:	config.h $(OBJ)
-	link /nologo /dll /def:libtiff.def /out:libtiff.dll \
-	/implib:libtiff_i.lib $(OBJ) $(LIBS)
-	
 clean:
-	-del *.obj *.lib *.dll *.exe
-
+	-del *.obj *.lib
 

@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.3 2004-05-03 18:12:57 dron Exp $
+# $Id: Makefile.vc,v 1.4 2004-06-06 17:56:21 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -21,7 +21,7 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
 # OF THIS SOFTWARE.
 #
-# Simple MS VC++ Makefile
+# Makefile for MS Visual C and Watcom C compilers.
 # Edit nmake.opt file if you want to ajust building options.
 #
 # To build:
@@ -29,19 +29,27 @@
 
 !INCLUDE nmake.opt
 
-all: lib tools
+all:	port lib tools
 
-lib:
+port::
+	cd port
+	$(MAKE) /f Makefile.vc
+	cd..
+
+lib:	port
 	cd libtiff
 	$(MAKE) /f Makefile.vc
 	cd..
 
-tools:
+tools:	lib
 	cd tools
 	$(MAKE) /f Makefile.vc
 	cd ..
 
 clean:
+	cd port
+	$(MAKE) /f Makefile.vc clean
+	cd..
 	cd libtiff
 	$(MAKE) /f Makefile.vc clean
 	cd..
