@@ -1,4 +1,4 @@
-/* $Id: tif_tile.c,v 1.6 2004-09-29 07:42:52 dron Exp $ */
+/* $Id: tif_tile.c,v 1.7 2004-10-01 14:11:01 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -34,7 +34,7 @@
 static uint32
 summarize(TIFF* tif, size_t summand1, size_t summand2, const char* where)
 {
-	uint32	bytes = summand1 + summand2;
+	size_t	bytes = summand1 + summand2;
 
 	if (bytes - summand1 != summand2) {
 		TIFFError(tif->tif_name, "Integer overflow in %s", where);
@@ -47,7 +47,7 @@ summarize(TIFF* tif, size_t summand1, size_t summand2, const char* where)
 static uint32
 multiply(TIFF* tif, size_t nmemb, size_t elem_size, const char* where)
 {
-	uint32	bytes = nmemb * elem_size;
+	size_t	bytes = nmemb * elem_size;
 
 	if (elem_size && bytes / elem_size != nmemb) {
 		TIFFError(tif->tif_name, "Integer overflow in %s", where);
