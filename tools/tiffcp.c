@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.26 2004-09-08 18:03:31 dron Exp $ */
+/* $Id: tiffcp.c,v 1.27 2004-09-21 13:27:23 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -329,7 +329,7 @@ processCompressOptions(char* opt)
 		defcompression = COMPRESSION_PACKBITS;
 	} else if (strneq(opt, "jpeg", 4)) {
 		char* cp = strchr(opt, ':');
-		if (cp && isdigit(cp[1]))
+		if (cp && isdigit((int)cp[1]))
 			quality = atoi(cp+1);
 		if (cp && strchr(cp, 'r'))
 			jpegcolormode = JPEGCOLORMODE_RAW;
