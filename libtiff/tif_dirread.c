@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.10 2002-04-08 17:07:19 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.11 2002-09-02 15:39:45 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -784,14 +784,22 @@ TIFFFetchByteArray(TIFF* tif, TIFFDirEntry* dir, uint16* v)
                 case 4: v[3] = (uint16)(dir->tdir_offset & 0xff);
                 case 3: v[2] = (uint16)((dir->tdir_offset >> 8) & 0xff);
                 case 2: v[1] = (uint16)((dir->tdir_offset >> 16) & 0xff);
-                case 1: v[0] = (uint16)(dir->tdir_offset >> 24);
+		case 1:
+		if (dir->tdir_type == TIFF_SBYTE)
+			v[0] = (signed char)(dir->tdir_offset >> 24);	
+		else
+                	v[0] = (uint16)(dir->tdir_offset >> 24);
             }
         } else {
             switch (dir->tdir_count) {
                 case 4: v[3] = (uint16)(dir->tdir_offset >> 24);
                 case 3: v[2] = (uint16)((dir->tdir_offset >> 16) & 0xff);
                 case 2: v[1] = (uint16)((dir->tdir_offset >> 8) & 0xff);
-                case 1: v[0] = (uint16)(dir->tdir_offset & 0xff);
+                case 1: 
+		if (dir->tdir_type == TIFF_SBYTE)
+			v[0] = (signed char)((dir->tdir_offset) & 0xff);
+		else
+			v[0] = (uint16)(dir->tdir_offset & 0xff);
             }
         }
         return (1);
