@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.25 1996/03/19 16:57:54 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ppm2tiff.c,v 1.26 1996/04/22 22:03:26 sam Rel $ */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler
@@ -31,8 +31,8 @@
 
 #include "tiffio.h"
 
-#ifdef _WINDOWS
-#define	BINMODE	"w"
+#if defined(_WINDOWS) || defined(MSDOS)
+#define BINMODE "b"
 #else
 #define	BINMODE
 #endif

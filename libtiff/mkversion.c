@@ -1,4 +1,4 @@
-/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkversion.c,v 1.4 1996/01/10 19:34:25 sam Exp $ */
+/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkversion.c,v 1.4 1996/01/10 19:34:25 sam Rel $ */
 
 /*
  * Copyright (c) 1995-1996 Sam Leffler

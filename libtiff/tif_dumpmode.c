@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dumpmode.c,v 1.40 1996/01/10 19:33:00 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dumpmode.c,v 1.40 1996/01/10 19:33:00 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

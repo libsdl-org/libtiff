@@ -4,7 +4,7 @@ $! Name      : MAKEVMS
 $!
 $! Purpose   : Compile TIFF library
 $!
-$! Arguments : 
+$! Arguments : If P1 is DEBUG, compile with debug
 $!
 $! Created   1-DEC-1994   Karsten Spang
 $!
@@ -37,8 +37,7 @@ $       CONF_FP="HAVE_IEEEFP=1"
 $   ELSE
 $       CONF_FP="HAVE_IEEEFP=0"
 $   ENDIF
-$   CONF_LIBRARY="USE_VARARGS=0,USE_PROTOTYPES=1,USE_CONST=1,"+ -
-	"BSDTYPES,MMAP_SUPPORT"
+$   CONF_LIBRARY="BSDTYPES,HAVE_MMAP"
 $   IF P1.EQS."DEBUG"
 $   THEN
 $       DEBUG_OPTIONS="/DEBUG/NOOPTIMIZE"
@@ -52,44 +51,94 @@ $   DEFINES="/DEFINE=("+CONF_FP+","+CONF_LIBRARY+")"
 $   C_COMPILE="CC"+DEBUG_OPTIONS+DEFINES
 $   IF ARCH.EQS."ALPHA"
 $   THEN
+$!
+$!      You may want a different floating point option
+$!
 $       C_COMPILE=C_COMPILE+ -
             "/FLOAT=IEEE_FLOAT/PREFIX_LIBRARY_ENTRIES=ALL_ENTRIES"
 $   ENDIF
 $!
-$   SOURCES="TIF_AUX,TIF_CCITTRLE,TIF_CLOSE,TIF_COMPRESS,"+ -
+$   SOURCES="TIF_AUX,TIF_CLOSE,TIF_CODEC,TIF_COMPRESS,"+ -
         "TIF_DIR,TIF_DIRINFO,TIF_DIRREAD,TIF_DIRWRITE,"+ -
-        "TIF_DUMPMODE,TIF_ERROR,TIF_FAX3,TIF_FAX4,TIF_FLUSH,TIF_GETIMAGE,"+ -
+        "TIF_DUMPMODE,TIF_ERROR,TIF_FAX3,TIF_FAX3SM,TIF_FLUSH,TIF_GETIMAGE,"+ -
 -!        "TIF_JPEG,"+ -
-        "TIF_LZW,TIF_NEXT,TIF_OPEN,TIF_PACKBITS,"+ -
+        "TIF_LZW,TIF_NEXT,TIF_OPEN,TIF_PACKBITS,TIF_PIXARLOG,TIF_PREDICT,"+ -
         "TIF_PRINT,TIF_READ,TIF_STRIP,TIF_SWAB,TIF_THUNDER,TIF_TILE,"+ -
         "TIF_VERSION,TIF_VMS,TIF_WARNING,TIF_WRITE"
+! ",TIF_ZIP"
 $   LIBFILE="TIFF"
 $   IF F$SEARCH(LIBFILE+".OLB").EQS."" THEN -
         LIBRARY/CREATE 'LIBFILE'
+$!
+$! Create the port library
+$!
+$   LIBPORT="[-.PORT]PORT"
+$   IF F$SEARCH(LIBPORT+".OLB") .EQS "" 
+$   THEN
+$       WRITE SYS$OUTPUT "Creating PORT.OLB"
+$       LIBRARY/CREATE 'LIBPORT'
+$       CREATE DUM.C
+main(){getopt();strtoul();strcasecmp();}
+$       C_COMPILE DUM
+$       SET MESSAGE/ID/FAC/SEV/TEXT
+$       DEFINE/USER SYS$OUTPUT LINK.WARNINGS
+$       DEFINE/USER SYS$ERROR NLA0:
+$       IF ARCH.EQS."ALPHA"
+$       THEN
+$           LINK DUM
+$       ELSE
+$           LINK DUM,SYS$INPUT:/OPTIONS
+SYS$SHARE:VAXCRTL/SHARE
+$       ENDIF
+$       DELETE DUM.C;,DUM.OBJ;,DUM.EXE;
+$       SEARCH/OUT=MISSING.OBJECTS LINK.WARNINGS LINK-I-UDFSYM
+$       DELETE LINK.WARNINGS;
+$       OPEN/READ MISSING MISSING.OBJECTS
+$NEXTMIS:
+$           READ/END=NOMOREMIS MISSING LINE
+$           LINE=F$EDIT(LINE,"TRIM,COMPRESS,UPCASE")
+$           LINE=F$ELEMENT(1," ",LINE)
+$           IF LINE .EQS. " " THEN GOTO NEXTMIS
+$           WRITE SYS$OUTPUT "   "+LINE
+$           C_COMPILE/OBJECT=[-.PORT]'LINE' [-.PORT]'LINE'
+$           LIBRARY 'LIBPORT' [-.PORT]'LINE'
+$           DELETE [-.PORT]'LINE'.OBJ;
+$       GOTO NEXTMIS
+$NOMOREMIS:
+$       CLOSE MISSING
+$       DELETE MISSING.OBJECTS;
+$   ENDIF
 $!
 $! Create VERSION.H
 $!
 $   IF F$SEARCH("VERSION.H").EQS.""
 $   THEN
-$       OPEN/READ VERS [-]VERSION.
-$       READ VERS PRIMVERS
-$       CLOSE VERS
-$       OPEN/READ VERS [-.DIST]TIFF.ALPHA
-$       READ VERS ALPHAVERS
-$       CLOSE VERS
-$       ALPHAVERS=F$ELEMENT(2," ",ALPHAVERS)
-$       OPEN/WRITE VERS VERSION.H
-$       WRITE VERS "#define VERSION ""LIBTIFF, Version "+PRIMVERS+ALPHAVERS+ -
-            "\nCopyright (c) 1988-1995 Sam Leffler\n"+  -
-            "Copyright (c) 1991-1995 Silicon Graphics, Inc."""
-$       CLOSE VERS
+$       WRITE SYS$OUTPUT "Creating VERSION.H"
+$       IF F$SEARCH("MKVERSION.EXE").EQS.""
+$       THEN
+$           IF F$SEARCH("MKVERSION.OBJ").EQS.""
+$           THEN
+$               C_COMPILE MKVERSION
+$           ENDIF
+$           IF ARCH.EQS."ALPHA"
+$           THEN
+$               LINK MKVERSION,'LIBPORT'/LIBRARY
+$           ELSE
+$               LINK MKVERSION,'LIBPORT'/LIBRARY,SYS$INPUT:/OPTIONS
+SYS$SHARE:VAXCRTL/SHARE
+$           ENDIF
+$           DELETE MKVERSION.OBJ;*
+$       ENDIF
+$       MKVERSION:=$'THIS_DIR'MKVERSION
+$       MKVERSION -V [-]VERSION -A [-.DIST]TIFF.ALPHA VERSION.H
+$       DELETE MKVERSION.EXE;*
 $   ENDIF
 $!
-$! Create G3STATES.H
+$! Create TIF_FAX3SM.C
 $!
-$   IF F$SEARCH("G3STATES.H").EQS.""
+$   IF F$SEARCH("TIF_FAX3SM.C").EQS.""
 $   THEN
-$       WRITE SYS$OUTPUT "Creating G3STATES.H"
+$       WRITE SYS$OUTPUT "Creating FAX3SM.C"
 $       IF F$SEARCH("MKG3STATES.EXE").EQS.""
 $       THEN
 $           IF F$SEARCH("MKG3STATES.OBJ").EQS.""
@@ -98,24 +147,15 @@ $               C_COMPILE MKG3STATES
 $           ENDIF
 $           IF ARCH.EQS."ALPHA"
 $           THEN
-$               LINK MKG3STATES
+$               LINK MKG3STATES,'LIBPORT'/LIBRARY
 $           ELSE
-$               LINK MKG3STATES,SYS$INPUT:/OPTIONS
+$               LINK MKG3STATES,'LIBPORT'/LIBRARY,SYS$INPUT:/OPTIONS
 SYS$SHARE:VAXCRTL/SHARE
 $           ENDIF
 $           DELETE MKG3STATES.OBJ;*
 $       ENDIF
 $       MKG3STATES:=$'THIS_DIR'MKG3STATES
-$!
-$!      return (0) in mkg3states causes a 
-$!      %NONAME-W-NOMSG, Message number 00000000
-$!      warning to be written at the end of g3states.h 
-$!      unless messages are suppressed
-$!
-$       SET MESSAGE/NOID/NOFAC/NOSEV/NOTEXT
-$       DEFINE/USER SYS$OUTPUT G3STATES.H
-$       MKG3STATES -C
-$       SET MESSAGE 'SAVE_MESS'
+$       MKG3STATES -c const TIF_FAX3SM.C
 $       DELETE MKG3STATES.EXE;*
 $   ENDIF
 $!
@@ -149,7 +189,7 @@ $           ON ERROR THEN CONTINUE
 $           C_COMPILE/OBJECT='OBJ_FILE' 'C_FILE'
 $           ON ERROR THEN GOTO EXIT
 $           LIBRARY 'LIBFILE' 'OBJ_FILE'
-$           PURGE 'OBJ_FILE'
+$
 $       ENDIF
 $       NUMBER=NUMBER+1
 $   GOTO COMPILE_LOOP

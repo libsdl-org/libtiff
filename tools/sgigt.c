@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.66 1996/01/10 19:35:32 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.66 1996/01/10 19:35:32 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

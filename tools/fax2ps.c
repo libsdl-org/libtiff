@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.9 1996/01/10 19:35:26 sam Exp $" */
+/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.10 1996/04/29 21:58:49 sam Rel $" */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler
@@ -28,7 +28,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#ifndef VMS
 #include <unistd.h>
+#else
+#include <unixio.h>
+#endif
 
 #include "tiffio.h"
 
@@ -383,7 +387,11 @@ main(int argc, char** argv)
 	while ((n = read(fileno(stdin), buf, sizeof (buf))) > 0)
 	    write(fileno(fd), buf, n);
 	tif = TIFFOpen(temp, "r");
+#ifndef VMS
 	unlink(temp);
+#else
+	remove(temp);
+#endif
 	if (tif) {
 	    fax2ps(tif, npages, pages, "<stdin>");
 	    TIFFClose(tif);

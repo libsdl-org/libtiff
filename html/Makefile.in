@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/html/RCS/Makefile.in,v 1.9 1996/04/09 17:37:07 sam Exp $
+#	$Header: /usr/people/sam/tiff/html/RCS/Makefile.in,v 1.10 1996/04/29 19:51:20 sam Rel $
 #
 # @WARNING@
 #
@@ -69,6 +69,7 @@ HTMLFILES=\
 	v3.4beta029.html	\
 	v3.4beta031.html	\
 	v3.4beta032.html	\
+	v3.4beta033.html	\
 	${NULL}
 IMAGES=\
 	images/back.gif		\

@@ -23,6 +23,7 @@ unsigned long preveBits = 0;
 static	void setupLumaTables();
 static int abs(int v) { return (v < 0 ? -v : v); }
 static double pct(int v,double range) { return (v*100. / range); }
+static void check(int R, int G, int B);
 
 float	D1, D2;
 float	D3, D4;
@@ -111,6 +112,7 @@ V2Code(float f, unsigned long RB, unsigned long RW, int CR)
 #define	CLAMP(f,min,max) \
     (int)((f)+.5 < (min) ? (min) : (f)+.5 > (max) ? (max) : (f)+.5)
 
+static
 void
 check(int R, int G, int B)
 {

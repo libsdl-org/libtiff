@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.47 1996/04/09 16:41:22 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.48 1996/04/26 03:36:20 sam Rel $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -145,7 +145,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.47 $"
+	echo "This is TIFF configure $Revision: 1.48 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1134,6 +1134,11 @@ if [ "$DSO" = auto ]; then
 	    DSOOPTS='-shared'
 	    DSO=LINUX
 	fi
+	;;
+    *-osf3*)
+	DSOSUF=so
+	DSOOPTS='-shared'
+	DSO=OSF
 	;;
     *)  DSO=no;;
     esac

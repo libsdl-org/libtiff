@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.26 1996/01/10 19:35:28 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/gif2tiff.c,v 1.27 1996/04/22 22:03:26 sam Rel $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -40,8 +40,8 @@
 
 #include "tiffio.h"
 
-#ifdef _WINDOWS
-#define	BINMODE	"w"
+#if defined(_WINDOWS) || defined(MSDOS)
+#define BINMODE "b"
 #else
 #define	BINMODE
 #endif

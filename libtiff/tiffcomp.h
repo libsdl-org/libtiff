@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffcomp.h,v 1.48 1996/02/06 23:50:58 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffcomp.h,v 1.49 1996/04/29 21:56:21 sam Rel $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -201,5 +201,14 @@ extern off_t lseek(int fd, off_t offset, int whence);
 extern int creat(const char *path, int mode);
 #endif /* __cplusplus */
 #endif /* __acornriscos */
+
+/* Bit and byte order, the default is MSB to LSB */
+#ifdef VMS
+#undef HOST_FILLORDER
+#undef HOST_BIGENDIAN
+#define HOST_FILLORDER FILLORDER_LSB2MSB
+#define HOST_BIGENDIAN	0
+#endif
+
 
 #endif /* _COMPAT_ */

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_predict.h,v 1.2 1996/01/10 19:33:22 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_predict.h,v 1.2 1996/01/10 19:33:22 sam Rel $ */
 
 /*
  * Copyright (c) 1995-1996 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.29 1996/02/09 22:51:07 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.29 1996/02/09 22:51:07 sam Rel $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler

@@ -1,9 +1,9 @@
 ! VMS linker options file for linking the TIFF library into a shareable image
 !
-IDENTIFICATION="LIBTIFF 3.4-002"
+IDENTIFICATION="LIBTIFF 3.4-032"
 !
 ! Please update the minor version number below, when adding new routines
-GSMATCH=LEQUAL,1,8
+GSMATCH=LEQUAL,1,9
 !
 ! Place the transfer vector at the beginning of the image
 !
@@ -11,7 +11,7 @@ CLUSTER=TIFFVEC,,,TIFFVEC
 !
 ! Then take the object library
 !
-TIFF/LIBRARY
+TIFF/LIBRARY/INCLUDE=(TIF_FAX3SM,TIF_CODEC)
 !
 ! The C RTL shareable image
 !

@@ -1,9 +1,9 @@
 ! VMS linker options file for linking the TIFF library into a shareable image
 !
-IDENTIFICATION="LIBTIFF 3.4-002"
+IDENTIFICATION="LIBTIFF 3.4-032"
 !
 ! Please update the minor version number below, when adding new routines
-GSMATCH=LEQUAL,1,8
+GSMATCH=LEQUAL,1,9
 !
 ! Here goes the definitions of all public functions in the library, plus
 ! a few extra that are called by the tools.
@@ -110,7 +110,12 @@ SYMBOL_VECTOR=(-
 	TIFFVTileSize=PROCEDURE,- ! not new, but omitted previously
 	TIFFSwabDouble=PROCEDURE,-
 	TIFFSwabArrayOfDouble=PROCEDURE,-
-	TIFFLastDirectory=PROCEDURE) ! not new either
+	TIFFLastDirectory=PROCEDURE,- ! not new either
+!
+! New entries in version 3.4 beta 007 through 032
+!
+	TIFFCurrentDirOffset=PROCEDURE,-
+	TIFFWriteBufferSetup=PROCEDURE)
 !
 ! Then take the object library
 !

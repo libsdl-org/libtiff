@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.55 1996/04/09 17:13:34 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.56 1996/04/29 21:56:21 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -753,9 +753,9 @@ TIFFWriteAnyArray(TIFF* tif,
 		w = (char*) _TIFFmalloc(n * tiffDataWidth[type]);
 	switch (type) {
 	case TIFF_BYTE:
-		{ unsigned char* bp = (unsigned char*) w;
+		{ uint8* bp = (uint8*) w;
 		  for (i = 0; i < n; i++)
-			bp[i] = (unsigned char) v[i];
+			bp[i] = (uint8) v[i];
 		  dir->tdir_tag = tag;
 		  dir->tdir_type = (short) type;
 		  dir->tdir_count = n;
@@ -764,9 +764,9 @@ TIFFWriteAnyArray(TIFF* tif,
 		}
 		break;
 	case TIFF_SBYTE:
-		{ signed char* bp = (signed char*) w;
+		{ int8* bp = (int8*) w;
 		  for (i = 0; i < n; i++)
-			bp[i] = (signed char) v[i];
+			bp[i] = (int8) v[i];
 		  dir->tdir_tag = tag;
 		  dir->tdir_type = (short) type;
 		  dir->tdir_count = n;

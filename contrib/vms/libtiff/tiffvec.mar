@@ -123,4 +123,9 @@
 	VECTOR TIFFSwabDouble
 	VECTOR TIFFSwabArrayOfDouble
 	VECTOR TIFFLastDirectory ; not new either
+;
+; New entries in version 3.4 beta 007 through 032
+;
+	VECTOR TIFFCurrentDirOffset
+	VECTOR TIFFWriteBufferSetup
 	.END

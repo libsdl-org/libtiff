@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_vms.c,v 1.21 1996/03/29 16:37:53 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_vms.c,v 1.21 1996/03/29 16:37:53 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.68 1996/04/05 17:36:53 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.71 1996/04/29 22:16:05 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -52,7 +52,11 @@
  * 32-bit quantities	int32/uint32
  * strings		unsigned char*
  */
+#ifdef __STDC__
 typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
+#else
+typedef	char int8;
+#endif
 typedef	unsigned char uint8;
 typedef	short int16;
 typedef	unsigned short uint16;	/* sizeof (uint16) must == 2 */
@@ -150,6 +154,8 @@ typedef	enum {
 #define     COMPRESSION_PIXARFILM	32908   /* Pixar companded 10bit LZW */
 #define	    COMPRESSION_PIXARLOG	32909   /* Pixar companded 11bit ZIP */
 #define	    COMPRESSION_DEFLATE		32946	/* Deflate compression */
+/* compression code 32947 is reserved for Oceana Matrix <dev@oceana.com> */
+#define     COMPRESSION_DCS             32947   /* Kodak DCS encoding */
 #define	    COMPRESSION_JBIG		34661	/* ISO JBIG */
 #define	TIFFTAG_PHOTOMETRIC		262	/* photometric interpretation */
 #define	    PHOTOMETRIC_MINISWHITE	0	/* min value is white */
@@ -351,7 +357,7 @@ typedef	enum {
 #define	    PIXARLOGDATAFMT_12BITPICIO	3	/* as per PICIO (1.0==2048) */
 #define	    PIXARLOGDATAFMT_16BIT	4	/* signed short samples */
 #define	    PIXARLOGDATAFMT_FLOAT	5	/* IEEE float samples */
-/* 65550-65556 are allocated to Ken Murchison <ken@oceana.com> */
+/* 65550-65556 are allocated to Oceana Matrix <dev@oceana.com> */
 #define TIFFTAG_DCSIMAGERTYPE           65550   /* imager model & filter */
 #define     DCSIMAGERMODEL_M3           0       /* M3 chip (1280 x 1024) */
 #define     DCSIMAGERMODEL_M5           1       /* M5 chip (1536 x 1024) */

@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.48 1996/04/09 17:37:14 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.51 1996/04/29 19:51:20 sam Rel $
 #
 # @WARNING@
 #
@@ -112,7 +112,6 @@ TIFFFILES=\
 	    dist/newversion			\
 	libtiff/Makefile.in			\
 	    libtiff/Makefile.lcc		\
-	    libtiff/Makefile.msc		\
 	    libtiff/t4.h			\
 	    libtiff/tiff.h			\
 	    libtiff/tiffcomp.h			\
@@ -260,6 +259,7 @@ TIFFFILES=\
 	    html/misc.html			\
 	    html/support.html			\
 	    html/tools.html			\
+	    html/v3.4beta033.html		\
 	    html/v3.4beta032.html		\
 	    html/v3.4beta031.html		\
 	    html/v3.4beta029.html		\
@@ -314,6 +314,7 @@ CONTRIBFILES=\
 	contrib/win95				\
 	contrib/winnt				\
 	contrib/mac-cw				\
+	contrib/dosdjgpp			\
 	${NULL}
 DISTFILES=\
 	${TIFFFILES}				\

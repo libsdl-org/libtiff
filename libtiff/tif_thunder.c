@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_thunder.c,v 1.29 1996/01/10 19:33:13 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_thunder.c,v 1.29 1996/01/10 19:33:13 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

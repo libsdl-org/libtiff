@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_acorn.c,v 1.1 1995/09/06 00:24:10 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_acorn.c,v 1.1 1995/09/06 00:24:10 sam Rel $ */
 
 /*
  * Copyright (c) 1988-1995 Sam Leffler
