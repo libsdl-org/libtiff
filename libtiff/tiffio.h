@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.36 2004-09-24 15:18:57 dron Exp $ */
+/* $Id: tiffio.h,v 1.37 2004-11-05 13:42:05 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -86,15 +86,16 @@ typedef	uint32 toff_t;		/* file offset */
 #endif
 
 #if defined(USE_WIN32_FILEIO)
-#include <windows.h>
-#ifdef __WIN32__
+# include <windows.h>
+# ifdef __WIN32__
 DECLARE_HANDLE(thandle_t);	/* Win32 file handle */
-#else
+extern	TIFF* TIFFOpenW(const wchar_t*, const char*);
+# else
 typedef	HFILE thandle_t;	/* client data handle */
-#endif
+# endif /* __WIN32__ */
 #else
 typedef	void* thandle_t;	/* client data handle */
-#endif
+#endif /* USE_WIN32_FILEIO */
 
 #ifndef NULL
 # define NULL	(void *)0
