@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_write.c,v 1.6 2002-04-09 19:36:12 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_write.c,v 1.7 2002-07-31 20:53:15 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -154,7 +154,9 @@ TIFFWriteScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
 	}
 	status = (*tif->tif_encoderow)(tif, (tidata_t) buf,
 	    tif->tif_scanlinesize, sample);
-	tif->tif_row++;
+
+        /* we are now poised at the beginning of the next row */
+	tif->tif_row = row + 1;
 	return (status);
 }
 
