@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.39 2004-11-13 11:19:15 dron Exp $ */
+/* $Id: tiffio.h,v 1.40 2004-11-21 16:12:08 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -492,12 +492,6 @@ extern  void TIFFSetClientInfo( TIFF *, void *, const char * );
     
 #if defined(c_plusplus) || defined(__cplusplus)
 }
-#endif
-
-#if defined(c_plusplus) || defined(__cplusplus)
-# include <iostream>
-extern	TIFF* TIFFStreamOpen(const char*, std::ostream *);
-extern	TIFF* TIFFStreamOpen(const char*, std::istream *);
 #endif
 
 #endif /* _TIFFIO_ */
