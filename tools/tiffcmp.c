@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.7 2004-10-14 04:53:56 bfriesen Exp $ */
+/* $Id: tiffcmp.c,v 1.8 2005-03-04 10:25:24 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -97,6 +97,9 @@ main(int argc, char* argv[])
 		}
 		printf("Directory %d:\n", ++dirnum);
 	}
+
+	TIFFClose(tif1);
+	TIFFClose(tif2);
 	return (0);
 }
 
@@ -487,7 +490,7 @@ CheckShortArrayTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 			char* sep;
 			uint16 i;
 
-			if (memcmp(a1, a2, n1) == 0)
+			if (memcmp(a1, a2, n1 * sizeof(uint16)) == 0)
 				return (1);
 			printf("%s: value mismatch, <%u:", name, n1);
 			sep = "";
