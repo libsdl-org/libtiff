@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.2 2004-03-26 11:48:28 dron Exp $
+# $Id: Makefile.am,v 1.3 2004-03-28 11:25:13 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -35,5 +35,5 @@ EXTRA_DIST = \
 	VERSION \
 	autogen.sh
 
-SUBDIRS = libtiff man tools
+SUBDIRS = html libtiff man tools
 
