@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.2 2004-06-04 15:32:40 dron Exp $
+# $Id: Makefile.am,v 1.3 2004-09-12 08:04:45 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -26,6 +26,7 @@
 # Process this file with automake to produce Makefile.in.
 
 EXTRA_DIST = \
+	addingtags.html \
 	bugs.html \
 	build.html \
 	contrib.html \
