@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/man/Makefile.in,v 1.3 1999-11-29 16:42:44 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/man/Makefile.in,v 1.4 2001-04-03 05:17:02 warmerda Exp $
 #
 # @WARNING@
 #
@@ -330,7 +330,7 @@ lib/TIFFWriteBufferSetup.3t:;	${ECHO} ".so ${MANDIR}TIFFbuffer.3t" > $@
 
 apps/Makefile:
 	test -d apps || mkdir apps
-	${MAKE} ${MANTOOLS}
+	${MAKE} -${MAKEFLAGS} ${MANTOOLS}
 	${RM} apps/Makefile
 	(cd apps;							\
 	 ${ECHO} 'install:';						\
@@ -342,7 +342,7 @@ apps/Makefile:
 	)>apps/Makefile
 lib/Makefile:
 	test -d lib || mkdir lib
-	${MAKE} ${MANDEV} ${MANDEVLINKS}
+	${MAKE} -${MAKEFLAGS} ${MANDEV} ${MANDEVLINKS}
 	${RM} lib/Makefile
 	(cd lib;							\
 	 ${ECHO} 'install:';						\
@@ -356,9 +356,9 @@ lib/Makefile:
 install: all
 	${INSTALL} -m 755 -dir -idb tiff.man.tools ${MAN}
 	${INSTALL} -m 755 -dir -idb tiff.man.tools ${MAN}/${MANAPPS}
-	cd apps; ${MAKE} install
+	cd apps; ${MAKE} -${MAKEFLAGS} install
 	${INSTALL} -m 755 -dir -idb tiff.man.dev ${MAN}/${MANLIB}
-	cd lib; ${MAKE} install
+	cd lib; ${MAKE} -${MAKEFLAGS} install
 
 clean:
 	rm -rf apps lib

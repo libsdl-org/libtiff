@@ -1,4 +1,4 @@
-# $Header: /cvs/maptools/cvsroot/libtiff/Attic/config.site,v 1.4 2001-04-03 03:51:57 warmerda Exp $
+# $Header: /cvs/maptools/cvsroot/libtiff/Attic/config.site,v 1.5 2001-04-03 05:18:51 warmerda Exp $
 #
 # TIFF Software
 #
@@ -139,6 +139,7 @@
 #RANLIB=":"				# pathname of suitable ranlib program
 #DSOSUF="so"				# DSO filename suffix
 #LIBCOPTS="-K PIC"			# compiler options for building library
+#SHELL=/usr/bin/sh                      # Bourne shell to use(normally /bin/sh)
 
 #
 # Makefile construction parameters.

@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.6 2001-03-30 01:55:32 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.7 2001-04-03 05:17:02 warmerda Exp $
 #
 # @WARNING@
 #
@@ -100,12 +100,12 @@ TARGETS	=\
 
 all:	${TARGETS}
 	@if [ "@LIBIMAGE@" = yes ]; then \
-	    ${MAKE} sgi2tiff; \
+	    ${MAKE} -${MAKEFLAGS} sgi2tiff; \
 	else \
 	    true; \
 	fi
 	@if [ "@LIBGL@" = yes ]; then \
-	    ${MAKE} tiffgt tiffsv; \
+	    ${MAKE} -${MAKEFLAGS} tiffgt tiffsv; \
 	else \
 	    true; \
 	fi
