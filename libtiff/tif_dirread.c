@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.32 2004-08-22 17:23:44 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.33 2004-08-23 19:04:40 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -419,11 +419,11 @@ TIFFReadDirectory(TIFF* tif)
 			 * one value per sample.  Because of this, we
 			 * accept the tag if one value is supplied.
 			 *
-			 * The MinSampleValue, MaxSampleValue and
-			 * BitsPerSample tags are supposed to be written
-			 * as one value/sample, but some vendors incorrectly
-			 * write one value only -- so we accept that
-			 * as well (yech).
+                         * The MinSampleValue, MaxSampleValue, BitsPerSample
+                         * DataType and SampleFormat tags are supposed to be
+                         * written as one value/sample, but some vendors
+                         * incorrectly write one value only -- so we accept
+                         * that as well (yech).
 			 */
 			if (dp->tdir_count == 1) {
 				v = TIFFExtractData(tif,
