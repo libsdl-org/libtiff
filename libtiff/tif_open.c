@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.2 1999-09-08 19:07:02 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.3 2000-08-14 17:30:58 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -170,7 +170,7 @@ TIFFClientOpen(
 	 * a file is opened read-only.
 	 */
 	tif->tif_flags = FILLORDER_MSB2LSB;
-	if (m == O_RDONLY)
+	if (m == O_RDONLY || m == O_RDWR)
 #ifdef STRIPCHOP_DEFAULT
 		tif->tif_flags |= TIFF_MAPPED|STRIPCHOP_DEFAULT;
 #else
