@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.7 2004-09-03 08:16:01 dron Exp $ */
+/* $Id: tiffdump.c,v 1.8 2005-01-05 20:38:38 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -307,6 +307,11 @@ ReadDirectory(int fd, unsigned ix, off_t off)
 			continue;
 		}
 		space = dp->tdir_count * datawidth[dp->tdir_type];
+		if (space <= 0) {
+			printf(">\n");
+			Error("Invalid count for tag %u", dp->tdir_tag);
+			continue;
+                }
 		if (space <= 4) {
 			switch (dp->tdir_type) {
 			case TIFF_FLOAT:
