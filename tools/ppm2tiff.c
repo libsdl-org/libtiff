@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/ppm2tiff.c,v 1.3 1999-12-27 17:35:01 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/ppm2tiff.c,v 1.4 2003-02-06 22:05:47 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -90,6 +90,11 @@ main(int argc, char* argv[])
 			usage();
 			/*NOTREACHED*/
 		}
+
+	if ( optind + 2 < argc ) {
+	    fprintf(stderr, "%s: Too many arguments\n", argv[0]);
+	    usage();
+	}
 
 	/*
 	 * If only one file is specified, read input from
