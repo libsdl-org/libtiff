@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.46 2004-12-19 18:15:52 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.47 2004-12-19 18:35:35 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -323,7 +323,8 @@ TIFFReadDirectory(TIFF* tif)
 		/*
 		 * Check count if known in advance.
 		 */
-		if (fip->field_readcount != TIFF_VARIABLE) {
+		if (fip->field_readcount != TIFF_VARIABLE
+		    && fip->field_readcount != TIFF_VARIABLE2) {
 			uint32 expected = (fip->field_readcount == TIFF_SPP) ?
 			    (uint32) td->td_samplesperpixel :
 			    (uint32) fip->field_readcount;
