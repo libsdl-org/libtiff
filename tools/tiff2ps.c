@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.19 2003-08-12 07:51:03 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.20 2003-10-17 21:25:51 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -28,7 +28,7 @@
 #include <stdlib.h>			/* for atof */
 #include <math.h>
 #include <time.h>
-#include <strings.h>
+#include <string.h>
 
 #include "tiffio.h"
 
