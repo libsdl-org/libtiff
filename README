@@ -1,4 +1,4 @@
-$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.3 2000-05-11 15:25:47 warmerda Exp $
+$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.4 2001-05-08 12:34:14 morourke Exp $
 
 
 TIFF Software Distribution
@@ -12,7 +12,7 @@ favorite WWW viewer at html/index.html; e.g.
 If you don't have an HTML viewer then you can read the HTML source
 or fetch a PostScript version of this documentation from the directory
 
-    ftp://ftp.sgi.com/graphics/tiff/doc
+    ftp://ftp.remotesensing.org/pub/libtiff/
 
 If you can't hack either of these options then basically what you
 want to do is:
