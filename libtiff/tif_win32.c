@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.3 1999-09-15 01:28:47 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.4 1999-11-27 21:43:59 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -83,6 +83,9 @@ _tiffSizeProc(thandle_t fd)
 	return ((toff_t)GetFileSize(fd, NULL));
 }
 
+#ifdef __BORLANDC__
+#pragma argsused
+#endif
 static int
 _tiffDummyMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 {
@@ -119,6 +122,9 @@ _tiffMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 	return(1);
 }
 
+#ifdef __BORLANDC__
+#pragma argsused
+#endif
 static void
 _tiffDummyUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 {
@@ -236,8 +242,8 @@ _TIFFmemcpy(void* d, const tdata_t s, tsize_t c)
 int
 _TIFFmemcmp(const tdata_t p1, const tdata_t p2, tsize_t c)
 {
-	register const BYTE *pb1 = p1;
-	register const BYTE *pb2 = p2;
+	register const BYTE *pb1 = (const BYTE *) p1;
+	register const BYTE *pb2 = (const BYTE *) p2;
 	register DWORD dwTmp = c;
 	register int iTmp;
 	for (iTmp = 0; dwTmp-- && !iTmp; iTmp = (int)*pb1++ - (int)*pb2++)
