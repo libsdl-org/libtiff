@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.30 2005-02-01 04:37:15 bfriesen Exp $ */
+/* $Id: tiff.h,v 1.31 2005-02-04 12:25:10 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -77,11 +77,7 @@ typedef unsigned int uint32;
 #ifndef _TIFF_DATA_TYPEDEFS_
 #define _TIFF_DATA_TYPEDEFS_
 
-#ifdef __STDC__
 typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
-#else
-typedef	char int8;
-#endif
 typedef	unsigned char uint8;
 typedef	short int16;
 typedef	unsigned short uint16;	/* sizeof (uint16) must == 2 */
