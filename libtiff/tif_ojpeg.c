@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.14 2004-10-12 18:50:48 dron Exp $ */
+/* $Id: tif_ojpeg.c,v 1.15 2004-11-04 12:40:11 dron Exp $ */
 
 #include "tiffiop.h"
 #ifdef OJPEG_SUPPORT
@@ -250,7 +250,7 @@ static const TIFFFieldInfo ojpegFieldInfo[]=/* JPEG-specific TIFF-record tags */
     these records to us in order to filter them below.
  */
     {
-      TIFFTAG_JPEGTABLES            ,TIFF_VARIABLE,TIFF_VARIABLE,
+      TIFFTAG_JPEGTABLES            ,TIFF_VARIABLE2,TIFF_VARIABLE2,
       TIFF_UNDEFINED,FIELD_JPEGTABLES            ,FALSE,TRUE ,"JPEGTables"
     },
 
