@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Attic/Makefile,v 1.2 1999-08-25 19:38:48 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Attic/Makefile,v 1.3 1999-09-26 22:03:46 mwelles Exp $
 #
 # Warning, this file was automatically created by the TIFF configure script
 #
@@ -31,7 +31,7 @@
 SRCDIR	= .
 
 #
-# VERSION:	v3.5.1
+# VERSION:	v3.5.2
 # DATE:		Wed Aug 25 15:30:36 EST 1999
 # TARGET:	i586-unknown-linux
 # CCOMPILER:	/usr/bin/gcc
