@@ -1,4 +1,4 @@
-/* $Id: short_tag.c,v 1.4 2004-10-02 11:16:04 dron Exp $ */
+/* $Id: short_tag.c,v 1.5 2004-10-09 18:36:47 dron Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@remotesensing.org>
@@ -136,10 +136,10 @@ main(int argc, char **argv)
 		return 1;
 	}
 	
-	if (CheckShortField(tif, TIFFTAG_IMAGEWIDTH, width) < 0)
+	if (CheckLongField(tif, TIFFTAG_IMAGEWIDTH, width) < 0)
 		goto failure;
 
-	if (CheckShortField(tif, TIFFTAG_IMAGELENGTH, length) < 0)
+	if (CheckLongField(tif, TIFFTAG_IMAGELENGTH, length) < 0)
 		goto failure;
 
 	if (CheckShortField(tif, TIFFTAG_BITSPERSAMPLE, bps) < 0)
@@ -151,7 +151,7 @@ main(int argc, char **argv)
 	if (CheckShortField(tif, TIFFTAG_SAMPLESPERPIXEL, SPP) < 0)
 		goto failure;
 
-	if (CheckShortField(tif, TIFFTAG_ROWSPERSTRIP, rows_per_strip) < 0)
+	if (CheckLongField(tif, TIFFTAG_ROWSPERSTRIP, rows_per_strip) < 0)
 		goto failure;
 
 	if (CheckShortField(tif, TIFFTAG_PLANARCONFIG, planarconfig) < 0)
