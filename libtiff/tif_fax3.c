@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.13 2001-01-23 14:45:58 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.14 2001-08-10 02:37:52 warmerda Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -321,7 +321,7 @@ Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
  * this is <8 bytes.  We optimize the code here to reflect the
  * machine characteristics.
  */
-#if defined(__alpha) || _MIPS_SZLONG == 64
+#if defined(__alpha) || _MIPS_SZLONG == 64 || defined(__LP64__)
 #define FILL(n, cp)							    \
     switch (n) {							    \
     case 15:(cp)[14] = 0xff; case 14:(cp)[13] = 0xff; case 13: (cp)[12] = 0xff;\
