@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_unix.c,v 1.3 2000-01-28 21:46:30 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_unix.c,v 1.4 2002-10-11 14:13:00 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -157,7 +157,11 @@ TIFFOpen(const char* name, const char* mode)
 #ifdef _AM29K
 	fd = open(name, m);
 #else
+#if USE_64BIT_API == 1
+	fd = open(name, m | O_LARGEFILE, 0666);
+#else
 	fd = open(name, m, 0666);
+#endif
 #endif
 	if (fd < 0) {
 		TIFFError(module, "%s: Cannot open", name);
