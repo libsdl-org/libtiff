@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.9 2001-03-27 22:57:51 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.10 2001-04-06 02:54:13 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -203,8 +203,9 @@ typedef struct {
 #include <stdio.h>
 #include <stdarg.h>
 
+/* share internal LogLuv conversion routines? */
 #ifndef LOGLUV_PUBLIC
-#define LOGLUV_PUBLIC		1	// share internal LogLuv conversion routines
+#define LOGLUV_PUBLIC		1	
 #endif
 
 #if defined(__cplusplus)
