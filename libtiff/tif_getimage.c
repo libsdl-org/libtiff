@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.27 2003-10-03 11:21:23 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.28 2003-10-18 15:42:50 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -215,7 +215,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
     case 8: case 16:
 	break;
     default:
-	sprintf(emsg, "Sorry, can not image with %d-bit samples",
+	sprintf(emsg, "Sorry, can not handle images with %d-bit samples",
 	    img->bitspersample);
 	return (0);
     }
