@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.6 1999-11-28 20:15:36 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.7 1999-11-29 16:43:31 warmerda Exp $
 #
 # @WARNING@
 #
@@ -255,6 +255,7 @@ TIFFFILES=\
 	    man/TIFFWriteDirectory.3t 		\
 	    man/TIFFWriteEncodedStrip.3t	\
 	    man/TIFFWriteEncodedTile.3t		\
+	    man/TIFFWriteTile.3t		\
 	    man/TIFFWriteRawStrip.3t		\
 	    man/TIFFWriteRawTile.3t		\
 	    man/TIFFWriteScanline.3t		\
