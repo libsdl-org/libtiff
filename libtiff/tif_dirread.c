@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.11 2002-09-02 15:39:45 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.12 2002-09-08 18:01:20 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -836,7 +836,7 @@ TIFFFetchShortArray(TIFF* tif, TIFFDirEntry* dir, uint16* v)
 static int
 TIFFFetchShortPair(TIFF* tif, TIFFDirEntry* dir)
 {
-	uint16 v[2];
+	uint16 v[4];
 	int ok = 0;
 
 	switch (dir->tdir_type) {
