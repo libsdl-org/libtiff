@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.49 2005-02-05 13:16:16 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.50 2005-02-05 13:17:26 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -581,7 +581,7 @@ TIFFReadDirectory(TIFF* tif)
  *   - it is larger than file itself (in case of uncompressed image);
  *   - it is smaller than the size of the bytes per row multiplied on the
  *     number of rows.  The last case should not be checked in the case of
- *     writing new image, because we may not know the exact strip size
+ *     writing new image, because we may do not know the exact strip size
  *     until the whole image will be written and directory dumped out.
  */
 #define	BYTECOUNTLOOKSBAD \
