@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.20 2002-09-29 18:14:48 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.21 2002-10-10 13:40:49 warmerda Exp $
 #
 # Tag Image File Format Library
 #
@@ -264,6 +264,8 @@ ${SRCDIR}/tiffvers.h: ${VERSION} ${SRCDIR}/mkversion.c
 	${CC} -o mkversion ${CFLAGS} ${SRCDIR}/mkversion.c
 	rm -f ${SRCDIR}/tiffvers.h
 	./mkversion -v ${VERSION} ${SRCDIR}/tiffvers.h
+
+tiffvers.h:	${SRCDIR}/tiffvers.h
 
 #
 # The finite state machine tables used by the G3/G4 decoders
