@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.22 2003-12-03 19:54:03 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.23 2003-12-04 10:31:54 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -153,8 +153,6 @@ typedef struct {				/* YCbCr->RGB support */
 	int*	Cb_b_tab;
 	int32*	Cr_g_tab;
 	int32*	Cb_g_tab;
-	float	coeffs[3];			/* XXX: no longer required. Will
-						   be removed in the future. */
 } TIFFYCbCrToRGB;
 
 typedef struct {				/* CIE Lab 1976->RGB support */
@@ -169,14 +167,15 @@ typedef struct {				/* CIE Lab 1976->RGB support */
 
 extern int TIFFCIELabToRGBInit(TIFFCIELabToRGB*, TIFFDisplay *display,
 			       float X0, float Y0, float Z0);
-extern int TIFFCIELabToRGBEnd(TIFFCIELabToRGB*);
+extern void TIFFCIELabToRGBEnd(TIFFCIELabToRGB*);
 extern void TIFFCIELabToXYZ(TIFFCIELabToRGB *, uint32, int32, int32,
 			    float *, float *, float *);
 extern void TIFFXYZToRGB(TIFFCIELabToRGB *, float, float, float,
 			 uint32 *, uint32 *, uint32 *);
 
-extern int
-TIFFYCbCrToRGBInit(TIFFYCbCrToRGB*, float, float, float);
+extern int TIFFYCbCrToRGBInit(TIFFYCbCrToRGB*, float, float, float);
+extern void TIFFYCbCrtoRGB(TIFFYCbCrToRGB *, uint32, int32, int32,
+			   uint32 *, uint32 *, uint32 *);
 
 /*
  * RGBA-style image support.
