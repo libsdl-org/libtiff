@@ -1,4 +1,4 @@
-.\"	$Header: /cvs/maptools/cvsroot/libtiff/man/tiff2ps.1,v 1.2 2001-03-29 01:34:33 warmerda Exp $
+.\"	$Header: /cvs/maptools/cvsroot/libtiff/man/tiff2ps.1,v 1.3 2002-05-10 10:45:43 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -155,6 +155,12 @@ on a page (the outer margin that the printing device is unable to mark).
 This option suppresses this behaviour.
 When \*(Ps Level I is generated, data is imaged to the entire printed
 page and this option has no affect.
+.TP
+.B \-c
+Override resolution units specified in the TIFF as centimeters.
+.TP
+.B \-n
+Override resolution units specified in the TIFF as inches.
 .SH EXAMPLES
 The following generates \*(Ps Level II for all pages of a facsimile:
 .RS
