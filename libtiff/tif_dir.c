@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.32 2003-12-26 10:19:41 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.33 2004-01-11 15:14:02 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1059,6 +1059,8 @@ TIFFFreeDirectory(TIFF* tif)
     /* Cleanup custom tag values */
     for( i = 0; i < td->td_customValueCount; i++ )
         _TIFFfree( td->td_customValues[i].value );
+
+    td->td_customValueCount = 0;
 
     if( td->td_customValues != NULL )
         _TIFFfree( td->td_customValues );
