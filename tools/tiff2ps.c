@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.2 2001-03-29 01:34:33 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.3 2001-09-08 17:27:38 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -247,8 +247,9 @@ checkImage(TIFF* tif)
 {
 	switch (photometric) {
 	case PHOTOMETRIC_YCBCR:
-		if (compression == COMPRESSION_JPEG &&
-		    planarconfiguration == PLANARCONFIG_CONTIG) {
+		if ((compression == COMPRESSION_JPEG 
+                     || compression == COMPRESION_OJPEG)
+                     && planarconfiguration == PLANARCONFIG_CONTIG) {
 			/* can rely on libjpeg to convert to RGB */
 			TIFFSetField(tif, TIFFTAG_JPEGCOLORMODE,
 				     JPEGCOLORMODE_RGB);
