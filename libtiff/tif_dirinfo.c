@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.25 2004-06-05 08:09:28 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.26 2004-06-06 10:17:26 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -436,7 +436,7 @@ _TIFFFindFieldInfoByName(TIFF* tif, const char *field_name, TIFFDataType dt)
 	/* NB: use sorted search (e.g. binary search) */
 	if(dt != TIFF_ANY) {
             TIFFFieldInfo key = {0, 0, 0, 0, 0, 0, 0, 0};
-            key.field_name = field_name;
+            key.field_name = (char *)field_name;
             key.field_type = dt;
             return((const TIFFFieldInfo *) bsearch(&key, 
 						   tif->tif_fieldinfo, 
