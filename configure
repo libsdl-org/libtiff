@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.3 2000-03-20 18:20:42 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.4 2000-05-11 12:00:07 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -147,7 +147,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.3 $"
+	echo "This is TIFF configure $Revision: 1.4 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1156,7 +1156,7 @@ if [ "$DSO" = auto ]; then
 	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
 	;;
     *-linux*)
-	if [ -r /lib/libc.so.6 || -r /lib/libc.so.5 ]; then
+	if [ -r /lib/libc.so.6 ] || [ -r /lib/libc.so.5 ]; then
 	    DSOSUF=so.${DIST_MAJOR}
 	    DSOSUF_VERSION=${DSOSUF}.${DIST_MINOR}.${DIST_ALPHA}
 	    LIBCOPTS='-fPIC'
