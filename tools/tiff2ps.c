@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.29 2004-10-28 17:56:46 dron Exp $ */
+/* $Id: tiff2ps.c,v 1.30 2004-10-30 13:46:33 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -542,7 +542,8 @@ TIFF2PS(FILE* fd, TIFF* tif,
 	double pw, double ph, double lm, double bm, int cnt)
 {
 	uint32 w, h;
-	double ox, oy, prw, prh;
+	float ox, oy;
+        double prw, prh;
 	double scale = 1.0;
 	double left_offset = lm * PS_UNIT_SIZE;
 	double bottom_offset = bm * PS_UNIT_SIZE;
