@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.22 2004-02-05 09:53:39 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.23 2004-04-20 11:04:14 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -763,7 +763,7 @@ static	int32 find1span(u_char*, int32, int32);
  * table.  The ``base'' of the bit string is supplied
  * along with the start+end bit indices.
  */
-INLINE static int32
+inline static int32
 find0span(u_char* bp, int32 bs, int32 be)
 {
 	int32 bits = be - bs;
@@ -822,7 +822,7 @@ find0span(u_char* bp, int32 bs, int32 be)
 	return (span);
 }
 
-INLINE static int32
+inline static int32
 find1span(u_char* bp, int32 bs, int32 be)
 {
 	int32 bits = be - bs;
