@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.2 1999-09-08 12:21:13 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -68,6 +68,14 @@ typedef	long int32;
 typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
 #endif
 #endif /* _TIFF_DATA_TYPEDEFS_ */
+
+/*	For TIFFReassignTagToIgnore */
+enum TIFFIgnoreSense /* IGNORE tag table */
+{
+	TIS_STORE,
+	TIS_EXTRACT,
+	TIS_EMPTY
+};
 
 typedef	struct {
 	uint16	tiff_magic;	/* magic number (defines byte order) */
