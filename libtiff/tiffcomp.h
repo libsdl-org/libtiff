@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffcomp.h,v 1.5 2004-03-19 17:36:53 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffcomp.h,v 1.6 2004-03-26 14:58:17 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -141,21 +141,6 @@ typedef	unsigned long u_long;
 typedef extended dblparam_t;
 #else
 typedef double dblparam_t;
-#endif
-
-/*
- * If your compiler supports inline functions, then
- * set INLINE appropriately to get the known hotspots
- * in the library expanded inline.
- */
-#if defined(__GNUC__)
-#if defined(__STRICT_ANSI__)
-#define	INLINE	__inline__
-#else
-#define	INLINE	inline
-#endif
-#else /* !__GNUC__ */
-#define	INLINE
 #endif
 
 /*

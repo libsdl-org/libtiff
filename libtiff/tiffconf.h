@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffconf.h,v 1.9 2004-03-19 17:36:53 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffconf.h,v 1.10 2004-03-26 14:57:52 dron Exp $ */
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -48,9 +48,6 @@
  * HOST_FILLORDER	native cpu bit order: one of FILLORDER_MSB2LSB
  *			or FILLODER_LSB2MSB; this is typically set by the
  *			configure script
- * WORDS_BIGENDIAN	native cpu byte order: 1 if big-endian (Motorola)
- *			or 0 if little-endian (Intel); this may be used
- *			in codecs to optimize code
  * USE_64BIT_API	set to 1 if tif_unix.c should use lseek64(),
  *                      fstat64() and stat64 allowing 2-4GB files.
  */
@@ -59,9 +56,6 @@
 #endif
 #ifndef HOST_FILLORDER
 #define	HOST_FILLORDER	FILLORDER_MSB2LSB
-#endif
-#ifndef	WORDS_BIGENDIAN
-#define	WORDS_BIGENDIAN	1
 #endif
 
 #ifndef USE_64BIT_API
