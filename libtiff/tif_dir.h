@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.7 2002-03-27 03:51:19 dbmalloc Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.8 2002-03-27 06:33:59 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -69,7 +69,6 @@ typedef	struct {
 	char*	td_imagedescription;
 	char*	td_make;
 	char*	td_model;
-	char*	td_software;
         char*   td_copyright;
 	char*	td_pagename;
 	tstrip_t td_stripsperimage;
@@ -173,7 +172,7 @@ typedef	struct {
 #define FIELD_ARTIST			27
 #define FIELD_DATETIME			28
 #define FIELD_HOSTCOMPUTER		29
-#define FIELD_SOFTWARE			30
+/* unused - was FIELD_SOFTWARE          30 */
 #define	FIELD_EXTRASAMPLES		31
 #define FIELD_SAMPLEFORMAT		32
 #define	FIELD_SMINSAMPLEVALUE		33

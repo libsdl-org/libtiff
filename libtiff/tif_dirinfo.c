@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.13 2002-03-27 03:52:36 dbmalloc Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.14 2002-03-27 06:33:59 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -144,7 +144,7 @@ const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_TRANSFERFUNCTION,	-1,-1, TIFF_SHORT,	FIELD_TRANSFERFUNCTION,
       TRUE,	FALSE,	"TransferFunction" },
 #endif
-    { TIFFTAG_SOFTWARE,		-1,-1, TIFF_ASCII,	FIELD_SOFTWARE,
+    { TIFFTAG_SOFTWARE,		-1,-1, TIFF_ASCII,	FIELD_CUSTOM,
       TRUE,	FALSE,	"Software" },
     { TIFFTAG_DATETIME,		20,20, TIFF_ASCII,	FIELD_DATETIME,
       TRUE,	FALSE,	"DateTime" },
