@@ -1,5 +1,5 @@
 #! smake
-# $Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.37 2003-10-07 08:14:33 dron Exp $
+# $Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.38 2003-10-16 05:58:19 dron Exp $
 #
 # @WARNING@
 #
@@ -549,7 +549,7 @@ release.tar.zip:
 #	just below this one, and that .rpt files are available. 
 #
 test:
-	test_pics.sh pics/*.tif
+	${SRCDIR}/test_pics.sh pics/*.tif
 
 #
 # Create a package of the test images.
