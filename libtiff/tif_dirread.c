@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.27 2004-01-11 15:30:19 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.28 2004-02-26 10:12:19 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1203,7 +1203,6 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 				ok = (fip->field_passcount ?
 					TIFFSetField(tif, dp->tdir_tag, 1, c)
 				      : TIFFSetField(tif, dp->tdir_tag, c));
-				ok = TIFFSetField(tif, dp->tdir_tag, c);
 			  }
 			}
 			break;
