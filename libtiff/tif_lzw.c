@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.8 2001-09-25 01:35:40 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.9 2001-09-25 01:59:13 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -204,12 +204,13 @@ LZWSetupDecode(TIFF* tif)
 		/*
 		 * Pre-load the table.
 		 */
-		for (code = 255; code >= 0; code--) {
-			sp->dec_codetab[code].value = code;
-			sp->dec_codetab[code].firstchar = code;
-			sp->dec_codetab[code].length = 1;
-			sp->dec_codetab[code].next = NULL;
-		}
+                code = 255;
+                do {
+                    sp->dec_codetab[code].value = code;
+                    sp->dec_codetab[code].firstchar = code;
+                    sp->dec_codetab[code].length = 1;
+                    sp->dec_codetab[code].next = NULL;
+                } while (code--);
 	}
 	return (1);
 }
