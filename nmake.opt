@@ -1,4 +1,4 @@
-# $Id: nmake.opt,v 1.12 2005-03-04 11:48:22 dron Exp $
+# $Id: nmake.opt,v 1.13 2005-03-17 14:38:54 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -115,9 +115,10 @@ OPTFLAGS =	/Ox /MD /GX /W3
 
 #
 # Uncomment following line to enable using Windows Common RunTime Library
-# instead of system calls. See notes on top of tif_unix.c module for details.
+# instead of Windows specific system calls. See notes on top of tif_unix.c
+# module for details.
 #
-#USE_WIN_CRT_LIB = 1
+USE_WIN_CRT_LIB = 1
 
 # Compiler specific options. You may probably want to adjust compilation
 # parameters in CFLAGS variable. Refer to your compiler documentation
