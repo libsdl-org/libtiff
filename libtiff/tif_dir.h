@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.h,v 1.2 1995/06/30 05:46:47 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.h,v 1.4 1996/01/10 19:33:21 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -167,6 +167,17 @@ typedef	struct {
 #define	FIELD_SUBIFD			49
 
 #define	FIELD_CODEC			50	/* base of codec-private tags */
+/*
+ * Pseudo-tags don't normally need field bits since they
+ * are not written to an output file (by definition).
+ * The library also has express logic to always query a
+ * codec for a pseudo-tag so allocating a field bit for
+ * one is a waste.   If codec wants to promote the notion
+ * of a pseudo-tag being ``set'' or ``unset'' then it can
+ * do using internal state flags without polluting the
+ * field bit space defined for real tags.
+ */
+#define	FIELD_PSEUDO			0
 
 #define	FIELD_LAST			(32*FIELD_SETLONGS-1)
 

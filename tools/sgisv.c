@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgisv.c,v 1.24 1995/10/10 23:53:58 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgisv.c,v 1.25 1996/01/10 19:35:33 sam Exp $ */
 
 /*
- * Copyright (c) 1990-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1990-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

@@ -1,4 +1,4 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffcp.1,v 1.22 1995/10/11 19:42:05 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffcp.1,v 1.23 1996/01/10 00:01:03 sam Exp $
 .\"
 .\" Copyright (c) 1988-1995 Sam Leffler
 .\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFCP 1 "October 15, 1995"
+.TH TIFFCP 1 "January 9, 1996"
 .SH NAME
 tiffcp \- copy (and possibly convert) a
 .SM TIFF
@@ -59,6 +59,14 @@ can be used to reorganize the storage characteristics of data
 in a file, but it is explicitly intended to not alter or convert
 the image data content in any way.
 .SH OPTIONS
+.TP
+.B \-B
+Force output to be written with Big-Endian byte order.
+This option only has an effect when the output file is created or
+overwritten and not when it is appended to.
+.B \-C
+Suppress the use of ``strip chopping'' when reading images
+that have a single strip/tile of uncompressed data.
 .TP
 .B \-c
 Specify the compression to use for data written to the output file:
@@ -137,6 +145,12 @@ Specify the length of a tile (in pixels).
 .I tiffcp
 attempts to set the tile dimensions so
 that no more than 8 kilobytes of data appear in a tile.
+.B \-L
+Force output to be written with Little-Endian byte order.
+This option only has an effect when the output file is created or
+overwritten and not when it is appended to.
+.B \-M
+Suppress the use of memory-mapped files when reading images.
 .TP
 .B \-p
 Specify the planar configuration to use in writing image data

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.c,v 1.151 1995/07/19 00:39:31 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.c,v 1.156 1996/01/10 20:37:08 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -371,8 +371,20 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		break;
 #endif
 	default:
-		TIFFError(tif->tif_name,
-		    "Internal error, tag value botch, tag \"%s\"",
+		/*
+		 * This can happen if multiple images are open with
+		 * different codecs which have private tags.  The
+		 * global tag information table may then have tags
+		 * that are valid for one file but not the other. 
+		 * If the client tries to set a tag that is not valid
+		 * for the image's codec then we'll arrive here.  This
+		 * happens, for example, when tiffcp is used to convert
+		 * between compression schemes and codec-specific tags
+		 * are blindly copied.
+		 */
+		TIFFError("TIFFSetField",
+		    "%s: Invalid %stag \"%s\" (not supported by codec)",
+		    tif->tif_name, isPseudoTag(tag) ? "pseduo-" : "",
 		    _TIFFFieldWithTag(tif, tag)->field_name);
 		status = 0;
 		break;
@@ -407,21 +419,24 @@ badvalue32:
 static int
 OkToChangeTag(TIFF* tif, ttag_t tag)
 {
-	if (tag != TIFFTAG_IMAGELENGTH &&
-	    (tif->tif_flags & TIFF_BEENWRITING)) {
-		const TIFFFieldInfo *fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
+	const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
+	if (!fip) {			/* unknown tag */
+		TIFFError("TIFFSetField", "%s: Unknown %stag %u",
+		    tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "", tag);
+		return (0);
+	}
+	if (tag != TIFFTAG_IMAGELENGTH && (tif->tif_flags & TIFF_BEENWRITING) &&
+	    !fip->field_oktochange) {
 		/*
 		 * Consult info table to see if tag can be changed
 		 * after we've started writing.  We only allow changes
 		 * to those tags that don't/shouldn't affect the
 		 * compression and/or format of the data.
 		 */
-		if (fip && !fip->field_oktochange) {
-			TIFFError("TIFFSetField",
-			    "%s: Cannot modify tag \"%s\" while writing",
-			    tif->tif_name, fip->field_name);
-			return (0);
-		}
+		TIFFError("TIFFSetField",
+		    "%s: Cannot modify tag \"%s\" while writing",
+		    tif->tif_name, fip->field_name);
+		return (0);
 	}
 	return (1);
 }
@@ -667,8 +682,17 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 		break;
 #endif
 	default:
-		TIFFError("_TIFFVGetField",
-		    "Internal error, no value returned for tag \"%s\"",
+		/*
+		 * This can happen if multiple images are open with
+		 * different codecs which have private tags.  The
+		 * global tag information table may then have tags
+		 * that are valid for one file but not the other. 
+		 * If the client tries to get a tag that is not valid
+		 * for the image's codec then we'll arrive here.
+		 */
+		TIFFError("TIFFGetField",
+		    "%s: Invalid %stag \"%s\" (not supported by codec)",
+		    tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
 		    _TIFFFieldWithTag(tif, tag)->field_name);
 		break;
 	}
@@ -701,7 +725,7 @@ int
 TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 {
 	const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
-	return (fip && TIFFFieldSet(tif, fip->field_bit) ?
+	return (fip && (isPseudoTag(tag) || TIFFFieldSet(tif, fip->field_bit)) ?
 	    (*tif->tif_vgetfield)(tif, tag, ap) : 0);
 }
 

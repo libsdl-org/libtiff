@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_compress.c,v 1.49 1995/10/12 16:41:08 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_compress.c,v 1.51 1996/01/10 19:32:57 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -34,9 +34,15 @@
 static int
 TIFFNoEncode(TIFF* tif, char* method)
 {
-	const TIFFCodec *c = TIFFFindCODEC(tif->tif_dir.td_compression);
-	TIFFError(tif->tif_name,
-	    "%s %s encoding is not implemented", c->name, method);
+	const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
+
+	if (c)
+		TIFFError(tif->tif_name, "%s %s encoding is not implemented",
+		    c->name, method);
+	else
+		TIFFError(tif->tif_name,
+		    "Compression scheme %u %s encoding is not implemented",
+		    tif->tif_dir.td_compression, method);
 	return (-1);
 }
 
@@ -64,9 +70,15 @@ _TIFFNoTileEncode(TIFF* tif, tidata_t pp, tsize_t cc, tsample_t s)
 static int
 TIFFNoDecode(TIFF* tif, char* method)
 {
-	const TIFFCodec *c = TIFFFindCODEC(tif->tif_dir.td_compression);
-	TIFFError(tif->tif_name,
-	    "%s %s decoding is not implemented", c->name, method);
+	const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
+
+	if (c)
+		TIFFError(tif->tif_name, "%s %s decoding is not implemented",
+		    c->name, method);
+	else
+		TIFFError(tif->tif_name,
+		    "Compression scheme %u %s decoding is not implemented",
+		    tif->tif_dir.td_compression, method);
 	return (-1);
 }
 
@@ -115,12 +127,6 @@ TIFFSetCompressionScheme(TIFF* tif, int scheme)
 {
 	const TIFFCodec *c = TIFFFindCODEC(scheme);
 
-	if (!c) {
-		TIFFError(tif->tif_name,
-		    "Unknown data compression algorithm %u (0x%x)",
-		    scheme, scheme);
-		return (0);
-	}
 	tif->tif_setupdecode = _TIFFtrue;
 	tif->tif_predecode = _TIFFNoPreCode;
 	tif->tif_decoderow = _TIFFNoRowDecode;
@@ -138,7 +144,13 @@ TIFFSetCompressionScheme(TIFF* tif, int scheme)
 	tif->tif_defstripsize = _TIFFDefaultStripSize;
 	tif->tif_deftilesize = _TIFFDefaultTileSize;
 	tif->tif_flags &= ~TIFF_NOBITREV;
-	return ((*c->init)(tif, scheme));
+	/*
+	 * Don't treat an unknown compression scheme as an error.
+	 * This permits applications to open files with data that
+	 * the library does not have builtin support for, but which
+	 * may still be meaningful.
+	 */
+	return (c ? (*c->init)(tif, scheme) : 1);
 }
 
 /*

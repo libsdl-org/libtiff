@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_open.c,v 1.59 1995/07/20 16:38:53 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_open.c,v 1.63 1996/01/10 19:33:07 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -76,27 +76,13 @@ static const int litTypeshift[13] = {
 };
 
 /*
- * Initialize the bit fill order, the
- * shift & mask tables, and the byte
- * swapping state according to the file
+ * Initialize the shift & mask tables, and the
+ * byte swapping state according to the file
  * contents and the machine architecture.
  */
 static void
-TIFFInitOrder(register TIFF* tif, int magic, int bigendian)
+TIFFInitOrder(TIFF* tif, int magic, int bigendian)
 {
-#ifdef notdef
-	/*
-	 * NB: too many applications assume that data is returned
-	 *     by the library in MSB2LSB bit order to change the
-	 *     default bit order to reflect the native cpu.  This
-	 *     may change in the future in which case applications
-	 *     will need to check the value of the FillOrder tag.
-	 */
-	tif->tif_flags = (tif->tif_flags &~ TIFF_FILLORDER) | HOST_FILLORDER;
-#else
-	tif->tif_flags = (tif->tif_flags &~ TIFF_FILLORDER) | FILLORDER_MSB2LSB;
-#endif
-
 	tif->tif_typemask = typemask;
 	if (magic == TIFF_BIGENDIAN) {
 		tif->tif_typeshift = bigTypeshift;
@@ -149,6 +135,7 @@ TIFFClientOpen(
 	static const char module[] = "TIFFClientOpen";
 	TIFF *tif;
 	int m, bigendian;
+	const char* cp;
 
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
@@ -174,28 +161,106 @@ TIFFClientOpen(
 	tif->tif_sizeproc = sizeproc;
 	tif->tif_mapproc = mapproc;
 	tif->tif_unmapproc = unmapproc;
+	/*
+	 * Default is to return data MSB2LSB and enable the
+	 * use of memory-mapped files and strip chopping when
+	 * a file is opened read-only.
+	 */
+	tif->tif_flags = FILLORDER_MSB2LSB;
+	if (m == O_RDONLY)
+		tif->tif_flags |= TIFF_MAPPED|TIFF_STRIPCHOP;
 
 	{ union { int32 i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
-#ifdef ENDIANHACK_SUPPORT
 	/*
-	 * Numerous vendors, typically on the PC, do not correctly
-	 * support TIFF; they only support the Intel little-endian
-	 * byte order.  If this hack is enabled, then applications
-	 * can open a file with a specific byte-order by specifying
-	 * either "wl" (for litt-endian byte order) or "wb" for
-	 * (big-endian byte order).  This support is not configured
-	 * by default because it supports the violation of the TIFF
-	 * spec that says that readers *MUST* support both byte orders.
+	 * Process library-specific flags in the open mode string.
+	 * The following flags may be used to control intrinsic library
+	 * behaviour that may or may not be desirable (usually for
+	 * compatibility with some application that claims to support
+	 * TIFF but only supports some braindead idea of what the
+	 * vendor thinks TIFF is):
 	 *
-	 * It is strongly recommended that you not use this feature
-	 * except to deal with busted apps that write invalid TIFF.
-	 * And even in those cases you should bang on the vendors to
-	 * fix their software.
+	 * 'l'		use little-endian byte order for creating a file
+	 * 'b'		use big-endian byte order for creating a file
+	 * 'L'		read/write information using LSB2MSB bit order
+	 * 'B'		read/write information using MSB2LSB bit order
+	 * 'H'		read/write information using host bit order
+	 * 'M'		enable use of memory-mapped files when supported
+	 * 'm'		disable use of memory-mapped files
+	 * 'C'		enable strip chopping support when reading
+	 * 'c'		disable strip chopping support
+	 *
+	 * The use of the 'l' and 'b' flags is strongly discouraged.
+	 * These flags are provided solely because numerous vendors,
+	 * typically on the PC, do not correctly support TIFF; they
+	 * only support the Intel little-endian byte order.  This
+	 * support is not configured by default because it supports
+	 * the violation of the TIFF spec that says that readers *MUST*
+	 * support both byte orders.  It is strongly recommended that
+	 * you not use this feature except to deal with busted apps
+	 * that write invalid TIFF.  And even in those cases you should
+	 * bang on the vendors to fix their software.
+	 *
+	 * The 'L', 'B', and 'H' flags are intended for applications
+	 * that can optimize operations on data by using a particular
+	 * bit order.  By default the library returns data in MSB2LSB
+	 * bit order for compatibiltiy with older versions of this
+	 * library.  Returning data in the bit order of the native cpu
+	 * makes the most sense but also requires applications to check
+	 * the value of the FillOrder tag; something they probabyl do
+	 * not do right now.
+	 *
+	 * The 'M' and 'm' flags are provided because some virtual memory
+	 * systems exhibit poor behaviour when large images are mapped.
+	 * These options permit clients to control the use of memory-mapped
+	 * files on a per-file basis.
+	 *
+	 * The 'C' and 'c' flags are provided because the library support
+	 * for chopping up large strips into multiple smaller strips is not
+	 * application-transparent and as such can cause problems.  The 'c'
+	 * option permits applications that only want to look at the tags,
+	 * for example, to get the unadulterated TIFF tag information.
 	 */
-	if ((m&O_CREAT) &&
-	    ((bigendian && mode[1] == 'l') || (!bigendian && mode[1] == 'b')))
-		tif->tif_flags |= TIFF_SWAB;
+	for (cp = mode; *cp; cp++)
+		switch (*cp) {
+		case 'b':
+			if ((m&O_CREAT) && !bigendian)
+				tif->tif_flags |= TIFF_SWAB;
+			break;
+		case 'l':
+			if ((m&O_CREAT) && bigendian)
+				tif->tif_flags |= TIFF_SWAB;
+			break;
+		case 'B':
+			tif->tif_flags = (tif->tif_flags &~ TIFF_FILLORDER) |
+			    FILLORDER_MSB2LSB;
+			break;
+		case 'L':
+			tif->tif_flags = (tif->tif_flags &~ TIFF_FILLORDER) |
+			    FILLORDER_LSB2MSB;
+			break;
+		case 'H':
+			tif->tif_flags = (tif->tif_flags &~ TIFF_FILLORDER) |
+			    HOST_FILLORDER;
+			break;
+		case 'M':
+			if (m == O_RDONLY)
+				tif->tif_flags |= TIFF_MAPPED;
+			break;
+		case 'm':
+			if (m == O_RDONLY)
+				tif->tif_flags &= ~TIFF_MAPPED;
+			break;
+#ifdef STRIPCHOP_SUPPORT
+		case 'C':
+			if (m == O_RDONLY)
+				tif->tif_flags |= TIFF_STRIPCHOP;
+			break;
+		case 'c':
+			if (m == O_RDONLY)
+				tif->tif_flags &= ~TIFF_STRIPCHOP;
+			break;
 #endif
+		}
 	/*
 	 * Read in TIFF header.
 	 */
@@ -211,6 +276,8 @@ TIFFClientOpen(
 		    ? (bigendian ? TIFF_LITTLEENDIAN : TIFF_BIGENDIAN)
 		    : (bigendian ? TIFF_BIGENDIAN : TIFF_LITTLEENDIAN);
 		tif->tif_header.tiff_version = TIFF_VERSION;
+		if (tif->tif_flags & TIFF_SWAB)
+			TIFFSwabShort(&tif->tif_header.tiff_version);
 		tif->tif_header.tiff_diroff = 0;	/* filled in later */
 		if (!WriteOK(tif, &tif->tif_header, sizeof (TIFFHeader))) {
 			TIFFError(name, "Error writing TIFF header");
@@ -267,8 +334,14 @@ TIFFClientOpen(
 	switch (mode[0]) {
 	case 'r':
 		tif->tif_nextdiroff = tif->tif_header.tiff_diroff;
-		if (TIFFMapFileContents(tif, (tdata_t*) &tif->tif_base, &tif->tif_size))
-			tif->tif_flags |= TIFF_MAPPED;
+		/*
+		 * Try to use a memory-mapped file if the client
+		 * has not explicitly suppressed usage with the
+		 * 'm' flag in the open mode (see above).
+		 */
+		if ((tif->tif_flags & TIFF_MAPPED) &&
+	!TIFFMapFileContents(tif, (tdata_t*) &tif->tif_base, &tif->tif_size))
+			tif->tif_flags &= ~TIFF_MAPPED;
 		if (TIFFReadDirectory(tif)) {
 			tif->tif_rawcc = -1;
 			tif->tif_flags |= TIFF_BUFFERSETUP;

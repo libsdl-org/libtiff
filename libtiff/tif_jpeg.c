@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_jpeg.c,v 1.23 1995/06/30 15:29:02 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_jpeg.c,v 1.25 1996/01/10 19:33:04 sam Exp $ */
 
 /*
- * Copyright (c) 1994-1995 Sam Leffler
- * Copyright (c) 1994-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1994-1996 Sam Leffler
+ * Copyright (c) 1994-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -114,18 +114,15 @@ static	int JPEGEncode(TIFF*, tidata_t, tsize_t, tsample_t);
 static	int JPEGEncodeRaw(TIFF*, tidata_t, tsize_t, tsample_t);
 
 #define	FIELD_JPEGTABLES	(FIELD_CODEC+0)
-#define	FIELD_JPEGQUALITY	(FIELD_CODEC+1)
-#define	FIELD_JPEGCOLORMODE	(FIELD_CODEC+2)
-#define	FIELD_JPEGTABLESMODE	(FIELD_CODEC+3)
 
 static const TIFFFieldInfo jpegFieldInfo[] = {
     { TIFFTAG_JPEGTABLES,	 -1,-1,	TIFF_UNDEFINED,	FIELD_JPEGTABLES,
       FALSE,	TRUE,	"JPEGTables" },
-    { TIFFTAG_JPEGQUALITY,	 0, 0,	TIFF_ANY,	FIELD_JPEGQUALITY,
+    { TIFFTAG_JPEGQUALITY,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
       TRUE,	FALSE,	"" },
-    { TIFFTAG_JPEGCOLORMODE,	 0, 0,	TIFF_ANY,	FIELD_JPEGCOLORMODE,
+    { TIFFTAG_JPEGCOLORMODE,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
       FALSE,	FALSE,	"" },
-    { TIFFTAG_JPEGTABLESMODE,	 0, 0,	TIFF_ANY,	FIELD_JPEGTABLESMODE,
+    { TIFFTAG_JPEGTABLESMODE,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
       FALSE,	FALSE,	"" },
 };
 #define	N(a)	(sizeof (a) / sizeof (a[0]))

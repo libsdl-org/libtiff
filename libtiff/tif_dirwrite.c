@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.52 1995/06/30 05:46:47 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirwrite.c,v 1.54 1996/01/10 19:33:00 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -931,7 +931,7 @@ TIFFLinkDirectory(TIFF* tif)
 		/*
 		 * First directory, overwrite offset in header.
 		 */
-		tif->tif_header.tiff_diroff = diroff;
+		tif->tif_header.tiff_diroff = (uint32) tif->tif_diroff;
 #define	HDROFF(f)	((toff_t) &(((TIFFHeader*) 0)->f))
 		(void) TIFFSeekFile(tif, HDROFF(tiff_diroff), SEEK_SET);
 		if (!WriteOK(tif, &diroff, sizeof (diroff))) {

@@ -1,8 +1,8 @@
-/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkversion.c,v 1.2 1995/10/16 19:14:11 sam Exp $ */
+/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkversion.c,v 1.4 1996/01/10 19:34:25 sam Exp $ */
 
 /*
- * Copyright (c) 1995 Sam Leffler
- * Copyright (c) 1995 Silicon Graphics, Inc.
+ * Copyright (c) 1995-1996 Sam Leffler
+ * Copyright (c) 1995-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -123,8 +123,8 @@ main(int argc, char* argv[])
     } else
 	fd = stdout;
     fprintf(fd, "#define VERSION \"LIBTIFF, Version %s\\n", version);
-    fprintf(fd, "Copyright (c) 1988-1995 Sam Leffler\\n");
-    fprintf(fd, "Copyright (c) 1991-1995 Silicon Graphics, Inc.\"\n");
+    fprintf(fd, "Copyright (c) 1988-1996 Sam Leffler\\n");
+    fprintf(fd, "Copyright (c) 1991-1996 Silicon Graphics, Inc.\"\n");
 
     if (fd != stdout)
 	fclose(fd);

@@ -1,9 +1,9 @@
-#	$Header: /usr/people/sam/tiff/dist/RCS/tiff.spec,v 1.2 1995/06/28 04:59:00 sam Exp $
+#	$Header: /usr/people/sam/tiff/dist/RCS/tiff.spec,v 1.3 1996/01/10 19:37:41 sam Exp $
 #
 # TIFF Software
 #
-# Copyright (c) 1994 Sam Leffler
-# Copyright (c) 1994 Silicon Graphics, Inc.
+# Copyright (c) 1994-1996 Sam Leffler
+# Copyright (c) 1994-1996 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided

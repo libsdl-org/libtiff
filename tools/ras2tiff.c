@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/ras2tiff.c,v 1.27 1995/10/10 00:35:22 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/ras2tiff.c,v 1.29 1996/01/10 19:35:30 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -184,7 +184,7 @@ main(int argc, char* argv[])
 			break;
 		}
 		if (h.ras_type == RT_STANDARD && h.ras_depth == 24) {
-			tsize_t cc = linebytes;
+			tsize_t cc = h.ras_width;
 			unsigned char* cp = buf;
 #define	SWAP(a,b)	{ unsigned char t = (a); (a) = (b); (b) = t; }
 			do {

@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.6 1995/10/16 22:32:45 sam Exp $" */
+/* $Header: /usr/people/sam/tiff/tools/RCS/fax2ps.c,v 1.9 1996/01/10 19:35:26 sam Exp $" */
 
 /*
- * Copyright (c) 1991-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1991-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -169,7 +169,7 @@ printTIF(TIFF* tif, int pageNumber)
     }
 
     printf("%%%%Page: \"%d\" %d\n", pageNumber, pageNumber);
-    printf("gsave\n");
+    printf("/$pageTop save def gsave\n");
     if (scaleToPage) {
 	float yscale = pageHeight / (h/yres);
 	float xscale = pageWidth / (w/xres);
@@ -192,7 +192,7 @@ printTIF(TIFF* tif, int pageNumber)
     for (s = 0; s < ns; s++)
 	(void) TIFFReadEncodedStrip(tif, s, (tdata_t) NULL, (tsize_t) -1);
     printf("p\n");
-    printf("grestore\n");
+    printf("grestore $pageTop restore\n");
     totalPages++;
 }
 
@@ -283,7 +283,6 @@ pcompar(const void* va, const void* vb)
     return (*pa - *pb);
 }
 
-extern	double atof();
 static	void usage(int code);
 
 int

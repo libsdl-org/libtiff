@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.46 1995/10/10 23:24:44 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.48 1996/01/10 19:35:38 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -42,7 +42,10 @@
 #undef open
 int  open(const char*, int, int);
 typedef unsigned int off_t;
-#else /* !VMS && !_WINDOWS */
+#else /* !VMS && !_WINDOWS && !applec */
+#ifdef unix
+#include <sys/types.h>
+#endif
 #include <unistd.h>
 #include <fcntl.h>
 #endif

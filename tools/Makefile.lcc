@@ -1,9 +1,9 @@
-# $Header: /usr/people/sam/tiff/tools/RCS/Makefile.lcc,v 1.3 1994/12/15 23:51:55 sam Exp $
+# $Header: /usr/people/sam/tiff/tools/RCS/Makefile.lcc,v 1.4 1996/01/10 19:35:26 sam Exp $
 #
 # TIFF Library Tools
 #
-# Copyright (c) 1988, 1989, 1990, 1991, 1992, 1993, 1994 Sam Leffler
-# Copyright (c) 1991, 1992, 1993, 1994 Silicon Graphics, Inc.
+# Copyright (c) 1988-1996 Sam Leffler
+# Copyright (c) 1991-1996 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided

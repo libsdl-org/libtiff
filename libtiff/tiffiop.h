@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.75 1995/10/12 18:45:02 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.79 1996/01/10 19:33:26 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -86,6 +86,7 @@ struct tiff {
 #define	TIFF_POSTENCODE		0x1000	/* need call to postencode routine */
 #define	TIFF_INSUBIFD		0x2000	/* currently writing a subifd */
 #define	TIFF_UPSAMPLED		0x4000	/* library is doing data up-sampling */ 
+#define	TIFF_STRIPCHOP		0x8000	/* enable strip chopping support */
 	toff_t		tif_diroff;	/* file offset of current directory */
 	toff_t		tif_nextdiroff;	/* file offset of following directory */
 	TIFFDirectory	tif_dir;	/* internal rep of current directory */
@@ -133,7 +134,7 @@ struct tiff {
 	tsize_t		tif_rawcc;	/* bytes unread from raw buffer */
 /* memory-mapped file support */
 	tidata_t	tif_base;	/* base of mapped file */
-#ifdef WIN32
+#ifdef __WIN32__
 	void*		pv_map_handle;	/* WIN32 file mapping handle;
 					 * must be contiguous with tif_base
 					 * since map & unmap only get tif_base
@@ -160,6 +161,8 @@ struct tiff {
 	TIFFPrintMethod	tif_printdir;	/* directory print routine */
 };
 
+#define	isPseudoTag(t)	(t > 0xffff)	/* is tag value normal or pseudo */
+
 #define	isTiled(tif)	(((tif)->tif_flags & TIFF_ISTILED) != 0)
 #define	isMapped(tif)	(((tif)->tif_flags & TIFF_MAPPED) != 0)
 #define	isFillOrder(tif, o)	(((tif)->tif_flags & (o)) != 0)
@@ -176,7 +179,7 @@ struct tiff {
 	((*(tif)->tif_sizeproc)((tif)->tif_clientdata))
 #define	TIFFMapFileContents(tif, paddr, psize) \
 	((*(tif)->tif_mapproc)((tif)->tif_clientdata,paddr,psize))
-#ifdef WIN32
+#ifdef __WIN32__
 #define	TIFFUnmapFileContents(tif, addr, dummy) \
 	((*(tif)->tif_unmapproc)((tif)->tif_clientdata,addr,\
 	    (toff_t)(tif)->pv_map_handle))

@@ -1,4 +1,4 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/libtiff.3t,v 1.21 1995/10/12 00:44:17 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/libtiff.3t,v 1.22 1996/01/09 22:47:08 sam Exp $
 .\"
 .\" Copyright (c) 1988-1995 Sam Leffler
 .\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
@@ -261,6 +261,9 @@ DateTime	306	R/W
 DocumentName	269	R/W
 DotRange	336	R/W
 ExtraSamples	338	R/W	lots
+FaxRecvParams	34908	R/W
+FaxSubAddress	34909	R/W
+FaxRecvTime	34910	R/W
 FillOrder	266	R/W	control bit order
 FreeByteCounts	289		parsed but ignored
 FreeOffsets	288		parsed but ignored

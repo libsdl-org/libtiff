@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.60 1995/10/12 16:25:42 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.64 1996/01/10 19:33:23 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -299,8 +299,14 @@ typedef	enum {
 #define TIFFTAG_PIXAR_IMAGEFULLLENGTH   33301   /* full image size in y */
 /* tag 33432 is listed in the 6.0 spec w/ unknown ownership */
 #define	TIFFTAG_COPYRIGHT		33432	/* copyright string */
+/* tags 34232-34236 are private tags registered to Texas Instruments */
+#define TIFFTAG_FRAMECOUNT              34232   /* Sequence Frame Count */
 /* tag 34750 is a private tag registered to Pixel Magic */
 #define	TIFFTAG_JBIGOPTIONS		34750	/* JBIG options */
+/* tags 34908-34914 are private tags registered to SGI */
+#define	TIFFTAG_FAXRECVPARAMS		34908	/* encoded Class 2 ses. parms */
+#define	TIFFTAG_FAXSUBADDRESS		34909	/* received SubAddr string */
+#define	TIFFTAG_FAXRECVTIME		34910	/* receive time (secs) */
 
 /*
  * The following are ``pseudo tags'' that can be
@@ -330,4 +336,11 @@ typedef	enum {
 #define	    JPEGTABLESMODE_HUFF	0x0002		/* include Huffman tbls */
 /* Note: default is JPEGTABLESMODE_QUANT | JPEGTABLESMODE_HUFF */
 #define	TIFFTAG_FAXFILLFUNC		65540	/* G3/G4 fill function */
+#define	TIFFTAG_PIXARLOGDATAFMT		65549	/* PixarLogCodec I/O data sz */
+#define	    PIXARLOGDATAFMT_8BIT	0	/* regular u_char samples */
+#define	    PIXARLOGDATAFMT_8BITABGR	1	/* ABGR-order u_chars */
+#define	    PIXARLOGDATAFMT_10BITLOG	2	/* 10-bit log-encoded (raw) */
+#define	    PIXARLOGDATAFMT_12BITPICIO	3	/* as per PICIO (1.0==2048) */
+#define	    PIXARLOGDATAFMT_16BIT	4	/* signed short samples */
+#define	    PIXARLOGDATAFMT_FLOAT	5	/* IEEE float samples */
 #endif /* _TIFF_ */

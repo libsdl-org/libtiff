@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcp.c,v 1.45 1995/10/12 16:40:49 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcp.c,v 1.48 1996/01/10 19:35:36 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -74,15 +74,18 @@ main(int argc, char* argv[])
 	uint32 diroff = 0;
 	TIFF* in;
 	TIFF* out;
-	const char* mode = "w";
+	char mode[10];
+	char* mp = mode;
 	int c;
 	extern int optind;
 	extern char* optarg;
 
-	while ((c = getopt(argc, argv, "c:f:l:o:p:r:w:aist")) != -1)
+	*mp++ = 'w';
+	*mp = '\0';
+	while ((c = getopt(argc, argv, "c:f:l:o:p:r:w:aistBLMC")) != -1)
 		switch (c) {
 		case 'a':		/* append to output */
-			mode = "a";
+			mode[0] = 'a';
 			break;
 		case 'c':		/* compression scheme */
 			if (!processCompressOptions(optarg))
@@ -127,6 +130,18 @@ main(int argc, char* argv[])
 			outtiled = TRUE;
 			deftilewidth = atoi(optarg);
 			break;
+		case 'B':
+			*mp++ = 'b'; *mp = '\0';
+			break;
+		case 'L':
+			*mp++ = 'l'; *mp = '\0';
+			break;
+		case 'M':
+			*mp++ = 'm'; *mp = '\0';
+			break;
+		case 'C':
+			*mp++ = 'c'; *mp = '\0';
+			break;
 		case '?':
 			usage();
 			/*NOTREACHED*/
@@ -136,8 +151,9 @@ main(int argc, char* argv[])
 	out = TIFFOpen(argv[argc-1], mode);
 	if (out == NULL)
 		return (-2);
+	mode[0] = 'r';
 	for (; optind < argc-1 ; optind++) {
-		in = TIFFOpen(argv[optind], "r");
+		in = TIFFOpen(argv[optind], mode);
 		if (in == NULL)
 			return (-3);
 		if (diroff != 0 && !TIFFSetSubDirectory(in, diroff)) {
@@ -302,6 +318,57 @@ CheckAndCorrectColormap(TIFF* tif, int n, uint16* r, uint16* g, uint16* b)
 #define	CopyField4(tag, v1, v2, v3, v4) \
     if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4)) TIFFSetField(out, tag, v1, v2, v3, v4)
 
+static void
+cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
+{
+	switch (type) {
+	case TIFF_SHORT:
+		if (count == 1) {
+			uint16 shortv;
+			CopyField(tag, shortv);
+		} else if (count == 2) {
+			uint16 shortv1, shortv2;
+			CopyField2(tag, shortv1, shortv2);
+		} else if (count == 4) {
+			uint16 *tr, *tg, *tb, *ta;
+			CopyField4(tag, tr, tg, tb, ta);
+		} else if (count == (uint16) -1) {
+			uint16 shortv1;
+			uint16* shortav;
+			CopyField2(tag, shortv1, shortav);
+		}
+		break;
+	case TIFF_LONG:
+		{ uint32 longv;
+		  CopyField(tag, longv);
+		}
+		break;
+	case TIFF_RATIONAL:
+		if (count == 1) {
+			float floatv;
+			CopyField(tag, floatv);
+		} else if (count == (uint16) -1) {
+			float* floatav;
+			CopyField(tag, floatav);
+		}
+		break;
+	case TIFF_ASCII:
+		{ char* stringv;
+		  CopyField(tag, stringv);
+		}
+		break;
+	case TIFF_DOUBLE:
+		if (count == 1) {
+			double doublev;
+			CopyField(tag, doublev);
+		} else if (count == (uint16) -1) {
+			double* doubleav;
+			CopyField(tag, doubleav);
+		}
+		break;
+	}
+}
+
 static struct cpTag {
 	uint16	tag;
 	uint16	count;
@@ -321,7 +388,6 @@ static struct cpTag {
 	{ TIFFTAG_PAGENAME,		1, TIFF_ASCII },
 	{ TIFFTAG_XPOSITION,		1, TIFF_RATIONAL },
 	{ TIFFTAG_YPOSITION,		1, TIFF_RATIONAL },
-	{ TIFFTAG_GROUP4OPTIONS,	1, TIFF_LONG },
 	{ TIFFTAG_RESOLUTIONUNIT,	1, TIFF_SHORT },
 	{ TIFFTAG_PAGENUMBER,		2, TIFF_SHORT },
 	{ TIFFTAG_SOFTWARE,		1, TIFF_ASCII },
@@ -331,9 +397,6 @@ static struct cpTag {
 	{ TIFFTAG_WHITEPOINT,		1, TIFF_RATIONAL },
 	{ TIFFTAG_PRIMARYCHROMATICITIES,(uint16) -1,TIFF_RATIONAL },
 	{ TIFFTAG_HALFTONEHINTS,	2, TIFF_SHORT },
-	{ TIFFTAG_BADFAXLINES,		1, TIFF_LONG },
-	{ TIFFTAG_CLEANFAXDATA,		1, TIFF_SHORT },
-	{ TIFFTAG_CONSECUTIVEBADFAXLINES,1, TIFF_LONG },
 	{ TIFFTAG_INKSET,		1, TIFF_SHORT },
 	{ TIFFTAG_INKNAMES,		1, TIFF_ASCII },
 	{ TIFFTAG_DOTRANGE,		2, TIFF_SHORT },
@@ -349,56 +412,7 @@ static struct cpTag {
 };
 #define	NTAGS	(sizeof (tags) / sizeof (tags[0]))
 
-static void
-cpOtherTags(TIFF* in, TIFF* out)
-{
-	struct cpTag *p;
-
-	for (p = tags; p < &tags[NTAGS]; p++)
-		switch (p->type) {
-		case TIFF_SHORT:
-			if (p->count == 1) {
-				uint16 shortv;
-				CopyField(p->tag, shortv);
-			} else if (p->count == 2) {
-				uint16 shortv1, shortv2;
-				CopyField2(p->tag, shortv1, shortv2);
-			} else if (p->count == (uint16) -1) {
-				uint16 shortv1;
-				uint16* shortav;
-				CopyField2(p->tag, shortv1, shortav);
-			}
-			break;
-		case TIFF_LONG:
-			{ uint32 longv;
-			  CopyField(p->tag, longv);
-			}
-			break;
-		case TIFF_RATIONAL:
-			if (p->count == 1) {
-				float floatv;
-				CopyField(p->tag, floatv);
-			} else if (p->count == (uint16) -1) {
-				float* floatav;
-				CopyField(p->tag, floatav);
-			}
-			break;
-		case TIFF_ASCII:
-			{ char* stringv;
-			  CopyField(p->tag, stringv);
-			}
-			break;
-		case TIFF_DOUBLE:
-			if (p->count == 1) {
-				double doublev;
-				CopyField(p->tag, doublev);
-			} else if (p->count == (uint16) -1) {
-				double* doubleav;
-				CopyField(p->tag, doubleav);
-			}
-			break;
-		}
-}
+#define	CopyTag(tag, count, type)	cpTag(in, out, tag, count, type)
 
 typedef int (*copyFunc)
     (TIFF* in, TIFF* out, uint32 l, uint32 w, uint16 samplesperpixel);
@@ -407,9 +421,10 @@ static	copyFunc pickCopyFunc(TIFF*, TIFF*, uint16, uint16);
 static int
 tiffcp(TIFF* in, TIFF* out)
 {
-	uint16 bitspersample, samplesperpixel, shortv;
+	uint16 bitspersample, samplesperpixel;
 	copyFunc cf;
 	uint32 w, l;
+	struct cpTag* p;
 
 	CopyField(TIFFTAG_IMAGEWIDTH, w);
 	CopyField(TIFFTAG_IMAGELENGTH, l);
@@ -421,11 +436,11 @@ tiffcp(TIFF* in, TIFF* out)
 	if (compression == COMPRESSION_JPEG && jpegcolormode == JPEGCOLORMODE_RGB)
 		TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_YCBCR);
 	else
-		CopyField(TIFFTAG_PHOTOMETRIC, shortv);
+		CopyTag(TIFFTAG_PHOTOMETRIC, 1, TIFF_SHORT);
 	if (fillorder != 0)
 		TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
 	else
-		CopyField(TIFFTAG_FILLORDER, shortv);
+		CopyTag(TIFFTAG_FILLORDER, 1, TIFF_SHORT);
 	CopyField(TIFFTAG_SAMPLESPERPIXEL, samplesperpixel);
 	/*
 	 * Choose tiles/strip for the output image according to
@@ -463,20 +478,9 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
 	else
 		CopyField(TIFFTAG_PLANARCONFIG, config);
-	if (g3opts != (uint32) -1)
-		TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, g3opts);
-	else
-		CopyField(TIFFTAG_GROUP3OPTIONS, g3opts);
-	if (samplesperpixel <= 4) {
-		uint16 *tr, *tg, *tb, *ta;
-		CopyField4(TIFFTAG_TRANSFERFUNCTION, tr, tg, tb, ta);
-	}
-	{ uint16 *red, *green, *blue;
-	  if (TIFFGetField(in, TIFFTAG_COLORMAP, &red, &green, &blue)) {
-		CheckAndCorrectColormap(in, 1<<bitspersample, red, green, blue);
-		TIFFSetField(out, TIFFTAG_COLORMAP, red, green, blue);
-	  }
-	}
+	if (samplesperpixel <= 4)
+		CopyTag(TIFFTAG_TRANSFERFUNCTION, 4, TIFF_SHORT);
+	CopyTag(TIFFTAG_COLORMAP, 4, TIFF_SHORT);
 /* SMinSampleValue & SMaxSampleValue */
 	switch (compression) {
 	case COMPRESSION_JPEG:
@@ -490,8 +494,26 @@ tiffcp(TIFF* in, TIFF* out)
 		else
 			CopyField(TIFFTAG_PREDICTOR, predictor);
 		break;
+	case COMPRESSION_CCITTFAX3:
+	case COMPRESSION_CCITTFAX4:
+		if (compression == COMPRESSION_CCITTFAX3) {
+			if (g3opts != (uint32) -1)
+				TIFFSetField(out, TIFFTAG_GROUP3OPTIONS,
+				    g3opts);
+			else
+				CopyField(TIFFTAG_GROUP3OPTIONS, g3opts);
+		} else
+			CopyTag(TIFFTAG_GROUP4OPTIONS, 1, TIFF_LONG);
+		CopyTag(TIFFTAG_BADFAXLINES, 1, TIFF_LONG);
+		CopyTag(TIFFTAG_CLEANFAXDATA, 1, TIFF_LONG);
+		CopyTag(TIFFTAG_CONSECUTIVEBADFAXLINES, 1, TIFF_LONG);
+		CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
+		CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
+		CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
+		break;
 	}
-	cpOtherTags(in, out);
+	for (p = tags; p < &tags[NTAGS]; p++)
+		CopyTag(p->tag, p->count, p->type);
 
 	cf = pickCopyFunc(in, out, bitspersample, samplesperpixel);
 	return (cf ? (*cf)(in, out, l, w, samplesperpixel) : FALSE);

@@ -1,8 +1,8 @@
-/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkg3states.c,v 1.33 1995/10/16 19:14:33 sam Exp $ */
+/* "$Header: /usr/people/sam/tiff/libtiff/RCS/mkg3states.c,v 1.34 1996/01/10 19:32:52 sam Exp $ */
 
 /*
- * Copyright (c) 1991-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1991-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

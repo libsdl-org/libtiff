@@ -1,8 +1,8 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.5 1995/10/10 22:22:44 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_codec.c,v 1.7 1996/01/10 19:32:56 sam Exp $ */
 
 /*
- * Copyright (c) 1988-1995 Sam Leffler
- * Copyright (c) 1991-1995 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1996 Sam Leffler
+ * Copyright (c) 1991-1996 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -89,11 +89,19 @@ TIFFCodec _TIFFBuiltinCODECS[] = {
 };
 
 static int
-NotConfigured(TIFF* tif, int scheme)
+_notConfigured(TIFF* tif)
 {
-	const TIFFCodec* c = TIFFFindCODEC(scheme);
-	
+	const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
+
 	TIFFError(tif->tif_name,
 	    "%s compression support is not configured", c->name);
 	return (0);
+}
+
+static int
+NotConfigured(TIFF* tif, int scheme)
+{
+	tif->tif_setupdecode = _notConfigured;
+	tif->tif_setupencode = _notConfigured;
+	return (1);
 }

@@ -1,10 +1,10 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.26 1995/10/15 23:39:31 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.32 1996/01/10 19:31:39 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
-# Copyright (c) 1988-1995 Sam Leffler
-# Copyright (c) 1991-1995 Silicon Graphics, Inc.
+# Copyright (c) 1988-1996 Sam Leffler
+# Copyright (c) 1991-1996 Silicon Graphics, Inc.
 # 
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided
@@ -85,6 +85,7 @@ Options: [defaults in brackets after descriptions]
   --help                  print this message
   --quiet                 do not print `Using ...' messages
   --verbose		  opposite of --quiet
+  --noninteractive        don't ask any questions
   --version               print the version of autoconf that created configure
   --target=TARGET         configure for TARGET [TARGET=HOST]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
@@ -93,6 +94,7 @@ EOF
 }
 
 QUIET=no
+NONINTERACTIVE=no
 SITE=
 TARGET=
 SRCDIR=
@@ -130,6 +132,7 @@ do
 	;;
     -quiet|--quiet)		QUIET=yes;;
     -verbose|--verbose)		QUIET=no;;
+    -noninteractive|--noninteractive) NONINTERACTIVE=yes;;
     -site|--site)		ac_prev=SITE;;
     -site=*|--site=*)		SITE="$ac_optarg";;
     -srcdir|--srcdir)		ac_prev=SRCDIR;;
@@ -137,7 +140,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.26 $"
+	echo "This is TIFF configure $Revision: 1.32 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -183,14 +186,14 @@ test "$SRCDIR" || {
     done
 }
 if [ ! -r $SRCDIR/VERSION ]; then
-    bitch "Can not locate sources in $SRCDIR."
+    bitch "Cannot locate sources in $SRCDIR."
     kill -1 $$
 fi
 SRCDIR=`echo "$SRCDIR" | sed 's;\([^/]\)/*$;\1;'`
 
 if [ -r ${SRCDIR}/tif_version.c ] ; then
     SRCDIR_IS_LIBTIFF=yes
-    PORDOTH=port.h
+    PORTDOTH=port.h
 else
     SRCDIR_IS_LIBTIFF=no
     PORTDOTH=libtiff/port.h
@@ -227,7 +230,11 @@ Note()
 }
 
 Note ""
-Note "Configuring TIFF Software $VERSION."
+if [ $SRCDIR_IS_LIBTIFF = yes ] ; then
+  Note "Configuring TIFF Software (library only) $VERSION."
+else
+  Note "Configuring TIFF Software $VERSION."
+fi
 Note ""
 
 #
@@ -370,6 +377,9 @@ findHeader()
     esac
     for i in ${DIRS_LIBINC}; do
 	test -r $i/$1 && {
+	    case "$i" in
+	    /*) echo "$i/$1"; return ;;
+	    esac
 	    if [ $SRCDIR_IS_LIBTIFF = yes ]; then
 		echo "$i/$1";
 	    else
@@ -558,14 +568,13 @@ fi
 # in the Makefiles.  If not, we add an explicit define
 # for places where recursive calls are made.
 #
-if [ -z "${SETMAKE:-}" ]; then
-M=
-eval `(cat<<'EOF'
+if [ -z "${SETMAKE-}" ]; then
+    if (cat<<'EOF'
+SHELL=/bin/sh
 all:
-	@echo M="${MAKE}"
+	@if [ -n "${MAKE}" ] ; then echo "make sets make"  ; fi
 EOF
-) | $MAKE -f - 2>&5`
-    if [ "$M" ]; then
+) | $MAKE -f - | grep "make sets make" > /dev/null ; then
 	SETMAKE=
     else
 	Note "Looks like $MAKE does not setup MAKE in Makefiles, will compensate."
@@ -584,7 +593,7 @@ if [ -z "$RANLIB" ]; then
     Note "Warning, no ranlib, assuming it's not needed."
     RANLIB=":"
     $RM dummy.a
-    if $AR rcs dummy.a; then
+    if $AR rcs dummy.a >/dev/null 2>&1; then
        AROPTS=crs
        Note "Looks like ar has an s option to build symbol tables."
     fi
@@ -935,7 +944,7 @@ BuildPortDotH()
     CheckFuncDecl floor 'extern double floor(double);' math.h
     CheckFuncDecl ceil 'extern double ceil(double);' math.h
     CheckFuncDecl exp 'extern double exp(double);' math.h
-    CheckFuncDecl pow 'extern double pow(double);' math.h
+    CheckFuncDecl pow 'extern double pow(double, double);' math.h
     CheckFuncDecl read 'extern int read(int, const void*, unsigned int);' unistd.h
     CheckFuncDecl malloc 'extern void* malloc(size_t);' stdlib.h
     CheckFuncDecl realloc 'extern void* realloc(void*, size_t);' stdlib.h
@@ -946,7 +955,7 @@ BuildPortDotH()
     Note "Done creating $PORTDOTH."
 }
 
-if test -f $PORTDOTH && CheckPortDotH; then
+if [ "$PORT" != no ] && test -f $PORTDOTH && CheckPortDotH; then
     Note ""
     Note "Using previously created $PORTDOTH."
 else
@@ -1381,7 +1390,7 @@ EOF
     fi
 }
 
-if [ $QUIET = no ]; then
+if [ $NONINTERACTIVE = no ] ; then
     ok=skip
     while [ "$ok" != y ] && [ "$ok" != yes ]; do
 	if [ "$ok" != skip ]; then
@@ -1467,12 +1476,12 @@ relativize()
     if [ $SRCDIR_IS_LIBTIFF = no ]; then
 	(for i do
 	    case "$i" in
-	    ./*|../*)	echo "../$i" ;;
-	    *)		echo "$i" ;;
+	    /*)		echo "$i" ;;
+	    *)		echo "../$i" ;;
 	    esac
 	done) | tr '\012' ' '
     else
-	echo "$@"
+	(for i do echo "$i" ; done ) | tr '\012' ' '
     fi
 }
 #
@@ -1483,13 +1492,13 @@ makeIncArgs()
 {
     (for i do
         case "$i" in
-	./*|../*)
+	/*)  echo "-I$i" ;;
+	*)
 	    if [ $SRCDIR_IS_LIBTIFF = yes ]; then
 		echo "-I$i" 
 	    else
 		echo "-I../$i" 
 	    fi ;;
-	*)  echo "-I$i" ;;
         esac
     done) | tr '\012' ' '
 }
