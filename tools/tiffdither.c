@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdither.c,v 1.5 2003-05-05 19:06:52 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdither.c,v 1.6 2003-05-05 19:13:42 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -247,10 +247,10 @@ main(int argc, char* argv[])
 	TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK);
-        if (fillorder)
-	    TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
-        else
-            CopyField(TIFFTAG_FILLORDER, shortv);
+	if (fillorder)
+		TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
+	else
+		CopyField(TIFFTAG_FILLORDER, shortv);
 	sprintf(thing, "Dithered B&W version of %s", argv[optind]);
 	TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
 	CopyField(TIFFTAG_ORIENTATION, shortv);
