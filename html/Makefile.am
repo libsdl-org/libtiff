@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.5 2004-10-02 13:54:51 dron Exp $
+# $Id: Makefile.am,v 1.6 2004-10-15 07:50:46 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -63,7 +63,8 @@ EXTRA_DIST = \
 	v3.6.1.html \
 	v3.7.0alpha.html \
 	v3.7.0beta.html \
-	v3.7.0beta2.html
+	v3.7.0beta2.html \
+	v3.7.0.html
 
 SUBDIRS = images man
 
