@@ -1,4 +1,4 @@
-/* "$Id: mkg3states.c,v 1.8 2004-09-02 14:38:34 dron Exp $ */
+/* "$Id: mkg3states.c,v 1.9 2004-10-10 11:46:16 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -335,8 +335,8 @@ FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
 static	char* storage_class = "";
 static	char* const_class = "";
 static	int packoutput = 1;
-static	char* prebrace = "{";
-static	char* postbrace = "}";
+static	char* prebrace = "";
+static	char* postbrace = "";
 
 void
 WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
