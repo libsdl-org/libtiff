@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.14 2004-08-01 10:39:41 dron Exp $" */
+/* $Id: fax2ps.c,v 1.15 2004-08-25 18:34:55 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -37,10 +37,6 @@
 
 #if HAVE_IO_H
 # include <io.h>
-#endif
-
-#if HAVE_GETOPT_H
-# include <getopt.h>
 #endif
 
 #include "tiffio.h"

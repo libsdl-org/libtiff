@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.25 2004-08-25 13:14:18 dron Exp $ */
+/* $Id: tiff2ps.c,v 1.26 2004-08-25 18:34:55 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,12 +33,6 @@
 #include <string.h>
 
 #include "tiffio.h"
-
-#ifdef HAVE_GETOPT_H
-# include <getopt.h>
-#else
-extern int getopt(int, char**, char*);
-#endif
 
 /*
  * Revision history
