@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/libtiff.3t,v 1.4 2002-09-12 13:32:41 dron Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/libtiff.3t,v 1.5 2002-09-15 16:44:52 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -495,6 +495,7 @@ routine.
 .IR ppm2tiff (1),
 .IR rgb2ycbcr (1),
 .IR ras2tiff (1),
+.IR raw2tiff (1),
 .IR sgi2tiff (1),
 .IR tiff2bw (1),
 .IR tiffdither (1),

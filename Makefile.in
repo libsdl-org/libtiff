@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.29 2002-09-12 13:45:45 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.30 2002-09-15 16:44:52 dron Exp $
 #
 # @WARNING@
 #
@@ -229,6 +229,7 @@ TIFFFILES=\
 	    man/pal2rgb.1			\
 	    man/ppm2tiff.1			\
 	    man/ras2tiff.1			\
+	    man/raw2tiff.1			\
 	    man/rgb2ycbcr.1			\
 	    man/sgi2tiff.1			\
 	    man/thumbnail.1			\
