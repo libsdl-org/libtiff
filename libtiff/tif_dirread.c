@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.45 2004-12-03 13:16:55 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.46 2004-12-19 18:15:52 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -71,7 +71,7 @@ CheckMalloc(TIFF* tif, size_t nmemb, size_t elem_size, const char* what)
 	/*
 	 * XXX: Check for integer overflow.
 	 */
-	if (elem_size && bytes / elem_size == nmemb)
+	if (nmemb && elem_size && bytes / elem_size == nmemb)
 		cp = (char*)_TIFFmalloc(bytes);
 
 	if (cp == NULL)
