@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_codec.c,v 1.5 2003-11-20 21:57:51 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_codec.c,v 1.6 2003-11-21 20:40:50 rossf Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -138,7 +138,7 @@ TIFFIsCODECConfigured(uint16 scheme)
 
 	if(codec == NULL)
 		return 0;
-	if(codec->init != _notConfigured)
+	if( codec->init != (TIFFInitMethod) _notConfigured)
 		return 1;
 	return 0;
 }
