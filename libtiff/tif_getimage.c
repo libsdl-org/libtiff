@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.23 2002-12-05 17:57:26 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.24 2002-12-21 04:19:33 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
