@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/contrib/pds/tif_imageiter.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/contrib/pds/tif_imageiter.c,v 1.2 2004-05-19 17:14:45 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler
@@ -47,7 +47,7 @@
  *
  */
 #include "tiffiop.h"
-#include "tif_imgiter.h"
+#include "tif_imageiter.h"
 #include <assert.h>
 #include <stdio.h>
 
