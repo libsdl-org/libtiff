@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.19 2002-03-08 07:21:53 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.20 2002-09-29 18:14:48 warmerda Exp $
 #
 # Tag Image File Format Library
 #
@@ -246,6 +246,13 @@ OPENBSDdso: ${OBJS}
 	${CC} -shared @LIBCOPTS@ -o libtiff.@DSOSUF_VERSION@ ${OBJS} @LIBJPEG@ @LIBGZ@ -lm
 	touch $@
 
+OPENSERVERdso:  ${OBJS}
+	${CC} -shared -fPIC \
+	  -o libtiff.@DSOSUF_VERSION@  ${OBJS} \
+		@LIBJPEG@ @LIBGZ@
+	rm -f libtiff.@DSOSUF@
+	@LN@ @LN_S@ libtiff.@DSOSUF_VERSION@ libtiff.@DSOSUF@
+	touch $@
 
 ${OBJS}: ${SRCDIR}/tiffio.h ${SRCDIR}/tiff.h ${SRCDIR}/tif_dir.h
 ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h

@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.24 2002-02-11 13:50:26 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.25 2002-09-29 18:14:48 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.24 $"
+	echo "This is TIFF configure $Revision: 1.25 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1234,6 +1234,13 @@ if [ "$DSO" = auto ]; then
 	DSOOPTS='-shared'
 	DSO=OSF
 	;;
+    *-sco3.2*)
+        DSOSUF=so.${DIST_MAJOR}
+        DSOSUF_VERSION=${DSOSUF}.${DIST_MINOR}.${DIST_POINT}
+        LIBCOPTS='-fPIC'
+        DSOOPTS='-shared'
+        DSO=OPENSERVER
+        ;;
 
     esac
 fi
