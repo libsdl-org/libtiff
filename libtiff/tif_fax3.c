@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.16 2002-02-11 14:01:05 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.17 2002-03-06 14:07:27 warmerda Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -1290,11 +1290,11 @@ InitCCITTFax3(TIFF* tif)
 	 * override parent get/set field methods.
 	 */
 	_TIFFMergeFieldInfo(tif, faxFieldInfo, N(faxFieldInfo));
-	sp->vgetparent = tif->tif_vgetfield;
-	tif->tif_vgetfield = Fax3VGetField;	/* hook for codec tags */
-	sp->vsetparent = tif->tif_vsetfield;
-	tif->tif_vsetfield = Fax3VSetField;	/* hook for codec tags */
-	tif->tif_printdir = Fax3PrintDir;	/* hook for codec tags */
+	sp->vgetparent = tif->tif_tagmethods.vgetfield;
+	tif->tif_tagmethods.vgetfield = Fax3VGetField;	/* hook for codec tags */
+	sp->vsetparent = tif->tif_tagmethods.vsetfield;
+	tif->tif_tagmethods.vsetfield = Fax3VSetField;	/* hook for codec tags */
+	tif->tif_tagmethods.printdir = Fax3PrintDir;	/* hook for codec tags */
 	sp->groupoptions = 0;	
 	sp->recvparams = 0;
 	sp->subaddress = NULL;
