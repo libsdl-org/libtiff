@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/mkspans.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Id: mkspans.c,v 1.2 2004-09-14 05:45:46 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -37,7 +37,7 @@ dumparray(name, runs)
 {
 	register int i;
 	register char *sep;
-	printf("static u_char %s[256] = {\n", name);
+	printf("static unsigned char %s[256] = {\n", name);
 	sep = "    ";
 	for (i = 0; i < 256; i++) {
 		printf("%s%d", sep, runs[i]);
@@ -70,3 +70,5 @@ main()
 	dumparray("bruns", runs[0]);
 	dumparray("wruns", runs[1]);
 }
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
