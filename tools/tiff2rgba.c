@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.8 2004-06-04 13:46:25 dron Exp $ */
+/* $Id: tiff2rgba.c,v 1.9 2004-07-24 19:05:57 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -455,7 +455,6 @@ static char* stuff[] = {
     " jpeg\t\tJPEG encoding\n",
     " zip\t\tLempel-Ziv & Welch encoding\n",
     " lzw\t\tLempel-Ziv & Welch encoding\n",
-    " (lzw compression unsupported by default due to Unisys patent enforcement)\n",
     " packbits\tPackBits encoding\n",
     " none\t\tno compression\n",
     "and the other options are:\n",

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffdither.c,v 1.6 2003-05-05 19:13:42 dron Exp $ */
+/* $Id: tiffdither.c,v 1.7 2004-07-24 19:05:57 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -285,7 +285,6 @@ char* stuff[] = {
 " -f lsb2msb	force lsb-to-msb FillOrder for output",
 " -f msb2lsb	force msb-to-lsb FillOrder for output",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-"               (no longer supported by default due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c packbits	compress output with packbits encoding",
 " -c g3[:opts]	compress output with CCITT Group 3 encoding",

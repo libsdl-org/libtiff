@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.5 2004-06-04 13:18:25 dron Exp $ */
+/* $Id: gif2tiff.c,v 1.6 2004-07-24 19:04:37 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -64,7 +64,6 @@ char* stuff[] = {
 " -r #		make each strip have no more than # rows",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-"               (no longer supported by default due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c packbits	compress output with packbits encoding",
 " -c none	use no compression algorithm on output",

@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.3 2004-07-03 16:04:01 dron Exp $
+/* $Id: bmp2tiff.c,v 1.4 2004-07-24 19:03:16 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -699,7 +699,6 @@ static char* stuff[] = {
 " -r #		make each strip have no more than # rows",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-"               (no longer supported by default due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c jpeg[:opts]compress output with JPEG encoding",
 " -c packbits	compress output with packbits encoding",
@@ -730,4 +729,3 @@ usage(void)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);
 }
-

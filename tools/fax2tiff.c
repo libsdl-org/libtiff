@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.10 2004-06-04 11:50:09 dron Exp $ */
+/* $Id: fax2tiff.c,v 1.11 2004-07-24 19:03:16 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -410,6 +410,7 @@ char* stuff[] = {
 " -l		output fill order is LSB2MSB		[default]",
 " -s		stretch image by duplicating scanlines",
 " -v		print information about conversion work",
+" -z		generate LZW compressed output",
 NULL
 };
 

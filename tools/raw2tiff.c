@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.12 2004-06-29 19:19:17 dron Exp $
+/* $Id: raw2tiff.c,v 1.13 2004-07-24 19:04:37 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -565,7 +565,6 @@ static char* stuff[] = {
 " band		band interleaved data",
 "",
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-"               (no longer supported by default due to Unisys patent enforcement)", 
 " -c zip[:opts]	compress output with deflate encoding",
 " -c jpeg[:opts]compress output with JPEG encoding",
 " -c packbits	compress output with packbits encoding",
