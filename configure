@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.21 2001-12-15 17:36:53 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.22 2002-01-18 18:58:19 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.21 $"
+	echo "This is TIFF configure $Revision: 1.22 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -946,6 +946,21 @@ EOF
 
 CheckForBigEndian()
 {
+    cat>t.c<<EOF
+#include <endian.h>
+#ifdef __BYTE_ORDER
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+little;
+#elif __BYTE_ORDER == __BIG_ENDIAN
+big;
+#endif
+#endif
+EOF
+    capture cat t.c
+    runMakeX t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" | grep little >&5 && \
+       return 1
+    runMakeX t "t:; ${CCOMPILER} ${ENVOPTS} -E t.c" | grep big >&5 && \
+       return 0
     echo 'main() { int one = 1; char* cp = (char*)&one; exit(*cp!=0); }'>t.c
     capture cat t.c
     runMake t "t:; ${CCOMPILER} ${ENVOPTS} t.c" && ./a.out
