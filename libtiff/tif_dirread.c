@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.22 2003-09-25 08:02:46 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.23 2003-09-25 08:36:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -103,20 +103,20 @@ TIFFReadDirectory(TIFF* tif)
 	 * with looped directory pointers. We will maintain a list of already
 	 * seen directories and check every IFD offset against this list.
 	 */
-	for (n = 0; n < tif->tif_dircount; n++) {
+	for (n = 0; n < tif->tif_dirnumber; n++) {
 		if (tif->tif_dirlist[n] == tif->tif_diroff)
 			return (0);
 	}
-	tif->tif_dircount++;
+	tif->tif_dirnumber++;
 	tif->tif_dirlist = _TIFFrealloc(tif->tif_dirlist,
-					tif->tif_dircount * sizeof(toff_t));
+					tif->tif_dirnumber * sizeof(toff_t));
 	if (!tif->tif_dirlist) {
 		TIFFError(module,
 			  "%.1000s: Failed to allocate space for IFD list",
 			  tif->tif_name);
 		return (0);
 	}
-	tif->tif_dirlist[tif->tif_dircount - 1] = tif->tif_diroff;
+	tif->tif_dirlist[tif->tif_dirnumber - 1] = tif->tif_diroff;
 
 	/*
 	 * Cleanup any previous compression state.

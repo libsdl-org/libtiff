@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.29 2003-07-08 16:40:46 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.30 2003-09-25 08:36:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1302,6 +1302,11 @@ TIFFSetDirectory(TIFF* tif, tdir_t dirn)
 	 * tif_curdir after successfully reading the directory.
 	 */
 	tif->tif_curdir = (dirn - n) - 1;
+	/*
+	 * Reset tif_dirnumber counter nad start new list of seen directories.
+	 * We need this in order to prevent IFD loops.
+	 */
+	tif->tif_dirnumber = 0;
 	return (TIFFReadDirectory(tif));
 }
 
@@ -1315,6 +1320,11 @@ int
 TIFFSetSubDirectory(TIFF* tif, uint32 diroff)
 {
 	tif->tif_nextdiroff = diroff;
+	/*
+	 * Reset tif_dirnumber counter nad start new list of seen directories.
+	 * We need this in order to prevent IFD loops.
+	 */
+	tif->tif_dirnumber = 0;
 	return (TIFFReadDirectory(tif));
 }
 

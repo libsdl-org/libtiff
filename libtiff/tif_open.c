@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.10 2003-09-25 08:02:46 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.11 2003-09-25 08:36:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -314,7 +314,7 @@ TIFFClientOpen(
 			goto bad;
 		tif->tif_diroff = 0;
 		tif->tif_dirlist = NULL;
-		tif->tif_dircount = 0;
+		tif->tif_dirnumber = 0;
 		return (tif);
 	}
 	/*

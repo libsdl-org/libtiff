@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.6 2003-09-25 08:02:46 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.7 2003-09-25 08:36:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -94,7 +94,7 @@ struct tiff {
 	toff_t		tif_nextdiroff;	/* file offset of following directory */
 	toff_t*		tif_dirlist;	/* list of offsets to already seen */
 					/* directories to prevent IFD looping */
-	uint16		tif_dircount;   /* number of already seen directories */
+	uint16		tif_dirnumber;  /* number of already seen directories */
 	TIFFDirectory	tif_dir;	/* internal rep of current directory */
 	TIFFHeader	tif_header;	/* file's header block */
 	const int*	tif_typeshift;	/* data type shift counts */
