@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.4 1999-11-27 21:12:49 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.5 2000-01-28 15:14:50 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -130,6 +130,7 @@ TIFFWriteDirectory(TIFF* tif)
 		_TIFFfree(tif->tif_rawdata);
 		tif->tif_rawdata = NULL;
 		tif->tif_rawcc = 0;
+                tif->tif_rawdatasize = 0;
 	}
 	tif->tif_flags &= ~(TIFF_BEENWRITING|TIFF_BUFFERSETUP);
 
@@ -359,11 +360,7 @@ TIFFWriteDirectory(TIFF* tif)
 	 * Reset directory-related state for subsequent
 	 * directories.
 	 */
-	TIFFDefaultDirectory(tif);
-	tif->tif_diroff = 0;
-	tif->tif_curoff = 0;
-	tif->tif_row = (uint32) -1;
-	tif->tif_curstrip = (tstrip_t) -1;
+        TIFFCreateDirectory(tif);
 	return (1);
 bad:
 	_TIFFfree(data);
