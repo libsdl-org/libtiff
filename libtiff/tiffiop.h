@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.2 1999-11-22 22:47:24 mwelles Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -206,6 +206,7 @@ extern	int _TIFFNoRowDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	int _TIFFNoStripDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	int _TIFFNoTileDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	void _TIFFNoPostDecode(TIFF*, tidata_t, tsize_t);
+extern  int  _TIFFNoPreCode (TIFF*, tsample_t); 
 extern	int _TIFFNoSeek(TIFF*, uint32);
 extern	void _TIFFSwab16BitData(TIFF*, tidata_t, tsize_t);
 extern	void _TIFFSwab32BitData(TIFF*, tidata_t, tsize_t);
