@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.17 2001-06-22 12:49:23 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.18 2001-06-22 21:20:08 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.17 $"
+	echo "This is TIFF configure $Revision: 1.18 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -504,7 +504,7 @@ checkCompiler()
 	no-*-irix*)	C_ANSI="-ansi";;
 	no-*-hp*)	C_ANSI="-D_HPUX_SOURCE";;
 	no-*-apollo-*)	C_ANSI="-A nansi";;
-	no-*-aix*)	C_ANSI="-Dunix -qlanglvl=ansi -qsrcmsg";;
+	no-*-aix*)	C_ANSI="-Dunix -qlanglvl=ansi -qsrcmsg -qmaxmem=8192";;
 	*-sco*)		C_ANSI="-Dsco";;
 	esac
     else
@@ -1136,6 +1136,7 @@ if [ "$DSO" = auto ]; then
 	DSOOPTS='-r'
 	LIBCOPTS="-bM\:SRE"
 	DSO=AIX
+	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
 	;;
     *-hpux*yes)
         DSOSUF=sl
