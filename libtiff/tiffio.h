@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.37 2004-11-05 13:42:05 dron Exp $ */
+/* $Id: tiffio.h,v 1.38 2004-11-07 18:20:05 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -264,7 +264,7 @@ typedef struct {
 #define LOGLUV_PUBLIC		1	
 #endif
 
-#if defined(__cplusplus)
+#if defined(c_plusplus) || defined(__cplusplus)
 extern "C" {
 #endif
 typedef	void (*TIFFErrorHandler)(const char*, const char*, va_list);
@@ -490,9 +490,16 @@ extern  TIFFTagMethods *TIFFAccessTagMethods( TIFF * );
 extern  void *TIFFGetClientInfo( TIFF *, const char * );
 extern  void TIFFSetClientInfo( TIFF *, void *, const char * );
     
-#if defined(__cplusplus)
+#if defined(c_plusplus) || defined(__cplusplus)
 }
 #endif
+
+#if defined(c_plusplus) || defined(__cplusplus)
+# include <iostream.h>
+extern	TIFF* TIFFStreamOpen(const char*, ostream *);
+extern	TIFF* TIFFStreamOpen(const char*, istream *);
+#endif
+
 #endif /* _TIFFIO_ */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
