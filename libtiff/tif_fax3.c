@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.c,v 1.135 1996/02/08 20:21:27 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.c,v 1.136 1997/02/20 20:14:39 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -718,7 +718,7 @@ Fax3PreEncode(TIFF* tif, tsample_t s)
 		 * and use 150 lpi to avoid problems with units conversion.)
 		 */
 		if (tif->tif_dir.td_resolutionunit == RESUNIT_CENTIMETER)
-			res = (res * .3937f) / 2.54f;	/* convert to inches */
+			res *= 2.54f;		/* convert to inches */
 		sp->maxk = (res > 150 ? 4 : 2);
 		sp->k = sp->maxk-1;
 	} else

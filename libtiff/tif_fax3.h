@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.31 1996/06/04 19:04:41 sam Exp $ */
+/* $Id: tif_fax3.h,v 1.33 1996/08/22 18:17:39 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -507,11 +507,13 @@ done1d:									\
 	}								\
     }									\
     if (RunLength) {							\
-	/* expect a final V0 */						\
-	NeedBits8(1,eof2d);						\
-	if (!GetBits(1))						\
-	    goto badMain2d;						\
-	ClrBits(1);							\
+	if (RunLength + a0 < lastx) {					\
+	    /* expect a final V0 */					\
+	    NeedBits8(1,eof2d);						\
+	    if (!GetBits(1))						\
+		goto badMain2d;						\
+	    ClrBits(1);							\
+	}								\
 	SETVAL(0);							\
     }									\
 eol2d:									\

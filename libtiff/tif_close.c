@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_close.c,v 1.30 1996/01/10 19:32:55 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_close.c,v 1.31 1997/01/27 19:09:09 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -37,8 +37,7 @@ TIFFClose(TIFF* tif)
 		 * Flush buffered data and directory (if dirty).
 		 */
 		TIFFFlush(tif);
-	if (tif->tif_cleanup)
-		(*tif->tif_cleanup)(tif);
+	(*tif->tif_cleanup)(tif);
 	TIFFFreeDirectory(tif);
 	if (tif->tif_rawdata && (tif->tif_flags&TIFF_MYBUFFER))
 		_TIFFfree(tif->tif_rawdata);

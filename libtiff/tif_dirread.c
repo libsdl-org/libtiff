@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirread.c,v 1.71 1996/03/29 16:35:17 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirread.c,v 1.76 1997/02/10 20:18:43 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -59,9 +59,7 @@ static	int TIFFFetchFloatArray(TIFF*, TIFFDirEntry*, float*);
 static	int TIFFFetchDoubleArray(TIFF*, TIFFDirEntry*, double*);
 static	int TIFFFetchAnyArray(TIFF*, TIFFDirEntry*, double*);
 static	int TIFFFetchShortPair(TIFF*, TIFFDirEntry*);
-#if STRIPCHOP_SUPPORT
 static	void ChopUpSingleUncompressedStrip(TIFF*);
-#endif
 
 static char *
 CheckMalloc(TIFF* tif, tsize_t n, const char* what)
@@ -100,8 +98,7 @@ TIFFReadDirectory(TIFF* tif)
 	/*
 	 * Cleanup any previous compression state.
 	 */
-	if (tif->tif_curdir != (tdir_t) -1)
-		(*tif->tif_cleanup)(tif);
+	(*tif->tif_cleanup)(tif);
 	tif->tif_curdir++;
 	nextdiroff = 0;
 	if (!isMapped(tif)) {
@@ -132,7 +129,7 @@ TIFFReadDirectory(TIFF* tif)
 	} else {
 		toff_t off = tif->tif_diroff;
 
-		if (off + sizeof (short) > tif->tif_size) {
+		if (off + sizeof (uint16) > tif->tif_size) {
 			TIFFError(tif->tif_name,
 			    "Can not read TIFF directory count");
 			return (0);
@@ -152,7 +149,7 @@ TIFFReadDirectory(TIFF* tif)
 			_TIFFmemcpy(dir, tif->tif_base + off,
 			    dircount*sizeof (TIFFDirEntry));
 		off += dircount* sizeof (TIFFDirEntry);
-		if (off + sizeof (uint32) < tif->tif_size)
+		if (off + sizeof (uint32) <= tif->tif_size)
 			_TIFFmemcpy(&nextdiroff, tif->tif_base+off, sizeof (uint32));
 	}
 	if (tif->tif_flags & TIFF_SWAB)
@@ -528,7 +525,6 @@ TIFFReadDirectory(TIFF* tif)
 	 */
 	if (!TIFFFieldSet(tif, FIELD_COMPRESSION))
 		TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-#if STRIPCHOP_SUPPORT
         /*
          * Some manufacturers make life difficult by writing
 	 * large amounts of uncompressed data as a single strip.
@@ -538,11 +534,9 @@ TIFFReadDirectory(TIFF* tif)
 	 * side effect, however, is that the RowsPerStrip tag
 	 * value may be changed.
          */
-	if ((tif->tif_flags & TIFF_STRIPCHOP) &&
-	    td->td_nstrips == 1 && td->td_compression == COMPRESSION_NONE &&
-	    td->td_tilewidth == td->td_imagewidth)
+	if (td->td_nstrips == 1 && td->td_compression == COMPRESSION_NONE &&
+	    (tif->tif_flags & (TIFF_STRIPCHOP|TIFF_ISTILED)) == TIFF_STRIPCHOP)
 		ChopUpSingleUncompressedStrip(tif);
-#endif
 	/*
 	 * Reinitialize i/o since we are starting on a new directory.
 	 */
@@ -585,7 +579,9 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 			if (cc > sizeof (uint32))
 				space += cc;
 		}
-		space = (filesize - space) / td->td_samplesperpixel;
+		space = filesize - space;
+		if (td->td_planarconfig == PLANARCONFIG_SEPARATE)
+			space /= td->td_samplesperpixel;
 		for (i = 0; i < td->td_nstrips; i++)
 			td->td_stripbytecount[i] = space;
 		/*
@@ -601,7 +597,7 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 			    filesize - td->td_stripoffset[i];
 	} else {
 		uint32 rowbytes = TIFFScanlineSize(tif);
-		uint32 rowsperstrip = td->td_imagelength / td->td_nstrips;
+		uint32 rowsperstrip = td->td_imagelength/td->td_stripsperimage;
 		for (i = 0; i < td->td_nstrips; i++)
 			td->td_stripbytecount[i] = rowbytes*rowsperstrip;
 	}
@@ -991,7 +987,7 @@ TIFFFetchAnyArray(TIFF* tif, TIFFDirEntry* dir, double* v)
 static int
 TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 {
-	static char mesg[] = "to fetch tag value";
+	static const char mesg[] = "to fetch tag value";
 	int ok = 0;
 	const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, dp->tdir_tag);
 
@@ -1271,7 +1267,7 @@ TIFFFetchExtraSamples(TIFF* tif, TIFFDirEntry* dir)
 static int
 TIFFFetchRefBlackWhite(TIFF* tif, TIFFDirEntry* dir)
 {
-	static char mesg[] = "for \"ReferenceBlackWhite\" array";
+	static const char mesg[] = "for \"ReferenceBlackWhite\" array";
 	char* cp;
 	int ok;
 
@@ -1298,7 +1294,6 @@ TIFFFetchRefBlackWhite(TIFF* tif, TIFFDirEntry* dir)
 }
 #endif
 
-#if STRIPCHOP_SUPPORT
 /*
  * Replace a single strip (tile) of uncompressed data by
  * multiple strips (tiles), each approximately 8Kbytes.
@@ -1371,4 +1366,3 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 	td->td_stripbytecount = newcounts;
 	td->td_stripoffset = newoffsets;
 }
-#endif /* STRIPCHOP_SUPPORT */

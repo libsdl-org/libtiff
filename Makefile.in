@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.57 1996/06/10 22:24:41 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.58 1997/02/21 01:20:19 sam Exp $
 #
 # @WARNING@
 #
@@ -272,6 +272,8 @@ TIFFFILES=\
 	    html/misc.html			\
 	    html/support.html			\
 	    html/tools.html			\
+	    html/v3.4beta036.html		\
+	    html/v3.4beta035.html		\
 	    html/v3.4beta034.html		\
 	    html/v3.4beta033.html		\
 	    html/v3.4beta032.html		\

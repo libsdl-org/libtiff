@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.80 1996/04/05 17:36:53 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffiop.h,v 1.81 1997/01/27 19:09:09 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -227,6 +227,7 @@ extern	int TIFFFlushData1(TIFF*);
 extern	void TIFFFreeDirectory(TIFF*);
 extern	int TIFFDefaultDirectory(TIFF*);
 extern	int TIFFSetCompressionScheme(TIFF*, int);
+extern	int TIFFSetDefaultCompressionState(TIFF*);
 extern	uint32 _TIFFDefaultStripSize(TIFF*, uint32);
 extern	void _TIFFDefaultTileSize(TIFF*, uint32*, uint32*);
 

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffconf.h,v 1.13 1996/04/05 17:36:53 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffconf.h,v 1.15 1997/01/27 23:05:36 sam Exp $ */
 /*
  * Copyright (c) 1988-1996 Sam Leffler
  * Copyright (c) 1991-1996 Silicon Graphics, Inc.
@@ -69,10 +69,12 @@
  *    COLORIMETRY_SUPPORT enable support for 6.0 colorimetry tags
  *    YCBCR_SUPPORT	enable support for 6.0 YCbCr tags
  *    CMYK_SUPPORT	enable support for 6.0 CMYK tags
+ *    ICC_SUPPORT	enable support for ICC profile tag
  */
 #define	COLORIMETRY_SUPPORT
 #define	YCBCR_SUPPORT
 #define	CMYK_SUPPORT
+#define	ICC_SUPPORT
 #endif /* FEATURE_SUPPORT */
 
 #ifndef COMPRESSION_SUPPORT
@@ -115,12 +117,13 @@
 /*
  * ``Orthogonal Features''
  *
- * STRIPCHOP_SUPPORT	automatically convert single-strip uncompressed images
- *			to mutiple strips of ~8Kb (for reducing memory use)
+ * STRIPCHOP_DEFAULT	default handling of strip chopping support (whether
+ *			or not to convert single-strip uncompressed images
+ *			to mutiple strips of ~8Kb--to reduce memory use)
  * SUBIFD_SUPPORT	enable support for SubIFD tag (thumbnails and such)
  */
-#ifndef STRIPCHOP_SUPPORT
-#define	STRIPCHOP_SUPPORT	1	/* enable strip chopping */
+#ifndef STRIPCHOP_DEFAULT
+#define	STRIPCHOP_DEFAULT	TIFF_STRIPCHOP	/* default is to enable */
 #endif
 #ifndef SUBIFD_SUPPORT
 #define	SUBIFD_SUPPORT		1	/* enable SubIFD tag (330) support */

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcp.c,v 1.48 1996/01/10 19:35:36 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffcp.c,v 1.51 1996/12/13 05:22:37 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -399,6 +399,7 @@ static struct cpTag {
 	{ TIFFTAG_HALFTONEHINTS,	2, TIFF_SHORT },
 	{ TIFFTAG_INKSET,		1, TIFF_SHORT },
 	{ TIFFTAG_INKNAMES,		1, TIFF_ASCII },
+	{ TIFFTAG_NUMBEROFINKS,		1, TIFF_SHORT },
 	{ TIFFTAG_DOTRANGE,		2, TIFF_SHORT },
 	{ TIFFTAG_TARGETPRINTER,	1, TIFF_ASCII },
 	{ TIFFTAG_SAMPLEFORMAT,		1, TIFF_SHORT },
@@ -511,6 +512,11 @@ tiffcp(TIFF* in, TIFF* out)
 		CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
 		CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
 		break;
+	}
+	{ uint32 len32;
+	  void** data;
+	  if (TIFFGetField(in, TIFFTAG_ICCPROFILE, &len32, &data))
+		TIFFSetField(out, TIFFTAG_ICCPROFILE, len32, data);
 	}
 	for (p = tags; p < &tags[NTAGS]; p++)
 		CopyTag(p->tag, p->count, p->type);

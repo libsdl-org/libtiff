@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/pal2rgb.c,v 1.29 1996/01/10 19:35:29 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/pal2rgb.c,v 1.30 1996/06/20 18:55:15 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -161,7 +161,7 @@ main(int argc, char* argv[])
 		 */
 		int i;
 
-		for (i = (1<<bitspersample)-1; i > 0; i--) {
+		for (i = (1<<bitspersample)-1; i >= 0; i--) {
 #define	CVT(x)		(((x) * 255) / ((1L<<16)-1))
 			rmap[i] = CVT(rmap[i]);
 			gmap[i] = CVT(gmap[i]);

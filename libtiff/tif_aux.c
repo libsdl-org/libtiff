@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_aux.c,v 1.32 1996/01/10 19:32:55 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_aux.c,v 1.33 1996/08/01 19:10:34 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler
@@ -123,6 +123,9 @@ TIFFVGetFieldDefaulted(TIFF* tif, ttag_t tag, va_list ap)
 		return (1);
 	case TIFFTAG_INKSET:
 		*va_arg(ap, uint16 *) = td->td_inkset;
+		return (1);
+	case TIFFTAG_NUMBEROFINKS:
+		*va_arg(ap, uint16 *) = td->td_ninks;
 		return (1);
 #endif
 	case TIFFTAG_EXTRASAMPLES:

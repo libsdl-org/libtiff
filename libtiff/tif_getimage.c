@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_getimage.c,v 1.39 1996/01/10 19:33:04 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_getimage.c,v 1.41 1997/01/27 23:27:39 sam Exp $ */
 
 /*
  * Copyright (c) 1991-1996 Sam Leffler
@@ -1173,7 +1173,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr44tile)
     uint32* cp1 = cp+w+toskew;
     uint32* cp2 = cp1+w+toskew;
     uint32* cp3 = cp2+w+toskew;
-    u_int incr = 3*w+4*toskew;
+    int32 incr = 3*w+4*toskew;
 
     (void) y;
     /* XXX adjust fromskew */
@@ -1215,7 +1215,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr42tile)
 {
     YCbCrSetup;
     uint32* cp1 = cp+w+toskew;
-    u_int incr = 2*toskew+w;
+    int32 incr = 2*toskew+w;
 
     (void) y;
     /* XXX adjust fromskew */
@@ -1277,7 +1277,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr22tile)
 {
     YCbCrSetup;
     uint32* cp1 = cp+w+toskew;
-    u_int incr = 2*toskew+w;
+    int32 incr = 2*toskew+w;
 
     (void) y;
     /* XXX adjust fromskew */
@@ -1589,7 +1589,7 @@ cvtcmap(TIFFRGBAImage* img)
     long i;
 
     for (i = (1L<<img->bitspersample)-1; i >= 0; i--) {
-#define	CVT(x)		((uint16)(((x) * 255) / ((1L<<16)-1)))
+#define	CVT(x)		((uint16)((x)>>8))
 	r[i] = CVT(r[i]);
 	g[i] = CVT(g[i]);
 	b[i] = CVT(b[i]);

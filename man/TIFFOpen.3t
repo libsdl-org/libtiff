@@ -1,4 +1,4 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFOpen.3t,v 1.14 1996/01/09 22:45:06 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFOpen.3t,v 1.15 1997/01/27 23:46:06 sam Exp $
 .\"
 .\" Copyright (c) 1988-1995 Sam Leffler
 .\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
@@ -186,18 +186,19 @@ Disable the use of memory-mapped files.
 Enable the use of ``strip chopping'' when reading images
 that are comprised of a single strip or tile of uncompressed data.
 Strip chopping is a mechanism by which the library will automatically
-convert the single-strip [-tile] image to multiple strips [tiles],
+convert the single-strip image to multiple strips,
 each of which has about 8 Kilobytes of data.
 This facility can be useful in reducing the amount of memory used
-to read an image because the library normally reads each strip [tile]
+to read an image because the library normally reads each strip
 in its entirety.
 Strip chopping does however alter the apparent contents of the
 image because when an image is divided into multiple strips it
 looks as though the underlying file contains multiple separate
-strips [tiles].
-Finally, note that strip chopping is an optional compile-time
-feature of the library; just because its use is enabled by an
-application does not mean that it may be present in the library.
+strips.
+Finally, note that default handling of strip chopping is a compile-time
+configuration parameter.
+The default behaviour, for backwards compatibility, is to enable
+strip chopping.
 .TP
 .B c
 Disable the use of strip chopping when reading images.

@@ -1,4 +1,4 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/tiff2ps.1,v 1.18 1995/10/11 19:42:04 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiff2ps.1,v 1.19 1997/01/27 23:48:56 sam Exp $
 .\"
 .\" Copyright (c) 1988-1995 Sam Leffler
 .\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
@@ -23,11 +23,12 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFF2PS 1 "October 15, 1995"
+.ds Ps P\s-2OST\s+2S\s-2CRIPT\s+2
+.TH TIFF2PS 1 "January 27, 1997"
 .SH NAME
 tiff2ps \- convert a
 .SM TIFF
-image to PostScript\(tm
+image to \*(Ps\(tm
 .SH SYNOPSIS
 .B tiff2ps
 [
@@ -38,17 +39,17 @@ image to PostScript\(tm
 .I tiff2ps
 reads
 .SM TIFF
-images and writes PostScript or Encapsulated PostScript (EPS)
+images and writes \*(Ps or Encapsulated \*(Ps (EPS)
 on the standard output.
 By default,
 .I tiff2ps
-writes Encapsulated PostScript for the first image in the specified
+writes Encapsulated \*(Ps for the first image in the specified
 .SM TIFF
 image file.
 .PP
 By default,
 .I tiff2ps
-will generate PostScript that fills a printed area specified
+will generate \*(Ps that fills a printed area specified
 by the 
 .SM TIFF
 tags in the input file.
@@ -67,22 +68,22 @@ overriding any relevant
 .SM TIFF
 tags.
 .PP
-The PostScript generated for
+The \*(Ps generated for
 .SM RGB,
 palette, and
 .SM CMYK
 images uses the
 .I colorimage
 operator.
-The PostScript generated for
+The \*(Ps generated for
 greyscale and bilevel images
 uses the
 .I image
 operator.
 When the
 .I colorimage
-operator is used, PostScript code to emulate this operator
-on older PostScript printers is also generated.
+operator is used, \*(Ps code to emulate this operator
+on older \*(Ps printers is also generated.
 Note that this emulation code can be very slow.
 .PP
 Color images with associated alpha data are composited over
@@ -90,10 +91,10 @@ a white background.
 .SH OPTIONS
 .TP
 .B \-1
-Generate PostScript Level I (the default).
+Generate \*(Ps Level I (the default).
 .TP
 .B \-2
-Generate PostScript Level II.
+Generate \*(Ps Level II.
 .TP
 .B \-a
 Generate output for all IFDs (pages) in the input file.
@@ -107,7 +108,7 @@ This option is useful for selecting individual pages in a
 multi-page (e.g. facsimile) file.
 .TP
 .B \-e
-Force the generation of Encapsulated PostScript.
+Force the generation of Encapsulated \*(Ps.
 .TP
 .B \-h
 Specify the vertical size of the printed area (in inches).
@@ -122,15 +123,24 @@ This option is useful for selecting thumbnail images and the
 like which are hidden using the SubIFD tag.
 .TP
 .B \-p
-Force the generation of (non-Encapsulated) PostScript.
+Force the generation of (non-Encapsulated) \*(Ps.
 .TP
 .B \-s
 Generate output for a single IFD (page) in the input file.
 .TP
 .B \-w
 Specify the horizontal size of the printed area (in inches).
+.TP
+.B \-z
+When generating \*(Ps Level II, data is scaled so that it does not
+image into the 
+.I deadzone
+on a page (the outer margin that the printing device is unable to mark).
+This option suppresses this behaviour.
+When \*(Ps Level I is generated, data is imaged to the entire printed
+page and this option has no affect.
 .SH EXAMPLES
-The following generates PostScript Level II for all pages of a facsimile:
+The following generates \*(Ps Level II for all pages of a facsimile:
 .RS
 .nf
 tiff2ps -a2 fax.tif | lpr
@@ -139,7 +149,7 @@ tiff2ps -a2 fax.tif | lpr
 Note also that if you have version 2.6.1 or newer of Ghostscript then you
 can efficiently preview facsimile generated with the above command.
 .PP
-To generate Encapsulated PostScript for a the image at directory 2
+To generate Encapsulated \*(Ps for a the image at directory 2
 of an image use:
 .RS
 .nf
@@ -148,8 +158,8 @@ tiff2ps -d 1 foo.tif
 .RE
 (notice that directories are numbered starting at zero.)
 .SH BUGS
-Because PostScript does not support the notion of a colormap,
-8-bit palette images produce 24-bit PostScript images.
+Because \*(Ps does not support the notion of a colormap,
+8-bit palette images produce 24-bit \*(Ps images.
 This conversion results in output that is six times
 bigger than the original image and which takes a long time
 to send to a printer over a serial line.

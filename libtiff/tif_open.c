@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_open.c,v 1.63 1996/01/10 19:33:07 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_open.c,v 1.65 1997/01/27 23:05:36 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -152,7 +152,7 @@ TIFFClientOpen(
 	tif->tif_curdir = (tdir_t) -1;		/* non-existent directory */
 	tif->tif_curoff = 0;
 	tif->tif_curstrip = (tstrip_t) -1;	/* invalid strip */
-	tif->tif_row = (uint32)-1;		/* read/write pre-increment */
+	tif->tif_row = (uint32) -1;		/* read/write pre-increment */
 	tif->tif_clientdata = clientdata;
 	tif->tif_readproc = readproc;
 	tif->tif_writeproc = writeproc;
@@ -161,6 +161,7 @@ TIFFClientOpen(
 	tif->tif_sizeproc = sizeproc;
 	tif->tif_mapproc = mapproc;
 	tif->tif_unmapproc = unmapproc;
+	_TIFFSetDefaultCompressionState(tif);	/* setup default state */
 	/*
 	 * Default is to return data MSB2LSB and enable the
 	 * use of memory-mapped files and strip chopping when
@@ -168,7 +169,11 @@ TIFFClientOpen(
 	 */
 	tif->tif_flags = FILLORDER_MSB2LSB;
 	if (m == O_RDONLY)
-		tif->tif_flags |= TIFF_MAPPED|TIFF_STRIPCHOP;
+#ifdef STRIPCHOP_DEFAULT
+		tif->tif_flags |= TIFF_MAPPED|STRIPCHOP_DEFAULT;
+#else
+		tif->tif_flags |= TIFF_MAPPED;
+#endif
 
 	{ union { int32 i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
 	/*
@@ -250,7 +255,6 @@ TIFFClientOpen(
 			if (m == O_RDONLY)
 				tif->tif_flags &= ~TIFF_MAPPED;
 			break;
-#ifdef STRIPCHOP_SUPPORT
 		case 'C':
 			if (m == O_RDONLY)
 				tif->tif_flags |= TIFF_STRIPCHOP;
@@ -259,7 +263,6 @@ TIFFClientOpen(
 			if (m == O_RDONLY)
 				tif->tif_flags &= ~TIFF_STRIPCHOP;
 			break;
-#endif
 		}
 	/*
 	 * Read in TIFF header.

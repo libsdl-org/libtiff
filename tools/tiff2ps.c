@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2ps.c,v 1.48 1996/01/10 19:35:35 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiff2ps.c,v 1.51 1997/02/20 20:15:03 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -46,6 +46,7 @@ int	printAll = FALSE;		/* print all images in file */
 int	generateEPSF = TRUE;		/* generate Encapsulated PostScript */
 int 	PSduplex = FALSE;		/* enable duplex printing */
 int	PStumble = FALSE;		/* enable top edge binding */
+int	PSavoiddeadzone = TRUE;		/* enable avoiding printer deadzone */
 char	*filename;			/* input filename */
 
 /*
@@ -83,7 +84,7 @@ main(int argc, char* argv[])
 	extern int optind;
 	FILE* output = stdout;
 
-	while ((c = getopt(argc, argv, "h:w:d:o:O:aeps128DT")) != -1)
+	while ((c = getopt(argc, argv, "h:w:d:o:O:aezps128DT")) != -1)
 		switch (c) {
 		case 'd':
 			dirnum = atoi(optarg);
@@ -123,6 +124,9 @@ main(int argc, char* argv[])
 			break;
 		case 'w':
 			pageWidth = atof(optarg);
+			break;
+		case 'z':
+			PSavoiddeadzone = FALSE;
 			break;
 		case '1':
 			level2 = FALSE;
@@ -280,7 +284,7 @@ setupPageState(TIFF* tif, uint32* pw, uint32* ph, float* pprw, float* pprh)
 		yres = PS_UNIT_SIZE;
 	switch (res_unit) {
 	case RESUNIT_CENTIMETER:
-		xres /= 2.54, yres /= 2.54;
+		xres *= 2.54, yres *= 2.54;
 		break;
 	case RESUNIT_NONE:
 		xres *= PS_UNIT_SIZE, yres *= PS_UNIT_SIZE;
@@ -314,6 +318,7 @@ TIFF2PS(FILE* fd, TIFF* tif, float pw, float ph)
 {
 	uint32 w, h;
 	float ox, oy, prw, prh;
+	float scale;
 	uint32 subfiletype;
 	uint16* sampleinfo;
 	static int npages = 0;
@@ -361,10 +366,16 @@ TIFF2PS(FILE* fd, TIFF* tif, float pw, float ph)
 			fprintf(fd, "%%%%Page: %d %d\n", npages, npages);
 			fprintf(fd, "gsave\n");
 			fprintf(fd, "100 dict begin\n");
-			if (pw != 0 && ph != 0)
-				fprintf(fd, "%f %f scale\n",
-				    pw*PS_UNIT_SIZE, ph*PS_UNIT_SIZE);
-			else
+			if (pw != 0 && ph != 0) {
+				/* NB: maintain image aspect ratio */
+				scale = (pw*PS_UNIT_SIZE/prw) < (ph*PS_UNIT_SIZE/prh) ?
+				    (pw*PS_UNIT_SIZE/prw) :
+				    (ph*PS_UNIT_SIZE/prh);
+				if (scale > 1.0)
+					scale = 1.0;
+				fprintf(fd, "0 %f translate\n", ph*PS_UNIT_SIZE-prh*scale);
+				fprintf(fd, "%f %f scale\n", prw*scale, prh*scale);
+			} else
 				fprintf(fd, "%f %f scale\n", prw, prh);
 			PSpage(fd, tif, w, h);
 			fprintf(fd, "end\n");
@@ -403,6 +414,16 @@ end\n\
 %%EndFeature\n\
 ";
 
+static char AvoidDeadZonePreamble[] = "\
+gsave newpath clippath pathbbox grestore\n\
+  4 2 roll 2 copy translate\n\
+  exch 3 1 roll sub 3 1 roll sub exch\n\
+  currentpagedevice /PageSize get aload pop\n\
+  exch 3 1 roll div 3 1 roll div abs exch abs\n\
+  2 copy gt { exch } if pop\n\
+  dup 1 lt { dup scale } { pop } ifelse\n\
+";
+
 void
 PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h, float pw, float ph,
 	float ox, float oy)
@@ -428,6 +449,8 @@ PSHead(FILE *fd, TIFF *tif, uint32 w, uint32 h, float pw, float ph,
 	        fprintf(fd, "%s", DuplexPreamble);
 	if (PStumble)
 	        fprintf(fd, "%s", TumblePreamble);
+	if (PSavoiddeadzone && level2)
+	        fprintf(fd, "%s", AvoidDeadZonePreamble);
 	fprintf(fd, "%%%%EndSetup\n");
 }
 
@@ -583,7 +606,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	fputs("  /ImageType 1\n", fd);
 	fprintf(fd, "  /Width %lu\n", (unsigned long) tile_width);
 	fprintf(fd, "  /Height %lu\n", (unsigned long) tile_height);
-	if (planarconfiguration == PLANARCONFIG_SEPARATE)
+	if (planarconfiguration == PLANARCONFIG_SEPARATE && samplesperpixel > 1)
 		fputs("  /MultipleDataSources true\n", fd);
 	fprintf(fd, "  /ImageMatrix [ %lu 0 0 %ld %s %s ]\n",
 	    (unsigned long) w, - (long)h, im_x, im_y);
@@ -1312,7 +1335,6 @@ Ascii85Put(unsigned char code, FILE* fd)
 					ascii85breaklen = 2*MAXLINE;
 				}
 			}
-			p += 4;
 		}
 		_TIFFmemcpy(ascii85buf, p, n);
 		ascii85count = n;
@@ -1348,6 +1370,7 @@ char* stuff[] = {
 " -s            generate PostScript for a single image",
 " -T            print pages for top edge binding",
 " -w #          assume printed page width is # inches (default 8.5)",
+" -z            enable printing in the deadzone (only for PostScript Level II)",
 NULL
 };
 

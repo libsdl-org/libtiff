@@ -230,7 +230,7 @@ main(int argc, char* argv[])
 {
     TIFF* tif = TIFFOpen(argv[1], "r");
     if (tif) {
-	int dircount = 1;
+	int dircount = 0;
 	do {
 	    dircount++;
 	} while (TIFFReadDirectory(tif));
@@ -375,7 +375,7 @@ main(int argc, char* argv[])
 	npixels = w * h;
 	raster = (uint32*) _TIFFmalloc(npixels * sizeof (uint32));
 	if (raster != NULL) {
-	    if (TIFFReadRGBAImage(tif, raster, w, h, 0)) {
+	    if (TIFFReadRGBAImage(tif, w, h, raster, 0)) {
 		...process raster data...
 	    }
 	    _TIFFfree(raster);
@@ -738,7 +738,7 @@ main()
 
 <ADDRESS>
 <A HREF="sam.html">Sam Leffler</A> / <A HREF="mailto:sam@engr.sgi.com">sam@engr.sgi.com</A>.
-Last updated: $Date: 1996/04/29 19:18:06 $
+Last updated: $Date: 1996/08/29 01:08:05 $
 </ADDRESS>
 
 </BODY>

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.67 1996/02/16 05:54:21 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.69 1996/12/13 05:25:39 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -213,12 +213,14 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		fprintf(fd, "  Ink Names: ");
 		i = td->td_samplesperpixel;
 		sep = "";
-		for (cp = td->td_inknames; i > 0; cp = strchr(cp, '\0')) {
+		for (cp = td->td_inknames; i > 0; cp = strchr(cp,'\0')+1, i--) {
 			fprintf(fd, "%s", sep);
 			_TIFFprintAscii(fd, cp);
 			sep = ", ";
 		}
 	}
+	if (TIFFFieldSet(tif,FIELD_NUMBEROFINKS))
+		fprintf(fd, " Number of Inks: %u\n", td->td_ninks);
 	if (TIFFFieldSet(tif,FIELD_DOTRANGE))
 		fprintf(fd, "  Dot Range: %u-%u\n",
 		    td->td_dotrange[0], td->td_dotrange[1]);
@@ -396,6 +398,11 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		} else
 			fprintf(fd, "(present)\n");
 	}
+#endif
+#ifdef ICC_SUPPORT
+	if (TIFFFieldSet(tif,FIELD_ICCPROFILE))
+		fprintf(fd, "  ICC Profile: <present>, %lu bytes\n",
+		    (u_long) td->td_profileLength);
 #endif
 #if SUBIFD_SUPPORT
 	if (TIFFFieldSet(tif, FIELD_SUBIFD)) {

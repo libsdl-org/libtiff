@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.19 1996/05/21 18:31:15 sam Exp $
+#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.21 1996/08/26 23:39:12 sam Exp $
 #
 # @WARNING@
 #
@@ -241,11 +241,11 @@ sgi2tiff.o: ${SRCDIR}/sgi2tiff.c
 
 # SGI versions of tiffgt & tiffsv that require -lgl
 tiffgt:	sgigt.o ${TIFFLIB}
-	${CC} -o tiffgt ${CFLAGS} sgigt.o ${LIBS} -lgutil -lgl_s
+	${CC} -o tiffgt ${CFLAGS} sgigt.o -lgutil -lgl ${LIBS}
 sgigt.o: ${SRCDIR}/sgigt.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/sgigt.c
 
 tiffsv:	sgisv.o ${TIFFLIB}
-	${CC} -o tiffsv ${CFLAGS} sgisv.o ${LIBS} -lgutil -lgl_s
+	${CC} -o tiffsv ${CFLAGS} sgisv.o -lgutil -lgl ${LIBS}
 sgisv.o: ${SRCDIR}/sgisv.c
 	${CC} -c ${CFLAGS} ${SRCDIR}/sgisv.c

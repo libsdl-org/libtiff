@@ -1,4 +1,4 @@
-.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFGetField.3t,v 1.16 1995/10/11 19:45:29 sam Exp $
+.\" $Header: /usr/people/sam/tiff/man/RCS/TIFFGetField.3t,v 1.17 1996/12/13 05:25:58 sam Exp $
 .\"
 .\" Copyright (c) 1988-1995 Sam Leffler
 .\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
@@ -179,11 +179,17 @@ TIFFTAG_YCBCRPOSITIONING	1	uint16*
 TIFFTAG_YCBCRSUBSAMPLING	2	uint16*
 TIFFTAG_YPOSITION	1	float*
 TIFFTAG_YRESOLUTION	1	float*
+TIFFTAG_ICCPROFILE	2	uint32*,void**	count, profile data\(dd
 .fi
 \(dg If
 .I SamplesPerPixel
 is one, then a single array is returned; otherwise three arrays are
 returned.
+.fi
+\(dd The contents of this field are quite complex.  See 
+.IR "The ICC Profile Format Specification" ,
+Annex B.3 "Embedding ICC Profiles in TIFF Files"
+(available at http://www.color.org) for an explanation.
 .SH "RETURN VALUES"
 1 is returned if the tag is defined in the current
 directory; otherwise a 0 is returned.

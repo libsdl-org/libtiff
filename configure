@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.52 1996/06/10 20:48:14 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/configure,v 1.56 1997/01/28 00:39:52 sam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -147,7 +147,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.52 $"
+	echo "This is TIFF configure $Revision: 1.56 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1093,6 +1093,7 @@ if [ "$DSO" = auto ]; then
 	    DSOSUF=so
 	    DSOOPTS='-elf -shared -no_unresolved -all'
 	    DSO=IRIX52
+	    TIFFLIBREF='-L${DEPTH}/libtiff -rpath '${DIR_LIB}' -ltiff'
 	fi
 	;;
     *-irix*)
@@ -1101,6 +1102,7 @@ if [ "$DSO" = auto ]; then
 	    DSOLD="${CCOMPILER} ${ENVOPTS}"
 	    DSOOPTS='-shared -rdata_shared -check_registry ${SRCDIR}/port/irix/so_locations -quickstart_info'
 	    DSO=IRIX
+	    TIFFLIBREF='-L${DEPTH}/libtiff -rpath '${DIR_LIB}' -ltiff'
 	fi
 	;;
     *-aix*)
@@ -1109,24 +1111,31 @@ if [ "$DSO" = auto ]; then
 	LIBCOPTS="-bM\:SRE"
 	DSO=AIX
 	;;
+    *-hpux*yes)
+        DSOSUF=sl
+        DSOLD=gcc
+        DSOOPTS='-fpic -shared'
+        LIBCOPTS=-fpic
+        DSO=HPUX
+        ;;		 
     *-hpux*)
 	DSOSUF=sl
 	DSOOPTS='-b'
 	LIBCOPTS="+Z"
 #	LIBPORT="-Wl,+b${DIR_LIB}"
 	DSO=HPUX
-	;;
-    *-solaris*-yes)
-	DSOSUF=so
-	DSOOPTS='-G'
-	LIBCOPTS="-fpic"
-	DSO=SOLARIS
+	TIFFLIBREF="-Wl,+s,+b${DIR_LIB}"' -L${DEPTH}/libtiff -ltiff'
 	;;
     *-solaris*)
 	DSOSUF=so
 	DSOOPTS='-G'
-	LIBCOPTS="-K PIC"
+	if [ $ISGCC = yes ]; then
+	    LIBCOPTS="-fpic"
+	else
+	    LIBCOPTS="-K PIC"
+	fi
 	DSO=SOLARIS
+	TIFFLIBREF='-L${DEPTH}/libtiff -R'${DIR_LIB}' -ltiff'
 	;;
     *-netbsd*)
 	DSOSUF=so.${DIST_MAJOR}.0
@@ -1141,7 +1150,7 @@ if [ "$DSO" = auto ]; then
 	TIFFLIBREF='-L${DEPTH}/libtiff -ltiff'
 	;;
     *-linux*)
-	if [ -x /lib/libc.so.5 ]; then
+	if [ -r /lib/libc.so.5 ]; then
 	    DSOSUF=so.${DIST_MAJOR}
 	    DSOSUF_VERSION=${DSOSUF}.${DIST_MINOR}.${DIST_ALPHA}
 	    LIBCOPTS='-fPIC'

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.94 1996/06/04 19:04:41 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffio.h,v 1.95 1997/01/27 23:05:10 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -39,7 +39,7 @@
  * version checking should be done based on the
  * string returned by TIFFGetVersion.
  */
-#define	TIFFLIB_VERSION	19960307	/* March 7, 1996 */
+#define	TIFFLIB_VERSION	19970127	/* January 27, 1997 */
 
 /*
  * TIFF is defined as an incomplete type to hide the
@@ -52,7 +52,7 @@ typedef	struct tiff TIFF;
  * data types used in the *exported* interfaces.  These
  * definitions depend on the proper definition of types
  * in tiff.h.  Note also that the varargs interface used
- * pass tag types and values uses the types defined in
+ * to pass tag types and values uses the types defined in
  * tiff.h directly.
  *
  * NB: ttag_t is unsigned int and not unsigned short because
@@ -71,6 +71,12 @@ typedef	uint16 tsample_t;	/* sample number */
 typedef	uint32 tstrip_t;	/* strip number */
 typedef uint32 ttile_t;		/* tile number */
 typedef	int32 tsize_t;		/* i/o size in bytes */
+typedef	void* tdata_t;		/* image data ref */
+typedef	int32 toff_t;		/* file offset */
+
+#if !defined(__WIN32__) && (defined(_WIN32) || defined(WIN32))
+#define __WIN32__
+#endif
 #if defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
 #include <windows.h>
 #ifdef __WIN32__
@@ -81,8 +87,6 @@ typedef	HFILE thandle_t;	/* client data handle */
 #else
 typedef	void* thandle_t;	/* client data handle */
 #endif
-typedef	void* tdata_t;		/* image data ref */
-typedef	int32 toff_t;		/* file offset */
 
 #ifndef NULL
 #define	NULL	0

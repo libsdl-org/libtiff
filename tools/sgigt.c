@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.66 1996/01/10 19:35:32 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/sgigt.c,v 1.67 1996/11/11 16:18:16 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -228,7 +228,7 @@ main(int argc, char* argv[])
 	    if (raster != NULL)
 		_TIFFfree(raster), raster = NULL;
 	    raster = (uint32*) _TIFFmalloc(w * h * sizeof (uint32));
-	    if (raster == 0) {
+	    if (raster == NULL) {
 		width = height = 0;
 		TIFFError(filename, "No space for raster buffer");
 		goto bad3;
@@ -868,7 +868,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr22tile)
 {
     YCbCrSetup;
     uint32* cp1 = cp+w+toskew;
-    unsigned int incr = 2*toskew+w;
+    int32 incr = 2*toskew+w;
 
     (void) y;
     /* XXX adjust fromskew */

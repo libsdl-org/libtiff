@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.38 1996/06/10 20:48:50 sam Exp $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.40 1996/11/11 16:15:16 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -159,7 +159,7 @@ libtiff.a: ${OBJS}
 
 # default IRIX DSO building rule
 IRIXdso: ${OBJS}
-	${CC} -o libtiff.@DSOSUF@ -shared -rdata_shared \
+	${CC} @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
 	    -check_registry ${SRCDIR}/../port/irix/so_locations \
 	    -quickstart_info \
 	    ${OBJS} @LIBJPEG@ @LIBGZ@
@@ -319,7 +319,7 @@ installDSO: @DSO@dso
 	    ${INSTALL} -idb tiff.sw.tools -F @DIR_LIB@			\
 		-ln libtiff.@DSOSUF_VERSION@ -O libtiff.@DSOSUF@;	\
 	else								\
-	    ${INSTALL} -idb tiff.sw.tools -m 444 -F @DIR_LIB@		\
+	    ${INSTALL} -idb tiff.sw.tools -m 555 -F @DIR_LIB@		\
 		-O libtiff.@DSOSUF@;					\
 	fi
 install: all installHdrs

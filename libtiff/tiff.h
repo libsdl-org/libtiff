@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.72 1996/05/10 14:43:54 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiff.h,v 1.75 1996/12/13 05:25:39 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -257,6 +257,7 @@ typedef	enum {
 #define	TIFFTAG_INKSET			332	/* !inks in separated image */
 #define	    INKSET_CMYK			1	/* !cyan-magenta-yellow-black */
 #define	TIFFTAG_INKNAMES		333	/* !ascii names of inks */
+#define	TIFFTAG_NUMBEROFINKS		334	/* !number of inks */
 #define	TIFFTAG_DOTRANGE		336	/* !0% and 100% dot codes */
 #define	TIFFTAG_TARGETPRINTER		337	/* !separation target */
 #define	TIFFTAG_EXTRASAMPLES		338	/* !info about extra samples */
@@ -333,6 +334,8 @@ typedef	enum {
 #define TIFFTAG_IT8COLORCHARACTERIZATION 34029	/* color character. table */
 /* tags 34232-34236 are private tags registered to Texas Instruments */
 #define TIFFTAG_FRAMECOUNT              34232   /* Sequence Frame Count */
+/* tag 34750 is a private tag registered to Adobe? */
+#define TIFFTAG_ICCPROFILE		34675	/* ICC profile data */
 /* tag 34750 is a private tag registered to Pixel Magic */
 #define	TIFFTAG_JBIGOPTIONS		34750	/* JBIG options */
 /* tags 34908-34914 are private tags registered to SGI */
@@ -397,4 +400,6 @@ typedef	enum {
 /* Note: quality level is on the ZLIB 1-9 scale. Default value is -1 */
 #define	TIFFTAG_ZIPQUALITY		65557	/* compression quality level */
 #define	TIFFTAG_PIXARLOGQUALITY		65558	/* PixarLog uses same scale */
+/* 65559 is allocated to Oceana Matrix <dev@oceana.com> */
+#define TIFFTAG_DCSCLIPRECTANGLE	65559	/* area of image to acquire */
 #endif /* _TIFF_ */

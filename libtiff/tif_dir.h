@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.h,v 1.4 1996/01/10 19:33:21 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.h,v 1.6 1996/12/13 05:25:17 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -91,9 +91,14 @@ typedef	struct {
 #endif
 #ifdef CMYK_SUPPORT
 	uint16	td_inkset;
+	uint16	td_ninks;
 	uint16	td_dotrange[2];
 	char*	td_inknames;
 	char*	td_targetprinter;
+#endif
+#ifdef ICC_SUPPORT
+	uint32	td_profileLength;
+	void	*td_profileData;
 #endif
 } TIFFDirectory;
 
@@ -165,8 +170,10 @@ typedef	struct {
 #define	FIELD_DOTRANGE			47
 #define	FIELD_TARGETPRINTER		48
 #define	FIELD_SUBIFD			49
-
-#define	FIELD_CODEC			50	/* base of codec-private tags */
+#define	FIELD_NUMBEROFINKS		50
+#define FIELD_ICCPROFILE		51
+/* end of support for well-known tags; codec-private tags follow */
+#define	FIELD_CODEC			51	/* base of codec-private tags */
 /*
  * Pseudo-tags don't normally need field bits since they
  * are not written to an output file (by definition).
@@ -192,8 +199,8 @@ typedef	struct {
 
 typedef	struct {
 	ttag_t	field_tag;		/* field's tag */
-	short	field_readcount;	/* read count (-1 for unknown) */
-	short	field_writecount;	/* write count (-1 for unknown) */
+	short	field_readcount;	/* read count/TIFF_VARIABLE/TIFF_SPP */
+	short	field_writecount;	/* write count/TIFF_VARIABLE */
 	TIFFDataType field_type;	/* type of associated data */
 	u_short	field_bit;		/* bit in fieldsset bit vector */
 	u_char	field_oktochange;	/* if true, can change while writing */
@@ -204,6 +211,7 @@ typedef	struct {
 #define	TIFF_ANY	TIFF_NOTYPE	/* for field descriptor searching */
 #define	TIFF_VARIABLE	-1		/* marker for variable length tags */
 #define	TIFF_SPP	-2		/* marker for SamplesPerPixel tags */
+#define	TIFF_VARIABLE2	-3		/* marker for uint32 var-length tags */
 
 extern	const int tiffDataWidth[];	/* table of tag datatype widths */
 

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.49 1996/03/29 16:38:33 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/tools/RCS/tiffdump.c,v 1.51 1996/12/13 04:47:56 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -64,8 +64,9 @@ char*	appname;
 char*	curfile;
 int	swabflag;
 int	bigendian;
-int	typeshift[13];	/* data type shift counts */
-long	typemask[13];	/* data type masks */
+int	typeshift[13];		/* data type shift counts */
+long	typemask[13];		/* data type masks */
+int	maxitems = 24;		/* maximum indirect data items to print */
 
 char*	bytefmt = "%s%#02x";		/* BYTE */
 char*	sbytefmt = "%s%d";		/* SBYTE */
@@ -99,7 +100,7 @@ main(int argc, char* argv[])
 	bigendian = (*(char *)&one == 0);
 
 	appname = argv[0];
-	while ((c = getopt(argc, argv, "o:h")) != -1) {
+	while ((c = getopt(argc, argv, "m:o:h")) != -1) {
 		switch (c) {
 		case 'h':			/* print values in hex */
 			shortfmt = "%s%#x";
@@ -109,6 +110,9 @@ main(int argc, char* argv[])
 			break;
 		case 'o':
 			diroff = (uint32) strtoul(optarg, NULL, 0);
+			break;
+		case 'm':
+			maxitems = strtoul(optarg, NULL, 0);
 			break;
 		default:
 			usage();
@@ -347,8 +351,13 @@ ReadDirectory(int fd, unsigned ix, uint32 off)
 			unsigned char *data = (unsigned char *)_TIFFmalloc(space);
 			if (data) {
 				if (TIFFFetchData(fd, dp, data))
-					PrintData(stdout, dp->tdir_type,
-					    dp->tdir_count, data);
+					if (dp->tdir_count > maxitems) {
+						PrintData(stdout, dp->tdir_type,
+						    maxitems, data);
+						printf(" ...");
+					} else
+						PrintData(stdout, dp->tdir_type,
+						    dp->tdir_count, data);
 				_TIFFfree(data);
 			} else
 				Error("No space for data for tag %u",
@@ -423,6 +432,7 @@ static	struct tagname {
     { TIFFTAG_SUBIFD,		"SubIFD" },
     { TIFFTAG_INKSET,		"InkSet" },
     { TIFFTAG_INKNAMES,		"InkNames" },
+    { TIFFTAG_NUMBEROFINKS,	"NumberOfInks" },
     { TIFFTAG_DOTRANGE,		"DotRange" },
     { TIFFTAG_TARGETPRINTER,	"TargetPrinter" },
     { TIFFTAG_EXTRASAMPLES,	"ExtraSamples" },
@@ -452,6 +462,7 @@ static	struct tagname {
     { TIFFTAG_TILEDEPTH,	"TileDepth (Silicon Graphics)" },
     { 32768,			"OLD BOGUS Matteing tag" },
     { TIFFTAG_COPYRIGHT,	"Copyright" },
+    { TIFFTAG_ICCPROFILE,	"ICC Profile" },
     { TIFFTAG_JBIGOPTIONS,	"JBIG Options" },
 };
 #define	NTAGS	(sizeof (tagnames) / sizeof (tagnames[0]))
@@ -567,8 +578,10 @@ PrintASCII(FILE* fd, uint32 cc, const unsigned char* cp)
 				break;
 		if (*tp)
 			fprintf(fd, "\\%c", *tp);
-		else
+		else if (*cp)
 			fprintf(fd, "\\%03o", *cp);
+		else
+			fprintf(fd, "\\0");
 	}
 }
 

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.c,v 1.156 1996/01/10 20:37:08 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dir.c,v 1.158 1996/12/13 05:25:39 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -50,6 +50,8 @@ _TIFFsetByteArray(void** vpp, void* vp, long n)
 }
 void _TIFFsetString(char** cpp, char* cp)
     { _TIFFsetByteArray((void**) cpp, (void*) cp, (long) (strlen(cp)+1)); }
+void _TIFFsetNString(char** cpp, char* cp, long n)
+    { _TIFFsetByteArray((void**) cpp, (void*) cp, n); }
 void _TIFFsetShortArray(uint16** wpp, uint16* wp, long n)
     { _TIFFsetByteArray((void**) wpp, (void*) wp, n*sizeof (uint16)); }
 void _TIFFsetLongArray(uint32** lpp, uint32* lp, long n)
@@ -364,10 +366,21 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		td->td_dotrange[1] = (uint16) va_arg(ap, int);
 		break;
 	case TIFFTAG_INKNAMES:
-		_TIFFsetString(&td->td_inknames, va_arg(ap, char*));
+		i = va_arg(ap, int);
+		_TIFFsetNString(&td->td_inknames, va_arg(ap, char*), i);
+		break;
+	case TIFFTAG_NUMBEROFINKS:
+		td->td_ninks = (uint16) va_arg(ap, int);
 		break;
 	case TIFFTAG_TARGETPRINTER:
 		_TIFFsetString(&td->td_targetprinter, va_arg(ap, char*));
+		break;
+#endif
+#ifdef ICC_SUPPORT
+	case TIFFTAG_ICCPROFILE:
+		td->td_profileLength = (uint32) va_arg(ap, uint32);
+		_TIFFsetByteArray(&td->td_profileData, va_arg(ap, void*),
+		    td->td_profileLength);
 		break;
 #endif
 	default:
@@ -677,8 +690,17 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 	case TIFFTAG_INKNAMES:
 		*va_arg(ap, char**) = td->td_inknames;
 		break;
+	case TIFFTAG_NUMBEROFINKS:
+		*va_arg(ap, uint16*) = td->td_ninks;
+		break;
 	case TIFFTAG_TARGETPRINTER:
 		*va_arg(ap, char**) = td->td_targetprinter;
+		break;
+#endif
+#ifdef ICC_SUPPORT
+	case TIFFTAG_ICCPROFILE:
+		*va_arg(ap, uint32*) = td->td_profileLength;
+		*va_arg(ap, void**) = td->td_profileData;
 		break;
 #endif
 	default:
@@ -775,6 +797,9 @@ TIFFFreeDirectory(TIFF* tif)
 	CleanupField(td_transferfunction[1]);
 	CleanupField(td_transferfunction[2]);
 #endif
+#ifdef ICC_SUPPORT
+	CleanupField(td_profileData);
+#endif
 	CleanupField(td_stripoffset);
 	CleanupField(td_stripbytecount);
 }
@@ -822,6 +847,7 @@ TIFFDefaultDirectory(TIFF* tif)
 #endif
 #ifdef CMYK_SUPPORT
 	td->td_inkset = INKSET_CMYK;
+	td->td_ninks = 4;
 #endif
 	tif->tif_postdecode = _TIFFNoPostDecode;
 	tif->tif_vsetfield = _TIFFVSetField;

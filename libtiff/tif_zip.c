@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_zip.c,v 1.8 1996/03/07 17:00:23 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_zip.c,v 1.9 1997/01/27 19:36:58 sam Exp $ */
 
 /*
  * Copyright (c) 1995-1996 Sam Leffler
@@ -88,7 +88,7 @@ static int
 ZIPSetupDecode(TIFF* tif)
 {
 	ZIPState* sp = DecoderState(tif);
-	static char module[] = "ZIPSetupDecode";
+	static const char module[] = "ZIPSetupDecode";
 
 	assert(sp != NULL);
 	if (inflateInit(&sp->stream) != Z_OK) {
@@ -119,7 +119,7 @@ static int
 ZIPDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 {
 	ZIPState* sp = DecoderState(tif);
-	static char module[] = "ZIPDecode";
+	static const char module[] = "ZIPDecode";
 
 	(void) s;
 	assert(sp != NULL);
@@ -156,7 +156,7 @@ static int
 ZIPSetupEncode(TIFF* tif)
 {
 	ZIPState* sp = EncoderState(tif);
-	static char module[] = "ZIPSetupEncode";
+	static const char module[] = "ZIPSetupEncode";
 
 	assert(sp != NULL);
 	if (deflateInit(&sp->stream, sp->zipquality) != Z_OK) {
@@ -190,7 +190,7 @@ static int
 ZIPEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	ZIPState *sp = EncoderState(tif);
-	static char module[] = "ZIPEncode";
+	static const char module[] = "ZIPEncode";
 
 	(void) s;
 	sp->stream.next_in = bp;
@@ -219,7 +219,7 @@ static int
 ZIPPostEncode(TIFF* tif)
 {
 	ZIPState *sp = EncoderState(tif);
-	static char module[] = "ZIPPostEncode";
+	static const char module[] = "ZIPPostEncode";
 	int state;
 
 	sp->stream.avail_in = 0;
@@ -263,7 +263,7 @@ static int
 ZIPVSetField(TIFF* tif, ttag_t tag, va_list ap)
 {
 	ZIPState* sp = ZState(tif);
-	static char module[] = "ZIPVSetField";
+	static const char module[] = "ZIPVSetField";
 
 	switch (tag) {
 	case TIFFTAG_ZIPQUALITY:

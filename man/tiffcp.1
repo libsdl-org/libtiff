@@ -1,4 +1,4 @@
-.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffcp.1,v 1.23 1996/01/10 00:01:03 sam Exp $
+.\"	$Header: /usr/people/sam/tiff/man/RCS/tiffcp.1,v 1.24 1996/08/07 00:01:40 sam Exp $
 .\"
 .\" Copyright (c) 1988-1995 Sam Leffler
 .\" Copyright (c) 1991-1995 Silicon Graphics, Inc.
@@ -64,6 +64,7 @@ the image data content in any way.
 Force output to be written with Big-Endian byte order.
 This option only has an effect when the output file is created or
 overwritten and not when it is appended to.
+.TP
 .B \-C
 Suppress the use of ``strip chopping'' when reading images
 that have a single strip/tile of uncompressed data.
@@ -134,21 +135,23 @@ will create a new file with the same fill order as the original.
 Specifying
 .B "\-f lsb2msb"
 will force data to be written with the FillOrder tag set to
-.SM LSB2MSB ,
+.SM LSB2MSB,
 while
 .B "\-f msb2lsb"
 will force data to be written with the FillOrder tag set to
-.SM MSB2LSB .
+.SM MSB2LSB.
 .TP
 .B \-l
 Specify the length of a tile (in pixels).
 .I tiffcp
 attempts to set the tile dimensions so
 that no more than 8 kilobytes of data appear in a tile.
+.TP
 .B \-L
 Force output to be written with Little-Endian byte order.
 This option only has an effect when the output file is created or
 overwritten and not when it is appended to.
+.TP
 .B \-M
 Suppress the use of memory-mapped files when reading images.
 .TP

@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirinfo.c,v 1.38 1996/06/04 19:04:41 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirinfo.c,v 1.40 1996/12/13 05:25:39 sam Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -166,7 +166,9 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_INKSET,		 1, 1, TIFF_SHORT,	FIELD_INKSET,
       FALSE,	FALSE,	"InkSet" },
     { TIFFTAG_INKNAMES,		-1,-1, TIFF_ASCII,	FIELD_INKNAMES,
-      TRUE,	FALSE,	"InkNames" },
+      TRUE,	TRUE,	"InkNames" },
+    { TIFFTAG_NUMBEROFINKS,	 1, 1, TIFF_SHORT,	FIELD_NUMBEROFINKS,
+      TRUE,	FALSE,	"NumberOfInks" },
     { TIFFTAG_DOTRANGE,		 2, 2, TIFF_SHORT,	FIELD_DOTRANGE,
       FALSE,	FALSE,	"DotRange" },
     { TIFFTAG_DOTRANGE,		 2, 2, TIFF_BYTE,	FIELD_DOTRANGE,
@@ -214,6 +216,10 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_TILEDEPTH,	 1, 1, TIFF_SHORT,	FIELD_TILEDEPTH,
       FALSE,	FALSE,	"TileDepth" },
 /* end SGI tags */
+#ifdef ICC_SUPPORT
+    { TIFFTAG_ICCPROFILE,	-1,-3, TIFF_UNDEFINED,	FIELD_ICCPROFILE,
+      FALSE,	TRUE,	"ICC Profile" },
+#endif
 };
 #define	N(a)	(sizeof (a) / sizeof (a[0]))
 
