@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFReadRGBAStrip.3t,v 1.2 2000-09-25 15:39:07 warmerda Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFReadRGBAStrip.3t,v 1.3 2003-12-03 15:39:34 dron Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -163,9 +163,6 @@ grayscale data to
 There was insufficient memory to allocate a table used to map
 data to 8-bit
 .SM RGB.
-.SH BUGS
-Orientations other than bottom-left, or top-left are
-not handled correctly.
 .SH "SEE ALSO"
 .IR libtiff (3T),
 .IR TIFFOpen (3T),

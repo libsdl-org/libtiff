@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.20 2003-11-20 21:57:51 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.21 2003-12-03 15:40:14 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -204,6 +204,7 @@ struct _TIFFRGBAImage {
 	uint16	bitspersample;			/* image bits/sample */
 	uint16	samplesperpixel;		/* image samples/pixel */
 	uint16	orientation;			/* image orientation */
+	uint16	req_orientation;		/* requested orientation */
 	uint16	photometric;			/* image photometric interp */
 	uint16*	redcmap;			/* colormap pallete */
 	uint16*	greencmap;
