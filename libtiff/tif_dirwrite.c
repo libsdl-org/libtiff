@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.17 2003-08-12 07:50:37 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.18 2003-12-04 10:26:15 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -474,6 +474,7 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
 		break;
 	case TIFF_LONG:
 	case TIFF_SLONG:
+	case TIFF_IFD:
 		if (wc > 1) {
 			uint32* lp;
 			if (wc == (u_short) TIFF_VARIABLE
