@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.17 2004-09-21 10:18:22 dron Exp $ */
+/* $Id: tif_print.c,v 1.18 2004-10-01 02:30:29 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -478,6 +478,13 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 			fprintf(fd, " %5lu", (long) td->td_subifd[i]);
 		fputc('\n', fd);
 	}
+ 	if (TIFFFieldSet(tif,FIELD_XMLPACKET)) {
+            fprintf(fd, "  XMLPacket (XMP Metadata):\n" );
+            for( i=0; i < td->td_xmlpacketLength; i++ )
+                fputc( ((char *)td->td_xmlpacketData)[i], fd );
+            fprintf( fd, "\n" );
+        }
+
         /*
         ** Custom tag support.
         */

@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.30 2004-09-25 19:36:57 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.31 2004-10-01 02:30:29 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -208,7 +208,7 @@ const TIFFFieldInfo tiffFieldInfo[] = {
 /* XXX temporarily accept LONG for backwards compatibility */
     { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_LONG,	FIELD_REFBLACKWHITE,
       TRUE,	FALSE,	"ReferenceBlackWhite" },
-    { TIFFTAG_XMLPACKET,	-1,-3, TIFF_UNDEFINED,	FIELD_XMLPACKET,
+    { TIFFTAG_XMLPACKET,	-1,-3, TIFF_BYTE,	FIELD_XMLPACKET,
       FALSE,	TRUE,	"XMLPacket" },
 /* begin SGI tags */
     { TIFFTAG_MATTEING,		 1, 1, TIFF_SHORT,	FIELD_EXTRASAMPLES,
