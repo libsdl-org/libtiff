@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.27 2004-09-09 18:06:14 fwarmerdam Exp $ */
+/* $Id: tiff2ps.c,v 1.28 2004-10-10 11:58:16 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1156,11 +1156,13 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	return(use_rawdata);
 }
 
+#define MAXLINE		36
+
 int
 PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 {
 	uint16 fillorder;
-	int use_rawdata, tiled_image, breaklen = 0;
+	int use_rawdata, tiled_image, breaklen = MAXLINE;
 	uint32 chunk_no, num_chunks, *bc;
 	unsigned char *buf_data, *cp;
 	tsize_t chunk_size, byte_count;
@@ -1233,7 +1235,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		if (ascii85)
 			Ascii85Init();
 		else
-			breaklen = 36;
+			breaklen = MAXLINE;
 		if (use_rawdata) {
 			if (tiled_image)
 				byte_count = TIFFReadRawTile(tif, chunk_no,
@@ -1309,7 +1311,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 
 				if (--breaklen <= 0) {
 					putc('\n', fd);
-					breaklen = 36;
+					breaklen = MAXLINE;
 				}
 			}
 		}
@@ -1432,7 +1434,6 @@ PSColorSeparatePreamble(FILE* fd, uint32 w, uint32 h, int nc)
 	fprintf(fd, "true %d colorimage\n", nc);
 }
 
-#define MAXLINE		36
 #define	DOBREAK(len, howmany, fd) \
 	if (((len) -= (howmany)) <= 0) {	\
 		putc('\n', fd);			\
