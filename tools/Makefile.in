@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.9 2001-07-17 13:13:37 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.10 2002-03-08 07:21:53 dron Exp $
 #
 # @WARNING@
 #
@@ -111,9 +111,9 @@ all:	${TARGETS}
 	    true; \
 	fi
 install: all
-	${INSTALL} -idb nostrip -idb tiff.sw.tools -m 755 		\
+	${INSTALL} -idb tiff.sw.tools -m 755 				\
 		-dir ${DESTDIR}@DIR_BIN@
-	${INSTALL} -idb nostrip -idb tiff.sw.tools -m 755 		\
+	${INSTALL} -idb tiff.sw.tools -m 755 				\
 		-F ${DESTDIR}@DIR_BIN@ -O ${TARGETS}
 	@if [ "@LIBIMAGE@" = yes ]; then 				\
 	    ${INSTALL} -idb tiff.sw.tools -m 755 			\
