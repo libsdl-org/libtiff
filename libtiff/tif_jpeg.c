@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.26 2004-11-04 12:40:11 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.27 2004-12-01 01:59:12 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -73,6 +73,17 @@ int TIFFFillTile(TIFF*, ttile_t);
 
 #include "jpeglib.h"
 #include "jerror.h"
+
+/*
+ * We are using width_in_blocks which is supposed to be private to
+ * libjpeg. Unfortunately, the libjpeg delivered with Cygwin has
+ * renamed this member to width_in_data_units.  Since the header has
+ * also renamed a define, use that unique define name in order to
+ * detect the problem header and adjust to suit.
+ */
+#if defined(D_MAX_DATA_UNITS_IN_MCU)
+#define width_in_blocks width_in_data_units
+#endif
 
 /*
  * On some machines it may be worthwhile to use _setjmp or sigsetjmp
