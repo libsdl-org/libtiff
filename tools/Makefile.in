@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.11 2002-08-10 15:25:54 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.12 2003-10-09 08:48:16 dron Exp $
 #
 # @WARNING@
 #
@@ -175,7 +175,7 @@ tiff2ps.o: ${SRCDIR}/tiff2ps.c
 tiffset: tiffset.o ${TIFFLIB}
 	${CC} -o tiffset ${CFLAGS} tiffset.o ${LIBS}
 tiffset.o: ${SRCDIR}/tiffset.c
-	${CC} -c ${CFLAGS} ${SRCDIR}/tiffset.c
+	${CC} -c ${CFLAGS} -I../libtiff ${SRCDIR}/tiffset.c
 
 #
 # Junky stuff... programs that are more examples of how
