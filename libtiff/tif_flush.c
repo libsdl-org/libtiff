@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_flush.c,v 1.2 2000-09-14 20:22:58 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_flush.c,v 1.3 2000-09-15 20:52:42 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -56,7 +56,7 @@ int
 TIFFFlushData(TIFF* tif)
 {
 	if ((tif->tif_flags & TIFF_BEENWRITING) == 0)
-		return (1);
+		return (0);
 	if (tif->tif_flags & TIFF_POSTENCODE) {
 		tif->tif_flags &= ~TIFF_POSTENCODE;
 		if (!(*tif->tif_postencode)(tif))
