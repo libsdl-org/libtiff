@@ -1,5 +1,5 @@
 #! /bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/port/Attic/install.sh,v 1.2 1999-09-28 17:22:20 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/port/Attic/install.sh,v 1.3 2000-03-20 18:20:42 mwelles Exp $
 #
 # Warning, this file was automatically created by the TIFF configure script
 #
@@ -32,8 +32,8 @@
 #
 # Warning, this file was automatically created by the HylaFAX configure script
 #
-# VERSION:	v3.5.2
-# DATE:		Tue Sep 28 13:26:51 CEST 1999
+# VERSION:	v3.5.4
+# DATE:		Mon Mar 20 13:09:13 EST 2000
 # TARGET:	i586-unknown-linux
 #
 

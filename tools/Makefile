@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/Makefile,v 1.3 1999-09-28 17:22:20 mwelles Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/Makefile,v 1.4 2000-03-20 18:20:42 mwelles Exp $
 #
 # Warning, this file was automatically created by the TIFF configure script
 #
@@ -32,8 +32,8 @@ SRCDIR	= ../tools
 LIBDIR	= ../libtiff
 
 #
-# VERSION:	v3.5.2
-# DATE:		Tue Sep 28 13:26:51 CEST 1999
+# VERSION:	v3.5.4
+# DATE:		Mon Mar 20 13:09:13 EST 2000
 # TARGET:	i586-unknown-linux
 # CCOMPILER:	/usr/bin/gcc
 #
@@ -47,10 +47,10 @@ OPTIMIZER=-O
 IPATH	= -I. -I${SRCDIR} -I${LIBDIR}
 CFLAGS	=  ${COPTS} ${OPTIMIZER} ${IPATH}
 #
-TIFFLIB	= ${DEPTH}/libtiff/libtiff.so.3
+TIFFLIB	= ${DEPTH}/libtiff/libtiff.a
 LIBJPEG	= 
 LIBGZ	= 
-LIBTIFF	= ${DEPTH}/libtiff/libtiff.so.3
+LIBTIFF	= ${DEPTH}/libtiff/libtiff.a
 LIBPORT	= 
 MACHLIBS= -lm
 LIBS	= ${LIBTIFF} ${LIBJPEG} ${LIBGZ} ${LIBPORT} ${MACHLIBS}
@@ -108,8 +108,8 @@ all:	${TARGETS}
 	    true; \
 	fi
 install: all
-	${INSTALL} -idb tiff.sw.tools -m 755 -dir /usr/local/bin
-	${INSTALL} -idb tiff.sw.tools -m 755 -F /usr/local/bin -O ${TARGETS}
+	${INSTALL} -idb nostrip tiff.sw.tools -m 755 -dir /usr/local/bin
+	${INSTALL} -idb nostrip tiff.sw.tools -m 755 -F /usr/local/bin -O ${TARGETS}
 	@if [ "no" = yes ]; then \
 	    ${INSTALL} -idb tiff.sw.tools -m 755 -F /usr/local/bin -O sgi2tiff; \
 	else \
