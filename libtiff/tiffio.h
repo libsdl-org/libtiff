@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.6 2000-06-15 15:32:36 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.7 2000-11-13 14:42:38 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -31,15 +31,7 @@
  * TIFF I/O Library Definitions.
  */
 #include "tiff.h"
-
-/*
- * This define can be used in code that requires
- * compilation-related definitions specific to a
- * version or versions of the library.  Runtime
- * version checking should be done based on the
- * string returned by TIFFGetVersion.
- */
-#define	TIFFLIB_VERSION	19970127	/* January 27, 1997 */
+#include "tiffvers.h"
 
 /*
  * TIFF is defined as an incomplete type to hide the
