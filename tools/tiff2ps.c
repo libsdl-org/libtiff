@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.12 2002-10-07 13:15:29 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiff2ps.c,v 1.13 2002-10-10 14:19:26 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1947,8 +1947,8 @@ char* stuff[] = {
 " -r            rotate by 180 degrees",
 " -s            generate PostScript for a single image",
 " -T            print pages for top edge binding",
-" -x		override resolution units as centimeters",
-" -y		override resolution units as inches",
+" -x            override resolution units as centimeters",
+" -y            override resolution units as inches",
 " -z            enable printing in the deadzone (only for PostScript Level II)",
 NULL
 };
