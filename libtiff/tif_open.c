@@ -1,4 +1,4 @@
-/* $Id: tif_open.c,v 1.19 2004-09-01 18:43:11 dron Exp $ */
+/* $Id: tif_open.c,v 1.20 2004-09-08 18:01:29 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -428,7 +428,7 @@ const char *
 TIFFSetFileName(TIFF* tif, const char *name)
 {
 	const char* old_name = tif->tif_name;
-	tif->tif_name = name;
+	tif->tif_name = (char *)name;
 	return (old_name);
 }
 
