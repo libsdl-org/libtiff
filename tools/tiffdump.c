@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.5 2004-06-04 11:50:09 dron Exp $ */
+/* $Id: tiffdump.c,v 1.6 2004-08-01 10:39:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "config.h"
+#include "tif_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.13 2004-07-03 16:04:01 dron Exp $" */
+/* $Id: fax2ps.c,v 1.14 2004-08-01 10:39:41 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -23,7 +23,7 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
-#include "config.h"
+#include "tif_config.h"
 
 #include <stdlib.h>
 #include <stdio.h>

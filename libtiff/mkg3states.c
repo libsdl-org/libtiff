@@ -1,4 +1,4 @@
-/* "$Id: mkg3states.c,v 1.4 2004-07-03 16:05:40 dron Exp $ */
+/* "$Id: mkg3states.c,v 1.5 2004-08-01 10:37:42 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -29,7 +29,7 @@
  * in Frank Cringle's viewfax program;
  *      Copyright (C) 1990, 1995  Frank D. Cringle.
  */
-#include "config.h"
+#include "tif_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>

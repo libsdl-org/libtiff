@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.4 2004-07-24 19:03:16 dron Exp $
+/* $Id: bmp2tiff.c,v 1.5 2004-08-01 10:39:41 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE.
  */
 
-#include "config.h"
+#include "tif_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
