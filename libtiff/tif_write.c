@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_write.c,v 1.4 2000-01-28 21:05:16 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_write.c,v 1.5 2000-02-11 19:28:17 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -383,7 +383,7 @@ TIFFWriteEncodedTile(TIFF* tif, ttile_t tile, tdata_t data, tsize_t cc)
 	 * done so that callers can pass in some large number
 	 * (e.g. -1) and have the tile size used instead.
 	 */
-	if ( cc > tif->tif_tilesize)
+	if ( cc < 1 || cc > tif->tif_tilesize)
 		cc = tif->tif_tilesize;
 	if (!(*tif->tif_encodetile)(tif, (tidata_t) data, cc, sample))
 		return ((tsize_t) 0);
