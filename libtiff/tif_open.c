@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.17 2004-04-04 17:46:36 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.18 2004-05-20 19:15:54 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -511,3 +511,13 @@ TIFFIsMSB2LSB(TIFF* tif)
 {
 	return (isFillOrder(tif, FILLORDER_MSB2LSB));
 }
+
+/*
+ * Return nonzero if given file was written in big-endian order.
+ */
+int
+TIFFIsBigEndian(TIFF* tif)
+{
+	return (tif->tif_header.tiff_magic == TIFF_BIGENDIAN);
+}
+
