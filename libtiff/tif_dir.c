@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.11 2000-03-03 15:15:57 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.12 2000-07-14 18:43:08 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -345,7 +345,7 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		break;
 	case TIFFTAG_SAMPLEFORMAT:
 		v = va_arg(ap, int);
-		if (v < SAMPLEFORMAT_UINT || SAMPLEFORMAT_VOID < v)
+		if (v < SAMPLEFORMAT_UINT || SAMPLEFORMAT_COMPLEX_IEEEFP < v)
 			goto badvalue;
 		td->td_sampleformat = (uint16) v;
 		break;
