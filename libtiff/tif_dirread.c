@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.17 2003-06-19 21:36:03 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirread.c,v 1.18 2003-06-30 08:24:40 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -263,7 +263,6 @@ TIFFReadDirectory(TIFF* tif)
                     while (fix < tif->tif_nfields &&
                            tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
 			fix++;
-		    /* dp->tdir_tag = IGNORE; */
 		}
 		/*
 		 * Null out old tags that we ignore.
@@ -613,14 +612,7 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 		/* calculate amount of space used by indirect values */
 		for (dp = dir, n = dircount; n > 0; n--, dp++)
 		{
-		    uint32 cc;
-		    if(dp->tdir_tag == IGNORE)
-		    {
-		        TIFFError(tif->tif_name,
-		        "Cannot determine StripByteCounts values, because of tags with unknown sizes");
-			return -1;
-		    }
-		    cc = dp->tdir_count*TIFFDataWidth(dp->tdir_type);
+		    uint32 cc = dp->tdir_count*TIFFDataWidth(dp->tdir_type);
 		    if (cc > sizeof (uint32))
 			space += cc;
 		}
@@ -656,8 +648,11 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 static void
 MissingRequired(TIFF* tif, const char* tagname)
 {
-	TIFFError(tif->tif_name,
-	    "TIFF directory is missing required \"%s\" field", tagname);
+	static const char module[] = "MissingRequired";
+
+	TIFFError(module,
+		  "%.1000s: TIFF directory is missing required \"%s\" field",
+		  tif->tif_name, tagname);
 }
 
 /*
