@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.6 2000-01-28 21:03:51 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.7 2000-01-28 21:46:21 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1011,7 +1011,7 @@ TIFFLinkDirectory(TIFF* tif)
 		if (tif->tif_flags & TIFF_SWAB)
 			TIFFSwabLong(&nextdir);
 	} while (nextdir != 0);
-        off = TIFFSeekFile(tif, 0, SEEK_CUR); // get current offset
+        off = TIFFSeekFile(tif, 0, SEEK_CUR); /* get current offset */
         (void) TIFFSeekFile(tif, off - (toff_t)sizeof(nextdir), SEEK_SET);
 	if (!WriteOK(tif, &diroff, sizeof (diroff))) {
 		TIFFError(module, "Error writing directory link");
