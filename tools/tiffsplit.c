@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.6 2004-05-20 19:20:52 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.7 2004-05-25 16:02:22 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -157,6 +157,7 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFGetField(in, TIFFTAG_JPEGTABLES, &count, &table);
 		TIFFSetField(out, TIFFTAG_JPEGTABLES, count, table);
 	}
+        CopyField(TIFFTAG_PHOTOMETRIC, shortv);
 	CopyField(TIFFTAG_PREDICTOR, shortv);
 	CopyField(TIFFTAG_THRESHHOLDING, shortv);
 	CopyField(TIFFTAG_FILLORDER, shortv);
