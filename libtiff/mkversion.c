@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/mkversion.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/mkversion.c,v 1.2 1999-09-08 19:09:35 warmerda Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -104,7 +104,7 @@ main(int argc, char* argv[])
 	cp = strchr(cp+1, ' ');
     if (cp) {				/* append alpha to version */
 	char* tp;
-	for (tp = strchr(version, '\0'), cp++; *tp = *cp; tp++, cp++)
+	for (tp = strchr(version, '\0'), cp++; (*tp = *cp) != 0; tp++, cp++)
 	    ;
 	if (tp[-1] == '\n')
 	    tp[-1] = '\0';
