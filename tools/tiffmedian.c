@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffmedian.c,v 1.5 2003-08-21 10:00:06 dron Exp $ */
+/* $Id: tiffmedian.c,v 1.6 2004-06-04 14:16:14 dron Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -760,7 +760,7 @@ quant(TIFF* in, TIFF* out)
 			red = *inptr++ >> COLOR_SHIFT;
 			green = *inptr++ >> COLOR_SHIFT;
 			blue = *inptr++ >> COLOR_SHIFT;
-			*outptr++ = histogram[red][green][blue];
+			*outptr++ = (unsigned char)histogram[red][green][blue];
 		}
 		if (TIFFWriteScanline(out, outline, i, 0) < 0)
 			break;

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcmp.c,v 1.4 2003-06-18 09:57:55 dron Exp $ */
+/* $Id: tiffcmp.c,v 1.5 2004-06-04 14:16:14 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -133,7 +133,8 @@ tiffcmp(TIFF* tif1, TIFF* tif2)
 {
 	uint16 config1, config2;
 	tsize_t size1;
-	uint32 s, row;
+	uint32 row;
+	tsample_t s;
 	unsigned char *buf1, *buf2;
 
 	if (!CheckShortTag(tif1, tif2, TIFFTAG_BITSPERSAMPLE, "BitsPerSample"))

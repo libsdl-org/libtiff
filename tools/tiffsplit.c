@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.7 2004-05-25 16:02:22 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.8 2004-06-04 14:16:14 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -210,7 +210,7 @@ cpStrips(TIFF* in, TIFF* out)
 
 		TIFFGetField(in, TIFFTAG_STRIPBYTECOUNTS, &bytecounts);
 		for (s = 0; s < ns; s++) {
-			if (bytecounts[s] > bufsize) {
+			if (bytecounts[s] > (uint32)bufsize) {
 				buf = (unsigned char *)_TIFFrealloc(buf, bytecounts[s]);
 				if (!buf)
 					return (0);
@@ -240,7 +240,7 @@ cpTiles(TIFF* in, TIFF* out)
 
 		TIFFGetField(in, TIFFTAG_TILEBYTECOUNTS, &bytecounts);
 		for (t = 0; t < nt; t++) {
-			if (bytecounts[t] > bufsize) {
+			if (bytecounts[t] > (uint32) bufsize) {
 				buf = (unsigned char *)_TIFFrealloc(buf, bytecounts[t]);
 				if (!buf)
 					return (0);
