@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.33 2002-10-15 02:30:31 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.34 2003-05-06 12:58:19 dron Exp $
 #
 # @WARNING@
 #
@@ -47,6 +47,11 @@ INSTALL	= @INSTALL@
 all default:
 	@if [ "@PORT@" = yes ]; then \
 	    ${ECHO} "= "port; cd port; ${MAKE} -${MAKEFLAGS}; \
+	else \
+	    true; \
+	fi
+	@if [ "@OJPEG@" = yes ]; then \
+	    ${ECHO} "= "ojpeg; cd contrib/ojpeg; ${MAKE} -${MAKEFLAGS}; \
 	else \
 	    true; \
 	fi
