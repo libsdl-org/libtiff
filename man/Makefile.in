@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/man/Makefile.in,v 1.5 2001-04-06 03:02:33 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/man/Makefile.in,v 1.6 2001-06-13 15:26:06 warmerda Exp $
 #
 # @WARNING@
 #
@@ -96,6 +96,7 @@ MANTOOLS=\
 	apps/sgi2tiff.1 \
 	apps/thumbnail.1 \
 	apps/tiff2bw.1 \
+	apps/tiff2rgba.1 \
 	apps/tiff2ps.1 \
 	apps/tiffcmp.1 \
 	apps/tiffcp.1 \
