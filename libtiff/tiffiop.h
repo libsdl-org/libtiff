@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.15 2004-04-20 14:25:21 dron Exp $ */
+/* $Id: tiffiop.h,v 1.16 2004-06-04 10:25:58 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,14 +30,8 @@
  * ``Library-private'' definitions.
  */
 
-/*
- * UNIX systems should run the configure script to generate
- * a port.h file that reflects the system capabilities.
- * Doing this obviates all the dreck done in tiffcomp.h.
- */
 #if defined(_MSC_VER)
 # include "config.h.vc"
-# include "tiffcomp.h"
 #else
 # include "config.h"
 #endif
