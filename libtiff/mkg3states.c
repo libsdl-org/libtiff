@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/mkg3states.c,v 1.3 2004-04-08 14:30:51 dron Exp $ */
+/* "$Id: mkg3states.c,v 1.4 2004-07-03 16:05:40 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -29,9 +29,15 @@
  * in Frank Cringle's viewfax program;
  *      Copyright (C) 1990, 1995  Frank D. Cringle.
  */
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_GETOPT_H
+# include <getopt.h>
+#endif
 
 #include "tif_fax3.h"
 
