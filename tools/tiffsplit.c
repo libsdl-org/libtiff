@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffsplit.c,v 1.2 2000-04-18 22:47:10 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffsplit.c,v 1.3 2003-07-26 03:46:08 warmerda Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -79,6 +79,7 @@ static void
 newfilename(void)
 {
 	static int first = 1;
+	static long lastTurn;
 	static long fnum;
 	static short defname;
 	static char *fpnt;
@@ -94,7 +95,7 @@ newfilename(void)
 		}
 		first = 0;
 	}
-#define	MAXFILES	676
+#define	MAXFILES	17576
 	if (fnum == MAXFILES) {
 		if (!defname || fname[0] == 'z') {
 			fprintf(stderr, "tiffsplit: too many files.\n");
@@ -103,8 +104,23 @@ newfilename(void)
 		fname[0]++;
 		fnum = 0;
 	}
-	fpnt[0] = fnum / 26 + 'a';
-	fpnt[1] = fnum % 26 + 'a';
+	if (fnum % 676 == 0) {
+		if (fnum != 0) {
+			//advance to next letter every 676 pages
+			//condition for 'z'++ will be covered above
+			fpnt[0]++;
+		} else {
+			//set to 'a' if we are on the very first file
+			fpnt[0] = 'a';
+		}
+		//set the value of the last turning point
+		lastTurn = fnum;
+	}
+	//start from 0 every 676 times (provided by lastTurn)
+	//this keeps us within a-z boundaries
+	fpnt[1] = (fnum - lastTurn) / 26 + 'a';
+	//cycle last letter every file, from a-z, then repeat
+	fpnt[2] = fnum % 26 + 'a';
 	fnum++;
 }
 
