@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.24 2001-11-23 16:02:14 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.25 2001-11-23 16:15:35 warmerda Exp $
 #
 # @WARNING@
 #
@@ -515,7 +515,11 @@ releasediff:
 
 # create release or beta distribution archive
 release.tar.zip:
-	VERSIONREL="@VERSION@-@RELEASE@";				\
+	if test "@RELEASE@" = "" ; then					\
+	  VERSIONREL="@VERSION@";					\
+	else								\
+	  VERSIONREL="@VERSION@-@RELEASE@";				\
+	fi;								\
 	rm -f ../tiff-$$VERSIONREL $$VERSIONREL $$VERSIONREL-tar;			\
 	ln -s ${SRCDIR} tiff-$$VERSIONREL;					\
 	(for i in ${DISTFILES}; do					\
