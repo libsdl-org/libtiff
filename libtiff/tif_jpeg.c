@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.21 2004-09-14 06:50:22 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.22 2004-09-29 07:44:26 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1628,7 +1628,7 @@ TIFFInitJPEG(TIFF* tif, int scheme)
 		TIFFError("TIFFInitJPEG", "No space for JPEG state block");
 		return (0);
 	}
-        memset( tif->tif_data, 0, sizeof(JPEGState));
+        _TIFFmemset( tif->tif_data, 0, sizeof(JPEGState));
 
 	sp = JState(tif);
 	sp->tif = tif;				/* back link */
