@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.3 2000-03-27 17:05:55 mwelles Exp $" */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.4 2000-03-28 18:22:59 warmerda Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -356,7 +356,7 @@ main(int argc, char** argv)
     printf("%%%%CreationDate: %s", ctime(&t));
     printf("%%%%Origin: 0 0\n");
     printf("%%%%BoundingBox: 0 0 %u %u\n",
-	(int)(pageHeight*72), (int)(pageWidth*72));	/* XXX */
+	(int)(pageWidth*72), (int)(pageHeight*72));	/* XXX */
     printf("%%%%Pages: (atend)\n");
     printf("%%%%EndComments\n");
     printf("%%%%BeginProlog\n");
