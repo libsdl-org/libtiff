@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.9 2004-10-10 12:33:18 dron Exp $
+/* $Id: bmp2tiff.c,v 1.10 2004-10-15 07:50:15 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -731,7 +731,7 @@ processCompressOptions(char* opt)
 }
 
 static char* stuff[] = {
-"bmp2tiff --- tool for converting Windows BMP files in TIFF",
+"bmp2tiff --- convert Windows BMP files to TIFF",
 "usage: bmp2tiff [options] input.bmp output.tif",
 "where options are:",
 " -r #		make each strip have no more than # rows",
