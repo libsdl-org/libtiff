@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.40 2004-10-09 13:44:32 dron Exp $ */
+/* $Id: tif_dir.c,v 1.41 2004-10-09 18:33:56 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1172,8 +1172,8 @@ TIFFDefaultDirectory(TIFF* tif)
 	td->td_orientation = ORIENTATION_TOPLEFT;
 	td->td_samplesperpixel = 1;
 	td->td_rowsperstrip = (uint32) -1;
-	td->td_tilewidth = (uint32) -1;
-	td->td_tilelength = (uint32) -1;
+	td->td_tilewidth = 0;
+	td->td_tilelength = 0;
 	td->td_tiledepth = 1;
 	td->td_stripbytecountsorted = 1; /* Our own arrays always sorted. */
 	td->td_resolutionunit = RESUNIT_INCH;
