@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.34 2004-09-02 14:24:57 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.35 2004-09-10 10:55:10 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -423,7 +423,10 @@ TIFFReadDirectory(TIFF* tif)
                          * DataType and SampleFormat tags are supposed to be
                          * written as one value/sample, but some vendors
                          * incorrectly write one value only -- so we accept
-                         * that as well (yech).
+                         * that as well (yech). Other vendors write correct
+			 * value for NumberOfSamples, but incorrect one for
+			 * BitsPerSample and friends, and we will read this
+			 * too.
 			 */
 			if (dp->tdir_count == 1) {
 				v = TIFFExtractData(tif,
@@ -693,12 +696,18 @@ MissingRequired(TIFF* tif, const char* tagname)
 static int
 CheckDirCount(TIFF* tif, TIFFDirEntry* dir, uint32 count)
 {
-	if (count != dir->tdir_count) {
+	if (count > dir->tdir_count) {
 		TIFFWarning(tif->tif_name,
 	"incorrect count for field \"%s\" (%lu, expecting %lu); tag ignored",
 		    _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name,
 		    dir->tdir_count, count);
 		return (0);
+	} else if (count < dir->tdir_count) {
+		TIFFWarning(tif->tif_name,
+	"incorrect count for field \"%s\" (%lu, expecting %lu); tag trimmed",
+		    _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name,
+		    dir->tdir_count, count);
+		return (1);
 	}
 	return (1);
 }
@@ -1287,8 +1296,7 @@ TIFFFetchPerSampleAnys(TIFF* tif, TIFFDirEntry* dir, double* pl)
 
 /*
  * Fetch a set of offsets or lengths.
- * While this routine says "strips",
- * in fact it's also used for tiles.
+ * While this routine says "strips", in fact it's also used for tiles.
  */
 static int
 TIFFFetchStripThing(TIFF* tif, TIFFDirEntry* dir, long nstrips, uint32** lpp)
