@@ -1,4 +1,4 @@
-/* "$Id: mkg3states.c,v 1.5 2004-08-01 10:37:42 dron Exp $ */
+/* "$Id: mkg3states.c,v 1.6 2004-09-02 13:43:28 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -34,10 +34,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef HAVE_GETOPT_H
-# include <getopt.h>
-#endif
 
 #include "tif_fax3.h"
 
@@ -335,8 +331,8 @@ FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
 static	char* storage_class = "";
 static	char* const_class = "";
 static	int packoutput = 1;
-static	char* prebrace = "";
-static	char* postbrace = "";
+static	char* prebrace = "{";
+static	char* postbrace = "}";
 
 void
 WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
@@ -351,7 +347,7 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
 	for (i = 0; i < Size; i++) {
 	    fprintf(fd, "%s%s%d,%d,%d%s",
 		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
-	    if (((i+1) % 12) == 0)
+	    if (((i+1) % 10) == 0)
 		    sep = ",\n";
 	    else
 		    sep = ",";
@@ -436,3 +432,5 @@ main(int argc, char* argv[])
     fclose(fd);
     return (0);
 }
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
