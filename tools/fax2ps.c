@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.7 2003-03-12 14:05:05 dron Exp $" */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.8 2003-10-03 13:09:38 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -82,7 +82,7 @@ printruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
     (void) buf;
     printf("%d m(", row++);
     while (runs < erun) {
-	if (!runlength) {
+	if (runlength <= 0) {
 	    colormode ^= 1;
 	    runlength = *runs++;
 	    if (x+runlength > lastx)
