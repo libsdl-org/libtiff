@@ -1,4 +1,4 @@
-/* $Id: tiff-grayscale.c,v 1.2 2004-05-03 16:46:36 dron Exp $ */
+/* $Id: tiff-grayscale.c,v 1.3 2004-06-05 21:03:16 dron Exp $ */
 
 /*
  * tiff-grayscale.c -- create a Class G (grayscale) TIFF file
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     TIFFSetField(tif, TIFFTAG_TRANSFERFUNCTION, gray);
     TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
 
-    scan_line = (u_char *) malloc(WIDTH / (8 / bits_per_pixel));
+    scan_line = (unsigned char *) malloc(WIDTH / (8 / bits_per_pixel));
 
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0, k = 0; j < WIDTH;) {
