@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.10 2004-11-05 13:42:05 dron Exp $ */
+/* $Id: tif_win32.c,v 1.11 2004-11-13 11:14:47 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -253,7 +253,7 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 	if (mbsize > 0) {
 		mbname = _TIFFmalloc(mbsize);
 		if (!mbname) {
-			_TIFFerror(module,
+			TIFFerror(module,
 			"Can't allocate space for filename conversion buffer");
 			return ((TIFF*)0);
 		}
