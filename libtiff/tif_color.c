@@ -1,4 +1,4 @@
-/* $Id: tif_color.c,v 1.8 2004-11-09 20:27:47 dron Exp $ */
+/* $Id: tif_color.c,v 1.9 2005-01-15 15:42:50 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -121,14 +121,14 @@ TIFFCIELabToRGBInit(TIFFCIELabToRGB* cielab,
 		    TIFFDisplay *display, float *refWhite)
 {
 	int i;
-	float gamma;
+	double gamma;
 
 	cielab->range = CIELABTORGB_TABLE_RANGE;
 
 	_TIFFmemcpy(&cielab->display, display, sizeof(TIFFDisplay));
 
 	/* Red */
-	gamma = 1.0F / cielab->display.d_gammaR ;
+	gamma = 1.0 / cielab->display.d_gammaR ;
 	cielab->rstep =
 		(cielab->display.d_YCR - cielab->display.d_Y0R)	/ cielab->range;
 	for(i = 0; i <= cielab->range; i++) {
@@ -137,7 +137,7 @@ TIFFCIELabToRGBInit(TIFFCIELabToRGB* cielab,
 	}
 
 	/* Green */
-	gamma = 1.0F / cielab->display.d_gammaG ;
+	gamma = 1.0 / cielab->display.d_gammaG ;
 	cielab->gstep =
 	    (cielab->display.d_YCR - cielab->display.d_Y0R) / cielab->range;
 	for(i = 0; i <= cielab->range; i++) {
@@ -146,7 +146,7 @@ TIFFCIELabToRGBInit(TIFFCIELabToRGB* cielab,
 	}
 
 	/* Blue */
-	gamma = 1.0F / cielab->display.d_gammaB ;
+	gamma = 1.0 / cielab->display.d_gammaB ;
 	cielab->bstep =
 	    (cielab->display.d_YCR - cielab->display.d_Y0R) / cielab->range;
 	for(i = 0; i <= cielab->range; i++) {
