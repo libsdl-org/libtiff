@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffsplit.c,v 1.3 2003-07-26 03:46:08 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffsplit.c,v 1.4 2004-01-26 17:00:56 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -106,20 +106,30 @@ newfilename(void)
 	}
 	if (fnum % 676 == 0) {
 		if (fnum != 0) {
-			//advance to next letter every 676 pages
-			//condition for 'z'++ will be covered above
+			/*
+                         * advance to next letter every 676 pages
+			 * condition for 'z'++ will be covered above
+                         */
 			fpnt[0]++;
 		} else {
-			//set to 'a' if we are on the very first file
+			/*
+                         * set to 'a' if we are on the very first file
+                         */
 			fpnt[0] = 'a';
 		}
-		//set the value of the last turning point
+		/*
+                 * set the value of the last turning point
+                 */
 		lastTurn = fnum;
 	}
-	//start from 0 every 676 times (provided by lastTurn)
-	//this keeps us within a-z boundaries
+	/* 
+         * start from 0 every 676 times (provided by lastTurn)
+         * this keeps us within a-z boundaries
+         */
 	fpnt[1] = (fnum - lastTurn) / 26 + 'a';
-	//cycle last letter every file, from a-z, then repeat
+	/* 
+         * cycle last letter every file, from a-z, then repeat
+         */
 	fpnt[2] = fnum % 26 + 'a';
 	fnum++;
 }

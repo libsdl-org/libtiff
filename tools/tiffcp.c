@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.16 2004-01-02 10:02:14 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.17 2004-01-26 17:00:55 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -670,7 +670,7 @@ tiffcp(TIFF* in, TIFF* out)
 	{
 	  unsigned short pg0, pg1;
 	  if (TIFFGetField(in, TIFFTAG_PAGENUMBER, &pg0, &pg1))
-		if (pageNum < 0) // only one input file
+		if (pageNum < 0) /* only one input file */
 			TIFFSetField(out, TIFFTAG_PAGENUMBER, pg0, pg1);
 		else 
 			TIFFSetField(out, TIFFTAG_PAGENUMBER, pageNum++, 0);
