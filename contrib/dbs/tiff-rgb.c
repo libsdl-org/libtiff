@@ -1,4 +1,4 @@
-/* $Id: tiff-rgb.c,v 1.2 2004-05-03 16:46:36 dron Exp $ */
+/* $Id: tiff-rgb.c,v 1.3 2004-09-03 08:29:16 dron Exp $ */
 
 /*
  * tiff-rgb.c -- create a 24-bit Class R (rgb) TIFF file
@@ -27,6 +27,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "tiffio.h"
 
@@ -41,8 +42,8 @@ char *              programName;
 
 int main(int argc, char **argv)
 {
-    char *          input_file;
-    double          image_gamma;
+    char *          input_file = NULL;
+    double          image_gamma = TIFF_GAMMA;
     int             i, j;
     TIFF *          tif;
     unsigned char * scan_line;

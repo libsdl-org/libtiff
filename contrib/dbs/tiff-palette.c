@@ -1,4 +1,4 @@
-/* $Id: tiff-palette.c,v 1.2 2004-05-03 16:46:36 dron Exp $ */
+/* $Id: tiff-palette.c,v 1.3 2004-09-03 08:27:20 dron Exp $ */
 
 /*
  * tiff-palette.c -- create a Class P (palette) TIFF file
@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "tiffio.h"
 
@@ -38,8 +39,8 @@ void                Usage();
 
 int main(int argc, char **argv)
 {
-    int             bits_per_pixel, cmsize, i, j, k,
-                    cmap_index, chunk_size, nchunks;
+    int             bits_per_pixel = 8, cmsize, i, j, k,
+                    cmap_index, chunk_size = 32, nchunks = 16;
     unsigned char * scan_line;
     uint16          *red, *green, *blue;
     TIFF *          tif;
