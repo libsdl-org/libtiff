@@ -1,5 +1,3 @@
-# $Id: Makefile.am,v 1.1 2004-05-19 17:14:45 dron Exp $
-#
 # Tag Image File Format (TIFF) Software
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
