@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_flush.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_flush.c,v 1.2 2000-09-14 20:22:58 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -45,12 +45,18 @@ TIFFFlush(TIFF* tif)
 
 /*
  * Flush buffered data to the file.
+ *
+ * Frank Warmerdam'2000: I modified this to return 1 if TIFF_BEENWRITING
+ * is not set, so that TIFFFlush() will proceed to write out the directory.
+ * The documentation says returning 1 is an error indicator, but not having
+ * been writing isn't exactly a an error.  Hopefully this doesn't cause
+ * problems for other people. 
  */
 int
 TIFFFlushData(TIFF* tif)
 {
 	if ((tif->tif_flags & TIFF_BEENWRITING) == 0)
-		return (0);
+		return (1);
 	if (tif->tif_flags & TIFF_POSTENCODE) {
 		tif->tif_flags &= ~TIFF_POSTENCODE;
 		if (!(*tif->tif_postencode)(tif))
@@ -58,3 +64,4 @@ TIFFFlushData(TIFF* tif)
 	}
 	return (TIFFFlushData1(tif));
 }
+
