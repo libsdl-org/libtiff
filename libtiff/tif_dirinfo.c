@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.34 2004-10-11 20:03:30 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.35 2004-10-12 06:46:50 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -174,6 +174,8 @@ const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_TILEBYTECOUNTS,	-1, 1, TIFF_SHORT,	FIELD_STRIPBYTECOUNTS,
       FALSE,	FALSE,	"TileByteCounts" },
     { TIFFTAG_SUBIFD,		-1,-1, TIFF_IFD,	FIELD_SUBIFD,
+      TRUE,	TRUE,	"SubIFD" },
+    { TIFFTAG_SUBIFD,		-1,-1, TIFF_LONG,	FIELD_SUBIFD,
       TRUE,	TRUE,	"SubIFD" },
     { TIFFTAG_INKSET,		 1, 1, TIFF_SHORT,	FIELD_INKSET,
       FALSE,	FALSE,	"InkSet" },
