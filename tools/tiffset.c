@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: tiffset.c,v 1.8 2004-11-11 11:18:09 dron Exp $
+ * $Id: tiffset.c,v 1.9 2004-12-25 20:17:00 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Mainline for setting metadata in existing TIFF files.
@@ -107,7 +107,7 @@ main(int argc, char* argv[])
                 short   wc;
 
                 if (fip->field_writecount == TIFF_VARIABLE)
-                        wc = argv[arg_index++];
+                        wc = atoi(argv[arg_index++]);
                 else
                         wc = fip->field_writecount;
 
