@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.8 2004-06-04 14:16:14 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.9 2004-06-05 08:11:26 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -30,7 +30,6 @@
 
 #include "tiffio.h"
 
-#define	streq(a,b)	(strcmp(a,b) == 0)
 #define	CopyField(tag, v) \
     if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
 #define	CopyField2(tag, v1, v2) \
