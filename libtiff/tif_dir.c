@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.6 1999-12-21 17:03:03 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.7 2000-01-28 15:12:17 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -968,6 +968,24 @@ TIFFSetTagExtender(TIFFExtendProc extender)
 	TIFFExtendProc prev = _TIFFextender;
 	_TIFFextender = extender;
 	return (prev);
+}
+
+/*
+ * Setup for a new directory.  Should we automatically call
+ * TIFFWriteDirectory() if the current one is dirty?
+ *
+ * The newly created directory will not exist on the file till
+ * TIFFWriteDirectory(), TIFFFlush() or TIFFClose() is called.
+ */
+int
+TIFFCreateDirectory(TIFF* tif)
+{
+	TIFFDefaultDirectory(tif);
+	tif->tif_diroff = 0;
+        tif->tif_nextdiroff = 0;
+	tif->tif_curoff = 0;
+	tif->tif_row = (uint32) -1;
+	tif->tif_curstrip = (tstrip_t) -1;
 }
 
 /*
