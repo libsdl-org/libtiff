@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.1 2004-03-29 11:26:49 dron Exp $
+# $Id: Makefile.am,v 1.2 2004-04-08 14:30:18 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -25,8 +25,7 @@
 
 # Process this file with automake to produce Makefile.in.
 
-EXTRA_DIST = \
-	getopt.c \
-	strcasecmp.c \
-	strtoul.c
+noinst_LIBRARIES	= libport.a
+libport_a_SOURCES	=
+libport_a_LIBADD	= @LIBOBJS@
 

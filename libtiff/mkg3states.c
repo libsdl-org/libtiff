@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/mkg3states.c,v 1.2 1999-11-27 21:50:41 warmerda Exp $ */
+/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/mkg3states.c,v 1.3 2004-04-08 14:30:51 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -29,13 +29,9 @@
  * in Frank Cringle's viewfax program;
  *      Copyright (C) 1990, 1995  Frank D. Cringle.
  */
-#if defined(unix) || defined(__unix)
-#include "port.h"
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 
 #include "tif_fax3.h"
 
