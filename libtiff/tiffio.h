@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.28 2004-01-28 17:57:09 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.29 2004-01-29 08:47:36 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -289,7 +289,6 @@ extern	void _TIFFmemcpy(tdata_t, const tdata_t, tsize_t);
 extern	int _TIFFmemcmp(const tdata_t, const tdata_t, tsize_t);
 extern	void _TIFFfree(tdata_t);
 
-extern	void TIFFCleanup(TIFF*);
 extern	void TIFFClose(TIFF*);
 extern	int TIFFFlush(TIFF*);
 extern	int TIFFFlushData(TIFF*);
