@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/libtiff.3t,v 1.1 1999-07-27 21:50:27 mike Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/libtiff.3t,v 1.2 1999-09-06 15:25:10 mwelles Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -383,6 +383,14 @@ depth rasters (e.g. for display in colormap mode)
 or for other purposes.
 The default value is a pointer to a builtin function that images
 packed bilevel data.
+.TP
+.B TIFFTAG_IPTCNEWSPHOTO
+Tag contaings image metadata per the IPTC newsphoto spec: Headline, 
+captioning, credit, etc... Used by most wire services. 
+.TP
+.B TIFFTAG_PHOTOSHOP
+Tag contains Photoshop captioning information and metadata. Photoshop 
+uses in parallel and redundantly alongside IPTCNEWSPHOTO information. 
 .TP
 .B TIFFTAG_JPEGQUALITY
 Control the compression quality level used in the baseline algorithm.
