@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.22 2004-04-15 10:44:32 dron Exp $ */
+/* $Id: tiffcp.c,v 1.23 2004-05-19 15:16:45 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -289,6 +289,7 @@ main(int argc, char* argv[])
 		TIFFClose(in);
 	}
 
+        TIFFClose( out );
         exit( 0 );
 }
 
