@@ -1,4 +1,4 @@
-.\"	$Header: /cvs/maptools/cvsroot/libtiff/man/raw2tiff.1,v 1.1 2002-09-15 16:44:52 dron Exp $
+.\"	$Header: /cvs/maptools/cvsroot/libtiff/man/raw2tiff.1,v 1.2 2003-07-10 20:07:27 dron Exp $
 .\"
 .\" Copyright (c) 1990-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -104,6 +104,35 @@ pixel interleaved data (default),
 .br
 .I band\t\t
 band interleaved data.
+.TP
+.B \-p photo
+photometric interpretation (color space) of the input image, where
+.B photo
+may be:
+.br
+.I miniswhite
+white color represented with 0 value,
+.br
+.I minisblack
+black color represented with 0 value (default),
+.br
+.I rgb\t\t
+image has RGB color model,
+.br
+.I cmyk\t\t
+image has CMYK (separated) color model,
+.br
+.I ycbcr\t\t
+image has YCbCr color model,
+.br
+.I cielab\t
+image has CIE L*a*b color model,
+.br
+.I icclab\t
+image has ICC L*a*b color model,
+.br
+.I itulab\t
+image has ITU L*a*b color model,
 .TP
 .B \-s
 swap bytes fetched from the input file.
