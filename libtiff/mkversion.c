@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/mkversion.c,v 1.3 2000-11-13 14:42:38 warmerda Exp $ */
+/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/mkversion.c,v 1.4 2001-11-28 17:07:13 warmerda Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -140,8 +140,8 @@ main(int argc, char* argv[])
 
     sprintf( tiffLibVersion, "#define TIFFLIB_VERSION %4.4s%2.2s%2.2s",
              rawReleaseDate+6, 
-             rawReleaseDate+3,
-             rawReleaseDate+0 );
+             rawReleaseDate+0,
+             rawReleaseDate+3 );
     
     /*
      * Emit the version.h file.
