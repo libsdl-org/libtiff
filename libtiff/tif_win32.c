@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.13 2004-12-04 11:06:44 dron Exp $ */
+/* $Id: tif_win32.c,v 1.14 2005-01-12 13:00:20 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -339,12 +339,12 @@ Win32WarningHandler(const char* module, const char* fmt, va_list ap)
 	LPTSTR szTitle;
 	LPTSTR szTmp;
 	LPCTSTR szTitleText = "%s Warning";
-	LPCTSTR szDefaultModule = "TIFFLIB";
+	LPCTSTR szDefaultModule = "LIBTIFF";
 	LPCTSTR szTmpModule = (module == NULL) ? szDefaultModule : module;
 	if ((szTitle = (LPTSTR)LocalAlloc(LMEM_FIXED, (strlen(szTmpModule) +
-			strlen(szTitleText) + strlen(fmt) + 128)*sizeof(char))) == NULL)
+		strlen(szTitleText) + strlen(fmt) + 128)*sizeof(char))) == NULL)
 		return;
-	sprintf(szTitle, szTitleText, szTmp);
+	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
 	vsprintf(szTmp, fmt, ap);
 	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONINFORMATION);
@@ -367,12 +367,12 @@ Win32ErrorHandler(const char* module, const char* fmt, va_list ap)
 	LPTSTR szTitle;
 	LPTSTR szTmp;
 	LPCTSTR szTitleText = "%s Error";
-	LPCTSTR szDefaultModule = "TIFFLIB";
+	LPCTSTR szDefaultModule = "LIBTIFF";
 	LPCTSTR szTmpModule = (module == NULL) ? szDefaultModule : module;
 	if ((szTitle = (LPTSTR)LocalAlloc(LMEM_FIXED, (strlen(szTmpModule) +
-			strlen(szTitleText) + strlen(fmt) + 128)*sizeof(char))) == NULL)
+		strlen(szTitleText) + strlen(fmt) + 128)*sizeof(char))) == NULL)
 		return;
-	sprintf(szTitle, szTitleText, szTmp);
+	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
 	vsprintf(szTmp, fmt, ap);
 	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
