@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/thumbnail.c,v 1.3 2003-03-12 14:05:06 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/thumbnail.c,v 1.4 2003-07-03 12:27:17 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -298,7 +298,7 @@ static	uint16	stepDstWidth;		/* dest stepping width */
 static	uint8* src0;			/* horizontal bit stepping (start) */
 static	uint8* src1;			/* horizontal bit stepping (middle) */
 static	uint8* src2;			/* horizontal bit stepping (end) */
-static	uint16* rowoff;		/* row offset for stepping */
+static	uint16* rowoff;			/* row offset for stepping */
 static	uint8 cmap[256];		/* colormap indexes */
 static	uint8 bits[256];		/* count of bits set */
 
@@ -523,6 +523,7 @@ generateThumbnail(TIFF* in, TIFF* out)
     TIFFGetField(in, TIFFTAG_PHOTOMETRIC, &photometric);
     setupCmap();
     setImage(raster, sw, sh);
+    _TIFFfree(raster);
 
     TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_REDUCEDIMAGE);
     TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32) tnw);
