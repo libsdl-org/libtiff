@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.1 1999-07-27 21:50:28 mike Exp $" */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2ps.c,v 1.2 1999-08-17 03:07:43 warmerda Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -28,10 +28,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#ifndef VMS
-#include <unistd.h>
-#else
+
+#if defined(VMS)
 #include <unixio.h>
+#elif defined(_WINDOWS)
+#include <io.h>
+#define	off_t	toff_t
+#else
+#include <unistd.h>
 #endif
 
 #include "tiffio.h"
