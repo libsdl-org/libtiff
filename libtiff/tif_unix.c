@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.7 2004-11-28 14:42:39 dron Exp $ */
+/* $Id: tif_unix.c,v 1.8 2004-11-28 15:04:54 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -180,6 +180,7 @@ TIFFOpen(const char* name, const char* mode)
 	return tif;
 }
 
+#ifdef __WIN32__
 /*
  * Open a TIFF file with a Unicode filename, for read/writing.
  */
@@ -230,6 +231,7 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 		close(fd);
 	return tif;
 }
+#endif
 
 void*
 _TIFFmalloc(tsize_t s)
