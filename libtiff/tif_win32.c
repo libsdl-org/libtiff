@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.6 2000-04-04 14:54:34 mwelles Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.7 2003-12-31 09:49:47 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -226,6 +226,10 @@ _TIFFrealloc(tdata_t p, tsize_t s)
 {
   void* pvTmp;
   tsize_t old=GlobalSize(p);
+
+  if(p==NULL)
+    return ((tdata_t)GlobalAlloc(GMEM_FIXED, s));
+
   if (old>=s)
     {
       if ((pvTmp = GlobalAlloc(GMEM_FIXED, s)) != NULL) {
