@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.29 2004-09-14 06:54:36 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.30 2004-09-25 19:36:57 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -378,7 +378,7 @@ TIFFDataWidth(TIFFDataType type)
 TIFFDataType
 _TIFFSampleToTagType(TIFF* tif)
 {
-	int bps = (int) TIFFhowmany(tif->tif_dir.td_bitspersample, 8);
+	uint32 bps = TIFFhowmany8(tif->tif_dir.td_bitspersample);
 
 	switch (tif->tif_dir.td_sampleformat) {
 	case SAMPLEFORMAT_IEEEFP:
