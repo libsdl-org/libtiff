@@ -1,5 +1,3 @@
-# $Id: Makefile.am,v 1.1 2004-03-28 12:08:27 dron Exp $
-#
 # Tag Image File Format (TIFF) Software
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
@@ -25,7 +23,9 @@
 
 # Process this file with automake to produce Makefile.in.
 
-EXTRA_DIST = \
+docdir = $(prefix)/share/doc/$(PACKAGE)-$(VERSION)/html/images
+
+docfiles = \
 	back.gif \
 	bali.jpg \
 	cat.gif \
@@ -43,3 +43,4 @@ EXTRA_DIST = \
 	strike.gif \
 	warning.gif
 
+dist_doc_DATA = $(docfiles)
