@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.12 2004-09-01 18:43:33 dron Exp $ */
+/* $Id: fax2tiff.c,v 1.13 2004-09-02 14:31:26 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -31,6 +31,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>		/* should have atof & getopt */
+
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #if HAVE_FCNTL_H
 # include <fcntl.h>

@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.6 2004-07-24 19:04:37 dron Exp $ */
+/* $Id: gif2tiff.c,v 1.7 2004-09-02 14:33:55 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -37,6 +37,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tiffio.h"
 
@@ -284,7 +288,7 @@ readgifimage(char* mode)
     } else if (global) {
         initcolors(globalmap, 1<<globalbits);
     }
-    if (status = readraster())
+    if ((status = readraster()))
 	rasterize(interleaved, mode);
     _TIFFfree(raster);
     return status;
@@ -302,7 +306,7 @@ readextension(void)
     char buf[255];
 
     (void) getc(infile);
-    while (count = getc(infile))
+    while ((count = getc(infile)))
         fread(buf, 1, count, infile);
 }
 
@@ -504,4 +508,6 @@ rasterize(int interleaved, char* mode)
     TIFFClose(tif);
 
     _TIFFfree(newras);
-} 
+}
+
+/* vim: set ts=8 sts=8 sw=8 noet: */

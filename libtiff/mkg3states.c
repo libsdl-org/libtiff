@@ -1,4 +1,4 @@
-/* "$Id: mkg3states.c,v 1.6 2004-09-02 13:43:28 dron Exp $ */
+/* "$Id: mkg3states.c,v 1.7 2004-09-02 14:27:49 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -34,6 +34,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tif_fax3.h"
 
