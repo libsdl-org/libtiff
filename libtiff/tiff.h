@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.5 2000-07-14 18:43:08 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.6 2001-02-17 03:03:52 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -438,4 +438,7 @@ typedef	enum {
 #define     SGILOGDATAFMT_16BIT		1	/* 16-bit samples */
 #define     SGILOGDATAFMT_RAW		2	/* uninterpreted data */
 #define     SGILOGDATAFMT_8BIT		3	/* 8-bit RGB monitor values */
+#define TIFFTAG_SGILOGENCODE		65561 /* SGILog data encoding control*/
+#define     SGILOGENCODE_NODITHER	0     /* do not dither encoded values*/
+#define     SGILOGENCODE_RANDITHER	1     /* randomly dither encd values */
 #endif /* _TIFF_ */
