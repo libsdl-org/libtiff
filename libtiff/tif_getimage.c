@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.18 2002-03-25 15:43:16 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.19 2002-03-26 10:35:27 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2342,7 +2342,7 @@ TIFFReadRGBAStrip(TIFF* tif, uint32 row, uint32 * raster )
 	return (0);
     }
 
-    if (TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
+    if (TIFFRGBAImageOK(tif, emsg) && TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
 
         img.row_offset = row;
         img.col_offset = 0;
@@ -2406,7 +2406,7 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
      * Setup the RGBA reader.
      */
     
-    if ( !TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
+    if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg)) {
 	TIFFError(TIFFFileName(tif), emsg);
         return( 0 );
     }
