@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.27 1996/01/10 19:35:01 sam Exp $
+#	$Header: /usr/people/sam/tiff/libtiff/RCS/Makefile.in,v 1.28 1996/02/09 05:55:00 sam Exp $
 #
 # Tag Image File Format Library
 #
@@ -33,7 +33,7 @@ SRCDIR	= @LIBSRCDIR@
 # TARGET:	@TARGET@
 # CCOMPILER:	@CCOMPILER@
 #
-SHELL	= /bin/sh
+SHELL	= @SCRIPT_SH@
 NULL	=
 CC	= @CCOMPILER@
 AR	= @AR@
@@ -136,6 +136,8 @@ TARGETS	= libtiff.a
 all:	${TARGETS}
 	if [ @DSO@dso != nodso ]; then \
 	    ${MAKE} @DSO@dso; \
+	else \
+	    true; \
 	fi
 
 libtiff.a: ${OBJS}
@@ -261,6 +263,8 @@ install: all installHdrs
 	${INSTALL} -idb tiff.sw.dev -m 444 -F @DIR_LIB@ -O libtiff.a
 	if [ @DSO@dso != nodso ]; then \
 	    ${MAKE} installDSO; \
+	else \
+	    true; \
 	fi
 
 clean:

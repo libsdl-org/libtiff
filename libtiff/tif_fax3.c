@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.c,v 1.133 1996/01/10 19:33:02 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.c,v 1.135 1996/02/08 20:21:27 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -592,6 +592,17 @@ Fax3PutBits(TIFF* tif, u_int bits, u_int length)
  */
 #define putcode(tif, te)	Fax3PutBits(tif, (te)->code, (te)->length)
 
+#ifdef FAX3_DEBUG
+#define	DEBUG_COLOR(w) (tab == TIFFFaxWhiteCodes ? w "W" : w "B")
+#define	DEBUG_PRINT(what,len) {						\
+    int t;								\
+    printf("%08X/%-2d: %s%5d\t", data, bit, DEBUG_COLOR(what), len);	\
+    for (t = length-1; t >= 0; t--)					\
+	putchar(code & (1<<t) ? '1' : '0');				\
+    putchar('\n');							\
+}
+#endif
+
 /*
  * Write the sequence of codes that describes
  * the specified span of zero's or one's.  The
@@ -609,6 +620,9 @@ putspan(TIFF* tif, int32 span, const tableentry* tab)
 	while (span >= 2624) {
 		const tableentry* te = &tab[63 + (2560>>6)];
 		code = te->code, length = te->length;
+#ifdef FAX3_DEBUG
+		DEBUG_PRINT("MakeUp", te->runlen);
+#endif
 		_PutBits(tif, code, length);
 		span -= te->runlen;
 	}
@@ -616,10 +630,16 @@ putspan(TIFF* tif, int32 span, const tableentry* tab)
 		const tableentry* te = &tab[63 + (span>>6)];
 		assert(te->runlen == 64*(span>>6));
 		code = te->code, length = te->length;
+#ifdef FAX3_DEBUG
+		DEBUG_PRINT("MakeUp", te->runlen);
+#endif
 		_PutBits(tif, code, length);
 		span -= te->runlen;
 	}
 	code = tab[span].code, length = tab[span].length;
+#ifdef FAX3_DEBUG
+	DEBUG_PRINT("  Term", tab[span].runlen);
+#endif
 	_PutBits(tif, code, length);
 
 	sp->data = data;
@@ -1070,21 +1090,20 @@ Fax3Cleanup(TIFF* tif)
 	}
 }
 
-#define	FIELD_OPTIONS		(FIELD_CODEC+0)
-#define	FIELD_BADFAXLINES	(FIELD_CODEC+1)
-#define	FIELD_CLEANFAXDATA	(FIELD_CODEC+2)
-#define	FIELD_BADFAXRUN		(FIELD_CODEC+3)
-#define	FIELD_RECVPARAMS	(FIELD_CODEC+4)
-#define	FIELD_SUBADDRESS	(FIELD_CODEC+5)
-#define	FIELD_RECVTIME		(FIELD_CODEC+6)
+#define	FIELD_BADFAXLINES	(FIELD_CODEC+0)
+#define	FIELD_CLEANFAXDATA	(FIELD_CODEC+1)
+#define	FIELD_BADFAXRUN		(FIELD_CODEC+2)
+#define	FIELD_RECVPARAMS	(FIELD_CODEC+3)
+#define	FIELD_SUBADDRESS	(FIELD_CODEC+4)
+#define	FIELD_RECVTIME		(FIELD_CODEC+5)
 
-static const TIFFFieldInfo fax3FieldInfo[] = {
+#define	FIELD_OPTIONS		(FIELD_CODEC+6)
+
+static const TIFFFieldInfo faxFieldInfo[] = {
     { TIFFTAG_FAXMODE,		 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
       FALSE,	FALSE,	"FaxMode" },
     { TIFFTAG_FAXFILLFUNC,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
       FALSE,	FALSE,	"FaxFillFunc" },
-    { TIFFTAG_GROUP3OPTIONS,	 1, 1,	TIFF_LONG,	FIELD_OPTIONS,
-      FALSE,	FALSE,	"Group3Options" },
     { TIFFTAG_BADFAXLINES,	 1, 1,	TIFF_LONG,	FIELD_BADFAXLINES,
       TRUE,	FALSE,	"BadFaxLines" },
     { TIFFTAG_BADFAXLINES,	 1, 1,	TIFF_SHORT,	FIELD_BADFAXLINES,
@@ -1102,29 +1121,13 @@ static const TIFFFieldInfo fax3FieldInfo[] = {
     { TIFFTAG_FAXRECVTIME,	 1, 1, TIFF_LONG,	FIELD_RECVTIME,
       TRUE,	FALSE,	"FaxRecvTime" },
 };
+static const TIFFFieldInfo fax3FieldInfo[] = {
+    { TIFFTAG_GROUP3OPTIONS,	 1, 1,	TIFF_LONG,	FIELD_OPTIONS,
+      FALSE,	FALSE,	"Group3Options" },
+};
 static const TIFFFieldInfo fax4FieldInfo[] = {
-    { TIFFTAG_FAXMODE,		 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      FALSE,	FALSE,	"FaxMode" },
-    { TIFFTAG_FAXFILLFUNC,	 0, 0,	TIFF_ANY,	FIELD_PSEUDO,
-      FALSE,	FALSE,	"FaxFillFunc" },
     { TIFFTAG_GROUP4OPTIONS,	 1, 1,	TIFF_LONG,	FIELD_OPTIONS,
       FALSE,	FALSE,	"Group4Options" },
-    { TIFFTAG_BADFAXLINES,	 1, 1,	TIFF_LONG,	FIELD_BADFAXLINES,
-      TRUE,	FALSE,	"BadFaxLines" },
-    { TIFFTAG_BADFAXLINES,	 1, 1,	TIFF_SHORT,	FIELD_BADFAXLINES,
-      TRUE,	FALSE,	"BadFaxLines" },
-    { TIFFTAG_CLEANFAXDATA,	 1, 1,	TIFF_SHORT,	FIELD_CLEANFAXDATA,
-      TRUE,	FALSE,	"CleanFaxData" },
-    { TIFFTAG_CONSECUTIVEBADFAXLINES,1,1, TIFF_LONG,	FIELD_BADFAXRUN,
-      TRUE,	FALSE,	"ConsecutiveBadFaxLines" },
-    { TIFFTAG_CONSECUTIVEBADFAXLINES,1,1, TIFF_SHORT,	FIELD_BADFAXRUN,
-      TRUE,	FALSE,	"ConsecutiveBadFaxLines" },
-    { TIFFTAG_FAXRECVPARAMS,	 1, 1, TIFF_LONG,	FIELD_RECVPARAMS,
-      TRUE,	FALSE,	"FaxRecvParams" },
-    { TIFFTAG_FAXSUBADDRESS,	-1,-1, TIFF_ASCII,	FIELD_SUBADDRESS,
-      TRUE,	FALSE,	"FaxSubAddress" },
-    { TIFFTAG_FAXRECVTIME,	 1, 1, TIFF_LONG,	FIELD_RECVTIME,
-      TRUE,	FALSE,	"FaxRecvTime" },
 };
 #define	N(a)	(sizeof (a) / sizeof (a[0]))
 
@@ -1268,8 +1271,8 @@ Fax3PrintDir(TIFF* tif, FILE* fd, long flags)
 		    (u_long) sp->recvtime);
 }
 
-int
-TIFFInitCCITTFax3(TIFF* tif, int scheme)
+static int
+InitCCITTFax3(TIFF* tif)
 {
 	Fax3BaseState* sp;
 
@@ -1291,14 +1294,7 @@ TIFFInitCCITTFax3(TIFF* tif, int scheme)
 	 * Merge codec-specific tag information and
 	 * override parent get/set field methods.
 	 */
-	switch (scheme) {
-	case COMPRESSION_CCITTFAX3:
-		_TIFFMergeFieldInfo(tif, fax3FieldInfo, N(fax3FieldInfo));
-		break;
-	case COMPRESSION_CCITTFAX4:
-		_TIFFMergeFieldInfo(tif, fax4FieldInfo, N(fax4FieldInfo));
-		break;
-	}
+	_TIFFMergeFieldInfo(tif, faxFieldInfo, N(faxFieldInfo));
 	sp->vgetparent = tif->tif_vgetfield;
 	tif->tif_vgetfield = Fax3VGetField;	/* hook for codec tags */
 	sp->vsetparent = tif->tif_vsetfield;
@@ -1308,7 +1304,6 @@ TIFFInitCCITTFax3(TIFF* tif, int scheme)
 	sp->recvparams = 0;
 	sp->subaddress = NULL;
 
-	TIFFSetField(tif, TIFFTAG_FAXMODE, FAXMODE_CLASSF);
 	if (tif->tif_mode == O_RDONLY) {
 		tif->tif_flags |= TIFF_NOBITREV;/* decoder does bit reversal */
 		DecoderState(tif)->runs = NULL;
@@ -1334,6 +1329,20 @@ TIFFInitCCITTFax3(TIFF* tif, int scheme)
 	tif->tif_cleanup = Fax3Cleanup;
 
 	return (1);
+}
+
+int
+TIFFInitCCITTFax3(TIFF* tif, int scheme)
+{
+	if (InitCCITTFax3(tif)) {
+		_TIFFMergeFieldInfo(tif, fax3FieldInfo, N(fax3FieldInfo));
+
+		/*
+		 * The default format is Class/F-style w/o RTC.
+		 */
+		return TIFFSetField(tif, TIFFTAG_FAXMODE, FAXMODE_CLASSF);
+	} else
+		return (0);
 }
 
 /*
@@ -1419,7 +1428,9 @@ Fax4PostEncode(TIFF* tif)
 int
 TIFFInitCCITTFax4(TIFF* tif, int scheme)
 {
-	if (TIFFInitCCITTFax3(tif, scheme)) {	/* reuse G3 logic */
+	if (InitCCITTFax3(tif)) {		/* reuse G3 support */
+		_TIFFMergeFieldInfo(tif, fax4FieldInfo, N(fax4FieldInfo));
+
 		tif->tif_decoderow = Fax4Decode;
 		tif->tif_decodestrip = Fax4Decode;
 		tif->tif_decodetile = Fax4Decode;
@@ -1492,7 +1503,7 @@ Fax3DecodeRLE(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 int
 TIFFInitCCITTRLE(TIFF* tif, int scheme)
 {
-	if (TIFFInitCCITTFax3(tif, scheme)) {	/* reuse G3 compression */
+	if (InitCCITTFax3(tif)) {		/* reuse G3 support */
 		tif->tif_decoderow = Fax3DecodeRLE;
 		tif->tif_decodestrip = Fax3DecodeRLE;
 		tif->tif_decodetile = Fax3DecodeRLE;
@@ -1508,7 +1519,7 @@ TIFFInitCCITTRLE(TIFF* tif, int scheme)
 int
 TIFFInitCCITTRLEW(TIFF* tif, int scheme)
 {
-	if (TIFFInitCCITTFax3(tif, scheme)) {	/* reuse G3 compression */
+	if (InitCCITTFax3(tif)) {		/* reuse G3 support */
 		tif->tif_decoderow = Fax3DecodeRLE;
 		tif->tif_decodestrip = Fax3DecodeRLE;
 		tif->tif_decodetile = Fax3DecodeRLE;

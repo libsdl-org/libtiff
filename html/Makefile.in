@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/html/RCS/Makefile.in,v 1.6 1996/01/10 19:36:59 sam Exp $
+#	$Header: /usr/people/sam/tiff/html/RCS/Makefile.in,v 1.8 1996/02/09 21:28:38 sam Exp $
 #
 # @WARNING@
 #
@@ -39,7 +39,7 @@ PORT	= ${DEPTH}/port
 # TARGET:	@TARGET@
 # CCOMPILER:	@CCOMPILER@
 #
-SHELL	= /bin/sh
+SHELL	= @SCRIPT_SH@
 NULL	=
 ECHO	= echo
 MV	= mv
@@ -65,6 +65,8 @@ HTMLFILES=\
 	v3.4beta016.html	\
 	v3.4beta018.html	\
 	v3.4beta024.html	\
+	v3.4beta028.html	\
+	v3.4beta029.html	\
 	${NULL}
 IMAGES=\
 	images/back.gif		\

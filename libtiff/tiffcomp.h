@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffcomp.h,v 1.47 1996/01/10 19:33:24 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tiffcomp.h,v 1.48 1996/02/06 23:50:58 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -60,7 +60,7 @@
 
 #if defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <types.h>
-#elif !defined(__MWERKS__) && !defined(THINK_C) && !defined(__acornriscos)
+#elif !defined(__MWERKS__) && !defined(THINK_C) && !defined(__acornriscos) && !defined(applec)
 #include <sys/types.h>
 #endif
 

@@ -1,4 +1,4 @@
-#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.16 1996/01/10 19:35:25 sam Exp $
+#	$Header: /usr/people/sam/tiff/tools/RCS/Makefile.in,v 1.17 1996/02/09 05:55:00 sam Exp $
 #
 # @WARNING@
 #
@@ -36,7 +36,7 @@ LIBDIR	= ${DEPTH}/@SRCDIR@/libtiff
 # TARGET:	@TARGET@
 # CCOMPILER:	@CCOMPILER@
 #
-SHELL	= /bin/sh
+SHELL	= @SCRIPT_SH@
 NULL	=
 CC	= @CCOMPILER@
 INSTALL	= @INSTALL@
@@ -93,18 +93,26 @@ TARGETS	=\
 all:	${TARGETS}
 	@if [ "@LIBIMAGE@" = yes ]; then \
 	    ${MAKE} sgi2tiff; \
+	else \
+	    true; \
 	fi
 	@if [ "@LIBGL@" = yes ]; then \
 	    ${MAKE} tiffgt tiffsv; \
+	else \
+	    true; \
 	fi
 install: all
 	${INSTALL} -idb tiff.sw.tools -m 755 -dir @DIR_BIN@
 	${INSTALL} -idb tiff.sw.tools -m 755 -F @DIR_BIN@ -O ${TARGETS}
 	@if [ "@LIBIMAGE@" = yes ]; then \
 	    ${INSTALL} -idb tiff.sw.tools -m 755 -F @DIR_BIN@ -O sgi2tiff; \
+	else \
+	    true; \
 	fi
 	@if [ "@LIBGL@" = yes ]; then \
 	    ${INSTALL} -idb tiff.sw.tools -m 755 -F @DIR_BIN@ -O tiffgt tiffsv;\
+	else \
+	    true; \
 	fi
 clean:
 	rm -f ${TARGETS} ${OBJS} sgigt.o tiffgt sgisv.o tiffsv \

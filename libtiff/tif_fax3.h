@@ -1,4 +1,4 @@
-/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.27 1996/01/10 19:33:22 sam Exp $ */
+/* $Header: /usr/people/sam/tiff/libtiff/RCS/tif_fax3.h,v 1.29 1996/02/09 22:51:07 sam Exp $ */
 
 /*
  * Copyright (c) 1990-1996 Sam Leffler
@@ -122,25 +122,49 @@ extern	const TIFFFaxTabEnt TIFFFaxBlackTable[];
  * data.  In any event, we don't prescan and must watch for
  * running out of data since we can't permit the library to
  * scan past the end of the input data buffer.
+ *
+ * Finally, note that we must handle remaindered data at the end
+ * of a strip specially.  The coder asks for a fixed number of
+ * bits when scanning for the next code.  This may be more bits
+ * than are actually present in the data stream.  If we appear
+ * to run out of data but still have some number of valid bits
+ * remaining then we makeup the requested amount with zeros and
+ * return successfully.  If the returned data is incorrect then
+ * we should be called again and get a premature EOF error;
+ * otherwise we should get the right answer.
  */
 #ifndef NeedBits8
 #define NeedBits8(n,eoflab) do {					\
     if (BitsAvail < (n)) {						\
-	if (EndOfData()) goto eoflab;					\
-	BitAcc |= bitmap[*cp++]<<BitsAvail;				\
-	BitsAvail += 8;							\
+	if (EndOfData()) {						\
+	    if (BitsAvail == 0)			/* no valid bits */	\
+		goto eoflab;						\
+	    BitsAvail = (n);			/* pad with zeros */	\
+	} else {							\
+	    BitAcc |= bitmap[*cp++]<<BitsAvail;				\
+	    BitsAvail += 8;						\
+	}								\
     }									\
 } while (0)
 #endif
 #ifndef NeedBits16
 #define NeedBits16(n,eoflab) do {					\
     if (BitsAvail < (n)) {						\
-	if (EndOfData()) goto eoflab;					\
-	BitAcc |= bitmap[*cp++]<<BitsAvail;				\
-	if ((BitsAvail += 8) < (n)) {					\
-	    if (EndOfData()) goto eoflab;				\
+	if (EndOfData()) {						\
+	    if (BitsAvail == 0)			/* no valid bits */	\
+		goto eoflab;						\
+	    BitsAvail = (n);			/* pad with zeros */	\
+	} else {							\
 	    BitAcc |= bitmap[*cp++]<<BitsAvail;				\
-	    BitsAvail += 8;						\
+	    if ((BitsAvail += 8) < (n)) {				\
+		if (EndOfData()) {					\
+		    /* NB: we know BitsAvail is non-zero here */	\
+		    BitsAvail = (n);		/* pad with zeros */	\
+		} else {						\
+		    BitAcc |= bitmap[*cp++]<<BitsAvail;			\
+		    BitsAvail += 8;					\
+		}							\
+	    }								\
 	}								\
     }									\
 } while (0)

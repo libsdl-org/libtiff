@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.4 1996/01/10 19:36:05 sam Exp $
+#	$Header: /usr/people/sam/tiff/port/RCS/Makefile.in,v 1.5 1996/02/09 05:54:37 sam Exp $
 #
 # @WARNING@
 #
@@ -39,7 +39,7 @@ VPATH	= ../@SRCDIR@/port
 # CCOMPILER:	@CCOMPILER@
 #
 
-SHELL	= /bin/sh
+SHELL	= @SCRIPT_SH@
 NULL	=
 CC	= @CCOMPILER@
 AR	= @AR@

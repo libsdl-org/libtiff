@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.41 1996/01/10 19:30:44 sam Exp $
+#	$Header: /usr/people/sam/tiff/RCS/Makefile.in,v 1.44 1996/02/09 21:29:19 sam Exp $
 #
 # @WARNING@
 #
@@ -38,7 +38,7 @@ SRCDIR	= @SRCDIR@
 # CXXCOMPILER:	@CXXCOMPILER@
 #
 @SETMAKE@
-SHELL	= /bin/sh
+SHELL	= @SCRIPT_SH@
 NULL	=
 ECHO	= echo
 GENDIST	= ${TOOLROOT}/usr/sbin/gendist
@@ -46,6 +46,8 @@ GENDIST	= ${TOOLROOT}/usr/sbin/gendist
 all default:
 	@if [ "@PORT@" = yes ]; then \
 	    ${ECHO} "= "port; cd port; ${MAKE}; \
+	else \
+	    true; \
 	fi
 	@${ECHO} "= "libtiff; cd libtiff; ${MAKE}
 	@${ECHO} "= "tools; cd tools; ${MAKE}
@@ -59,6 +61,8 @@ install:
 clean:
 	@if [ "@PORT@" = yes ]; then \
 	    ${ECHO} "= "port; cd port; ${MAKE} clean; \
+	else \
+	    true; \
 	fi
 	@${ECHO} "= "libtiff; cd libtiff; ${MAKE} clean
 	@${ECHO} "= "tools; cd tools; ${MAKE} clean
@@ -256,6 +260,8 @@ TIFFFILES=\
 	    html/misc.html			\
 	    html/support.html			\
 	    html/tools.html			\
+	    html/v3.4beta029.html		\
+	    html/v3.4beta028.html		\
 	    html/v3.4beta024.html		\
 	    html/v3.4beta018.html		\
 	    html/v3.4beta016.html		\
@@ -305,6 +311,7 @@ CONTRIBFILES=\
 	contrib/win32				\
 	contrib/win95				\
 	contrib/winnt				\
+	contrib/mac-cw				\
 	${NULL}
 DISTFILES=\
 	${TIFFFILES}				\
