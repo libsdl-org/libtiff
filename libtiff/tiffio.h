@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.3 1999-09-08 12:21:13 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.4 2000-01-28 15:09:12 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -251,6 +251,8 @@ extern	tstrip_t TIFFCurrentStrip(TIFF*);
 extern	ttile_t TIFFCurrentTile(TIFF*);
 extern	int TIFFReadBufferSetup(TIFF*, tdata_t, tsize_t);
 extern	int TIFFWriteBufferSetup(TIFF*, tdata_t, tsize_t);
+extern  int TIFFWriteCheck(TIFF*, int, const char *);
+extern  int TIFFCreateDirectory(TIFF*);
 extern	int TIFFLastDirectory(TIFF*);
 extern	int TIFFSetDirectory(TIFF*, tdir_t);
 extern	int TIFFSetSubDirectory(TIFF*, uint32);
