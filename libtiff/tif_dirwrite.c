@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.11 2002-03-10 13:11:35 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.12 2002-03-15 11:05:56 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -842,8 +842,8 @@ TIFFWriteAnyArray(TIFF* tif,
 	char* w = buf;
 	int i, status = 0;
 
-	if (n * tiffDataWidth[type] > sizeof buf)
-		w = (char*) _TIFFmalloc(n * tiffDataWidth[type]);
+	if (n * TIFFDataWidth(type) > sizeof buf)
+		w = (char*) _TIFFmalloc(n * TIFFDataWidth(type));
 	switch (type) {
 	case TIFF_BYTE:
 		{ uint8* bp = (uint8*) w;
@@ -991,7 +991,7 @@ TIFFWriteData(TIFF* tif, TIFFDirEntry* dir, char* cp)
 		}
 	}
 	dir->tdir_offset = tif->tif_dataoff;
-	cc = dir->tdir_count * tiffDataWidth[dir->tdir_type];
+	cc = dir->tdir_count * TIFFDataWidth(dir->tdir_type);
 	if (SeekOK(tif, dir->tdir_offset) &&
 	    WriteOK(tif, cp, cc)) {
 		tif->tif_dataoff += (cc + 1) & ~1;

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.4 2002-02-24 16:07:49 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.h,v 1.5 2002-03-15 11:05:56 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -233,7 +233,6 @@ typedef	struct {
         ((v) & (tif)->tif_typemask[type]) << (tif)->tif_typeshift[type] : \
 	(v) & (tif)->tif_typemask[type]))
 
-extern	const int tiffDataWidth[];	/* table of tag datatype widths */
 
 #define BITn(n)				(((u_long)1L)<<((n)&0x1f)) 
 #define BITFIELDn(tif, n)		((tif)->tif_dir.td_fieldsset[(n)/32]) 
@@ -247,6 +246,7 @@ extern	const int tiffDataWidth[];	/* table of tag datatype widths */
 #if defined(__cplusplus)
 extern "C" {
 #endif
+extern	int TIFFDataWidth(TIFFDataType);	/* table of tag datatype widths */
 extern	void _TIFFSetupFieldInfo(TIFF*);
 extern	void _TIFFPrintFieldInfo(TIFF*, FILE*);
 extern	TIFFDataType _TIFFSampleToTagType(TIFF*);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.17 2002-02-24 15:40:57 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dir.c,v 1.18 2002-03-15 11:05:56 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -517,7 +517,7 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
                 td->td_customValues = (TIFFTagValue *)
                     _TIFFmalloc(sizeof(TIFFTagValue));
 
-            tv_size = tiffDataWidth[fip->field_type];
+            tv_size = TIFFDataWidth(fip->field_type);
             tv = td->td_customValues + (td->td_customValueCount - 1);
             tv->info = fip;
             if( fip->field_passcount )
