@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.6 2004-07-06 15:20:37 warmerda Exp $ */
+/* $Id: tiffinfo.c,v 1.7 2004-09-03 08:19:27 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -24,9 +24,19 @@
  * OF THIS SOFTWARE.
  */
 
+#include "tif_config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_STRINGS_H
+# include <strings.h>
+#endif
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tiffio.h"
 
@@ -428,3 +438,5 @@ tiffinfo(TIFF* tif, uint16 order, long flags)
 		TIFFReadData(tif);
 	}
 }
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
