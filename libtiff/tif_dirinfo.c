@@ -216,6 +216,21 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_TILEDEPTH,	 1, 1, TIFF_SHORT,	FIELD_TILEDEPTH,
       FALSE,	FALSE,	"TileDepth" },
 /* end SGI tags */
+#ifdef IPTC_SUPPORT
+#ifdef PHOTOSHOP_SUPPORT
+    { TIFFTAG_RICHTIFFIPTC, -1,-1, TIFF_LONG,   FIELD_RICHTIFFIPTC, 
+      FALSE,    TRUE,   "RichTIFFIPTC" },
+#else
+    { TIFFTAG_RICHTIFFIPTC, -1,-3, TIFF_UNDEFINED, FIELD_RICHTIFFIPTC, 
+      FALSE,    TRUE,   "RichTIFFIPTC" },
+#endif
+#endif
+#ifdef PHOTOSHOP_SUPPORT
+    { TIFFTAG_PHOTOSHOP,    -1,-3, TIFF_UNDEFINED, FIELD_PHOTOSHOP, 
+      FALSE,    TRUE,   "Photoshop" },
+    { TIFFTAG_PHOTOSHOP,    -1,-1, TIFF_BYTE,   FIELD_PHOTOSHOP, 
+      FALSE,    TRUE,   "Photoshop" },
+#endif
 #ifdef ICC_SUPPORT
     { TIFFTAG_ICCPROFILE,	-1,-3, TIFF_UNDEFINED,	FIELD_ICCPROFILE,
       FALSE,	TRUE,	"ICC Profile" },

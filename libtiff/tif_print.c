@@ -419,6 +419,16 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		fprintf(fd, "  ICC Profile: <present>, %lu bytes\n",
 		    (u_long) td->td_profileLength);
 #endif
+#ifdef PHOTOSHOP_SUPPORT
+ 	if (TIFFFieldSet(tif,FIELD_PHOTOSHOP))
+ 		fprintf(fd, "  Photoshop Data: <present>, %lu bytes\n",
+ 		    (u_long) td->td_photoshopLength);
+#endif
+#ifdef IPTC_SUPPORT
+ 	if (TIFFFieldSet(tif,FIELD_RICHTIFFIPTC))
+ 		fprintf(fd, "  RichTIFFIPTC Data: <present>, %lu bytes\n",
+ 		    (u_long) td->td_richtiffiptcLength);
+#endif
 #if SUBIFD_SUPPORT
 	if (TIFFFieldSet(tif, FIELD_SUBIFD)) {
 		fprintf(fd, "  SubIFD Offsets:");

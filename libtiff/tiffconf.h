@@ -70,11 +70,15 @@
  *    YCBCR_SUPPORT	enable support for 6.0 YCbCr tags
  *    CMYK_SUPPORT	enable support for 6.0 CMYK tags
  *    ICC_SUPPORT	enable support for ICC profile tag
+ *    PHOTOSHOP_SUPPORT enable support for PHOTOSHOP resource tag
+ *    IPTC_SUPPORT  enable support for RichTIFF IPTC tag
  */
 #define	COLORIMETRY_SUPPORT
 #define	YCBCR_SUPPORT
 #define	CMYK_SUPPORT
 #define	ICC_SUPPORT
+#define PHOTOSHOP_SUPPORT
+#define IPTC_SUPPORT
 #endif /* FEATURE_SUPPORT */
 
 #ifndef COMPRESSION_SUPPORT
