@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.6 2003-03-12 14:05:05 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/fax2tiff.c,v 1.7 2003-05-24 06:16:09 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -280,7 +280,7 @@ main(int argc, char* argv[])
 		} else
 			TIFFSetField(out, TIFFTAG_YRESOLUTION, 196.);
 		TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
-		TIFFSetField(out, TIFFTAG_PAGENUMBER, pn+1, npages);
+		TIFFSetField(out, TIFFTAG_PAGENUMBER, pn, npages);
 
 		if (!verbose)
 		    whandler = TIFFSetWarningHandler(NULL);
