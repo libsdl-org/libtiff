@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.5 2001-03-02 04:58:46 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/tools/Makefile.in,v 1.6 2001-03-30 01:55:32 warmerda Exp $
 #
 # @WARNING@
 #
@@ -43,7 +43,7 @@ CC	= @CCOMPILER@
 INSTALL	= @INSTALL@
 #
 COPTS	= @GCOPTS@
-OPTIMIZER=-O
+OPTIMIZER=@OPTIMIZER@
 IPATH	= -I. -I${SRCDIR} -I${LIBDIR}
 CFLAGS	= @ENVOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH}
 #

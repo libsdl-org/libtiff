@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/port/Makefile.in,v 1.1 1999-07-27 21:50:28 mike Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/port/Makefile.in,v 1.2 2001-03-30 01:55:32 warmerda Exp $
 #
 # @WARNING@
 #
@@ -46,7 +46,7 @@ RANLIB	= @RANLIB@
 
 IPATH	= -I. -I${SRCDIR}
 COPTS	= @GCOPTS@
-OPTIMIZER=-O
+OPTIMIZER=@OPTIMIZER@
 CFLAGS	= @ENVOPTS@ ${COPTS} ${OPTIMIZER} ${IPATH}
 
 CFILES	= @PORTFUNCS@

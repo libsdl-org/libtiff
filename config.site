@@ -1,4 +1,4 @@
-# $Header: /cvs/maptools/cvsroot/libtiff/Attic/config.site,v 1.2 1999-09-26 22:03:46 mwelles Exp $
+# $Header: /cvs/maptools/cvsroot/libtiff/Attic/config.site,v 1.3 2001-03-30 01:55:32 warmerda Exp $
 #
 # TIFF Software
 #
@@ -132,6 +132,7 @@
 #CC="gcc"				# name/pathname of C compiler
 #ENVOPTS="-Aa"				# options for getting ANSI C
 #GCOPTS="-g"				# options to pass C compiler
+#OPTIMIZER="-O"				# Optimization options for compiler
 #LIBPORT='${PORT}/libport.a'		# library with emulation code
 #MACHDEPLIBS=""				# extra libraries for linking
 #PORTFUNCS=""				# non-standard functions to emulate
