@@ -1,4 +1,4 @@
-/* $Id: tif_pixarlog.c,v 1.7 2004-10-02 13:29:41 dron Exp $ */
+/* $Id: tif_pixarlog.c,v 1.8 2004-10-12 18:50:48 dron Exp $ */
 
 /*
  * Copyright (c) 1996-1997 Sam Leffler
@@ -1232,7 +1232,7 @@ PixarLogVSetField(TIFF* tif, ttag_t tag, va_list ap)
 	/*
 	 * Must recalculate sizes should bits/sample change.
 	 */
-	tif->tif_tilesize = TIFFTileSize(tif);
+	tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
 	tif->tif_scanlinesize = TIFFScanlineSize(tif);
 	result = 1;		/* NB: pseudo tag */
 	break;

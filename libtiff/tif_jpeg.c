@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.23 2004-10-02 13:29:41 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.24 2004-10-12 18:50:48 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1396,7 +1396,7 @@ JPEGVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		 * Must recalculate cached tile size
 		 * in case sampling state changed.
 		 */
-		tif->tif_tilesize = TIFFTileSize(tif);
+		tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
 		return (1);			/* pseudo tag */
 	case TIFFTAG_JPEGTABLESMODE:
 		sp->jpegtablesmode = va_arg(ap, int);

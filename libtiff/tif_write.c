@@ -1,4 +1,4 @@
-/* $Id: tif_write.c,v 1.15 2004-10-02 13:29:41 dron Exp $ */
+/* $Id: tif_write.c,v 1.16 2004-10-12 18:50:48 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -528,7 +528,7 @@ TIFFWriteCheck(TIFF* tif, int tiles, const char* module)
 		    tif->tif_name, isTiled(tif) ? "tile" : "strip");
 		return (0);
 	}
-	tif->tif_tilesize = TIFFTileSize(tif);
+	tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
 	tif->tif_scanlinesize = TIFFScanlineSize(tif);
 	tif->tif_flags |= TIFF_BEENWRITING;
 	return (1);

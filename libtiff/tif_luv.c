@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.12 2004-10-02 13:29:41 dron Exp $ */
+/* $Id: tif_luv.c,v 1.13 2004-10-12 18:50:48 dron Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -1509,7 +1509,7 @@ LogLuvVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		/*
 		 * Must recalculate sizes should bits/sample change.
 		 */
-		tif->tif_tilesize = TIFFTileSize(tif);
+		tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
 		tif->tif_scanlinesize = TIFFScanlineSize(tif);
 		return (1);
 	case TIFFTAG_SGILOGENCODE:

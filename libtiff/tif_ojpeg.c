@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.13 2004-09-14 06:32:19 dron Exp $ */
+/* $Id: tif_ojpeg.c,v 1.14 2004-10-12 18:50:48 dron Exp $ */
 
 #include "tiffiop.h"
 #ifdef OJPEG_SUPPORT
@@ -2301,7 +2301,7 @@ OJPEGVSetField(register TIFF *tif,ttag_t tag,va_list ap)
 
           if ((tif->tif_flags ^ v32) & TIFF_UPSAMPLED)
             {
-              tif->tif_tilesize = TIFFTileSize(tif);
+              tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
               tif->tif_flags |= TIFF_DIRTYDIRECT;
             };
           return 1;
