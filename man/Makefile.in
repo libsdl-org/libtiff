@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/man/Makefile.in,v 1.10 2001-09-26 17:32:24 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/man/Makefile.in,v 1.11 2002-02-11 13:53:52 warmerda Exp $
 #
 # @WARNING@
 #
@@ -344,7 +344,7 @@ apps/Makefile:
 	 for i in *.1; do						\
 	    f=${MANAPPNAME};						\
 	    ${ECHO} '	cd ..; ${INSTALL} -m 444 			\
-		-F ${DESTDIR}${MAN}/${MANAPPS}				\
+		-F $${DESTDIR}${MAN}/${MANAPPS}				\
 		-idb tiff.man.tools -src' apps/"$$i" '-O' "$$f";	\
 	 done								\
 	)>apps/Makefile
@@ -357,7 +357,7 @@ lib/Makefile:
 	 for i in *.3t; do						\
 	    f=${MANLIBNAME};						\
 	    ${ECHO} '	cd ..; ${INSTALL} -m 444 			\
-		-F ${DESTDIR}${MAN}/${MANLIB}				\
+		-F $${DESTDIR}${MAN}/${MANLIB}				\
 		-idb tiff.man.dev -src' lib/"$$i" '-O' "$$f";		\
 	 done								\
 	)>lib/Makefile
