@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.2 2004-03-28 11:18:36 dron Exp $
+# $Id: Makefile.am,v 1.3 2004-03-29 11:32:20 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -55,7 +55,7 @@ bin_PROGRAMS = \
 	tiffset \
 	tiffsplit \
 	$(BIN_TIFFGT)
-EXTRA_PROGRAMS = $(BIN_TIFFGT) sgi2tiff.c sgisv.c ycbcr.c
+EXTRA_PROGRAMS = $(BIN_TIFFGT) sgi2tiff sgisv ycbcr
 
 fax2ps_SOURCES = fax2ps.c
 fax2ps_LDADD = @LIBTIFF@
