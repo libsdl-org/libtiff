@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.3 2005-01-30 12:05:54 dron Exp $ */
+/* $Id: tif_stream.cxx,v 1.4 2005-03-05 11:18:04 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -109,8 +109,8 @@ _tiffosSeekProc(thandle_t fd, toff_t off, int whence)
 	// ostrstream/ostringstream does. In that situation, add intermediate
 	// '\0' characters.
 	if( os->fail() ) {
-		ios_base::iostate   old_state;
-		toff_t		    origin;
+		ios::iostate	old_state;
+		toff_t		origin;
 
 		old_state = os->rdstate();
 		// reset the fail bit or else tellp() won't work below
