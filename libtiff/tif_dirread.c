@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.48 2005-02-03 18:07:58 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.49 2005-02-05 13:16:16 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -580,7 +580,9 @@ TIFFReadDirectory(TIFF* tif)
  *   - it is equal to zero along with StripOffset;
  *   - it is larger than file itself (in case of uncompressed image);
  *   - it is smaller than the size of the bytes per row multiplied on the
- *     number of rows.
+ *     number of rows.  The last case should not be checked in the case of
+ *     writing new image, because we may not know the exact strip size
+ *     until the whole image will be written and directory dumped out.
  */
 #define	BYTECOUNTLOOKSBAD \
     ( (td->td_stripbytecount[0] == 0 && td->td_stripoffset[0] != 0) || \
