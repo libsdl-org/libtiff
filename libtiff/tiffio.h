@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.17 2003-10-07 06:19:21 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.18 2003-11-07 11:26:38 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -244,6 +244,7 @@ extern	int TIFFReadDirectory(TIFF*);
 extern	tsize_t TIFFScanlineSize(TIFF*);
 extern	tsize_t TIFFRasterScanlineSize(TIFF*);
 extern	tsize_t TIFFStripSize(TIFF*);
+extern	tsize_t TIFFRawStripSize(TIFF*, tstrip_t);
 extern	tsize_t TIFFVStripSize(TIFF*, uint32);
 extern	tsize_t TIFFTileRowSize(TIFF*);
 extern	tsize_t TIFFTileSize(TIFF*);
