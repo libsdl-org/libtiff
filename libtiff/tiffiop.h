@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.18 2004-06-04 22:03:10 dron Exp $ */
+/* $Id: tiffiop.h,v 1.19 2004-06-05 08:11:49 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -36,12 +36,16 @@
 # include <fcntl.h>
 #endif
 
-#include "tiffio.h"
-#include "tif_dir.h"
-
 #if HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
+
+#if HAVE_STRING_H
+# include <string.h>
+#endif
+
+#include "tiffio.h"
+#include "tif_dir.h"
 
 /* Define BSDTYPES if we don't have the ones */
 # ifndef HAVE_U_CHAR
@@ -60,6 +64,8 @@ typedef unsigned long u_long;
 typedef double dblparam_t;
 
 #define GLOBALDATA(TYPE,NAME)	extern TYPE NAME
+
+#define    streq(a,b)      (strcasecmp(a,b) == 0)
 
 #ifndef TRUE
 #define	TRUE	1
