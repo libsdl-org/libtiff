@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.38 2004-09-25 11:05:58 dron Exp $ */
+/* $Id: tif_dir.c,v 1.39 2004-09-26 09:49:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1139,6 +1139,7 @@ TIFFDefaultDirectory(TIFF* tif)
 	td->td_tilewidth = (uint32) -1;
 	td->td_tilelength = (uint32) -1;
 	td->td_tiledepth = 1;
+	td->td_stripbytecountsorted = 1; /* Our own arrays always sorted. */
 	td->td_resolutionunit = RESUNIT_INCH;
 	td->td_sampleformat = SAMPLEFORMAT_UINT;
 	td->td_imagedepth = 1;
