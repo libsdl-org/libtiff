@@ -1,4 +1,4 @@
-/* $Header: /d1/sam/tiff/tools/RCS/rgb2ycbcr.c,v 1.29 1997/08/29 21:46:48 sam Exp $ */
+/* $Header: /usr/local/cvs/internal/libtiff/tools/rgb2ycbcr.c,v 1.1.1.1 1999/07/27 21:50:28 mike Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler

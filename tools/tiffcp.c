@@ -1,4 +1,4 @@
-/* $Header: /d1/sam/tiff/tools/RCS/tiffcp.c,v 1.54 1997/09/01 03:22:05 sam Exp $ */
+/* $Header: /usr/local/cvs/internal/libtiff/tools/tiffcp.c,v 1.1.1.1 1999/07/27 21:50:28 mike Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

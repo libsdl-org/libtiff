@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /d1/sam/tiff/RCS/configure,v 1.58 1997/08/29 22:30:51 sam Exp $
+#	$Header: /usr/local/cvs/internal/libtiff/configure,v 1.1.1.1 1999/07/27 21:50:26 mike Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -147,7 +147,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.58 $"
+	echo "This is TIFF configure $Revision: 1.1.1.1 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;

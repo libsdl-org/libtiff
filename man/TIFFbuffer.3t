@@ -1,4 +1,4 @@
-.\" $Header: /d1/sam/tiff/man/RCS/TIFFbuffer.3t,v 1.1 1995/10/12 00:43:54 sam Exp $
+.\" $Header: /usr/local/cvs/internal/libtiff/man/TIFFbuffer.3t,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
 .\"
 .\" Copyright (c) 1995 Sam Leffler
 .\" Copyright (c) 1995 Silicon Graphics, Inc.

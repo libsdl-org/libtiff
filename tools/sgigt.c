@@ -1,4 +1,4 @@
-/* $Header: /d1/sam/tiff/tools/RCS/sgigt.c,v 1.70 1997/08/31 23:54:02 sam Exp $ */
+/* $Header: /usr/local/cvs/internal/libtiff/tools/sgigt.c,v 1.1.1.1 1999/07/27 21:50:28 mike Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Header: /d1/sam/tiff/libtiff/RCS/tif_win3.c,v 1.8 1997/08/29 21:46:03 sam Exp $ */
+/* $Header: /usr/local/cvs/internal/libtiff/libtiff/tif_win3.c,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

@@ -1,4 +1,4 @@
-#	$Header: /d1/sam/tiff/dist/RCS/tiff.spec,v 1.7 1997/08/29 21:49:10 sam Exp $
+#	$Header: /usr/local/cvs/internal/libtiff/dist/tiff.spec,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $
 #
 # TIFF Software
 #

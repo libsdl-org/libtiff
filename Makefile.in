@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /d1/sam/tiff/RCS/Makefile.in,v 1.62 1997/08/29 23:24:06 sam Exp $
+#	$Header: /usr/local/cvs/internal/libtiff/Makefile.in,v 1.1.1.1 1999/07/27 21:50:26 mike Exp $
 #
 # @WARNING@
 #

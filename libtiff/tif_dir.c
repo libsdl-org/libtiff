@@ -1,4 +1,4 @@
-/* $Header: /d1/sam/tiff/libtiff/RCS/tif_dir.c,v 1.162 1997/08/29 21:45:47 sam Exp $ */
+/* $Header: /usr/local/cvs/internal/libtiff/libtiff/tif_dir.c,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -424,6 +424,25 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		    td->td_profileLength);
 		break;
 #endif
+#ifdef PHOTOSHOP_SUPPORT
+ 	case TIFFTAG_PHOTOSHOP:
+  		td->td_photoshopLength = (uint32) va_arg(ap, uint32);
+  		_TIFFsetByteArray (&td->td_photoshopData, va_arg(ap, void*),
+ 			td->td_photoshopLength);
+ 		break;
+#endif
+#ifdef IPTC_SUPPORT
+    case TIFFTAG_RICHTIFFIPTC: 
+  		td->td_richtiffiptcLength = (uint32) va_arg(ap, uint32);
+#ifdef PHOTOSHOP_SUPPORT
+  		_TIFFsetLongArray ((uint32**)&td->td_richtiffiptcData, va_arg(ap, uint32*),
+ 			td->td_richtiffiptcLength);
+#else
+  		_TIFFsetByteArray (&td->td_photoshopData, va_arg(ap, void*),
+ 			td->td_photoshopLength);
+#endif
+ 		break;
+#endif
 	default:
 		/*
 		 * This can happen if multiple images are open with
@@ -752,6 +771,18 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 		*va_arg(ap, void**) = td->td_profileData;
 		break;
 #endif
+#ifdef PHOTOSHOP_SUPPORT
+ 	case TIFFTAG_PHOTOSHOP:
+ 		*va_arg(ap, uint32*) = td->td_photoshopLength;
+ 		*va_arg(ap, void**) = td->td_photoshopData;
+ 		break;
+#endif
+#ifdef IPTC_SUPPORT
+ 	case TIFFTAG_RICHTIFFIPTC:
+ 		*va_arg(ap, uint32*) = td->td_richtiffiptcLength;
+ 		*va_arg(ap, void**) = td->td_richtiffiptcData;
+ 		break;
+#endif
 	default:
 		/*
 		 * This can happen if multiple images are open with
@@ -848,6 +879,12 @@ TIFFFreeDirectory(TIFF* tif)
 #endif
 #ifdef ICC_SUPPORT
 	CleanupField(td_profileData);
+#endif
+#ifdef PHOTOSHOP_SUPPORT
+	CleanupField(td_photoshopData);
+#endif
+#ifdef IPTC_SUPPORT
+	CleanupField(td_richtiffiptcData);
 #endif
 	CleanupField(td_stripoffset);
 	CleanupField(td_stripbytecount);

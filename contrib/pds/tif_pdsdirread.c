@@ -1,4 +1,4 @@
-/* $Header: /d1/sam/tiff/contrib/pds/RCS/tif_pdsdirread.c,v 1.1 1997/08/29 23:12:56 sam Exp $ */
+/* $Header: /usr/local/cvs/internal/libtiff/contrib/pds/tif_pdsdirread.c,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler

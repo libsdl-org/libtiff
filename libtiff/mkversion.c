@@ -1,4 +1,4 @@
-/* "$Header: /d1/sam/tiff/libtiff/RCS/mkversion.c,v 1.5 1997/08/29 21:45:43 sam Exp $ */
+/* "$Header: /usr/local/cvs/internal/libtiff/libtiff/mkversion.c,v 1.1.1.1 1999/07/27 21:50:27 mike Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
