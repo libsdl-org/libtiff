@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.22 2002-01-18 18:58:19 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.23 2002-02-05 17:46:57 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.22 $"
+	echo "This is TIFF configure $Revision: 1.23 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -1683,6 +1683,9 @@ if [ "${JPEG}" = yes ]; then
     if test -z "${LIBJPEG-}" ; then
       LIBJPEG="-ljpeg"
       test -z "${DIR_JPEGLIB-}" || LIBJPEG="-L${DIR_JPEGLIB} ${LIBJPEG}"
+    fi
+    if [ "${OJPEG}" = yes ]; then
+      CONF_JPEG="$CONF_JPEG -DOJPEG_SUPPORT"
     fi
 else
     CONF_JPEG=
