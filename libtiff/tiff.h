@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.16 2003-11-16 19:26:29 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiff.h,v 1.17 2003-12-04 07:52:07 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -149,7 +149,7 @@ typedef	enum {
 	TIFF_SRATIONAL	= 10,	/* !64-bit signed fraction */
 	TIFF_FLOAT	= 11,	/* !32-bit IEEE floating point */
 	TIFF_DOUBLE	= 12,	/* !64-bit IEEE floating point */
-	TIFF_IFD	= 13,	/* %32-bit unsigned integer (offset) */
+	TIFF_IFD	= 13	/* %32-bit unsigned integer (offset) */
 } TIFFDataType;
 
 /*
