@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.14 2002-04-18 13:23:46 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_lzw.c,v 1.15 2002-08-22 15:13:27 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -442,6 +442,13 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 				break;
 			}
 			len = codep->length;
+			if(len == 0) {
+			    TIFFError(tif->tif_name,
+	    		    "LZWDecode: Wrong length of decoded string: "
+			    "data probably corrupted at scanline %d",
+			    tif->tif_row);	
+			    return (0);
+			}
 			tp = op + len;
 			do {
 				int t;
@@ -615,6 +622,13 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 					codep = codep->next;
 				}  while (--occ);
 				break;
+			}
+			if(codep->length == 0) {
+			    TIFFError(tif->tif_name,
+	    		    "LZWDecodeCompat: Wrong length of decoded "
+			    "string: data probably corrupted at scanline %d",
+			    tif->tif_row);	
+			    return (0);
 			}
 			op += codep->length, occ -= codep->length;
 			tp = op;
