@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.16 2001-09-09 15:56:04 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.17 2001-12-15 17:36:53 warmerda Exp $
 #
 # Tag Image File Format Library
 #
@@ -211,7 +211,7 @@ GNULDdso: ${OBJS}
 	fi
 	touch $@
 DARWINdso: ${OBJS}
-	${CC} -dynamiclib -undefined suppress \
+	${CC} -dynamiclib -undefined error \
 	  -install_name libtiff.@DSOSUF@ \
 	  -o libtiff.@DSOSUF_VERSION@  ${OBJS} \
 	  @LIBJPEG@ @LIBGZ@ @MACHDEPLIBS@
