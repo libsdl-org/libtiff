@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.2 1999-09-08 19:07:02 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -28,6 +28,8 @@
  * TIFF Library.
  */
 #include "tiffiop.h"
+
+void _TIFFSetDefaultCompressionState(TIFF* tif);
 
 static const long typemask[13] = {
 	0L,		/* TIFF_NOTYPE */

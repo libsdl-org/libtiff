@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.2 1999-08-18 12:38:55 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirwrite.c,v 1.3 1999-09-08 19:07:02 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -478,6 +478,7 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
         /* added based on patch request from MARTIN.MCBRIDE.MM@agfa.co.uk,
            correctness not verified (FW, 99/08) */
         case TIFF_BYTE:
+        case TIFF_SBYTE:          
                 if (wc > 1) {
                     char* cp;
                     if (wc == (u_short) TIFF_VARIABLE) {
@@ -509,6 +510,9 @@ TIFFWriteNormalTag(TIFF* tif, TIFFDirEntry* dir, const TIFFFieldInfo* fip)
 			return (0);
 		}
 		break;
+
+        case TIFF_NOTYPE:
+                break;
 	}
 	return (1);
 }

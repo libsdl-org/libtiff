@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_read.c,v 1.1 1999-07-27 21:50:27 mike Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_read.c,v 1.2 1999-09-08 19:07:02 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -98,7 +98,7 @@ TIFFReadScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
 
 	if (!TIFFCheckRead(tif, 0))
 		return (-1);
-	if (e = TIFFSeek(tif, row, sample)) {
+	if( (e = TIFFSeek(tif, row, sample)) != 0) {
 		/*
 		 * Decompress desired row into user buffer.
 		 */
