@@ -1,5 +1,5 @@
 #! smake
-#	$Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.36 2003-05-20 15:42:10 dron Exp $
+# $Header: /cvs/maptools/cvsroot/libtiff/Makefile.in,v 1.37 2003-10-07 08:14:33 dron Exp $
 #
 # @WARNING@
 #
@@ -328,10 +328,11 @@ TIFFFILES=\
 	    html/v3.5.1.html					\
 	    html/v3.5.2.html					\
 	    html/v3.5.3.html					\
-            html/v3.5.4.html					\
+	    html/v3.5.4.html					\
 	    html/v3.5.5.html					\
 	    html/v3.5.6-beta.html				\
 	    html/v3.5.7.html					\
+	    html/v3.6.0.html					\
 	    html/man						\
 	    html/man/TIFFClose.3t.html				\
 	    html/man/TIFFDataWidth.3t.html			\
