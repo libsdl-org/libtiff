@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_print.c,v 1.13 2004-03-30 14:28:17 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_print.c,v 1.14 2004-05-19 15:23:54 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -511,11 +511,20 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
                                      (int) ((char *) raw_data)[j] );
 			else if( fld->field_type == TIFF_SHORT )
                             fprintf( fd, "%d",
+                                     (int) ((unsigned short *) raw_data)[j] );
+			else if( fld->field_type == TIFF_SSHORT )
+                            fprintf( fd, "%d",
                                      (int) ((short *) raw_data)[j] );
                         else if( fld->field_type == TIFF_LONG )
                             fprintf( fd, "%d",
+                                     (int) ((unsigned long *) raw_data)[j] );
+                        else if( fld->field_type == TIFF_SLONG )
+                            fprintf( fd, "%d",
                                      (int) ((long *) raw_data)[j] );
 			else if( fld->field_type == TIFF_RATIONAL )
+			    fprintf( fd, "%f",
+				     ((float *) raw_data)[j] );
+			else if( fld->field_type == TIFF_SRATIONAL )
 			    fprintf( fd, "%f",
 				     ((float *) raw_data)[j] );
                         else if( fld->field_type == TIFF_ASCII )
