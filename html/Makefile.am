@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.11 2005-01-23 09:43:26 dron Exp $
+# $Id: Makefile.am,v 1.12 2005-02-04 13:27:01 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -67,7 +67,8 @@ docfiles = \
 	v3.7.0beta.html \
 	v3.7.0beta2.html \
 	v3.7.0.html \
-	v3.7.1.html
+	v3.7.1.html \
+	v3.7.2.html
 
 dist_doc_DATA = $(docfiles)
 
