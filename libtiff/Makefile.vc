@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.10 2004-11-12 13:05:35 dron Exp $
+# $Id: Makefile.vc,v 1.11 2004-11-24 11:24:20 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -30,6 +30,12 @@
 !INCLUDE ..\nmake.opt
 
 INCL	= -I. $(JPEG_INCLUDE) $(ZLIB_INCLUDE)
+
+!IFDEF USE_WIN_CRT_LIB
+OBJ_SYSDEP_MODULE = tif_unix.obj
+!ELSE
+OBJ_SYSDEP_MODULE = tif_win32.obj
+!ENDIF
 
 OBJ	= \
 	tif_aux.obj \
@@ -64,11 +70,11 @@ OBJ	= \
 	tif_strip.obj \
 	tif_thunder.obj \
 	tif_tile.obj \
-	tif_win32.obj \
 	tif_version.obj \
 	tif_warning.obj \
 	tif_write.obj \
-	tif_zip.obj
+	tif_zip.obj \
+	$(OBJ_SYSDEP_MODULE)
 
 all:	libtiff.lib libtiff.dll
 
