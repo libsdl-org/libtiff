@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.14 2001-09-09 16:02:04 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_getimage.c,v 1.15 2001-09-24 19:40:37 warmerda Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -455,7 +455,7 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     TIFF* tif = img->tif;
     tileContigRoutine put = img->put.contig;
     uint16 orientation;
-    uint32 col, row, y, rowstoread, ret = 0;
+    uint32 col, row, y, rowstoread, ret = 1;
     uint32 pos;
     uint32 tw, th;
     u_char* buf;
