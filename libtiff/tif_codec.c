@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_codec.c,v 1.6 2003-11-21 20:40:50 rossf Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_codec.c,v 1.7 2003-12-05 14:10:58 rossf Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -136,10 +136,15 @@ TIFFIsCODECConfigured(uint16 scheme)
 {
 	const TIFFCodec* codec = TIFFFindCODEC(scheme);
 
-	if(codec == NULL)
-		return 0;
-	if( codec->init != (TIFFInitMethod) _notConfigured)
-		return 1;
+	if(codec == NULL) {
+            return 0;
+        }
+        if(codec->init == NULL) {
+            return 0;
+        }
+	if(codec->init != NotConfigured){
+            return 1;
+        }
 	return 0;
 }
 
