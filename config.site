@@ -1,4 +1,4 @@
-# $Header: /cvs/maptools/cvsroot/libtiff/Attic/config.site,v 1.5 2001-04-03 05:18:51 warmerda Exp $
+# $Header: /cvs/maptools/cvsroot/libtiff/Attic/config.site,v 1.6 2001-04-06 02:52:35 warmerda Exp $
 #
 # TIFF Software
 #
@@ -46,6 +46,8 @@
 #LIBGL="auto"			# yes|no|auto configure IRIS GL-based tools
 #LIBIMAGE="auto"		# yes|no|auto configure SGI RGB image tools
 #HTML="no"			# yes|no install HTML documentation
+
+#NONINTERACTIVE=yes		# yes|no Don't ask for confirmation on console
 
 #
 # Directory parameters.
@@ -130,16 +132,19 @@
 #AR="/bin/ar"				# pathname of suitable ar program
 #AROPTS="rc"				# options to ar for creating archive
 #CC="gcc"				# name/pathname of C compiler
+#CCOMPILER=/opt/ansic/bin/$CC		# path to compiler if not in PATH.
 #ENVOPTS="-Aa"				# options for getting ANSI C
 #GCOPTS="-g"				# options to pass C compiler
 #OPTIMIZER="-O"				# Optimization options for compiler
+#LDFLAGS="-Wl,-O"                       # Special linker flags.
 #LIBPORT='${PORT}/libport.a'		# library with emulation code
 #MACHDEPLIBS="-lm"			# extra libraries for linking
 #PORTFUNCS=""				# non-standard functions to emulate
 #RANLIB=":"				# pathname of suitable ranlib program
 #DSOSUF="so"				# DSO filename suffix
 #LIBCOPTS="-K PIC"			# compiler options for building library
-#SHELL=/usr/bin/sh                      # Bourne shell to use(normally /bin/sh)
+#TARGET=hppa1.1-hp-hpux11.11            # Force TARGET platform setting.
+#PATH="$PATH:/usr/ccs/bin"		# Modify path for finding compilers,etc
 
 #
 # Makefile construction parameters.
