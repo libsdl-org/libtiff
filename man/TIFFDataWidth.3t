@@ -1,4 +1,4 @@
-.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFDataWidth.3t,v 1.2 2003-06-30 18:22:50 dron Exp $
+.\" $Header: /cvs/maptools/cvsroot/libtiff/man/Attic/TIFFDataWidth.3t,v 1.3 2003-12-23 09:15:22 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -54,6 +54,8 @@ Currently following data types are supported:
 .I TIFF_SLONG
 .br
 .I TIFF_FLOAT
+.br
+.I TIFF_IFD
 .br
 .I TIFF_RATIONAL
 .br
