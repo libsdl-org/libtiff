@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: tiffset.c,v 1.1 2001-03-02 04:58:53 warmerda Exp $
+ * $Id: tiffset.c,v 1.2 2001-09-26 17:42:18 warmerda Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Mainline for setting metadata in existing TIFF files.
@@ -29,7 +29,10 @@
  ******************************************************************************
  *
  * $Log: tiffset.c,v $
- * Revision 1.1  2001-03-02 04:58:53  warmerda
+ * Revision 1.2  2001-09-26 17:42:18  warmerda
+ * added TIFFRewriteDirectory
+ *
+ * Revision 1.1  2001/03/02 04:58:53  warmerda
  * New
  *
  */
@@ -143,9 +146,12 @@ main(int argc, char* argv[])
         }
     }
 
+#ifdef notdef
     tiff->tif_header.tiff_diroff = 0;
     tiff->tif_diroff = 0;
-    TIFFWriteDirectory(tiff);
+#endif
+
+    TIFFRewriteDirectory(tiff);
     TIFFClose(tiff);
     return (0);
 }
