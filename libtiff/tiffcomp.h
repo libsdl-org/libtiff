@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffcomp.h,v 1.6 2004-03-26 14:58:17 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffcomp.h,v 1.7 2004-04-16 08:13:44 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -192,14 +192,5 @@ extern off_t lseek(int fd, off_t offset, int whence);
 extern int creat(const char *path, int mode);
 #endif /* __cplusplus */
 #endif /* __acornriscos */
-
-/* Bit and byte order, the default is MSB to LSB */
-#ifdef VMS
-#undef HOST_FILLORDER
-#undef WORDS_BIGENDIAN
-#define HOST_FILLORDER FILLORDER_LSB2MSB
-#define WORDS_BIGENDIAN	0
-#endif
-
 
 #endif /* _COMPAT_ */
