@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.36 2004-11-04 12:42:12 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.37 2004-11-05 13:07:54 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -245,7 +245,7 @@ const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_COPYRIGHT,	-1,-1, TIFF_ASCII,	FIELD_COPYRIGHT,
       TRUE,	FALSE,	"Copyright" },
 /* end Pixar tags */
-    { TIFFTAG_RICHTIFFIPTC, -1,-1, TIFF_LONG,   FIELD_RICHTIFFIPTC, 
+    { TIFFTAG_RICHTIFFIPTC, -1,-3, TIFF_LONG,   FIELD_RICHTIFFIPTC, 
       FALSE,    TRUE,   "RichTIFFIPTC" },
     { TIFFTAG_PHOTOSHOP,    -1,-3, TIFF_BYTE,   FIELD_PHOTOSHOP, 
       FALSE,    TRUE,   "Photoshop" },
