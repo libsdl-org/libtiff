@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.19 2001-07-16 20:42:59 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.20 2001-11-15 17:21:05 warmerda Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.19 $"
+	echo "This is TIFF configure $Revision: 1.20 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -774,11 +774,11 @@ CheckForFunc()
 
 if [ -z "${MACHDEPLIBS-}" ]; then
     MACHDEPLIBS=""
-    if ! CheckForFunc cos ; then
+    if CheckForFunc cos ; then
+        echo "Leaving MACHDEPLIBS empty, apparently you don't need -lm."
+    else
         MACHDEPLIBS="-lm"
         echo "Defaulting MACHDEPLIBS to -lm."
-    else
-        echo "Leaving MACHDEPLIBS empty, apparently you don't need -lm."
     fi
 fi
 
