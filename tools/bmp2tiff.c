@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.7 2004-09-03 07:59:54 dron Exp $
+/* $Id: bmp2tiff.c,v 1.8 2004-09-21 12:16:51 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -672,7 +672,7 @@ processCompressOptions(char* opt)
 		compression = COMPRESSION_PACKBITS;
 	else if (strncmp(opt, "jpeg", 4) == 0) {
 		char* cp = strchr(opt, ':');
-		if (cp && isdigit(cp[1]))
+		if (cp && isdigit((int)cp[1]))
 			quality = atoi(cp+1);
 		if (cp && strchr(cp, 'r'))
 			jpegcolormode = JPEGCOLORMODE_RAW;
