@@ -1,4 +1,4 @@
-/* $Id: short_tag.c,v 1.3 2004-10-01 14:16:37 dron Exp $ */
+/* $Id: short_tag.c,v 1.4 2004-10-02 11:16:04 dron Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@remotesensing.org>
@@ -63,9 +63,9 @@ static struct SingleTags {
 	{ TIFFTAG_MINSAMPLEVALUE, 23 },
 	{ TIFFTAG_MAXSAMPLEVALUE, 241 },
 	{ TIFFTAG_NUMBEROFINKS, SPP },
-	{ TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT },
-	{ TIFFTAG_IMAGEDEPTH, 1 },
-	{ TIFFTAG_TILEDEPTH, 1 }
+	{ TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT }
+	/*{ TIFFTAG_IMAGEDEPTH, 1 },
+	{ TIFFTAG_TILEDEPTH, 1 }*/
 };
 #define NSINGLETAGS   (sizeof(short_single_tags) / sizeof(short_single_tags[0]))
 
