@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.14 2003-07-26 03:50:08 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/tools/tiffcp.c,v 1.15 2003-12-20 13:46:57 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -630,7 +630,7 @@ tiffcp(TIFF* in, TIFF* out)
 	switch (compression) {
 	case COMPRESSION_JPEG:
 		TIFFSetField(out, TIFFTAG_JPEGQUALITY, quality);
-		//TIFFSetField(out, TIFFTAG_JPEGCOLORMODE, jpegcolormode);
+		TIFFSetField(out, TIFFTAG_JPEGCOLORMODE, jpegcolormode);
 		break;
 	case COMPRESSION_LZW:
 	case COMPRESSION_DEFLATE:
