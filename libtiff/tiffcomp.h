@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffcomp.h,v 1.4 2003-10-12 08:46:11 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tiffcomp.h,v 1.5 2004-03-19 17:36:53 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -211,9 +211,9 @@ extern int creat(const char *path, int mode);
 /* Bit and byte order, the default is MSB to LSB */
 #ifdef VMS
 #undef HOST_FILLORDER
-#undef HOST_BIGENDIAN
+#undef WORDS_BIGENDIAN
 #define HOST_FILLORDER FILLORDER_LSB2MSB
-#define HOST_BIGENDIAN	0
+#define WORDS_BIGENDIAN	0
 #endif
 
 

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.11 2004-01-30 20:22:18 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.12 2004-03-19 17:37:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -29,13 +29,30 @@
 /*
  * ``Library-private'' definitions.
  */
+
+#include <sys/types.h>
+#define HOST_FILLORDER FILLORDER_MSB2LSB
+#define WORDS_BIGENDIAN	0
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#include <fcntl.h>
+typedef double dblparam_t;
+#ifdef __STRICT_ANSI__
+#define	INLINE	__inline__
+#else
+#define	INLINE	inline
+#endif
+#define GLOBALDATA(TYPE,NAME)	extern TYPE NAME
+
 /*
  * UNIX systems should run the configure script to generate
  * a port.h file that reflects the system capabilities.
  * Doing this obviates all the dreck done in tiffcomp.h.
  */
 #if defined(unix) || defined(__unix)
-#include "port.h"
+#include "config.h"
 #include "tiffconf.h"
 #else
 #include "tiffconf.h"
