@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.8 2004-01-29 15:39:52 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_win32.c,v 1.9 2004-01-29 19:54:14 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -154,12 +154,11 @@ TIFFFdOpen(int ifd, const char* name, const char* mode)
 	TIFF* tif;
 	BOOL fSuppressMap = (mode[1] == 'u' || (mode[1]!=0 && mode[2] == 'u'));
 
-	tif = TIFFClientOpen(name, mode,
-		 (thandle_t)ifd,
-	    _tiffReadProc, _tiffWriteProc,
-	    _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
-		 fSuppressMap ? _tiffDummyMapProc : _tiffMapProc,
-		 fSuppressMap ? _tiffDummyUnmapProc : _tiffUnmapProc);
+	tif = TIFFClientOpen(name, mode, (thandle_t)ifd,
+			_tiffReadProc, _tiffWriteProc,
+			_tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
+			fSuppressMap ? _tiffDummyMapProc : _tiffMapProc,
+			fSuppressMap ? _tiffDummyUnmapProc : _tiffUnmapProc);
 	if (tif)
 		tif->tif_fd = ifd;
 	return (tif);
@@ -175,6 +174,7 @@ TIFFOpen(const char* name, const char* mode)
 	thandle_t fd;
 	int m;
 	DWORD dwMode;
+	TIFF* tif;
 
 	m = _TIFFgetMode(mode, module);
 
@@ -198,14 +198,20 @@ TIFFOpen(const char* name, const char* mode)
 	default:
 		return ((TIFF*)0);
 	}
-	fd = (thandle_t)CreateFile(name, (m == O_RDONLY) ? GENERIC_READ :
-			(GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, dwMode,
-			(m == O_RDONLY) ? FILE_ATTRIBUTE_READONLY : FILE_ATTRIBUTE_NORMAL, NULL);
+	fd = (thandle_t)CreateFile(name,
+		(m == O_RDONLY)?GENERIC_READ:(GENERIC_READ | GENERIC_WRITE),
+		FILE_SHARE_READ, NULL, dwMode,
+		(m == O_RDONLY)?FILE_ATTRIBUTE_READONLY:FILE_ATTRIBUTE_NORMAL,
+		NULL);
 	if (fd == INVALID_HANDLE_VALUE) {
 		TIFFError(module, "%s: Cannot open", name);
 		return ((TIFF *)0);
 	}
-	return (TIFFFdOpen((int)fd, name, mode));
+
+	tif = TIFFFdOpen((int)fd, name, mode);
+	if(!tif)
+		CloseHandle(fd);
+	return tif;
 }
 
 tdata_t

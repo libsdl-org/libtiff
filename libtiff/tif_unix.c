@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_unix.c,v 1.4 2002-10-11 14:13:00 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_unix.c,v 1.5 2004-01-29 19:54:14 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -144,6 +144,7 @@ TIFFOpen(const char* name, const char* mode)
 {
 	static const char module[] = "TIFFOpen";
 	int m, fd;
+        TIFF* tif;
 
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
@@ -167,7 +168,11 @@ TIFFOpen(const char* name, const char* mode)
 		TIFFError(module, "%s: Cannot open", name);
 		return ((TIFF *)0);
 	}
-	return (TIFFFdOpen(fd, name, mode));
+
+	tif = TIFFFdOpen((int)fd, name, mode);
+	if(!tif)
+		close(fd);
+	return tif;
 }
 
 void*
