@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.7 2000-03-02 15:38:28 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_fax3.c,v 1.8 2000-03-17 18:34:39 warmerda Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -373,7 +373,7 @@ _TIFFFax3fillruns(u_char* buf, uint32* runs, uint32* erun, uint32 lastx)
 	x = 0;
 	for (; runs < erun; runs += 2) {
 	    run = runs[0];
-	    if (x+run > lastx)
+	    if (x+run > lastx || run == -1 )
 		run = runs[0] = (uint16) (lastx - x);
 	    if (run) {
 		cp = buf + (x>>3);
@@ -412,7 +412,7 @@ _TIFFFax3fillruns(u_char* buf, uint32* runs, uint32* erun, uint32 lastx)
 		x += runs[0];
 	    }
 	    run = runs[1];
-	    if (x+run > lastx)
+	    if (x+run > lastx || run == -1 )
 		run = runs[1] = lastx - x;
 	    if (run) {
 		cp = buf + (x>>3);
