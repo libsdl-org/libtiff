@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.21 2004-03-26 15:52:47 dron Exp $ */
+/* $Id: tiffcp.c,v 1.22 2004-04-15 10:44:32 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -92,7 +92,7 @@ static int nextSrcImage (TIFF *tif, char **imageSpec)
 {
   if (**imageSpec == comma) {  /* if not @comma, we've done all images */
     char *start = *imageSpec + 1;
-    unsigned long nextImage = strtol (start, imageSpec, 0);
+    tdir_t nextImage = (tdir_t)strtol(start, imageSpec, 0);
     if (start == *imageSpec) nextImage = TIFFCurrentDirectory (tif);
     if (**imageSpec)
     {
