@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.14 2004-01-29 15:34:01 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_open.c,v 1.15 2004-01-30 20:22:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -382,7 +382,7 @@ TIFFClientOpen(
 	}
 bad:
 	tif->tif_mode = O_RDONLY;	/* XXX avoid flush */
-        _TIFFCleanup(tif);
+        TIFFCleanup(tif);
 bad2:
 	return ((TIFF*)0);
 	(void) (*closeproc)(clientdata);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.10 2004-01-29 08:47:36 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffiop.h,v 1.11 2004-01-30 20:22:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -207,7 +207,6 @@ struct tiff {
 #if defined(__cplusplus)
 extern "C" {
 #endif
-extern	void _TIFFCleanup(TIFF*);
 extern	int _TIFFgetMode(const char*, const char*);
 extern	int _TIFFNoRowEncode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	int _TIFFNoStripEncode(TIFF*, tidata_t, tsize_t, tsample_t);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_close.c,v 1.7 2004-01-29 08:47:36 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_close.c,v 1.8 2004-01-30 20:22:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,7 +30,7 @@
 #include "tiffiop.h"
 
 /************************************************************************/
-/*                            _TIFFCleanup()                            */
+/*                            TIFFCleanup()                             */
 /************************************************************************/
 
 /**
@@ -43,7 +43,7 @@
  */
 
 void
-_TIFFCleanup(TIFF* tif)
+TIFFCleanup(TIFF* tif)
 {
 	if (tif->tif_mode != O_RDONLY)
 	    /*
@@ -113,7 +113,7 @@ TIFFClose(TIFF* tif)
 	TIFFCloseProc closeproc = tif->tif_closeproc;
 	thandle_t fd = tif->tif_clientdata;
 
-	_TIFFCleanup(tif);
+	TIFFCleanup(tif);
 	(void) (*closeproc)(fd);
 }
 
