@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_write.c,v 1.2 1999-11-30 14:21:01 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_write.c,v 1.3 2000-01-28 15:10:34 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,6 +33,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#define REWRITE_HACK
+
 #define	STRIPINCR	20		/* expansion factor on strip array */
 
 #define	WRITECHECKSTRIPS(tif, module)				\
@@ -40,10 +42,9 @@
 #define	WRITECHECKTILES(tif, module)				\
 	(((tif)->tif_flags&TIFF_BEENWRITING) || TIFFWriteCheck((tif),1,module))
 #define	BUFFERCHECK(tif)					\
-	(((tif)->tif_flags & TIFF_BUFFERSETUP) ||		\
+	((((tif)->tif_flags & TIFF_BUFFERSETUP) && tif->tif_rawdata) ||	\
 	    TIFFWriteBufferSetup((tif), NULL, (tsize_t) -1))
 
-static	int TIFFWriteCheck(TIFF*, int, const char*);
 static	int TIFFGrowStrips(TIFF*, int, const char*);
 static	int TIFFAppendToStrip(TIFF*, tstrip_t, tidata_t, tsize_t);
 static	int TIFFSetupStrips(TIFF*);
@@ -468,7 +469,7 @@ TIFFSetupStrips(TIFF* tif)
  * we also "freeze" the state of the directory so
  * that important information is not changed.
  */
-static int
+int
 TIFFWriteCheck(TIFF* tif, int tiles, const char* module)
 {
 	if (tif->tif_mode == O_RDONLY) {
