@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.12 2002-03-24 15:48:39 dbmalloc Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dirinfo.c,v 1.13 2002-03-27 03:52:36 dbmalloc Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -220,10 +220,8 @@ const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_LONG,	FIELD_REFBLACKWHITE,
       TRUE,	FALSE,	"ReferenceBlackWhite" },
 #endif
-#ifdef XML_SUPPORT
-	  { TIFFTAG_XMLPACKET,	-1,-3, TIFF_UNDEFINED,	FIELD_XMLPACKET,
+    { TIFFTAG_XMLPACKET,	-1,-3, TIFF_UNDEFINED,	FIELD_XMLPACKET,
       FALSE,	TRUE,	"XMLPacket" },
-#endif
 /* begin SGI tags */
     { TIFFTAG_MATTEING,		 1, 1, TIFF_SHORT,	FIELD_EXTRASAMPLES,
       FALSE,	FALSE,	"Matteing" },
