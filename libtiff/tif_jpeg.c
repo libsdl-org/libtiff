@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_jpeg.c,v 1.4 2001-05-12 03:59:50 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_jpeg.c,v 1.5 2001-07-20 15:00:35 warmerda Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -46,6 +46,11 @@
 
 #ifdef FAR
 #undef FAR
+#endif
+
+/* The windows RPCNDR.H file defines boolean. */
+#ifdef __RPCNDR_H__
+#define HAVE_BOOLEAN
 #endif
 
 #include "jpeglib.h"
