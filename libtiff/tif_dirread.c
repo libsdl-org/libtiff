@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.31 2004-08-20 14:40:10 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.32 2004-08-22 17:23:44 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -272,7 +272,7 @@ TIFFReadDirectory(TIFF* tif)
 		    tif->tif_fieldinfo[fix]->field_tag != dp->tdir_tag) {
 
                     TIFFWarning(module,
-"%.1000s: unknown field with tag %d (0x%x) and type %d encountered",
+                        "%.1000s: unknown field with tag %d (0x%x) encountered",
                                 tif->tif_name, dp->tdir_tag, dp->tdir_tag,
                                 dp->tdir_type);
 
@@ -297,12 +297,12 @@ TIFFReadDirectory(TIFF* tif)
 		/*
 		 * Check data type.
 		 */
-		fip = tif->tif_fieldinfo[fix++];
+		fip = tif->tif_fieldinfo[fix];
 		while (dp->tdir_type != (u_short) fip->field_type
                        && fix < tif->tif_nfields) {
 			if (fip->field_type == TIFF_ANY)	/* wildcard */
 				break;
-                        fip = tif->tif_fieldinfo[fix++];
+                        fip = tif->tif_fieldinfo[++fix];
 			if (fix >= tif->tif_nfields ||
 			    fip->field_tag != dp->tdir_tag) {
 				TIFFWarning(module,
