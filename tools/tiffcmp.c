@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.6 2004-09-03 08:09:05 dron Exp $ */
+/* $Id: tiffcmp.c,v 1.7 2004-10-14 04:53:56 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -49,7 +49,7 @@ static	int cmptags(TIFF*, TIFF*);
 static	void ContigCompare(int, uint32, unsigned char*, unsigned char*, int);
 static	void PrintDiff(uint32, int, uint32, int, int);
 static	void SeparateCompare(int, int, uint32, unsigned char*, unsigned char*);
-static	void eof(const char*, uint32, int);
+static	void leof(const char*, uint32, int);
 
 int
 main(int argc, char* argv[])
@@ -123,7 +123,7 @@ usage(void)
 }
 
 #define	checkEOF(tif, row, sample) { \
-	eof(TIFFFileName(tif), row, sample); \
+	leof(TIFFFileName(tif), row, sample); \
 	goto bad; \
 }
 
@@ -532,7 +532,7 @@ CheckStringTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 }
 
 static void
-eof(const char* name, uint32 row, int s)
+leof(const char* name, uint32 row, int s)
 {
 
 	printf("%s: EOF at scanline %lu", name, row);
