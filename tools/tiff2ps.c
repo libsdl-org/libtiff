@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.26 2004-08-25 18:34:55 dron Exp $ */
+/* $Id: tiff2ps.c,v 1.27 2004-09-09 18:06:14 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -31,6 +31,10 @@
 #include <math.h>
 #include <time.h>
 #include <string.h>
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tiffio.h"
 
