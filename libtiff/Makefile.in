@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.2 1999-08-16 17:57:40 warmerda Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.3 1999-09-08 12:40:31 warmerda Exp $
 #
 # Tag Image File Format Library
 #
@@ -161,10 +161,15 @@ libtiff.a: ${OBJS}
 
 # default IRIX DSO building rule
 IRIXdso: ${OBJS}
-	${CC} @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
-	    -check_registry ${SRCDIR}/../port/irix/so_locations \
-	    -quickstart_info \
-	    ${OBJS} @LIBJPEG@ @LIBGZ@
+	@if [ "`basename ${CC}`" = "gcc" ]; then \
+	   ${LD} -n32 @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
+	   ${OBJS}; \
+	else \
+	    ${CC} @ENVOPTS@ -o libtiff.@DSOSUF@ -shared -rdata_shared \
+	        -check_registry ${SRCDIR}/../port/irix/so_locations \
+	        -quickstart_info \
+	        ${OBJS} @LIBJPEG@ @LIBGZ@; \
+	fi
 	touch $@
 # special rule for IRIX 5.2
 IRIX52dso: ${OBJS}
