@@ -1,4 +1,4 @@
-#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.23 2003-08-12 09:48:12 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Makefile.in,v 1.24 2003-10-09 08:36:24 dron Exp $
 #
 # Tag Image File Format Library
 #
@@ -260,11 +260,12 @@ ${OBJS}: ${SRCDIR}/tiffcomp.h ${SRCDIR}/tiffiop.h ${SRCDIR}/tiffconf.h
 ${OBJS}: ${SRCDIR}/tiffvers.h
 
 VERSION	= @VERSIONFILE@
+RELEASE_DATE = @RELEASE_DATE_FILE@
 
 ${SRCDIR}/tiffvers.h: ${VERSION} ${SRCDIR}/mkversion.c
 	${CC} -o mkversion ${CFLAGS} ${SRCDIR}/mkversion.c
 	rm -f ${SRCDIR}/tiffvers.h
-	./mkversion -v ${VERSION} ${SRCDIR}/tiffvers.h
+	./mkversion -v ${VERSION} -r ${RELEASE_DATE} ${SRCDIR}/tiffvers.h
 
 tiffvers.h:	${SRCDIR}/tiffvers.h
 

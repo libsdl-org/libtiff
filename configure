@@ -1,5 +1,5 @@
 #!/bin/sh
-#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.30 2003-05-20 15:42:10 dron Exp $
+#	$Header: /cvs/maptools/cvsroot/libtiff/configure,v 1.31 2003-10-09 08:33:47 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -152,7 +152,7 @@ do
     -target|--target)		ac_prev=TARGET;;
     -target=*|--target=*)	TARGET="$ac_optarg" ;;
     -version|--version)
-	echo "This is TIFF configure $Revision: 1.30 $"
+	echo "This is TIFF configure $Revision: 1.31 $"
 	exit 0
 	;;
     -help|--help)		usage; exit 0;;
@@ -256,6 +256,7 @@ wrong thing, you can use the information captured here to aid in debugging.
 EOF
 
 VERSIONFILE=$SRCDIR/VERSION
+RELEASE_DATE_FILE=$SRCDIR/RELEASE-DATE
 DATE=`date`
 
 eval `cat $VERSIONFILE |  sed 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)\(.*\)/DIST_MAJOR=\1; DIST_MINOR=\2; DIST_POINT=\3/'`
@@ -1844,6 +1845,7 @@ s;@TIFFLIBREF@;${TIFFLIBREF};g
 s;@VERSION@;${VERSION};g
 s;@RELEASE@;${RELEASE};g
 s;@VERSIONFILE@;`relativize ${VERSIONFILE}`;g
+s;@RELEASE_DATE_FILE@;`relativize ${RELEASE_DATE_FILE}`;g
 s;@WARNING@;Warning, this file was automatically created by the TIFF configure script;g
 EOF
 
