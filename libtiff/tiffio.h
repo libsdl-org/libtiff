@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.8 2001-02-17 03:03:52 warmerda Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tiffio.h,v 1.9 2001-03-27 22:57:51 warmerda Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -333,7 +333,7 @@ extern	void TIFFSwabArrayOfDouble(double*, unsigned long);
 extern	void TIFFReverseBits(unsigned char *, unsigned long);
 extern	const unsigned char* TIFFGetBitRevTable(int);
 
-#if LOGLUV_PUBLIC
+#ifdef LOGLUV_PUBLIC
 #define U_NEU		0.210526316
 #define V_NEU		0.473684211
 #define UVSCALE		410.
