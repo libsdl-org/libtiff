@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.41 2005-03-30 13:23:19 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.42 2005-04-08 10:10:44 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -604,7 +604,7 @@ _TIFFFindFieldInfoByName(TIFF* tif, const char *field_name, TIFFDataType dt)
             key.field_type = dt;
             return((const TIFFFieldInfo *) lfind(&key, 
 						   tif->tif_fieldinfo, 
-						   tif->tif_nfields,
+						   &tif->tif_nfields,
 						   sizeof(TIFFFieldInfo), 
 						   tagNameCompare));
         } else
