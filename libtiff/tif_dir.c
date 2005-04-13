@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.47 2005-04-08 10:15:37 dron Exp $ */
+/* $Id: tif_dir.c,v 1.48 2005-04-13 14:06:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -151,6 +151,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		if (tif->tif_flags & TIFF_SWAB) {
 			if (td->td_bitspersample == 16)
 				tif->tif_postdecode = _TIFFSwab16BitData;
+			else if (td->td_bitspersample == 24)
+				tif->tif_postdecode = _TIFFSwab24BitData;
 			else if (td->td_bitspersample == 32)
 				tif->tif_postdecode = _TIFFSwab32BitData;
 			else if (td->td_bitspersample == 64)

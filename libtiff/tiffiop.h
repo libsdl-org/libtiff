@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.31 2005-04-08 10:15:37 dron Exp $ */
+/* $Id: tiffiop.h,v 1.32 2005-04-13 14:06:21 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -238,6 +238,7 @@ extern	void _TIFFNoPostDecode(TIFF*, tidata_t, tsize_t);
 extern  int  _TIFFNoPreCode (TIFF*, tsample_t); 
 extern	int _TIFFNoSeek(TIFF*, uint32);
 extern	void _TIFFSwab16BitData(TIFF*, tidata_t, tsize_t);
+extern	void _TIFFSwab24BitData(TIFF*, tidata_t, tsize_t);
 extern	void _TIFFSwab32BitData(TIFF*, tidata_t, tsize_t);
 extern	void _TIFFSwab64BitData(TIFF*, tidata_t, tsize_t);
 extern	int TIFFFlushData1(TIFF*);
