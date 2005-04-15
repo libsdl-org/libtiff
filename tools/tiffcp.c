@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.27 2004-09-21 13:27:23 dron Exp $ */
+/* $Id: tiffcp.c,v 1.28 2005-04-15 17:50:09 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -348,7 +348,7 @@ processCompressOptions(char* opt)
 		char* cp = strchr(opt, ':');
 		if (cp)
 			defpredictor = atoi(cp+1);
-		defcompression = COMPRESSION_DEFLATE;
+		defcompression = COMPRESSION_ADOBE_DEFLATE;
 	} else
 		return (0);
 	return (1);
@@ -649,6 +649,7 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFSetField(out, TIFFTAG_JPEGCOLORMODE, jpegcolormode);
 		break;
 	case COMPRESSION_LZW:
+	case COMPRESSION_ADOBE_DEFLATE:
 	case COMPRESSION_DEFLATE:
 		if (predictor != (uint16)-1)
 			TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
