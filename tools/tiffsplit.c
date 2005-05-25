@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.10 2005-05-17 14:18:48 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.11 2005-05-25 10:35:13 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -29,6 +29,10 @@
 #include <string.h>
 
 #include "tiffio.h"
+
+#ifndef HAVE_GETOPT
+extern int getopt(int, char**, char*);
+#endif
 
 #define	CopyField(tag, v) \
     if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
@@ -125,11 +129,11 @@ newfilename(void)
          * start from 0 every 676 times (provided by lastTurn)
          * this keeps us within a-z boundaries
          */
-	fpnt[1] = (fnum - lastTurn) / 26 + 'a';
+	fpnt[1] = (char)((fnum - lastTurn) / 26) + 'a';
 	/* 
          * cycle last letter every file, from a-z, then repeat
          */
-	fpnt[2] = fnum % 26 + 'a';
+	fpnt[2] = (char)(fnum % 26) + 'a';
 	fnum++;
 }
 
