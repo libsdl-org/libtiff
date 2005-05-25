@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.14 2005-01-12 13:00:20 dron Exp $ */
+/* $Id: tif_win32.c,v 1.15 2005-05-25 11:27:59 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -199,7 +199,7 @@ TIFFOpen(const char* name, const char* mode)
 	}
 	fd = (thandle_t)CreateFileA(name,
 		(m == O_RDONLY)?GENERIC_READ:(GENERIC_READ | GENERIC_WRITE),
-		FILE_SHARE_READ, NULL, dwMode,
+		FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, dwMode,
 		(m == O_RDONLY)?FILE_ATTRIBUTE_READONLY:FILE_ATTRIBUTE_NORMAL,
 		NULL);
 	if (fd == INVALID_HANDLE_VALUE) {
