@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.48 2005-04-13 14:06:21 dron Exp $ */
+/* $Id: tif_dir.c,v 1.49 2005-05-25 11:38:32 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1016,7 +1016,6 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 				*va_arg(ap, uint16*) = (uint16)tv->count;
 			*va_arg(ap, void **) = tv->value;
 			ret_val = 1;
-			break;
                 } else {
 			if (fip->field_type == TIFF_ASCII
 			    || fip->field_readcount == TIFF_VARIABLE
@@ -1077,6 +1076,7 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 				}
 			}
                 }
+		break;
             }
         }
     }
