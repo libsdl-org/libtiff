@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.42 2005-04-08 10:10:44 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.43 2005-05-25 13:10:09 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -515,11 +515,11 @@ int
 _TIFFDataSize(TIFFDataType type)
 {
 	switch (type) {
-		case TIFF_BYTE:
 		case TIFF_ASCII:
-		case TIFF_SBYTE:
 		case TIFF_UNDEFINED:
 		    return 1;
+		case TIFF_BYTE:
+		case TIFF_SBYTE:
 		case TIFF_SHORT:
 		case TIFF_SSHORT:
 		    return 2;
