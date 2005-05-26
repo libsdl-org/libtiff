@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.11 2005-05-25 10:35:13 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.12 2005-05-26 18:42:56 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -23,6 +23,8 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
+
+#include "tif_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
