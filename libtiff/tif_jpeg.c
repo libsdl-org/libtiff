@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.34 2005-05-23 22:40:51 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.35 2005-06-01 08:46:49 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1896,9 +1896,12 @@ TIFFInitJPEG(TIFF* tif, int scheme)
         */
         if( tif->tif_diroff == 0 )
         {
+#define SIZE_OF_JPEGTABLES 2000
             TIFFSetFieldBit(tif, FIELD_JPEGTABLES);
-            sp->jpegtables_length = 2000;
+            sp->jpegtables_length = SIZE_OF_JPEGTABLES;
             sp->jpegtables = (void *) _TIFFmalloc(sp->jpegtables_length);
+	    _TIFFmemset(sp->jpegtables, 0, SIZE_OF_JPEGTABLES);
+#undef SIZE_OF_JPEGTABLES
         }
 
         /*
