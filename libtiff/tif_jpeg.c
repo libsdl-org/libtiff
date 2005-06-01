@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.35 2005-06-01 08:46:49 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.36 2005-06-01 09:41:30 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1827,6 +1827,9 @@ TIFFInitJPEG(TIFF* tif, int scheme)
 
 	assert(scheme == COMPRESSION_JPEG);
 
+	if ((tif->tif_flags & TIFF_CODERSETUP) == 0)
+		JPEGCleanup(tif);
+
 	/*
 	 * Allocate state block so tag methods have storage to record values.
 	 */
@@ -1842,15 +1845,15 @@ TIFFInitJPEG(TIFF* tif, int scheme)
 	sp->tif = tif;				/* back link */
 
 	/*
-	 * Merge codec-specific tag information and
-	 * override parent get/set field methods.
+	 * Merge codec-specific tag information and override parent get/set
+	 * field methods.
 	 */
 	_TIFFMergeFieldInfo(tif, jpegFieldInfo, N(jpegFieldInfo));
 	sp->vgetparent = tif->tif_tagmethods.vgetfield;
-	tif->tif_tagmethods.vgetfield = JPEGVGetField;	/* hook for codec tags */
+	tif->tif_tagmethods.vgetfield = JPEGVGetField; /* hook for codec tags */
 	sp->vsetparent = tif->tif_tagmethods.vsetfield;
-	tif->tif_tagmethods.vsetfield = JPEGVSetField;	/* hook for codec tags */
-	tif->tif_tagmethods.printdir = JPEGPrintDir;	/* hook for codec tags */
+	tif->tif_tagmethods.vsetfield = JPEGVSetField; /* hook for codec tags */
+	tif->tif_tagmethods.printdir = JPEGPrintDir;   /* hook for codec tags */
 
 	/* Default values for codec-specific fields */
 	sp->jpegtables = NULL;
@@ -1910,7 +1913,7 @@ TIFFInitJPEG(TIFF* tif, int scheme)
          */
         TIFFSetFieldBit( tif, FIELD_YCBCRSUBSAMPLING );
 
-	return (1);
+	return 1;
 }
 #endif /* JPEG_SUPPORT */
 
