@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.32 2005-04-13 14:06:21 dron Exp $ */
+/* $Id: tiffiop.h,v 1.33 2005-06-03 07:38:58 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -50,7 +50,7 @@
 # define assert(x) 
 #endif
 
-#ifdef HAVE_SEARCH_H
+#if HAVE_SEARCH_H
 # include <search.h>
 #endif
 
