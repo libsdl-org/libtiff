@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.35 2005-06-29 10:21:35 dron Exp $ */
+/* $Id: tiffiop.h,v 1.36 2005-07-01 12:35:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -109,6 +109,8 @@ struct tiff {
 #define	TIFF_INSUBIFD		0x2000	/* currently writing a subifd */
 #define	TIFF_UPSAMPLED		0x4000	/* library is doing data up-sampling */ 
 #define	TIFF_STRIPCHOP		0x8000	/* enable strip chopping support */
+#define	TIFF_HEADERONLY		0x10000	/* read header only, do not process */
+					/* the first directory */
 	toff_t		tif_diroff;	/* file offset of current directory */
 	toff_t		tif_nextdiroff;	/* file offset of following directory */
 	toff_t*		tif_dirlist;	/* list of offsets to already seen */

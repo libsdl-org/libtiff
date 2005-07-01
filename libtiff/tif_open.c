@@ -1,4 +1,4 @@
-/* $Id: tif_open.c,v 1.25 2005-06-03 13:41:13 dron Exp $ */
+/* $Id: tif_open.c,v 1.26 2005-07-01 12:35:18 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -222,6 +222,7 @@ TIFFClientOpen(
 	 * 'm'		disable use of memory-mapped files
 	 * 'C'		enable strip chopping support when reading
 	 * 'c'		disable strip chopping support
+	 * 'h'		read TIFF header only, do not load the first IFD
 	 *
 	 * The use of the 'l' and 'b' flags is strongly discouraged.
 	 * These flags are provided solely because numerous vendors,
@@ -295,6 +296,9 @@ TIFFClientOpen(
 		case 'c':
 			if (m == O_RDONLY)
 				tif->tif_flags &= ~TIFF_STRIPCHOP;
+			break;
+		case 'h':
+			tif->tif_flags |= TIFF_HEADERONLY;
 			break;
 		}
 	/*
@@ -378,6 +382,16 @@ TIFFClientOpen(
 	tif->tif_flags |= TIFF_MYBUFFER;
 	tif->tif_rawcp = tif->tif_rawdata = 0;
 	tif->tif_rawdatasize = 0;
+
+	/*
+	 * Sometimes we do not want to read the first directory (for example,
+	 * it may be broken) and want to proceed to other directories. I this
+	 * case we use the TIFF_HEADERONLY flag to open file and return
+	 * immediately after reading TIFF header.
+	 */
+	if (tif->tif_flags & TIFF_HEADERONLY)
+		return (tif);
+
 	/*
 	 * Setup initial directory.
 	 */
