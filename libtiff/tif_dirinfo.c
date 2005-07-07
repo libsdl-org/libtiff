@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.47 2005-07-06 11:23:55 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.48 2005-07-07 16:00:29 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -31,7 +31,6 @@
  */
 #include "tiffiop.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 /*
  * NB: NB: THIS ARRAY IS ASSUMED TO BE SORTED BY TAG.
