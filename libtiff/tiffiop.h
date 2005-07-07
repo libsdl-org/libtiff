@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.36 2005-07-01 12:35:18 dron Exp $ */
+/* $Id: tiffiop.h,v 1.37 2005-07-07 16:00:50 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -52,6 +52,9 @@
 
 #if HAVE_SEARCH_H
 # include <search.h>
+#else
+extern void *lfind(const void *, const void *, size_t *, size_t,
+		   int (*)(const void *, const void *));
 #endif
 
 #include "tiffio.h"
