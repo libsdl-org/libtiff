@@ -1,4 +1,4 @@
-/* $Id: lfind.c,v 1.1 2005-07-07 15:59:49 dron Exp $ */
+/* $Id: lfind.c,v 1.2 2005-07-07 16:34:06 dron Exp $ */
 
 /*
  * Copyright (c) 1989, 1993
@@ -38,7 +38,6 @@ __RCSID("$NetBSD: lsearch.c,v 1.2 2005/07/06 15:47:15 drochner Exp $");
 #endif
 
 #include <sys/types.h>
-#include <assert.h>
 
 #ifndef NULL
 # define NULL 0
@@ -51,10 +50,6 @@ lfind(const void *key, const void *base, size_t *nmemb, size_t size,
       cmp_fn_t compar)
 {
 	char *element, *end;
-
-	assert(key != NULL);
-	assert(base != NULL);
-	assert(compar != NULL);
 
 	end = (char *)base + *nmemb * size;
 	for (element = (char *)base; element < end; element += size)
