@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.4 2005-03-05 11:18:04 dron Exp $ */
+/* $Id: tif_stream.cxx,v 1.5 2005-07-26 08:11:13 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -27,8 +27,8 @@
 /*
  * TIFF Library UNIX-specific Routines.
  */
-#include <iostream>
 #include "tiffiop.h"
+#include <iostream>
 
 using namespace std;
 
