@@ -1,4 +1,4 @@
-/* $Id: tif_aux.c,v 1.10 2005-07-28 12:05:45 dron Exp $ */
+/* $Id: tif_aux.c,v 1.11 2005-07-28 13:48:32 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -33,7 +33,7 @@
 #include "tif_predict.h"
 #include <math.h>
 
-tdata_t
+char *
 _TIFFCheckMalloc(TIFF* tif, size_t nmemb, size_t elem_size, const char* what)
 {
 	tdata_t *cp = NULL;
