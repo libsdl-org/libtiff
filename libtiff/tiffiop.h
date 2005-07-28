@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.38 2005-07-11 14:45:18 dron Exp $ */
+/* $Id: tiffiop.h,v 1.39 2005-07-28 11:35:12 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -267,6 +267,8 @@ extern	void _TIFFprintAsciiTag(FILE*, const char*, const char*);
 
 GLOBALDATA(TIFFErrorHandler,_TIFFwarningHandler);
 GLOBALDATA(TIFFErrorHandler,_TIFFerrorHandler);
+
+extern	char *_TIFFCheckMalloc(TIFF*, size_t, size_t, const char*);
 
 extern	int TIFFInitDumpMode(TIFF*, int);
 #ifdef PACKBITS_SUPPORT
