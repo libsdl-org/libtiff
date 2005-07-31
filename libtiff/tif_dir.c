@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.54 2005-07-27 19:56:44 dron Exp $ */
+/* $Id: tif_dir.c,v 1.55 2005-07-31 03:33:12 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -155,6 +155,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 			else if (td->td_bitspersample == 32)
 				tif->tif_postdecode = _TIFFSwab32BitData;
 			else if (td->td_bitspersample == 64)
+				tif->tif_postdecode = _TIFFSwab64BitData;
+			else if (td->td_bitspersample == 128) /* two 64's */
 				tif->tif_postdecode = _TIFFSwab64BitData;
 		}
 		break;
@@ -334,10 +336,6 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
                          && td->td_bitspersample == 64
                          && tif->tif_postdecode == _TIFFSwab64BitData )
                     tif->tif_postdecode = _TIFFSwab32BitData;
-                else if( td->td_sampleformat == SAMPLEFORMAT_COMPLEXIEEEFP
-                         && td->td_bitspersample == 128
-                         && tif->tif_postdecode == NULL )
-                    tif->tif_postdecode = _TIFFSwab64BitData;
 		break;
 	case TIFFTAG_IMAGEDEPTH:
 		td->td_imagedepth = va_arg(ap, uint32);
