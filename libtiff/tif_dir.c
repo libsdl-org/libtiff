@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.55 2005-07-31 03:33:12 fwarmerdam Exp $ */
+/* $Id: tif_dir.c,v 1.56 2005-09-06 03:25:16 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -453,7 +453,10 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
                 if(td->td_customValues[iCustom].info == fip) {
                     tv = td->td_customValues + iCustom;
                     if(tv->value != NULL)
+                    {
                         _TIFFfree(tv->value);
+                        tv->value = NULL;
+                    }
                     break;
                 }
             }
