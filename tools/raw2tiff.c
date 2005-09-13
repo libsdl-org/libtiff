@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.17 2004-11-28 14:44:31 dron Exp $
+/* $Id: raw2tiff.c,v 1.18 2005-09-13 13:21:43 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -371,7 +371,8 @@ guessSize(int fd, TIFFDataType dtype, off_t hdr_size, uint32 nbands,
 
 		*length = imagesize / *width;
 		
-		fprintf(stderr, "Height is guessed as %lu.\n", *length);
+		fprintf(stderr, "Height is guessed as %lu.\n",
+			(unsigned long)*length);
 
 		return 1;
 	} else if (*width == 0 && *length != 0) {
@@ -379,7 +380,8 @@ guessSize(int fd, TIFFDataType dtype, off_t hdr_size, uint32 nbands,
 
 		*width = imagesize / *length;
 		
-		fprintf(stderr,	"Width is guessed as %lu.\n", *width);
+		fprintf(stderr,	"Width is guessed as %lu.\n",
+			(unsigned long)*width);
 
 		return 1;
 	} else if (*width == 0 && *length == 0) {
@@ -415,7 +417,7 @@ guessSize(int fd, TIFFDataType dtype, off_t hdr_size, uint32 nbands,
 
 		fprintf(stderr,
 			"Width is guessed as %lu, height is guessed as %lu.\n",
-			*width, *length);
+			(unsigned long)*width, (unsigned long)*length);
 
 		return 1;
 	} else {
