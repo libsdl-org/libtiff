@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.9 2005-07-25 13:48:58 dron Exp $ */
+/* $Id: tiffdump.c,v 1.10 2005-09-13 14:09:10 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -295,7 +295,8 @@ ReadDirectory(int fd, unsigned ix, off_t off)
 	if (swabflag)
 		TIFFSwabLong(&nextdiroff);
 	printf("Directory %u: offset %lu (%#lx) next %lu (%#lx)\n", ix,
-	    (unsigned long) off, (unsigned long) off, nextdiroff, nextdiroff);
+	    (unsigned long)off, (unsigned long)off,
+	    (unsigned long)nextdiroff, (unsigned long)nextdiroff);
 	for (dp = dir, n = dircount; n > 0; n--, dp++) {
 		if (swabflag) {
 			TIFFSwabArrayOfShort(&dp->tdir_tag, 2);

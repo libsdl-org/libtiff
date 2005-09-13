@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.10 2005-06-23 11:27:35 dron Exp $ */
+/* $Id: tiffcmp.c,v 1.11 2005-09-13 14:09:10 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -623,7 +623,7 @@ static void
 leof(const char* name, uint32 row, int s)
 {
 
-	printf("%s: EOF at scanline %lu", name, row);
+	printf("%s: EOF at scanline %lu", name, (unsigned long)row);
 	if (s >= 0)
 		printf(", sample %d", s);
 	printf("\n");
