@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.10 2005-09-13 14:09:10 dron Exp $ */
+/* $Id: tiffdump.c,v 1.11 2005-09-28 12:10:22 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -702,8 +702,8 @@ TIFFFetchData(int fd, TIFFDirEntry* dir, void* cp)
 
 	w = (dir->tdir_type < NWIDTHS ? datawidth[dir->tdir_type] : 0);
 	cc = dir->tdir_count * w;
-	if (lseek(fd, (off_t)dir->tdir_offset, 0) == (off_t)dir->tdir_offset &&
-	    read(fd, cp, cc) == cc) {
+	if (lseek(fd, (off_t)dir->tdir_offset, 0) != (off_t)-1
+	    && read(fd, cp, cc) != -1) {
 		if (swabflag) {
 			switch (dir->tdir_type) {
 			case TIFF_SHORT:
