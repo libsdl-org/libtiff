@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.60 2005-10-07 17:27:35 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.61 2005-10-07 17:29:14 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1542,6 +1542,7 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 	}
         else
             return;
+#undef STRIP_SIZE_DEFAULT
 
 	/* 
 	 * never increase the number of strips in an image
