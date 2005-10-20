@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.33 2005-10-20 05:03:34 joris Exp $ */
+/* $Id: tif_fax3.c,v 1.34 2005-10-20 14:23:49 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -229,7 +229,7 @@ static int
 Fax3Decode1D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE(tif, sp, "Fax3Decode1D");
-    int line = 0;
+        int line = 0;
 
 	(void) s;
 	CACHE_STATE(tif, sp);
@@ -248,7 +248,7 @@ Fax3Decode1D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 		(*sp->fill)(buf, thisrun, pa, lastx);
 		buf += sp->b.rowbytes;
 		occ -= sp->b.rowbytes;
-        line++;
+                line++;
 		continue;
 	EOF1D:				/* premature EOF */
 		CLEANUP_RUNS();
@@ -269,7 +269,7 @@ static int
 Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE_2D(tif, sp, "Fax3Decode2D");
-    int line = 0;
+        int line = 0;
 	int is1D;			/* current line is 1d/2d-encoded */
 
 	(void) s;
@@ -302,7 +302,7 @@ Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 		SWAP(uint32*, sp->curruns, sp->refruns);
 		buf += sp->b.rowbytes;
 		occ -= sp->b.rowbytes;
-        line++;
+                line++;
 		continue;
 	EOF2D:				/* premature EOF */
 		CLEANUP_RUNS();
@@ -1370,7 +1370,7 @@ static int
 Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE_2D(tif, sp, "Fax4Decode");
-    int line = 0;
+        int line = 0;
 
 	(void) s;
 	CACHE_STATE(tif, sp);
@@ -1393,7 +1393,7 @@ Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 		SWAP(uint32*, sp->curruns, sp->refruns);
 		buf += sp->b.rowbytes;
 		occ -= sp->b.rowbytes;
-        line++;
+                line++;
 		continue;
 	EOFG4:
                 NeedBits16( 13, BADG4 );
@@ -1478,7 +1478,7 @@ Fax3DecodeRLE(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE(tif, sp, "Fax3DecodeRLE");
 	int mode = sp->b.mode;
-    int line = 0;
+        int line = 0;
 
 	(void) s;
 	CACHE_STATE(tif, sp);
@@ -1508,7 +1508,7 @@ Fax3DecodeRLE(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 		}
 		buf += sp->b.rowbytes;
 		occ -= sp->b.rowbytes;
-        line++;
+                line++;
 		continue;
 	EOFRLE:				/* premature EOF */
 		(*sp->fill)(buf, thisrun, pa, lastx);
