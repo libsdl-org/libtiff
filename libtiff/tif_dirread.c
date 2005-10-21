@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.61 2005-10-07 17:29:14 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.62 2005-10-21 20:03:12 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1550,6 +1550,9 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 	if (rowsperstrip >= td->td_rowsperstrip)
 		return;
 	nstrips = (tstrip_t) TIFFhowmany(bytecount, stripbytes);
+        if( nstrips == 0 ) /* something is wonky, do nothing. */
+            return;
+
 	newcounts = (uint32*) _TIFFCheckMalloc(tif, nstrips, sizeof (uint32),
 				"for chopped \"StripByteCounts\" array");
 	newoffsets = (uint32*) _TIFFCheckMalloc(tif, nstrips, sizeof (uint32),
