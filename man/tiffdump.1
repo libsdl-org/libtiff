@@ -1,4 +1,4 @@
-.\" $Id: tiffdump.1,v 1.2 2005-09-20 10:27:14 dron Exp $
+.\" $Id: tiffdump.1,v 1.3 2005-10-23 19:11:34 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -23,7 +23,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFDUMP 1 "September 20, 2005" "tiffdump"
+.TH TIFFDUMP 1 "October 23, 2005" "tiffdump"
 .SH NAME
 tiffdump \- print verbatim information about
 .SM TIFF
@@ -63,7 +63,11 @@ does not understand.
 Force numeric data to be printed in hexadecimal rather than the
 default decimal.
 .TP
-.B \-o
+.B \-m " items"
+Change the number of indirect data items that are printed. By default, this
+will be 24.
+.TP
+.B \-o " offset"
 Dump the contents of the 
 .SM IFD
 at the a particular file offset.
