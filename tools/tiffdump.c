@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.11 2005-09-28 12:10:22 dron Exp $ */
+/* $Id: tiffdump.c,v 1.12 2005-10-31 13:08:19 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -56,8 +56,8 @@ char*	appname;
 char*	curfile;
 int	swabflag;
 int	bigendian;
-int	typeshift[13];		/* data type shift counts */
-long	typemask[13];		/* data type masks */
+int	typeshift[14];		/* data type shift counts */
+long	typemask[14];		/* data type masks */
 uint32	maxitems = 24;		/* maximum indirect data items to print */
 
 char*	bytefmt = "%s%#02x";		/* BYTE */
