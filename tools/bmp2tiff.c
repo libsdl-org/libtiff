@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.13 2005-10-31 12:59:30 dron Exp $
+/* $Id: bmp2tiff.c,v 1.14 2005-10-31 13:31:10 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -518,8 +518,7 @@ main(int argc, char* argv[])
 		 */
 		size = width * info_hdr.iBitCount + 31;
 		if (!width || !info_hdr.iBitCount
-		    || (size - 31) / info_hdr.iBitCount != width )
-		{
+		    || (size - 31) / info_hdr.iBitCount != width ) {
 			TIFFError(infilename,
 				  "Wrong image parameters; "
 				  "can't allocate space for scanline buffer");
