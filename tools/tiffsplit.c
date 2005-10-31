@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.12 2005-05-26 18:42:56 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.13 2005-10-31 12:08:17 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -199,6 +199,13 @@ tiffcp(TIFF* in, TIFF* out)
 	CopyField(TIFFTAG_HOSTCOMPUTER, stringv);
 	CopyField(TIFFTAG_PAGENAME, stringv);
 	CopyField(TIFFTAG_DOCUMENTNAME, stringv);
+	CopyField(TIFFTAG_BADFAXLINES, longv);
+	CopyField(TIFFTAG_CLEANFAXDATA, longv);
+	CopyField(TIFFTAG_CONSECUTIVEBADFAXLINES, longv);
+	CopyField(TIFFTAG_FAXRECVPARAMS, longv);
+	CopyField(TIFFTAG_FAXRECVTIME, longv);
+	CopyField(TIFFTAG_FAXSUBADDRESS, stringv);
+	CopyField(TIFFTAG_FAXDCS, stringv);
 	if (TIFFIsTiled(in))
 		return (cpTiles(in, out));
 	else
