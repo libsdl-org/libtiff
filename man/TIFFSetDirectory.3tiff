@@ -1,4 +1,4 @@
-.\" $Id: TIFFSetDirectory.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFSetDirectory.3tiff,v 1.2 2005-11-02 11:07:18 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -69,8 +69,11 @@ An error was encountered while reading the ``directory count'' field.
 An error was encountered while reading the ``link value'' that points to the
 next directory in a file.
 .SH "SEE ALSO"
-.IR libtiff (3TIFF),
 .IR TIFFCurrentDirectory (3TIFF),
 .IR TIFFOpen (3TIFF),
 .IR TIFFReadDirectory (3TIFF),
-.IR TIFFWriteDirectory (3TIFF)
+.IR TIFFWriteDirectory (3TIFF),
+.IR libtiff (3TIFF)
+.PP
+Libtiff library home page:
+.BR http://www.remotesensing.org/libtiff/

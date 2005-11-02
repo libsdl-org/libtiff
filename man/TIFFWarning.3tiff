@@ -1,4 +1,4 @@
-.\" $Id: TIFFWarning.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFWarning.3tiff,v 1.2 2005-11-02 11:07:18 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -62,6 +62,9 @@ A
 .IR TIFFSetWarningHandler
 returns a reference to the previous error handling function.
 .SH "SEE ALSO"
-.IR libtiff (3TIFF),
-.IR TIFFError (3TIFF),
-.IR printf (3)
+.BR TIFFError (3TIFF),
+.BR libtiff (3TIFF),
+.BR printf (3)
+.PP
+Libtiff library home page:
+.BR http://www.remotesensing.org/libtiff/

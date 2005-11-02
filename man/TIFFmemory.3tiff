@@ -1,4 +1,4 @@
-.\" $Id: TIFFmemory.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFmemory.3tiff,v 1.2 2005-11-02 11:07:18 dron Exp $
 .\"
 .\" Copyright (c) 1995 Sam Leffler
 .\" Copyright (c) 1995 Silicon Graphics, Inc.
@@ -82,6 +82,9 @@ repsectively.
 .SH DIAGNOSTICS
 None.
 .SH "SEE ALSO"
-.IR libtiff (3TIFF),
-.IR malloc (3),
-.IR memory (3)
+.BR malloc (3),
+.BR memory (3),
+.BR libtiff (3TIFF)
+.PP
+Libtiff library home page:
+.BR http://www.remotesensing.org/libtiff/

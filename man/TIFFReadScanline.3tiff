@@ -1,4 +1,4 @@
-.\" $Id: TIFFReadScanline.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFReadScanline.3tiff,v 1.2 2005-11-02 11:07:18 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -85,7 +85,10 @@ the size of a scanline is not calculated on a per-sample basis, and for
 the library does not unpack the block-interleaved samples; use the strip- and
 tile-based interfaces to read these formats.
 .SH "SEE ALSO"
-.IR libtiff (3TIFF),
-.IR TIFFOpen (3TIFF),
-.IR TIFFReadEncodedStrip (3TIFF),
-.IR TIFFReadRawStrip (3TIFF)
+.BR TIFFOpen (3TIFF),
+.BR TIFFReadEncodedStrip (3TIFF),
+.BR TIFFReadRawStrip (3TIFF),
+.BR libtiff (3TIFF)
+.PP
+Libtiff library home page:
+.BR http://www.remotesensing.org/libtiff/

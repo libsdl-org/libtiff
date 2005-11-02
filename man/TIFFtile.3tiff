@@ -1,4 +1,4 @@
-.\" $Id: TIFFtile.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFtile.3tiff,v 1.2 2005-11-02 11:07:19 dron Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -119,10 +119,13 @@ returns the number of tiles in the image.
 .SH DIAGNOSTICS
 None.
 .SH "SEE ALSO"
-.IR libtiff (3TIFF),
-.IR TIFFReadEncodedTile (3TIFF),
-.IR TIFFReadRawTile (3TIFF),
-.IR TIFFReadTile (3TIFF),
-.IR TIFFWriteEncodedTile (3TIFF),
-.IR TIFFWriteRawTile (3TIFF),
-.IR TIFFWriteTile (3TIFF)
+.BR TIFFReadEncodedTile (3TIFF),
+.BR TIFFReadRawTile (3TIFF),
+.BR TIFFReadTile (3TIFF),
+.BR TIFFWriteEncodedTile (3TIFF),
+.BR TIFFWriteRawTile (3TIFF),
+.BR TIFFWriteTile (3TIFF),
+.BR libtiff (3TIFF)
+.PP
+Libtiff library home page:
+.BR http://www.remotesensing.org/libtiff/

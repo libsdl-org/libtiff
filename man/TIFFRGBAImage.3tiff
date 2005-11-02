@@ -1,4 +1,4 @@
-.\" $Id: TIFFRGBAImage.3tiff,v 1.1 2004-11-11 14:39:16 dron Exp $
+.\" $Id: TIFFRGBAImage.3tiff,v 1.2 2005-11-02 11:07:18 dron Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -275,9 +275,12 @@ There was insufficient memory to allocate a table used to map
 data to 8-bit
 .SM RGB.
 .SH "SEE ALSO"
-.IR libtiff (3TIFF),
-.IR TIFFOpen (3TIFF),
-.IR TIFFReadRGBAImage (3TIFF),
-.IR TIFFReadRGBAImageOriented (3TIFF),
-.IR TIFFReadRGBAStrip (3TIFF),
-.IR TIFFReadRGBATile (3TIFF)
+.BR TIFFOpen (3TIFF),
+.BR TIFFReadRGBAImage (3TIFF),
+.BR TIFFReadRGBAImageOriented (3TIFF),
+.BR TIFFReadRGBAStrip (3TIFF),
+.BR TIFFReadRGBATile (3TIFF),
+.BR libtiff (3TIFF)
+.PP
+Libtiff library home page:
+.BR http://www.remotesensing.org/libtiff/
