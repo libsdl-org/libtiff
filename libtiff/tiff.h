@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.38 2005-07-26 10:33:57 dron Exp $ */
+/* $Id: tiff.h,v 1.39 2005-11-21 03:35:05 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -50,7 +50,8 @@
 
 #define	TIFF_BIGENDIAN		0x4d4d
 #define	TIFF_LITTLEENDIAN	0x4949
-
+#define	MDI_LITTLEENDIAN        0x5045
+#define	MDI_BIGENDIAN           0x4550
 /*
  * Intrinsic data types required by the file format:
  *
