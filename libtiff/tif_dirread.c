@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.62 2005-10-21 20:03:12 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.63 2005-11-23 22:20:56 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -78,7 +78,7 @@ TIFFReadDirectory(TIFF* tif)
 	uint16 iv;
 	uint32 v;
 	const TIFFFieldInfo* fip;
-	int fix;
+	size_t fix;
 	uint16 dircount;
 	toff_t nextdiroff;
 	char* cp;
