@@ -1,4 +1,4 @@
-/* $Id: tif_pixarlog.c,v 1.9 2005-01-15 15:44:05 dron Exp $ */
+/* $Id: tif_pixarlog.c,v 1.10 2005-11-23 22:38:30 dron Exp $ */
 
 /*
  * Copyright (c) 1996-1997 Sam Leffler
@@ -1126,7 +1126,7 @@ PixarLogPostEncode(TIFF* tif)
 		switch (state) {
 		case Z_STREAM_END:
 		case Z_OK:
-		    if (sp->stream.avail_out != tif->tif_rawdatasize) {
+		    if (sp->stream.avail_out != (uint32)tif->tif_rawdatasize) {
 			    tif->tif_rawcc =
 				tif->tif_rawdatasize - sp->stream.avail_out;
 			    TIFFFlushData1(tif);
