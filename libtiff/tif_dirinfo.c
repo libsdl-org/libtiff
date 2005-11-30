@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.52 2005-11-30 13:54:35 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.53 2005-11-30 14:15:28 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -421,7 +421,6 @@ tagCompare(const void* a, const void* b)
 {
 	const TIFFFieldInfo* ta = *(const TIFFFieldInfo**) a;
 	const TIFFFieldInfo* tb = *(const TIFFFieldInfo**) b;
-	fprintf(stderr, "%d - %d\n", ta->field_tag, tb->field_tag);
 	/* NB: be careful of return values for 16-bit platforms */
 	if (ta->field_tag != tb->field_tag)
 		return (ta->field_tag < tb->field_tag ? -1 : 1);
