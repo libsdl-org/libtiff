@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.15 2005-05-25 11:27:59 dron Exp $ */
+/* $Id: tif_win32.c,v 1.16 2005-11-30 14:01:49 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -264,6 +264,8 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 
 	tif = TIFFFdOpen((int)fd,
 			 (mbname != NULL) ? mbname : "<unknown>", mode);
+	if(!tif)
+		CloseHandle(fd);
 
 	_TIFFfree(mbname);
 
