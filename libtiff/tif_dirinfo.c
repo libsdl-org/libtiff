@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.53 2005-11-30 14:15:28 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.54 2005-12-02 16:07:34 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -685,8 +685,8 @@ _TIFFFindOrRegisterFieldInfo( TIFF *tif, ttag_t tag, TIFFDataType dt )
 TIFFFieldInfo*
 _TIFFCreateAnonFieldInfo(TIFF *tif, ttag_t tag, TIFFDataType field_type)
 {
-	(void) tif;
 	TIFFFieldInfo *fld;
+	(void) tif;
 
 	fld = (TIFFFieldInfo *) _TIFFmalloc(sizeof (TIFFFieldInfo));
 	if (fld == NULL)
