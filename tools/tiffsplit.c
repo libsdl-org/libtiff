@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.13 2005-10-31 12:08:17 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.14 2005-12-06 22:18:13 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -56,6 +56,7 @@ main(int argc, char* argv[])
 	TIFF *in, *out;
 
 	if (argc < 2) {
+                fprintf(stderr, "%s\n\n", TIFFGetVersion());
 		fprintf(stderr, "usage: tiffsplit input.tif [prefix]\n");
 		return (-3);
 	}
@@ -271,3 +272,5 @@ cpTiles(TIFF* in, TIFF* out)
 	}
 	return (0);
 }
+
+/* vim: set ts=8 sts=8 sw=8 noet: */
