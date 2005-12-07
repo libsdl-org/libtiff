@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.55 2005-12-07 16:27:41 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.56 2005-12-07 17:11:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -218,10 +218,10 @@ const TIFFFieldInfo tiffFieldInfo[] = {
       FALSE,	FALSE,	"YCbCrSubsampling" },
     { TIFFTAG_YCBCRPOSITIONING,	 1, 1, TIFF_SHORT,	FIELD_YCBCRPOSITIONING,
       FALSE,	FALSE,	"YCbCrPositioning" },
-    { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_RATIONAL,	FIELD_REFBLACKWHITE,
+    { TIFFTAG_REFERENCEBLACKWHITE, 6, 6, TIFF_RATIONAL,	FIELD_CUSTOM,
       TRUE,	FALSE,	"ReferenceBlackWhite" },
 /* XXX temporarily accept LONG for backwards compatibility */
-    { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_LONG,	FIELD_REFBLACKWHITE,
+    { TIFFTAG_REFERENCEBLACKWHITE, 6, 6, TIFF_LONG,	FIELD_CUSTOM,
       TRUE,	FALSE,	"ReferenceBlackWhite" },
     { TIFFTAG_XMLPACKET,	-1,-3, TIFF_BYTE,	FIELD_XMLPACKET,
       FALSE,	TRUE,	"XMLPacket" },

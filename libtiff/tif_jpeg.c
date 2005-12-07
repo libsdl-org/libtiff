@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.37 2005-11-23 22:38:30 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.38 2005-12-07 17:11:53 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1144,16 +1144,21 @@ JPEGSetupEncode(TIFF* tif)
 		 * default value is inappropriate for YCbCr.  Fill in the
 		 * proper value if application didn't set it.
 		 */
-		if (!TIFFFieldSet(tif, FIELD_REFBLACKWHITE)) {
-			float refbw[6];
-			long top = 1L << td->td_bitspersample;
-			refbw[0] = 0;
-			refbw[1] = (float)(top-1L);
-			refbw[2] = (float)(top>>1);
-			refbw[3] = refbw[1];
-			refbw[4] = refbw[2];
-			refbw[5] = refbw[1];
-			TIFFSetField(tif, TIFFTAG_REFERENCEBLACKWHITE, refbw);
+		{
+			float *ref;
+			if (!TIFFGetField(tif, TIFFTAG_REFERENCEBLACKWHITE,
+					  &ref)) {
+				float refbw[6];
+				long top = 1L << td->td_bitspersample;
+				refbw[0] = 0;
+				refbw[1] = (float)(top-1L);
+				refbw[2] = (float)(top>>1);
+				refbw[3] = refbw[1];
+				refbw[4] = refbw[2];
+				refbw[5] = refbw[1];
+				TIFFSetField(tif, TIFFTAG_REFERENCEBLACKWHITE,
+					     refbw);
+			}
 		}
 		break;
 	case PHOTOMETRIC_PALETTE:		/* disallowed by Tech Note */
