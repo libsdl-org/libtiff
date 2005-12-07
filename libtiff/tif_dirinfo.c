@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.54 2005-12-02 16:07:34 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.55 2005-12-07 16:27:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -212,7 +212,7 @@ const TIFFFieldInfo tiffFieldInfo[] = {
       FALSE,	FALSE,	"YClipPathUnits" },
     { TIFFTAG_YCLIPPATHUNITS,	 1, 1,	TIFF_SBYTE,	FIELD_CUSTOM,
       FALSE,	FALSE,	"YClipPathUnits" },
-    { TIFFTAG_YCBCRCOEFFICIENTS, 3, 3, TIFF_RATIONAL,	FIELD_YCBCRCOEFFICIENTS,
+    { TIFFTAG_YCBCRCOEFFICIENTS, 3, 3, TIFF_RATIONAL,	FIELD_CUSTOM,
       FALSE,	FALSE,	"YCbCrCoefficients" },
     { TIFFTAG_YCBCRSUBSAMPLING,	 2, 2, TIFF_SHORT,	FIELD_YCBCRSUBSAMPLING,
       FALSE,	FALSE,	"YCbCrSubsampling" },
