@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.65 2005-12-06 12:45:20 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.66 2005-12-07 18:11:08 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -684,12 +684,15 @@ bad:
 /*
  */
 int
-TIFFReadCustomDirectory(TIFF* tif, toff_t diroff)
+TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
+			const TIFFFieldInfo info[], size_t n)
 {
 	static const char module[] = "TIFFReadCustomDirectory";
 
 	TIFFDirEntry *dp, *dir = NULL;
-	uint16 n, dircount;
+	uint16 i, dircount;
+
+	_TIFFSetupFieldInfo(tif, info, n);
 
 	if (!isMapped(tif)) {
 		if (!SeekOK(tif, diroff)) {
@@ -746,7 +749,7 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff)
 		}
 	}
 
-	for (dp = dir, n = dircount; n > 0; n--, dp++) {
+	for (dp = dir, i = dircount; i > 0; i--, dp++) {
 		if (tif->tif_flags & TIFF_SWAB) {
 			TIFFSwabArrayOfShort(&dp->tdir_tag, 2);
 			TIFFSwabArrayOfLong(&dp->tdir_count, 2);

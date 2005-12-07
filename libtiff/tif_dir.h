@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.19 2005-12-07 17:11:53 dron Exp $ */
+/* $Id: tif_dir.h,v 1.20 2005-12-07 18:11:09 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -219,7 +219,7 @@ typedef	struct {
 #if defined(__cplusplus)
 extern "C" {
 #endif
-extern	void _TIFFSetupFieldInfo(TIFF*);
+extern	void _TIFFSetupFieldInfo(TIFF*, const TIFFFieldInfo[], int);
 extern	void _TIFFPrintFieldInfo(TIFF*, FILE*);
 extern	TIFFDataType _TIFFSampleToTagType(TIFF*);
 extern  const TIFFFieldInfo* _TIFFFindOrRegisterFieldInfo( TIFF *tif,
