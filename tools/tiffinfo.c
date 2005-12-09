@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.7 2004-09-03 08:19:27 dron Exp $ */
+/* $Id: tiffinfo.c,v 1.8 2005-12-09 14:52:48 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -129,9 +129,16 @@ main(int argc, char* argv[])
 				if (TIFFSetSubDirectory(tif, diroff))
 					tiffinfo(tif, order, flags);
 			} else {
-				do
+				do {
+					uint32 offset;
+
 					tiffinfo(tif, order, flags);
-				while (TIFFReadDirectory(tif));
+					if (TIFFGetField(tif, TIFFTAG_EXIFIFD,
+							 &offset)) {
+						if (TIFFReadEXIFDirectory(tif, offset))
+							tiffinfo(tif, order, flags);
+					}
+				} while (TIFFReadDirectory(tif));
 			}
 			TIFFClose(tif);
 		}
