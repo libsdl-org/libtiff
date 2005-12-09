@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.41 2005-11-03 18:22:58 fwarmerdam Exp $ */
+/* $Id: tiffiop.h,v 1.42 2005-12-09 12:58:08 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -228,6 +228,8 @@ struct tiff {
 
 #define TIFFmax(A,B) ((A)>(B)?(A):(B))
 #define TIFFmin(A,B) ((A)<(B)?(A):(B))
+
+#define TIFFArraySize(a) (sizeof (a) / sizeof ((a)[0]))
 
 #if defined(__cplusplus)
 extern "C" {

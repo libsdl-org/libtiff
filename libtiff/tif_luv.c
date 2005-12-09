@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.13 2004-10-12 18:50:48 dron Exp $ */
+/* $Id: tif_luv.c,v 1.14 2005-12-09 12:58:08 dron Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -173,7 +173,6 @@ struct logLuvState {
 #define	DecoderState(tif)	((LogLuvState*) (tif)->tif_data)
 #define	EncoderState(tif)	((LogLuvState*) (tif)->tif_data)
 
-#define N(a)   (sizeof(a)/sizeof(a[0]))
 #define SGILOGDATAFMT_UNKNOWN	-1
 
 #define MINRUN		4	/* minimum run length */
@@ -1584,7 +1583,8 @@ TIFFInitSGILog(TIFF* tif, int scheme)
 	tif->tif_cleanup = LogLuvCleanup;
 
 	/* override SetField so we can handle our private pseudo-tag */
-	_TIFFMergeFieldInfo(tif, LogLuvFieldInfo, N(LogLuvFieldInfo));
+	_TIFFMergeFieldInfo(tif, LogLuvFieldInfo,
+			    TIFFArraySize(LogLuvFieldInfo));
 	sp->vgetparent = tif->tif_tagmethods.vgetfield;
 	tif->tif_tagmethods.vgetfield = LogLuvVGetField;   /* hook for codec tags */
 	sp->vsetparent = tif->tif_tagmethods.vsetfield;
