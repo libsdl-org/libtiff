@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.9 2005-07-12 12:03:15 dron Exp $ */
+/* $Id: tif_unix.c,v 1.10 2005-12-12 22:28:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,6 +30,11 @@
  */
 #include "tif_config.h"
 
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+
+#include <stdarg.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 
@@ -39,10 +44,6 @@
 
 #ifdef HAVE_FCNTL_H
 # include <fcntl.h>
-#endif
-
-#ifdef HAVE_SYS_TYPES_H
-# include <sys/types.h>
 #endif
 
 #ifdef HAVE_IO_H
