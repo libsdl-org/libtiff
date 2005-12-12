@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.35 2005-11-23 22:38:30 dron Exp $ */
+/* $Id: tif_fax3.c,v 1.36 2005-12-12 15:30:08 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -298,7 +298,7 @@ Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 		else
 			EXPAND2D(EOF2Da);
 		(*sp->fill)(buf, thisrun, pa, lastx);
-		SETVAL(0);		/* imaginary change for reference */
+		SETVALUE(0);		/* imaginary change for reference */
 		SWAP(uint32*, sp->curruns, sp->refruns);
 		buf += sp->b.rowbytes;
 		occ -= sp->b.rowbytes;
@@ -1389,7 +1389,7 @@ Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
                 if (EOLcnt)
                     goto EOFG4;
 		(*sp->fill)(buf, thisrun, pa, lastx);
-		SETVAL(0);		/* imaginary change for reference */
+		SETVALUE(0);		/* imaginary change for reference */
 		SWAP(uint32*, sp->curruns, sp->refruns);
 		buf += sp->b.rowbytes;
 		occ -= sp->b.rowbytes;
