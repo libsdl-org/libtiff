@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.14 2005-12-09 12:58:08 dron Exp $ */
+/* $Id: tif_luv.c,v 1.15 2005-12-13 21:23:58 dron Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -1584,7 +1584,7 @@ TIFFInitSGILog(TIFF* tif, int scheme)
 
 	/* override SetField so we can handle our private pseudo-tag */
 	_TIFFMergeFieldInfo(tif, LogLuvFieldInfo,
-			    TIFFArraySize(LogLuvFieldInfo));
+			    TIFFArrayCount(LogLuvFieldInfo));
 	sp->vgetparent = tif->tif_tagmethods.vgetfield;
 	tif->tif_tagmethods.vgetfield = LogLuvVGetField;   /* hook for codec tags */
 	sp->vsetparent = tif->tif_tagmethods.vsetfield;
