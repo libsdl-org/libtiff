@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.43 2005-12-13 21:23:58 dron Exp $ */
+/* $Id: tiffiop.h,v 1.44 2005-12-21 13:05:32 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -268,6 +268,8 @@ extern	void _TIFFprintAsciiTag(FILE*, const char*, const char*);
 
 GLOBALDATA(TIFFErrorHandler,_TIFFwarningHandler);
 GLOBALDATA(TIFFErrorHandler,_TIFFerrorHandler);
+GLOBALDATA(TIFFErrorHandlerExt,_TIFFwarningHandlerExt);
+GLOBALDATA(TIFFErrorHandlerExt,_TIFFerrorHandlerExt);
 
 extern	tdata_t _TIFFCheckMalloc(TIFF*, size_t, size_t, const char*);
 
