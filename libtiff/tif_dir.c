@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.62 2005-12-21 14:24:41 dron Exp $ */
+/* $Id: tif_dir.c,v 1.63 2005-12-21 15:55:49 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1244,8 +1244,8 @@ TIFFUnlinkDirectory(TIFF* tif, tdir_t dirn)
 	tdir_t n;
 
 	if (tif->tif_mode == O_RDONLY) {
-		TIFFErrorExit(tif->tif_clientdata, module,
-			      "Can not unlink directory in read-only file");
+		TIFFErrorExt(tif->tif_clientdata, module,
+                             "Can not unlink directory in read-only file");
 		return (0);
 	}
 	/*
