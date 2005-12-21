@@ -1,4 +1,4 @@
-/* $Id: tif_packbits.c,v 1.10 2004-10-02 13:29:41 dron Exp $ */
+/* $Id: tif_packbits.c,v 1.11 2005-12-21 12:23:13 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -266,7 +266,7 @@ PackBitsDecode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 	tif->tif_rawcp = (tidata_t) bp;
 	tif->tif_rawcc = cc;
 	if (occ > 0) {
-		TIFFError(tif->tif_name,
+		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 		    "PackBitsDecode: Not enough data for scanline %ld",
 		    (long) tif->tif_row);
 		return (0);
