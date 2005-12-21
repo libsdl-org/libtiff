@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.46 2005-12-21 12:23:13 joris Exp $ */
+/* $Id: tif_getimage.c,v 1.47 2005-12-21 12:52:35 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2240,7 +2240,7 @@ makecmap(TIFFRGBAImage* img)
     img->PALmap = (uint32**) _TIFFmalloc(
 	256*sizeof (uint32 *)+(256*nsamples*sizeof(uint32)));
     if (img->PALmap == NULL) {
-		TIFFError(img->tif->tif_clientdata, TIFFFileName(img->tif), "No space for Palette mapping table");
+		TIFFErrorExt(img->tif->tif_clientdata, TIFFFileName(img->tif), "No space for Palette mapping table");
 		return (0);
 	}
     p = (uint32*)(img->PALmap + 256);
