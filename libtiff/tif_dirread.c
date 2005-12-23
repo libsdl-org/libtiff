@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.71 2005-12-23 01:18:59 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.72 2005-12-23 11:42:08 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -586,7 +586,8 @@ TIFFReadDirectory(TIFF* tif)
 		            _TIFFFieldWithTag(tif,TIFFTAG_STRIPBYTECOUNTS)->field_name);
 		if(EstimateStripByteCounts(tif, dir, dircount) < 0)
 		    goto bad;
-	} else if (td->td_nstrips > 2
+	} else if (td->td_planarconfig == PLANARCONFIG_CONTIG
+		   && td->td_nstrips > 2
 		   && td->td_compression == COMPRESSION_NONE
 		   && td->td_stripbytecount[0] != td->td_stripbytecount[1]) {
 		/*
