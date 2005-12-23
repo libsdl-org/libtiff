@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.47 2005-12-21 12:52:35 joris Exp $ */
+/* $Id: tif_getimage.c,v 1.48 2005-12-23 01:18:59 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2305,7 +2305,7 @@ buildMap(TIFFRGBAImage* img)
 	if (checkcmap(img) == 16)
 	    cvtcmap(img);
 	else
-	    TIFFWarning(TIFFFileName(img->tif), "Assuming 8-bit colormap");
+	    TIFFWarningExt(img->tif->tif_clientdata, TIFFFileName(img->tif), "Assuming 8-bit colormap");
 	/*
 	 * Use mapping table and colormap to construct
 	 * unpacking tables for samples < 8 bits.

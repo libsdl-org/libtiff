@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_error.c,v 1.3 2005-12-21 16:09:01 fwarmerdam Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_error.c,v 1.4 2005-12-23 01:18:59 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -29,7 +29,6 @@
  */
 #include "tiffiop.h"
 
-TIFFErrorHandlerExt _TIFFwarningHandlerExt = NULL;
 TIFFErrorHandlerExt _TIFFerrorHandlerExt = NULL;
 
 TIFFErrorHandler

@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.31 2005-12-21 12:23:13 joris Exp $ */
+/* $Id: tif_dirwrite.c,v 1.32 2005-12-23 01:18:59 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -850,7 +850,7 @@ TIFFWriteRationalArray(TIFF* tif, TIFFDirEntry* dir, float* v)
 
 		if (fv < 0) {
 			if (dir->tdir_type == TIFF_RATIONAL) {
-				TIFFWarning(tif->tif_name,
+				TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
 	"\"%s\": Information lost writing value (%g) as (unsigned) RATIONAL",
 				_TIFFFieldWithTag(tif,dir->tdir_tag)->field_name,
 				fv);

@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.25 2005-12-21 12:23:13 joris Exp $ */
+/* $Id: tif_lzw.c,v 1.26 2005-12-23 01:18:59 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -175,7 +175,7 @@ static  void cl_hash(LZWCodecState*);
  */
 #define	NextCode(_tif, _sp, _bp, _code, _get) {				\
 	if ((_sp)->dec_bitsleft < nbits) {				\
-		TIFFWarning(_tif->tif_name,				\
+		TIFFWarningExt(_tif->tif_clientdata, _tif->tif_name,				\
 		    "LZWDecode: Strip %d not terminated with EOI code", \
 		    _tif->tif_curstrip);				\
 		_code = CODE_EOI;					\
@@ -257,7 +257,7 @@ LZWPreDecode(TIFF* tif, tsample_t s)
 	if (tif->tif_rawdata[0] == 0 && (tif->tif_rawdata[1] & 0x1)) {
 #ifdef LZW_COMPAT
 		if (!sp->dec_decode) {
-			TIFFWarning(tif->tif_name,
+			TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
 			    "Old-style LZW codes, convert file");
 			/*
 			 * Override default decoding methods with
