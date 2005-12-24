@@ -1,4 +1,4 @@
-/* $Id: tif_aux.c,v 1.16 2005-12-23 16:28:15 dron Exp $ */
+/* $Id: tif_aux.c,v 1.17 2005-12-24 15:36:16 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -152,10 +152,10 @@ TIFFVGetFieldDefaulted(TIFF* tif, ttag_t tag, va_list ap)
 		*va_arg(ap, uint16 *) = (1<<td->td_bitspersample)-1;
 		return (1);
 	case TIFFTAG_INKSET:
-		*va_arg(ap, uint16 *) = td->td_inkset;
-		return (1);
+		*va_arg(ap, uint16 *) = INKSET_CMYK;
+		return 1;
 	case TIFFTAG_NUMBEROFINKS:
-		*va_arg(ap, uint16 *) = td->td_ninks;
+		*va_arg(ap, uint16 *) = 4;
 		return (1);
 	case TIFFTAG_EXTRASAMPLES:
 		*va_arg(ap, uint16 *) = td->td_extrasamples;

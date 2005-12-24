@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.32 2005-12-23 01:18:59 joris Exp $ */
+/* $Id: tif_dirwrite.c,v 1.33 2005-12-24 15:36:16 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -293,7 +293,6 @@ _TIFFWriteDirectory(TIFF* tif, int done)
 		case FIELD_PAGENUMBER:
 		case FIELD_HALFTONEHINTS:
 		case FIELD_YCBCRSUBSAMPLING:
-		case FIELD_DOTRANGE:
 			if (!TIFFSetupShortPair(tif, fip->field_tag, dir))
 				goto bad;
 			break;

@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.48 2005-12-23 01:18:59 joris Exp $ */
+/* $Id: tif_getimage.c,v 1.49 2005-12-24 15:36:16 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -139,17 +139,23 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 	}
 	break;
     case PHOTOMETRIC_SEPARATED:
-	if (td->td_inkset != INKSET_CMYK) {
-	    sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
-		"InkSet", td->td_inkset);
-	    return (0);
+	{
+		uint16 inkset;
+		TIFFGetFieldDefaulted(tif, TIFFTAG_INKSET, &inkset);
+		if (inkset != INKSET_CMYK) {
+		    sprintf(emsg,
+			    "Sorry, can not handle separated image with %s=%d",
+			    "InkSet", inkset);
+		    return 0;
+		}
+		if (td->td_samplesperpixel < 4) {
+		    sprintf(emsg,
+			    "Sorry, can not handle separated image with %s=%d",
+			    "Samples/pixel", td->td_samplesperpixel);
+		    return 0;
+		}
+		break;
 	}
-	if (td->td_samplesperpixel < 4) {
-	    sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
-		"Samples/pixel", td->td_samplesperpixel);
-	    return (0);
-	}
-	break;
     case PHOTOMETRIC_LOGL:
 	if (td->td_compression != COMPRESSION_SGILOG) {
 	    sprintf(emsg, "Sorry, LogL data must have %s=%d",
