@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.66 2005-12-24 15:36:16 dron Exp $ */
+/* $Id: tif_dir.c,v 1.67 2005-12-26 14:31:24 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -998,7 +998,11 @@ TIFFDefaultDirectory(TIFF* tif)
 {
 	register TIFFDirectory* td = &tif->tif_dir;
 
-	_TIFFSetupFieldInfo(tif, tiffFieldInfo, TIFFArrayCount(tiffFieldInfo));
+	size_t tiffFieldInfoCount;
+	const TIFFFieldInfo *tiffFieldInfo =
+		_TIFFGetFieldInfo(&tiffFieldInfoCount);
+	_TIFFSetupFieldInfo(tif, tiffFieldInfo, tiffFieldInfoCount);
+
 	_TIFFmemset(td, 0, sizeof (*td));
 	td->td_fillorder = FILLORDER_MSB2LSB;
 	td->td_bitspersample = 1;

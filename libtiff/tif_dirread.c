@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.72 2005-12-23 11:42:08 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.73 2005-12-26 14:31:25 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -850,8 +850,11 @@ bad:
 int
 TIFFReadEXIFDirectory(TIFF* tif, toff_t diroff)
 {
+	size_t exifFieldInfoCount;
+	const TIFFFieldInfo *exifFieldInfo =
+		_TIFFGetFieldInfo(&exifFieldInfoCount);
 	return TIFFReadCustomDirectory(tif, diroff, exifFieldInfo,
-				       TIFFArrayCount(exifFieldInfo));
+				       exifFieldInfoCount);
 }
 
 static int
