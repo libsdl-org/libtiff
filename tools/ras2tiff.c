@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.11 2004-09-21 12:37:53 dron Exp $ */
+/* $Id: ras2tiff.c,v 1.12 2005-12-27 12:20:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -60,7 +60,7 @@ int
 main(int argc, char* argv[])
 {
 	unsigned char* buf;
-	uint32 row;
+	long row;
 	tsize_t linebytes, scanline;
 	TIFF *out;
 	FILE *in;
@@ -207,8 +207,8 @@ main(int argc, char* argv[])
 	    TIFFDefaultStripSize(out, rowsperstrip));
 	for (row = 0; row < h.ras_height; row++) {
 		if (fread(buf, linebytes, 1, in) != 1) {
-			fprintf(stderr, "%s: scanline %lu: Read error.\n",
-			    argv[optind], (unsigned long) row);
+			fprintf(stderr, "%s: scanline %ld: Read error.\n",
+			    argv[optind], row);
 			break;
 		}
 		if (h.ras_type == RT_STANDARD && h.ras_depth == 24) {

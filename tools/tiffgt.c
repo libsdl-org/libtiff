@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.4 2005-06-23 11:50:05 dron Exp $ */
+/* $Id: tiffgt.c,v 1.5 2005-12-27 12:26:08 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -53,7 +53,7 @@ static uint16	photo0 = (uint16) -1, photo;
 static int	stoponerr = 0;			/* stop on read error */
 static int	verbose = 0;
 static char	title[1024];			/* window title line */
-static long	xmax, ymax;
+static uint32	xmax, ymax;
 static char**	filelist = NULL;
 static int	fileindex;
 static int	filenum;
