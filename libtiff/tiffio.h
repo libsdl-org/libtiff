@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.48 2005-12-23 01:18:59 joris Exp $ */
+/* $Id: tiffio.h,v 1.49 2005-12-27 11:13:58 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -86,6 +86,7 @@ typedef	uint32 toff_t;		/* file offset */
 #endif
 
 #if defined(USE_WIN32_FILEIO)
+# define VC_EXTRALEAN
 # include <windows.h>
 # ifdef __WIN32__
 DECLARE_HANDLE(thandle_t);	/* Win32 file handle */
