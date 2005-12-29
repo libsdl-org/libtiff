@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.15 2005-12-29 00:15:57 bfriesen Exp $
+/* $Id: bmp2tiff.c,v 1.16 2005-12-29 00:33:51 bfriesen Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -394,7 +394,7 @@ main(int argc, char* argv[])
                         /* Allocate memory for colour table and read it. */
                         if (info_hdr.iClrUsed)
                             clr_tbl_size = ((uint32)(1 << depth) < info_hdr.iClrUsed) ?
-				    1 << depth : info_hdr.iClrUsed;
+				    (uint32) (1 << depth) : info_hdr.iClrUsed;
                         else
                             clr_tbl_size = 1 << depth;
                         clr_tbl = (unsigned char *)
