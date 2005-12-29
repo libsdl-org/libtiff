@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.11 2005-09-13 14:09:10 dron Exp $ */
+/* $Id: tiffcmp.c,v 1.12 2005-12-29 00:15:57 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -602,7 +602,7 @@ static int
 CheckLongTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
 	uint32 v1, v2;
-	CHECK(v1 == v2, "%s: %lu %lu\n");
+	CHECK(v1 == v2, "%s: %u %u\n");
 }
 
 static int
