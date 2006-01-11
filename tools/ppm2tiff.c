@@ -1,4 +1,4 @@
-/* $Id: ppm2tiff.c,v 1.10 2006-01-11 16:59:36 fwarmerdam Exp $ */
+/* $Id: ppm2tiff.c,v 1.11 2006-01-11 17:03:43 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -226,7 +226,7 @@ processCompressOptions(char* opt)
 	else if (strneq(opt, "jpeg", 4)) {
 		char* cp = strchr(opt, ':');
 
-                defcompression = COMPRESSION_JPEG;
+                compression = COMPRESSION_JPEG;
                 while( cp )
                 {
                     if (isdigit((int)cp[1]))

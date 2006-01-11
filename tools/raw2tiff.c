@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.19 2006-01-11 16:59:36 fwarmerdam Exp $
+/* $Id: raw2tiff.c,v 1.20 2006-01-11 17:03:43 fwarmerdam Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -532,7 +532,7 @@ processCompressOptions(char* opt)
 	else if (strncmp(opt, "jpeg", 4) == 0) {
 		char* cp = strchr(opt, ':');
 
-                defcompression = COMPRESSION_JPEG;
+                compression = COMPRESSION_JPEG;
                 while( cp )
                 {
                     if (isdigit((int)cp[1]))
