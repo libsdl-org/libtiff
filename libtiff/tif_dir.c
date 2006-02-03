@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.69 2006-02-03 16:27:13 dron Exp $ */
+/* $Id: tif_dir.c,v 1.70 2006-02-03 16:36:02 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -975,6 +975,8 @@ TIFFFreeDirectory(TIFF* tif)
 	CleanupField(td_transferfunction[2]);
 	CleanupField(td_stripoffset);
 	CleanupField(td_stripbytecount);
+	TIFFClrFieldBit(tif, FIELD_YCBCRSUBSAMPLING);
+	TIFFClrFieldBit(tif, FIELD_YCBCRPOSITIONING);
 
 	/* Cleanup custom tag values */
 	for( i = 0; i < td->td_customValueCount; i++ ) {
