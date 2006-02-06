@@ -1,4 +1,4 @@
-/* $Id: tif_aux.c,v 1.17 2005-12-24 15:36:16 dron Exp $ */
+/* $Id: tif_aux.c,v 1.18 2006-02-06 16:11:46 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -181,7 +181,7 @@ TIFFVGetFieldDefaulted(TIFF* tif, ttag_t tag, va_list ap)
 	case TIFFTAG_YCBCRCOEFFICIENTS:
 		{
 			/* defaults are from CCIR Recommendation 601-1 */
-			float ycbcrcoeffs[] = { 0.299f, 0.587f, 0.114f };
+			static float ycbcrcoeffs[] = { 0.299f, 0.587f, 0.114f };
 			*va_arg(ap, float **) = ycbcrcoeffs;
 			return 1;
 		}
