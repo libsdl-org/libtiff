@@ -1,4 +1,4 @@
-/* $Id: tif_aux.c,v 1.18 2006-02-06 16:11:46 dron Exp $ */
+/* $Id: tif_aux.c,v 1.19 2006-02-07 10:41:30 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -36,7 +36,7 @@
 tdata_t
 _TIFFCheckMalloc(TIFF* tif, size_t nmemb, size_t elem_size, const char* what)
 {
-	tdata_t *cp = NULL;
+	tdata_t cp = NULL;
 	tsize_t	bytes = nmemb * elem_size;
 
 	/*
