@@ -1,4 +1,4 @@
-/* $Id: tif_color.c,v 1.11 2005-11-23 22:20:56 dron Exp $ */
+/* $Id: tif_color.c,v 1.12 2006-02-09 15:42:20 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -91,6 +91,11 @@ TIFFXYZToRGB(TIFFCIELabToRGB *cielab, float X, float Y, float Z,
 	Yr = TIFFmax(Yr, cielab->display.d_Y0R);
 	Yg = TIFFmax(Yg, cielab->display.d_Y0G);
 	Yb = TIFFmax(Yb, cielab->display.d_Y0B);
+
+	/* Avoid overflow in case of wrong input values */
+	Yr = TIFFmin(Yr, cielab->display.d_YCR);
+	Yg = TIFFmin(Yg, cielab->display.d_YCG);
+	Yb = TIFFmin(Yb, cielab->display.d_YCB);
 
 	/* Turn luminosity to colour value. */
 	i = (int)((Yr - cielab->display.d_Y0R) / cielab->rstep);
