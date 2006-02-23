@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.70 2006-02-03 16:36:02 dron Exp $ */
+/* $Id: tif_dir.c,v 1.71 2006-02-23 15:55:02 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -853,11 +853,11 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 				*va_arg(ap, void **) = tv->value;
 				ret_val = 1;
 			} else {
-			    int i;
+			    int j;
 			    char *val = (char *)tv->value;
 
-			    for (i = 0; i < tv->count;
-				 i++, val += _TIFFDataSize(fip->field_type)) {
+			    for (j = 0; j < tv->count;
+				 j++, val += _TIFFDataSize(tv->info->field_type)) {
 				switch (fip->field_type) {
 					case TIFF_BYTE:
 					case TIFF_UNDEFINED:
