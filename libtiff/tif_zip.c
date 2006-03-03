@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.7 2005-12-21 12:23:14 joris Exp $ */
+/* $Id: tif_zip.c,v 1.8 2006-03-03 14:13:01 dron Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -249,17 +249,20 @@ static void
 ZIPCleanup(TIFF* tif)
 {
 	ZIPState* sp = ZState(tif);
-	if (sp) {
-		if (sp->state&ZSTATE_INIT) {
-			/* NB: avoid problems in the library */
-			if (tif->tif_mode == O_RDONLY)
-				inflateEnd(&sp->stream);
-			else
-				deflateEnd(&sp->stream);
-		}
-		_TIFFfree(sp);
-		tif->tif_data = NULL;
+
+	assert(sp != 0);
+
+	(void)TIFFPredictorCleanup(tif);
+
+	if (sp->state&ZSTATE_INIT) {
+		/* NB: avoid problems in the library */
+		if (tif->tif_mode == O_RDONLY)
+			inflateEnd(&sp->stream);
+		else
+			deflateEnd(&sp->stream);
 	}
+	_TIFFfree(sp);
+	tif->tif_data = NULL;
 }
 
 static int
@@ -311,7 +314,8 @@ TIFFInitZIP(TIFF* tif, int scheme)
 {
 	ZIPState* sp;
 
-	assert( (scheme == COMPRESSION_DEFLATE) || (scheme == COMPRESSION_ADOBE_DEFLATE));
+	assert( (scheme == COMPRESSION_DEFLATE)
+		|| (scheme == COMPRESSION_ADOBE_DEFLATE));
 
 	/*
 	 * Allocate state block so tag methods have storage to record values.
