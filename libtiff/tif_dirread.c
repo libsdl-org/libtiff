@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.76 2006-03-03 13:06:00 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.77 2006-03-04 16:00:45 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -973,7 +973,7 @@ TIFFFetchData(TIFF* tif, TIFFDirEntry* dir, char* cp)
 	tsize_t cc = dir->tdir_count * w;
 
 	/* Check for overflow. */
-	if (!dir->tdir_count || !w || (tsize_t)dir->tdir_count / w != cc)
+	if (!dir->tdir_count || !w || cc / w != (tsize_t)dir->tdir_count)
 		goto bad;
 
 	if (!isMapped(tif)) {
