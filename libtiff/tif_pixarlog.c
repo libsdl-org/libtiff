@@ -1,4 +1,4 @@
-/* $Id: tif_pixarlog.c,v 1.12 2006-03-03 14:13:01 dron Exp $ */
+/* $Id: tif_pixarlog.c,v 1.13 2006-03-07 11:59:12 dron Exp $ */
 
 /*
  * Copyright (c) 1996-1997 Sam Leffler
@@ -1166,6 +1166,9 @@ PixarLogCleanup(TIFF* tif)
 	assert(sp != 0);
 
 	(void)TIFFPredictorCleanup(tif);
+
+	tif->tif_tagmethods.vgetfield = sp->vgetparent;
+	tif->tif_tagmethods.vsetfield = sp->vsetparent;
 
 	if (sp->FromLT2) _TIFFfree(sp->FromLT2);
 	if (sp->From14) _TIFFfree(sp->From14);

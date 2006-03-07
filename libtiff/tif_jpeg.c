@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.42 2005-12-28 04:08:01 joris Exp $ */
+/* $Id: tif_jpeg.c,v 1.43 2006-03-07 11:59:12 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1519,15 +1519,19 @@ JPEGPostEncode(TIFF* tif)
 static void
 JPEGCleanup(TIFF* tif)
 {
-	if (tif->tif_data) {
-		JPEGState *sp = JState(tif);
-                if( sp->cinfo_initialized )
-                    TIFFjpeg_destroy(sp);	/* release libjpeg resources */
-		if (sp->jpegtables)		/* tag value */
-			_TIFFfree(sp->jpegtables);
-		_TIFFfree(tif->tif_data);	/* release local state */
-		tif->tif_data = NULL;
-	}
+	JPEGState *sp = JState(tif);
+	
+	assert(sp != 0);
+
+	tif->tif_tagmethods.vgetfield = sp->vgetparent;
+	tif->tif_tagmethods.vsetfield = sp->vsetparent;
+
+	if( sp->cinfo_initialized )
+	    TIFFjpeg_destroy(sp);	/* release libjpeg resources */
+	if (sp->jpegtables)		/* tag value */
+		_TIFFfree(sp->jpegtables);
+	_TIFFfree(tif->tif_data);	/* release local state */
+	tif->tif_data = NULL;
 }
 
 static int
