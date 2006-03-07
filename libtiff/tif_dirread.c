@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.78 2006-03-07 13:57:01 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.79 2006-03-07 15:55:27 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1333,8 +1333,9 @@ TIFFFetchAnyArray(TIFF* tif, TIFFDirEntry* dir, double* v)
 		/* TIFF_ASCII */
 		/* TIFF_UNDEFINED */
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-		    "cannot read TIFF_ANY type %d for field \"%s\"",
-		    _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
+			     "cannot read TIFF_ANY type %d for field \"%s\"",
+			     dir->tdir_type,
+			     _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
 		return (0);
 	}
 	return (1);
