@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.34 2006-02-23 15:56:34 dron Exp $ */
+/* $Id: tif_print.c,v 1.35 2006-03-13 07:53:28 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -578,8 +578,11 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		 * _TIFFPrettyPrintField() fall down and print it as any other
 		 * tag.
 		 */
-		if (_TIFFPrettyPrintField(tif, fd, tag, value_count, raw_data))
+		if (_TIFFPrettyPrintField(tif, fd, tag, value_count, raw_data)) {
+			if(mem_alloc)
+				_TIFFfree(raw_data);
 			continue;
+		}
 		else
 			_TIFFPrintField(fd, fip, value_count, raw_data);
 
