@@ -1,4 +1,4 @@
-/* $Id: tif_strip.c,v 1.15 2006-02-27 14:09:35 dron Exp $ */
+/* $Id: tif_strip.c,v 1.16 2006-03-15 12:49:15 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -199,9 +199,6 @@ TIFFDefaultStripSize(TIFF* tif, uint32 request)
 	return (*tif->tif_defstripsize)(tif, request);
 }
 
-#ifndef STRIP_SIZE_DEFAULT
-# define STRIP_SIZE_DEFAULT 8192
-#endif
 uint32
 _TIFFDefaultStripSize(TIFF* tif, uint32 s)
 {
@@ -217,7 +214,6 @@ _TIFFDefaultStripSize(TIFF* tif, uint32 s)
 	}
 	return (s);
 }
-#undef STRIP_SIZE_DEFAULT
 
 /*
  * Return the number of bytes to read/write in a call to
