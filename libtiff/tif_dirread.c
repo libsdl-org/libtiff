@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.81 2006-03-15 12:49:15 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.82 2006-03-16 12:24:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -129,10 +129,9 @@ TIFFReadDirectory(TIFF* tif)
 		}
 		if (tif->tif_flags & TIFF_SWAB)
 			TIFFSwabShort(&dircount);
-		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif,
-						  dircount,
-						  sizeof (TIFFDirEntry),
-						  "to read TIFF directory");
+		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif, dircount,
+						       sizeof (TIFFDirEntry),
+						"to read TIFF directory");
 		if (dir == NULL)
 			return (0);
 		if (!ReadOK(tif, dir, dircount*sizeof (TIFFDirEntry))) {
@@ -158,8 +157,9 @@ TIFFReadDirectory(TIFF* tif)
 		off += sizeof (uint16);
 		if (tif->tif_flags & TIFF_SWAB)
 			TIFFSwabShort(&dircount);
-		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif,
-		    dircount, sizeof (TIFFDirEntry), "to read TIFF directory");
+		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif, dircount,
+						       sizeof (TIFFDirEntry),
+						"to read TIFF directory");
 		if (dir == NULL)
 			return (0);
 		if (off + dircount*sizeof (TIFFDirEntry) > tif->tif_size) {
@@ -723,10 +723,9 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 		}
 		if (tif->tif_flags & TIFF_SWAB)
 			TIFFSwabShort(&dircount);
-		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif,
-						  dircount,
-						  sizeof (TIFFDirEntry),
-						  "to read TIFF directory");
+		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif, dircount,
+						       sizeof (TIFFDirEntry),
+					"to read TIFF custom directory");
 		if (dir == NULL)
 			return (0);
 		if (!ReadOK(tif, dir, dircount * sizeof (TIFFDirEntry))) {
@@ -748,8 +747,9 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 		off += sizeof (uint16);
 		if (tif->tif_flags & TIFF_SWAB)
 			TIFFSwabShort(&dircount);
-		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif,
-		    dircount, sizeof (TIFFDirEntry), "to read TIFF directory");
+		dir = (TIFFDirEntry *)_TIFFCheckMalloc(tif, dircount,
+						       sizeof (TIFFDirEntry),
+					"to read TIFF custom directory");
 		if (dir == NULL)
 			return (0);
 		if (off + dircount * sizeof (TIFFDirEntry) > tif->tif_size) {
