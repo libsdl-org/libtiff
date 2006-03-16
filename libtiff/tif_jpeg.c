@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.44 2006-03-15 20:56:40 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.45 2006-03-16 12:38:24 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1532,6 +1532,8 @@ JPEGCleanup(TIFF* tif)
 		_TIFFfree(sp->jpegtables);
 	_TIFFfree(tif->tif_data);	/* release local state */
 	tif->tif_data = NULL;
+
+	_TIFFSetDefaultCompressionState(tif);
 }
 
 static int

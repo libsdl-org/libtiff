@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.9 2006-03-07 11:59:12 dron Exp $ */
+/* $Id: tif_zip.c,v 1.10 2006-03-16 12:38:24 dron Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -266,6 +266,8 @@ ZIPCleanup(TIFF* tif)
 	}
 	_TIFFfree(sp);
 	tif->tif_data = NULL;
+
+	_TIFFSetDefaultCompressionState(tif);
 }
 
 static int
