@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.16 2005-10-31 14:48:59 dron Exp $ */
+/* $Id: fax2tiff.c,v 1.17 2006-03-17 14:58:57 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -350,11 +350,11 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 	tifin->tif_rawdatasize = TIFFGetFileSize(tifin);
 	tifin->tif_rawdata = _TIFFmalloc(tifin->tif_rawdatasize);
 	if (tifin->tif_rawdata == NULL) {
-		TIFFError(tifin->tif_name, "%s: Not enough memory");
+		TIFFError(tifin->tif_name, "Not enough memory");
 		return (0);
 	}
 	if (!ReadOK(tifin, tifin->tif_rawdata, tifin->tif_rawdatasize)) {
-		TIFFError(tifin->tif_name, "%s: Read error at scanline 0");
+		TIFFError(tifin->tif_name, "Read error at scanline 0");
 		return (0);
 	}
 	tifin->tif_rawcp = tifin->tif_rawdata;
