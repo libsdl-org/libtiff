@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.19 2005-03-03 12:48:31 dron Exp $" */
+/* $Id: fax2ps.c,v 1.20 2006-03-17 14:56:42 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -382,6 +382,7 @@ main(int argc, char** argv)
 	}
 	while ((n = read(fileno(stdin), buf, sizeof (buf))) > 0)
 	    write(fileno(fd), buf, n);
+	lseek(fileno(fd), 0, SEEK_SET);
 	tif = TIFFFdOpen(fileno(fd), "temp", "r");
 	if (tif) {
 	    fax2ps(tif, npages, pages, "<stdin>");
@@ -407,7 +408,7 @@ char* stuff[] = {
 " -y yres       set default vertical resolution of input data (lpi)",
 " -S            scale output to page size",
 " -W width      set output page width (inches), default is 8.5",
-" -H height     set output page height (inchest), default is 11",
+" -H height     set output page height (inches), default is 11",
 NULL
 };
 
