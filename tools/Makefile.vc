@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.9 2004-06-08 15:54:12 dron Exp $
+# $Id: Makefile.vc,v 1.10 2006-03-21 16:41:07 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -46,4 +46,5 @@ tiffgt.exe:
 	$(CC) $(CFLAGS) tiffgt.c $(EXTRA_OBJ) $(LIBS)
 
 clean:
-	-del *.exe *.obj
+	-del *.exe
+	-del *.obj

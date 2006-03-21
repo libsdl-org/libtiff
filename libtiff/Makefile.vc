@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.13 2005-08-18 20:21:06 fwarmerdam Exp $
+# $Id: Makefile.vc,v 1.14 2006-03-21 16:41:07 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -78,20 +78,21 @@ OBJ	= \
 
 all:	libtiff.lib $(DLLNAME)
 
-tif_config.h:
+tif_config.h:	tif_config.h.vc
 	copy tif_config.h.vc tif_config.h
 
-tiffconf.h:
+tiffconf.h:	tiffconf.h.vc
 	copy tiffconf.h.vc tiffconf.h
 
 libtiff.lib:	tif_config.h tiffconf.h $(OBJ)
 	$(AR) /out:libtiff.lib $(OBJ) $(LIBS)
 
-$(DLLNAME):	tif_config.h $(OBJ)
+$(DLLNAME):	tif_config.h tiffconf.h libtiff.def $(OBJ)
 	$(LD) /debug /dll /def:libtiff.def /out:$(DLLNAME) \
 	/implib:libtiff_i.lib $(OBJ) $(LIBS)
 	
 clean:
-	-del *.obj *.lib *.dll *.exe
-
-
+	-del *.obj
+	-del *.lib
+	-del *.dll
+	-del *.exe

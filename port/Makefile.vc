@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.2 2004-07-03 16:04:59 dron Exp $
+# $Id: Makefile.vc,v 1.3 2006-03-21 16:41:07 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@remotesensing.org>
 #
@@ -38,5 +38,6 @@ libport.lib:	$(OBJ)
 	$(AR) /out:libport.lib $(OBJ)
 
 clean:
-	-del *.obj *.lib
+	-del *.obj
+	-del *.lib
 
