@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.11 2005-12-21 12:23:13 joris Exp $ */
+/* $Id: tif_unix.c,v 1.12 2006-03-21 16:37:51 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -182,6 +182,7 @@ TIFFOpen(const char* name, const char* mode)
 }
 
 #ifdef __WIN32__
+#include <windows.h>
 /*
  * Open a TIFF file with a Unicode filename, for read/writing.
  */

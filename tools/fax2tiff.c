@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.17 2006-03-17 14:58:57 dron Exp $ */
+/* $Id: fax2tiff.c,v 1.18 2006-03-21 16:37:51 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -264,7 +264,11 @@ main(int argc, char* argv[])
 			    "%s: %s: Can not open\n", argv[0], argv[optind]);
 			continue;
 		}
+#if defined(_WIN32) && defined(USE_WIN32_FILEIO)
+                TIFFSetClientdata(faxTIFF, (thandle_t)_get_osfhandle(fileno(in)));
+#else
                 TIFFSetClientdata(faxTIFF, (thandle_t)fileno(in));
+#endif
 		TIFFSetFileName(faxTIFF, (const char*)argv[optind]);
 		TIFFSetField(out, TIFFTAG_IMAGEWIDTH, xsize);
 		TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 1);
