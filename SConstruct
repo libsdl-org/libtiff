@@ -1,8 +1,8 @@
-# $Id: SConstruct,v 1.1 2005-07-12 12:37:24 dron Exp $
+# $Id: SConstruct,v 1.2 2006-03-23 14:54:00 dron Exp $
 
 # Tag Image File Format (TIFF) Software
 #
-# Copyright (C) 2005, Andrey Kiselev <dron@remotesensing.org>
+# Copyright (C) 2005, Andrey Kiselev <dron@ak4719.spb.edu>
 #
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided

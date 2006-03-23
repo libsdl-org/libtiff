@@ -1,11 +1,11 @@
-/* $Id: bmp2tiff.c,v 1.19 2006-02-15 13:12:54 dron Exp $
+/* $Id: bmp2tiff.c,v 1.20 2006-03-23 14:54:02 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
- * Author:   Andrey Kiselev, dron@remotesensing.org
+ * Author:   Andrey Kiselev, dron@ak4719.spb.edu
  *
  ******************************************************************************
- * Copyright (c) 2004, Andrey Kiselev <dron@remotesensing.org>
+ * Copyright (c) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

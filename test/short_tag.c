@@ -1,7 +1,7 @@
-/* $Id: short_tag.c,v 1.5 2004-10-09 18:36:47 dron Exp $ */
+/* $Id: short_tag.c,v 1.6 2006-03-23 14:54:02 dron Exp $ */
 
 /*
- * Copyright (c) 2004, Andrey Kiselev  <dron@remotesensing.org>
+ * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided

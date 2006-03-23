@@ -1,7 +1,7 @@
-/* $Id: strip.c,v 1.2 2004-10-10 11:54:54 dron Exp $ */
+/* $Id: strip.c,v 1.3 2006-03-23 14:54:02 dron Exp $ */
 
 /*
- * Copyright (c) 2004, Andrey Kiselev  <dron@remotesensing.org>
+ * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
