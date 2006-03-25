@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.50 2006-03-21 16:37:51 dron Exp $ */
+/* $Id: tiffio.h,v 1.51 2006-03-25 08:01:08 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -349,6 +349,7 @@ extern	int TIFFReadCustomDirectory(TIFF*, toff_t, const TIFFFieldInfo[],
 				    size_t);
 extern	int TIFFReadEXIFDirectory(TIFF*, toff_t);
 extern	tsize_t TIFFScanlineSize(TIFF*);
+extern	tsize_t TIFFOldScanlineSize(TIFF*);
 extern	tsize_t TIFFRasterScanlineSize(TIFF*);
 extern	tsize_t TIFFStripSize(TIFF*);
 extern	tsize_t TIFFRawStripSize(TIFF*, tstrip_t);
