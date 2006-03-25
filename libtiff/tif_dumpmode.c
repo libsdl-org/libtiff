@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.4 2005-12-21 12:23:13 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.5 2006-03-25 03:09:24 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -45,7 +45,7 @@ DumpModeEncode(TIFF* tif, tidata_t pp, tsize_t cc, tsample_t s)
 		if (tif->tif_rawcc + n > tif->tif_rawdatasize)
 			n = tif->tif_rawdatasize - tif->tif_rawcc;
 
-                assert( n > 0 );
+		assert( n > 0 );
                 
 		/*
 		 * Avoid copy if client has setup raw
