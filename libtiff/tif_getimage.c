@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.51 2006-03-26 16:39:30 joris Exp $ */
+/* $Id: tif_getimage.c,v 1.52 2006-04-04 02:00:08 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -350,7 +350,6 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 				/* can rely on libjpeg to convert to RGB */
 				/* XXX should restore current state on exit */
 				switch (compress) {
-					case COMPRESSION_OJPEG:
 					case COMPRESSION_JPEG:
 						TIFFSetField(tif, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
 						img->photometric = PHOTOMETRIC_RGB;
