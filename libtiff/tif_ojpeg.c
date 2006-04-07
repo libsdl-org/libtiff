@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.20 2006-04-04 16:49:16 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.21 2006-04-07 00:08:56 joris Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -1930,7 +1930,7 @@ OJPEGReadSkip(OJPEGState* sp, uint16 len)
 	uint16 n;
 	m=len;
 	n=m;
-	if (n<sp->in_buffer_togo)
+	if (n>sp->in_buffer_togo)
 		n=sp->in_buffer_togo;
 	sp->in_buffer_cur+=n;
 	sp->in_buffer_togo-=n;
@@ -1939,7 +1939,7 @@ OJPEGReadSkip(OJPEGState* sp, uint16 len)
 	{
 		assert(sp->in_buffer_togo==0);
 		n=m;
-		if (n<sp->in_buffer_file_togo)
+		if (n>sp->in_buffer_file_togo)
 			n=sp->in_buffer_file_togo;
 		sp->in_buffer_file_pos+=n;
 		sp->in_buffer_file_togo-=n;
