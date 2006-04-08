@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.21 2006-04-07 00:08:56 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.22 2006-04-08 02:15:40 joris Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -1106,7 +1106,7 @@ OJPEGLibjpegSessionAbort(TIFF* tif)
 {
 	OJPEGState* sp=(OJPEGState*)tif->tif_data;
 	assert(sp->libjpeg_session_active!=0);
-	jpeg_abort((jpeg_common_struct*)(&(sp->libjpeg_jpeg_decompress_struct)));
+	jpeg_destroy((jpeg_common_struct*)(&(sp->libjpeg_jpeg_decompress_struct)));
 	sp->libjpeg_session_active=0;
 }
 
