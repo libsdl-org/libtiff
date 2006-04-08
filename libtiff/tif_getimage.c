@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.54 2006-04-08 02:41:30 joris Exp $ */
+/* $Id: tif_getimage.c,v 1.55 2006-04-08 03:08:56 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2441,37 +2441,37 @@ pickTileContigCase(TIFFRGBAImage* img)
 static int
 pickTileSeparateCase(TIFFRGBAImage* img)
 {
-    tileSeparateRoutine put = 0;
+	tileSeparateRoutine put = 0;
 
-    if (buildMap(img)) {
-	switch (img->photometric) {
-	case PHOTOMETRIC_RGB:
-	    switch (img->bitspersample) {
-	    case 8:
-		if (!img->Map) {
-		    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
-			put = putRGBAAseparate8bittile;
-		    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
-			put = putRGBUAseparate8bittile;
-		    else
-			put = putRGBseparate8bittile;
-		} else
-		    put = putRGBseparate8bitMaptile;
-		break;
-	    case 16:
-		put = putRGBseparate16bittile;
-		if (!img->Map) {
-		    if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
-			put = putRGBAAseparate16bittile;
-		    else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
-			put = putRGBUAseparate16bittile;
+	if (buildMap(img)) {
+		switch (img->photometric) {
+			case PHOTOMETRIC_RGB:
+				switch (img->bitspersample) {
+					case 8:
+						if (!img->Map) {
+							if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
+								put = putRGBAAseparate8bittile;
+							else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
+								put = putRGBUAseparate8bittile;
+							else
+								put = putRGBseparate8bittile;
+						} else
+							put = putRGBseparate8bitMaptile;
+						break;
+					case 16:
+						put = putRGBseparate16bittile;
+						if (!img->Map) {
+							if (img->alpha == EXTRASAMPLE_ASSOCALPHA)
+								put = putRGBAAseparate16bittile;
+							else if (img->alpha == EXTRASAMPLE_UNASSALPHA)
+								put = putRGBUAseparate16bittile;
+						}
+						break;
+				}
+				break;
 		}
-		break;
-	    }
-	    break;
 	}
-    }
-    return ((img->put.separate = put) != 0);
+	return ((img->put.separate = put) != 0);
 }
 
 /*
