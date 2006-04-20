@@ -1,4 +1,4 @@
-# $Id: SConstruct,v 1.2 2006-03-23 14:54:00 dron Exp $
+# $Id: SConstruct,v 1.3 2006-04-20 12:26:46 dron Exp $
 
 # Tag Image File Format (TIFF) Software
 #
@@ -132,6 +132,7 @@ if target_os != 'cygwin' \
 # Check for system headers
 conf.CheckCHeader('assert.h')
 conf.CheckCHeader('fcntl.h')
+conf.CheckCHeader('io.h')
 conf.CheckCHeader('limits.h')
 conf.CheckCHeader('malloc.h')
 conf.CheckCHeader('search.h')
@@ -145,6 +146,7 @@ conf.CheckFunc('memmove')
 conf.CheckFunc('memset')
 conf.CheckFunc('mmap')
 conf.CheckFunc('pow')
+conf.CheckFunc('setmode')
 conf.CheckFunc('sqrt')
 conf.CheckFunc('strchr')
 conf.CheckFunc('strrchr')
