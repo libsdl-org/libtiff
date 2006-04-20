@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.14 2006-01-11 17:03:43 fwarmerdam Exp $ */
+/* $Id: ras2tiff.c,v 1.15 2006-04-20 12:36:23 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -44,10 +44,6 @@
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
-#ifndef BINMODE
-#define	BINMODE
-#endif
-
 static	uint16 compression = (uint16) -1;
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
 static	int quality = 75;		/* JPEG quality */
@@ -87,7 +83,7 @@ main(int argc, char* argv[])
 		}
 	if (argc - optind != 2)
 		usage();
-	in = fopen(argv[optind], "r" BINMODE);
+	in = fopen(argv[optind], "rb");
 	if (in == NULL) {
 		fprintf(stderr, "%s: Can not open.\n", argv[optind]);
 		return (-1);

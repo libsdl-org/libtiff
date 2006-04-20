@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.31 2006-04-20 12:04:35 dron Exp $
+/* $Id: tiff2pdf.c,v 1.32 2006-04-20 12:36:23 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -36,6 +36,14 @@
 
 #if HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
+#endif
+
+#ifdef HAVE_IO_H
+# include <io.h>
 #endif
 
 #ifndef NULL
@@ -696,6 +704,9 @@ int main(int argc, char** argv){
 #if !defined(_WIN32) || defined(AVOID_WIN32_FILEIO)
 		close(output->tif_fd);
 		output->tif_fd=(int)fileno(stdout);
+# if defined(HAVE_SETMODE) && defined(O_BINARY)
+		setmode(fileno(stdout), O_BINARY);
+# endif
 #else
 		CloseHandle((HANDLE) output->tif_fd);
 		output->tif_fd=(int)GetStdHandle(STD_OUTPUT_HANDLE);

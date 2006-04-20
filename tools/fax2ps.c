@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.21 2006-03-21 16:37:51 dron Exp $" */
+/* $Id: fax2ps.c,v 1.22 2006-04-20 12:36:23 dron Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -33,6 +33,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
 #endif
 
 #ifdef HAVE_IO_H
@@ -380,6 +384,9 @@ main(int argc, char** argv)
 	    fclose(fd);
 	    exit(-2);
 	}
+#if defined(HAVE_SETMODE) && defined(O_BINARY)
+	setmode(fileno(stdin), O_BINARY);
+#endif
 	while ((n = read(fileno(stdin), buf, sizeof (buf))) > 0)
 	    write(fileno(fd), buf, n);
 	lseek(fileno(fd), 0, SEEK_SET);

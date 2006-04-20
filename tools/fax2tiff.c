@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.18 2006-03-21 16:37:51 dron Exp $ */
+/* $Id: fax2tiff.c,v 1.19 2006-04-20 12:36:23 dron Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -45,10 +45,6 @@
 #endif
 
 #include "tiffiop.h"
-
-#ifndef BINMODE
-# define	BINMODE
-#endif
 
 #ifndef EXIT_SUCCESS
 # define EXIT_SUCCESS	0
@@ -258,7 +254,7 @@ main(int argc, char* argv[])
 	else if (compression_in == COMPRESSION_CCITTFAX4)
 		TIFFSetField(faxTIFF, TIFFTAG_GROUP4OPTIONS, group4options_in);
 	for (pn = 0; optind < argc; pn++, optind++) {
-		in = fopen(argv[optind], "r" BINMODE);
+		in = fopen(argv[optind], "rb");
 		if (in == NULL) {
 			fprintf(stderr,
 			    "%s: %s: Can not open\n", argv[0], argv[optind]);
