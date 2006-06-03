@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.23 2006-04-08 22:52:49 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.24 2006-06-03 15:28:33 bfriesen Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -146,7 +146,7 @@
  * 	absolutely no effect. That is why most people insist the EGYPTIANWALK is a bit silly.
  */
 
-/* define LIBJPEG_ENCAP_EXTERNAL */
+/* #define LIBJPEG_ENCAP_EXTERNAL */
 #define SETJMP(jbuf) setjmp(jbuf)
 #define LONGJMP(jbuf,code) longjmp(jbuf,code)
 #define JMP_BUF jmp_buf
