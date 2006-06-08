@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.12 2005-12-29 00:15:57 bfriesen Exp $ */
+/* $Id: tiffcmp.c,v 1.13 2006-06-08 11:52:27 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
@@ -383,7 +384,7 @@ ContigCompare(int sample, uint32 row,
 			int	s;
 
 			for(s = 0; s < samples_to_test; s++) {
-				if (*pix1 != *pix2) {
+				if (fabs(*pix1 - *pix2) < 0.000000000001) {
 					PrintFloatDiff(row, sample, pix,
 						       *pix1, *pix2);
 				}
