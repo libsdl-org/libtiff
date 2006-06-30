@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.54 2006-04-13 03:25:53 joris Exp $ */
+/* $Id: tiffio.h,v 1.55 2006-06-30 19:08:03 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -96,10 +96,6 @@ typedef	HFILE thandle_t;	/* client data handle */
 #else
 typedef	void* thandle_t;	/* client data handle */
 #endif /* USE_WIN32_FILEIO */
-
-#ifndef NULL
-# define NULL	(void *)0
-#endif
 
 /*
  * Flags to pass to TIFFPrintDirectory to control
