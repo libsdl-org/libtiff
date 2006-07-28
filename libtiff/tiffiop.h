@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.49 2006-07-28 09:50:14 dron Exp $ */
+/* $Id: tiffiop.h,v 1.50 2006-07-28 09:57:51 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -229,7 +229,7 @@ struct tiff {
 
 /* NB: the uint32 casts are to silence certain ANSI-C compilers */
 #define TIFFhowmany(x, y) ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y)))
-#define TIFFhowmany8(x) (((x)&0x07) ? 1 : (uint32)(x)>>3)
+#define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
 #define	TIFFroundup(x, y) (TIFFhowmany(x,y)*(y))
 
 #define TIFFmax(A,B) ((A)>(B)?(A):(B))
