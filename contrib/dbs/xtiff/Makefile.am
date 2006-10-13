@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.2 2006-03-23 14:54:01 dron Exp $
+# $Id: Makefile.am,v 1.3 2006-10-13 10:16:22 dron Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -25,5 +25,19 @@
 
 # Process this file with automake to produce Makefile.in.
 
-EXTRA_DIST = Imakefile README patchlevel.h xtiff.c xtifficon.h
+LIBTIFF = $(top_builddir)/libtiff/libtiff.la
+
+EXTRA_DIST = README
+
+noinst_PROGRAMS =
+
+if HAVE_XAW
+noinst_PROGRAMS += xtiff
+endif
+
+xtiff_SOURCES = patchlevel.h xtiff.c xtifficon.h
+xtiff_CFLAGS = $(CFLAGS) $(XAW_CFLAGS) $(AM_CFLAGS)
+xtiff_LDADD = $(LIBTIFF) $(X_LIBS) $(XAW_LIBS)
+
+INCLUDES = -I$(top_srcdir)/libtiff
 
