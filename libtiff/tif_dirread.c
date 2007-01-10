@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.88 2006-10-13 15:06:52 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.89 2007-01-10 16:59:53 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1888,11 +1888,10 @@ TIFFFetchRefBlackWhite(TIFF* tif, TIFFDirEntry* dir)
 }
 
 /*
- * Replace a single strip (tile) of uncompressed data by
- * multiple strips (tiles), each approximately 8Kbytes.
- * This is useful for dealing with large images or
- * for dealing with machines with a limited amount
- * memory.
+ * Replace a single strip (tile) of uncompressed data by multiple strips
+ * (tiles), each approximately STRIP_SIZE_DEFAULT bytes. This is useful for
+ * dealing with large images or for dealing with machines with a limited
+ * amount memory.
  */
 static void
 ChopUpSingleUncompressedStrip(TIFF* tif)
