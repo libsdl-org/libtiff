@@ -1,4 +1,4 @@
-/* $Id: mkspans.c,v 1.2 2004-09-14 05:45:46 dron Exp $ */
+/* $Id: mkspans.c,v 1.3 2007-02-21 14:20:32 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -24,7 +24,8 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tiffcomp.h"
+#include <string.h>
+#include <stdio.h>
 
 /*
  * Hack program to construct tables used to find
@@ -35,8 +36,8 @@ dumparray(name, runs)
 	char *name;
 	unsigned char runs[256];
 {
-	register int i;
-	register char *sep;
+	int i;
+	char *sep;
 	printf("static unsigned char %s[256] = {\n", name);
 	sep = "    ";
 	for (i = 0; i < 256; i++) {
