@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.89 2007-01-10 16:59:53 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.90 2007-02-22 11:33:44 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1933,8 +1933,8 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 				"for chopped \"StripOffsets\" array");
 	if (newcounts == NULL || newoffsets == NULL) {
 	        /*
-		 * Unable to allocate new strip information, give
-		 * up and use the original one strip information.
+		 * Unable to allocate new strip information, give up and use
+		 * the original one strip information.
 		 */
 		if (newcounts != NULL)
 			_TIFFfree(newcounts);
@@ -1947,7 +1947,7 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 	 * that reflect the broken-up format.
 	 */
 	for (strip = 0; strip < nstrips; strip++) {
-		if (stripbytes > (tsize_t) bytecount)
+		if ((uint32)stripbytes > bytecount)
 			stripbytes = bytecount;
 		newcounts[strip] = stripbytes;
 		newoffsets[strip] = offset;
