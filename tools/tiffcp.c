@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.36 2006-06-07 16:34:32 dron Exp $ */
+/* $Id: tiffcp.c,v 1.37 2007-02-24 15:57:01 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -647,7 +647,7 @@ tiffcp(TIFF* in, TIFF* out)
 				rowsperstrip =
 					TIFFDefaultStripSize(out, rowsperstrip);
 			}
-			if (rowsperstrip > length)
+			if (rowsperstrip > length && rowsperstrip != (uint32)-1)
 				rowsperstrip = length;
 		}
 		else if (rowsperstrip == (uint32) -1)

@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.2 2007-02-24 15:27:15 dron Exp $ */
+/* $Id: tiffcrop.c,v 1.3 2007-02-24 15:57:01 dron Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include cropping of selections
  *
@@ -927,7 +927,7 @@ tiffcp(TIFF* in, TIFF* out)
 				rowsperstrip =
 					TIFFDefaultStripSize(out, rowsperstrip);
 			}
-			if (rowsperstrip > length)
+			if (rowsperstrip > length && rowsperstrip != (uint32)-1)
 				rowsperstrip = length;
 		}
 		else if (rowsperstrip == (uint32) -1)
