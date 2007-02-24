@@ -1,4 +1,4 @@
-# $Id: SConstruct,v 1.3 2006-04-20 12:26:46 dron Exp $
+# $Id: SConstruct,v 1.4 2007-02-24 15:03:47 dron Exp $
 
 # Tag Image File Format (TIFF) Software
 #
@@ -76,7 +76,7 @@ Export([ 'env', 'idir_prefix', 'idir_lib', 'idir_bin', 'idir_inc', 'idir_doc' ])
 
 # Now proceed to system feature checks
 target_cpu, target_vendor, target_kernel, target_os = \
-    os.popen("./config.guess").readlines()[0].split("-")
+    os.popen("./config/config.guess").readlines()[0].split("-")
 
 def Define(context, key, have):
     import SCons.Conftest

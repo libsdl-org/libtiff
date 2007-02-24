@@ -1,6 +1,8 @@
+# $Id: Makefile.am,v 1.1 2007-02-24 15:03:49 dron Exp $
+#
 # Tag Image File Format (TIFF) Software
 #
-# Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
+# Copyright (C) 2007, Andrey Kiselev <dron@ak4719.spb.edu>
 #
 # Permission to use, copy, modify, distribute, and sell this software and 
 # its documentation for any purpose is hereby granted without fee, provided
@@ -23,34 +25,7 @@
 
 # Process this file with automake to produce Makefile.in.
 
-docdir = $(LIBTIFF_DOCDIR)
+EXTRA_DIST = README
 
-AUTOMAKE_OPTIONS = dist-zip foreign
-ACLOCAL_AMFLAGS = -I ./m4
-
-docfiles = \
-	COPYRIGHT \
-	ChangeLog \
-	README \
-	README.vms \
-	RELEASE-DATE \
-	TODO \
-	VERSION
-
-EXTRA_DIST = \
-	HOWTO-RELEASE \
-	Makefile.vc \
-	SConstruct \
-	autogen.sh \
-	configure.com \
-	nmake.opt
-
-dist_doc_DATA = $(docfiles)
-
-SUBDIRS = port libtiff tools build contrib test man html
-
-release:
-	(rm -f RELEASE-DATE && echo $(LIBTIFF_RELEASE_DATE) > RELEASE-DATE)
-	(rm -f VERSION && echo $(LIBTIFF_VERSION) > VERSION)
-	(rm -f ./libtiff/tiffvers.h && sed 's,LIBTIFF_VERSION,$(LIBTIFF_VERSION),;s,LIBTIFF_RELEASE_DATE,$(LIBTIFF_RELEASE_DATE),' ./libtiff/tiffvers.h.in > ./libtiff/tiffvers.h)
+SUBDIRS = 
 
