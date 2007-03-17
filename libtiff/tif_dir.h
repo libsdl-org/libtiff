@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.30 2006-10-12 14:49:09 dron Exp $ */
+/* $Id: tif_dir.h,v 1.31 2007-03-17 04:41:29 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -156,11 +156,11 @@ typedef	struct {
 #define	FIELD_LAST			(32*FIELD_SETLONGS-1)
 
 #define	TIFFExtractData(tif, type, v) \
-    ((uint32) ((tif)->tif_header.tiff_magic == TIFF_BIGENDIAN ? \
-        ((v) >> (tif)->tif_typeshift[type]) & (tif)->tif_typemask[type] : \
+    ((uint32) ((tif)->tif_header.common.tiff_magic == TIFF_BIGENDIAN ? \
+	((v) >> (tif)->tif_typeshift[type]) & (tif)->tif_typemask[type] : \
 	(v) & (tif)->tif_typemask[type]))
 #define	TIFFInsertData(tif, type, v) \
-    ((uint32) ((tif)->tif_header.tiff_magic == TIFF_BIGENDIAN ? \
+    ((uint32) ((tif)->tif_header.common.tiff_magic == TIFF_BIGENDIAN ? \
         ((v) & (tif)->tif_typemask[type]) << (tif)->tif_typeshift[type] : \
 	(v) & (tif)->tif_typemask[type]))
 

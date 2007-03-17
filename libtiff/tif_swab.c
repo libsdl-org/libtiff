@@ -1,4 +1,4 @@
-/* $Id: tif_swab.c,v 1.4 2005-04-13 14:06:21 dron Exp $ */
+/* $Id: tif_swab.c,v 1.5 2007-03-17 04:41:29 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -51,6 +51,20 @@ TIFFSwabLong(uint32* lp)
 
 	t = cp[3]; cp[3] = cp[0]; cp[0] = t;
 	t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+}
+#endif
+
+#ifndef TIFFSwabLong8
+void
+TIFFSwabLong8(uint64* lp)
+{
+	register unsigned char* cp = (unsigned char*) lp;
+	unsigned char t;
+
+	t = cp[7]; cp[7] = cp[0]; cp[0] = t;
+	t = cp[6]; cp[6] = cp[1]; cp[1] = t;
+	t = cp[5]; cp[5] = cp[2]; cp[2] = t;
+	t = cp[4]; cp[4] = cp[3]; cp[3] = t;
 }
 #endif
 
