@@ -1,10 +1,10 @@
-/* $Id: dummy.c,v 1.2 2005-07-07 15:21:52 dron Exp $ */
+/* $Id: dummy.c,v 1.3 2007-03-21 14:54:16 dron Exp $ */
 
 /*
  * Dummy function, just to be ensure that the library always will be created.
  */
 
-static void
+void
 libport_dummy_function()
 {
         return;
