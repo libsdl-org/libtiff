@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.31 2007-03-17 04:41:29 joris Exp $ */
+/* $Id: tif_dir.h,v 1.32 2007-03-22 02:08:21 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,7 +33,7 @@
 /*
  * Internal format of a TIFF directory entry.
  */
-typedef	struct {
+typedef struct {
 #define	FIELD_SETLONGS	4
 	/* bit vector of fields that are set */
 	unsigned long	td_fieldsset[FIELD_SETLONGS];
@@ -66,8 +66,8 @@ typedef	struct {
 	 * number of striles */
 	tstrile_t td_stripsperimage;
 	tstrile_t td_nstrips;            /* size of offset & bytecount arrays */
-	toff_t* td_stripoffset;
-	toff_t* td_stripbytecount;	 /* FIXME: it should be tsize_t array */
+	uint64* td_stripoffset;
+	uint64* td_stripbytecount;
 	int     td_stripbytecountsorted; /* is the bytecount array sorted ascending? */
 	uint16  td_nsubifd;
 	uint32* td_subifd;
