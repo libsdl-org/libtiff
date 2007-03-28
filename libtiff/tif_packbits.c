@@ -1,4 +1,4 @@
-/* $Id: tif_packbits.c,v 1.13 2006-02-07 11:03:29 dron Exp $ */
+/* $Id: tif_packbits.c,v 1.14 2007-03-28 02:50:41 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -46,7 +46,7 @@ PackBitsPreEncode(TIFF* tif, tsample_t s)
 	if (isTiled(tif))
 		*(tsize_t*)tif->tif_data = TIFFTileRowSize(tif);
 	else
-		*(tsize_t*)tif->tif_data = TIFFScanlineSize(tif);
+		*(tsize_t*)tif->tif_data = TIFFScanlineSize(tif);  ddd
 	return (1);
 }
 

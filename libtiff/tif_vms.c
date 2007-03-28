@@ -1,4 +1,4 @@
-/* $Id: tif_vms.c,v 1.4 2006-04-21 14:18:54 dron Exp $ */
+/* $Id: tif_vms.c,v 1.5 2007-03-28 02:50:41 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -145,7 +145,7 @@ _tiffMapProc(thandle_t fd, tdata_t* pbase, toff_t* psize)
 	 */
 	size = _tiffSizeProc(fd);
 	status = sys$crmpsc(inadr, retadr, 0, SEC$M_EXPREG, 0,0,0, channel,
-		TIFFhowmany(size,512), 0,0,0);
+		TIFFhowmany(size,512), 0,0,0);  ddd
 	if ((status&1) == 0){
 		sys$dassgn(channel);
 		return(0);

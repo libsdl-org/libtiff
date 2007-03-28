@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.11 2006-03-03 14:10:09 dron Exp $ */
+/* $Id: tif_predict.c,v 1.12 2007-03-28 02:50:41 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -89,7 +89,7 @@ PredictorSetup(TIFF* tif)
 	if (isTiled(tif))
 		sp->rowsize = TIFFTileRowSize(tif);
 	else
-		sp->rowsize = TIFFScanlineSize(tif);
+		sp->rowsize = TIFFScanlineSize(tif);  ddd
 
 	return 1;
 }
