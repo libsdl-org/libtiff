@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.65 2007-03-31 01:04:52 joris Exp $ */
+/* $Id: tif_getimage.c,v 1.66 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler

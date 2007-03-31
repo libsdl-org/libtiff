@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.46 2007-03-31 01:04:52 joris Exp $ */
+/* $Id: tif_fax3.c,v 1.47 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -780,7 +780,7 @@ static	int32 find1span(unsigned char*, int32, int32);
  * table.  The ``base'' of the bit string is supplied
  * along with the start+end bit indices.
  */
-static inline int32
+inline static int32
 find0span(unsigned char* bp, int32 bs, int32 be)
 {
 	int32 bits = be - bs;
@@ -839,7 +839,7 @@ find0span(unsigned char* bp, int32 bs, int32 be)
 	return (span);
 }
 
-static inline int32
+inline static int32
 find1span(unsigned char* bp, int32 bs, int32 be)
 {
 	int32 bits = be - bs;

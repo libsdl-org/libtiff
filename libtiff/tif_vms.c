@@ -1,4 +1,4 @@
-/* $Id: tif_vms.c,v 1.6 2007-03-31 01:04:53 joris Exp $ */
+/* $Id: tif_vms.c,v 1.7 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

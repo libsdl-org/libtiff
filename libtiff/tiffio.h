@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.60 2007-03-31 01:04:53 joris Exp $ */
+/* $Id: tiffio.h,v 1.61 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -458,10 +458,10 @@ extern uint64 TIFFReadEncodedTile(TIFF* tif, uint32 tile, void* buf, uint64 size
 extern uint64 TIFFReadRawTile(TIFF* tif, uint32 tile, void* buf, uint64 size);
 extern uint64 TIFFWriteEncodedStrip(TIFF* tif, uint32 strip, void* data, uint64 cc);
 extern uint64 TIFFWriteRawStrip(TIFF* tif, uint32 strip, void* data, uint64 cc);
-extern tsize_t TIFFWriteEncodedTile(TIFF*, ttile_t, tdata_t, tsize_t);
-extern tsize_t TIFFWriteRawTile(TIFF*, ttile_t, tdata_t, tsize_t);
+extern uint64 TIFFWriteEncodedTile(TIFF* tif, uint32 tile, void* data, uint64 cc);
+extern uint64 TIFFWriteRawTile(TIFF* tif, uint32 tile, void* data, uint64 cc);
 extern int TIFFDataWidth(TIFFDataType);    /* table of tag datatype widths */
-extern void TIFFSetWriteOffset(TIFF*, toff_t);
+extern void TIFFSetWriteOffset(TIFF* tif, uint64 off);
 extern void TIFFSwabShort(uint16*);
 extern void TIFFSwabLong(uint32*);
 extern void TIFFSwabLong8(uint64*);

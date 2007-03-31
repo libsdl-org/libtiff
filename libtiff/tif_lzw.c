@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.30 2007-03-31 01:04:52 joris Exp $ */
+/* $Id: tif_lzw.c,v 1.31 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.68 2007-03-31 01:04:52 joris Exp $ */
+/* $Id: tif_dirinfo.c,v 1.69 2007-03-31 01:41:10 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

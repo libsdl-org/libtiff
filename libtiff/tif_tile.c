@@ -1,4 +1,4 @@
-/* $Id: tif_tile.c,v 1.14 2007-03-31 01:04:53 joris Exp $ */
+/* $Id: tif_tile.c,v 1.15 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler

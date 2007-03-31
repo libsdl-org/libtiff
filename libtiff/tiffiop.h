@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.54 2007-03-31 01:04:53 joris Exp $ */
+/* $Id: tiffiop.h,v 1.55 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -138,7 +138,7 @@ struct tiff {
 	uint32          tif_row;	/* current scanline */
 	tdir_t          tif_curdir;	/* current directory (index) */
 	uint32          tif_curstrip;	/* current strip for read/write */
-	toff_t		tif_curoff;	/* current offset for read/write */
+	uint64          tif_curoff;	/* current offset for read/write */
 	toff_t		tif_dataoff;	/* current offset for writing dir */
 /* SubIFD support */
 	uint16		tif_nsubifd;	/* remaining subifds to write */

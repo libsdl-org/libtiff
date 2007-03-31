@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.12 2007-03-31 01:04:53 joris Exp $ */
+/* $Id: tif_zip.c,v 1.13 2007-03-31 01:41:11 joris Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
