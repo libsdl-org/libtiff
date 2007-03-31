@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.39 2007-03-22 02:08:21 joris Exp $ */
+/* $Id: tif_dirwrite.c,v 1.40 2007-03-31 01:04:52 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -223,8 +223,8 @@ _TIFFWriteDirectory(TIFF* tif, int done)
 			
 			dir->tdir_tag = (uint16) tag;
 			dir->tdir_type = (uint16) TIFF_LONG;
-			dir->tdir_count = (uint32) td->td_nstrips;
-			if (!TIFFWriteLongArray(tif, dir, td->td_stripoffset))
+			dir->tdir_count = (uint32) td->td_nstrips;  ddd
+			if (!TIFFWriteLongArray(tif, dir, td->td_stripoffset))  ddd
 				goto bad;
 			break;
 		case FIELD_STRIPBYTECOUNTS:
@@ -241,7 +241,7 @@ _TIFFWriteDirectory(TIFF* tif, int done)
 			
 			dir->tdir_tag = (uint16) tag;
 			dir->tdir_type = (uint16) TIFF_LONG;
-			dir->tdir_count = (uint32) td->td_nstrips;
+			dir->tdir_count = (uint32) td->td_nstrips;  ddd
 			if (!TIFFWriteLongArray(tif, dir, td->td_stripbytecount))
 				goto bad;
 			break;
@@ -374,8 +374,8 @@ _TIFFWriteDirectory(TIFF* tif, int done)
 		 * byte-swap indirect data.
 		 */
 		for (dir = (TIFFDirEntry*) data; dircount; dir++, dircount--) {
-			TIFFSwabArrayOfShort(&dir->tdir_tag, 2);
-			TIFFSwabArrayOfLong(&dir->tdir_count, 2);
+			TIFFSwabArrayOfShort(&dir->tdir_tag, 2);  ddd
+			TIFFSwabArrayOfLong(&dir->tdir_count, 2);  ddd
 		}
 		dircount = (uint16) nfields;
 		TIFFSwabShort(&dircount);
@@ -535,7 +535,7 @@ _TIFFWriteCustomDirectory(TIFF* tif, toff_t *pdiroff)
 		 */
 		for (dir = (TIFFDirEntry*) data; dircount; dir++, dircount--) {
 			TIFFSwabArrayOfShort(&dir->tdir_tag, 2);
-			TIFFSwabArrayOfLong(&dir->tdir_count, 2);
+			TIFFSwabArrayOfLong(&dir->tdir_count, 2);  ddd
 		}
 		dircount = (uint16) nfields;
 		TIFFSwabShort(&dircount);
@@ -1201,14 +1201,14 @@ TIFFWriteData(TIFF* tif, TIFFDirEntry* dir, char* cp)
 		case TIFF_LONG:
 		case TIFF_SLONG:
 		case TIFF_FLOAT:
-			TIFFSwabArrayOfLong((uint32*) cp, dir->tdir_count);
+			TIFFSwabArrayOfLong((uint32*) cp, dir->tdir_count);  ddd
 			break;
 		case TIFF_RATIONAL:
 		case TIFF_SRATIONAL:
-			TIFFSwabArrayOfLong((uint32*) cp, 2*dir->tdir_count);
+			TIFFSwabArrayOfLong((uint32*) cp, 2*dir->tdir_count);  ddd
 			break;
 		case TIFF_DOUBLE:
-			TIFFSwabArrayOfDouble((double*) cp, dir->tdir_count);
+			TIFFSwabArrayOfDouble((double*) cp, dir->tdir_count);  ddd
 			break;
 		}
 	}

@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.67 2007-03-28 02:50:41 joris Exp $ */
+/* $Id: tif_dirinfo.c,v 1.68 2007-03-31 01:04:52 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -692,7 +692,7 @@ _TIFFDataSize(TIFFDataType type)
 TIFFDataType
 _TIFFSampleToTagType(TIFF* tif)
 {
-	uint32 bps = TIFFhowmany8(tif->tif_dir.td_bitspersample);  ddd
+	uint32 bps = TIFFhowmany8_32(tif->tif_dir.td_bitspersample);
 
 	switch (tif->tif_dir.td_sampleformat) {
 	case SAMPLEFORMAT_IEEEFP:
