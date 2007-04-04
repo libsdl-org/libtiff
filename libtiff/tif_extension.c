@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_extension.c,v 1.4 2004-10-02 13:29:41 dron Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_extension.c,v 1.5 2007-04-04 04:16:07 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -41,13 +41,13 @@ int TIFFGetTagListCount( TIFF *tif )
     return td->td_customValueCount;
 }
 
-ttag_t TIFFGetTagListEntry( TIFF *tif, int tag_index )
+uint32 TIFFGetTagListEntry( TIFF *tif, int tag_index )
 
 {
     TIFFDirectory* td = &tif->tif_dir;
 
     if( tag_index < 0 || tag_index >= td->td_customValueCount )
-        return (ttag_t) -1;
+        return (uint32)(-1);
     else
         return td->td_customValues[tag_index].info->field_tag;
 }

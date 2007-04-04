@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_apple.c,v 1.3 2005-12-21 12:23:13 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_apple.c,v 1.4 2007-04-04 04:16:07 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -139,7 +139,7 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 {
 	TIFF* tif;
 
-	tif = TIFFClientOpen(name, mode, (thandle_t) fd,
+	tif = TIFFClientOpen(name, mode, (thandle_t) fd,  ddd
 	    _tiffReadProc, _tiffWriteProc, _tiffSeekProc, _tiffCloseProc,
 	    _tiffSizeProc, _tiffMapProc, _tiffUnmapProc);
 	if (tif)

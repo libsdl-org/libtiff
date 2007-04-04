@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.12 2006-03-21 16:37:51 dron Exp $ */
+/* $Id: tif_unix.c,v 1.13 2007-04-04 04:16:08 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -136,7 +136,7 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 {
 	TIFF* tif;
 
-	tif = TIFFClientOpen(name, mode,
+	tif = TIFFClientOpen(name, mode,  ddd
 	    (thandle_t) fd,
 	    _tiffReadProc, _tiffWriteProc,
 	    _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,

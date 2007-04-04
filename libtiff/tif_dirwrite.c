@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.41 2007-03-31 01:41:11 joris Exp $ */
+/* $Id: tif_dirwrite.c,v 1.42 2007-04-04 04:16:07 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -182,7 +182,7 @@ _TIFFWriteDirectory(TIFF* tif, int done)
 		nfields--;
 		dirsize -= sizeof (TIFFDirEntry);
 	}								/*XXX*/
-	for (fi = 0, nfi = tif->tif_nfields; nfi > 0; nfi--, fi++) {
+	for (fi = 0, nfi = tif->tif_nfields; nfi > 0; nfi--, fi++) {  ddd
 		const TIFFFieldInfo* fip = tif->tif_fieldinfo[fi];
 
 		/*
@@ -492,7 +492,7 @@ _TIFFWriteCustomDirectory(TIFF* tif, toff_t *pdiroff)
 	 */
 	_TIFFmemcpy(fields, td->td_fieldsset, sizeof (fields));
 
-	for (fi = 0, nfi = tif->tif_nfields; nfi > 0; nfi--, fi++) {
+	for (fi = 0, nfi = tif->tif_nfields; nfi > 0; nfi--, fi++) {  ddd
 		const TIFFFieldInfo* fip = tif->tif_fieldinfo[fi];
 
 		/*
@@ -534,7 +534,7 @@ _TIFFWriteCustomDirectory(TIFF* tif, toff_t *pdiroff)
 		 * byte-swap indirect data.
 		 */
 		for (dir = (TIFFDirEntry*) data; dircount; dir++, dircount--) {
-			TIFFSwabArrayOfShort(&dir->tdir_tag, 2);
+			TIFFSwabArrayOfShort(&dir->tdir_tag, 2);  ddd
 			TIFFSwabArrayOfLong(&dir->tdir_count, 2);  ddd
 		}
 		dircount = (uint16) nfields;
@@ -1196,7 +1196,7 @@ TIFFWriteData(TIFF* tif, TIFFDirEntry* dir, char* cp)
 		switch (dir->tdir_type) {
 		case TIFF_SHORT:
 		case TIFF_SSHORT:
-			TIFFSwabArrayOfShort((uint16*) cp, dir->tdir_count);
+			TIFFSwabArrayOfShort((uint16*) cp, dir->tdir_count);  ddd
 			break;
 		case TIFF_LONG:
 		case TIFF_SLONG:

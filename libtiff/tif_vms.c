@@ -1,4 +1,4 @@
-/* $Id: tif_vms.c,v 1.7 2007-03-31 01:41:11 joris Exp $ */
+/* $Id: tif_vms.c,v 1.8 2007-04-04 04:16:08 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -213,7 +213,7 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 {
 	TIFF* tif;
 
-	tif = TIFFClientOpen(name, mode,
+	tif = TIFFClientOpen(name, mode,  ddd
 	    (thandle_t) fd,
 	    _tiffReadProc, _tiffWriteProc, _tiffSeekProc, _tiffCloseProc,
 	    _tiffSizeProc, _tiffMapProc, _tiffUnmapProc);

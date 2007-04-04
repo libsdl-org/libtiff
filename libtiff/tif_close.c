@@ -1,4 +1,4 @@
-/* $Id: tif_close.c,v 1.10 2006-03-25 03:09:24 joris Exp $ */
+/* $Id: tif_close.c,v 1.11 2007-04-04 04:16:07 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -74,7 +74,7 @@ TIFFCleanup(TIFF* tif)
 	/* Clean up custom fields */
 	if (tif->tif_nfields > 0)
 	{
-		size_t  i;
+		uint32 i;
 
 	    for (i = 0; i < tif->tif_nfields; i++) 
 	    {

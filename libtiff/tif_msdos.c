@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_msdos.c,v 1.3 2006-07-25 18:26:33 fwarmerdam Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_msdos.c,v 1.4 2007-04-04 04:16:07 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -85,7 +85,7 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 {
 	TIFF* tif;
 
-	tif = TIFFClientOpen(name, mode,
+	tif = TIFFClientOpen(name, mode,  ddd
 	    (void*) fd,
 	    _tiffReadProc, _tiffWriteProc, _tiffSeekProc, _tiffCloseProc,
 	    _tiffSizeProc, _tiffMapProc, _tiffUnmapProc);

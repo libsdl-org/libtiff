@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.47 2007-03-31 01:41:11 joris Exp $ */
+/* $Id: tif_fax3.c,v 1.48 2007-04-04 04:16:07 joris Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -497,7 +497,7 @@ Fax3SetupState(TIFF* tif)
 
 	nruns = needsRefLine ? 2*TIFFroundup(rowpixels,32) : rowpixels;  ddd
 	nruns += 3;
-	dsp->runs = (uint32*) _TIFFCheckMalloc(tif, 2*nruns, sizeof (uint32),
+	dsp->runs = (uint32*) _TIFFCheckMalloc(tif, 2*nruns, sizeof (uint32),  ddd
 					  "for Group 3/4 run arrays");
 	if (dsp->runs == NULL)
 		return (0);
