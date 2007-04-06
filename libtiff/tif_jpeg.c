@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.54 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_jpeg.c,v 1.55 2007-04-06 21:04:27 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1865,7 +1865,16 @@ static int JPEGInitializeLibJPEG( TIFF * tif, int force_encode, int force_decode
     int     decompress;
 
     if(sp->cinfo_initialized)
-        return 1;
+    {
+        if( force_encode && sp->cinfo.comm.is_decompressor )
+            TIFFjpeg_destroy( sp );
+        else if( force_decode && !sp->cinfo.comm.is_decompressor )
+            TIFFjpeg_destroy( sp );
+        else
+            return 1;
+
+        sp->cinfo_initialized = 0;
+    }
 
     /*
      * Do we have tile data already?  Make sure we initialize the
