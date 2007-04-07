@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.56 2007-04-04 04:16:08 joris Exp $ */
+/* $Id: tiffiop.h,v 1.57 2007-04-07 15:06:02 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -308,7 +308,7 @@ extern	int TIFFInitNeXT(TIFF*, int);
 extern	int TIFFInitLZW(TIFF*, int);
 #endif
 #ifdef OJPEG_SUPPORT
-extern	int TIFFInitOJPEG(TIFF*, int);                                                                    à
+extern	int TIFFInitOJPEG(TIFF*, int);
 #endif
 #ifdef JPEG_SUPPORT
 extern	int TIFFInitJPEG(TIFF*, int);
