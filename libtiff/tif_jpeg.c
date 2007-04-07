@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.1 2007-04-06 21:01:22 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.2 2007-04-07 14:58:30 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1931,6 +1931,16 @@ TIFFInitJPEG(TIFF* tif, int scheme)
 	assert(scheme == COMPRESSION_JPEG);
 
 	/*
+	 * Merge codec-specific tag information.
+	 */
+	if (!_TIFFMergeFieldInfo(tif, jpegFieldInfo, N(jpegFieldInfo))) {
+		TIFFErrorExt(tif->tif_clientdata,
+			     "TIFFInitJPEG",
+			     "Merging JPEG codec-specific tags failed");
+		return 0;
+	}
+
+	/*
 	 * Allocate state block so tag methods have storage to record values.
 	 */
 	tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (JPEGState));
@@ -1938,18 +1948,16 @@ TIFFInitJPEG(TIFF* tif, int scheme)
 	if (tif->tif_data == NULL) {
 		TIFFErrorExt(tif->tif_clientdata,
 			     "TIFFInitJPEG", "No space for JPEG state block");
-		return (0);
+		return 0;
 	}
-        _TIFFmemset( tif->tif_data, 0, sizeof(JPEGState));
+        _TIFFmemset(tif->tif_data, 0, sizeof(JPEGState));
 
 	sp = JState(tif);
 	sp->tif = tif;				/* back link */
 
 	/*
-	 * Merge codec-specific tag information and override parent get/set
-	 * field methods.
+	 * Override parent get/set field methods.
 	 */
-	_TIFFMergeFieldInfo(tif, jpegFieldInfo, N(jpegFieldInfo));
 	sp->vgetparent = tif->tif_tagmethods.vgetfield;
 	tif->tif_tagmethods.vgetfield = JPEGVGetField; /* hook for codec tags */
 	sp->vsetparent = tif->tif_tagmethods.vsetfield;
