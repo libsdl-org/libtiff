@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.26 2007-03-31 01:41:11 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.27 2007-04-07 15:14:30 dron Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -393,7 +393,18 @@ TIFFInitOJPEG(TIFF* tif, int scheme)
 {
 	static const char module[]="TIFFInitOJPEG";
 	OJPEGState* sp;
+
 	assert(scheme==COMPRESSION_OJPEG);
+
+        /*
+	 * Merge codec-specific tag information.
+	 */
+	if (!_TIFFMergeFieldInfo(tif,ojpeg_field_info,FIELD_OJPEG_COUNT)) {
+		TIFFErrorExt(tif->tif_clientdata, module,
+			     "Merging Old JPEG codec-specific tags failed");
+		return 0;
+	}
+
 	/* state block */
 	sp=_TIFFmalloc(sizeof(OJPEGState));
 	if (sp==NULL)
@@ -423,7 +434,6 @@ TIFFInitOJPEG(TIFF* tif, int scheme)
 	tif->tif_cleanup=OJPEGCleanup;
 	tif->tif_data=(tidata_t)sp;
 	/* tif tag methods */
-	_TIFFMergeFieldInfo(tif,ojpeg_field_info,FIELD_OJPEG_COUNT);
 	sp->vgetparent=tif->tif_tagmethods.vgetfield;
 	tif->tif_tagmethods.vgetfield=OJPEGVGetField;
 	sp->vsetparent=tif->tif_tagmethods.vsetfield;
