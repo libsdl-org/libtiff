@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.1 2007-04-07 14:58:30 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.2 2007-04-09 18:43:40 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -197,11 +197,11 @@ TIFFReadDirectory(TIFF* tif)
 						(TIFFDataType) dp->tdir_type),
 						1))
 					{
-					TIFFErrorExt(tif->tif_clientdata,
-						     module,
+					TIFFWarningExt(tif->tif_clientdata,
+						       module,
 			"Registering anonymous field with tag %d (0x%x) failed",
-						     dp->tdir_tag,
-						     dp->tdir_tag);
+						       dp->tdir_tag,
+						       dp->tdir_tag);
 					goto ignore;
 					}
 			fix = 0;
@@ -810,9 +810,9 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 						 (TIFFDataType) dp->tdir_type),
 						 1))
 			{
-				TIFFErrorExt(tif->tif_clientdata, module,
+				TIFFWarningExtt(tif->tif_clientdata, module,
 			"Registering anonymous field with tag %d (0x%x) failed",
-					     dp->tdir_tag, dp->tdir_tag);
+						dp->tdir_tag, dp->tdir_tag);
 				goto ignore;
 			}
 
