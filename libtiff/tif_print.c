@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.39 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_print.c,v 1.40 2007-04-10 02:56:33 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -598,7 +598,7 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		uint32 s;
 
 		fprintf(fd, "  %lu %s:\n",
-		    (long) td->td_nstrips,  ddd
+		    (long) td->td_nstrips,
 		    isTiled(tif) ? "Tiles" : "Strips");
 		for (s = 0; s < td->td_nstrips; s++)
 			fprintf(fd, "    %3lu: [%8llu, %8llu]\n",

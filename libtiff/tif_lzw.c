@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.32 2007-04-10 02:41:15 joris Exp $ */
+/* $Id: tif_lzw.c,v 1.33 2007-04-10 02:56:33 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -27,7 +27,7 @@
 #include "tiffiop.h"
 #ifdef LZW_SUPPORT
 /*
- * TIFF Library.
+ * TIFF Library.  
  * Rev 5.0 Lempel-Ziv & Welch Compression Support
  *
  * This code is derived from the compress program whose code is
