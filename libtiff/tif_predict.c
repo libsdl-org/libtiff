@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.16 2007-04-07 15:14:31 dron Exp $ */
+/* $Id: tif_predict.c,v 1.17 2007-04-11 14:28:59 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -257,6 +257,7 @@ horAcc8(TIFF* tif, uint8* cp0, tmsize_t cc)
 				cp += 4;
 			}
 		} else  {
+			cc -= stride;
 			do {
 				REPEAT4(stride, cp[stride] =
 					(char) (cp[stride] + *cp); cp++)

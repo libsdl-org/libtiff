@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.107 2007-04-09 18:03:30 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.108 2007-04-11 14:28:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -3960,10 +3960,12 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 					enum TIFFReadDirEntryErr err;
 					uint16 v;
 					err=TIFFReadDirEntryShort(tif,dp,&v);
-					assert(err==TIFFReadDirEntryErrOk);
-					ok = (fip->field_passcount ?
-					    TIFFSetField(tif, dp->tdir_tag, 1, &v)
-					    : TIFFSetField(tif, dp->tdir_tag, v));
+					if (err!=TIFFReadDirEntryErrOk)
+						ok=0;
+					else
+						ok = (fip->field_passcount ?
+						    TIFFSetField(tif, dp->tdir_tag, 1, &v)
+						    : TIFFSetField(tif, dp->tdir_tag, v));
 				}
 				break;
 			case TIFF_SSHORT:
@@ -3973,10 +3975,12 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 					enum TIFFReadDirEntryErr err;
 					uint32 v;
 					err=TIFFReadDirEntryLong(tif,dp,&v);
-					assert(err==TIFFReadDirEntryErrOk);
-					ok = (fip->field_passcount ?
-					    TIFFSetField(tif, dp->tdir_tag, 1, &v)
-					    : TIFFSetField(tif, dp->tdir_tag, v));
+					if (err!=TIFFReadDirEntryErrOk)
+						ok=0;
+					else
+						ok = (fip->field_passcount ?
+						    TIFFSetField(tif, dp->tdir_tag, 1, &v)
+						    : TIFFSetField(tif, dp->tdir_tag, v));
 				}
 				break;
 			case TIFF_SLONG:
@@ -3986,10 +3990,12 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 					enum TIFFReadDirEntryErr err;
 					uint64_new v;
 					err=TIFFReadDirEntryLong8(tif,dp,&v);
-					assert(err==TIFFReadDirEntryErrOk);
-					ok = (fip->field_passcount ?
-					    TIFFSetField(tif, dp->tdir_tag, 1, &v)
-					    : TIFFSetField(tif, dp->tdir_tag, v));
+					if (err!=TIFFReadDirEntryErrOk)
+						ok=0;
+					else
+						ok = (fip->field_passcount ?
+						    TIFFSetField(tif, dp->tdir_tag, 1, &v)
+						    : TIFFSetField(tif, dp->tdir_tag, v));
 				}
 				break;
 			case TIFF_SLONG8:
@@ -4023,18 +4029,18 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 				break;
 				#endif
 			case TIFF_DOUBLE:
-				assert(0);
-				#ifdef NDEF
 				{
+					enum TIFFReadDirEntryErr err;
 					double v;
-					ok = (TIFFFetchDoubleArray(tif, dp, &v) &&
-					    (fip->field_passcount ?
-					    TIFFSetField(tif, dp->common.tdir_tag, 1, &v)
-					    : TIFFSetField(tif, dp->common.tdir_tag, v))
-					    );
+					err=TIFFReadDirEntryDouble(tif,dp,&v);
+					if (err!=TIFFReadDirEntryErrOk)
+						ok=0;
+					else
+						ok = (fip->field_passcount ?
+						    TIFFSetField(tif, dp->tdir_tag, 1, &v)
+						    : TIFFSetField(tif, dp->tdir_tag, v));
 				}
 				break;
-				#endif
 			case TIFF_UNDEFINED:        /* bit of a cheat... */
 				assert(0);
 				#ifdef NDEF
@@ -4058,10 +4064,12 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp)
 					enum TIFFReadDirEntryErr err;
 					uint64_new v;
 					err=TIFFReadDirEntryIfd8(tif,dp,&v);
-					assert(err==TIFFReadDirEntryErrOk);
-					ok = (fip->field_passcount ?
-					    TIFFSetField(tif, dp->tdir_tag, 1, &v)
-					    : TIFFSetField(tif, dp->tdir_tag, v));
+					if (err!=TIFFReadDirEntryErrOk)
+						ok=0;
+					else
+						ok = (fip->field_passcount ?
+						    TIFFSetField(tif, dp->tdir_tag, 1, &v)
+						    : TIFFSetField(tif, dp->tdir_tag, v));
 				}
 				break;
 			default:
