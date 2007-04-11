@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.15 2007-04-10 17:36:19 joris Exp $ */
+/* $Id: tif_zip.c,v 1.16 2007-04-11 02:41:22 joris Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -87,8 +87,8 @@ static int ZIPDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s);
 static int
 ZIPSetupDecode(TIFF* tif)
 {
-	ZIPState* sp = DecoderState(tif);
 	static const char module[] = "ZIPSetupDecode";
+	ZIPState* sp = DecoderState(tif);
 
 	assert(sp != NULL);
         
