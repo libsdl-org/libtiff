@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.2 2007-04-09 18:43:40 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.3 2007-04-12 17:16:10 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -810,7 +810,7 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 						 (TIFFDataType) dp->tdir_type),
 						 1))
 			{
-				TIFFWarningExtt(tif->tif_clientdata, module,
+				TIFFWarningExt(tif->tif_clientdata, module,
 			"Registering anonymous field with tag %d (0x%x) failed",
 						dp->tdir_tag, dp->tdir_tag);
 				goto ignore;
