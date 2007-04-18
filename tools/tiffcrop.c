@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.4 2007-04-06 14:23:54 dron Exp $ */
+/* $Id: tiffcrop.c,v 1.5 2007-04-18 08:46:33 dron Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include cropping of selections
  *
@@ -1560,7 +1560,7 @@ initImageData (struct image_data *image)
   image->spp = 0;
   image->planar = 0;
   image->photometric = 0;
-  };
+  }
 
 static void
 initCropMasks (struct crop_mask *cps)
