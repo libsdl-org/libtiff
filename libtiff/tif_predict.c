@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.17 2007-04-11 14:28:59 joris Exp $ */
+/* $Id: tif_predict.c,v 1.18 2007-04-19 00:51:47 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -536,7 +536,7 @@ PredictorEncodeTile(TIFF* tif, uint8* bp0, tmsize_t cc0, uint16 s)
 #define	FIELD_PREDICTOR	(FIELD_CODEC+0)		/* XXX */
 
 static const TIFFFieldInfo predictFieldInfo[] = {
-    { TIFFTAG_PREDICTOR,	 1, 1, TIFF_SHORT,	FIELD_PREDICTOR,
+    { TIFFTAG_PREDICTOR,	 1, 1, TIFF_SHORT,	TIFF_SETGET_UNDEFINED, TIFF_SETGET_UNDEFINED, FIELD_PREDICTOR,
       FALSE,	FALSE,	"Predictor" },
 };
 
@@ -622,7 +622,7 @@ TIFFPredictorInit(TIFF* tif)
             PredictorVGetField;/* hook for predictor tag */
 	sp->vsetparent = tif->tif_tagmethods.vsetfield;
 	tif->tif_tagmethods.vsetfield =
-            PredictorVSetField;/* hook for predictor tag */
+            PredictorVSetField;/* hook for predictor tag */   ddd
 	sp->printdir = tif->tif_tagmethods.printdir;
 	tif->tif_tagmethods.printdir =
             PredictorPrintDir;	/* hook for predictor tag */

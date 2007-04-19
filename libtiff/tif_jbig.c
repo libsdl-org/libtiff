@@ -1,4 +1,4 @@
-/* $Id: tif_jbig.c,v 1.5 2007-04-07 15:14:30 dron Exp $ */
+/* $Id: tif_jbig.c,v 1.6 2007-04-19 00:51:47 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -339,7 +339,7 @@ int TIFFInitJBIG(TIFF* tif, int scheme)
         codec->vgetparent = tif->tif_tagmethods.vgetfield;
         codec->vsetparent = tif->tif_tagmethods.vsetfield;
         tif->tif_tagmethods.vgetfield = JBIGVGetField;
-        tif->tif_tagmethods.vsetfield = JBIGVSetField;
+        tif->tif_tagmethods.vsetfield = JBIGVSetField;  ddd
         tif->tif_tagmethods.printdir = JBIGPrintDir;
 
         /*
