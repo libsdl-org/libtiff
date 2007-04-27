@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.37.2.1 2007-04-18 08:42:26 dron Exp $
+/* $Id: tiff2pdf.c,v 1.37.2.2 2007-04-27 16:43:43 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -664,36 +664,34 @@ int main(int argc, char** argv){
 
 	if (outfilename) {
 		output = TIFFOpen(outfilename, "w");
-		if(output == NULL) {
+		if (output == NULL) {
 			TIFFError(TIFF2PDF_MODULE, 
 				  "Can't open output file %s for writing", 
 				  optarg);
 			goto failfreet2p;
 		}
-		if(output->tif_seekproc != NULL) {
+		if (output->tif_seekproc != NULL) {
 			TIFFSeekFile(output, (toff_t) 0, SEEK_SET);
 		}
 	} else {
 #if !defined(_WIN32) || defined(AVOID_WIN32_FILEIO)
-		output = TIFFFdOpen((int)fileno(tmpfile()), "-", "w");
+		FILE *tempfp = tmpfile();
+		if (tempfp)
+			output = TIFFFdOpen((int)fileno(tempfp), "-", "w");
 #else
-		{
-			TCHAR temppath[MAX_PATH];
-			TCHAR tempfile[MAX_PATH];
-			GetTempPath((DWORD)MAX_PATH, (LPTSTR)temppath);
-			GetTempFileName((LPCTSTR)temppath, (LPTSTR) "t2p", 0, (LPTSTR)tempfile);
-			output = TIFFFdOpen( (int)CreateFile(
-				(LPCTSTR)tempfile, 
-				GENERIC_WRITE, 
-				0, 
-				NULL, 
-				CREATE_ALWAYS, 
-				FILE_FLAG_DELETE_ON_CLOSE,  
-				NULL), 
-				"-", "w");
-		}
+		TCHAR temppath[MAX_PATH];
+		TCHAR tempfile[MAX_PATH];
+		GetTempPath((DWORD)MAX_PATH, (LPTSTR)temppath);
+		GetTempFileName((LPCTSTR)temppath, (LPTSTR) "t2p", 0,
+				(LPTSTR)tempfile);
+		output = TIFFFdOpen((int)CreateFile((LPCTSTR)tempfile,
+						    GENERIC_WRITE, 0, NULL,
+						    CREATE_ALWAYS,
+						    FILE_FLAG_DELETE_ON_CLOSE,
+						    NULL),
+				    "-", "w");
 #endif
-		if(output==NULL){
+		if (output == NULL) {
 			TIFFError(TIFF2PDF_MODULE, 
 			"Can't open temporary output file for writing to stdout", 
 				  argv[optind-1]);
