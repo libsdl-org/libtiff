@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.37.2.1 2007-04-06 16:05:15 dron Exp $ */
+/* $Id: tif_dirwrite.c,v 1.37.2.2 2007-05-01 15:01:32 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -925,20 +925,20 @@ TIFFWriteByteArray(TIFF* tif, TIFFDirEntry* dir, char* cp)
 	if (dir->tdir_count <= 4) {
 		if (tif->tif_header.tiff_magic == TIFF_BIGENDIAN) {
 			dir->tdir_offset = (uint32)cp[0] << 24;
-			if (dir->tdir_count == 2)
+			if (dir->tdir_count >= 2)
 				dir->tdir_offset |= (uint32)cp[1] << 16;
-			if (dir->tdir_count == 3)
+			if (dir->tdir_count >= 3)
 				dir->tdir_offset |= (uint32)cp[2] << 8;
 			if (dir->tdir_count == 4)
 				dir->tdir_offset |= cp[3];
 		} else {
 			dir->tdir_offset = cp[0];
-			if (dir->tdir_count == 2)
+			if (dir->tdir_count >= 2)
 				dir->tdir_offset |= (uint32) cp[1] << 8;
-			if (dir->tdir_count == 3)
-				dir->tdir_offset |= (uint32) cp[1] << 16;
+			if (dir->tdir_count >= 3)
+				dir->tdir_offset |= (uint32) cp[2] << 16;
 			if (dir->tdir_count == 4)
-				dir->tdir_offset |= (uint32) cp[1] << 24;
+				dir->tdir_offset |= (uint32) cp[3] << 24;
 		}
 		return 1;
 	} else
