@@ -1,4 +1,4 @@
-/* $Id: tif_strip.c,v 1.23 2007-04-04 04:16:08 joris Exp $ */
+/* $Id: tif_strip.c,v 1.24 2007-05-11 14:41:01 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -310,6 +310,8 @@ TIFFScanlineSize64(TIFF* tif)
 			assert(td->td_samplesperpixel==3);
 			TIFFGetField(tif,TIFFTAG_YCBCRSUBSAMPLING,ycbcrsubsampling+0,
 			    ycbcrsubsampling+1);
+			assert((ycbcrsubsampling[0]==1)||(ycbcrsubsampling[0]==2)||(ycbcrsubsampling[0]==4));
+			assert((ycbcrsubsampling[1]==1)||(ycbcrsubsampling[1]==2)||(ycbcrsubsampling[1]==4));
 			if (ycbcrsubsampling[0]*ycbcrsubsampling[1]==0)
 			{
 				TIFFErrorExt(tif->tif_clientdata,module,
