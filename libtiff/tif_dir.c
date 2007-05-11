@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.83 2007-04-19 00:51:47 joris Exp $ */
+/* $Id: tif_dir.c,v 1.84 2007-05-11 05:44:10 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -246,10 +246,10 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 		td->td_smaxsamplevalue = (double) va_arg(ap, double);
 		break;
 	case TIFFTAG_XRESOLUTION:
-		td->td_xresolution = (float) va_arg(ap, float);
+		td->td_xresolution = (float) va_arg(ap, double);
 		break;
 	case TIFFTAG_YRESOLUTION:
-		td->td_yresolution = (float) va_arg(ap, float);
+		td->td_yresolution = (float) va_arg(ap, double);
 		break;
 	case TIFFTAG_PLANARCONFIG:
 		v = (uint16) va_arg(ap, uint16);
@@ -258,10 +258,10 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 		td->td_planarconfig = (uint16) v;
 		break;
 	case TIFFTAG_XPOSITION:
-		td->td_xposition = (float) va_arg(ap, float);
+		td->td_xposition = (float) va_arg(ap, double);
 		break;
 	case TIFFTAG_YPOSITION:
-		td->td_yposition = (float) va_arg(ap, float);
+		td->td_yposition = (float) va_arg(ap, double);
 		break;
 	case TIFFTAG_RESOLUTIONUNIT:
 		v = (uint16) va_arg(ap, uint16);
@@ -389,7 +389,6 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 		}
 		break;
 	default: {
-		ddd
             TIFFTagValue *tv;
             int tv_size, iCustom;
 	    const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
