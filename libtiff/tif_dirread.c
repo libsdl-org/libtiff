@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.114 2007-05-24 15:51:36 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.115 2007-05-30 13:53:17 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -3692,6 +3692,7 @@ TIFFReadDirectory(TIFF* tif)
 			}
 		}
 	}
+	(*tif->tif_fixuptags)(tif);
 
 	/*
 	 * Some manufacturers make life difficult by writing

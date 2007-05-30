@@ -1,4 +1,4 @@
-/* $Id: tif_pixarlog.c,v 1.22 2007-05-11 05:44:11 joris Exp $ */
+/* $Id: tif_pixarlog.c,v 1.23 2007-05-30 13:53:18 joris Exp $ */
 
 /*
  * Copyright (c) 1996-1997 Sam Leffler
@@ -639,6 +639,12 @@ multiply_ms(tmsize_t m1, tmsize_t m2)
 		bytes = 0;
 
 	return bytes;
+}
+
+static int
+PixarLogFixupTags(TIFF* tif)
+{
+	return (1);
 }
 
 static int
@@ -1362,6 +1368,7 @@ TIFFInitPixarLog(TIFF* tif, int scheme)
 	/*
 	 * Install codec methods.
 	 */
+	tif->tif_fixuptags = PixarLogFixupTags; 
 	tif->tif_setupdecode = PixarLogSetupDecode;
 	tif->tif_predecode = PixarLogPreDecode;
 	tif->tif_decoderow = PixarLogDecode;

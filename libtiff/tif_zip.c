@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.19 2007-05-11 05:44:11 joris Exp $ */
+/* $Id: tif_zip.c,v 1.20 2007-05-30 13:53:18 joris Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -83,6 +83,12 @@ typedef struct {
 
 static int ZIPEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s);
 static int ZIPDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s);
+
+static int
+ZIPFixupTags(TIFF* tif)
+{
+	return (1);
+}
 
 static int
 ZIPSetupDecode(TIFF* tif)
@@ -421,6 +427,7 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	/*
 	 * Install codec methods.
 	 */
+	tif->tif_fixuptags = ZIPFixupTags; 
 	tif->tif_setupdecode = ZIPSetupDecode;
 	tif->tif_predecode = ZIPPreDecode;
 	tif->tif_decoderow = ZIPDecode;

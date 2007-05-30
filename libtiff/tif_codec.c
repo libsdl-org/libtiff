@@ -1,4 +1,4 @@
-/* $Id: tif_codec.c,v 1.10 2005-12-21 12:23:13 joris Exp $ */
+/* $Id: tif_codec.c,v 1.11 2007-05-30 13:53:17 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -112,7 +112,8 @@ static int
 NotConfigured(TIFF* tif, int scheme)
 {
     (void) scheme;
-    
+
+    tif->tif_fixuptags = _notConfigured;
     tif->tif_decodestatus = FALSE;
     tif->tif_setupdecode = _notConfigured;
     tif->tif_encodestatus = FALSE;

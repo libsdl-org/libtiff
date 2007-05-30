@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.52 2007-05-11 05:44:10 joris Exp $ */
+/* $Id: tif_fax3.c,v 1.53 2007-05-30 13:53:17 joris Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -456,6 +456,12 @@ _TIFFFax3fillruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
 }
 #undef	ZERO
 #undef	FILL
+
+static int
+Fax3FixupTags(TIFF* tif)
+{
+	return (1);
+}
 
 /*
  * Setup G3/G4-related compression/decompression state
@@ -1352,6 +1358,7 @@ InitCCITTFax3(TIFF* tif)
 	/*
 	 * Install codec methods.
 	 */
+	tif->tif_fixuptags = Fax3FixupTags;
 	tif->tif_setupdecode = Fax3SetupState;
 	tif->tif_predecode = Fax3PreDecode;
 	tif->tif_decoderow = Fax3Decode1D;

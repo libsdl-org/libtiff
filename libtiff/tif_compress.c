@@ -1,4 +1,4 @@
-/* $Id: tif_compress.c,v 1.16 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_compress.c,v 1.17 2007-05-30 13:53:17 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -36,11 +36,11 @@ TIFFNoEncode(TIFF* tif, const char* method)
 {
 	const TIFFCodec* c = TIFFFindCODEC(tif->tif_dir.td_compression);
 
-	if (c) { 
+	if (c) {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 			     "%s %s encoding is not implemented",
 			     c->name, method);
-	} else { 
+	} else {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 			"Compression scheme %u %s encoding is not implemented",
 			     tif->tif_dir.td_compression, method);
@@ -86,6 +86,12 @@ TIFFNoDecode(TIFF* tif, const char* method)
 }
 
 int
+_TIFFNoFixupTags(TIFF* tif)
+{
+	return (1);
+}
+
+int
 _TIFFNoRowDecode(TIFF* tif, uint8* pp, tmsize_t cc, uint16 s)
 {
 	(void) pp; (void) cc; (void) s;
@@ -128,6 +134,7 @@ static void _TIFFvoid(TIFF* tif) { (void) tif; }
 void
 _TIFFSetDefaultCompressionState(TIFF* tif)
 {
+	tif->tif_fixuptags = _TIFFNoFixupTags; 
 	tif->tif_decodestatus = TRUE;
 	tif->tif_setupdecode = _TIFFtrue;
 	tif->tif_predecode = _TIFFNoPreCode;

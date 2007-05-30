@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.24 2007-05-11 05:44:10 joris Exp $ */
+/* $Id: tif_luv.c,v 1.25 2007-05-30 13:53:18 joris Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -1330,6 +1330,12 @@ LogLuvInitState(TIFF* tif)
 }
 
 static int
+LogLuvFixupTags(TIFF* tif)
+{
+	return (1);
+}
+
+static int
 LogLuvSetupDecode(TIFF* tif)
 {
 	static const char module[] = "LogLuvSetupDecode";
@@ -1610,6 +1616,7 @@ TIFFInitSGILog(TIFF* tif, int scheme)
 	 * NB: tif_decoderow & tif_encoderow are filled
 	 *     in at setup time.
 	 */
+	tif->tif_fixuptags = LogLuvFixupTags;  
 	tif->tif_setupdecode = LogLuvSetupDecode;
 	tif->tif_decodestrip = LogLuvDecodeStrip;
 	tif->tif_decodetile = LogLuvDecodeTile;

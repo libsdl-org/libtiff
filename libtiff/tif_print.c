@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.40 2007-04-10 02:56:33 joris Exp $ */
+/* $Id: tif_print.c,v 1.41 2007-05-30 13:53:18 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -386,18 +386,9 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 	}
 	if (TIFFFieldSet(tif,FIELD_YCBCRSUBSAMPLING))
         {
-            /*
-             * For hacky reasons (see tif_jpeg.c - JPEGFixupTestSubsampling),
-             * we need to fetch this rather than trust what is in our
-             * structures.
-             */
-            uint16 subsampling[2];
-
-            TIFFGetField( tif, TIFFTAG_YCBCRSUBSAMPLING, 
-                          subsampling + 0, subsampling + 1 );
 		fprintf(fd, "  YCbCr Subsampling: %u, %u\n",
-                        subsampling[0], subsampling[1] );
-        }
+			td->td_ycbcrsubsampling[0], td->td_ycbcrsubsampling[1] );
+	}
 	if (TIFFFieldSet(tif,FIELD_YCBCRPOSITIONING)) {
 		fprintf(fd, "  YCbCr Positioning: ");
 		switch (td->td_ycbcrpositioning) {

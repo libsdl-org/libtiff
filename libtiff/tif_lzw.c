@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.33 2007-04-10 02:56:33 joris Exp $ */
+/* $Id: tif_lzw.c,v 1.34 2007-05-30 13:53:18 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -187,6 +187,12 @@ static void cl_hash(LZWCodecState*);
 #else
 #define	NextCode(tif, sp, bp, code, get) get(sp, bp, code)
 #endif
+
+static int
+LZWFixupTags(TIFF* tif)
+{
+	return (1);
+}
 
 static int
 LZWSetupDecode(TIFF* tif)
@@ -1052,6 +1058,7 @@ TIFFInitLZW(TIFF* tif, int scheme)
 	/*
 	 * Install codec methods.
 	 */
+	tif->tif_fixuptags = LZWFixupTags; 
 	tif->tif_setupdecode = LZWSetupDecode;
 	tif->tif_predecode = LZWPreDecode;
 	tif->tif_decoderow = LZWDecode;
