@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.38 2007-06-07 12:15:18 joris Exp $ */
+/* $Id: tif_dir.h,v 1.39 2007-06-08 09:10:21 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -70,7 +70,7 @@ typedef struct {
 	uint64_new* td_stripbytecount;
 	int     td_stripbytecountsorted; /* is the bytecount array sorted ascending? */  
 	uint16  td_nsubifd;
-	uint32* td_subifd;
+	uint64_new* td_subifd;
 	/* YCbCr parameters */
 	uint16  td_ycbcrsubsampling[2];
 	uint16  td_ycbcrpositioning;
