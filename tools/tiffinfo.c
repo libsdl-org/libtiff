@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.8 2005-12-09 14:52:48 dron Exp $ */
+/* $Id: tiffinfo.c,v 1.9 2007-06-12 13:08:09 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -60,7 +60,7 @@ main(int argc, char* argv[])
 	extern int optind;
 	extern char* optarg;
 	long flags = 0;
-	uint32 diroff = 0;
+	uint64 diroff = 0;
 	int chopstrips = 0;		/* disable strip chopping */
 
 	while ((c = getopt(argc, argv, "f:o:cdDSjilmrsvwz0123456789")) != -1)
