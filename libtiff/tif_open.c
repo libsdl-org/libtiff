@@ -1,4 +1,4 @@
-/* $Id: tif_open.c,v 1.37 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_open.c,v 1.38 2007-06-12 13:07:33 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -161,8 +161,8 @@ TIFFClientOpen(
 	assert(sizeof(int16)==2);
 	assert(sizeof(uint32)==4);
 	assert(sizeof(int32)==4);
-	assert(sizeof(uint64_new)==8);
-	assert(sizeof(int64_new)==8);
+	assert(sizeof(uint64)==8);
+	assert(sizeof(int64)==8);
 	assert(sizeof(tmsize_t)==sizeof(void*));
 
 	m = _TIFFgetMode(mode, module);

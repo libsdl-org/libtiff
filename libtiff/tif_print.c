@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.42 2007-06-08 09:10:21 joris Exp $ */
+/* $Id: tif_print.c,v 1.43 2007-06-12 13:07:33 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -199,8 +199,8 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 	uint16 i;
 	long l, n;
 
-	fprintf(fd, "TIFF Directory at offset 0x%lx (%lu)\n",
-		(unsigned long)tif->tif_diroff, (unsigned long)tif->tif_diroff);
+	fprintf(fd, "TIFF Directory at offset 0x%llx (%llu)\n",
+		tif->tif_diroff, tif->tif_diroff);
 	if (TIFFFieldSet(tif,FIELD_SUBFILETYPE)) {
 		fprintf(fd, "  Subfile Type:");
 		sep = " ";

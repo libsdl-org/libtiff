@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.39 2007-06-08 09:10:21 joris Exp $ */
+/* $Id: tif_dir.h,v 1.40 2007-06-12 13:07:32 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -66,11 +66,11 @@ typedef struct {
 	 * number of striles */
 	uint32  td_stripsperimage;  
 	uint32  td_nstrips;            /* size of offset & bytecount arrays */
-	uint64_new* td_stripoffset;
-	uint64_new* td_stripbytecount;
-	int     td_stripbytecountsorted; /* is the bytecount array sorted ascending? */  
+	uint64* td_stripoffset;
+	uint64* td_stripbytecount;
+	int     td_stripbytecountsorted; /* is the bytecount array sorted ascending? */
 	uint16  td_nsubifd;
-	uint64_new* td_subifd;
+	uint64* td_subifd;
 	/* YCbCr parameters */
 	uint16  td_ycbcrsubsampling[2];
 	uint16  td_ycbcrpositioning;

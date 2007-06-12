@@ -1,4 +1,4 @@
-/* $Id: tif_swab.c,v 1.9 2007-04-04 04:16:08 joris Exp $ */
+/* $Id: tif_swab.c,v 1.10 2007-06-12 13:07:33 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -56,7 +56,7 @@ TIFFSwabLong(uint32* lp)
 
 #ifndef TIFFSwabLong8
 void
-TIFFSwabLong8(uint64_new* lp)
+TIFFSwabLong8(uint64* lp)
 {
 	register unsigned char* cp = (unsigned char*) lp;
 	unsigned char t;
@@ -119,7 +119,7 @@ TIFFSwabArrayOfLong(register uint32* lp, tmsize_t n)
 
 #ifndef TIFFSwabArrayOfLong8
 void
-TIFFSwabArrayOfLong8(register uint64_new* lp, tmsize_t n)  
+TIFFSwabArrayOfLong8(register uint64* lp, tmsize_t n)  
 {
 	register unsigned char *cp;
 	register unsigned char t;
