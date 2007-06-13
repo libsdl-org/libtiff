@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.14 2007-06-13 14:14:03 joris Exp $ */
+/* $Id: tiff2rgba.c,v 1.15 2007-06-13 14:21:59 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -63,7 +63,7 @@ main(int argc, char* argv[])
 	extern int optind;
 	extern char *optarg;
 
-	while ((c = getopt(argc, argv, "c:r:t:b:n:8")) != -1)
+	while ((c = getopt(argc, argv, "c:r:t:bn8")) != -1)
 		switch (c) {
 			case 'b':
 				process_by_block = 1;
