@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.26 2007-06-12 13:07:33 joris Exp $ */
+/* $Id: tif_win32.c,v 1.27 2007-06-20 10:43:46 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -35,23 +35,57 @@
 static tmsize_t
 _tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
 {
-	DWORD dwSizeRead;
-	/* TODO: support size datatype that is 64bit on 64bit systems */
-	assert((int32)size==size);
-	if (!ReadFile(fd, buf, (uint32)size, &dwSizeRead, NULL))
-		return(0);
-	return ((tmsize_t)dwSizeRead);
+	/* tmsize_t is 64bit on 64bit systems, but the WinAPI ReadFile takes
+	 * 32bit sizes, so we loop through the data in suitable 32bit sized
+	 * chunks */
+	uint8* ma;
+	uint64 mb;
+	DWORD n;
+	DWORD o;
+	tmsize_t p;
+	ma=(uint8*)buf;
+	mb=size;
+	p=0;
+	while (mb>0)
+	{
+		n=0x80000000UL;
+		if ((uint64)n>mb)
+			n=(DWORD)mb;
+		if (!ReadFile(fd,(LPVOID)ma,n,&o,NULL))
+			return(0);
+		ma+=o;
+		mb-=o;
+		p+=o;
+	}
+	return ((tmsize_t)p);
 }
 
 static tmsize_t
 _tiffWriteProc(thandle_t fd, void* buf, tmsize_t size)
 {
-	DWORD dwSizeWritten;
-	/* TODO: support size datatype that is 64bit on 64bit systems */
-	assert((int32)size==size);
-	if (!WriteFile(fd, buf, (uint32)size, &dwSizeWritten, NULL))
-		return(0);
-	return ((tmsize_t)dwSizeWritten);
+	/* tmsize_t is 64bit on 64bit systems, but the WinAPI WriteFile takes
+	 * 32bit sizes, so we loop through the data in suitable 32bit sized
+	 * chunks */
+	uint8* ma;
+	uint64 mb;
+	DWORD n;
+	DWORD o;
+	tmsize_t p;
+	ma=(uint8*)buf;
+	mb=size;
+	p=0;
+	while (mb>0)
+	{
+		n=0x80000000UL;
+		if ((uint64)n>mb)
+			n=(DWORD)mb;
+		if (!WriteFile(fd,(LPVOID)ma,n,&o,NULL))
+			return(0);
+		ma+=o;
+		mb-=o;
+		p+=o;
+	}
+	return ((tmsize_t)p);
 }
 
 static uint64
@@ -161,8 +195,17 @@ TIFF*
 TIFFFdOpen(int ifd, const char* name, const char* mode)
 {
 	TIFF* tif;
-	BOOL fSuppressMap = (mode[1] == 'u' || (mode[1]!=0 && mode[2] == 'u'));
-
+	int fSuppressMap;
+	int m;
+	fSuppressMap=0;
+	for (m=0; mode[m]!=0; m++)
+	{
+		if (mode[m]=='u')
+		{
+			fSuppressMap=1;
+			break;
+		}
+	}
 	tif = TIFFClientOpen(name, mode, (thandle_t)ifd,
 			_tiffReadProc, _tiffWriteProc,
 			_tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
