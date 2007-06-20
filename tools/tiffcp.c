@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.38 2007-06-20 08:35:57 joris Exp $ */
+/* $Id: tiffcp.c,v 1.39 2007-06-20 08:36:42 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -152,7 +152,7 @@ static TIFF* openSrcImage (char **imageSpec)
 }
 
 int
-tiffcp_main(int argc, char* argv[])
+main(int argc, char* argv[])
 {
 	uint16 defconfig = (uint16) -1;
 	uint16 deffillorder = 0;
