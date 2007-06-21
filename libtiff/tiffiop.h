@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.60 2007-06-12 13:07:33 joris Exp $ */
+/* $Id: tiffiop.h,v 1.61 2007-06-21 16:47:15 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -129,8 +129,6 @@ struct tiff {
 		TIFFHeaderBig big;
 	} tif_header;
 	uint16               tif_header_size;  /* file's header block and its length */
-	const int*           tif_typeshift;    /* data type shift counts */
-	const long*          tif_typemask;     /* data type masks */
 	uint32               tif_row;          /* current scanline */
 	uint16               tif_curdir;       /* current directory (index) */
 	uint32               tif_curstrip;     /* current strip for read/write */

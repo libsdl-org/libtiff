@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.8 2007-04-04 04:16:07 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.9 2007-06-21 16:47:15 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,6 +30,12 @@
  * "Null" Compression Algorithm Support.
  */
 #include "tiffiop.h"
+
+static int
+DumpFixupTags(TIFF* tif)
+{
+	return (1);
+}
 
 /*
  * Encode a hunk of pixels.
@@ -106,6 +112,7 @@ int
 TIFFInitDumpMode(TIFF* tif, int scheme)
 {
 	(void) scheme;
+	tif->tif_fixuptags = DumpFixupTags;  
 	tif->tif_decoderow = DumpModeDecode;
 	tif->tif_decodestrip = DumpModeDecode;
 	tif->tif_decodetile = DumpModeDecode;

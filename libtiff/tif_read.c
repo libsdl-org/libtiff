@@ -1,4 +1,4 @@
-/* $Id: tif_read.c,v 1.21 2007-06-12 13:07:33 joris Exp $ */
+/* $Id: tif_read.c,v 1.22 2007-06-21 16:47:15 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -51,9 +51,9 @@ TIFFSeek(TIFF* tif, uint32 row, uint16 sample)
 
 	if (row >= td->td_imagelength) {	/* out of range */
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-			     "%lu: Row out of range, max %lu",
-			     (unsigned long) row,
-			     (unsigned long) td->td_imagelength);
+		    "%lu: Row out of range, max %lu",
+		    (unsigned long) row,
+		    (unsigned long) td->td_imagelength);
 		return (0);
 	}
 	if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {

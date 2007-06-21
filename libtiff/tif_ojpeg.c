@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.32 2007-06-12 13:07:33 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.33 2007-06-21 16:47:15 joris Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -146,7 +146,7 @@
  * 	absolutely no effect. That is why most people insist the EGYPTIANWALK is a bit silly.
  */
 
-/* #define LIBJPEG_ENCAP_EXTERNAL */
+/* define LIBJPEG_ENCAP_EXTERNAL */
 #define SETJMP(jbuf) setjmp(jbuf)
 #define LONGJMP(jbuf,code) longjmp(jbuf,code)
 #define JMP_BUF jmp_buf
@@ -402,7 +402,7 @@ TIFFInitOJPEG(TIFF* tif, int scheme)
 	 */
 	if (!_TIFFMergeFieldInfo(tif,ojpeg_field_info,FIELD_OJPEG_COUNT)) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-			     "Merging Old JPEG codec-specific tags failed");
+		    "Merging Old JPEG codec-specific tags failed");
 		return 0;
 	}
 

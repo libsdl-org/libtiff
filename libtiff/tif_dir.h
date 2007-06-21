@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.40 2007-06-12 13:07:32 joris Exp $ */
+/* $Id: tif_dir.h,v 1.41 2007-06-21 16:47:14 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -154,16 +154,6 @@ typedef struct {
 #define	FIELD_PSEUDO			0
 
 #define	FIELD_LAST			(32*FIELD_SETLONGS-1)
-
-#define	TIFFExtractData(tif, type, v) \
-    ((uint32) ((tif)->tif_header.common.tiff_magic == TIFF_BIGENDIAN ? \
-	((v) >> (tif)->tif_typeshift[type]) & (tif)->tif_typemask[type] : \
-	(v) & (tif)->tif_typemask[type]))
-#define	TIFFInsertData(tif, type, v) \
-    ((uint32) ((tif)->tif_header.common.tiff_magic == TIFF_BIGENDIAN ? \
-        ((v) & (tif)->tif_typemask[type]) << (tif)->tif_typeshift[type] : \
-	(v) & (tif)->tif_typemask[type]))
-
 
 #define BITn(n)				(((unsigned long)1L)<<((n)&0x1f)) 
 #define BITFIELDn(tif, n)		((tif)->tif_dir.td_fieldsset[(n)/32]) 
