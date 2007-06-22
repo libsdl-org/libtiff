@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.55 2007-06-12 13:07:33 joris Exp $ */
+/* $Id: tiff.h,v 1.56 2007-06-22 08:27:22 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -170,6 +170,7 @@ typedef enum {
 typedef enum {
 	TIFF_SETGET_UNDEFINED,
 	TIFF_SETGET_ASCII,
+	TIFF_SETGET_UINT8,
 	TIFF_SETGET_UINT16,
 	TIFF_SETGET_UINT32,
 	TIFF_SETGET_UINT64,
