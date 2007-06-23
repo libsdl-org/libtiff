@@ -1,4 +1,4 @@
-/* $Id: tif_compress.c,v 1.17 2007-05-30 13:53:17 joris Exp $ */
+/* $Id: tif_compress.c,v 1.18 2007-06-23 01:32:31 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -177,10 +177,10 @@ TIFFSetCompressionScheme(TIFF* tif, int scheme)
  * by this library.
  */
 typedef struct _codec {
-	struct _codec*	next;
-	TIFFCodec*	info;
+	struct _codec* next;
+	TIFFCodec* info;
 } codec_t;
-static	codec_t* registeredCODECS = NULL;
+static codec_t* registeredCODECS = NULL;
 
 const TIFFCodec*
 TIFFFindCODEC(uint16 scheme)
