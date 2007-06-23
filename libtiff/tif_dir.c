@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.86 2007-06-12 13:07:32 joris Exp $ */
+/* $Id: tif_dir.c,v 1.87 2007-06-23 01:06:06 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1066,11 +1066,10 @@ int
 TIFFDefaultDirectory(TIFF* tif)
 {
 	register TIFFDirectory* td = &tif->tif_dir;
+	const TIFFFieldInfoArray* tiffFieldInfoArray;
 
-	size_t tiffFieldInfoCount;
-	const TIFFFieldInfo *tiffFieldInfo =
-	    _TIFFGetFieldInfo(&tiffFieldInfoCount);
-	_TIFFSetupFieldInfo(tif, tiffFieldInfo, tiffFieldInfoCount);
+	tiffFieldInfoArray = _TIFFGetFieldInfo();
+	_TIFFSetupFieldInfo(tif, tiffFieldInfoArray);   
 
 	_TIFFmemset(td, 0, sizeof (*td));
 	td->td_fillorder = FILLORDER_MSB2LSB;
