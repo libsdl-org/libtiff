@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.56 2007-06-22 08:27:22 joris Exp $ */
+/* $Id: tiff.h,v 1.57 2007-06-25 15:38:25 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -64,6 +64,19 @@
  * strings              unsigned char*
  */
 
+typedef TIFF_INT8_T   int8;
+typedef TIFF_UINT8_T  uint8;
+
+typedef TIFF_INT16_T  int16;
+typedef TIFF_UINT16_T uint16;
+
+typedef TIFF_INT32_T  int32;
+typedef TIFF_UINT32_T uint32;
+
+typedef TIFF_INT64_T  int64;
+typedef TIFF_UINT64_T uint64;
+
+#if 0
 #ifndef HAVE_INT8
 typedef signed char int8;       /* NB: non-ANSI compilers may not grok */
 #endif
@@ -85,6 +98,7 @@ typedef unsigned long uint32;   /* sizeof (uint32) must == 4 */
 #endif
 typedef unsigned long long uint64;
 typedef signed long long int64;
+#endif
 
 /* For TIFFReassignTagToIgnore */
 enum TIFFIgnoreSense /* IGNORE tag table */
