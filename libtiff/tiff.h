@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.58 2007-06-25 15:58:03 bfriesen Exp $ */
+/* $Id: tiff.h,v 1.59 2007-06-26 09:42:28 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -42,8 +42,9 @@
  *
  *    (http://partners.adobe.com/asn/developer/PDFS/TN/TIFF6.pdf)
  *
- * For Big TIFF design notes see the following link
+ * For BigTIFF design notes see the following links
  *    http://www.remotesensing.org/libtiff/bigtiffdesign.html
+ *    http://www.awaresystems.be/imaging/tiff/bigtiff.html
  */
 
 #define TIFF_VERSION_CLASSIC 42

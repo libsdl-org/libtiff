@@ -1,4 +1,4 @@
-/* $Id: tiffio.hxx,v 1.1 2004-11-21 16:12:08 dron Exp $ */
+/* $Id: tiffio.hxx,v 1.2 2007-06-26 09:42:28 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -34,8 +34,8 @@
 #include <iostream>
 #include "tiff.h"
 
-extern	TIFF* TIFFStreamOpen(const char*, std::ostream *);
-extern	TIFF* TIFFStreamOpen(const char*, std::istream *);
+extern TIFF* TIFFStreamOpen(const char*, std::ostream *);
+extern TIFF* TIFFStreamOpen(const char*, std::istream *);
 
 #endif /* _TIFFIO_HXX_ */
 
