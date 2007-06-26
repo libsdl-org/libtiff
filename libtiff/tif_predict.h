@@ -1,4 +1,4 @@
-/* $Id: tif_predict.h,v 1.4 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_predict.h,v 1.5 2007-06-26 10:30:13 joris Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -54,8 +54,8 @@ typedef struct {
 #if defined(__cplusplus)
 extern "C" {
 #endif
-extern	int TIFFPredictorInit(TIFF*);
-extern	int TIFFPredictorCleanup(TIFF*);
+extern int TIFFPredictorInit(TIFF*);
+extern int TIFFPredictorCleanup(TIFF*);
 #if defined(__cplusplus)
 }
 #endif

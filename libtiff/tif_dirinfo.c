@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.81 2007-06-23 01:06:07 joris Exp $ */
+/* $Id: tif_dirinfo.c,v 1.82 2007-06-26 10:30:12 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -253,13 +253,13 @@ static const TIFFFieldInfoArray tiffFieldInfoArray = { tfiatImage, 0, TIFFArrayC
 static const TIFFFieldInfoArray exifFieldInfoArray = { tfiatExif, 0, TIFFArrayCount(exifFieldInfo), exifFieldInfo };
 
 const TIFFFieldInfoArray*
-_TIFFGetFieldInfo()
+_TIFFGetFieldInfo(void)
 {
 	return(&tiffFieldInfoArray);
 }
 
 const TIFFFieldInfoArray*
-_TIFFGetExifFieldInfo()
+_TIFFGetExifFieldInfo(void)
 {
 	return(&exifFieldInfoArray);
 }

@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.65 2007-06-23 01:06:07 joris Exp $ */
+/* $Id: tif_jpeg.c,v 1.66 2007-06-26 10:30:13 joris Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -846,7 +846,8 @@ JPEGFixupTagsSubsamplingReadByte(struct JPEGFixupTagsSubsamplingData* data, uint
 		m=data->buffersize;
 		if ((uint64)m>data->filebytesleft)
 			m=(uint32)data->filebytesleft;
-		if (TIFFReadFile(data->tif,data->buffer,m)!=m)
+		assert(m<0x80000000UL);
+		if (TIFFReadFile(data->tif,data->buffer,(tmsize_t)m)!=(tmsize_t)m)
 			return(0);
 		data->buffercurrentbyte=data->buffer;
 		data->bufferbytesleft=m;
