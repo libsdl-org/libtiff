@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.in,v 1.40 2007-06-26 20:05:39 bfriesen Exp $
+# $Id: Makefile.in,v 1.41 2007-06-26 22:52:13 bfriesen Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
