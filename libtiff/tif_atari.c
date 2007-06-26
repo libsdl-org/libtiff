@@ -1,4 +1,4 @@
-/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_atari.c,v 1.3 2007-04-04 04:16:07 joris Exp $" */
+/* "$Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_atari.c,v 1.4 2007-06-26 10:41:28 joris Exp $" */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -43,6 +43,11 @@
 #include <errno.h>
 
 #define AEFILNF   -33
+
+COMPILATION SHOULD FAIL
+This file is not yet updated to reflect changes in LibTiff 4.0. If you have
+the opportunity to update and test this file, please contact LibTiff folks
+for all assistance you may require and contribute the results
 
 static tsize_t
 _tiffReadProc(thandle_t fd, tdata_t buf, tsize_t size)

@@ -1,4 +1,4 @@
-/* $Id: tif_wince.c,v 1.1 2007-01-15 18:40:39 mloskot Exp $ */
+/* $Id: tif_wince.c,v 1.2 2007-06-26 10:41:28 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -38,6 +38,11 @@
 
 /* Turn off console support on Windows CE. */
 #undef TIF_PLATFORM_CONSOLE
+
+COMPILATION SHOULD FAIL
+This file is not yet updated to reflect changes in LibTiff 4.0. If you have
+the opportunity to update and test this file, please contact LibTiff folks
+for all assistance you may require and contribute the results
 
 
 /*
