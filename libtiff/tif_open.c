@@ -1,4 +1,4 @@
-/* $Id: tif_open.c,v 1.39 2007-06-21 16:47:15 joris Exp $ */
+/* $Id: tif_open.c,v 1.40 2007-06-26 12:31:26 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -100,7 +100,7 @@ TIFFClientOpen(
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
 		goto bad2;
-	tif = (TIFF *)_TIFFmalloc(sizeof (TIFF) + strlen(name) + 1);
+	tif = (TIFF *)_TIFFmalloc((tmsize_t)(sizeof (TIFF) + strlen(name) + 1));
 	if (tif == NULL) {
 		TIFFErrorExt(clientdata, module, "%s: Out of memory (TIFF structure)", name);
 		goto bad2;

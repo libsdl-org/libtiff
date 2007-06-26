@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.55 2007-06-23 01:06:07 joris Exp $ */
+/* $Id: tif_fax3.c,v 1.56 2007-06-26 12:31:26 joris Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -93,7 +93,7 @@ typedef struct {
 #define EncoderState(tif) ((Fax3CodecState*) Fax3State(tif))
 
 #define is2DEncoding(sp) (sp->b.groupoptions & GROUP3OPT_2DENCODING)
-#define isAligned(p,t) ((((tmsize_t)(p)) & (sizeof (t)-1)) == 0)
+#define isAligned(p,t) ((((size_t)(p)) & (sizeof (t)-1)) == 0)
 
 /*
  * Group 3 and Group 4 Decoding.
@@ -139,7 +139,7 @@ typedef struct {
     sp->bit = BitsAvail;						\
     sp->data = BitAcc;							\
     sp->EOLcnt = EOLcnt;						\
-    tif->tif_rawcc -= (uint8*) cp - tif->tif_rawcp;			\
+    tif->tif_rawcc -= (tmsize_t)((uint8*) cp - tif->tif_rawcp);		\
     tif->tif_rawcp = (uint8*) cp;					\
 } while (0)
 

@@ -1,4 +1,4 @@
-/* $Id: tif_read.c,v 1.22 2007-06-21 16:47:15 joris Exp $ */
+/* $Id: tif_read.c,v 1.23 2007-06-26 12:31:26 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -249,7 +249,7 @@ TIFFReadRawStrip(TIFF* tif, uint32 strip, void* buf, tmsize_t size)
 	}
 	if (size != (tmsize_t)(-1) && size < bytecountm)
 		bytecountm = size;
-	return (TIFFReadRawStrip1(tif, strip, buf, bytecount, module));
+	return (TIFFReadRawStrip1(tif, strip, buf, bytecountm, module));
 }
 
 /*

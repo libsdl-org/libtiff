@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.27 2007-06-20 10:43:46 joris Exp $ */
+/* $Id: tif_win32.c,v 1.28 2007-06-26 12:31:26 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -56,6 +56,8 @@ _tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
 		ma+=o;
 		mb-=o;
 		p+=o;
+		if (o!=n)
+			break;
 	}
 	return ((tmsize_t)p);
 }
@@ -84,6 +86,8 @@ _tiffWriteProc(thandle_t fd, void* buf, tmsize_t size)
 		ma+=o;
 		mb-=o;
 		p+=o;
+		if (o!=n)
+			break;
 	}
 	return ((tmsize_t)p);
 }
@@ -352,7 +356,7 @@ _TIFFrealloc(void* p, tmsize_t s)
 	if(p == NULL)
 		return ((void*)GlobalAlloc(GMEM_FIXED, s));
 
-	old = GlobalSize(p);
+	old = (tmsize_t)GlobalSize(p);
 
 	if (old>=s) {
 		if ((pvTmp = (void*)GlobalAlloc(GMEM_FIXED, s)) != NULL) {

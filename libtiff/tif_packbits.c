@@ -1,4 +1,4 @@
-/* $Id: tif_packbits.c,v 1.17 2007-04-10 03:22:11 joris Exp $ */
+/* $Id: tif_packbits.c,v 1.18 2007-06-26 12:31:26 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -93,8 +93,8 @@ PackBitsEncode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
 			 * front of the buffer.
 			 */
 			if (state == LITERAL || state == LITERAL_RUN) {
-				slop = op - lastliteral;
-				tif->tif_rawcc += lastliteral - tif->tif_rawcp;
+				slop = (long)(op - lastliteral);
+				tif->tif_rawcc += (tmsize_t)(lastliteral - tif->tif_rawcp);
 				if (!TIFFFlushData1(tif))
 					return (-1);
 				op = tif->tif_rawcp;
@@ -102,7 +102,7 @@ PackBitsEncode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
 					*op++ = *lastliteral++;
 				lastliteral = tif->tif_rawcp;
 			} else {
-				tif->tif_rawcc += op - tif->tif_rawcp;
+				tif->tif_rawcc += (tmsize_t)(op - tif->tif_rawcp);
 				if (!TIFFFlushData1(tif))
 					return (-1);
 				op = tif->tif_rawcp;
@@ -178,7 +178,7 @@ PackBitsEncode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
 			goto again;
 		}
 	}
-	tif->tif_rawcc += op - tif->tif_rawcp;
+	tif->tif_rawcc += (tmsize_t)(op - tif->tif_rawcp);
 	tif->tif_rawcp = op;
 	return (1);
 }
