@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.9 2007-06-21 16:47:15 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.10 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -34,6 +34,7 @@
 static int
 DumpFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

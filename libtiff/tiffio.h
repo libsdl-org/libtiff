@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.70 2007-06-26 22:52:13 bfriesen Exp $ */
+/* $Id: tiffio.h,v 1.71 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -495,11 +495,13 @@ extern void TIFFSetWriteOffset(TIFF* tif, uint64 off);
 extern void TIFFSwabShort(uint16*);
 extern void TIFFSwabLong(uint32*);
 extern void TIFFSwabLong8(uint64*);
+extern void TIFFSwabFloat(float*);
 extern void TIFFSwabDouble(double*);
 extern void TIFFSwabArrayOfShort(uint16* wp, tmsize_t n);
 extern void TIFFSwabArrayOfTriples(uint8* tp, tmsize_t n);
 extern void TIFFSwabArrayOfLong(uint32* lp, tmsize_t n);
 extern void TIFFSwabArrayOfLong8(uint64* lp, tmsize_t n);
+extern void TIFFSwabArrayOfFloat(float* fp, tmsize_t n);
 extern void TIFFSwabArrayOfDouble(double* dp, tmsize_t n);
 extern void TIFFReverseBits(uint8* cp, tmsize_t n);
 extern const unsigned char* TIFFGetBitRevTable(int);

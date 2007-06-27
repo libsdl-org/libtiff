@@ -1,4 +1,4 @@
-/* $Id: tif_swab.c,v 1.11 2007-06-21 16:47:15 joris Exp $ */
+/* $Id: tif_swab.c,v 1.12 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -132,6 +132,35 @@ TIFFSwabArrayOfLong8(register uint64* lp, tmsize_t n)
 		t = cp[5]; cp[5] = cp[2]; cp[2] = t;
 		t = cp[4]; cp[4] = cp[3]; cp[3] = t;
 		lp++;
+	}
+}
+#endif
+
+#ifndef TIFFSwabFloat
+void
+TIFFSwabFloat(float* fp)
+{
+	register unsigned char* cp = (unsigned char*) fp;
+	unsigned char t;
+	assert(sizeof(float)==4);
+	t = cp[3]; cp[3] = cp[0]; cp[0] = t;
+	t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+}
+#endif
+
+#ifndef TIFFSwabArrayOfFloat
+void
+TIFFSwabArrayOfFloat(register float* fp, tmsize_t n)
+{
+	register unsigned char *cp;
+	register unsigned char t;
+	assert(sizeof(float)==4);
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char *)fp;
+		t = cp[3]; cp[3] = cp[0]; cp[0] = t;
+		t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+		fp++;
 	}
 }
 #endif

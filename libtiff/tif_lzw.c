@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.34 2007-05-30 13:53:18 joris Exp $ */
+/* $Id: tif_lzw.c,v 1.35 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -191,6 +191,7 @@ static void cl_hash(LZWCodecState*);
 static int
 LZWFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.58 2007-06-27 12:28:16 joris Exp $ */
+/* $Id: tif_fax3.c,v 1.59 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -460,6 +460,7 @@ _TIFFFax3fillruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
 static int
 Fax3FixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

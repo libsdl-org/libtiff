@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.26 2007-06-23 01:06:07 joris Exp $ */
+/* $Id: tif_luv.c,v 1.27 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -1332,6 +1332,7 @@ LogLuvInitState(TIFF* tif)
 static int
 LogLuvFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

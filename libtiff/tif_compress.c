@@ -1,4 +1,4 @@
-/* $Id: tif_compress.c,v 1.20 2007-06-26 12:31:25 joris Exp $ */
+/* $Id: tif_compress.c,v 1.21 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -88,6 +88,7 @@ TIFFNoDecode(TIFF* tif, const char* method)
 int
 _TIFFNoFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

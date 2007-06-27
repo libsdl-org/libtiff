@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.21 2007-06-23 01:06:08 joris Exp $ */
+/* $Id: tif_zip.c,v 1.22 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -87,6 +87,7 @@ static int ZIPDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s);
 static int
 ZIPFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

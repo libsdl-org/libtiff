@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.28 2007-06-26 12:31:26 joris Exp $ */
+/* $Id: tif_win32.c,v 1.29 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -187,6 +187,8 @@ _tiffDummyUnmapProc(thandle_t fd, void* base, tmsize_t size)
 static void
 _tiffUnmapProc(thandle_t fd, void* base, tmsize_t size)
 {
+	(void) fd;
+	(void) size;
 	UnmapViewOfFile(base);
 }
 

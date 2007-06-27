@@ -1,4 +1,4 @@
-/* $Id: tif_pixarlog.c,v 1.25 2007-06-26 10:30:13 joris Exp $ */
+/* $Id: tif_pixarlog.c,v 1.26 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1996-1997 Sam Leffler
@@ -644,6 +644,7 @@ multiply_ms(tmsize_t m1, tmsize_t m2)
 static int
 PixarLogFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return (1);
 }
 

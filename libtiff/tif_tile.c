@@ -1,4 +1,4 @@
-/* $Id: tif_tile.c,v 1.19 2007-06-21 16:47:15 joris Exp $ */
+/* $Id: tif_tile.c,v 1.20 2007-06-27 16:09:58 joris Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -30,19 +30,6 @@
  * Tiled Image Support Routines.
  */
 #include "tiffiop.h"
-
-static uint32
-summarize_32(TIFF* tif, uint32 summand1, uint32 summand2, const char* where)
-{
-	uint32 bytes = summand1 + summand2;
-
-	if (bytes - summand1 != summand2) {
-		TIFFErrorExt(tif->tif_clientdata, where, "Integer overflow in %s", where);
-		bytes = 0;
-	}
-
-	return (bytes);
-}
 
 static uint32
 multiply_32(TIFF* tif, uint32 nmemb, uint32 elem_size, const char* where)

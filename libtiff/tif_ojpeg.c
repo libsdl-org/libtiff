@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.36 2007-06-27 12:28:16 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.37 2007-06-27 16:09:58 joris Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -616,6 +616,7 @@ OJPEGPrintDir(TIFF* tif, FILE* fd, long flags)
 static int
 OJPEGFixupTags(TIFF* tif)
 {
+	(void) tif;
 	return(1);
 }
 
@@ -1889,7 +1890,7 @@ OJPEGReadBufferFill(OJPEGState* sp)
 			assert(n>0);
 			assert(n<=OJPEG_BUFFER);
 			assert(n<65536);
-			assert(n<=sp->in_buffer_file_togo);
+			assert((uint64)n<=sp->in_buffer_file_togo);
 			m=(uint16)n;
 			sp->in_buffer_togo=m;
 			sp->in_buffer_cur=sp->in_buffer;
