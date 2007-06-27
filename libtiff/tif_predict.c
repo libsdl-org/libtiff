@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.22 2007-06-23 01:06:08 joris Exp $ */
+/* $Id: tif_predict.c,v 1.23 2007-06-27 12:28:16 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -547,7 +547,7 @@ PredictorVSetField(TIFF* tif, uint32 tag, va_list ap)
 
 	switch (tag) {
 	case TIFFTAG_PREDICTOR:
-		sp->predictor = (uint16) va_arg(ap, uint16);
+		sp->predictor = (uint16) va_arg(ap, uint16_vap);
 		TIFFSetFieldBit(tif, FIELD_PREDICTOR);
 		break;
 	default:

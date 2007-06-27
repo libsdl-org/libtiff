@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.120 2007-06-26 12:31:26 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.121 2007-06-27 12:28:15 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2321,7 +2321,8 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryFloatArray(TIFF* tif, TIFFDirEnt
 				{
 					if (tif->tif_flags&TIFF_SWAB)
 						TIFFSwabLong(ma);
-					maa=*((int32*)ma)++;
+					maa=*(int32*)ma;
+					ma++;
 					if (tif->tif_flags&TIFF_SWAB)
 						TIFFSwabLong(ma);
 					mab=*ma++;

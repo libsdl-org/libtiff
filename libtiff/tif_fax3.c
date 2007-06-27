@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.57 2007-06-26 20:05:40 bfriesen Exp $ */
+/* $Id: tif_fax3.c,v 1.58 2007-06-27 12:28:16 joris Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -1168,7 +1168,7 @@ Fax3VSetField(TIFF* tif, uint32 tag, va_list ap)
 		sp->badfaxlines = (uint32) va_arg(ap, uint32);
 		break;
 	case TIFFTAG_CLEANFAXDATA:
-		sp->cleanfaxdata = (uint16) va_arg(ap, uint16);
+		sp->cleanfaxdata = (uint16) va_arg(ap, uint16_vap);
 		break;
 	case TIFFTAG_CONSECUTIVEBADFAXLINES:
 		sp->badfaxrun = (uint32) va_arg(ap, uint32);
