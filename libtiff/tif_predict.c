@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.23 2007-06-27 12:28:16 joris Exp $ */
+/* $Id: tif_predict.c,v 1.24 2007-06-28 12:43:08 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -534,7 +534,7 @@ PredictorEncodeTile(TIFF* tif, uint8* bp0, tmsize_t cc0, uint16 s)
 #define	FIELD_PREDICTOR	(FIELD_CODEC+0)		/* XXX */
 
 static const TIFFFieldInfo predictFieldInfo[] = {
-    { TIFFTAG_PREDICTOR, 1, 1, TIFF_SHORT, TIFF_SETGET_UINT16, TIFF_SETGET_UINT16, FIELD_PREDICTOR, FALSE, FALSE, "Predictor", NULL },
+    { TIFFTAG_PREDICTOR, 1, 1, TIFF_SHORT, 0, TIFF_SETGET_UINT16, TIFF_SETGET_UINT16, FIELD_PREDICTOR, FALSE, FALSE, "Predictor", NULL },
 };
 
 static int

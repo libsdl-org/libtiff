@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.22 2007-06-27 16:09:58 joris Exp $ */
+/* $Id: tif_zip.c,v 1.23 2007-06-28 12:43:08 joris Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -379,7 +379,7 @@ ZIPVGetField(TIFF* tif, uint32 tag, va_list ap)
 }
 
 static const TIFFFieldInfo zipFieldInfo[] = {
-    { TIFFTAG_ZIPQUALITY, 0, 0, TIFF_ANY, TIFF_SETGET_INT, TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, TRUE, FALSE, "", NULL },
+    { TIFFTAG_ZIPQUALITY, 0, 0, TIFF_ANY, 0, TIFF_SETGET_INT, TIFF_SETGET_UNDEFINED, FIELD_PSEUDO, TRUE, FALSE, "", NULL },
 };
 
 int
