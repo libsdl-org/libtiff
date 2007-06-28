@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.122 2007-06-27 16:09:58 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.123 2007-06-28 01:34:01 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -3871,9 +3871,9 @@ TIFFReadDirectoryCheckOrder(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 static TIFFDirEntry*
 TIFFReadDirectoryFindEntry(TIFF* tif, TIFFDirEntry* dir, uint16 dircount, uint16 tagid)
 {
-	(void) tif;
 	TIFFDirEntry* m;
 	uint16 n;
+	(void) tif;
 	for (m=dir, n=0; n<dircount; m++, n++)
 	{
 		if (m->tdir_tag==tagid)
