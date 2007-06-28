@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.15 2007-06-28 01:34:01 joris Exp $ */
+/* $Id: tif_unix.c,v 1.16 2007-06-28 05:51:18 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -40,6 +40,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <limits.h>
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
