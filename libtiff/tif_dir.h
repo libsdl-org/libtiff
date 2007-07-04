@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.43 2007-06-26 10:30:12 joris Exp $ */
+/* $Id: tif_dir.h,v 1.44 2007-07-04 13:21:31 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -29,6 +29,12 @@
 /*
  * ``Library-private'' Directory-related Definitions.
  */
+
+typedef struct {
+	const TIFFFieldInfo  *info;
+	int             count;
+	void           *value;
+} TIFFTagValue;
 
 /*
  * Internal format of a TIFF directory entry.
@@ -188,3 +194,4 @@ extern  TIFFFieldInfo* _TIFFCreateAnonFieldInfo(TIFF *tif, uint32 tag,
 #endif /* _TIFFDIR_ */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+

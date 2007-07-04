@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.72 2007-06-28 12:43:08 joris Exp $ */
+/* $Id: tiffio.h,v 1.73 2007-07-04 13:21:32 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -335,12 +335,6 @@ typedef struct _TIFFFieldInfoArray{
 	uint32 used;                                          /* size of array */
 	const TIFFFieldInfo* fieldinfo;                       /* actual field info */
 } TIFFFieldInfoArray;
-
-typedef struct _TIFFTagValue {
-    const TIFFFieldInfo  *info;
-    int             count;
-    void           *value;
-} TIFFTagValue;
 
 extern void TIFFMergeFieldInfo(TIFF* tif, const TIFFFieldInfo info[], uint32 n);
 extern const TIFFFieldInfo* TIFFFindFieldInfo(TIFF*, uint32, TIFFDataType);
