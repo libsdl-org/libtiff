@@ -1,4 +1,4 @@
-/* $Id: tiff.h,v 1.61 2007-06-27 12:28:16 joris Exp $ */
+/* $Id: tiff.h,v 1.62 2007-07-04 14:04:48 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -86,14 +86,6 @@ typedef TIFF_UINT64_T uint64;
  */
 
 typedef int uint16_vap;
-
-/* For TIFFReassignTagToIgnore */
-enum TIFFIgnoreSense /* IGNORE tag table */
-{
-	TIS_STORE,
-	TIS_EXTRACT,
-	TIS_EMPTY
-};
 
 /*
  * TIFF header.

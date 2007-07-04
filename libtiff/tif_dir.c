@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.92 2007-06-27 16:09:58 joris Exp $ */
+/* $Id: tif_dir.c,v 1.93 2007-07-04 14:04:47 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1462,56 +1462,6 @@ TIFFUnlinkDirectory(TIFF* tif, uint16 dirn)
 	tif->tif_row = (uint32) -1;
 	tif->tif_curstrip = (uint32) -1;
 	return (1);
-}
-
-/*			[BFC]
- *
- * Author: Bruce Cameron <cameron@petris.com>
- *
- * Set a table of tags that are to be replaced during directory process by the
- * 'IGNORE' state - or return TRUE/FALSE for the requested tag such that
- * 'ReadDirectory' can use the stored information.
- *
- * FIXME: this is never used properly. Should be removed in the future.
- */
-int
-TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
-{
-	static int TIFFignoretags [FIELD_LAST];
-	static int tagcount = 0 ;
-	int i; /* Loop index */
-	int j; /* Loop index */
-
-	switch (task)
-	{
-		case TIS_STORE:
-			if ( tagcount < (FIELD_LAST - 1) )
-			{
-				for ( j = 0 ; j < tagcount ; ++j )
-				{
-					/* Do not add duplicate tag */
-					if ( TIFFignoretags [j] == TIFFtagID )
-						return (TRUE) ;
-				}
-				TIFFignoretags [tagcount++] = TIFFtagID ;
-				return (TRUE) ;
-			}
-			break ;
-		case TIS_EXTRACT:
-			for ( i = 0 ; i < tagcount ; ++i )
-			{
-				if ( TIFFignoretags [i] == TIFFtagID )
-					return (TRUE) ;
-			}
-			break;
-		case TIS_EMPTY:
-			tagcount = 0 ; /* Clear the list */
-			return (TRUE) ;
-		default:
-			break;
-	}
-
-	return (FALSE);
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */

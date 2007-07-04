@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.73 2007-07-04 13:21:32 dron Exp $ */
+/* $Id: tiffio.h,v 1.74 2007-07-04 14:04:48 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -425,7 +425,6 @@ extern int TIFFVSetField(TIFF*, uint32, va_list);
 extern int TIFFWriteDirectory(TIFF *);
 extern int TIFFCheckpointDirectory(TIFF *);
 extern int TIFFRewriteDirectory(TIFF *);
-extern int TIFFReassignTagToIgnore(enum TIFFIgnoreSense, int);
 
 #if defined(c_plusplus) || defined(__cplusplus)
 extern void TIFFPrintDirectory(TIFF*, FILE*, long = 0);
