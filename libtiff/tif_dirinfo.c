@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.86 2007-07-04 13:58:38 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.87 2007-07-04 21:33:31 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -509,6 +509,12 @@ _TIFFFindFieldInfoByName(TIFF* tif, const char *field_name, TIFFDataType dt)
 	    && streq(tif->tif_foundfield->field_name, field_name)
 	    && (dt == TIFF_ANY || dt == tif->tif_foundfield->field_type))
 		return (tif->tif_foundfield);
+
+	/* If we are invoked with no field information, then just return. */
+	if ( !tif->tif_fieldinfo ) {
+		return NULL;
+	}
+
 	/* NB: use sorted search (e.g. binary search) */
 
 	key.field_name = (char *)field_name;
