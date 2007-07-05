@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.123 2007-06-28 01:34:01 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.124 2007-07-05 02:57:12 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -741,7 +741,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryArray(TIFF* tif, TIFFDirEntry* d
 		{
 			enum TIFFReadDirEntryErr err;
 			uint32 offset;
-			offset=(uint32)(direntry->tdir_offset);
+			offset=*(uint32*)(&direntry->tdir_offset);
 			if (tif->tif_flags&TIFF_SWAB)
 				TIFFSwabLong(&offset);
 			err=TIFFReadDirEntryData(tif,(uint64)offset,(tmsize_t)datasize,data);
