@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.40 2007-07-03 15:47:05 dron Exp $
+/* $Id: tiff2pdf.c,v 1.41 2007-07-06 01:25:17 bfriesen Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -2593,8 +2593,9 @@ dataready:
 		bufferoffset = TIFFWriteEncodedStrip(output, (tstrip_t)0,
 						     buffer,
 						     stripsize * stripcount); 
-	} else {
+	} else
 #endif
+        {
 		bufferoffset = TIFFWriteEncodedStrip(output, (tstrip_t)0,
 						     buffer,
 						     t2p->tiff_datasize); 
