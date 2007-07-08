@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.54 2007-07-06 00:49:18 joris Exp $ */
+/* $Id: tif_dirwrite.c,v 1.55 2007-07-08 18:30:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -560,10 +560,9 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64* pdiroff)
 			}
 			{
 				uint32 n;
-				for (n=0; n<tif->tif_nfields; n++)
-				{
-					const TIFFFieldInfo* o;
-					o=tif->tif_fieldinfo[n];
+				for (n=0; n<tif->tif_nfields; n++) {
+					const TIFFField* o;
+					o = tif->tif_fieldinfo[n];
 					if ((o->field_bit>=FIELD_CODEC)&&(TIFFFieldSet(tif,o->field_bit)))
 					{
 						switch (o->get_field_type)

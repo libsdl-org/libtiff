@@ -1,4 +1,4 @@
-/* $Id: tif_close.c,v 1.12 2007-06-23 01:32:31 joris Exp $ */
+/* $Id: tif_close.c,v 1.13 2007-07-08 18:30:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -78,7 +78,7 @@ TIFFCleanup(TIFF* tif)
 
 		for (i = 0; i < tif->tif_nfields; i++)
 		{
-			TIFFFieldInfo *fld = tif->tif_fieldinfo[i];
+			TIFFField *fld = tif->tif_fieldinfo[i];
 			if (fld->field_bit == FIELD_CUSTOM &&
 			    strncmp("Tag ", fld->field_name, 4) == 0)
 			{

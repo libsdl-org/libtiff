@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.38 2007-06-28 12:43:08 joris Exp $ */
+/* $Id: tif_ojpeg.c,v 1.39 2007-07-08 18:30:41 dron Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -173,9 +173,8 @@
 #define FIELD_OJPEG_JPEGACTABLES (FIELD_CODEC+4)
 #define FIELD_OJPEG_JPEGPROC (FIELD_CODEC+5)
 #define FIELD_OJPEG_JPEGRESTARTINTERVAL (FIELD_CODEC+6)
-#define FIELD_OJPEG_COUNT 7
 
-static const TIFFFieldInfo ojpeg_field_info[] = {
+static const TIFFField ojpegFields[] = {
 	{TIFFTAG_JPEGIFOFFSET,1,1,TIFF_LONG8,0,TIFF_SETGET_UINT64,TIFF_SETGET_UNDEFINED,FIELD_OJPEG_JPEGINTERCHANGEFORMAT,TRUE,FALSE,"JpegInterchangeFormat",NULL},
 	{TIFFTAG_JPEGIFBYTECOUNT,1,1,TIFF_LONG8,0,TIFF_SETGET_UINT64,TIFF_SETGET_UNDEFINED,FIELD_OJPEG_JPEGINTERCHANGEFORMATLENGTH,TRUE,FALSE,"JpegInterchangeFormatLength",NULL},
 	{TIFFTAG_JPEGQTABLES,TIFF_VARIABLE2,TIFF_VARIABLE2,TIFF_LONG8,0,TIFF_SETGET_C32_UINT64,TIFF_SETGET_UNDEFINED,FIELD_OJPEG_JPEGQTABLES,FALSE,TRUE,"JpegQTables",NULL},
@@ -400,7 +399,7 @@ TIFFInitOJPEG(TIFF* tif, int scheme)
         /*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeFieldInfo(tif,ojpeg_field_info,FIELD_OJPEG_COUNT)) {
+	if (!_TIFFMergeField(tif, ojpegFields, TIFFArrayCount(ojpegFields))) {
 		TIFFErrorExt(tif->tif_clientdata, module,
 		    "Merging Old JPEG codec-specific tags failed");
 		return 0;
