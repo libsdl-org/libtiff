@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.40 2007-07-09 09:26:57 dron Exp $ */
+/* $Id: tif_ojpeg.c,v 1.41 2007-07-09 10:15:37 dron Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -569,7 +569,7 @@ OJPEGVSetField(TIFF* tif, uint32 tag, va_list ap)
 		default:
 			return (*sp->vsetparent)(tif,tag,ap);
 	}
-	TIFFSetFieldBit(tif,_TIFFFieldWithTag(tif,tag)->field_bit);
+	TIFFSetFieldBit(tif,TIFFFieldWithTag(tif,tag)->field_bit);
 	tif->tif_flags|=TIFF_DIRTYDIRECT;
 	return(1);
 }
