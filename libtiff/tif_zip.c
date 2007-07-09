@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.24 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_zip.c,v 1.25 2007-07-09 09:26:57 dron Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -394,7 +394,7 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	/*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeField(tif, zipFields, TIFFArrayCount(zipFields))) {
+	if (!_TIFFMergeFields(tif, zipFields, TIFFArrayCount(zipFields))) {
 		TIFFErrorExt(tif->tif_clientdata, module,
 			     "Merging Deflate codec-specific tags failed");
 		return 0;

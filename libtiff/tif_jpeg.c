@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.70 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.71 2007-07-09 09:26:57 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -2079,7 +2079,7 @@ TIFFInitJPEG(TIFF* tif, int scheme)
 	/*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeField(tif, jpegFields, TIFFArrayCount(jpegFields))) {
+	if (!_TIFFMergeFields(tif, jpegFields, TIFFArrayCount(jpegFields))) {
 		TIFFErrorExt(tif->tif_clientdata,
 			     "TIFFInitJPEG",
 			     "Merging JPEG codec-specific tags failed");

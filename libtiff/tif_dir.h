@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.45 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_dir.h,v 1.46 2007-07-09 09:26:57 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -216,7 +216,7 @@ struct _TIFFFieldInfoArray {
 	const TIFFField* fieldinfo;     /* actual field info */
 };
 
-extern int _TIFFMergeField(TIFF*, const TIFFField[], uint32);
+extern int _TIFFMergeFields(TIFF*, const TIFFField[], uint32);
 extern const TIFFField* _TIFFFindOrRegisterFieldInfo(TIFF *, uint32,
 						     TIFFDataType);
 extern  TIFFField* _TIFFCreateAnonField(TIFF *, uint32, TIFFDataType);

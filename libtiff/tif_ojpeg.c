@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.39 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_ojpeg.c,v 1.40 2007-07-09 09:26:57 dron Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -399,7 +399,7 @@ TIFFInitOJPEG(TIFF* tif, int scheme)
         /*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeField(tif, ojpegFields, TIFFArrayCount(ojpegFields))) {
+	if (!_TIFFMergeFields(tif, ojpegFields, TIFFArrayCount(ojpegFields))) {
 		TIFFErrorExt(tif->tif_clientdata, module,
 		    "Merging Old JPEG codec-specific tags failed");
 		return 0;

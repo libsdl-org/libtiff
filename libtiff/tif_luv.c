@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.29 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_luv.c,v 1.30 2007-07-09 09:26:57 dron Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -1592,7 +1592,8 @@ TIFFInitSGILog(TIFF* tif, int scheme)
 	/*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeField(tif, LogLuvFields, TIFFArrayCount(LogLuvFields))) {
+	if (!_TIFFMergeFields(tif, LogLuvFields,
+			      TIFFArrayCount(LogLuvFields))) {
 		TIFFErrorExt(tif->tif_clientdata, module,
 		    "Merging SGILog codec-specific tags failed");
 		return 0;

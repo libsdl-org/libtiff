@@ -1,4 +1,4 @@
-/* $Id: tif_pixarlog.c,v 1.28 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_pixarlog.c,v 1.29 2007-07-09 09:26:57 dron Exp $ */
 
 /*
  * Copyright (c) 1996-1997 Sam Leffler
@@ -1348,8 +1348,8 @@ TIFFInitPixarLog(TIFF* tif, int scheme)
 	/*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeField(tif, pixarlogFields,
-			     TIFFArrayCount(pixarlogFields))) {
+	if (!_TIFFMergeFields(tif, pixarlogFields,
+			      TIFFArrayCount(pixarlogFields))) {
 		TIFFErrorExt(tif->tif_clientdata, module,
 			     "Merging PixarLog codec-specific tags failed");
 		return 0;

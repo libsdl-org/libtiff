@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.25 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_predict.c,v 1.26 2007-07-09 09:26:57 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -604,8 +604,8 @@ TIFFPredictorInit(TIFF* tif)
 	/*
 	 * Merge codec-specific tag information.
 	 */
-	if (!_TIFFMergeField(tif, predictFields,
-			     TIFFArrayCount(predictFields))) {
+	if (!_TIFFMergeFields(tif, predictFields,
+			      TIFFArrayCount(predictFields))) {
 		TIFFErrorExt(tif->tif_clientdata, "TIFFPredictorInit",
 		    "Merging Predictor codec-specific tags failed");
 		return 0;
