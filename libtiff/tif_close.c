@@ -1,4 +1,4 @@
-/* $Id: tif_close.c,v 1.13 2007-07-08 18:30:41 dron Exp $ */
+/* $Id: tif_close.c,v 1.14 2007-07-10 11:52:02 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -78,7 +78,7 @@ TIFFCleanup(TIFF* tif)
 
 		for (i = 0; i < tif->tif_nfields; i++)
 		{
-			TIFFField *fld = tif->tif_fieldinfo[i];
+			TIFFField *fld = tif->tif_fields[i];
 			if (fld->field_bit == FIELD_CUSTOM &&
 			    strncmp("Tag ", fld->field_name, 4) == 0)
 			{
@@ -87,7 +87,7 @@ TIFFCleanup(TIFF* tif)
 			}
 		}
 
-		_TIFFfree(tif->tif_fieldinfo);
+		_TIFFfree(tif->tif_fields);
 	}
 
 	_TIFFfree(tif);
