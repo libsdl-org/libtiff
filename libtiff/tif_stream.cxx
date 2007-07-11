@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.8 2007-07-11 20:27:20 bfriesen Exp $ */
+/* $Id: tif_stream.cxx,v 1.9 2007-07-11 21:27:14 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -75,18 +75,34 @@ using namespace std;
     basic_ostream& ostream::write(const char *str, streamsize count)
 */
 
-class tiffis_data
-{
-  public:
+struct tiffis_data;
+struct tiffos_data;
 
+extern "C" {
+
+	static tmsize_t _tiffosReadProc(thandle_t, void*, tmsize_t);
+	static tmsize_t _tiffisReadProc(thandle_t fd, void* buf, tmsize_t size);
+	static tmsize_t _tiffosWriteProc(thandle_t fd, void* buf, tmsize_t size);
+	static tmsize_t _tiffisWriteProc(thandle_t, void*, tmsize_t);
+	static uint64   _tiffosSeekProc(thandle_t fd, uint64 off, int whence);
+	static uint64   _tiffisSeekProc(thandle_t fd, uint64 off, int whence);
+	static uint64   _tiffosSizeProc(thandle_t fd);
+	static uint64   _tiffisSizeProc(thandle_t fd);
+	static int      _tiffosCloseProc(thandle_t fd);
+	static int      _tiffisCloseProc(thandle_t fd);
+	static int 	_tiffDummyMapProc(thandle_t , void** base, toff_t* size );
+	static void     _tiffDummyUnmapProc(thandle_t , void* base, toff_t size );
+	static TIFF*    _tiffStreamOpen(const char* name, const char* mode, void *fd);
+}
+
+struct tiffis_data
+{
 	istream	*stream;
         ios::pos_type start_pos;
 };
 
-class tiffos_data
+struct tiffos_data
 {
-  public:
-
 	ostream	*stream;
 	ios::pos_type start_pos;
 };
