@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.19 2007-06-28 22:23:49 bfriesen Exp $ */
+/* $Id: tif_unix.c,v 1.20 2007-07-11 15:52:48 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -111,7 +111,7 @@ _tiffSizeProc(thandle_t fd)
 #include <sys/mman.h>
 
 static int
-_tiffMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
+_tiffMapProc(thandle_t fd, void** pbase, toff_t* psize)
 {
 	uint64 size64 = _tiffSizeProc(fd);
 	tmsize_t sizem = (tmsize_t)size64;
@@ -127,21 +127,21 @@ _tiffMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
 }
 
 static void
-_tiffUnmapProc(thandle_t fd, void* base, tmsize_t size)
+_tiffUnmapProc(thandle_t fd, void* base, toff_t size)
 {
 	(void) fd;
 	(void) munmap(base, (off_t) size);
 }
 #else /* !HAVE_MMAP */
 static int
-_tiffMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
+_tiffMapProc(thandle_t fd, void** pbase, toff_t* psize)
 {
 	(void) fd; (void) pbase; (void) psize;
 	return (0);
 }
 
 static void
-_tiffUnmapProc(thandle_t fd, void* base, tmsize_t size)
+_tiffUnmapProc(thandle_t fd, void* base, toff_t size)
 {
 	(void) fd; (void) base; (void) size;
 }

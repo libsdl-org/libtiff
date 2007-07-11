@@ -1,4 +1,4 @@
-/* $Id: tif_close.c,v 1.14 2007-07-10 11:52:02 dron Exp $ */
+/* $Id: tif_close.c,v 1.15 2007-07-11 15:52:48 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -69,7 +69,7 @@ TIFFCleanup(TIFF* tif)
 	if (tif->tif_rawdata && (tif->tif_flags&TIFF_MYBUFFER))
 		_TIFFfree(tif->tif_rawdata);
 	if (isMapped(tif))
-		TIFFUnmapFileContents(tif, tif->tif_base, tif->tif_size);
+		TIFFUnmapFileContents(tif, tif->tif_base, (toff_t)tif->tif_size);
 
 	/* Clean up custom fields */
 	if (tif->tif_nfields > 0)

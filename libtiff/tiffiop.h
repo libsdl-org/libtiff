@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.65 2007-07-10 11:52:02 dron Exp $ */
+/* $Id: tiffiop.h,v 1.66 2007-07-11 15:52:48 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -190,7 +190,7 @@ struct tiff {
 	tmsize_t             tif_rawcc;        /* bytes unread from raw buffer */
 	/* memory-mapped file support */
 	uint8*               tif_base;         /* base of mapped file */
-	tmsize_t             tif_size;         /* size of mapped file region (bytes) */
+	tmsize_t             tif_size;         /* size of mapped file region (bytes, thus tmsize_t) */
 	TIFFMapFileProc      tif_mapproc;      /* map file method */
 	TIFFUnmapFileProc    tif_unmapproc;    /* unmap file method */
 	/* input/output callback methods */

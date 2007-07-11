@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.76 2007-07-09 10:15:37 dron Exp $ */
+/* $Id: tiffio.h,v 1.77 2007-07-11 15:52:48 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -272,8 +272,8 @@ typedef tmsize_t (*TIFFReadWriteProc)(thandle_t, void*, tmsize_t);
 typedef uint64 (*TIFFSeekProc)(thandle_t, uint64, int);
 typedef int (*TIFFCloseProc)(thandle_t);
 typedef uint64 (*TIFFSizeProc)(thandle_t);
-typedef int (*TIFFMapFileProc)(thandle_t, void** base, tmsize_t* size);
-typedef void (*TIFFUnmapFileProc)(thandle_t, void* base, tmsize_t size);
+typedef int (*TIFFMapFileProc)(thandle_t, void** base, toff_t* size);
+typedef void (*TIFFUnmapFileProc)(thandle_t, void* base, toff_t size);
 typedef void (*TIFFExtendProc)(TIFF*);
 
 extern const char* TIFFGetVersion(void);

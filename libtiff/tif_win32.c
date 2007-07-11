@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.30 2007-06-28 01:34:01 joris Exp $ */
+/* $Id: tif_win32.c,v 1.31 2007-07-11 15:52:48 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -133,7 +133,7 @@ _tiffSizeProc(thandle_t fd)
 }
 
 static int
-_tiffDummyMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
+_tiffDummyMapProc(thandle_t fd, void** pbase, toff_t* psize)
 {
 	(void) fd;
 	(void) pbase;
@@ -153,7 +153,7 @@ _tiffDummyMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
  * with Visual C++ 5.0
  */
 static int
-_tiffMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
+_tiffMapProc(thandle_t fd, void** pbase, toff_t* psize)
 {
 	uint64 size;
 	tmsize_t sizem;
@@ -170,12 +170,12 @@ _tiffMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
 	CloseHandle(hMapFile);
 	if (*pbase == NULL)
 		return (0);
-	*psize = sizem;
+	*psize = size;
 	return(1);
 }
 
 static void
-_tiffDummyUnmapProc(thandle_t fd, void* base, tmsize_t size)
+_tiffDummyUnmapProc(thandle_t fd, void* base, toff_t size)
 {
 	(void) fd;
 	(void) base;
@@ -183,7 +183,7 @@ _tiffDummyUnmapProc(thandle_t fd, void* base, tmsize_t size)
 }
 
 static void
-_tiffUnmapProc(thandle_t fd, void* base, tmsize_t size)
+_tiffUnmapProc(thandle_t fd, void* base, toff_t size)
 {
 	(void) fd;
 	(void) size;

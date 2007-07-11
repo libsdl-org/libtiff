@@ -1,4 +1,4 @@
-/* $Id: tif_open.c,v 1.41 2007-06-29 11:30:29 joris Exp $ */
+/* $Id: tif_open.c,v 1.42 2007-07-11 15:52:48 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,14 +33,14 @@
  * Dummy functions to fill the omitted client procedures.
  */
 static int
-_tiffDummyMapProc(thandle_t fd, void** pbase, tmsize_t* psize)
+_tiffDummyMapProc(thandle_t fd, void** pbase, toff_t* psize)
 {
 	(void) fd; (void) pbase; (void) psize;
 	return (0);
 }
 
 static void
-_tiffDummyUnmapProc(thandle_t fd, void* base, tmsize_t size)
+_tiffDummyUnmapProc(thandle_t fd, void* base, toff_t size)
 {
 	(void) fd; (void) base; (void) size;
 }
@@ -450,9 +450,17 @@ TIFFClientOpen(
 			 * has not explicitly suppressed usage with the
 			 * 'm' flag in the open mode (see above).
 			 */
-			if ((tif->tif_flags & TIFF_MAPPED) &&
-			    !TIFFMapFileContents(tif,(void**)(&tif->tif_base),&tif->tif_size))
-				tif->tif_flags &= ~TIFF_MAPPED;
+			if (tif->tif_flags & TIFF_MAPPED)
+			{
+				toff_t n;
+				if (TIFFMapFileContents(tif,(void**)(&tif->tif_base),&n))
+				{
+					tif->tif_size=(tmsize_t)n;
+					assert((toff_t)tif->tif_size==n);
+				}
+				else
+					tif->tif_flags &= ~TIFF_MAPPED;
+			}
 			if (TIFFReadDirectory(tif)) {
 				tif->tif_rawcc = (tmsize_t)-1;
 				tif->tif_flags |= TIFF_BUFFERSETUP;
