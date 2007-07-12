@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.66 2007-07-11 15:52:48 joris Exp $ */
+/* $Id: tiffiop.h,v 1.67 2007-07-12 13:59:34 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -208,6 +208,10 @@ struct tiff {
 	const TIFFField*     tif_foundfield;   /* cached pointer to already found tag */
 	TIFFTagMethods       tif_tagmethods;   /* tag get/set/print routines */
 	TIFFClientInfoLink*  tif_clientinfo;   /* extra client information. */
+	/* Backward compatibility stuff. We need these two fields for
+	 * setting up an old tag extension scheme. */
+	TIFFFieldArray*      tif_fieldscompat;
+	uint32               tif_nfieldscompat;
 };
 
 #define isPseudoTag(t) (t > 0xffff)            /* is tag value normal or pseudo */
