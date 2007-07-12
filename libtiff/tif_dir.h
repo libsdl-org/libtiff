@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.48 2007-07-10 11:52:02 dron Exp $ */
+/* $Id: tif_dir.h,v 1.49 2007-07-12 02:16:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -250,7 +250,7 @@ struct _TIFFField {
 typedef enum {
 	tfiatImage,
 	tfiatExif,
-	tfiatOther,
+	tfiatOther
 } TIFFFieldInfoArrayType;
 
 struct _TIFFFieldInfoArray {
