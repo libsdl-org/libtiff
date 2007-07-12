@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.37.2.3 2007-07-03 15:26:13 dron Exp $
+/* $Id: tiff2pdf.c,v 1.37.2.4 2007-07-12 17:25:44 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -537,6 +537,7 @@ t2p_unmapproc(thandle_t handle, tdata_t data, toff_t offset)
 int main(int argc, char** argv){
 
 	extern char *optarg;
+	extern int optind;
 	const char *outfilename = NULL;
 	T2P *t2p = NULL;
 	TIFF *input = NULL, *output = NULL;
@@ -2593,8 +2594,9 @@ dataready:
 		bufferoffset = TIFFWriteEncodedStrip(output, (tstrip_t)0,
 						     buffer,
 						     stripsize * stripcount); 
-	} else {
+	} else
 #endif
+	{
 		bufferoffset = TIFFWriteEncodedStrip(output, (tstrip_t)0,
 						     buffer,
 						     t2p->tiff_datasize); 
