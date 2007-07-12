@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.42 2007-07-12 17:25:12 dron Exp $
+/* $Id: tiff2pdf.c,v 1.43 2007-07-12 17:32:53 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -402,14 +402,14 @@ t2p_sizeproc(thandle_t handle)
 }
 
 static int 
-t2p_mapproc(thandle_t handle, void **data, tmsize_t *offset) 
+t2p_mapproc(thandle_t handle, void **data, toff_t *offset) 
 { 
 	(void) handle, (void) data, (void) offset;
 	return -1; 
 }
 
 static void 
-t2p_unmapproc(thandle_t handle, void *data, tmsize_t offset)
+t2p_unmapproc(thandle_t handle, void *data, toff_t offset)
 { 
 	(void) handle, (void) data, (void) offset;
 }
