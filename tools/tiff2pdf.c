@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.41 2007-07-06 01:25:17 bfriesen Exp $
+/* $Id: tiff2pdf.c,v 1.42 2007-07-12 17:25:12 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -537,6 +537,7 @@ t2p_unmapproc(thandle_t handle, void *data, tmsize_t offset)
 int main(int argc, char** argv){
 
 	extern char *optarg;
+	extern int optind;
 	const char *outfilename = NULL;
 	T2P *t2p = NULL;
 	TIFF *input = NULL, *output = NULL;
