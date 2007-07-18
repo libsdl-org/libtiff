@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.17.2.1 2007-04-06 14:18:47 dron Exp $
+# $Id: Makefile.vc,v 1.17.2.2 2007-07-18 14:30:05 dron Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
 #
@@ -94,6 +94,7 @@ $(DLLNAME):	tif_config.h tiffconf.h libtiff.def $(OBJ)
 	/implib:libtiff_i.lib $(OBJ) $(LIBS)
 	
 clean:
+	-del tif_config.h tiffconf.h
 	-del *.obj
 	-del *.lib
 	-del *.dll
