@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.72 2007-07-09 10:15:37 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.73 2007-07-18 15:26:09 dron Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -77,7 +77,7 @@ int TIFFFillTile(TIFF* tif, uint32 tile);
 */
 
 /* Define "boolean" as unsigned char, not int, per Windows custom. */
-#if defined(WIN32) && !defined(__MINGW32__)
+#if defined(__WIN32__) && !defined(__MINGW32__)
 # ifndef __RPCNDR_H__            /* don't conflict if rpcndr.h already read */
    typedef unsigned char boolean;
 # endif
