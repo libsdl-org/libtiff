@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.20 2007-07-11 15:52:48 joris Exp $ */
+/* $Id: tif_unix.c,v 1.21 2007-07-18 13:46:41 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -218,9 +218,6 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 #ifdef O_BINARY
 	m |= O_BINARY;
 #endif
-
-
-	m |= O_LARGEFILE;
 
 	fd = _wopen(name, m, 0666);
 	if (fd < 0) {
