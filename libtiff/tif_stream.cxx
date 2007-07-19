@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.9 2007-07-11 21:27:14 bfriesen Exp $ */
+/* $Id: tif_stream.cxx,v 1.10 2007-07-19 15:44:31 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -93,7 +93,6 @@ extern "C" {
 	static int 	_tiffDummyMapProc(thandle_t , void** base, toff_t* size );
 	static void     _tiffDummyUnmapProc(thandle_t , void* base, toff_t size );
 	static TIFF*    _tiffStreamOpen(const char* name, const char* mode, void *fd);
-}
 
 struct tiffis_data
 {
@@ -390,6 +389,8 @@ _tiffStreamOpen(const char* name, const char* mode, void *fd)
 
 	return (tif);
 }
+
+} /* extern "C" */
 
 TIFF*
 TIFFStreamOpen(const char* name, ostream *os)
