@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.35 2007-06-27 16:09:58 joris Exp $ */
+/* $Id: tif_lzw.c,v 1.36 2007-07-19 13:25:43 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -527,9 +527,15 @@ LZWDecode(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 	sp->dec_maxcodep = maxcodep;
 
 	if (occ > 0) {
+#if defined(__WIN32__) && defined(_MSC_VER)
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Not enough data at scanline %d (short %llud bytes)",
-		    tif->tif_row, (unsigned long long) occ);
+			"Not enough data at scanline %d (short %I64d bytes)",
+			     tif->tif_row, (unsigned __int64) occ);
+#else
+		TIFFErrorExt(tif->tif_clientdata, module,
+			"Not enough data at scanline %d (short %llu bytes)",
+			     tif->tif_row, (unsigned long long) occ);
+#endif
 		return (0);
 	}
 	return (1);
@@ -710,9 +716,15 @@ LZWDecodeCompat(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 	sp->dec_maxcodep = maxcodep;
 
 	if (occ > 0) {
+#if defined(__WIN32__) && defined(_MSC_VER)
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Not enough data at scanline %d (short %llud bytes)",
-		    tif->tif_row, (unsigned long long) occ);
+			"Not enough data at scanline %d (short %I64d bytes)",
+			     tif->tif_row, (unsigned __int64) occ);
+#else
+		TIFFErrorExt(tif->tif_clientdata, module,
+			"Not enough data at scanline %d (short %llu bytes)",
+			     tif->tif_row, (unsigned long long) occ);
+#endif
 		return (0);
 	}
 	return (1);
@@ -732,7 +744,8 @@ LZWSetupEncode(TIFF* tif)
 	assert(sp != NULL);
 	sp->enc_hashtab = (hash_t*) _TIFFmalloc(HSIZE*sizeof (hash_t));
 	if (sp->enc_hashtab == NULL) {
-		TIFFErrorExt(tif->tif_clientdata, module, "No space for LZW hash table");
+		TIFFErrorExt(tif->tif_clientdata, module,
+			     "No space for LZW hash table");
 		return (0);
 	}
 	return (1);
