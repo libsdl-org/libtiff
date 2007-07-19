@@ -1,4 +1,4 @@
-/* $Id: tif_close.c,v 1.16 2007-07-12 13:59:34 dron Exp $ */
+/* $Id: tif_close.c,v 1.17 2007-07-19 17:13:56 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -76,7 +76,7 @@ TIFFCleanup(TIFF* tif)
 	/*
          * Clean up custom fields.
          */
-	if (tif->tif_nfields > 0) {
+	if (tif->tif_fields && tif->tif_nfields > 0) {
 		uint32 i;
 
 		for (i = 0; i < tif->tif_nfields; i++) {
