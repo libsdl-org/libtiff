@@ -1,4 +1,4 @@
-/* $Id: tif_aux.c,v 1.21 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_aux.c,v 1.22 2007-07-19 13:11:59 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -272,4 +272,46 @@ TIFFGetFieldDefaulted(TIFF* tif, uint32 tag, ...)
 	return (ok);
 }
 
+struct _Int64Parts {
+	int32 low, high;
+};
+
+typedef union {
+	struct _Int64Parts part;
+	int64 value;
+} _Int64;
+
+float
+_TIFFUInt64ToFloat(uint64 ui64)
+{
+	_Int64 i;
+
+	i.value = ui64;
+	if (i.part.high >= 0) {
+		return (float)i.value;
+	} else {
+		long double df;
+		df = (long double)i.value;
+		df += 18446744073709551616.0; /* adding 2**64 */
+		return (float)df;
+	}
+}
+
+double
+_TIFFUInt64ToDouble(uint64 ui64)
+{
+	_Int64 i;
+
+	i.value = ui64;
+	if (i.part.high >= 0) {
+		return (double)i.value;
+	} else {
+		long double df;
+		df = (long double)i.value;
+		df += 18446744073709551616.0; /* adding 2**64 */
+		return (double)df;
+	}
+}
+
 /* vim: set ts=8 sts=8 sw=8 noet: */
+

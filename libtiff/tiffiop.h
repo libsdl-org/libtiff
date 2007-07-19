@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.67 2007-07-12 13:59:34 dron Exp $ */
+/* $Id: tiffiop.h,v 1.68 2007-07-19 13:11:59 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -307,6 +307,9 @@ extern TIFFErrorHandlerExt _TIFFerrorHandlerExt;
 
 extern void* _TIFFCheckMalloc(TIFF* tif, tmsize_t nmemb, tmsize_t elem_size, const char* what);
 extern void* _TIFFCheckRealloc(TIFF* tif, void* buffer, tmsize_t nmemb, tmsize_t elem_size, const char* what);
+
+extern double _TIFFUInt64ToDouble(uint64);
+extern float _TIFFUInt64ToFloat(uint64);
 
 extern int TIFFInitDumpMode(TIFF*, int);
 #ifdef PACKBITS_SUPPORT
