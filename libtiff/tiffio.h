@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.78 2007-07-12 13:59:34 dron Exp $ */
+/* $Id: tiffio.h,v 1.79 2007-08-10 10:19:57 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -201,8 +201,6 @@ struct _TIFFRGBAImage {
 	int alpha;                              /* type of alpha data present */
 	uint32 width;                           /* image width */
 	uint32 height;                          /* image height */
-	uint16 SubsamplingHor;                  /* subsampling factors */
-	uint16 SubsamplingVer;
 	uint16 bitspersample;                   /* image bits/sample */
 	uint16 samplesperpixel;                 /* image samples/pixel */
 	uint16 orientation;                     /* image orientation */
