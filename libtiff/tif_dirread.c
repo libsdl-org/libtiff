@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.130 2007-08-24 20:46:00 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.131 2007-09-20 16:34:23 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4245,9 +4245,9 @@ CheckDirCount(TIFF* tif, TIFFDirEntry* dir, uint32 count)
  */
 static uint16
 TIFFFetchDirectory(TIFF* tif, uint64 diroff, TIFFDirEntry** pdir,
-    uint64 *nextdiroff)
+                   uint64 *nextdiroff)
 {
-	static const char module[] = "TIFFFetchDirectoryClassic";
+	static const char module[] = "TIFFFetchDirectory";
 
 	void* origdir;
 	uint16 dircount16;
