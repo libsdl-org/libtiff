@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.58 2007-09-20 19:57:58 fwarmerdam Exp $ */
+/* $Id: tif_dirwrite.c,v 1.59 2007-09-21 14:21:03 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1405,10 +1405,11 @@ TIFFWriteDirectoryTagLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, 
     uint32* q;
     int o;
 
+    /* is this just a counting pass? */
     if (dir==NULL)
     {
-        (*ndir)++;  /* crash - makes tracebacks easier */
-        return(1);  /* why do we return success? */
+        (*ndir)++;
+        return(1);
     }
 
     /* We always write LONG8 for BigTIFF, no checking needed. */
