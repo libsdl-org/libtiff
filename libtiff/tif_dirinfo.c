@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.65.2.5 2007-09-13 20:49:15 fwarmerdam Exp $ */
+/* $Id: tif_dirinfo.c,v 1.65.2.6 2007-09-22 14:51:29 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -591,8 +591,8 @@ TIFFMergeFieldInfo(TIFF* tif, const TIFFFieldInfo info[], int n)
 int
 _TIFFMergeFieldInfo(TIFF* tif, const TIFFFieldInfo info[], int n)
 {
-	const char module[] = "_TIFFMergeFieldInfo";
-	const char reason[] = "for field info array";
+	static const char module[] = "_TIFFMergeFieldInfo";
+	static const char reason[] = "for field info array";
 	TIFFFieldInfo** tp;
 	int i;
 
