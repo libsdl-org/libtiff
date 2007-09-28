@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.59 2007-09-21 14:21:03 fwarmerdam Exp $ */
+/* $Id: tif_dirwrite.c,v 1.60 2007-09-28 14:49:15 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -781,7 +781,7 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64* pdiroff)
 			n+=4;
 			o++;
 		}
-		*(uint32*)n = tif->tif_nextdiroff;
+		*(uint32*)n = (uint32)tif->tif_nextdiroff;
 	}
 	else
 	{

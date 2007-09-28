@@ -1,4 +1,4 @@
-/* $Id: tif_read.c,v 1.26 2007-07-19 15:31:20 dron Exp $ */
+/* $Id: tif_read.c,v 1.27 2007-09-28 14:49:15 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -136,7 +136,7 @@ TIFFReadEncodedStrip(TIFF* tif, uint32 strip, void* buf, tmsize_t size)
 	if (strip>=td->td_nstrips)
 	{
 		TIFFErrorExt(tif->tif_clientdata,module,
-		    "%uld: Strip out of range, max %uld",(unsigned long)strip,
+		    "%lu: Strip out of range, max %lu",(unsigned long)strip,
 		    (unsigned long)td->td_nstrips);
 		return((tmsize_t)(-1));
 	}
@@ -188,14 +188,12 @@ TIFFReadRawStrip1(TIFF* tif, uint32 strip, void* buf, tmsize_t size,
 #if defined(__WIN32__) && defined(_MSC_VER)
 			TIFFErrorExt(tif->tif_clientdata, module,
 		"Read error at scanline %lu; got %I64u bytes, expected %I64u",
-				     tif->tif_name,
 				     (unsigned long) tif->tif_row,
 				     (unsigned __int64) cc,
 				     (unsigned __int64) size);
 #else
 			TIFFErrorExt(tif->tif_clientdata, module,
 		"Read error at scanline %lu; got %llu bytes, expected %llu",
-				     tif->tif_name,
 				     (unsigned long) tif->tif_row,
 				     (unsigned long long) cc,
 				     (unsigned long long) size);
