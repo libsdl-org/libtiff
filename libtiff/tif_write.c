@@ -1,4 +1,4 @@
-/* $Id: tif_write.c,v 1.28 2007-07-11 13:41:44 joris Exp $ */
+/* $Id: tif_write.c,v 1.29 2007-10-01 12:43:50 joris Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -82,7 +82,7 @@ TIFFWriteScanline(TIFF* tif, void* buf, uint32 row, uint16 sample)
 	if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {
 		if (sample >= td->td_samplesperpixel) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "%lud: Sample out of range, max %lud",
+			    "%lu: Sample out of range, max %lu",
 			    (unsigned long) sample, (unsigned long) td->td_samplesperpixel);
 			return (-1);
 		}
