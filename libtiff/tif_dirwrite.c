@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.60 2007-09-28 14:49:15 joris Exp $ */
+/* $Id: tif_dirwrite.c,v 1.61 2007-11-02 19:53:04 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -323,6 +323,8 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64* pdiroff)
 	 */
 	if (imagedone)
 	{
+                tmsize_t orig_rawcc = tif->tif_rawcc;
+
 		if (tif->tif_flags & TIFF_POSTENCODE)
 		{
 			tif->tif_flags &= ~TIFF_POSTENCODE;
@@ -336,9 +338,12 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64* pdiroff)
 		(*tif->tif_close)(tif);       /* shutdown encoder */
 		/*
 		 * Flush any data that might have been written
-		 * by the compression close+cleanup routines.
+		 * by the compression close+cleanup routines.  But
+                 * be careful not to write stuff if we didn't add data
+                 * in the previous steps as the "rawcc" data may well be
+                 * a previously read tile/strip in mixed read/write mode.
 		 */
-		if (tif->tif_rawcc > 0
+		if (tif->tif_rawcc > 0 && tif->tif_rawcc != orig_rawcc
 		    && (tif->tif_flags & TIFF_BEENWRITING) != 0
 		    && !TIFFFlushData1(tif))
 		{
