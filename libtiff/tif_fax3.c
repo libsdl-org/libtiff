@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.43.2.2 2007-04-07 14:58:30 dron Exp $ */
+/* $Id: tif_fax3.c,v 1.43.2.3 2007-11-26 15:27:29 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -1086,6 +1086,9 @@ Fax3Cleanup(TIFF* tif)
 
 	if (Fax3State(tif)->subaddress)
 		_TIFFfree(Fax3State(tif)->subaddress);
+	if (Fax3State(tif)->faxdcs)
+		_TIFFfree(Fax3State(tif)->faxdcs);
+
 	_TIFFfree(tif->tif_data);
 	tif->tif_data = NULL;
 
