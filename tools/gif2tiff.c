@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.8 2004-09-02 14:36:33 dron Exp $ */
+/* $Id: gif2tiff.c,v 1.9 2008-01-01 15:49:00 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -250,7 +250,7 @@ readscreen(void)
     global = buf[4] & 0x80;
     if (global) {
         globalbits = (buf[4] & 0x07) + 1;
-        fread(globalmap,3,1<<globalbits,infile);
+        fread(globalmap,3,((size_t)1)<<globalbits,infile);
     }
 }
 
@@ -285,7 +285,7 @@ readgifimage(char* mode)
 
         fprintf(stderr, "   local colors: %d\n", 1<<localbits);
 
-        fread(localmap, 3, 1<<localbits, infile);
+        fread(localmap, 3, ((size_t)1)<<localbits, infile);
         initcolors(localmap, 1<<localbits);
     } else if (global) {
         initcolors(globalmap, 1<<globalbits);

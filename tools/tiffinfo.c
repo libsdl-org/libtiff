@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.9 2007-06-12 13:08:09 joris Exp $ */
+/* $Id: tiffinfo.c,v 1.10 2008-01-01 15:49:01 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -254,7 +254,7 @@ TIFFReadSeparateStripData(TIFF* tif)
 
 static void
 ShowTile(uint32 row, uint32 col, tsample_t sample,
-    unsigned char* pp, uint32 nrow, uint32 rowsize)
+    unsigned char* pp, uint32 nrow, tsize_t rowsize)
 {
 	uint32 cc;
 
