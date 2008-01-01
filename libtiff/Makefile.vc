@@ -1,4 +1,4 @@
-# $Id: Makefile.vc,v 1.20 2007-07-18 14:18:08 dron Exp $
+# $Id: Makefile.vc,v 1.21 2008-01-01 15:53:10 fwarmerdam Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
 #
@@ -97,5 +97,5 @@ clean:
 	-del *.obj
 	-del *.lib
 	-del *.dll
-	-del *.exe
+	-del *.dll.manifest
 	-del *.pdb
