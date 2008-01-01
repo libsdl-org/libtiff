@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.15 2007-07-04 11:31:36 dron Exp $ */
+/* $Id: tiffdump.c,v 1.16 2008-01-01 15:45:14 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -50,6 +50,10 @@
 
 #ifndef O_BINARY
 # define O_BINARY	0
+#endif
+
+#if defined(_WIN32)
+typedef	TIFF_SSIZE_T	ssize_t;
 #endif
 
 static union
