@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.64 2008-01-01 16:26:14 fwarmerdam Exp $ */
+/* $Id: tif_dirwrite.c,v 1.65 2008-01-07 15:50:02 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2665,12 +2665,12 @@ TIFFRewriteField(TIFF* tif, uint16 tag, TIFFDataType in_datatype,
     {
         uint32 value;
 
-        value = entry_count;
+        value = (uint32) entry_count;
         memcpy( direntry_raw + 4, &value, sizeof(uint32) );
         if (tif->tif_flags&TIFF_SWAB)
             TIFFSwabLong( (uint32 *) (direntry_raw + 4) );
 
-        value = entry_offset;
+        value = (uint32) entry_offset;
         memcpy( direntry_raw + 8, &value, sizeof(uint32) );
         if (tif->tif_flags&TIFF_SWAB)
             TIFFSwabLong( (uint32 *) (direntry_raw + 8) );
