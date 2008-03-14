@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.138 2008-02-09 09:51:49 joris Exp $ */
+/* $Id: tif_dirread.c,v 1.139 2008-03-14 05:58:40 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -723,10 +723,12 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryArray(TIFF* tif, TIFFDirEntry* d
 		*value=0;
 		return(TIFFReadDirEntryErrOk);
 	}
+#ifdef notdef
 	if ((uint64)(4*1024*1024/typesize)<direntry->tdir_count)
 		return(TIFFReadDirEntryErrSizesan);
 	if ((uint64)(4*1024*1024/desttypesize)<direntry->tdir_count)
 		return(TIFFReadDirEntryErrSizesan);
+#endif
 	*count=(uint32)direntry->tdir_count;
 	datasize=(*count)*typesize;
 	assert((tmsize_t)datasize>0);
