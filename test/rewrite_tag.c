@@ -1,4 +1,4 @@
-/* $Id: rewrite_tag.c,v 1.1 2008-01-01 13:55:23 fwarmerdam Exp $ */
+/* $Id: rewrite_tag.c,v 1.2 2008-03-28 01:42:06 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2007, Frank Warmerdam <warmerdam@pobox.com>
@@ -336,8 +336,8 @@ main(int argc, char **argv)
     failure |= rewrite_test( "rewrite4.tif", 1, 1, 100 );
 
     /* test with very large values that don't fit in 4bytes (bigtiff only) */
-    failure |= rewrite_test( "rewrite5.tif", 1000, 1, 0x6000000000 );
-    failure |= rewrite_test( "rewrite6.tif", 1, 1, 0x6000000000 );
+    failure |= rewrite_test( "rewrite5.tif", 1000, 1, 0x6000000000ULL );
+    failure |= rewrite_test( "rewrite6.tif", 1, 1, 0x6000000000ULL );
 
     return failure;
 }
