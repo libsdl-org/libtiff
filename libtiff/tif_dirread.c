@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.139 2008-03-14 05:58:40 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.140 2008-04-09 08:58:11 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -655,7 +655,16 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryDouble(TIFF* tif, TIFFDirEntry* 
 				err=TIFFReadDirEntryCheckedLong8(tif,direntry,&m);
 				if (err!=TIFFReadDirEntryErrOk)
 					return(err);
-				*value=(double)m;
+#if defined(__WIN32__) && (_MSC_VER < 1500)
+				/*
+				 * XXX: MSVC 6.0 does not support conversion
+				 * of 64-bit integers into floating point
+				 * values.
+				 */
+				*value = _TIFFUInt64ToDouble(m);
+#else
+				*value = (double)m;
+#endif
 				return(TIFFReadDirEntryErrOk);
 			}
 		case TIFF_SLONG8:
@@ -2267,7 +2276,16 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryFloatArray(TIFF* tif, TIFFDirEnt
 				{
 					if (tif->tif_flags&TIFF_SWAB)
 						TIFFSwabLong8(ma);
-					*mb++=(float)(*ma++);
+#if defined(__WIN32__) && (_MSC_VER < 1500)
+					/*
+					 * XXX: MSVC 6.0 does not support
+					 * conversion of 64-bit integers into
+					 * floating point values.
+					 */
+					*mb++ = _TIFFUInt64ToFloat(*ma++);
+#else
+					*mb++ = (float)(*ma++);
+#endif
 				}
 			}
 			break;
@@ -2501,7 +2519,16 @@ TIFFReadDirEntryDoubleArray(TIFF* tif, TIFFDirEntry* direntry, double** value)
 				{
 					if (tif->tif_flags&TIFF_SWAB)
 						TIFFSwabLong8(ma);
-					*mb++=(double)(*ma++);
+#if defined(__WIN32__) && (_MSC_VER < 1500)
+					/*
+					 * XXX: MSVC 6.0 does not support
+					 * conversion of 64-bit integers into
+					 * floating point values.
+					 */
+					*mb++ = _TIFFUInt64ToDouble(*ma++);
+#else
+					*mb++ = (double)(*ma++);
+#endif
 				}
 			}
 			break;
