@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.71 2008-04-10 10:42:53 dron Exp $ */
+/* $Id: tiffiop.h,v 1.72 2008-04-10 11:08:48 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -286,6 +286,7 @@ extern void _TIFFSwab64BitData(TIFF* tif, uint8* buf, tmsize_t cc);
 extern int TIFFFlushData1(TIFF* tif);
 extern int TIFFDefaultDirectory(TIFF* tif);
 extern void _TIFFSetDefaultCompressionState(TIFF* tif);
+extern int _TIFFRewriteField(TIFF *, uint16, TIFFDataType, tmsize_t, void *);
 extern int TIFFSetCompressionScheme(TIFF* tif, int scheme);
 extern int TIFFSetDefaultCompressionState(TIFF* tif);
 extern uint32 _TIFFDefaultStripSize(TIFF* tif, uint32 s);
