@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.72 2008-04-10 11:08:48 dron Exp $ */
+/* $Id: tiffiop.h,v 1.73 2008-04-14 09:05:26 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -86,7 +86,11 @@ typedef struct {
 	uint16 tdir_tag;        /* see below */
 	uint16 tdir_type;       /* data type; see below */
 	uint64 tdir_count;      /* number of items; length in spec */
-	uint64 tdir_offset;
+	union {
+		uint16 toff_short;
+		uint32 toff_long;
+		uint64 toff_long8;
+	} tdir_offset;		/* either offset or the data itself if fits */
 } TIFFDirEntry;
 
 typedef struct client_info {

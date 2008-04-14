@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.66 2008-04-10 11:08:48 dron Exp $ */
+/* $Id: tif_dirwrite.c,v 1.67 2008-04-14 09:05:26 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2120,7 +2120,7 @@ TIFFWriteDirectoryTagData(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, uint16 tag
 	dir[m].tdir_tag=tag;
 	dir[m].tdir_type=datatype;
 	dir[m].tdir_count=count;
-	dir[m].tdir_offset=0;
+	dir[m].tdir_offset.toff_long8 = 0;
 	if (datalength<=((tif->tif_flags&TIFF_BIGTIFF)?0x8U:0x4U))
 		_TIFFmemcpy(&dir[m].tdir_offset,data,datalength);
 	else
@@ -2159,9 +2159,9 @@ TIFFWriteDirectoryTagData(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, uint16 tag
 		}
 		else
 		{
-			dir[m].tdir_offset=na;
+			dir[m].tdir_offset.toff_long8 = na;
 			if (tif->tif_flags&TIFF_SWAB)
-				TIFFSwabLong8(&dir[m].tdir_offset);
+				TIFFSwabLong8(&dir[m].tdir_offset.toff_long8);
 		}
 	}
 	(*ndir)++;
