@@ -1,4 +1,4 @@
-/* $Id: thumbnail.c,v 1.9 2005-06-23 10:54:02 dron Exp $ */
+/* $Id: thumbnail.c,v 1.10 2008-05-23 17:24:41 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -100,6 +100,8 @@ main(int argc, char* argv[])
     if (out == NULL)
 	return 2;
     in = TIFFOpen(argv[optind], "r");
+    if( in == NULL )
+        return 2;
 
     thumbnail = (uint8*) _TIFFmalloc(tnw * tnh);
     if (!thumbnail) {

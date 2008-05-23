@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.39 2007-06-20 08:36:42 joris Exp $ */
+/* $Id: tiffcp.c,v 1.40 2008-05-23 17:24:41 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -720,10 +720,8 @@ tiffcp(TIFF* in, TIFF* out)
 				const char* cp = inknames;
 				while (ninks > 1) {
 					cp = strchr(cp, '\0');
-					if (cp) {
-						cp++;
-						inknameslen += (strlen(cp) + 1);
-					}
+                                        cp++;
+                                        inknameslen += (strlen(cp) + 1);
 					ninks--;
 				}
 				TIFFSetField(out, TIFFTAG_INKNAMES, inknameslen, inknames);
@@ -1178,9 +1176,11 @@ DECLAREreadFunc(readSeparateStripsIntoBuffer)
 {
 	int status = 1;
 	tsize_t scanlinesize = TIFFScanlineSize(in);
-	tdata_t scanline = _TIFFmalloc(scanlinesize);
+	tdata_t scanline;
 	if (!scanlinesize)
 		return 0;
+
+        scanline = _TIFFmalloc(scanlinesize);
 
 	(void) imagewidth;
 	if (scanline) {
