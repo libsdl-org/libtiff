@@ -1,4 +1,4 @@
-/* $Id: iptcutil.c,v 1.4 2004-09-21 13:34:39 dron Exp $ */
+/* $Id: iptcutil.c,v 1.5 2008-05-24 02:14:13 fwarmerdam Exp $ */
 
 #include "tif_config.h"
 
@@ -294,7 +294,10 @@ int formatIPTC(FILE *ifile, FILE *ofile)
     {
       c = str[tagindx] = getc(ifile);
       if (c == EOF)
-        return -1;
+      {
+          free(str);
+          return -1;
+      }
     }
     str[ taglen ] = 0;
 
