@@ -14,7 +14,6 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.in,v 1.47 2008-05-18 16:25:49 fwarmerdam Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
