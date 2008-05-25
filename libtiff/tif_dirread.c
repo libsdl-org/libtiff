@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.3 2007-04-12 17:16:10 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.4 2008-05-25 01:53:09 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -782,6 +782,7 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 	}
 
 	TIFFFreeDirectory(tif);
+        _TIFFmemset(&tif->tif_dir, 0, sizeof(TIFFDirectory));
 
 	fix = 0;
 	for (dp = dir, i = dircount; i > 0; i--, dp++) {
@@ -905,6 +906,9 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 	td->td_stripbytecount = (uint32*)
 	    _TIFFCheckMalloc(tif, td->td_nstrips, sizeof (uint32),
 		"for \"StripByteCounts\" array");
+        if( td->td_stripbytecount == NULL )
+            return -1;
+
 	if (td->td_compression != COMPRESSION_NONE) {
 		uint32 space = (uint32)(sizeof (TIFFHeader)
 		    + sizeof (uint16)
