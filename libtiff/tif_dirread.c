@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.141 2008-04-14 09:05:25 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.142 2008-05-25 03:11:33 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4138,6 +4138,9 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 	td->td_stripbytecount = (uint64*)
 	    _TIFFCheckMalloc(tif, td->td_nstrips, sizeof (uint64),
 		"for \"StripByteCounts\" array");
+        if( td->td_stripbytecount == NULL )
+            return -1;
+
 	if (td->td_compression != COMPRESSION_NONE) {
 		uint64 space;
 		uint64 filesize;
