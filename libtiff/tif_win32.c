@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.33 2008-01-01 15:35:54 fwarmerdam Exp $ */
+/* $Id: tif_win32.c,v 1.34 2008-05-26 15:38:31 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -337,67 +337,40 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 
 #endif /* ndef _WIN32_WCE */
 
-
 void*
 _TIFFmalloc(tmsize_t s)
 {
-	return ((void*)GlobalAlloc(GMEM_FIXED, s));
+	return (malloc((size_t) s));
 }
 
 void
 _TIFFfree(void* p)
 {
-	GlobalFree((HGLOBAL)p);
-	return;
+	free(p);
 }
 
 void*
 _TIFFrealloc(void* p, tmsize_t s)
 {
-	void* pvTmp;
-	tmsize_t old;
-
-	if(p == NULL)
-		return ((void*)GlobalAlloc(GMEM_FIXED, s));
-
-	old = (tmsize_t)GlobalSize(p);
-
-	if (old>=s) {
-		if ((pvTmp = (void*)GlobalAlloc(GMEM_FIXED, s)) != NULL) {
-			CopyMemory(pvTmp, p, s);
-			GlobalFree((HGLOBAL)p);
-		}
-	} else {
-		if ((pvTmp = (void*)GlobalAlloc(GMEM_FIXED, s)) != NULL) {
-			CopyMemory(pvTmp, p, old);
-			GlobalFree((HGLOBAL)p);
-		}
-	}
-	return (pvTmp);
+	return (realloc(p, (size_t) s));
 }
 
 void
 _TIFFmemset(void* p, int v, tmsize_t c)
 {
-	FillMemory(p, c, (BYTE)v);
+	memset(p, v, (size_t) c);
 }
 
 void
 _TIFFmemcpy(void* d, const void* s, tmsize_t c)
 {
-	CopyMemory(d, s, c);
+	memcpy(d, s, (size_t) c);
 }
 
 int
 _TIFFmemcmp(const void* p1, const void* p2, tmsize_t c)
 {
-	register const BYTE *pb1 = (const BYTE *) p1;
-	register const BYTE *pb2 = (const BYTE *) p2;
-	register tmsize_t dwTmp = c;
-	register int iTmp;
-	for (iTmp = 0; dwTmp-- && !iTmp; iTmp = (int)*pb1++ - (int)*pb2++)
-		;
-	return (iTmp);
+	return (memcmp(p1, p2, (size_t) c));
 }
 
 #ifndef _WIN32_WCE
