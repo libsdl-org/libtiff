@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.102 2008-05-18 16:18:30 fwarmerdam Exp $ */
+/* $Id: tif_dirinfo.c,v 1.103 2008-05-26 15:17:09 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -499,7 +499,7 @@ _TIFFFindFieldByName(TIFF* tif, const char *field_name, TIFFDataType dt)
 	if (!tif->tif_fields)
 		return NULL;
 
-	/* NB: use sorted search (e.g. binary search) */
+	/* NB: use linear search since list is sorted by key#, not name */
 
 	key.field_name = (char *)field_name;
 	key.field_type = dt;
