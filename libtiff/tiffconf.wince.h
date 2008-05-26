@@ -1,4 +1,4 @@
-/* $Id: tiffconf.wince.h,v 1.1 2007-01-15 18:40:39 mloskot Exp $ */
+/* $Id: tiffconf.wince.h,v 1.2 2008-05-26 19:05:51 fwarmerdam Exp $ */
 
 /*
  * Windows CE platform tiffconf.wince.h
@@ -38,9 +38,6 @@
 
 /* The size of a `int', as computed by sizeof. */
 #define SIZEOF_INT 4
-
-/* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
 
 /* Compatibility stuff. */
 
