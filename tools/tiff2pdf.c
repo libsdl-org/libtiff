@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.45 2008-01-01 15:49:00 fwarmerdam Exp $
+/* $Id: tiff2pdf.c,v 1.46 2008-09-03 07:35:25 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -861,8 +861,7 @@ void tiff2pdf_usage(){
 
 int tiff2pdf_match_paper_size(float* width, float* length, char* papersize){
 
-	int i=0;
-	size_t len=0;
+	size_t i, len;
 	const char* sizes[]={
 		"LETTER", "A4", "LEGAL",
 		"EXECUTIVE", "LETTER", "LEGAL", "LEDGER", "TABLOID", 
@@ -3730,7 +3729,7 @@ tsize_t t2p_write_pdf_string(unsigned char* pdfstr, TIFF* output){
 	written += t2pWriteFile(output, (tdata_t) "(", 1);
 	for (i=0; i<len; i++) {
 		if((pdfstr[i]&0x80) || (pdfstr[i]==127) || (pdfstr[i]<32)){
-			sprintf(buffer, "\\%.3o", pdfstr[i]);
+			sprintf(buffer, "\\%.3hho", pdfstr[i]);
 			buffer[sizeof(buffer) - 1] = '\0';
 			written += t2pWriteFile(output, (tdata_t) buffer, 4);
 		} else {
