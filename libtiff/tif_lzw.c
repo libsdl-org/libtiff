@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.29.2.1 2007-11-22 21:24:51 fwarmerdam Exp $ */
+/* $Id: tif_lzw.c,v 1.29.2.2 2008-09-03 07:09:09 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -414,6 +414,8 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 			break;
 		if (code == CODE_CLEAR) {
 			free_entp = sp->dec_codetab + CODE_FIRST;
+			_TIFFmemset(free_entp, 0,
+				    (CSIZE - CODE_FIRST) * sizeof (code_t));
 			nbits = BITS_MIN;
 			nbitsmask = MAXCODE(BITS_MIN);
 			maxcodep = sp->dec_codetab + nbitsmask-1;
@@ -610,6 +612,8 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 			break;
 		if (code == CODE_CLEAR) {
 			free_entp = sp->dec_codetab + CODE_FIRST;
+			_TIFFmemset(free_entp, 0,
+				    (CSIZE - CODE_FIRST) * sizeof (code_t));
 			nbits = BITS_MIN;
 			nbitsmask = MAXCODE(BITS_MIN);
 			maxcodep = sp->dec_codetab + nbitsmask;
