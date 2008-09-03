@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.14 2005-12-06 22:18:13 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.15 2008-09-03 07:47:26 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -43,7 +43,9 @@ extern int getopt(int, char**, char*);
 #define	CopyField3(tag, v1, v2, v3) \
     if (TIFFGetField(in, tag, &v1, &v2, &v3)) TIFFSetField(out, tag, v1, v2, v3)
 
-static	char fname[1024+1];
+#define PATH_LENGTH 8192
+
+static	char fname[PATH_LENGTH];
 
 static	int tiffcp(TIFF*, TIFF*);
 static	void newfilename(void);
@@ -60,15 +62,16 @@ main(int argc, char* argv[])
 		fprintf(stderr, "usage: tiffsplit input.tif [prefix]\n");
 		return (-3);
 	}
-	if (argc > 2)
-		strcpy(fname, argv[2]);
+	if (argc > 2) {
+		strncpy(fname, argv[2], sizeof(fname));
+		fname[sizeof(fname) - 1] = '\0';
+	}
 	in = TIFFOpen(argv[1], "r");
 	if (in != NULL) {
 		do {
-			char path[1024+1];
+			char path[PATH_LENGTH];
 			newfilename();
-			strcpy(path, fname);
-			strcat(path, ".tif");
+			snprintf(path, sizeof(path), "%s.tif", fname);
 			out = TIFFOpen(path, TIFFIsBigEndian(in)?"wb":"wl");
 			if (out == NULL)
 				return (-2);
