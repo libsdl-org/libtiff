@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.16 2008-09-05 06:44:32 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.17 2008-09-05 07:06:26 dron Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -230,16 +230,16 @@ tiffcp(TIFF* in, TIFF* out)
 static int
 cpStrips(TIFF* in, TIFF* out)
 {
-	tsize_t bufsize  = TIFFStripSize(in);
+	tmsize_t bufsize  = TIFFStripSize(in);
 	unsigned char *buf = (unsigned char *)_TIFFmalloc(bufsize);
 
 	if (buf) {
 		tstrip_t s, ns = TIFFNumberOfStrips(in);
-		uint32 *bytecounts;
+		uint64 *bytecounts;
 
 		TIFFGetField(in, TIFFTAG_STRIPBYTECOUNTS, &bytecounts);
 		for (s = 0; s < ns; s++) {
-			if (bytecounts[s] > (uint32)bufsize) {
+			if (bytecounts[s] > (uint64)bufsize) {
 				buf = (unsigned char *)_TIFFrealloc(buf, bytecounts[s]);
 				if (!buf)
 					return (0);
@@ -260,16 +260,16 @@ cpStrips(TIFF* in, TIFF* out)
 static int
 cpTiles(TIFF* in, TIFF* out)
 {
-	tsize_t bufsize = TIFFTileSize(in);
+	tmsize_t bufsize = TIFFTileSize(in);
 	unsigned char *buf = (unsigned char *)_TIFFmalloc(bufsize);
 
 	if (buf) {
 		ttile_t t, nt = TIFFNumberOfTiles(in);
-		uint32 *bytecounts;
+		uint64 *bytecounts;
 
 		TIFFGetField(in, TIFFTAG_TILEBYTECOUNTS, &bytecounts);
 		for (t = 0; t < nt; t++) {
-			if (bytecounts[t] > (uint32) bufsize) {
+			if (bytecounts[t] > (uint64) bufsize) {
 				buf = (unsigned char *)_TIFFrealloc(buf, bytecounts[t]);
 				if (!buf)
 					return (0);
