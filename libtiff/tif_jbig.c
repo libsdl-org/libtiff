@@ -1,4 +1,4 @@
-/* $Id: tif_jbig.c,v 1.13 2007-07-04 13:58:39 dron Exp $ */
+/* $Id: tif_jbig.c,v 1.14 2008-10-21 13:16:59 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -80,8 +80,20 @@ static int JBIGDecode(TIFF* tif, uint8* buffer, tmsize_t size, uint16 s)
 				  (size_t)tif->tif_rawdatasize, NULL);
 	if (JBG_EOK != decodeStatus)
 	{
-		TIFFErrorExt(tif->tif_clientdata, "JBIG", "Error (%d) decoding: %s",
-			  decodeStatus, jbg_strerror(decodeStatus, JBG_EN));
+		/*
+		 * XXX: JBG_EN constant was defined in pre-2.0 releases of the
+		 * JBIG-KIT. Since the 2.0 the error reporting functions were
+		 * changed. We will handle both cases here.
+		 */
+		TIFFErrorExt(tif->tif_clientdata,
+			     "JBIG", "Error (%d) decoding: %s",
+			     decodeStatus,
+#if defined(JBG_EN)
+			     jbg_strerror(decodeStatus, JBG_EN)
+#else
+			     jbg_strerror(decodeStatus)
+#endif
+			     );
 		return 0;
 	}
 
