@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.2 2007-04-07 14:58:30 dron Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.3 2008-12-21 20:24:51 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1424,6 +1424,10 @@ JPEGEncode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 	nrows = cc / sp->bytesperline;
 	if (cc % sp->bytesperline)
 		TIFFWarningExt(tif->tif_clientdata, tif->tif_name, "fractional scanline discarded");
+
+        /* The last strip will be limited to image size */
+        if( !isTiled(tif) && tif->tif_row+nrows > tif->tif_dir.td_imagelength )
+            nrows = tif->tif_dir.td_imagelength - tif->tif_row;
 
 	while (nrows-- > 0) {
 		bufptr[0] = (JSAMPROW) buf;
