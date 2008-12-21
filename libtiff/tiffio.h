@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.81 2008-04-10 11:08:48 dron Exp $ */
+/* $Id: tiffio.h,v 1.82 2008-12-21 20:30:25 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -392,6 +392,7 @@ extern int TIFFSetSubDirectory(TIFF*, uint64);
 extern int TIFFUnlinkDirectory(TIFF*, uint16);
 extern int TIFFSetField(TIFF*, uint32, ...);
 extern int TIFFVSetField(TIFF*, uint32, va_list);
+extern int TIFFUnsetField(TIFF*, uint32);
 extern int TIFFWriteDirectory(TIFF *);
 extern int TIFFCheckpointDirectory(TIFF *);
 extern int TIFFRewriteDirectory(TIFF *);
