@@ -1,4 +1,4 @@
-/* $Id: tif_flush.c,v 1.6 2008-10-30 01:25:11 fwarmerdam Exp $ */
+/* $Id: tif_flush.c,v 1.7 2008-12-21 20:31:33 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -99,7 +99,7 @@ int
 TIFFFlushData(TIFF* tif)
 {
 	if ((tif->tif_flags & TIFF_BEENWRITING) == 0)
-		return (0);
+		return (1);
 	if (tif->tif_flags & TIFF_POSTENCODE) {
 		tif->tif_flags &= ~TIFF_POSTENCODE;
 		if (!(*tif->tif_postencode)(tif))
