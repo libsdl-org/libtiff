@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.10 2008-01-01 15:49:01 fwarmerdam Exp $ */
+/* $Id: tiffinfo.c,v 1.11 2008-12-29 23:44:19 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -130,7 +130,7 @@ main(int argc, char* argv[])
 					tiffinfo(tif, order, flags);
 			} else {
 				do {
-					uint32 offset;
+					uint64 offset;
 
 					tiffinfo(tif, order, flags);
 					if (TIFFGetField(tif, TIFFTAG_EXIFIFD,
