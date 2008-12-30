@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.144 2008-09-01 23:26:27 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.145 2008-12-30 00:39:22 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4019,7 +4019,7 @@ TIFFReadDirectoryFindFieldInfo(TIFF* tif, uint16 tagid, uint32* fii)
  * The code is very similar to TIFFReadDirectory().
  */
 int
-TIFFReadCustomDirectory(TIFF* tif, uint64 diroff,
+TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 			const TIFFFieldArray* infoarray)
 {
 	static const char module[] = "TIFFReadCustomDirectory";
@@ -4124,7 +4124,7 @@ TIFFReadCustomDirectory(TIFF* tif, uint64 diroff,
  * function to read it.
  */
 int
-TIFFReadEXIFDirectory(TIFF* tif, uint64 diroff)
+TIFFReadEXIFDirectory(TIFF* tif, toff_t diroff)
 {
 	const TIFFFieldArray* exifFieldArray;
 	exifFieldArray = _TIFFGetExifFields();
