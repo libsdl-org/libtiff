@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.13 2008-12-31 03:06:27 bfriesen Exp $ */
+/* $Id: tiffinfo.c,v 1.14 2008-12-31 23:48:02 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -263,7 +263,7 @@ ShowTile(uint32 row, uint32 col, tsample_t sample,
 		printf(",%u", sample);
 	printf("):\n");
 	while (nrow-- > 0) {
-		for (cc = 0; cc < rowsize; cc++) {
+	  for (cc = 0; cc < (uint32) rowsize; cc++) {
 			printf(" %02x", *pp++);
 			if (((cc+1) % 24) == 0)
 				putchar('\n');

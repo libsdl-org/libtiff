@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.7 2008-06-17 20:16:54 fwarmerdam Exp $ */
+/* $Id: tiffcrop.c,v 1.8 2008-12-31 23:48:02 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -1673,7 +1673,7 @@ DECLAREwriteFunc(writeBufferToContigStrips)
 		tsize_t stripsize = TIFFVStripSize(out, nrows);
 		if (TIFFWriteEncodedStrip(out, strip++, buf, stripsize) < 0) {
 			TIFFError(TIFFFileName(out),
-				  "Error, can't write strip %lu", strip - 1);
+				  "Error, can't write strip %u", strip - 1);
 			return 0;
 		}
 		buf += stripsize;
@@ -1704,7 +1704,7 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
 			    nrows, imagewidth, 0, 0, spp, 1);
 			if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0) {
 				TIFFError(TIFFFileName(out),
-					  "Error, can't write strip %lu",
+					  "Error, can't write strip %u",
 					  strip - 1);
 				_TIFFfree(obuf);
 				return 0;

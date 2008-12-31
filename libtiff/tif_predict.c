@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.29 2008-01-01 15:41:22 fwarmerdam Exp $ */
+/* $Id: tif_predict.c,v 1.30 2008-12-31 23:48:02 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -546,7 +546,7 @@ PredictorEncodeTile(TIFF* tif, uint8* bp0, tmsize_t cc0, uint16 s)
         if( working_copy == NULL )
         {
             TIFFErrorExt(tif->tif_clientdata, module, 
-                         "Out of memory allocating %d byte temp buffer.",
+                         "Out of memory allocating " TIFF_SSIZE_FORMAT " byte temp buffer.",
                          cc0 );
             return 0;
         }

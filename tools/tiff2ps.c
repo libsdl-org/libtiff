@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.38 2008-12-31 03:06:27 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.39 2008-12-31 23:48:02 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1246,8 +1246,8 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	}
 	buf_data = (unsigned char *)_TIFFmalloc(chunk_size);
 	if (!buf_data) {
-		TIFFError(filename, "Can't alloc %u bytes for %s.",
-			chunk_size, tiled_image ? "tiles" : "strips");
+		TIFFError(filename, "Can't alloc %lu bytes for %s.",
+			(unsigned long) chunk_size, tiled_image ? "tiles" : "strips");
 		return(FALSE);
 	}
 
