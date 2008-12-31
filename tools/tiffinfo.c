@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.12 2008-12-30 00:12:11 bfriesen Exp $ */
+/* $Id: tiffinfo.c,v 1.13 2008-12-31 03:06:27 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -382,7 +382,7 @@ TIFFReadRawData(TIFF* tif, int bitrev)
 {
 	tstrip_t nstrips = TIFFNumberOfStrips(tif);
 	const char* what = TIFFIsTiled(tif) ? "Tile" : "Strip";
-	uint32* stripbc;
+	uint64* stripbc;
 
 	TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &stripbc);
 	if (nstrips > 0) {
