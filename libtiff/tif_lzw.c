@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.29.2.3 2008-09-03 07:17:23 dron Exp $ */
+/* $Id: tif_lzw.c,v 1.29.2.4 2009-01-01 00:10:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -534,7 +534,7 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 
 	if (occ > 0) {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-		"LZWDecode: Not enough data at scanline %d (short %d bytes)",
+		"LZWDecode: Not enough data at scanline %d (short %ld bytes)",
 		    tif->tif_row, occ);
 		return (0);
 	}
@@ -725,7 +725,7 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 
 	if (occ > 0) {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-	    "LZWDecodeCompat: Not enough data at scanline %d (short %d bytes)",
+	    "LZWDecodeCompat: Not enough data at scanline %d (short %ld bytes)",
 		    tif->tif_row, occ);
 		return (0);
 	}

@@ -1,4 +1,4 @@
-/* $Id: tiffio.h,v 1.56.2.2 2008-12-21 16:35:19 fwarmerdam Exp $ */
+/* $Id: tiffio.h,v 1.56.2.3 2009-01-01 00:10:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -251,6 +251,10 @@ typedef struct {
 #define LOGLUV_PUBLIC		1
 #endif
 
+#if !defined(__GNUC__) && !defined(__attribute__)
+#  define __attribute__(x) /*nothing*/
+#endif
+
 #if defined(c_plusplus) || defined(__cplusplus)
 extern "C" {
 #endif
@@ -433,10 +437,10 @@ extern	TIFF* TIFFClientOpen(const char*, const char*,
 	    TIFFMapFileProc, TIFFUnmapFileProc);
 extern	const char* TIFFFileName(TIFF*);
 extern	const char* TIFFSetFileName(TIFF*, const char *);
-extern	void TIFFError(const char*, const char*, ...);
-extern	void TIFFErrorExt(thandle_t, const char*, const char*, ...);
-extern	void TIFFWarning(const char*, const char*, ...);
-extern	void TIFFWarningExt(thandle_t, const char*, const char*, ...);
+extern void TIFFError(const char*, const char*, ...) __attribute__((format (printf,2,3)));
+extern void TIFFErrorExt(thandle_t, const char*, const char*, ...) __attribute__((format (printf,3,4)));
+extern void TIFFWarning(const char*, const char*, ...) __attribute__((format (printf,2,3)));
+extern void TIFFWarningExt(thandle_t, const char*, const char*, ...) __attribute__((format (printf,3,4)));
 extern	TIFFErrorHandler TIFFSetErrorHandler(TIFFErrorHandler);
 extern	TIFFErrorHandlerExt TIFFSetErrorHandlerExt(TIFFErrorHandlerExt);
 extern	TIFFErrorHandler TIFFSetWarningHandler(TIFFErrorHandler);

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.5 2006-03-25 03:09:24 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/tif_dumpmode.c,v 1.5.2.1 2009-01-01 00:10:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -71,6 +71,8 @@ static int
 DumpModeDecode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 {
 	(void) s;
+/*         fprintf(stderr,"DumpModeDecode: scanline %ld, expected %ld bytes, got %ld bytes\n", */
+/*                 (long) tif->tif_row, (long) tif->tif_rawcc, (long) cc); */
 	if (tif->tif_rawcc < cc) {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 		    "DumpModeDecode: Not enough data for scanline %d",
