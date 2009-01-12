@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.40 2009-01-11 20:04:22 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.41 2009-01-12 16:23:12 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -881,7 +881,7 @@ TIFF2PS(FILE* fd, TIFF* tif,
 			      }
                             else
 			      {
-			      fprintf (stderr, "No rotation\n");
+			      /* fprintf (stderr, "No rotation\n"); */
 			      fprintf (fd, "%f %f scale\n", prw, prh);
 			      }
 			}
