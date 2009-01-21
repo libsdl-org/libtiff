@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.17 2008-09-05 07:06:26 dron Exp $ */
+/* $Id: tiffsplit.c,v 1.18 2009-01-21 04:42:10 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -197,7 +197,7 @@ tiffcp(TIFF* in, TIFF* out)
 	CopyField(TIFFTAG_YPOSITION, floatv);
 	CopyField(TIFFTAG_IMAGEDEPTH, longv);
 	CopyField(TIFFTAG_TILEDEPTH, longv);
-	CopyField(TIFFTAG_SAMPLEFORMAT, longv);
+	CopyField(TIFFTAG_SAMPLEFORMAT, shortv);
 	CopyField2(TIFFTAG_EXTRASAMPLES, shortv, shortav);
 	{ uint16 *red, *green, *blue;
 	  CopyField3(TIFFTAG_COLORMAP, red, green, blue);
