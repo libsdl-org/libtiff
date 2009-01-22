@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.22 2006-04-20 12:36:23 dron Exp $" */
+/* $Id: fax2ps.c,v 1.23 2009-01-22 21:50:43 fwarmerdam Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -41,6 +41,10 @@
 
 #ifdef HAVE_IO_H
 # include <io.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"
