@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.19 2009-01-22 20:53:08 fwarmerdam Exp $ */
+/* $Id: tiffdump.c,v 1.20 2009-01-22 20:59:33 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -46,12 +46,12 @@
 # include <io.h>
 #endif
 
-#ifndef HAVE_GETOPT
-extern int getopt(int, char**, char*);
-#endif
-
 #ifdef NEED_LIBPORT
 # include "libport.h"
+#endif
+
+#ifndef HAVE_GETOPT
+extern int getopt(int, char**, char*);
 #endif
 
 #include "tiffio.h"
