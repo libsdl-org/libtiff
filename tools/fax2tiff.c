@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.19 2006-04-20 12:36:23 dron Exp $ */
+/* $Id: fax2tiff.c,v 1.20 2009-01-22 20:53:07 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -42,6 +42,10 @@
 
 #ifdef HAVE_IO_H
 # include <io.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffiop.h"

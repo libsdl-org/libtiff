@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.48 2008-12-31 23:48:02 bfriesen Exp $
+/* $Id: tiff2pdf.c,v 1.49 2009-01-22 20:53:07 fwarmerdam Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -42,6 +42,10 @@
 
 #ifdef HAVE_IO_H
 # include <io.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"

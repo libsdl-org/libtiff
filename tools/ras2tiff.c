@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.15 2006-04-20 12:36:23 dron Exp $ */
+/* $Id: ras2tiff.c,v 1.16 2009-01-22 20:53:07 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,6 +33,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "rasterfile.h"

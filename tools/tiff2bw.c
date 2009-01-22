@@ -1,4 +1,4 @@
-/* $Id: tiff2bw.c,v 1.12 2006-01-11 17:03:43 fwarmerdam Exp $ */
+/* $Id: tiff2bw.c,v 1.13 2009-01-22 20:53:07 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,6 +33,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"

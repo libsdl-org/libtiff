@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.23 2006-03-23 14:54:02 dron Exp $
+/* $Id: raw2tiff.c,v 1.24 2009-01-22 20:53:07 fwarmerdam Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -51,6 +51,10 @@
 
 #if HAVE_IO_H
 # include <io.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"

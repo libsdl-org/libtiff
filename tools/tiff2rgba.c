@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.15 2007-06-13 14:21:59 joris Exp $ */
+/* $Id: tiff2rgba.c,v 1.16 2009-01-22 20:53:07 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -32,6 +32,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"

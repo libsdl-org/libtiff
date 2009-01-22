@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.41 2009-01-12 16:23:12 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.42 2009-01-22 20:53:07 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -34,6 +34,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"

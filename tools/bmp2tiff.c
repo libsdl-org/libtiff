@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.21 2008-01-01 15:49:00 fwarmerdam Exp $
+/* $Id: bmp2tiff.c,v 1.22 2009-01-22 20:53:07 fwarmerdam Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -50,6 +50,10 @@
 
 #if HAVE_IO_H
 # include <io.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"

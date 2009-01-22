@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.14 2008-01-01 15:49:01 fwarmerdam Exp $ */
+/* $Id: tiffcmp.c,v 1.15 2009-01-22 20:53:07 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,6 +33,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"
