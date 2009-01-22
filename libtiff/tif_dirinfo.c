@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.103 2008-05-26 15:17:09 fwarmerdam Exp $ */
+/* $Id: tif_dirinfo.c,v 1.104 2009-01-22 19:06:49 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -906,6 +906,10 @@ TIFFFindFieldInfoByName(TIFF* tif, const char *field_name, TIFFDataType dt)
 					     sizeof(TIFFFieldInfo *),
 					     tagNameCompare);
 	return tif->tif_foundfield = (ret ? *ret : NULL);
+#else
+        (void) tif;
+        (void) field_name;
+        (void) dt;
 #endif
 	return NULL;
 }
@@ -937,6 +941,10 @@ TIFFFindFieldInfo(TIFF* tif, uint32 tag, TIFFDataType dt)
 					       sizeof(TIFFFieldInfo *),
 					       tagCompare);
 	return tif->tif_foundfield = (ret ? *ret : NULL);
+#else
+        (void) tif;
+        (void) tag;
+        (void) dt;
 #endif
 	return NULL;
 }
