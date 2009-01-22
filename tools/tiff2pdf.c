@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.49 2009-01-22 20:53:07 fwarmerdam Exp $
+/* $Id: tiff2pdf.c,v 1.50 2009-01-22 21:12:45 fwarmerdam Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -387,7 +387,7 @@ t2p_seekproc(thandle_t handle, uint64 offset, int whence)
 { 
 	T2P *t2p = (T2P*) handle;
 	if (t2p->outputdisable <= 0 && t2p->outputfile)
-		return fseek(t2p->outputfile, offset, whence);
+		return fseek(t2p->outputfile, (long) offset, whence);
 	return offset;
 }
 
@@ -1840,14 +1840,14 @@ void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 #ifdef CCITT_SUPPORT
 		if(t2p->pdf_compression == T2P_COMPRESS_G4 ){
 			TIFFGetField(input, TIFFTAG_STRIPBYTECOUNTS, &sbc);
-			t2p->tiff_datasize=sbc[0];
+			t2p->tiff_datasize=(tmsize_t)sbc[0];
 			return;
 		}
 #endif
 #ifdef ZIP_SUPPORT
 		if(t2p->pdf_compression == T2P_COMPRESS_ZIP){
 			TIFFGetField(input, TIFFTAG_STRIPBYTECOUNTS, &sbc);
-			t2p->tiff_datasize=sbc[0];
+			t2p->tiff_datasize=(tmsize_t)sbc[0];
 			return;
 		}
 #endif
@@ -1955,7 +1955,7 @@ void t2p_read_tiff_size_tile(T2P* t2p, TIFF* input, ttile_t tile){
 			return;
 		} else {
 			TIFFGetField(input, TIFFTAG_TILEBYTECOUNTS, &tbc);
-			t2p->tiff_datasize=tbc[tile];
+			t2p->tiff_datasize=(tmsize_t)tbc[tile];
 #ifdef OJPEG_SUPPORT
 			if(t2p->tiff_compression==COMPRESSION_OJPEG){
 				t2p->tiff_datasize+=2048;
