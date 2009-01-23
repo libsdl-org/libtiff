@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.10 2009-01-22 20:53:07 fwarmerdam Exp $ */
+/* $Id: tiffcrop.c,v 1.11 2009-01-23 06:04:31 fwarmerdam Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -4948,7 +4948,7 @@ static int
 loadImage(TIFF* in, struct image_data *image, struct dump_opts * dump, unsigned char **read_ptr)
   {
   uint32   i;
-  float    xres, yres;
+  float    xres=0.0, yres=0.0;
   uint16   nstrips, ntiles, planar, bps, spp, res_unit, photometric, orientation;
   uint32   width, length, rowsperstrip;
   uint32   stsize, tlsize, buffsize, scanlinesize;
