@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.99 2008-12-31 23:48:02 bfriesen Exp $ */
+/* $Id: tif_dir.c,v 1.100 2009-01-23 05:25:19 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -700,7 +700,7 @@ TIFFUnsetField(TIFF* tif, uint32 tag)
         TIFFClrFieldBit(tif, fip->field_bit);
     else
     {
-        TIFFTagValue *tv;
+        TIFFTagValue *tv = NULL;
         int i;
 
         for (i = 0; i < td->td_customValueCount; i++) {
