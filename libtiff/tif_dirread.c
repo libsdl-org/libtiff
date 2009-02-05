@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.150 2009-02-05 19:21:45 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.151 2009-02-05 19:50:01 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4581,7 +4581,6 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 	uint32 fii;
 	const TIFFField* fip;
 	TIFFReadDirectoryFindFieldInfo(tif,dp->tdir_tag,&fii);
-	assert(fii != FAILED_FII);
         if( fii == FAILED_FII )
         {
             TIFFErrorExt(tif->tif_clientdata, "TIFFFetchNormalTag",
