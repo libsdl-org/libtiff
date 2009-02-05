@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.149 2009-02-05 16:07:59 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.150 2009-02-05 19:21:45 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4748,7 +4748,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				assert(fip->field_readcount>=1);
 				assert(fip->field_passcount==0);
 				if (dp->tdir_count!=(uint64)fip->field_readcount)
-					assert(0);
+                                    /* corrupt file */;
 				else
 				{
 					err=TIFFReadDirEntryByteArray(tif,dp,&data);
@@ -4770,7 +4770,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				assert(fip->field_readcount>=1);
 				assert(fip->field_passcount==0);
 				if (dp->tdir_count!=(uint64)fip->field_readcount)
-					assert(0);
+                                    /* corrupt file */;
 				else
 				{
 					err=TIFFReadDirEntryShortArray(tif,dp,&data);
@@ -4792,7 +4792,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				assert(fip->field_readcount>=1);
 				assert(fip->field_passcount==0);
 				if (dp->tdir_count!=(uint64)fip->field_readcount)
-					assert(0);
+                                    /* corrupt file */;
 				else
 				{
 					err=TIFFReadDirEntryLongArray(tif,dp,&data);
@@ -4814,7 +4814,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				assert(fip->field_readcount>=1);
 				assert(fip->field_passcount==0);
 				if (dp->tdir_count!=(uint64)fip->field_readcount)
-					assert(0);
+                                    /* corrupt file */;
 				else
 				{
 					err=TIFFReadDirEntryFloatArray(tif,dp,&data);
