@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.11 2009-01-23 06:04:31 fwarmerdam Exp $ */
+/* $Id: tiffcrop.c,v 1.12 2009-02-06 15:43:06 fwarmerdam Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -4966,7 +4966,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts * dump, unsigned 
   TIFFGetField(in, TIFFTAG_IMAGELENGTH, &length);
   TIFFGetField(in, TIFFTAG_XRESOLUTION, &xres);
   TIFFGetField(in, TIFFTAG_YRESOLUTION, &yres);
-  TIFFGetFieldDefaulted(in, TIFFTAG_RESOLUTIONUNIT, &res_unit);
+  TIFFGetField(in, TIFFTAG_RESOLUTIONUNIT, &res_unit);
   scanlinesize = TIFFScanlineSize(in);
 
   image->bps = bps;
