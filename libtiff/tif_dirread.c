@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.152 2009-02-05 20:13:44 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.153 2009-02-09 14:29:08 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -780,7 +780,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryArray(TIFF* tif, TIFFDirEntry* d
 	*count=(uint32)direntry->tdir_count;
 	datasize=(*count)*typesize;
 	assert((tmsize_t)datasize>0);
-	data=_TIFFmalloc(datasize);
+	data=_TIFFCheckMalloc(tif, *count, typesize, "ReadDirEntryArray");
 	if (data==0)
 		return(TIFFReadDirEntryErrAlloc);
 	if (!(tif->tif_flags&TIFF_BIGTIFF))
