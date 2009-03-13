@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.79 2008-12-21 21:07:05 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.80 2009-03-13 02:02:51 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -2009,6 +2009,8 @@ JPEGPrintDir(TIFF* tif, FILE* fd, long flags)
 	if (TIFFFieldSet(tif,FIELD_JPEGTABLES))
 		fprintf(fd, "  JPEG Tables: (%lu bytes)\n",
 			(unsigned long) sp->jpegtables_length);
+	if (sp->printdir)
+		(*sp->printdir)(tif, fd, flags);
 }
 
 static uint32
