@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.44 2009-03-13 02:02:51 fwarmerdam Exp $ */
+/* $Id: tif_ojpeg.c,v 1.45 2009-05-03 14:29:36 fwarmerdam Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -2387,7 +2387,7 @@ OJPEGLibjpegJpegErrorMgrOutputMessage(jpeg_common_struct* cinfo)
 {
 	char buffer[JMSG_LENGTH_MAX];
 	(*cinfo->err->format_message)(cinfo,buffer);
-	TIFFWarningExt(((TIFF*)(cinfo->client_data))->tif_clientdata,"LibJpeg",buffer);
+	TIFFWarningExt(((TIFF*)(cinfo->client_data))->tif_clientdata,"LibJpeg","%s",buffer);
 }
 
 static void
@@ -2395,7 +2395,7 @@ OJPEGLibjpegJpegErrorMgrErrorExit(jpeg_common_struct* cinfo)
 {
 	char buffer[JMSG_LENGTH_MAX];
 	(*cinfo->err->format_message)(cinfo,buffer);
-	TIFFErrorExt(((TIFF*)(cinfo->client_data))->tif_clientdata,"LibJpeg",buffer);
+	TIFFErrorExt(((TIFF*)(cinfo->client_data))->tif_clientdata,"LibJpeg","%s",buffer);
 	jpeg_encap_unwind((TIFF*)(cinfo->client_data));
 }
 
