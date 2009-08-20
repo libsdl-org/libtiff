@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.3.2.5 2009-01-11 20:09:15 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.3.2.6 2009-08-20 22:31:00 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -117,7 +117,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 #include <math.h>
 #include <ctype.h>
 #include <limits.h>

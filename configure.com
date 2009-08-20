@@ -1,4 +1,4 @@
-$! $Id: configure.com,v 1.1.2.1 2007-11-23 09:12:35 dron Exp $
+$! $Id: configure.com,v 1.1.2.2 2009-08-20 22:31:00 bfriesen Exp $
 $!
 $! OpenVMS configure procedure for libtiff
 $! (c) Alexey Chupahin  22-NOV-2007
@@ -1314,7 +1314,7 @@ $COPY SYS$INPUT 'CURRENT'TIF_CONFIG.H
 #define PACKAGE_NAME "LibTIFF Software"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "LibTIFF Software 3.9.0beta for VMS"
+#define PACKAGE_STRING "LibTIFF Software 3.9.0 for VMS"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "tiff"
