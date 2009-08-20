@@ -1,4 +1,4 @@
-/* $Id: tif_write.c,v 1.22.2.2 2009-06-03 23:49:30 fwarmerdam Exp $ */
+/* $Id: tif_write.c,v 1.22.2.3 2009-08-20 20:23:52 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -630,7 +630,7 @@ TIFFAppendToStrip(TIFF* tif, tstrip_t strip, tidata_t data, tsize_t cc)
 
             if( td->td_stripbytecount[strip] != 0 
                 && td->td_stripoffset[strip] != 0 
-                && td->td_stripbytecount[strip] >= cc )
+                && (tsize_t) td->td_stripbytecount[strip] >= cc )
             {
                 /* 
                  * There is already tile data on disk, and the new tile
