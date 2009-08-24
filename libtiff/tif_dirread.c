@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.153 2009-02-09 14:29:08 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.154 2009-08-24 16:43:40 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4140,6 +4140,8 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 			}
 			switch (dp->tdir_tag)
 			{
+				case IGNORE:
+					break;
 				case EXIFTAG_SUBJECTDISTANCE:
 					(void) TIFFFetchSubjectDistance(tif,dp);
 					break;
