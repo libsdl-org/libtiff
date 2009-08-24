@@ -1,4 +1,4 @@
-/* $Id: rgb2ycbcr.c,v 1.11 2009-01-22 20:53:07 fwarmerdam Exp $ */
+/* $Id: rgb2ycbcr.c,v 1.12 2009-08-24 17:15:05 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -38,6 +38,7 @@
 # include "libport.h"
 #endif
 
+#include "tiffiop.h"
 #include "tiffio.h"
 
 #define	streq(a,b)	(strcmp(a,b) == 0)
@@ -282,15 +283,32 @@ tiffcvt(TIFF* in, TIFF* out)
 	float floatv;
 	char *stringv;
 	uint32 longv;
-        int result;
+	int result;
+	size_t pixel_count;
 
 	TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
 	TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
-	raster = (uint32*)_TIFFmalloc(width * height * sizeof (uint32));
-	if (raster == 0) {
-		TIFFError(TIFFFileName(in), "No space for raster buffer");
-		return (0);
-	}
+	pixel_count = width * height;
+
+ 	/* XXX: Check the integer overflow. */
+ 	if (!width || !height || pixel_count / width != height) {
+ 		TIFFError(TIFFFileName(in),
+ 			  "Malformed input file; "
+ 			  "can't allocate buffer for raster of %lux%lu size",
+ 			  (unsigned long)width, (unsigned long)height);
+ 		return 0;
+ 	}
+ 
+ 	raster = (uint32*)_TIFFCheckMalloc(in, pixel_count, sizeof(uint32),
+ 					   "raster buffer");
+  	if (raster == 0) {
+ 		TIFFError(TIFFFileName(in),
+ 			  "Failed to allocate buffer (%lu elements of %lu each)",
+ 			  (unsigned long)pixel_count,
+ 			  (unsigned long)sizeof(uint32));
+  		return (0);
+  	}
+
 	if (!TIFFReadRGBAImage(in, width, height, raster, 0)) {
 		_TIFFfree(raster);
 		return (0);
