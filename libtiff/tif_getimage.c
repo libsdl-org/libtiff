@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.71 2009-05-03 14:29:36 fwarmerdam Exp $ */
+/* $Id: tif_getimage.c,v 1.72 2009-08-29 20:05:06 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2080,7 +2080,7 @@ DECLARESepPutFunc(putseparate8bitYCbCr11tile)
 static int
 initYCbCrConversion(TIFFRGBAImage* img)
 {
-	static char module[] = "initYCbCrConversion";
+	static const char module[] = "initYCbCrConversion";
 
 	float *luma, *refBlackWhite;
 
@@ -2109,7 +2109,7 @@ initYCbCrConversion(TIFFRGBAImage* img)
 static tileContigRoutine
 initCIELabConversion(TIFFRGBAImage* img)
 {
-	static char module[] = "initCIELabConversion";
+	static const char module[] = "initCIELabConversion";
 
 	float   *whitePoint;
 	float   refWhite[3];
