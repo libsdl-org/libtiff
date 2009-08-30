@@ -1,4 +1,4 @@
-/* $Id: iptcutil.c,v 1.4 2004-09-21 13:34:39 dron Exp $ */
+/* $Id: iptcutil.c,v 1.4.2.1 2009-08-30 16:21:46 bfriesen Exp $ */
 
 #include "tif_config.h"
 
@@ -385,7 +385,7 @@ int main(int argc, char *argv[])
 
   if( argc < 2 )
     {
-      printf(usage);
+      printf("%s\n", usage);
 	    return 1;
     }
 
@@ -444,7 +444,7 @@ int main(int argc, char *argv[])
       }
     else
       {
-        printf(usage);
+        printf("%s\n", usage);
 	      return 1;
       }
   }
