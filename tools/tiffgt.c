@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.7 2006-03-23 14:54:02 dron Exp $ */
+/* $Id: tiffgt.c,v 1.8 2009-08-30 17:38:51 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -204,7 +204,7 @@ initImage(void)
         if (photo != (uint16) -1)
                 TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photo);
         if (!TIFFRGBAImageBegin(&img, tif, stoponerr, title)) {
-                TIFFError(filelist[fileindex], title);
+                TIFFError(filelist[fileindex], "%s", title);
                 TIFFClose(tif);
                 tif = NULL;
                 return -1;

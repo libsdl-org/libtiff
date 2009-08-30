@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.12 2009-02-06 15:43:06 fwarmerdam Exp $ */
+/* $Id: tiffcrop.c,v 1.13 2009-08-30 17:38:51 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -1981,7 +1981,7 @@ main(int argc, char* argv[])
                   (dump.format == DUMP_TEXT) ? "txt" : "raw");
           if ((dump.infile = fopen(temp_filename, dump.mode)) == NULL)
             {
-	    TIFFError ("Unable to open dump file %s for writing", temp_filename);
+	    TIFFError ("Unable to open dump file %s for writing", "%s", temp_filename);
 	    exit (-1);
             }
           dump_info(dump.infile, dump.format, "Reading image","%d from %s", 
@@ -1997,7 +1997,7 @@ main(int argc, char* argv[])
                   (dump.format == DUMP_TEXT) ? "txt" : "raw");
           if ((dump.outfile = fopen(temp_filename, dump.mode)) == NULL)
             {
-	    TIFFError ("Unable to open dump file %s for writing", temp_filename);
+	    TIFFError ("Unable to open dump file %s for writing", "%s", temp_filename);
 	    exit (-1);
             }
           dump_info(dump.outfile, dump.format, "Writing image","%d from %s", 
