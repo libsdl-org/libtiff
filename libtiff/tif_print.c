@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.36.2.1 2009-08-20 20:31:33 bfriesen Exp $ */
+/* $Id: tif_print.c,v 1.36.2.2 2009-09-17 18:00:28 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -31,7 +31,7 @@
  */
 #include "tiffiop.h"
 #include <stdio.h>
-
+#include <string.h>
 #include <ctype.h>
 
 static const char *photoNames[] = {
