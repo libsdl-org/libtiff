@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.37.2.5 2009-08-28 17:24:56 fwarmerdam Exp $ */
+/* $Id: tif_dirwrite.c,v 1.37.2.6 2009-10-31 21:51:08 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1144,6 +1144,7 @@ TIFFWriteAnyArray(TIFF* tif,
                     if( !TIFFWriteDoubleArray(tif, dir, v))
                         goto out;
                 }
+		break;
 	default:
 		/* TIFF_NOTYPE */
 		/* TIFF_ASCII */
