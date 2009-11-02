@@ -1,4 +1,4 @@
-/* $Id: libport.h,v 1.1 2009-01-22 20:54:45 fwarmerdam Exp $ */
+/* $Id: libport.h,v 1.2 2009-11-02 14:44:13 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2009 Frank Warmerdam
@@ -27,6 +27,11 @@
 #define	_LIBPORT_
 
 int getopt(int argc, char * const argv[], const char *optstring);
+extern   char *optarg;
+extern   int opterr;
+extern   int optind;
+extern   int optopt;
+
 int strcasecmp(const char *s1, const char *s2);
 
 #ifndef HAVE_GETOPT
