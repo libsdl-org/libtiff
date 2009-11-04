@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.in,v 1.49.2.10 2009-10-07 20:15:00 bfriesen Exp $
+# $Id: Makefile.in,v 1.49.2.11 2009-11-04 17:28:46 bfriesen Exp $
 #
 # Tag Image File Format (TIFF) Software
 #
@@ -344,7 +344,9 @@ docfiles = \
 	v3.8.0.html \
 	v3.8.1.html \
 	v3.8.2.html \
-	v3.9.0beta.html
+	v3.9.0beta.html \
+	v3.9.1.html \
+	v3.9.2.html
 
 dist_doc_DATA = $(docfiles)
 SUBDIRS = images man
