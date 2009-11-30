@@ -1,4 +1,4 @@
-/* $Id: tif_color.c,v 1.16 2007-04-04 04:16:07 joris Exp $ */
+/* $Id: tif_color.c,v 1.17 2009-11-30 12:22:26 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -123,7 +123,7 @@ TIFFXYZToRGB(TIFFCIELabToRGB *cielab, float X, float Y, float Z,
  */
 int
 TIFFCIELabToRGBInit(TIFFCIELabToRGB* cielab,
-		    TIFFDisplay *display, float *refWhite)
+		    const TIFFDisplay *display, float *refWhite)
 {
 	int i;
 	double gamma;
