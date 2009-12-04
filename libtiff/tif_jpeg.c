@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.4 2009-08-30 16:21:46 bfriesen Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.5 2009-12-04 01:04:00 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1613,7 +1613,11 @@ JPEGResetUpsampled( TIFF* tif )
 	 * Must recalculate cached tile size in case sampling state changed.
 	 * Should we really be doing this now if image size isn't set? 
 	 */
-	tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
+        if( tif->tif_tilesize > 0 )
+            tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tsize_t) -1;
+
+        if(tif->tif_scanlinesize > 0 )
+            tif->tif_scanlinesize = TIFFScanlineSize(tif); 
 }
 
 static int
@@ -1741,13 +1745,21 @@ JPEGFixupTestSubsampling( TIFF * tif )
 			return;
     }
     else
-	{
+    {
         if( !TIFFFillStrip( tif, 0 ) )
             return;
     }
 
     TIFFSetField( tif, TIFFTAG_YCBCRSUBSAMPLING, 
                   (uint16) sp->h_sampling, (uint16) sp->v_sampling );
+
+    /*
+    ** We want to clear the loaded strip so the application has time
+    ** to set JPEGCOLORMODE or other behavior modifiers.  This essentially
+    ** undoes the JPEGPreDecode triggers by TIFFFileStrip().  (#1936)
+    */
+    tif->tif_curstrip = -1;
+
 #endif /* CHECK_JPEG_YCBCR_SUBSAMPLING */
 }
 
