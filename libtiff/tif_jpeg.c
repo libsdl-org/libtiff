@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.84 2009-06-23 18:56:46 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.85 2009-12-04 01:21:52 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1978,7 +1978,10 @@ JPEGResetUpsampled( TIFF* tif )
 	 * Must recalculate cached tile size in case sampling state changed.
 	 * Should we really be doing this now if image size isn't set? 
 	 */
-	tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)(-1);   
+        if( tif->tif_tilesize > 0 )
+            tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)(-1);   
+        if( tif->tif_scanlinesize > 0 )
+            tif->tif_scanlinesize = TIFFScanlineSize(tif); 
 }
 
 static int
