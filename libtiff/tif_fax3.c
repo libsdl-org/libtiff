@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.43.2.6 2010-02-22 19:22:52 faxguy Exp $ */
+/* $Id: tif_fax3.c,v 1.43.2.7 2010-02-22 21:14:56 faxguy Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -1444,7 +1444,7 @@ Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
                 ClrBits( 13 );
 		(*sp->fill)(buf, thisrun, pa, lastx);
 		UNCACHE_STATE(tif, sp);
-		return ( line ? 1 : -1);	/* don't error on badly-terminated strips */
+		return ( sp->line ? 1 : -1);	/* don't error on badly-terminated strips */
 	}
 	UNCACHE_STATE(tif, sp);
 	return (1);
