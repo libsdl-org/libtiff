@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.43.2.5 2009-01-01 00:10:43 bfriesen Exp $ */
+/* $Id: tif_fax3.c,v 1.43.2.6 2010-02-22 19:22:52 faxguy Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -1439,12 +1439,12 @@ Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
         BADG4:
 #ifdef FAX3_DEBUG
                 if( GetBits(13) != 0x1001 )
-                    fputs( "Bad RTC\n", stderr );
+                    fputs( "Bad EOFB\n", stderr );
 #endif                
                 ClrBits( 13 );
 		(*sp->fill)(buf, thisrun, pa, lastx);
 		UNCACHE_STATE(tif, sp);
-		return (-1);
+		return ( line ? 1 : -1);	/* don't error on badly-terminated strips */
 	}
 	UNCACHE_STATE(tif, sp);
 	return (1);
