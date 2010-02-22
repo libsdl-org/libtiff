@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.37.2.7 2009-01-01 00:10:43 bfriesen Exp $
+/* $Id: tiff2pdf.c,v 1.37.2.8 2010-02-22 19:07:24 faxguy Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -3320,6 +3320,9 @@ int t2p_process_jpeg_strip(
 	while(i<(*striplength)){
 		switch( strip[i] ){
 			case 0xd8:
+				/* SOI - start of image */
+				_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), 2);
+				*bufferoffset+=2;
 				i+=2;
 				break;
 			case 0xc0:
