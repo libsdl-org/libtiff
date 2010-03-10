@@ -1,4 +1,4 @@
-/* $Id: rgb2ycbcr.c,v 1.12 2009-08-24 17:15:05 bfriesen Exp $ */
+/* $Id: rgb2ycbcr.c,v 1.13 2010-03-10 18:56:49 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -380,3 +380,10 @@ usage(int code)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

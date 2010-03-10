@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.23 2009-01-22 21:50:43 fwarmerdam Exp $" */
+/* $Id: fax2ps.c,v 1.24 2010-03-10 18:56:49 bfriesen Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -441,3 +441,10 @@ usage(int code)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

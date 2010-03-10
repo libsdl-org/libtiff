@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.17 2009-08-24 17:15:05 bfriesen Exp $ */
+/* $Id: tiff2rgba.c,v 1.18 2010-03-10 18:56:50 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -531,3 +531,10 @@ usage(int code)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.19 2009-01-22 21:12:45 fwarmerdam Exp $ */
+/* $Id: tiffsplit.c,v 1.20 2010-03-10 18:56:50 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -288,3 +288,10 @@ cpTiles(TIFF* in, TIFF* out)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

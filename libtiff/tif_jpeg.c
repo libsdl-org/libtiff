@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.87 2010-02-22 19:10:07 faxguy Exp $ */
+/* $Id: tif_jpeg.c,v 1.88 2010-03-10 18:56:48 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -2303,3 +2303,10 @@ here hopefully is harmless.
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
 
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

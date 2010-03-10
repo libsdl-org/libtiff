@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.8 2009-08-30 17:38:51 bfriesen Exp $ */
+/* $Id: tiffgt.c,v 1.9 2010-03-10 18:56:50 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -453,3 +453,10 @@ photoArg(const char* arg)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

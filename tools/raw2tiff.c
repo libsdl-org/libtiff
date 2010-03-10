@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.24 2009-01-22 20:53:07 fwarmerdam Exp $
+/* $Id: raw2tiff.c,v 1.25 2010-03-10 18:56:49 bfriesen Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -642,3 +642,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

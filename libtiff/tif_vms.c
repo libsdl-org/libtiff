@@ -1,4 +1,4 @@
-/* $Id: tif_vms.c,v 1.10 2007-11-23 10:01:38 dron Exp $ */
+/* $Id: tif_vms.c,v 1.11 2010-03-10 18:56:49 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -591,3 +591,10 @@ TIFFCvtNativeToIEEEDouble(TIFF* tif, u_int n, double* f)
 	}
 }
 #endif
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

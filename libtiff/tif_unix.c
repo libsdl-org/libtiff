@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.21 2007-07-18 13:46:41 dron Exp $ */
+/* $Id: tif_unix.c,v 1.22 2010-03-10 18:56:49 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -309,3 +309,10 @@ TIFFErrorHandler _TIFFerrorHandler = unixErrorHandler;
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
 
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

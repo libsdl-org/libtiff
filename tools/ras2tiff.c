@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.17 2009-11-30 18:42:53 fwarmerdam Exp $ */
+/* $Id: ras2tiff.c,v 1.18 2010-03-10 18:56:49 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -307,3 +307,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

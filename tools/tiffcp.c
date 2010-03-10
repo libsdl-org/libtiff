@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.42 2009-06-30 17:25:26 fwarmerdam Exp $ */
+/* $Id: tiffcp.c,v 1.43 2010-03-10 18:56:50 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1751,3 +1751,10 @@ pickCopyFunc(TIFF* in, TIFF* out, uint16 bitspersample, uint16 samplesperpixel)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

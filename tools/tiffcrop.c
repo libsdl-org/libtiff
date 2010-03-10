@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.15 2009-11-03 15:24:27 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.16 2010-03-10 18:56:50 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -8873,3 +8873,10 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
   }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */
