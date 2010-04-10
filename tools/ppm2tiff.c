@@ -1,4 +1,4 @@
-/* $Id: ppm2tiff.c,v 1.13 2006-04-20 12:36:23 dron Exp $ */
+/* $Id: ppm2tiff.c,v 1.13.2.1 2010-04-10 19:22:46 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -169,7 +169,7 @@ main(int argc, char* argv[])
 		if (c == '#') {
 			do {
 			    c = fgetc(in);
-			} while(!strchr("\r\n", c) || feof(in));
+			} while(!(strchr("\r\n", c) || feof(in)));
 			continue;
 		}
 
