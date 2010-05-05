@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.89 2010-04-21 20:46:17 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.90 2010-05-05 18:38:38 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1613,7 +1613,7 @@ JPEGSetupEncode(TIFF* tif)
 	/* Create a JPEGTables field if appropriate */
 	if (sp->jpegtablesmode & (JPEGTABLESMODE_QUANT|JPEGTABLESMODE_HUFF)) {
                 if( sp->jpegtables == NULL
-                    || memcpy(sp->jpegtables,"\0\0\0\0\0\0\0\0\0",8) == 0 )
+                    || memcmp(sp->jpegtables,"\0\0\0\0\0\0\0\0\0",8) == 0 )
                 {
                         if (!prepare_JPEGTables(tif))
                                 return (0);
