@@ -1,4 +1,4 @@
-/* $Id: tif_aux.c,v 1.20.2.1 2010-06-08 18:50:41 bfriesen Exp $ */
+/* $Id: tif_aux.c,v 1.20.2.2 2010-06-08 19:13:03 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -48,7 +48,9 @@ _TIFFCheckRealloc(TIFF* tif, tdata_t buffer,
 
 	if (cp == NULL)
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-			     "No space %s", what);
+			     "Failed to allocate memory for %s "
+			     "(%ld elements of %ld bytes each)",
+			     what,(long) nmemb, (long) elem_size);
 
 	return cp;
 }
