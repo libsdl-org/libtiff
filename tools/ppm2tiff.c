@@ -1,4 +1,4 @@
-/* $Id: ppm2tiff.c,v 1.13.2.1 2010-04-10 19:22:46 bfriesen Exp $ */
+/* $Id: ppm2tiff.c,v 1.13.2.2 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -353,3 +353,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

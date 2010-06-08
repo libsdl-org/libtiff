@@ -1,4 +1,4 @@
-/* $Id: strcasecmp.c,v 1.2 2005-07-07 16:34:06 dron Exp $ */
+/* $Id: strcasecmp.c,v 1.2.2.1 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1987, 1993
@@ -48,3 +48,10 @@ strcasecmp(const char *s1, const char *s2)
 			return (0);
 	return (tolower(*us1) - tolower(*--us2));
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

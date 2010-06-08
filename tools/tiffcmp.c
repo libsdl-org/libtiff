@@ -1,4 +1,4 @@
-/* $Id: tiffcmp.c,v 1.13 2006-06-08 11:52:27 dron Exp $ */
+/* $Id: tiffcmp.c,v 1.13.2.1 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -631,3 +631,10 @@ leof(const char* name, uint32 row, int s)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

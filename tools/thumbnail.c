@@ -1,4 +1,4 @@
-/* $Id: thumbnail.c,v 1.9 2005-06-23 10:54:02 dron Exp $ */
+/* $Id: thumbnail.c,v 1.9.2.1 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -630,3 +630,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

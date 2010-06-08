@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.35.2.3 2009-01-12 16:25:18 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.35.2.4 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2361,3 +2361,10 @@ usage(int code)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

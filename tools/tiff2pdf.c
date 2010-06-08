@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.37.2.8 2010-02-22 19:07:24 faxguy Exp $
+/* $Id: tiff2pdf.c,v 1.37.2.9 2010-06-08 18:50:44 bfriesen Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -5395,3 +5395,10 @@ tsize_t t2p_write_pdf(T2P* t2p, TIFF* input, TIFF* output){
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

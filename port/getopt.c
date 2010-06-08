@@ -1,4 +1,4 @@
-/* $Id: getopt.c,v 1.2 2005-07-07 16:34:06 dron Exp $ */
+/* $Id: getopt.c,v 1.2.2.1 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1987, 1993, 1994
@@ -122,3 +122,10 @@ getopt(int argc, char * const argv[], const char *optstring)
 	}
 	return (optopt);			/* return option letter */
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

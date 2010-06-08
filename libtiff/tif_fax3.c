@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.43.2.7 2010-02-22 21:14:56 faxguy Exp $ */
+/* $Id: tif_fax3.c,v 1.43.2.8 2010-06-08 18:50:42 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -1601,3 +1601,10 @@ TIFFInitCCITTRLEW(TIFF* tif, int scheme)
 #endif /* CCITT_SUPPORT */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

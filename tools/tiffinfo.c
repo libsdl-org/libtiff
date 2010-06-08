@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.8 2005-12-09 14:52:48 dron Exp $ */
+/* $Id: tiffinfo.c,v 1.8.2.1 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -447,3 +447,10 @@ tiffinfo(TIFF* tif, uint16 order, long flags)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

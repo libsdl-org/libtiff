@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.13 2005-11-21 03:35:06 fwarmerdam Exp $ */
+/* $Id: tiffdump.c,v 1.13.2.1 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -776,3 +776,10 @@ Fatal(const char* fmt, ...)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

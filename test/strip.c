@@ -1,4 +1,4 @@
-/* $Id: strip.c,v 1.3.2.1 2009-01-01 17:52:51 bfriesen Exp $ */
+/* $Id: strip.c,v 1.3.2.2 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
@@ -289,3 +289,10 @@ write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

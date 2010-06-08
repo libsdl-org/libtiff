@@ -1,4 +1,4 @@
-/* $Id: long_tag.c,v 1.3 2006-03-23 14:54:02 dron Exp $ */
+/* $Id: long_tag.c,v 1.3.2.1 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
@@ -152,3 +152,10 @@ failure:
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

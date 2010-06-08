@@ -1,4 +1,4 @@
-/* $Id: tiffmedian.c,v 1.8 2004-09-09 18:06:14 fwarmerdam Exp $ */
+/* $Id: tiffmedian.c,v 1.8.2.1 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -893,3 +893,10 @@ bad:
 	_TIFFfree(nextline);
 	_TIFFfree(outline);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

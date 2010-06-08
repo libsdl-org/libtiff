@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.75.2.3 2010-01-07 04:05:39 fwarmerdam Exp $ */
+/* $Id: tif_dir.c,v 1.75.2.4 2010-06-08 18:50:41 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1372,3 +1372,10 @@ TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_msdos.c,v 1.3 2006-07-25 18:26:33 fwarmerdam Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/libtiff/Attic/tif_msdos.c,v 1.3.2.1 2010-06-08 18:50:42 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -184,3 +184,10 @@ msdosErrorHandler(const char* module, const char* fmt, va_list ap)
 	fprintf(stderr, ".\n");
 }
 TIFFErrorHandler _TIFFerrorHandler = msdosErrorHandler;
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

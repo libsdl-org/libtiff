@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.8 2004-09-02 14:36:33 dron Exp $ */
+/* $Id: gif2tiff.c,v 1.8.2.1 2010-06-08 18:50:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -513,3 +513,10 @@ rasterize(int interleaved, char* mode)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

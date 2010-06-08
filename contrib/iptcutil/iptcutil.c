@@ -1,4 +1,4 @@
-/* $Id: iptcutil.c,v 1.4.2.1 2009-08-30 16:21:46 bfriesen Exp $ */
+/* $Id: iptcutil.c,v 1.4.2.2 2010-06-08 18:50:41 bfriesen Exp $ */
 
 #include "tif_config.h"
 
@@ -932,3 +932,10 @@ byebye:
 
   return 0;
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

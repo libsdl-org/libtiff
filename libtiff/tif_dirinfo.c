@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.65.2.7 2009-09-17 18:00:28 bfriesen Exp $ */
+/* $Id: tif_dirinfo.c,v 1.65.2.8 2010-06-08 18:50:42 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -879,3 +879,10 @@ _TIFFCreateAnonFieldInfo(TIFF *tif, ttag_t tag, TIFFDataType field_type)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

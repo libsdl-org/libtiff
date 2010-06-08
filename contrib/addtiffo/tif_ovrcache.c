@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: tif_ovrcache.c,v 1.7 2006-03-25 17:52:37 joris Exp $
+ * $Id: tif_ovrcache.c,v 1.7.2.1 2010-06-08 18:50:40 bfriesen Exp $
  *
  * Project:  TIFF Overview Builder
  * Purpose:  Library functions to maintain two rows of tiles or two strips
@@ -332,3 +332,10 @@ void TIFFDestroyOvrCache( TIFFOvrCache * psCache )
     _TIFFfree( psCache->pabyRow2Blocks );
     _TIFFfree( psCache );
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

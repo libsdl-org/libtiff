@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.30.2.1 2007-04-07 14:58:30 dron Exp $ */
+/* $Id: tif_dir.h,v 1.30.2.2 2010-06-08 18:50:41 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -200,3 +200,10 @@ extern  TIFFFieldInfo* _TIFFCreateAnonFieldInfo( TIFF *tif, ttag_t tag,
 #endif /* _TIFFDIR_ */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

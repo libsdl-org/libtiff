@@ -1,4 +1,4 @@
-/* $Id: tiffconf.wince.h,v 1.1.2.1 2009-01-01 17:52:51 bfriesen Exp $ */
+/* $Id: tiffconf.wince.h,v 1.1.2.2 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Windows CE platform tiffconf.wince.h
@@ -127,3 +127,10 @@
 #define IPTC_SUPPORT
 
 #endif /* _TIFFCONF_ */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

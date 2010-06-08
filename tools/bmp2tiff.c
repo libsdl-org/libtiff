@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.20 2006-03-23 14:54:02 dron Exp $
+/* $Id: bmp2tiff.c,v 1.20.2.1 2010-06-08 18:50:43 bfriesen Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -841,3 +841,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

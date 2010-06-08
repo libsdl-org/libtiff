@@ -1,4 +1,4 @@
-/* $Id: libport.h,v 1.2.2.2 2009-11-02 14:47:41 bfriesen Exp $ */
+/* $Id: libport.h,v 1.2.2.3 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2009 Frank Warmerdam
@@ -49,3 +49,10 @@ lfind(const void *key, const void *base, size_t *nmemb, size_t size,
 #endif
 
 #endif /* ndef _LIBPORT_ */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

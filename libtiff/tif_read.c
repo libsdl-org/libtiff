@@ -1,4 +1,4 @@
-/* $Id: tif_read.c,v 1.16 2007-02-22 11:33:44 dron Exp $ */
+/* $Id: tif_read.c,v 1.16.2.1 2010-06-08 18:50:43 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -739,3 +739,10 @@ _TIFFSwab64BitData(TIFF* tif, tidata_t buf, tsize_t cc)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */
