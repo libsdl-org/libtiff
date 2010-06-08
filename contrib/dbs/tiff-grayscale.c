@@ -1,4 +1,4 @@
-/* $Id: tiff-grayscale.c,v 1.5 2009-11-30 18:42:53 fwarmerdam Exp $ */
+/* $Id: tiff-grayscale.c,v 1.6 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /*
  * tiff-grayscale.c -- create a Class G (grayscale) TIFF file
@@ -138,3 +138,10 @@ Usage()
     fprintf(stderr, "Usage: %s -depth (8 | 4 | 2) tiff-image\n", programName);
     exit(0);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

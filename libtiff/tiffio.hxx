@@ -1,4 +1,4 @@
-/* $Id: tiffio.hxx,v 1.2 2007-06-26 09:42:28 joris Exp $ */
+/* $Id: tiffio.hxx,v 1.3 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -40,3 +40,10 @@ extern TIFF* TIFFStreamOpen(const char*, std::istream *);
 #endif /* _TIFFIO_HXX_ */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c++
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */
