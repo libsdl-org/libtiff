@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.37.2.3 2010-06-08 18:50:44 bfriesen Exp $ */
+/* $Id: tiffcp.c,v 1.37.2.4 2010-06-08 23:29:51 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -279,6 +279,7 @@ main(int argc, char* argv[])
 		if (diroff != 0 && !TIFFSetSubDirectory(in, diroff)) {
 			TIFFError(TIFFFileName(in),
 			    "Error, setting subdirectory at %#x", diroff);
+			(void) TIFFClose(in);
 			(void) TIFFClose(out);
 			return (1);
 		}
@@ -292,7 +293,8 @@ main(int argc, char* argv[])
                    tilelength = deftilelength;
                    g3opts = defg3opts;
                    if (!tiffcp(in, out) || !TIFFWriteDirectory(out)) {
-                        TIFFClose(out);
+			(void) TIFFClose(in);
+                        (void) TIFFClose(out);
                         return (1);
                    }
                    if (imageCursor) { /* seek next image directory */
@@ -300,10 +302,10 @@ main(int argc, char* argv[])
                    }else
                         if (!TIFFReadDirectory(in)) break;
 		}
-		TIFFClose(in);
+		(void) TIFFClose(in);
 	}
 
-        TIFFClose(out);
+        (void) TIFFClose(out);
         return (0);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.24.2.5 2010-06-08 18:50:42 bfriesen Exp $ */
+/* $Id: tif_ojpeg.c,v 1.24.2.6 2010-06-08 23:29:51 bfriesen Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -1909,6 +1909,10 @@ OJPEGReadBufferFill(OJPEGState* sp)
 					sp->in_buffer_source=osibsEof;
 				else
 				{
+					if (sp->tif->tif_dir.td_stripoffset == 0) {
+						TIFFErrorExt(sp->tif->tif_clientdata,sp->tif->tif_name,"Strip offsets are missing");
+						return(0);
+					}
 					sp->in_buffer_file_pos=sp->tif->tif_dir.td_stripoffset[sp->in_buffer_next_strile];  
 					if (sp->in_buffer_file_pos!=0)
 					{

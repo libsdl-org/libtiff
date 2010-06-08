@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.3.2.10 2010-06-08 18:50:44 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.3.2.11 2010-06-08 23:29:51 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -148,10 +148,6 @@ extern int getopt(int, char**, char*);
 #define	streq(a,b)	(strcmp((a),(b)) == 0)
 #endif
 #define	strneq(a,b,n)	(strncmp((a),(b),(n)) == 0)
-
-/* NB: the uint32 casts are to silence certain ANSI-C compilers */
-#define TIFFhowmany(x, y) ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y)))
-#define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
 
 #define	TRUE	1
 #define	FALSE	0

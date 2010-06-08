@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.43.2.8 2010-06-08 18:50:42 bfriesen Exp $ */
+/* $Id: tif_fax3.c,v 1.43.2.9 2010-06-08 23:29:51 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -493,8 +493,11 @@ Fax3SetupState(TIFF* tif)
 	    td->td_compression == COMPRESSION_CCITTFAX4
 	);
 
-	nruns = needsRefLine ? 2*TIFFroundup(rowpixels,32) : rowpixels;
-	nruns += 3;
+	/* TIFFroundup returns zero on internal overflow */
+	nruns = TIFFroundup(rowpixels,32);
+	if (needsRefLine) {
+		nruns *= 2;
+	}
 	dsp->runs = (uint32*) _TIFFCheckMalloc(tif, 2*nruns, sizeof (uint32),
 					  "for Group 3/4 run arrays");
 	if (dsp->runs == NULL)
