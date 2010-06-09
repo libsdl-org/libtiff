@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.30.2.2 2010-06-08 18:50:41 bfriesen Exp $ */
+/* $Id: tif_dir.h,v 1.30.2.3 2010-06-09 21:15:27 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -75,6 +75,7 @@ typedef	struct {
 	uint16  td_ycbcrsubsampling[2];
 	uint16  td_ycbcrpositioning;
 	/* Colorimetry parameters */
+	float*	td_refblackwhite;
 	uint16* td_transferfunction[3];
 	/* CMYK parameters */
 	int     td_inknameslen;
@@ -133,6 +134,7 @@ typedef	struct {
 #define	FIELD_HALFTONEHINTS		37
 #define FIELD_YCBCRSUBSAMPLING		39
 #define FIELD_YCBCRPOSITIONING		40
+#define	FIELD_REFBLACKWHITE		41
 #define	FIELD_TRANSFERFUNCTION		44
 #define	FIELD_INKNAMES			46
 #define	FIELD_SUBIFD			49
