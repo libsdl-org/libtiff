@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.c,v 1.71 2010-06-08 23:32:23 bfriesen Exp $ */
+/* $Id: tif_fax3.c,v 1.72 2010-06-09 17:17:13 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -504,13 +504,26 @@ Fax3SetupState(TIFF* tif)
 	    td->td_compression == COMPRESSION_CCITTFAX4
 	);
 
-	/* TIFFroundup_32 returns zero on internal overflow */
+	/*
+	  Assure that allocation computations do not overflow.
+	  
+	  TIFFroundup and TIFFSafeMultiply return zero on integer overflow
+	*/
+	dsp->runs=(uint32*) NULL;
 	nruns = TIFFroundup_32(rowpixels,32);
 	if (needsRefLine) {
-		nruns *= 2;
+		nruns = TIFFSafeMultiply(uint32,nruns,2);
 	}
-	dsp->runs = (uint32*) _TIFFCheckMalloc(tif, 2*nruns, sizeof (uint32),
-					  "for Group 3/4 run arrays");
+	if ((nruns == 0) || (TIFFSafeMultiply(uint32,nruns,2) == 0)) {
+		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+			     "Row pixels integer overflow (rowpixels %u)",
+			     rowpixels);
+		return (0);
+	}
+	dsp->runs = (uint32*) _TIFFCheckMalloc(tif,
+					       TIFFSafeMultiply(uint32,nruns,2),
+					       sizeof (uint32),
+					       "for Group 3/4 run arrays");
 	if (dsp->runs == NULL)
 		return (0);
 	dsp->curruns = dsp->runs;

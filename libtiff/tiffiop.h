@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.76 2010-06-08 23:32:23 bfriesen Exp $ */
+/* $Id: tiffiop.h,v 1.77 2010-06-09 17:17:13 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -268,6 +268,9 @@ struct tiff {
 #define TIFFhowmany_64(x, y) ((((uint64)(x))+(((uint64)(y))-1))/((uint64)(y)))
 #define TIFFhowmany8_64(x) (((x)&0x07)?((uint64)(x)>>3)+1:(uint64)(x)>>3)
 #define TIFFroundup_64(x, y) (TIFFhowmany_64(x,y)*(y))
+
+/* Safe multiply which returns zero if there is an integer overflow */
+#define TIFFSafeMultiply(t,v,m) ((((t)v*m)/(t)m == (t)v) ? (t)v*m : (t)0)
 
 #define TIFFmax(A,B) ((A)>(B)?(A):(B))
 #define TIFFmin(A,B) ((A)<(B)?(A):(B))
