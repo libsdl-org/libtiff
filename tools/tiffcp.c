@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.37.2.4 2010-06-08 23:29:51 bfriesen Exp $ */
+/* $Id: tiffcp.c,v 1.37.2.5 2010-06-09 17:16:58 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -274,8 +274,10 @@ main(int argc, char* argv[])
 	for (; optind < argc-1 ; optind++) {
                 char *imageCursor = argv[optind];
 		in = openSrcImage (&imageCursor);
-		if (in == NULL)
+		if (in == NULL) {
+			(void) TIFFClose(out);
 			return (-3);
+		}
 		if (diroff != 0 && !TIFFSetSubDirectory(in, diroff)) {
 			TIFFError(TIFFFileName(in),
 			    "Error, setting subdirectory at %#x", diroff);
