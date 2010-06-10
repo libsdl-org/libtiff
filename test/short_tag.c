@@ -1,4 +1,4 @@
-/* $Id: short_tag.c,v 1.6.2.1 2010-06-08 18:50:43 bfriesen Exp $ */
+/* $Id: short_tag.c,v 1.6.2.2 2010-06-10 22:52:45 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
@@ -39,6 +39,7 @@
 
 #include "tiffio.h"
 
+extern int CheckLongField(TIFF *, ttag_t, uint32);
 extern int CheckShortField(TIFF *, ttag_t, uint16);
 
 const char	*filename = "short_test.tiff";
