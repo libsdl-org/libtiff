@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.45 2010-06-09 17:17:13 bfriesen Exp $ */
+/* $Id: tiffcp.c,v 1.46 2010-06-11 21:23:12 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -564,6 +564,7 @@ static int
 tiffcp(TIFF* in, TIFF* out)
 {
 	uint16 bitspersample, samplesperpixel;
+	uint16 input_compression, input_photometric;
 	copyFunc cf;
 	uint32 width, length;
 	struct cpTag* p;
@@ -576,25 +577,29 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	else
 		CopyField(TIFFTAG_COMPRESSION, compression);
-	if (compression == COMPRESSION_JPEG) {
-		uint16 input_compression, input_photometric;
+	TIFFGetFieldDefaulted(in, TIFFTAG_COMPRESSION, &input_compression);
+	TIFFGetFieldDefaulted(in, TIFFTAG_PHOTOMETRIC, &input_photometric);
+	if (input_compression == COMPRESSION_JPEG) {
+		/* Force conversion to RGB */
+		TIFFSetField(in, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
+	} else if (input_photometric == PHOTOMETRIC_YCBCR) {
+		/* Otherwise, can't handle subsampled input */
+		uint16 subsamplinghor,subsamplingver;
 
-		if (TIFFGetField(in, TIFFTAG_COMPRESSION, &input_compression)
-		    && input_compression == COMPRESSION_JPEG) {
-			TIFFSetField(in, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
+		TIFFGetFieldDefaulted(in, TIFFTAG_YCBCRSUBSAMPLING,
+				      &subsamplinghor, &subsamplingver);
+		if (subsamplinghor!=1 || subsamplingver!=1) {
+			fprintf(stderr, "tiffcp: %s: Can't copy/convert subsampled image.\n",
+				TIFFFileName(in));
+			return FALSE;
 		}
-		if (TIFFGetField(in, TIFFTAG_PHOTOMETRIC, &input_photometric)) {
-			if(input_photometric == PHOTOMETRIC_RGB) {
-				if (jpegcolormode == JPEGCOLORMODE_RGB)
-					TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
-					    PHOTOMETRIC_YCBCR);
-				else
-					TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
-					    PHOTOMETRIC_RGB);
-			} else
-				TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
-				    input_photometric);
-		}
+	}
+	if (compression == COMPRESSION_JPEG) {
+		if (input_photometric == PHOTOMETRIC_RGB &&
+		    jpegcolormode == JPEGCOLORMODE_RGB)
+		  TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_YCBCR);
+		else
+		  TIFFSetField(out, TIFFTAG_PHOTOMETRIC, input_photometric);
 	}
 	else if (compression == COMPRESSION_SGILOG
 	    || compression == COMPRESSION_SGILOG24)
