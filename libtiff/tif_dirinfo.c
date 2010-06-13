@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.109 2010-05-08 18:33:51 olivier Exp $ */
+/* $Id: tif_dirinfo.c,v 1.110 2010-06-13 19:37:23 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -271,7 +271,7 @@ td_lfind(const void *key, const void *base, size_t *nmemb, size_t size,
 
     end = (char *)base + *nmemb * size;
     for (element = (char *)base; element < end; element += size)
-        if (!compar(element, key))		/* key found */
+        if (!compar(key, element))		/* key found */
             return element;
 
     return NULL;
