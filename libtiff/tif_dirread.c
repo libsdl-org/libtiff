@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.7 2010-06-08 18:50:42 bfriesen Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.8 2010-06-14 00:19:22 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1918,6 +1918,13 @@ TIFFFetchSubjectDistance(TIFF* tif, TIFFDirEntry* dir)
 	uint32 l[2];
 	float v;
 	int ok = 0;
+
+    if( dir->tdir_count != 1 || dir->tdir_type != TIFF_RATIONAL )
+    {
+		TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
+                       "incorrect count or type for SubjectDistance, tag ignored" );
+		return (0);
+    }
 
 	if (TIFFFetchData(tif, dir, (char *)l)
 	    && cvtRational(tif, dir, l[0], l[1], &v)) {
