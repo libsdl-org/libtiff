@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.9 2010-06-14 02:47:16 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.10 2010-06-21 19:18:06 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1064,7 +1064,7 @@ JPEGDecodeRaw(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 					}
 				}
 				else
-				{         // 12-bit
+				{         /* 12-bit  */
 					int value_pairs = (sp->cinfo.d.output_width
 					    * sp->cinfo.d.num_components) / 2;
 					int iPair;
