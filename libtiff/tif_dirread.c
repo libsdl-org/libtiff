@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.157 2010-05-08 18:33:07 olivier Exp $ */
+/* $Id: tif_dirread.c,v 1.158 2010-06-21 19:09:26 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2792,7 +2792,7 @@ static void TIFFReadDirEntryCheckedSbyte(TIFF* tif, TIFFDirEntry* direntry, int8
 static void TIFFReadDirEntryCheckedShort(TIFF* tif, TIFFDirEntry* direntry, uint16* value)
 {
 	*value = direntry->tdir_offset.toff_short;
-	//*value=*(uint16*)(&direntry->tdir_offset);
+	/* *value=*(uint16*)(&direntry->tdir_offset); */
 	if (tif->tif_flags&TIFF_SWAB)
 		TIFFSwabShort(value);
 }

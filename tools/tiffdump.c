@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.22 2010-03-10 18:56:50 bfriesen Exp $ */
+/* $Id: tiffdump.c,v 1.23 2010-06-21 19:09:26 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -169,7 +169,7 @@ dump(int fd, uint64 diroff)
 		ReadError("TIFF header");
 	if (hdr.common.tiff_magic != TIFF_BIGENDIAN && hdr.common.tiff_magic != TIFF_LITTLEENDIAN &&
 #if HOST_BIGENDIAN
-	    // MDI is sensitive to the host byte order, unlike TIFF
+	    /* MDI is sensitive to the host byte order, unlike TIFF */
 	    MDI_BIGENDIAN != hdr.common.tiff_magic )
 #else
 	    MDI_LITTLEENDIAN != hdr.common.tiff_magic )

@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.36 2010-03-10 18:56:49 bfriesen Exp $ */
+/* $Id: tif_win32.c,v 1.37 2010-06-21 19:09:26 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -165,8 +165,8 @@ _tiffMapProc(thandle_t fd, void** pbase, toff_t* psize)
 	if ((uint64)sizem!=size)
 		return (0);
 
-	// By passing in 0 for the maximum file size, it specifies that we
-	// create a file mapping object for the full file size.
+	/* By passing in 0 for the maximum file size, it specifies that we
+	   create a file mapping object for the full file size. */
 	hMapFile = CreateFileMapping(fd, NULL, PAGE_READONLY, 0, 0, NULL);
 	if (hMapFile == NULL)
 		return (0);

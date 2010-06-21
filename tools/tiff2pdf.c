@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.53 2010-06-13 19:25:55 fwarmerdam Exp $
+/* $Id: tiff2pdf.c,v 1.54 2010-06-21 19:09:26 bfriesen Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -4803,7 +4803,7 @@ tsize_t t2p_write_pdf_transfer_dict(T2P* t2p, TIFF* output, uint16 i){
 	tsize_t written=0;
 	char buffer[32];
 	int buflen=0;
-	(void)i; // XXX
+	(void)i; /* XXX */
 
 	written += t2pWriteFile(output, (tdata_t) "/FunctionType 0 \n", 17);
 	written += t2pWriteFile(output, (tdata_t) "/Domain [0.0 1.0] \n", 19);
