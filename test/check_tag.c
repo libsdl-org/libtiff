@@ -1,4 +1,4 @@
-/* $Id: check_tag.c,v 1.2.2.2 2010-06-21 20:16:06 bfriesen Exp $ */
+/* $Id: check_tag.c,v 1.2.2.3 2010-06-21 20:17:27 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
@@ -30,6 +30,8 @@
  */
 
 #include "tif_config.h"
+
+#include <stdio.h>
 
 #include "tiffio.h"
 
