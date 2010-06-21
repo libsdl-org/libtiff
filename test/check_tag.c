@@ -1,4 +1,4 @@
-/* $Id: check_tag.c,v 1.2.2.1 2010-06-08 18:50:43 bfriesen Exp $ */
+/* $Id: check_tag.c,v 1.2.2.2 2010-06-21 20:16:06 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
@@ -28,6 +28,8 @@
  *
  * Module to test LONG tags read/write functions.
  */
+
+#include "tif_config.h"
 
 #include "tiffio.h"
 
