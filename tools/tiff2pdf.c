@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.37.2.12 2010-06-30 14:21:46 dron Exp $
+/* $Id: tiff2pdf.c,v 1.37.2.13 2010-06-30 15:43:27 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -1905,7 +1905,7 @@ void t2p_read_tiff_size_tile(T2P* t2p, TIFF* input, ttile_t tile){
 				if(TIFFGetField(input, TIFFTAG_JPEGTABLES, &count, &jpt)!=0){
 					if(count > 4){
 						t2p->tiff_datasize += count;
-						t2p->tiff_datasize -= 4; /* don't use EOI of header or SOI of tile */
+						t2p->tiff_datasize -= 2; /* don't use EOI of header or SOI of tile */
 					}
 				}
 			}
