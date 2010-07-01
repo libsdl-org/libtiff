@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.79 2010-06-12 02:55:30 bfriesen Exp $ */
+/* $Id: tiffiop.h,v 1.80 2010-07-01 15:33:28 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -319,8 +319,10 @@ extern TIFFErrorHandler _TIFFerrorHandler;
 extern TIFFErrorHandlerExt _TIFFwarningHandlerExt;
 extern TIFFErrorHandlerExt _TIFFerrorHandlerExt;
 
-extern void* _TIFFCheckMalloc(TIFF* tif, tmsize_t nmemb, tmsize_t elem_size, const char* what);
-extern void* _TIFFCheckRealloc(TIFF* tif, void* buffer, tmsize_t nmemb, tmsize_t elem_size, const char* what);
+extern uint32 _TIFFMultiply32(TIFF*, uint32, uint32, const char*);
+extern uint64 _TIFFMultiply64(TIFF*, uint64, uint64, const char*);
+extern void* _TIFFCheckMalloc(TIFF*, tmsize_t, tmsize_t, const char*);
+extern void* _TIFFCheckRealloc(TIFF*, void*, tmsize_t, tmsize_t, const char*);
 
 extern double _TIFFUInt64ToDouble(uint64);
 extern float _TIFFUInt64ToFloat(uint64);
@@ -359,6 +361,9 @@ extern int TIFFInitPixarLog(TIFF*, int);
 #endif
 #ifdef LOGLUV_SUPPORT
 extern int TIFFInitSGILog(TIFF*, int);
+#endif
+#ifdef LZMA_SUPPORT
+extern int TIFFInitLZMA(TIFF*, int);
 #endif
 #ifdef VMS
 extern const TIFFCodec _TIFFBuiltinCODECS[];
