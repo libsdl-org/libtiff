@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.63.2.4 2010-06-08 18:50:42 bfriesen Exp $ */
+/* $Id: tif_getimage.c,v 1.63.2.5 2010-07-02 10:03:07 dron Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2397,7 +2397,7 @@ PickContigCase(TIFFRGBAImage* img)
 			}
 			break;
 		case PHOTOMETRIC_YCBCR:
-			if (img->bitspersample == 8)
+			if ((img->bitspersample==8) && (img->samplesperpixel==3))
 			{
 				if (initYCbCrConversion(img)!=0)
 				{
