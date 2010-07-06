@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.110 2010-06-13 19:37:23 fwarmerdam Exp $ */
+/* $Id: tif_dirinfo.c,v 1.111 2010-07-06 14:16:05 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -538,8 +538,6 @@ TIFFFieldWithTag(TIFF* tif, uint32 tag)
 		TIFFErrorExt(tif->tif_clientdata, "TIFFFieldWithTag",
 			     "Internal error, unknown tag 0x%x",
 			     (unsigned int) tag);
-		assert(fip != NULL);
-		/*NOTREACHED*/
 	}
 	return (fip);
 }
@@ -552,8 +550,6 @@ TIFFFieldWithName(TIFF* tif, const char *field_name)
 	if (!fip) {
 		TIFFErrorExt(tif->tif_clientdata, "TIFFFieldWithName",
 			     "Internal error, unknown tag %s", field_name);
-		assert(fip != NULL);
-		/*NOTREACHED*/
 	}
 	return (fip);
 }
