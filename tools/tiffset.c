@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: tiffset.c,v 1.12.2.1 2010-06-08 18:50:44 bfriesen Exp $
+ * $Id: tiffset.c,v 1.12.2.2 2010-07-06 14:26:00 dron Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Mainline for setting metadata in existing TIFF files.
@@ -27,22 +27,6 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  ******************************************************************************
- *
- * $Log: tiffset.c,v $
- * Revision 1.12.2.1  2010-06-08 18:50:44  bfriesen
- * * Add an emacs formatting mode footer to all source files so that
- * emacs can be effectively used.
- *
- * Revision 1.12  2007/02/24 17:14:14  dron
- * Properly handle tags with TIFF_VARIABLE writecount. As per bug
- * http://bugzilla.remotesensing.org/show_bug.cgi?id=1350
- *
- * Revision 1.11  2005/09/13 14:13:42  dron
- * Avoid warnings.
- *
- * Revision 1.10  2005/02/24 14:47:11  fwarmerdam
- * Updated header.
- *
  */
 
 
@@ -80,7 +64,7 @@ GetField(TIFF *tiff, const char *tagname)
         fip = TIFFFieldWithName(tiff, tagname);
 
     if (!fip) {
-        fprintf( stderr, "Field name %s not recognised.\n", tagname );
+        fprintf( stderr, "Field name \"%s\" is not recognised.\n", tagname );
         return (TIFFFieldInfo *)NULL;
     }
 
@@ -224,10 +208,21 @@ main(int argc, char* argv[])
                         if (fip->field_passcount) {
                                 ret = TIFFSetField(tiff, fip->field_tag,
                                                    wc, array);
-                        } else {
+                        } else if (fip->field_tag == TIFFTAG_PAGENUMBER
+				   || fip->field_tag == TIFFTAG_HALFTONEHINTS
+				   || fip->field_tag == TIFFTAG_YCBCRSUBSAMPLING
+				   || fip->field_tag == TIFFTAG_DOTRANGE) {
+       				if (fip->field_type == TIFF_BYTE) {
+					ret = TIFFSetField(tiff, fip->field_tag,
+						((uint8 *)array)[0], ((uint8 *)array)[1]);
+				} else if (fip->field_type == TIFF_SHORT) {
+					ret = TIFFSetField(tiff, fip->field_tag,
+						((uint16 *)array)[0], ((uint16 *)array)[1]);
+				}
+			} else {
                                 ret = TIFFSetField(tiff, fip->field_tag,
                                                    array);
-                        }
+			}
 
                         _TIFFfree(array);
                 } else {
