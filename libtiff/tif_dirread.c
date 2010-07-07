@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.158 2010-06-21 19:09:26 bfriesen Exp $ */
+/* $Id: tif_dirread.c,v 1.159 2010-07-07 15:13:57 dron Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4329,6 +4329,7 @@ CheckDirCount(TIFF* tif, TIFFDirEntry* dir, uint32 count)
 	"incorrect count for field \"%s\" (" TIFF_UINT64_FORMAT ", expecting %u); tag trimmed",
 		    TIFFFieldWithTag(tif, dir->tdir_tag)->field_name,
 		    dir->tdir_count, count);
+		dir->tdir_count = count;
 		return (1);
 	}
 	return (1);
