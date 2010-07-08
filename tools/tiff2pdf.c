@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.57 2010-06-30 16:04:50 dron Exp $
+/* $Id: tiff2pdf.c,v 1.58 2010-07-08 09:37:52 dron Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -5054,9 +5054,8 @@ tsize_t t2p_write_pdf_trailer(T2P* t2p, TIFF* output)
 	int buflen = 0;
 	size_t i = 0;
 
-	for (i = 0; i < sizeof(t2p->pdf_fileid); i += 8)
+	for (i = 0; i < sizeof(t2p->pdf_fileid) - 8; i += 8)
 		snprintf(t2p->pdf_fileid + i, 9, "%.8X", rand());
-	t2p->pdf_fileid[sizeof(t2p->pdf_fileid) - 1] = '\0';
 
 	written += t2pWriteFile(output, (tdata_t) "trailer\n<<\n/Size ", 17);
 	buflen = sprintf(buffer, "%lu", (unsigned long)(t2p->pdf_xrefcount+1));
