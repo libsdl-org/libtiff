@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.17 2010-03-10 18:56:50 bfriesen Exp $ */
+/* $Id: tiffinfo.c,v 1.18 2010-10-21 19:07:32 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -129,8 +129,7 @@ main(int argc, char* argv[])
 	if (optind >= argc)
 		usage();
 
-	old_error_handler = _TIFFerrorHandler;
-	(void) TIFFSetErrorHandler(PrivateErrorHandler);
+	old_error_handler = TIFFSetErrorHandler(PrivateErrorHandler);
 
 	multiplefiles = (argc - optind > 1);
 	for (; optind < argc; optind++) {
