@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.58 2010-07-08 09:37:52 dron Exp $
+/* $Id: tiff2pdf.c,v 1.59 2010-11-28 15:35:12 faxguy Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -766,6 +766,7 @@ int main(int argc, char** argv){
 		goto fail;
 	}
 
+	goto success;
 fail:
 	ret = EXIT_FAILURE;
 success:
