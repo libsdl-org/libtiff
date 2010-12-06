@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.92 2010-06-21 19:09:26 bfriesen Exp $ */
+/* $Id: tif_jpeg.c,v 1.93 2010-12-06 18:05:56 faxguy Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1167,6 +1167,7 @@ JPEGPreDecode(TIFF* tif, uint16 s)
 	if (downsampled_output) {
 		/* Need to use raw-data interface to libjpeg */
 		sp->cinfo.d.raw_data_out = TRUE;
+		sp->cinfo.d.do_fancy_upsampling = FALSE;
 		tif->tif_decoderow = DecodeRowError;
 		tif->tif_decodestrip = JPEGDecodeRaw;
 		tif->tif_decodetile = JPEGDecodeRaw;
