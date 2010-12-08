@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.10 2010-07-07 15:13:19 dron Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.11 2010-12-08 17:44:35 faxguy Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -105,7 +105,20 @@ TIFFReadDirectory(TIFF* tif)
 			     tif->tif_name, tif->tif_nextdiroff);
 		return 0;
 	}
-
+	{
+		TIFFDirEntry* ma;
+		uint16 mb;
+		for (ma=dir, mb=0; mb<dircount; ma++, mb++)
+		{
+			TIFFDirEntry* na;
+			uint16 nb;
+			for (na=ma+1, nb=mb+1; nb<dircount; na++, nb++)
+			{
+				if (ma->tdir_tag==na->tdir_tag)
+					na->tdir_tag=IGNORE;
+			}
+		}
+	}
 	tif->tif_flags &= ~TIFF_BEENWRITING;	/* reset before new dir */
 	/*
 	 * Setup default value and then make a pass over
