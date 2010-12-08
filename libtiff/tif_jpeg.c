@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.12 2010-12-06 20:53:13 faxguy Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.13 2010-12-08 00:47:52 faxguy Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -988,8 +988,15 @@ JPEGDecodeRaw(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 	tsize_t nrows;
 	(void) s;
 
-	/* data is expected to be read in multiples of a scanline */
-	if ( (nrows = sp->cinfo.d.image_height) ) {
+    nrows = cc / sp->bytesperline;
+    if (cc % sp->bytesperline)
+		TIFFWarningExt(tif->tif_clientdata, tif->tif_name, "fractional scanline not read");
+
+    if( nrows > (int) sp->cinfo.d.image_height )
+        nrows = sp->cinfo.d.image_height;
+
+    /* data is expected to be read in multiples of a scanline */
+    if (nrows) {
 		/* Cb,Cr both have sampling factors 1, so this is correct */
 		JDIMENSION clumps_per_line = sp->cinfo.d.comp_info[1].downsampled_width;            
 		int samples_per_clump = sp->samplesperclump;
@@ -1087,8 +1094,7 @@ JPEGDecodeRaw(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 			 * TODO: resolve this */
 			buf += sp->bytesperline;
 			cc -= sp->bytesperline;
-			nrows -= sp->v_sampling;
-		} while (nrows > 0);
+		} while (--nrows > 0);
 
 #ifdef JPEG_LIB_MK1
 		_TIFFfree(tmpbuf);
