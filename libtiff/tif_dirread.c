@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.11 2010-12-08 17:44:35 faxguy Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.12 2010-12-11 22:32:32 faxguy Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -606,8 +606,7 @@ TIFFReadDirectory(TIFF* tif)
 		}
 		if (!TIFFFieldSet(tif,FIELD_SAMPLESPERPIXEL))
 		{
-			if ((td->td_photometric==PHOTOMETRIC_RGB)
-			    || (td->td_photometric==PHOTOMETRIC_YCBCR))
+			if (td->td_photometric==PHOTOMETRIC_RGB)
 			{
 				TIFFWarningExt(tif->tif_clientdata,
 					       "TIFFReadDirectory",
@@ -616,13 +615,22 @@ TIFFReadDirectory(TIFF* tif)
 				if (!TIFFSetField(tif,TIFFTAG_SAMPLESPERPIXEL,3))
 					goto bad;
 			}
-			else if ((td->td_photometric==PHOTOMETRIC_MINISWHITE)
-				 || (td->td_photometric==PHOTOMETRIC_MINISBLACK))
+			if (td->td_photometric==PHOTOMETRIC_YCBCR)
 			{
 				TIFFWarningExt(tif->tif_clientdata,
 					       "TIFFReadDirectory",
 				"SamplesPerPixel tag is missing, "
-				"assuming correct SamplesPerPixel value is 1");
+				"applying correct SamplesPerPixel value of 3");
+				if (!TIFFSetField(tif,TIFFTAG_SAMPLESPERPIXEL,3))
+					goto bad;
+			}
+			else if ((td->td_photometric==PHOTOMETRIC_MINISWHITE)
+				 || (td->td_photometric==PHOTOMETRIC_MINISBLACK))
+			{
+				/*
+				 * SamplesPerPixel tag is missing, but is not required
+				 * by spec.  Assume correct SamplesPerPixel value of 1.
+				 */
 				if (!TIFFSetField(tif,TIFFTAG_SAMPLESPERPIXEL,1))
 					goto bad;
 			}
