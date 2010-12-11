@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.48 2010-12-11 19:16:48 faxguy Exp $ */
+/* $Id: tif_ojpeg.c,v 1.49 2010-12-11 19:52:52 faxguy Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -1903,7 +1903,7 @@ OJPEGReadBufferFill(OJPEGState* sp)
 				sp->in_buffer_file_pos_log=1;
 			}
 			m=OJPEG_BUFFER;
-			if ((tmsize_t)m>sp->in_buffer_file_togo)
+			if ((uint64)m>sp->in_buffer_file_togo)
 				m=(uint16)sp->in_buffer_file_togo;
 			n=TIFFReadFile(sp->tif,sp->in_buffer,(tmsize_t)m);
 			if (n==0)
