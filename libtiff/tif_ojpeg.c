@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.24.2.6 2010-06-08 23:29:51 bfriesen Exp $ */
+/* $Id: tif_ojpeg.c,v 1.24.2.7 2010-12-11 19:16:26 faxguy Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -1918,8 +1918,14 @@ OJPEGReadBufferFill(OJPEGState* sp)
 					{
 						if (sp->in_buffer_file_pos>=sp->file_size)
 							sp->in_buffer_file_pos=0;
+						else if (sp->tif->tif_dir.td_stripbytecount==NULL)
+							sp->in_buffer_file_togo=sp->file_size-sp->in_buffer_file_pos;
 						else
 						{
+							if (sp->tif->tif_dir.td_stripbytecount == 0) {
+								TIFFErrorExt(sp->tif->tif_clientdata,sp->tif->tif_name,"Strip byte counts are missing");
+								return(0);
+							}
 							sp->in_buffer_file_togo=sp->tif->tif_dir.td_stripbytecount[sp->in_buffer_next_strile];  
 							if (sp->in_buffer_file_togo==0)
 								sp->in_buffer_file_pos=0;
