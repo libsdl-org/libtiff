@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.13 2010-12-08 00:47:52 faxguy Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.14 2010-12-12 01:57:24 faxguy Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1529,7 +1529,7 @@ JPEGEncodeRaw(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 			sp->scancount = 0;
 		}
 		tif->tif_row += sp->v_sampling;
-		buf += sp->bytesperline;
+		buf += bytesperclumpline;
 		nrows -= sp->v_sampling;
 	}
 	return (1);
