@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.60 2010-12-11 22:47:49 faxguy Exp $
+/* $Id: tiff2pdf.c,v 1.61 2010-12-12 06:58:27 faxguy Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -4656,14 +4656,6 @@ tsize_t t2p_write_pdf_xobject_cs(T2P* t2p, TIFF* output){
 			written += t2pWriteFile(output, (tdata_t) "/WhitePoint ", 12);
 			X_W = t2p->tiff_whitechromaticities[0];
 			Y_W = t2p->tiff_whitechromaticities[1];
-			Z_W = 1.0F - (X_W + Y_W);
-			X_W /= Y_W;
-			Z_W /= Y_W;
-			Y_W = 1.0F;
-			buflen=sprintf(buffer, "[%.4f %.4f %.4f] \n", X_W, Y_W, Z_W);
-			written += t2pWriteFile(output, (tdata_t) buffer, buflen);
-			X_W = 0.3457F; /* 0.3127F; */ /* D50, commented D65 */
-			Y_W = 0.3585F; /* 0.3290F; */
 			Z_W = 1.0F - (X_W + Y_W);
 			X_W /= Y_W;
 			Z_W /= Y_W;
