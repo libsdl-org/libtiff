@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.24 2010-03-10 18:56:49 bfriesen Exp $" */
+/* $Id: fax2ps.c,v 1.25 2010-12-12 01:11:56 faxguy Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -381,11 +381,12 @@ main(int argc, char** argv)
 	int n;
 	FILE* fd;
 	char buf[16*1024];
+	char temp[1024];
 
-	fd = tmpfile();
+	strcpy(temp, "/tmp/fax2psXXXXXX");
+	fd = fdopen(mkstemp(temp), "w+");
 	if (fd == NULL) {
-	    fprintf(stderr, "Could not create temporary file, exiting.\n");
-	    fclose(fd);
+	    fprintf(stderr, "Could not create temp file \"%s\"\n", temp);
 	    exit(-2);
 	}
 #if defined(HAVE_SETMODE) && defined(O_BINARY)
