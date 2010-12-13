@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.37.2.18 2010-12-12 06:59:00 faxguy Exp $
+/* $Id: tiff2pdf.c,v 1.37.2.19 2010-12-13 05:41:11 faxguy Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -3478,11 +3478,10 @@ t2p_sample_rgba_to_rgb(tdata_t data, uint32 samplecount)
 	
 	for (i = 0; i < samplecount; i++) {
 		sample=((uint32*)data)[i];
-		alpha=(uint8)((255 - (sample & 0xff)));
-		((uint8 *)data)[i * 3] = (uint8) ((sample >> 24) & 0xff) + alpha;
-		((uint8 *)data)[i * 3 + 1] = (uint8) ((sample >> 16) & 0xff) + alpha;
-		((uint8 *)data)[i * 3 + 2] = (uint8) ((sample >> 8) & 0xff) + alpha;
-		
+		alpha=(uint8)((255 - ((sample >> 24) & 0xff)));
+		((uint8 *)data)[i * 3] = (uint8) ((sample >> 16) & 0xff) + alpha;
+		((uint8 *)data)[i * 3 + 1] = (uint8) ((sample >> 8) & 0xff) + alpha;
+		((uint8 *)data)[i * 3 + 2] = (uint8) (sample & 0xff) + alpha;
 	}
 
 	return (i * 3);
