@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.163 2010-12-13 05:15:50 faxguy Exp $ */
+/* $Id: tif_dirread.c,v 1.164 2010-12-14 03:03:24 faxguy Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -583,7 +583,16 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryFloat(TIFF* tif, TIFFDirEntry* d
 				err=TIFFReadDirEntryCheckedLong8(tif,direntry,&m);
 				if (err!=TIFFReadDirEntryErrOk)
 					return(err);
+#if defined(__WIN32__) && (_MSC_VER < 1500)
+				/*
+				 * XXX: MSVC 6.0 does not support conversion
+				 * of 64-bit integers into floating point
+				 * values.
+				 */
+				*value = _TIFFUInt64ToFloat(m);
+#else
 				*value=(float)m;
+#endif
 				return(TIFFReadDirEntryErrOk);
 			}
 		case TIFF_SLONG8:
