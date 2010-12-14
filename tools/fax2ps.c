@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.25 2010-12-12 01:11:56 faxguy Exp $" */
+/* $Id: fax2ps.c,v 1.26 2010-12-14 03:16:45 faxguy Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -277,9 +277,9 @@ findPage(TIFF* tif, uint16 pageNumber)
     uint16 pn = (uint16) -1;
     uint16 ptotal = (uint16) -1;
     if (GetPageNumber(tif)) {
-	while (pn != pageNumber && TIFFReadDirectory(tif) && GetPageNumber(tif))
+	while (pn != (pageNumber-1) && TIFFReadDirectory(tif) && GetPageNumber(tif))
 	    ;
-	return (pn == pageNumber);
+	return (pn == (pageNumber-1));
     } else
 	return (TIFFSetDirectory(tif, (tdir_t)(pageNumber-1)));
 }
