@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.92.2.13 2010-12-14 02:40:31 faxguy Exp $ */
+/* $Id: tif_dirread.c,v 1.92.2.14 2010-12-15 01:04:34 faxguy Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -643,8 +643,14 @@ TIFFReadDirectory(TIFF* tif)
 	 */
 	if (td->td_photometric == PHOTOMETRIC_PALETTE &&
 	    !TIFFFieldSet(tif, FIELD_COLORMAP)) {
-		MissingRequired(tif, "Colormap");
-		goto bad;
+		if ( tif->tif_dir.td_bitspersample>=8 && tif->tif_dir.td_samplesperpixel==3)
+			tif->tif_dir.td_photometric = PHOTOMETRIC_RGB;
+		else if (tif->tif_dir.td_bitspersample>=8)
+			tif->tif_dir.td_photometric = PHOTOMETRIC_MINISBLACK;
+		else {
+			MissingRequired(tif, "Colormap");
+			goto bad;
+		}
 	}
 	/*
 	 * OJPEG hack:
