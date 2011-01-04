@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.15 2010-12-14 23:59:42 faxguy Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.16 2011-01-04 02:42:46 faxguy Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1366,7 +1366,7 @@ JPEGPreEncode(TIFF* tif, tsample_t s)
 				sp->cinfo.c.in_color_space = JCS_CMYK;
 			else
 				sp->cinfo.c.in_color_space = JCS_UNKNOWN;
-			if (!TIFFjpeg_set_colorspace(sp, (sp->cinfo.c.in_color_space == JCS_RGB) ? JCS_YCbCr : sp->cinfo.c.in_color_space))
+			if (!TIFFjpeg_set_colorspace(sp, sp->cinfo.c.in_color_space))
 				return (0);
 			/* jpeg_set_colorspace set all sampling factors to 1 */
 		}
