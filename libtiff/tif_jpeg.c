@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.50.2.16 2011-01-04 02:42:46 faxguy Exp $ */
+/* $Id: tif_jpeg.c,v 1.50.2.17 2011-01-04 02:51:17 faxguy Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1358,7 +1358,7 @@ JPEGPreEncode(TIFF* tif, tsample_t s)
 			sp->cinfo.c.comp_info[0].h_samp_factor = sp->h_sampling;
 			sp->cinfo.c.comp_info[0].v_samp_factor = sp->v_sampling;
 		} else {
-			if (td->td_photometric == PHOTOMETRIC_MINISWHITE || td->td_photometric == PHOTOMETRIC_MINISBLACK)
+			if ((td->td_photometric == PHOTOMETRIC_MINISWHITE || td->td_photometric == PHOTOMETRIC_MINISBLACK) && td->td_samplesperpixel == 1)
 				sp->cinfo.c.in_color_space = JCS_GRAYSCALE;
 			else if (td->td_photometric == PHOTOMETRIC_RGB)
 				sp->cinfo.c.in_color_space = JCS_RGB;
