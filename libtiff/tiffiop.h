@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.80 2010-07-01 15:33:28 dron Exp $ */
+/* $Id: tiffiop.h,v 1.81 2011-01-24 21:06:32 olivier Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -141,6 +141,7 @@ struct tiff {
 	#define TIFF_BIGTIFF     0x80000 /* read/write bigtiff */
         #define TIFF_BUF4WRITE  0x100000 /* rawcc bytes are for writing */
         #define TIFF_DIRTYSTRIP 0x200000 /* stripoffsets/stripbytecount dirty*/
+        #define TIFF_PERSAMPLE  0x400000 /* get/set per sample tags as arrays */
 	uint64               tif_diroff;       /* file offset of current directory */
 	uint64               tif_nextdiroff;   /* file offset of following directory */
 	uint64*              tif_dirlist;      /* list of offsets to already seen directories to prevent IFD looping */

@@ -1,4 +1,4 @@
-/* $Id: tif_dir.h,v 1.52 2010-03-10 18:56:48 bfriesen Exp $ */
+/* $Id: tif_dir.h,v 1.53 2011-01-24 21:06:31 olivier Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -57,7 +57,8 @@ typedef struct {
 	uint16  td_samplesperpixel;
 	uint32  td_rowsperstrip;
 	uint16  td_minsamplevalue, td_maxsamplevalue;
-	double  td_sminsamplevalue, td_smaxsamplevalue;
+	double* td_sminsamplevalue;
+	double* td_smaxsamplevalue;
 	float   td_xresolution, td_yresolution;
 	uint16  td_resolutionunit;
 	uint16  td_planarconfig;
