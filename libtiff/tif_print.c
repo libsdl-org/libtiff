@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.51 2011-01-24 21:06:31 olivier Exp $ */
+/* $Id: tif_print.c,v 1.52 2011-02-11 19:21:03 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -138,8 +138,6 @@ static int
 _TIFFPrettyPrintField(TIFF* tif, FILE* fd, uint32 tag,
 		      uint32 value_count, void *raw_data)
 {
-	TIFFDirectory *td = &tif->tif_dir;
-
 	switch (tag)
 	{
 		case TIFFTAG_INKSET:
