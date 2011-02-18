@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.75 2011-01-24 21:06:31 olivier Exp $ */
+/* $Id: tif_dirwrite.c,v 1.76 2011-02-18 20:53:04 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -370,6 +370,9 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64* pdiroff)
 	uint32 m;
 	if (tif->tif_mode == O_RDONLY)
 		return (1);
+
+        _TIFFFillStriles( tif );
+        
 	/*
 	 * Clear write state so that subsequent images with
 	 * different characteristics get the right buffers

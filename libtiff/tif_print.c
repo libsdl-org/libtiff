@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.52 2011-02-11 19:21:03 fwarmerdam Exp $ */
+/* $Id: tif_print.c,v 1.53 2011-02-18 20:53:04 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -138,6 +138,8 @@ static int
 _TIFFPrettyPrintField(TIFF* tif, FILE* fd, uint32 tag,
 		      uint32 value_count, void *raw_data)
 {
+        (void) tif;
+        
 	switch (tag)
 	{
 		case TIFFTAG_INKSET:
@@ -618,6 +620,9 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
         
 	if (tif->tif_tagmethods.printdir)
 		(*tif->tif_tagmethods.printdir)(tif, fd, flags);
+
+        _TIFFFillStriles( tif );
+        
 	if ((flags & TIFFPRINT_STRIPS) &&
 	    TIFFFieldSet(tif,FIELD_STRIPOFFSETS)) {
 		uint32 s;
