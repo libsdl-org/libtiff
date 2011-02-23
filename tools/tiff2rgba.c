@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.18 2010-03-10 18:56:50 bfriesen Exp $ */
+/* $Id: tiff2rgba.c,v 1.19 2011-02-23 21:46:09 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -124,6 +124,7 @@ main(int argc, char* argv[])
 				if (!tiffcvt(in, out) ||
 				    !TIFFWriteDirectory(out)) {
 					(void) TIFFClose(out);
+					(void) TIFFClose(in);
 					return (1);
 				}
 			} while (TIFFReadDirectory(in));
