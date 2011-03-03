@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.h,v 1.7 2010-03-10 18:56:48 bfriesen Exp $ */
+/* $Id: tif_fax3.h,v 1.8 2011-03-03 01:38:25 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -478,6 +478,10 @@ done1d:									\
 	    break;							\
 	case S_VL:							\
 	    CHECK_b1;							\
+	    if (b1 <= (int) (a0 + TabEnt->Param)) {			\
+		unexpected("VL", a0);					\
+		goto eol2d;						\
+	    }								\
 	    SETVALUE(b1 - a0 - TabEnt->Param);				\
 	    b1 -= *--pb;						\
 	    break;							\
