@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: tiffset.c,v 1.15 2010-07-06 14:30:38 dron Exp $
+ * $Id: tiffset.c,v 1.16 2011-03-26 12:07:20 fwarmerdam Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Mainline for setting metadata in existing TIFF files.
@@ -41,6 +41,8 @@ static char* usageMsg[] = {
 "usage: tiffset [options] filename",
 "where options are:",
 " -s <tagname> [count] <value>...   set the tag value",
+" -d <dirno> set the directory",
+" -sd <diroff> set the subdirectory",
 " -sf <tagname> <filename>  read the tag value from file (for ASCII tags only)",
 NULL
 };
@@ -86,6 +88,24 @@ main(int argc, char* argv[])
         return 2;
 
     for( arg_index = 1; arg_index < argc-1; arg_index++ ) {
+	if (strcmp(argv[arg_index],"-d") == 0 && arg_index < argc-2) {
+	    arg_index++;
+	    if( TIFFSetDirectory(tiff, atoi(argv[arg_index]) ) != 1 )
+            {
+               fprintf( stderr, "Failed to set directory=%s\n", argv[arg_index] );
+               return 6;
+            }
+	    arg_index++;
+	}
+	if (strcmp(argv[arg_index],"-sd") == 0 && arg_index < argc-2) {
+	    arg_index++;
+	    if( TIFFSetSubDirectory(tiff, atoi(argv[arg_index]) ) != 1 )
+            {
+               fprintf( stderr, "Failed to set sub directory=%s\n", argv[arg_index] );
+               return 7;
+            }
+	    arg_index++;
+	}
         if (strcmp(argv[arg_index],"-s") == 0 && arg_index < argc-3) {
             const TIFFField *fip;
             const char *tagname;
