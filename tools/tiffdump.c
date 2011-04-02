@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.24 2010-07-02 11:06:29 dron Exp $ */
+/* $Id: tiffdump.c,v 1.25 2011-04-02 20:54:09 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -80,7 +80,7 @@ const char* sshortfmt = "%s%d";		/* SSHORT */
 const char* longfmt = "%s%lu";		/* LONG */
 const char* slongfmt = "%s%ld";		/* SLONG */
 const char* ifdfmt = "%s%#04lx";	/* IFD offset */
-#if defined(__WIN32__) && defined(_MSC_VER)
+#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 const char* long8fmt = "%s%I64u";	/* LONG8 */
 const char* slong8fmt = "%s%I64d";	/* SLONG8 */
 const char* ifd8fmt = "%s%#08I64x";	/* IFD offset8*/
@@ -336,7 +336,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 				TIFFSwabLong8(&nextdiroff);
 		}
 	}
-#if defined(__WIN32__) && defined(_MSC_VER)
+#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 	printf("Directory %u: offset %I64u (%#I64x) next %I64u (%#I64x)\n", ix,
 	    (unsigned __int64)off, (unsigned __int64)off,
 	    (unsigned __int64)nextdiroff, (unsigned __int64)nextdiroff);
@@ -383,7 +383,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 				TIFFSwabLong8(&count);
 			dp += sizeof(uint64);
 		}
-#if defined(__WIN32__) && defined(_MSC_VER)
+#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 		printf("%I64u<", (unsigned __int64)count);
 #else
 		printf("%llu<", (unsigned long long)count);

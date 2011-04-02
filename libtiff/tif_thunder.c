@@ -1,4 +1,4 @@
-/* $Id: tif_thunder.c,v 1.11 2011-03-21 16:02:27 fwarmerdam Exp $ */
+/* $Id: tif_thunder.c,v 1.12 2011-04-02 20:54:09 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -143,7 +143,7 @@ ThunderDecode(TIFF* tif, uint8* op, tmsize_t maxpixels)
 	tif->tif_rawcp = (uint8*) bp;
 	tif->tif_rawcc = cc;
 	if (npixels != maxpixels) {
-#if defined(__WIN32__) && defined(_MSC_VER)
+#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 		TIFFErrorExt(tif->tif_clientdata, module,
 			     "%s data at scanline %lu (%I64u != %I64u)",
 			     npixels < maxpixels ? "Not enough" : "Too much",

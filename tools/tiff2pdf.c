@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.62 2010-12-13 05:41:38 faxguy Exp $
+/* $Id: tiff2pdf.c,v 1.63 2011-04-02 20:54:09 bfriesen Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -3678,7 +3678,7 @@ tsize_t t2p_write_pdf_string(char* pdfstr, TIFF* output)
 	written += t2pWriteFile(output, (tdata_t) "(", 1);
 	for (i=0; i<len; i++) {
 		if((pdfstr[i]&0x80) || (pdfstr[i]==127) || (pdfstr[i]<32)){
-			snprintf(buffer, sizeof(buffer), "\\%.3hho", pdfstr[i]);
+			snprintf(buffer, sizeof(buffer), "\\%.3o", ((unsigned char)pdfstr[i]));
 			written += t2pWriteFile(output, (tdata_t)buffer, 4);
 		} else {
 			switch (pdfstr[i]){
