@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.35.2.6 2010-11-26 22:43:46 faxguy Exp $ */
+/* $Id: tiff2ps.c,v 1.35.2.7 2011-04-09 16:53:56 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -440,19 +440,19 @@ main(int argc, char* argv[])
 
         if ((generateEPSF == TRUE) && (printAll == TRUE))
           {
-	  TIFFError(" -e and -a", "Warning: Cannot generate Encapuslated Postscript for multiple images");
+	  TIFFError(" -e and -a", "Warning: Cannot generate Encapsulated Postscript for multiple images");
 	  generateEPSF = FALSE;
           }
 
         if ((generateEPSF == TRUE) && (PSduplex == TRUE))
           {
-	  TIFFError(" -e and -D", "Warning: Encapuslated Postscript does not support Duplex option");
+	  TIFFError(" -e and -D", "Warning: Encapsulated Postscript does not support Duplex option");
 	  PSduplex = FALSE;
           }
 
         if ((generateEPSF == TRUE) && (PStumble == TRUE))
           {
-	  TIFFError(" -e and -T", "Warning: Encapuslated Postscript does not support Top Edge Binding option");
+	  TIFFError(" -e and -T", "Warning: Encapsulated Postscript does not support Top Edge Binding option");
 	  PStumble = FALSE;
           }
 
