@@ -1,11 +1,10 @@
-/* $Id: iptcutil.c,v 1.7 2010-06-08 18:55:15 bfriesen Exp $ */
+/* $Id: iptcutil.c,v 1.8 2011-05-08 00:44:18 fwarmerdam Exp $ */
 
 #include "tif_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <memory.h>
 #include <ctype.h>
 
 #ifdef HAVE_STRINGS_H
