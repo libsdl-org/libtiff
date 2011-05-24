@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.167 2011-02-18 20:53:04 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.168 2011-05-24 13:35:30 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4574,6 +4574,12 @@ TIFFFetchDirectory(TIFF* tif, uint64 diroff, TIFFDirEntry** pdir,
 			}
 			dircount16 = (uint16)dircount64;
 			dirsize = 20;
+		}
+		if (dircount16 == 0 )
+		{
+			TIFFErrorExt(tif->tif_clientdata, module,
+			             "Sanity check on directory count failed, zero tag directories not supported");
+			return 0;
 		}
 		origdir = _TIFFCheckMalloc(tif, dircount16,
 						dirsize,
