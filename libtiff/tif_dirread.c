@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.168 2011-05-24 13:35:30 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.169 2011-05-31 17:10:18 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -5353,8 +5353,10 @@ TIFFFetchStripThing(TIFF* tif, TIFFDirEntry* dir, uint32 nstrips, uint64** lpp)
 	{
 		uint64* resizeddata;
 		resizeddata=(uint64*)_TIFFCheckMalloc(tif,nstrips,sizeof(uint64),"for strip array");
-		if (resizeddata==0)
+		if (resizeddata==0) {
+			_TIFFfree(data);
 			return(0);
+		}
 		if (dir->tdir_count<(uint64)nstrips)
 		{
 			_TIFFmemcpy(resizeddata,data,(uint32)dir->tdir_count*sizeof(uint64));
