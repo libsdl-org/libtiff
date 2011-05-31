@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.64 2011-05-31 16:57:10 bfriesen Exp $
+/* $Id: tiff2pdf.c,v 1.65 2011-05-31 17:00:03 bfriesen Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -2375,6 +2375,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 		}
 
 		if(t2p->pdf_sample & T2P_SAMPLE_REALIZE_PALETTE){
+			// FIXME: overflow?
 			samplebuffer=(unsigned char*)_TIFFrealloc( 
 				(tdata_t) buffer, 
 				t2p->tiff_datasize * t2p->tiff_samplesperpixel);

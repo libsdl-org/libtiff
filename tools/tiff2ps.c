@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.47 2011-04-09 16:53:08 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.48 2011-05-31 17:00:03 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2595,6 +2595,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 
 	(void) w; (void) h;
 	tf_buf = (unsigned char *) _TIFFmalloc(stripsize);
+	// FIXME
         memset(tf_buf, 0, stripsize);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");

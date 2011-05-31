@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.103 2011-05-31 16:54:15 bfriesen Exp $ */
+/* $Id: tif_jpeg.c,v 1.104 2011-05-31 17:00:03 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1823,6 +1823,7 @@ JPEGEncode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
         {
             line16_count = (sp->bytesperline * 2) / 3;
             line16 = (short *) _TIFFmalloc(sizeof(short) * line16_count);
+	    // FIXME: undiagnosed malloc failure
         }
             
 	while (nrows-- > 0) {
@@ -2311,6 +2312,7 @@ here hopefully is harmless.
 */
             sp->jpegtables_length = SIZE_OF_JPEGTABLES;
             sp->jpegtables = (void *) _TIFFmalloc(sp->jpegtables_length);
+	    // FIXME: NULL-deref after malloc failure
 	    _TIFFmemset(sp->jpegtables, 0, SIZE_OF_JPEGTABLES);
 #undef SIZE_OF_JPEGTABLES
         }
