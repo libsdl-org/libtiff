@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.102 2011-05-31 16:51:50 bfriesen Exp $ */
+/* $Id: tif_jpeg.c,v 1.103 2011-05-31 16:54:15 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -2189,8 +2189,6 @@ JPEGDefaultTileSize(TIFF* tif, uint32* tw, uint32* th)
 static int JPEGInitializeLibJPEG( TIFF * tif, int decompress )
 {
     JPEGState* sp = JState(tif);
-    uint64* byte_counts = NULL;
-    int     data_is_empty = TRUE;
 
     if(sp->cinfo_initialized)
     {
@@ -2202,24 +2200,6 @@ static int JPEGInitializeLibJPEG( TIFF * tif, int decompress )
             return 1;
 
         sp->cinfo_initialized = 0;
-    }
-
-    /*
-     * Do we have tile data already?  Make sure we initialize the
-     * the state in decompressor mode if we have tile data, even if we
-     * are not in read-only file access mode. 
-     */
-    if( TIFFIsTiled( tif ) 
-        && TIFFGetField( tif, TIFFTAG_TILEBYTECOUNTS, &byte_counts ) 
-        && byte_counts != NULL )
-    {
-        data_is_empty = byte_counts[0] == 0;
-    }
-    if( !TIFFIsTiled( tif ) 
-        && TIFFGetField( tif, TIFFTAG_STRIPBYTECOUNTS, &byte_counts) 
-        && byte_counts != NULL )
-    {
-        data_is_empty = byte_counts[0] == 0;
     }
 
     /*
