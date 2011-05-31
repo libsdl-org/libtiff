@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.101 2011-02-23 21:58:00 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.102 2011-05-31 16:51:50 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1351,6 +1351,11 @@ JPEGDecodeRaw(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
 		unsigned short* tmpbuf = _TIFFmalloc(sizeof(unsigned short) *
 		    sp->cinfo.d.output_width *
 		    sp->cinfo.d.num_components);
+		if(tmpbuf==NULL) {
+                        TIFFErrorExt(tif->tif_clientdata, "JPEGDecodeRaw",
+				     "Out of memory");
+			return 0;
+                }
 #endif
 
 		do {
