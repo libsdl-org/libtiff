@@ -1,4 +1,4 @@
-/* $Id: tiffsplit.c,v 1.14.2.5 2010-12-11 19:16:26 faxguy Exp $ */
+/* $Id: tiffsplit.c,v 1.14.2.6 2011-10-22 17:02:49 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1992-1997 Sam Leffler
@@ -172,7 +172,7 @@ tiffcp(TIFF* in, TIFF* out)
 	CopyField(TIFFTAG_SAMPLESPERPIXEL, samplesperpixel);
 	CopyField(TIFFTAG_COMPRESSION, compression);
 	if (compression == COMPRESSION_JPEG) {
-		uint16 count = 0;
+		uint32 count = 0;
 		void *table = NULL;
 		if (TIFFGetField(in, TIFFTAG_JPEGTABLES, &count, &table)
 		    && count > 0 && table) {
