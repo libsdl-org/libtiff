@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.170 2011-12-08 05:43:26 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.171 2011-12-08 05:48:39 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4026,7 +4026,11 @@ TIFFReadDirectory(TIFF* tif)
 	    (tif->tif_dir.td_nstrips==1)&&
 	    (tif->tif_dir.td_compression==COMPRESSION_NONE)&&  
 	    ((tif->tif_flags&(TIFF_STRIPCHOP|TIFF_ISTILED))==TIFF_STRIPCHOP))
+    {
+        if ( !_TIFFFillStriles(tif) || !tif->tif_dir.td_stripbytecount )
+            return 0;
 		ChopUpSingleUncompressedStrip(tif);
+    }
 
         /*
          * Clear the dirty directory flag. 
@@ -5459,8 +5463,6 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 	uint64* newcounts;
 	uint64* newoffsets;
 
-        _TIFFFillStriles(tif);
-        
 	bytecount = td->td_stripbytecount[0];
 	offset = td->td_stripoffset[0];
 	assert(td->td_planarconfig == PLANARCONFIG_CONTIG);
