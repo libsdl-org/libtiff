@@ -1,4 +1,4 @@
-$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.6 2009-01-02 03:48:45 fwarmerdam Exp $
+$Header: /cvs/maptools/cvsroot/libtiff/README,v 1.7 2012-02-18 21:53:27 bfriesen Exp $
 
 
 TIFF Software Distribution
@@ -9,7 +9,7 @@ favorite WWW viewer at html/index.html;
 
 e.g.
 
-    netscape html/index.html
+    firefox html/index.html
 
 If you don't have an HTML viewer then you can read the HTML source
 or fetch a PostScript version of this documentation from the directory
