@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.18 2010-10-21 19:07:32 fwarmerdam Exp $ */
+/* $Id: tiffinfo.c,v 1.19 2012-05-24 03:50:31 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -217,7 +217,7 @@ TIFFReadContigStripData(TIFF* tif)
 
 	buf = (unsigned char *)_TIFFmalloc(TIFFStripSize(tif));
 	if (buf) {
-		uint32 row, h;
+		uint32 row, h=0;
 		uint32 rowsperstrip = (uint32)-1;
 
 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
@@ -350,7 +350,7 @@ TIFFReadSeparateTileData(TIFF* tif)
 void
 TIFFReadData(TIFF* tif)
 {
-	uint16 config;
+	uint16 config = PLANARCONFIG_CONTIG;
 
 	TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &config);
 	if (TIFFIsTiled(tif)) {
