@@ -1,4 +1,4 @@
-/* $Id: tif_ojpeg.c,v 1.54 2011-05-31 17:05:07 bfriesen Exp $ */
+/* $Id: tif_ojpeg.c,v 1.55 2012-05-24 02:43:51 fwarmerdam Exp $ */
 
 /* WARNING: The type of JPEG encapsulation defined by the TIFF Version 6.0
    specification is now totally obsolete and deprecated for new applications and
@@ -1954,6 +1954,11 @@ OJPEGReadBufferFill(OJPEGState* sp)
 			case osibsJpegInterchangeFormat:
 				sp->in_buffer_source=osibsStrile;
 			case osibsStrile:
+				if (!_TIFFFillStriles( sp->tif ) 
+				    || sp->tif->tif_dir.td_stripoffset == NULL
+				    || sp->tif->tif_dir.td_stripbytecount == NULL)
+					return 0;
+
 				if (sp->in_buffer_next_strile==sp->in_buffer_strile_count)
 					sp->in_buffer_source=osibsEof;
 				else
