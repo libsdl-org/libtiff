@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.105 2012-02-01 01:51:00 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.106 2012-06-01 01:30:56 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1389,12 +1389,17 @@ JPEGDecodeRaw(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
 
 				for (ypos = 0; ypos < vsamp; ypos++) {
 					JSAMPLE *inptr = sp->ds_buffer[ci][sp->scancount*vsamp + ypos];
+					JDIMENSION nclump;
 #if defined(JPEG_LIB_MK1_OR_12BIT)
 					JSAMPLE *outptr = (JSAMPLE*)tmpbuf + clumpoffset;
 #else
 					JSAMPLE *outptr = (JSAMPLE*)buf + clumpoffset;
+					if (cc < clumpoffset + samples_per_clump * clumps_per_line) {
+						TIFFErrorExt(tif->tif_clientdata, "JPEGDecodeRaw",
+							     "application buffer not large enough for all data, possible subsampling issue");
+						return 0;
+					}
 #endif
-					JDIMENSION nclump;
 
 					if (hsamp == 1) {
 						/* fast path for at least Cb and Cr */
