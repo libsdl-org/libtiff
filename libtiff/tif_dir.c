@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.75.2.6 2010-07-02 09:49:23 dron Exp $ */
+/* $Id: tif_dir.c,v 1.75.2.7 2012-06-01 22:47:02 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -502,7 +502,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		    && fip->field_tag != TIFFTAG_PAGENUMBER
 		    && fip->field_tag != TIFFTAG_HALFTONEHINTS
 		    && fip->field_tag != TIFFTAG_YCBCRSUBSAMPLING
-		    && fip->field_tag != TIFFTAG_DOTRANGE) {
+		    && fip->field_tag != TIFFTAG_DOTRANGE
+		    && fip->field_tag != TIFFTAG_WHITELEVEL) {
                     _TIFFmemcpy(tv->value, va_arg(ap, void *),
 				tv->count * tv_size);
 		} else {
