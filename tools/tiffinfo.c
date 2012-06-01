@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.19 2012-05-24 03:50:31 fwarmerdam Exp $ */
+/* $Id: tiffinfo.c,v 1.20 2012-06-01 23:22:54 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -150,8 +150,12 @@ main(int argc, char* argv[])
 					tiffinfo(tif, order, flags);
 					if (TIFFGetField(tif, TIFFTAG_EXIFIFD,
 							 &offset)) {
-						if (TIFFReadEXIFDirectory(tif, offset))
+						if (TIFFReadEXIFDirectory(tif, offset)) {
+							int old_readdata = readdata;
+							readdata = 0;
 							tiffinfo(tif, order, flags);
+							readdata = old_readdata;
+						}
 					}
 				} while (TIFFReadDirectory(tif));
 			}
