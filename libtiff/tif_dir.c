@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.111 2012-06-06 04:56:01 fwarmerdam Exp $ */
+/* $Id: tif_dir.c,v 1.112 2012-06-06 04:58:00 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1235,6 +1235,35 @@ TIFFCreateDirectory(TIFF* tif)
 	tif->tif_curstrip = (uint32) -1;
 
 	return 0;
+}
+
+int
+TIFFCreateCustomDirectory(TIFF* tif, const TIFFFieldArray* infoarray)
+{
+	TIFFDefaultDirectory(tif);
+
+	/*
+	 * Reset the field definitions to match the application provided list. 
+	 * Hopefully TIFFDefaultDirectory() won't have done anything irreversable
+	 * based on it's assumption this is an image directory.
+	 */
+	_TIFFSetupFields(tif, infoarray);
+
+	tif->tif_diroff = 0;
+	tif->tif_nextdiroff = 0;
+	tif->tif_curoff = 0;
+	tif->tif_row = (uint32) -1;
+	tif->tif_curstrip = (uint32) -1;
+
+	return 0;
+}
+
+int
+TIFFCreateEXIFDirectory(TIFF* tif)
+{
+	const TIFFFieldArray* exifFieldArray;
+	exifFieldArray = _TIFFGetExifFields();
+	return TIFFCreateCustomDirectory(tif, exifFieldArray);
 }
 
 /*
