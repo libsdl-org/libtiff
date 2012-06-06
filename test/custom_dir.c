@@ -1,4 +1,4 @@
-/* $Id: custom_dir.c,v 1.1 2012-06-06 04:58:29 fwarmerdam Exp $ */
+/* $Id: custom_dir.c,v 1.2 2012-06-06 05:26:37 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 2012, Frank Warmerdam <warmerdam@pobox.com>
@@ -141,6 +141,7 @@ main()
 	 * TIFF tags.
 	 */
 	
+	TIFFFreeDirectory( tif );
 	if (TIFFCreateCustomDirectory(tif, &customFieldArray) != 0) {
 		fprintf (stderr, "TIFFCreateEXIFDirectory() failed.\n" );
 		goto failure;
