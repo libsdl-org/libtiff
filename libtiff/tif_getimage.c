@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.81 2012-06-01 22:22:04 fwarmerdam Exp $ */
+/* $Id: tif_getimage.c,v 1.82 2012-06-06 00:17:49 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -1534,7 +1534,6 @@ DECLARESepPutFunc(putCMYKseparate8bittile)
 	(void) img; (void) y;
 	while (h-- > 0) {
 		uint32 rv, gv, bv, kv;
-		uint8* m;
 		for (x = w; x-- > 0;) {
 			kv = 255 - *a++;
 			rv = (kv*(255-*r++))/255;
