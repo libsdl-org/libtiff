@@ -1,4 +1,4 @@
-/* $Id: rewrite_tag.c,v 1.4 2008-12-31 03:06:27 bfriesen Exp $ */
+/* $Id: rewrite_tag.c,v 1.5 2012-06-13 04:38:55 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 2007, Frank Warmerdam <warmerdam@pobox.com>
@@ -122,7 +122,7 @@ int test_packbits()
 
     TIFFClose(tif);
 
-    /* unlink(filename); */
+    unlink(filename);
 
     return 0;
 
