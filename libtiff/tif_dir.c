@@ -1,4 +1,4 @@
-/* $Id: tif_dir.c,v 1.112 2012-06-06 04:58:00 fwarmerdam Exp $ */
+/* $Id: tif_dir.c,v 1.113 2012-06-14 20:32:53 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -585,8 +585,8 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 				_TIFFmemcpy(tv->value, va_arg(ap, void *),
 				    tv->count * tv_size);
 			} else {
-				assert( tv->count == 1 );
 				char *val = (char *)tv->value;
+				assert( tv->count == 1 );
 
 				switch (fip->field_type) {
 				case TIFF_BYTE:
