@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.25 2011-04-02 20:54:09 bfriesen Exp $ */
+/* $Id: tiffdump.c,v 1.26 2012-06-15 21:51:54 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -266,7 +266,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 	uint16 dircount;
 	uint32 direntrysize;
 	void* dirmem = NULL;
-	uint64 nextdiroff;
+	uint64 nextdiroff = 0;
 	uint32 n;
 	uint8* dp;
 
@@ -289,7 +289,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 			TIFFSwabShort(&dircount);
 		direntrysize = 12;
 	} else {
-		uint64 dircount64;
+		uint64 dircount64 = 0;
 		if (read(fd, (char*) &dircount64, sizeof (uint64)) != sizeof (uint64)) {
 			ReadError("directory count");
 			goto done;
