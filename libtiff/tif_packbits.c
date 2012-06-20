@@ -1,4 +1,4 @@
-/* $Id: tif_packbits.c,v 1.21 2012-06-20 05:22:52 fwarmerdam Exp $ */
+/* $Id: tif_packbits.c,v 1.22 2012-06-20 05:25:33 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -241,7 +241,7 @@ PackBitsDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 				n = (long)occ;
 			}
 			occ -= n;
-			b = *bp++, cc--;      /* TODO: may be reading past input buffer here when input data is corrupt or ends prematurely */
+			b = *bp++, cc--;
 			while (n-- > 0)
 				*op++ = (uint8) b;
 		} else {		/* copy next n+1 bytes literally */
