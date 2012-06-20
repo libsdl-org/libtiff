@@ -1,4 +1,4 @@
-/* $Id: tif_packbits.c,v 1.20 2010-03-10 18:56:49 bfriesen Exp $ */
+/* $Id: tif_packbits.c,v 1.21 2012-06-20 05:22:52 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -252,7 +252,13 @@ PackBitsDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 				    (unsigned long) ((tmsize_t)n - occ + 1));
 				n = (long)occ - 1;
 			}
-			_TIFFmemcpy(op, bp, ++n);  /* TODO: may be reading past input buffer here when input data is corrupt or ends prematurely */
+			if (cc < (tmsize_t) (n+1)) 
+			{
+				TIFFWarningExt(tif->tif_clientdata, module,
+					       "Terminating PackBitsDecode due to lack of data.");
+				break;
+			}
+			_TIFFmemcpy(op, bp, ++n);
 			op += n; occ -= n;
 			bp += n; cc -= n;
 		}
