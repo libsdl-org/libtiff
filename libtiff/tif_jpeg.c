@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.108 2012-06-05 03:24:30 fwarmerdam Exp $ */
+/* $Id: tif_jpeg.c,v 1.109 2012-07-03 00:57:50 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1695,7 +1695,7 @@ JPEGPreEncode(TIFF* tif, uint16 s)
 		} else {
 			if ((td->td_photometric == PHOTOMETRIC_MINISWHITE || td->td_photometric == PHOTOMETRIC_MINISBLACK) && td->td_samplesperpixel == 1)
 				sp->cinfo.c.in_color_space = JCS_GRAYSCALE;
-			else if (td->td_photometric == PHOTOMETRIC_RGB)
+			else if (td->td_photometric == PHOTOMETRIC_RGB && td->td_samplesperpixel == 3)
 				sp->cinfo.c.in_color_space = JCS_RGB;
 			else if (td->td_photometric == PHOTOMETRIC_SEPARATED && td->td_samplesperpixel == 4)
 				sp->cinfo.c.in_color_space = JCS_CMYK;
