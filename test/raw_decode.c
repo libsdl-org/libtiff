@@ -1,4 +1,4 @@
-/* $Id: raw_decode.c,v 1.2 2012-07-03 20:48:11 tgl Exp $ */
+/* $Id: raw_decode.c,v 1.3 2012-07-04 19:45:32 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2012, Frank Warmerdam <warmerdam@pobox.com>
@@ -103,7 +103,9 @@ int
 main(int argc, char **argv)
 {
 	TIFF		*tif;
-	static const char *srcfile = "images/quad-tile.jpg.tiff";
+	static const char *srcfilerel = "images/quad-tile.jpg.tiff";
+	char *srcdir = NULL;
+	char srcfile[1024];
 	unsigned short h, v;
 	int status;
 	unsigned char *buffer;
@@ -112,6 +114,17 @@ main(int argc, char **argv)
 
         (void) argc;
         (void) argv;
+
+	if ((srcdir = getenv("srcdir")) == NULL) {
+		srcdir = ".";
+	}
+	if ((strlen(srcdir) + 1 + strlen(srcfilerel)) >= sizeof(srcfile)) {
+		fprintf( stderr, "srcdir too long %s\n", srcdir);
+		exit( 1 );
+	}
+	strcpy(srcfile,srcdir);
+	strcat(srcfile,"/");
+	strcat(srcfile,srcfilerel);
 
 	tif = TIFFOpen(srcfile,"r");
 	if ( tif == NULL ) {
@@ -217,3 +230,10 @@ main(int argc, char **argv)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */
