@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.174 2012-02-01 02:24:47 fwarmerdam Exp $ */
+/* $Id: tif_dirread.c,v 1.175 2012-07-06 23:24:46 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -3313,10 +3313,15 @@ TIFFReadDirEntryData(TIFF* tif, uint64 offset, tmsize_t size, void* dest)
 		if (!ReadOK(tif,dest,size))
 			return(TIFFReadDirEntryErrIo);
 	} else {
-		tmsize_t ma,mb;
-		ma=(tmsize_t)offset;
+		size_t ma,mb;
+		ma=(size_t)offset;
 		mb=ma+size;
-		if (((uint64)ma!=offset)||(mb<ma)||(mb<size)||(mb>tif->tif_size))
+		if (((uint64)ma!=offset)
+		    || (mb < ma)
+		    || (mb - ma != (size_t) size)
+		    || (mb < (size_t)size)
+		    || (mb > (size_t)tif->tif_size)
+		    )
 			return(TIFFReadDirEntryErrIo);
 		_TIFFmemcpy(dest,tif->tif_base+ma,size);
 	}
