@@ -1,4 +1,4 @@
-/* $Id: raw_decode.c,v 1.3 2012-07-04 19:45:32 bfriesen Exp $ */
+/* $Id: raw_decode.c,v 1.4 2012-07-06 17:05:16 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2012, Frank Warmerdam <warmerdam@pobox.com>
@@ -41,6 +41,8 @@
 #endif 
 
 #include "tiffio.h"
+
+#include "jpeglib.h" /* Needed for JPEG_LIB_VERSION */
 
 static unsigned char cluster_0[] = { 0, 0, 2, 0, 138, 139 };
 static unsigned char cluster_64[] = { 0, 0, 9, 6, 134, 119 };
@@ -111,6 +113,7 @@ main(int argc, char **argv)
 	unsigned char *buffer;
 	uint32 *rgba_buffer;
 	tsize_t sz, szout;
+	unsigned int pixel_status = 0;
 
         (void) argc;
         (void) argv;
@@ -188,11 +191,15 @@ main(int argc, char **argv)
 		return 1;
 	}
 
-	if (check_rgb_pixel( 0, 15, 0, 18, buffer )
-	    || check_rgb_pixel( 64, 0, 0, 2, buffer )
-	    || check_rgb_pixel( 512, 6, 36, 182, buffer ) ) {
-		exit(1);
-	}	
+#if JPEG_LIB_VERSION >= 70
+	pixel_status |= check_rgb_pixel( 0, 18, 0, 41, buffer );
+	pixel_status |= check_rgb_pixel( 64, 0, 0, 0, buffer );
+	pixel_status |= check_rgb_pixel( 512, 5, 34, 196, buffer );
+#else
+	pixel_status |= check_rgb_pixel( 0, 15, 0, 18, buffer );
+	pixel_status |= check_rgb_pixel( 64, 0, 0, 2, buffer );
+	pixel_status |= check_rgb_pixel( 512, 6, 36, 182, buffer );
+#endif
 
 	free( buffer );
 
@@ -217,14 +224,22 @@ main(int argc, char **argv)
 	 * accomplish it from the YCbCr subsampled buffer ourselves in which
 	 * case the results may be subtly different but similar.
 	 */
-	if (check_rgba_pixel( 0, 15, 0, 18, 255, rgba_buffer )
-	    || check_rgba_pixel( 64, 0, 0, 2, 255, rgba_buffer )
-	    || check_rgba_pixel( 512, 6, 36, 182, 255, rgba_buffer ) ) {
-		exit(1);
-	}	
+#if JPEG_LIB_VERSION >= 70
+	pixel_status |= check_rgba_pixel( 0, 18, 0, 41, 255, rgba_buffer );
+	pixel_status |= check_rgba_pixel( 64, 0, 0, 0, 255, rgba_buffer );
+	pixel_status |= check_rgba_pixel( 512, 5, 34, 196, 255, rgba_buffer );
+#else
+	pixel_status |= check_rgba_pixel( 0, 15, 0, 18, 255, rgba_buffer );
+	pixel_status |= check_rgba_pixel( 64, 0, 0, 2, 255, rgba_buffer );
+	pixel_status |= check_rgba_pixel( 512, 6, 36, 182, 255, rgba_buffer );
+#endif
 
 	free( rgba_buffer );
 	TIFFClose(tif);
+
+	if (pixel_status) {
+		exit(1);
+	}
 	
 	exit( 0 );
 }
