@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.114 2011-05-17 00:21:17 fwarmerdam Exp $ */
+/* $Id: tif_dirinfo.c,v 1.115 2012-07-06 19:18:31 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -348,7 +348,7 @@ _TIFFMergeFields(TIFF* tif, const TIFFField info[], uint32 n)
 {
 	static const char module[] = "_TIFFMergeFields";
 	static const char reason[] = "for fields array";
-	TIFFField** tp;
+	/* TIFFField** tp; */
 	uint32 i;
 
         tif->tif_foundfield = NULL;
@@ -369,7 +369,7 @@ _TIFFMergeFields(TIFF* tif, const TIFFField info[], uint32 n)
 		return 0;
 	}
 
-	tp = tif->tif_fields + tif->tif_nfields;
+	/* tp = tif->tif_fields + tif->tif_nfields; */
 	for (i = 0; i < n; i++) {
 		const TIFFField *fip =
 			TIFFFindField(tif, info[i].field_tag, TIFF_ANY);
