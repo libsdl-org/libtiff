@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.175 2012-07-06 23:24:46 bfriesen Exp $ */
+/* $Id: tif_dirread.c,v 1.176 2012-07-07 14:43:17 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4766,7 +4766,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 			break;
 		case TIFF_SETGET_UINT8:
 			{
-				uint8 data;
+				uint8 data=0;
 				assert(fip->field_readcount==1);
 				assert(fip->field_passcount==0);
 				err=TIFFReadDirEntryByte(tif,dp,&data);
