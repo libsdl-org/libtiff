@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.67 2012-06-15 21:51:54 fwarmerdam Exp $
+/* $Id: tiff2pdf.c,v 1.68 2012-07-18 15:07:55 tgl Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -1066,6 +1066,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 				"Can't set directory %u of input file %s", 
 				i,
 				TIFFFileName(input));
+			t2p->t2p_error = T2P_ERR_ERROR;
 			return;
 		}
 		if(TIFFGetField(input, TIFFTAG_PAGENUMBER, &pagen, &paged)){
