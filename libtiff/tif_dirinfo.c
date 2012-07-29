@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.115 2012-07-06 19:18:31 bfriesen Exp $ */
+/* $Id: tif_dirinfo.c,v 1.116 2012-07-29 15:45:29 tgl Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -554,6 +554,42 @@ TIFFFieldWithName(TIFF* tif, const char *field_name)
 			     "Internal error, unknown tag %s", field_name);
 	}
 	return (fip);
+}
+
+uint32
+TIFFFieldTag(const TIFFField* fip)
+{
+	return fip->field_tag;
+}
+
+const char *
+TIFFFieldName(const TIFFField* fip)
+{
+	return fip->field_name;
+}
+
+TIFFDataType
+TIFFFieldDataType(const TIFFField* fip)
+{
+	return fip->field_type;
+}
+
+int
+TIFFFieldPassCount(const TIFFField* fip)
+{
+	return fip->field_passcount;
+}
+
+int
+TIFFFieldReadCount(const TIFFField* fip)
+{
+	return fip->field_readcount;
+}
+
+int
+TIFFFieldWriteCount(const TIFFField* fip)
+{
+	return fip->field_writecount;
 }
 
 const TIFFField*
