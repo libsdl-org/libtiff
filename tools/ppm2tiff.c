@@ -1,4 +1,4 @@
-/* $Id: ppm2tiff.c,v 1.16 2010-04-10 19:22:34 bfriesen Exp $ */
+/* $Id: ppm2tiff.c,v 1.17 2012-11-02 05:13:24 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -89,6 +89,7 @@ main(int argc, char* argv[])
 	int c;
 	extern int optind;
 	extern char* optarg;
+	tmsize_t scanline_size;
 
 	if (argc < 2) {
 	    fprintf(stderr, "%s: Too few arguments\n", argv[0]);
@@ -237,8 +238,16 @@ main(int argc, char* argv[])
 	}
 	if (TIFFScanlineSize(out) > linebytes)
 		buf = (unsigned char *)_TIFFmalloc(linebytes);
-	else
-		buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+	else {
+		scanline_size = TIFFScanlineSize(out);
+		if (scanline_size != 0)
+			buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+		else {
+			fprintf(stderr, "%s: scanline size overflow\n",infile);
+			(void) TIFFClose(out);
+			exit(-2);					
+			}
+		}
 	if (resolution > 0) {
 		TIFFSetField(out, TIFFTAG_XRESOLUTION, resolution);
 		TIFFSetField(out, TIFFTAG_YRESOLUTION, resolution);
