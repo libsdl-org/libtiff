@@ -1,4 +1,4 @@
-/* $Id: tif_print.c,v 1.36.2.5 2010-07-06 14:05:30 dron Exp $ */
+/* $Id: tif_print.c,v 1.36.2.6 2012-12-12 23:18:05 tgl Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -514,8 +514,19 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 			continue;
 
 		if(fip->field_passcount) {
-			if(TIFFGetField(tif, tag, &value_count, &raw_data) != 1)
+			if (fip->field_readcount == TIFF_VARIABLE2 ) {
+				if(TIFFGetField(tif, tag, &value_count, &raw_data) != 1)
+					continue;
+			} else if (fip->field_readcount == TIFF_VARIABLE ) {
+				uint16 small_value_count;
+				if(TIFFGetField(tif, tag, &small_value_count, &raw_data) != 1)
+					continue;
+				value_count = small_value_count;
+			} else {
+				assert (fip->field_readcount == TIFF_VARIABLE
+					|| fip->field_readcount == TIFF_VARIABLE2);
 				continue;
+			} 
 		} else {
 			if (fip->field_readcount == TIFF_VARIABLE
 			    || fip->field_readcount == TIFF_VARIABLE2)
