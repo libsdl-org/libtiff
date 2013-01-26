@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.49 2011-05-31 17:10:18 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.50 2013-01-26 02:24:05 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -44,6 +44,11 @@
 
 /*
  * Revision history
+ * 2013-Jan-21
+ *    Richard Nolde: Fix bug in auto rotate option code. Once a
+ *    rotation angle was set by the auto rotate check, it was
+ *    retained for all pages that followed instead of being
+ *    retested for each page.
  *
  * 2010-Sep-17
  *    Richard Nolde: Reinstate code from Feb 2009 that never got
@@ -423,9 +428,10 @@ main(int argc, char* argv[])
         /* auto rotate requires a specified page width and height */
         if (auto_rotate == TRUE)
           {
+	    /*
 	  if ((pageWidth == 0) || (pageHeight == 0))
 	    TIFFWarning ("-r auto", " requires page height and width specified with -h and -w");
-
+	    */
           if ((maxPageWidth > 0) || (maxPageHeight > 0))
             {
 	    TIFFError ("-r auto", " is incompatible with maximum page width/height specified by -H or -W");
@@ -1592,6 +1598,8 @@ int TIFF2PS(FILE* fd, TIFF* tif, double pgwidth, double pgheight, double lm, dou
        }
   if (generateEPSF)
     break;
+  if (auto_rotate)
+    rotation = 0.0;
   TIFFGetFieldDefaulted(tif, TIFFTAG_SUBFILETYPE, &subfiletype);
   } while (((subfiletype & FILETYPE_PAGE) || printAll) && TIFFReadDirectory(tif));
 
