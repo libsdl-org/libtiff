@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.51 2013-03-06 03:35:09 tgl Exp $ */
+/* $Id: tiff2ps.c,v 1.52 2013-05-02 14:44:29 tgl Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1789,8 +1789,8 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		imageOp = "imagemask";
 
 	(void)strcpy(im_x, "0");
-	(void)sprintf(im_y, "%lu", (long) h);
-	(void)sprintf(im_h, "%lu", (long) h);
+	(void)snprintf(im_y, sizeof(im_y), "%lu", (long) h);
+	(void)snprintf(im_h, sizeof(im_h), "%lu", (long) h);
 	tile_width = w;
 	tile_height = h;
 	if (TIFFIsTiled(tif)) {
@@ -1811,7 +1811,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		}
 		if (tile_height < h) {
 			fputs("/im_y 0 def\n", fd);
-			(void)sprintf(im_y, "%lu im_y sub", (unsigned long) h);
+			(void)snprintf(im_y, sizeof(im_y), "%lu im_y sub", (unsigned long) h);
 		}
 	} else {
 		repeat_count = tf_numberstrips;
@@ -1823,7 +1823,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 			fprintf(fd, "/im_h %lu def\n",
 			    (unsigned long) tile_height);
 			(void)strcpy(im_h, "im_h");
-			(void)sprintf(im_y, "%lu im_y sub", (unsigned long) h);
+			(void)snprintf(im_y, sizeof(im_y), "%lu im_y sub", (unsigned long) h);
 		}
 	}
 

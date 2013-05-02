@@ -1,4 +1,4 @@
-/* $Id: tiffdither.c,v 1.13 2013-03-06 03:35:09 tgl Exp $ */
+/* $Id: tiffdither.c,v 1.14 2013-05-02 14:44:29 tgl Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -260,7 +260,7 @@ main(int argc, char* argv[])
 		TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
 	else
 		CopyField(TIFFTAG_FILLORDER, shortv);
-	sprintf(thing, "Dithered B&W version of %s", argv[optind]);
+	snprintf(thing, sizeof(thing), "Dithered B&W version of %s", argv[optind]);
 	TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
 	CopyField(TIFFTAG_PHOTOMETRIC, shortv);
 	CopyField(TIFFTAG_ORIENTATION, shortv);

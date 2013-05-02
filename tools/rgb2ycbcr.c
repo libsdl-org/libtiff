@@ -1,4 +1,4 @@
-/* $Id: rgb2ycbcr.c,v 1.14 2011-05-31 17:03:16 bfriesen Exp $ */
+/* $Id: rgb2ycbcr.c,v 1.15 2013-05-02 14:44:29 tgl Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -332,7 +332,8 @@ tiffcvt(TIFF* in, TIFF* out)
 	TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	{ char buf[2048];
 	  char *cp = strrchr(TIFFFileName(in), '/');
-	  sprintf(buf, "YCbCr conversion of %s", cp ? cp+1 : TIFFFileName(in));
+	  snprintf(buf, sizeof(buf), "YCbCr conversion of %s",
+		   cp ? cp+1 : TIFFFileName(in));
 	  TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, buf);
 	}
 	TIFFSetField(out, TIFFTAG_SOFTWARE, TIFFGetVersion());

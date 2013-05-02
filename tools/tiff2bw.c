@@ -1,4 +1,4 @@
-/* $Id: tiff2bw.c,v 1.15 2010-07-02 12:02:56 dron Exp $ */
+/* $Id: tiff2bw.c,v 1.16 2013-05-02 14:44:29 tgl Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -205,7 +205,7 @@ main(int argc, char* argv[])
 		}
 	}
 	TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK);
-	sprintf(thing, "B&W version of %s", argv[optind]);
+	snprintf(thing, sizeof(thing), "B&W version of %s", argv[optind]);
 	TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
 	TIFFSetField(out, TIFFTAG_SOFTWARE, "tiff2bw");
 	outbuf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
