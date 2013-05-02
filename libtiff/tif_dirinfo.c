@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.65.2.10 2010-07-06 14:14:41 dron Exp $ */
+/* $Id: tif_dirinfo.c,v 1.65.2.11 2013-05-02 14:44:43 tgl Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -869,7 +869,7 @@ _TIFFCreateAnonFieldInfo(TIFF *tif, ttag_t tag, TIFFDataType field_type)
 	 * note that this name is a special sign to TIFFClose() and
 	 * _TIFFSetupFieldInfo() to free the field
 	 */
-	sprintf(fld->field_name, "Tag %d", (int) tag);
+	snprintf(fld->field_name, 32, "Tag %d", (int) tag);
 
 	return fld;    
 }
