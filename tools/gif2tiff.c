@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.13 2013-08-14 05:18:53 fwarmerdam Exp $ */
+/* $Id: gif2tiff.c,v 1.14 2013-08-14 13:59:17 fwarmerdam Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -400,6 +400,10 @@ process(register int code, unsigned char** fill)
     }
 
     if (oldcode == -1) {
+        if (code >= clear) {
+            fprintf(stderr, "bad input: code=%d is larger than clear=%d\n",code, clear);
+            return 0;
+        }
 	*(*fill)++ = suffix[code];
 	firstchar = oldcode = code;
 	return 1;
