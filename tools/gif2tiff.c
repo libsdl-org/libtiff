@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.14 2013-08-14 13:59:17 fwarmerdam Exp $ */
+/* $Id: gif2tiff.c,v 1.15 2013-09-20 16:09:01 faxguy Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -312,7 +312,7 @@ readextension(void)
     char buf[255];
 
     (void) getc(infile);
-    while ((count = getc(infile)))
+    while ((count = getc(infile)) && count <= 255)
         fread(buf, 1, count, infile);
 }
 
@@ -346,7 +346,7 @@ readraster(void)
 	suffix[code] = code;
     }
     stackp = stack;
-    for (count = getc(infile); count > 0; count = getc(infile)) {
+    for (count = getc(infile); count > 0 && count <= 255; count = getc(infile)) {
 	fread(buf,1,count,infile);
 	for (ch=buf; count-- > 0; ch++) {
 	    datum += (unsigned long) *ch << bits;
