@@ -1,4 +1,4 @@
-/* $Id: short_tag.c,v 1.6.2.2 2010-06-10 22:52:45 bfriesen Exp $ */
+/* $Id: short_tag.c,v 1.6.2.3 2013-12-17 14:45:12 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
@@ -123,7 +123,7 @@ main(int argc, char **argv)
 	}
 
 	/* Write dummy pixel data. */
-	if (!TIFFWriteScanline(tif, buf, 0, 0) < 0) {
+	if (TIFFWriteScanline(tif, buf, 0, 0) == -1) {
 		fprintf (stderr, "Can't write image data.\n");
 		goto failure;
 	}
