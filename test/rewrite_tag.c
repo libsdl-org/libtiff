@@ -1,4 +1,4 @@
-/* $Id: rewrite_tag.c,v 1.5 2012-06-13 04:38:55 fwarmerdam Exp $ */
+/* $Id: rewrite_tag.c,v 1.6 2013-12-17 14:41:58 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2007, Frank Warmerdam <warmerdam@pobox.com>
@@ -191,7 +191,7 @@ int rewrite_test( const char *filename, int length, int bigtiff,
 
     for (i = 0; i < length; i++ )
     {
-        if( !TIFFWriteScanline( tif, buf, i, 0 ) )
+        if( TIFFWriteScanline( tif, buf, i, 0 ) == -1 )
         {
             fprintf (stderr, "Can't write image data.\n");
             goto failure;
