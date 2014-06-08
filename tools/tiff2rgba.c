@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.19 2011-02-23 21:46:09 fwarmerdam Exp $ */
+/* $Id: tiff2rgba.c,v 1.20 2014-06-08 03:37:02 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -506,7 +506,7 @@ static char* stuff[] = {
     "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] input... output",
     "where comp is one of the following compression algorithms:",
     " jpeg\t\tJPEG encoding",
-    " zip\t\tLempel-Ziv & Welch encoding",
+    " zip\t\tZip/Deflate encoding",
     " lzw\t\tLempel-Ziv & Welch encoding",
     " packbits\tPackBits encoding",
     " none\t\tno compression",
