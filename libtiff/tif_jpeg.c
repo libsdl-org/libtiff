@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.111 2012-07-06 18:48:04 bfriesen Exp $ */
+/* $Id: tif_jpeg.c,v 1.112 2014-11-20 14:34:51 erouault Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -729,6 +729,7 @@ JPEGFixupTagsSubsampling(TIFF* tif)
         _TIFFFillStriles( tif );
         
         if( tif->tif_dir.td_stripbytecount == NULL
+            || tif->tif_dir.td_stripoffset == NULL
             || tif->tif_dir.td_stripbytecount[0] == 0 )
         {
             /* Do not even try to check if the first strip/tile does not
