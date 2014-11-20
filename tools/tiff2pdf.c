@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.74 2014-10-20 17:52:05 olivier Exp $
+/* $Id: tiff2pdf.c,v 1.75 2014-11-20 16:47:21 erouault Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -411,8 +411,8 @@ t2p_seekproc(thandle_t handle, uint64 offset, int whence)
 static int 
 t2p_closeproc(thandle_t handle)
 { 
-	(void) handle;
-	return 0; 
+	T2P *t2p = (T2P*) handle;
+	return fclose(t2p->outputfile);
 }
 
 static uint64 

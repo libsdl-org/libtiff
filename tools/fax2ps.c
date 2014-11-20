@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.27 2011-04-02 19:30:20 bfriesen Exp $" */
+/* $Id: fax2ps.c,v 1.28 2014-11-20 16:47:21 erouault Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -346,6 +346,11 @@ main(int argc, char** argv)
 		pages = (uint16*) realloc(pages, (npages+1)*sizeof(uint16));
 	    else
 		pages = (uint16*) malloc(sizeof(uint16));
+	    if( pages == NULL )
+	    {
+		fprintf(stderr, "Out of memory\n");
+		exit(-1);
+	    }
 	    pages[npages++] = pageNumber;
 	    break;
 	case 'w':
