@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.27 2014-11-20 16:47:22 erouault Exp $ */
+/* $Id: tiffdump.c,v 1.28 2014-12-06 15:58:44 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -518,7 +518,10 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 			if (datatruncated)
 				printf(" ...");
 			if (!datafits)
-				_TIFFfree(datamem);
+                                {
+                                        _TIFFfree(datamem);
+                                        datamem = NULL;
+                                }
 		}
 		printf(">\n");
 	}
