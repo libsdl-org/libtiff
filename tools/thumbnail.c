@@ -1,4 +1,4 @@
-/* $Id: thumbnail.c,v 1.16 2010-07-02 12:02:56 dron Exp $ */
+/* $Id: thumbnail.c,v 1.17 2014-12-07 22:33:06 erouault Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -585,12 +585,17 @@ generateThumbnail(TIFF* in, TIFF* out)
     rowsize = TIFFScanlineSize(in);
     rastersize = sh * rowsize;
     fprintf(stderr, "rastersize=%u\n", (unsigned int)rastersize);
-    raster = (unsigned char*)_TIFFmalloc(rastersize);
+	/* +3 : add a few guard bytes since setrow() can read a bit */
+	/* outside buffer */
+    raster = (unsigned char*)_TIFFmalloc(rastersize+3);
     if (!raster) {
 	    TIFFError(TIFFFileName(in),
 		      "Can't allocate space for raster buffer.");
 	    return 0;
     }
+    raster[rastersize] = 0;
+    raster[rastersize+1] = 0;
+    raster[rastersize+2] = 0;
     rp = raster;
     for (s = 0; s < ns; s++) {
 	(void) TIFFReadEncodedStrip(in, s, rp, -1);

@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.22 2014-11-20 16:47:21 erouault Exp $ */
+/* $Id: tiffcrop.c,v 1.23 2014-12-07 22:33:06 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -6000,8 +6000,10 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
     }
  
   read_buff = *read_ptr;
+  /* +3 : add a few guard bytes since reverseSamples16bits() can read a bit */
+  /* outside buffer */
   if (!read_buff)
-    read_buff = (unsigned char *)_TIFFmalloc(buffsize);
+    read_buff = (unsigned char *)_TIFFmalloc(buffsize+3);
   else
     {
     if (prev_readsize < buffsize)
@@ -6010,12 +6012,15 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
       if (!new_buff)
         {
 	free (read_buff);
-        read_buff = (unsigned char *)_TIFFmalloc(buffsize);
+        read_buff = (unsigned char *)_TIFFmalloc(buffsize+3);
         }
       else
         read_buff = new_buff;
       }
     }
+  read_buff[buffsize] = 0;
+  read_buff[buffsize+1] = 0;
+  read_buff[buffsize+2] = 0;
 
   if (!read_buff)
     {
