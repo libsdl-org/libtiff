@@ -1,4 +1,4 @@
-/* $Id: thumbnail.c,v 1.19 2014-12-21 19:53:59 erouault Exp $ */
+/* $Id: thumbnail.c,v 1.20 2014-12-21 20:04:31 erouault Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -257,7 +257,7 @@ static struct cpTag {
     { TIFFTAG_CLEANFAXDATA,		1, TIFF_SHORT },
     { TIFFTAG_CONSECUTIVEBADFAXLINES,	1, TIFF_LONG },
     { TIFFTAG_INKSET,			1, TIFF_SHORT },
-    { TIFFTAG_INKNAMES,			1, TIFF_ASCII },
+    /*{ TIFFTAG_INKNAMES,			1, TIFF_ASCII },*/ /* Needs much more complicated logic. See tiffcp */
     { TIFFTAG_DOTRANGE,			2, TIFF_SHORT },
     { TIFFTAG_TARGETPRINTER,		1, TIFF_ASCII },
     { TIFFTAG_SAMPLEFORMAT,		1, TIFF_SHORT },
