@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.50 2013-03-06 03:35:09 tgl Exp $ */
+/* $Id: tiffcp.c,v 1.51 2014-12-21 16:28:37 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -633,6 +633,12 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
 		    samplesperpixel == 1 ?
 		    PHOTOMETRIC_LOGL : PHOTOMETRIC_LOGLUV);
+	else if (input_compression == COMPRESSION_JPEG &&
+			 samplesperpixel == 3 ) {
+		/* RGB conversion was forced above
+		hence the output will be of the same type */
+		TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+	}
 	else
 		CopyTag(TIFFTAG_PHOTOMETRIC, 1, TIFF_SHORT);
 	if (fillorder != 0)
