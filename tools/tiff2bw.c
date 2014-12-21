@@ -1,4 +1,4 @@
-/* $Id: tiff2bw.c,v 1.16 2013-05-02 14:44:29 tgl Exp $ */
+/* $Id: tiff2bw.c,v 1.17 2014-12-21 20:58:30 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -168,6 +168,11 @@ main(int argc, char* argv[])
 	TIFFGetField(in, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
 	if (samplesperpixel != 1 && samplesperpixel != 3) {
 		fprintf(stderr, "%s: Bad samples/pixel %u.\n",
+		    argv[optind], samplesperpixel);
+		return (-1);
+	}
+	if( photometric == PHOTOMETRIC_RGB && samplesperpixel != 3) {
+		fprintf(stderr, "%s: Bad samples/pixel %u for PHOTOMETRIC_RGB.\n",
 		    argv[optind], samplesperpixel);
 		return (-1);
 	}
