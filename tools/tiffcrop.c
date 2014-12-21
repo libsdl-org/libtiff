@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.23 2014-12-07 22:33:06 erouault Exp $ */
+/* $Id: tiffcrop.c,v 1.24 2014-12-21 15:15:32 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -1205,9 +1205,10 @@ static int writeBufferToContigTiles (TIFF* out, uint8* buf, uint32 imagelength,
   tsize_t tilesize = TIFFTileSize(out);
   unsigned char *tilebuf = NULL;
 
-  TIFFGetField(out, TIFFTAG_TILELENGTH, &tl);
-  TIFFGetField(out, TIFFTAG_TILEWIDTH, &tw);
-  TIFFGetField(out, TIFFTAG_BITSPERSAMPLE, &bps);
+  if( !TIFFGetField(out, TIFFTAG_TILELENGTH, &tl) ||
+      !TIFFGetField(out, TIFFTAG_TILEWIDTH, &tw) ||
+      !TIFFGetField(out, TIFFTAG_BITSPERSAMPLE, &bps) )
+      return 1;
 
   tile_buffsize = tilesize;
   if (tilesize < (tsize_t)(tl * tile_rowsize))
