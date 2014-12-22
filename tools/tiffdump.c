@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.29 2014-12-21 15:15:32 erouault Exp $ */
+/* $Id: tiffdump.c,v 1.30 2014-12-22 02:52:38 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -33,6 +33,8 @@
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
+
+#include "tiffiop.h"
 
 #ifdef HAVE_FCNTL_H
 # include <fcntl.h>
@@ -233,8 +235,21 @@ dump(int fd, uint64 diroff)
 			Fatal("Cycle detected in chaining of TIFF directories!");
 		    }
 		}
-		visited_diroff = (uint64*) realloc(visited_diroff,
-				    (count_visited_dir + 1) * sizeof(uint64));
+                {
+                    size_t alloc_size;
+                    alloc_size=TIFFSafeMultiply(tmsize_t,(count_visited_dir + 1),
+                                                sizeof(uint64));
+                    if (alloc_size == 0)
+                    {
+                        if (visited_diroff)
+                            free(visited_diroff);
+                        visited_diroff = 0;
+                    }
+                    else
+                    {
+                        visited_diroff = (uint64*) realloc(visited_diroff,alloc_size);
+                    }
+                }
 		if( !visited_diroff )
 		    Fatal("Out of memory");
 		visited_diroff[count_visited_dir] = diroff;
@@ -322,7 +337,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 		dircount = (uint16)dircount64;
 		direntrysize = 20;
 	}
-	dirmem = _TIFFmalloc(dircount * direntrysize);
+	dirmem = _TIFFmalloc(TIFFSafeMultiply(tmsize_t,dircount,direntrysize));
 	if (dirmem == NULL) {
 		Fatal("No space for TIFF directory");
 		goto done;
