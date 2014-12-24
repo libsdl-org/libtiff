@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.83 2014-12-21 15:15:31 erouault Exp $ */
+/* $Id: tif_getimage.c,v 1.84 2014-12-24 16:57:18 erouault Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -875,6 +875,10 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
 	TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
 	TIFFGetFieldDefaulted(tif, TIFFTAG_YCBCRSUBSAMPLING, &subsamplinghor, &subsamplingver);
+	if( subsamplingver == 0 ) {
+		TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "Invalid vertical YCbCr subsampling");
+		return (0);
+	}
 	scanline = TIFFScanlineSize(tif);
 	fromskew = (w < imagewidth ? imagewidth - w : 0);
 	for (row = 0; row < h; row += nrow)
