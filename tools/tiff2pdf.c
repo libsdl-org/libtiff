@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.79 2014-12-21 17:36:36 erouault Exp $
+/* $Id: tiff2pdf.c,v 1.80 2014-12-24 15:38:11 erouault Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -2408,7 +2408,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				TIFFReadEncodedStrip(input, 
 				i, 
 				(tdata_t) &buffer[bufferoffset], 
-				stripsize);
+				TIFFmin(stripsize, t2p->tiff_datasize - bufferoffset));
 			if(read==-1){
 				TIFFError(TIFF2PDF_MODULE, 
 					"Error on decoding strip %u of %s", 
@@ -2455,7 +2455,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 						TIFFReadEncodedStrip(input, 
 							i + j*stripcount, 
 							(tdata_t) &(samplebuffer[samplebufferoffset]), 
-							sepstripsize);
+							TIFFmin(sepstripsize, stripsize - samplebufferoffset));
 					if(read==-1){
 						TIFFError(TIFF2PDF_MODULE, 
 					"Error on decoding strip %u of %s", 
@@ -2495,7 +2495,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				TIFFReadEncodedStrip(input, 
 				i, 
 				(tdata_t) &buffer[bufferoffset], 
-				stripsize);
+				TIFFmin(stripsize, t2p->tiff_datasize - bufferoffset));
 			if(read==-1){
 				TIFFError(TIFF2PDF_MODULE, 
 					"Error on decoding strip %u of %s", 
