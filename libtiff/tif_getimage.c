@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.84 2014-12-24 16:57:18 erouault Exp $ */
+/* $Id: tif_getimage.c,v 1.85 2014-12-25 18:29:11 erouault Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -2560,7 +2560,7 @@ PickContigCase(TIFFRGBAImage* img)
 					 * must always be <= horizontal subsampling; so
 					 * there are only a few possibilities and we just
 					 * enumerate the cases.
-					 * Joris: added support for the [1,2] case, nonetheless, to accomodate
+					 * Joris: added support for the [1,2] case, nonetheless, to accommodate
 					 * some OJPEG files
 					 */
 					uint16 SubsamplingHor;
