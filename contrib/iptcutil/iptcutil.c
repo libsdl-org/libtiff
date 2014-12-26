@@ -1,4 +1,4 @@
-/* $Id: iptcutil.c,v 1.8 2011-05-08 00:44:18 fwarmerdam Exp $ */
+/* $Id: iptcutil.c,v 1.9 2014-12-26 16:10:08 bfriesen Exp $ */
 
 #include "tif_config.h"
 
@@ -367,11 +367,11 @@ char *super_fgets(char *b, int *blen, FILE *file)
 
 int main(int argc, char *argv[])
 {            
-  unsigned int
-    length;
+  /* unsigned int */
+  /*   length; */
 
-  unsigned char
-    *buffer;
+  /*unsigned char
+   *buffer;*/
 
   int
     i,
@@ -392,8 +392,8 @@ int main(int argc, char *argv[])
     }
 
   mode = 0;
-  length = -1;
-  buffer = (unsigned char *)NULL;
+  /* length = -1; */
+  /* buffer = (unsigned char *)NULL; */
 
   for (i=1; i<argc; i++)
   {
