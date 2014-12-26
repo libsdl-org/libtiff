@@ -1,4 +1,4 @@
-/* $Id: tif_stream.cxx,v 1.11 2010-12-11 23:12:29 faxguy Exp $ */
+/* $Id: tif_stream.cxx,v 1.12 2014-12-26 16:01:05 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -340,12 +340,16 @@ _tiffisCloseProc(thandle_t fd)
 static int
 _tiffDummyMapProc(thandle_t , void** base, toff_t* size )
 {
+	(void) base;
+	(void) size;
 	return (0);
 }
 
 static void
 _tiffDummyUnmapProc(thandle_t , void* base, toff_t size )
 {
+	(void) base;
+	(void) size;
 }
 
 /*
