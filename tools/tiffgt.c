@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.10 2010-07-01 15:56:56 dron Exp $ */
+/* $Id: tiffgt.c,v 1.11 2014-12-26 16:06:41 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -306,6 +306,8 @@ raster_reshape(int win_w, int win_h)
 static void
 raster_keys(unsigned char key, int x, int y)
 {
+        (void) x;
+        (void) y;
         switch (key) {
                 case 'b':                       /* photometric MinIsBlack */
                     photo = PHOTOMETRIC_MINISBLACK;
@@ -351,6 +353,8 @@ raster_keys(unsigned char key, int x, int y)
 static void
 raster_special(int key, int x, int y)
 {
+        (void) x;
+        (void) y;
         switch (key) {
                 case GLUT_KEY_PAGE_UP:          /* previous logical image */
                     if (TIFFCurrentDirectory(tif) > 0) {
