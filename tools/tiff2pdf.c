@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.81 2014-12-24 16:32:28 erouault Exp $
+/* $Id: tiff2pdf.c,v 1.82 2015-01-05 19:03:11 olivier Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -440,7 +440,7 @@ checkAdd64(uint64 summand1, uint64 summand2, T2P* t2p)
 {
 	uint64 bytes = summand1 + summand2;
 
-	if (bytes - summand1 != summand2) {
+	if (bytes < summand1) {
 		TIFFError(TIFF2PDF_MODULE, "Integer overflow");
 		t2p->t2p_error = T2P_ERR_ERROR;
 		bytes = 0;
