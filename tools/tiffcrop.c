@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.25 2014-12-26 16:32:32 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.26 2015-05-28 01:50:23 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -178,7 +178,7 @@ extern int getopt(int, char**, char*);
 #define ROTATECW_90   8
 #define ROTATECW_180 16
 #define ROTATECW_270 32
-#define ROTATE_ANY ROTATECW_90 || ROTATECW_180 || ROTATECW_270 
+#define ROTATE_ANY (ROTATECW_90 | ROTATECW_180 | ROTATECW_270)
 
 #define CROP_NONE     0
 #define CROP_MARGINS  1
