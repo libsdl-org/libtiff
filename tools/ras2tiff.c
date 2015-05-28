@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.20 2015-05-28 03:52:00 bfriesen Exp $ */
+/* $Id: ras2tiff.c,v 1.21 2015-05-28 04:07:31 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
@@ -122,13 +123,13 @@ main(int argc, char* argv[])
 		fclose(in);
 		return (-3);
 	}
-        if ((h.ras_width <= 0) ||
-            (h.ras_height <= 0) ||
-            (h.ras_depth <= 0) ||
-            (h.ras_length <= 0) ||
+        if ((h.ras_width <= 0) || (h.ras_width >= INT_MAX) ||
+            (h.ras_height <= 0) || (h.ras_height >= INT_MAX) ||
+            (h.ras_depth <= 0) || (h.ras_depth >= INT_MAX) ||
+            (h.ras_length <= 0) || (h.ras_length >= INT_MAX) ||
             (h.ras_type <= 0) ||
             (h.ras_maptype <= 0) ||
-            (h.ras_maplength <= 0)) {
+            (h.ras_maplength <= 0) || (h.ras_maplength >= INT_MAX)) {
                 fprintf(stderr, "%s: Improper image header.\n", argv[optind]);
                 fclose(in);
 		return (-2);
