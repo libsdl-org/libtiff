@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.27 2015-05-28 01:59:10 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.28 2015-05-28 02:02:10 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -938,8 +938,8 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8* buf,
 	    }
           }
         prev_trailing_bits += trailing_bits;
-        if (prev_trailing_bits > 7)
-	  prev_trailing_bits-= 8;
+        /* if (prev_trailing_bits > 7) */
+	/*   prev_trailing_bits-= 8; */
 	}
       }
     }
