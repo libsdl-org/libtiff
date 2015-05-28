@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.29 2015-05-28 02:07:59 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.30 2015-05-28 02:11:01 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -7787,15 +7787,16 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
 	    TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, g3opts);
 	  else
 	    CopyField(TIFFTAG_GROUP3OPTIONS, g3opts);
-	} else
+	} else {
 	    CopyTag(TIFFTAG_GROUP4OPTIONS, 1, TIFF_LONG);
-	    CopyTag(TIFFTAG_BADFAXLINES, 1, TIFF_LONG);
-	    CopyTag(TIFFTAG_CLEANFAXDATA, 1, TIFF_LONG);
-	    CopyTag(TIFFTAG_CONSECUTIVEBADFAXLINES, 1, TIFF_LONG);
-	    CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
-	    CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
-	    CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
-	 break;
+        }
+        CopyTag(TIFFTAG_BADFAXLINES, 1, TIFF_LONG);
+        CopyTag(TIFFTAG_CLEANFAXDATA, 1, TIFF_LONG);
+        CopyTag(TIFFTAG_CONSECUTIVEBADFAXLINES, 1, TIFF_LONG);
+        CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
+        CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
+        CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
+        break;
     case COMPRESSION_NONE:
          break;
     default: break;
