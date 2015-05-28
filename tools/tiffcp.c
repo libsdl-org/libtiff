@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.51 2014-12-21 16:28:37 erouault Exp $ */
+/* $Id: tiffcp.c,v 1.52 2015-05-28 13:17:35 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1070,7 +1070,7 @@ DECLAREcpFunc(cpContig2SeparateByRow)
 	inbuf = _TIFFmalloc(scanlinesizein);
 	outbuf = _TIFFmalloc(scanlinesizeout);
 	if (!inbuf || !outbuf)
-		return 0;
+		goto bad;
 	_TIFFmemset(inbuf, 0, scanlinesizein);
 	_TIFFmemset(outbuf, 0, scanlinesizeout);
 	/* unpack channels */
@@ -1123,7 +1123,7 @@ DECLAREcpFunc(cpSeparate2ContigByRow)
 	inbuf = _TIFFmalloc(scanlinesizein);
 	outbuf = _TIFFmalloc(scanlinesizeout);
 	if (!inbuf || !outbuf)
-		return 0;
+                goto bad;
 	_TIFFmemset(inbuf, 0, scanlinesizein);
 	_TIFFmemset(outbuf, 0, scanlinesizeout);
 	for (row = 0; row < imagelength; row++) {
