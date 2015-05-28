@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.31 2015-05-28 02:16:08 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.32 2015-05-28 02:19:16 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -6013,7 +6013,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
     {
     if (prev_readsize < buffsize)
       {
-      new_buff = _TIFFrealloc(read_buff, buffsize);
+      new_buff = _TIFFrealloc(read_buff, buffsize+3);
       if (!new_buff)
         {
 	free (read_buff);
