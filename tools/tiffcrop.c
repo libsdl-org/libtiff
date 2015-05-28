@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.30 2015-05-28 02:11:01 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.31 2015-05-28 02:16:08 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -6023,15 +6023,15 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
         read_buff = new_buff;
       }
     }
-  read_buff[buffsize] = 0;
-  read_buff[buffsize+1] = 0;
-  read_buff[buffsize+2] = 0;
-
   if (!read_buff)
     {
     TIFFError("loadImage", "Unable to allocate/reallocate read buffer");
     return (-1);
     }
+
+  read_buff[buffsize] = 0;
+  read_buff[buffsize+1] = 0;
+  read_buff[buffsize+2] = 0;
 
   prev_readsize = buffsize;
   *read_ptr = read_buff;
