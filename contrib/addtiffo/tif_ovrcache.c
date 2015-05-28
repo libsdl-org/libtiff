@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: tif_ovrcache.c,v 1.9 2010-06-08 18:55:15 bfriesen Exp $
+ * $Id: tif_ovrcache.c,v 1.10 2015-05-28 13:26:03 bfriesen Exp $
  *
  * Project:  TIFF Overview Builder
  * Purpose:  Library functions to maintain two rows of tiles or two strips
@@ -109,7 +109,9 @@ TIFFOvrCache *TIFFCreateOvrCache( TIFF *hTIFF, toff_t nDirOffset )
     {
 		TIFFErrorExt( hTIFF->tif_clientdata, hTIFF->tif_name,
 					  "Can't allocate memory for overview cache." );
-        /* TODO: use of TIFFError is inconsistent with use of fprintf in addtiffo.c, sort out */
+                /* TODO: use of TIFFError is inconsistent with use of fprintf in addtiffo.c, sort out */
+                if (psCache->pabyRow1Blocks) _TIFFfree(psCache->pabyRow1Blocks);
+                if (psCache->pabyRow2Blocks) _TIFFfree(psCache->pabyRow2Blocks);
         return NULL;
     }
 
