@@ -1,4 +1,4 @@
-/* $Id: tiffmedian.c,v 1.10 2010-03-10 18:56:50 bfriesen Exp $ */
+/* $Id: tiffmedian.c,v 1.11 2015-05-28 02:25:11 bfriesen Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -779,24 +779,28 @@ quant(TIFF* in, TIFF* out)
 
 #define	SWAP(type,a,b)	{ type p; p = a; a = b; b = p; }
 
-#define	GetInputLine(tif, row, bad)				\
-	if (TIFFReadScanline(tif, inputline, row, 0) <= 0)	\
-		bad;						\
-	inptr = inputline;					\
-	nextptr = nextline;					\
-	for (j = 0; j < imagewidth; ++j) {			\
-		*nextptr++ = *inptr++;				\
-		*nextptr++ = *inptr++;				\
-		*nextptr++ = *inptr++;				\
-	}
+#define	GetInputLine(tif, row, bad)                                     \
+        do {                                                            \
+                if (TIFFReadScanline(tif, inputline, row, 0) <= 0)	\
+                        bad;						\
+                inptr = inputline;					\
+                nextptr = nextline;					\
+                for (j = 0; j < imagewidth; ++j) {			\
+                        *nextptr++ = *inptr++;				\
+                        *nextptr++ = *inptr++;				\
+                        *nextptr++ = *inptr++;				\
+                }                                                       \
+        } while (0);
 #define	GetComponent(raw, cshift, c)				\
-	cshift = raw;						\
-	if (cshift < 0)						\
-		cshift = 0;					\
-	else if (cshift >= MAX_COLOR)				\
-		cshift = MAX_COLOR-1;				\
-	c = cshift;						\
-	cshift >>= COLOR_SHIFT;
+        do {                                                    \
+                cshift = raw;                                   \
+                if (cshift < 0)                                 \
+                        cshift = 0;                             \
+                else if (cshift >= MAX_COLOR)                   \
+                        cshift = MAX_COLOR-1;                   \
+                c = cshift;                                     \
+                cshift >>= COLOR_SHIFT;                         \
+        } while (0);
 
 static void
 quant_fsdither(TIFF* in, TIFF* out)
