@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.19 2015-05-28 03:30:42 bfriesen Exp $ */
+/* $Id: ras2tiff.c,v 1.20 2015-05-28 03:52:00 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -135,8 +135,7 @@ main(int argc, char* argv[])
         }
         if ((h.ras_depth != 1) &&
             (h.ras_depth != 8) &&
-            (h.ras_depth != 24) &&
-            (h.ras_depth != 32)) {
+            (h.ras_depth != 24)) {
                 fprintf(stderr, "%s: Improper image depth (%d).\n",
                         argv[optind], h.ras_depth);
                 fclose(in);
