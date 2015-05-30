@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.114 2014-12-30 16:37:22 erouault Exp $ */
+/* $Id: tif_jpeg.c,v 1.115 2015-05-30 23:52:24 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -2016,13 +2016,10 @@ JPEGCleanup(TIFF* tif)
 	tif->tif_tagmethods.vgetfield = sp->vgetparent;
 	tif->tif_tagmethods.vsetfield = sp->vsetparent;
 	tif->tif_tagmethods.printdir = sp->printdir;
-
-	if( sp != NULL ) {
-		if( sp->cinfo_initialized )
-		    TIFFjpeg_destroy(sp);	/* release libjpeg resources */
-		if (sp->jpegtables)		/* tag value */
-			_TIFFfree(sp->jpegtables);
-	}
+        if( sp->cinfo_initialized )
+                TIFFjpeg_destroy(sp);	/* release libjpeg resources */
+        if (sp->jpegtables)		/* tag value */
+                _TIFFfree(sp->jpegtables);
 	_TIFFfree(tif->tif_data);	/* release local state */
 	tif->tif_data = NULL;
 
