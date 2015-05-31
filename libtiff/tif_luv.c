@@ -1,4 +1,4 @@
-/* $Id: tif_luv.c,v 1.37 2015-05-31 21:21:23 bfriesen Exp $ */
+/* $Id: tif_luv.c,v 1.38 2015-05-31 21:23:23 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1997 Greg Ward Larson
@@ -649,6 +649,9 @@ static int
 LogLuvEncodeStrip(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 {
 	tmsize_t rowlen = TIFFScanlineSize(tif);
+
+        if (rowlen == 0)
+                return 0;
 
 	assert(cc%rowlen == 0);
 	while (cc && (*tif->tif_encoderow)(tif, bp, rowlen, s) == 1)
