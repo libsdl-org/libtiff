@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.185 2015-05-31 21:05:22 bfriesen Exp $ */
+/* $Id: tif_dirread.c,v 1.186 2015-05-31 21:07:41 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2713,11 +2713,6 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryIfd8Array(TIFF* tif, TIFFDirEntr
 			break;
 	}
 	_TIFFfree(origdata);
-	if (err!=TIFFReadDirEntryErrOk)
-	{
-		_TIFFfree(data);
-		return(err);
-	}
 	*value=data;
 	return(TIFFReadDirEntryErrOk);
 }
