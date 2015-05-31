@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.183 2015-01-03 18:03:40 erouault Exp $ */
+/* $Id: tif_dirread.c,v 1.184 2015-05-31 21:01:37 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2657,11 +2657,6 @@ TIFFReadDirEntryDoubleArray(TIFF* tif, TIFFDirEntry* direntry, double** value)
 			break;
 	}
 	_TIFFfree(origdata);
-	if (err!=TIFFReadDirEntryErrOk)
-	{
-		_TIFFfree(data);
-		return(err);
-	}
 	*value=data;
 	return(TIFFReadDirEntryErrOk);
 }
