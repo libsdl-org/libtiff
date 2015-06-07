@@ -1,4 +1,4 @@
-/* $Id: tif_write.c,v 1.41 2015-06-07 22:53:17 bfriesen Exp $ */
+/* $Id: tif_write.c,v 1.42 2015-06-07 23:00:23 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -115,6 +115,10 @@ TIFFWriteScanline(TIFF* tif, void* buf, uint32 row, uint16 sample)
 		if (strip >= td->td_stripsperimage && imagegrew)
 			td->td_stripsperimage =
 			    TIFFhowmany_32(td->td_imagelength,td->td_rowsperstrip);
+                if (td->td_stripsperimage == 0) {
+                        TIFFErrorExt(tif->tif_clientdata, module, "Zero strips per image");
+                        return (-1);
+                }
 		tif->tif_row =
 		    (strip % td->td_stripsperimage) * td->td_rowsperstrip;
 		if ((tif->tif_flags & TIFF_CODERSETUP) == 0) {
