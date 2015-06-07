@@ -1,4 +1,4 @@
-/* $Id: tif_write.c,v 1.38 2013-01-18 21:57:12 fwarmerdam Exp $ */
+/* $Id: tif_write.c,v 1.39 2015-06-07 22:41:07 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -219,6 +219,11 @@ TIFFWriteEncodedStrip(TIFF* tif, uint32 strip, void* data, tmsize_t cc)
 
         tif->tif_flags |= TIFF_BUF4WRITE;
 	tif->tif_curstrip = strip;
+
+        if (td->td_stripsperimage == 0) {
+                TIFFErrorExt(tif->tif_clientdata, module, "Zero strips per image");
+                return ((tmsize_t) -1);
+        }
 
 	tif->tif_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
 	if ((tif->tif_flags & TIFF_CODERSETUP) == 0) {
