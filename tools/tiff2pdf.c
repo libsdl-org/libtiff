@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.86 2015-06-13 05:14:57 faxguy Exp $
+/* $Id: tiff2pdf.c,v 1.87 2015-06-13 05:32:13 faxguy Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -766,7 +766,7 @@ int main(int argc, char** argv){
 	/*
 	 * Output
 	 */
-	t2p->outputdisable = 0;
+	t2p->outputdisable = 1;
 	if (outfilename) {
 		t2p->outputfile = fopen(outfilename, "wb");
 		if (t2p->outputfile == NULL) {
@@ -784,6 +784,7 @@ int main(int argc, char** argv){
 				t2p_readproc, t2p_writeproc, t2p_seekproc, 
 				t2p_closeproc, t2p_sizeproc, 
 				t2p_mapproc, t2p_unmapproc);
+	t2p->outputdisable = 0;
 	if (output == NULL) {
 		TIFFError(TIFF2PDF_MODULE,
 			  "Can't initialize output descriptor");
