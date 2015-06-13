@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.32 2015-05-28 02:19:16 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.33 2015-06-13 05:49:18 faxguy Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -6963,7 +6963,7 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
       TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_JPEG);
       }
     else /* Use the compression from the input file */
-      TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
+      CopyField(TIFFTAG_COMPRESSION, compression);
     }
 
   if (compression == COMPRESSION_JPEG)
