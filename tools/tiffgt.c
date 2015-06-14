@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.11 2014-12-26 16:06:41 bfriesen Exp $ */
+/* $Id: tiffgt.c,v 1.12 2015-06-14 21:44:17 faxguy Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -287,6 +287,7 @@ static void
 raster_draw(void)
 {
   glDrawPixels(img.width, img.height, GL_RGBA, GL_UNSIGNED_BYTE, (const GLvoid *) raster);
+  glFlush();
 }
 
 static void
