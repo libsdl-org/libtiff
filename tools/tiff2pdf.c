@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.87 2015-06-13 05:32:13 faxguy Exp $
+/* $Id: tiff2pdf.c,v 1.88 2015-06-14 20:54:32 faxguy Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -5220,7 +5220,7 @@ tsize_t t2p_write_pdf_xobject_stream_filter(ttile_t tile, T2P* t2p, TIFF* output
 
 			if(t2p->tiff_photometric != PHOTOMETRIC_YCBCR) {
 				written += t2pWriteFile(output, (tdata_t) "/DecodeParms ", 13);
-				written += t2pWriteFile(output, (tdata_t) "<< /ColorTransform 0 >>\n", 24);
+				written += t2pWriteFile(output, (tdata_t) "<< /ColorTransform 1 >>\n", 24);
 			}
 			break;
 #endif
