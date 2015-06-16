@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.25 2015-06-14 23:13:40 faxguy Exp $ */
+/* $Id: tif_unix.c,v 1.26 2015-06-16 15:33:17 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -114,9 +114,9 @@ _tiffCloseProc(thandle_t fd)
 static uint64
 _tiffSizeProc(thandle_t fd)
 {
+	struct stat sb;
 	fd_as_handle_union_t fdh;
 	fdh.h = fd;
-	struct stat sb;
 	if (fstat(fdh.fd,&sb)<0)
 		return(0);
 	else
