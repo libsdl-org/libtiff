@@ -1,4 +1,4 @@
-/* $Id: rewrite_tag.c,v 1.6 2013-12-17 14:41:58 bfriesen Exp $ */
+/* $Id: rewrite_tag.c,v 1.7 2015-06-20 16:33:40 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2007, Frank Warmerdam <warmerdam@pobox.com>
@@ -322,9 +322,10 @@ int rewrite_test( const char *filename, int length, int bigtiff,
 int
 main(int argc, char **argv)
 {
+    int failure = 0;
+
     (void) argc;
     (void) argv;
-    int failure = 0;
 
     failure |= test_packbits();
 
