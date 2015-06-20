@@ -1,4 +1,4 @@
-/* $Id: raw_decode.c,v 1.5 2012-12-20 18:08:07 tgl Exp $ */
+/* $Id: raw_decode.c,v 1.6 2015-06-20 16:52:25 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2012, Frank Warmerdam <warmerdam@pobox.com>
@@ -41,7 +41,13 @@
 #endif 
 
 #include "tiffio.h"
-
+/*
+  Avoid conflicting typedefs for INT32 and boolean when including jpeglib.h.
+*/
+#if defined(__MINGW32__)
+# define XMD_H 1
+# define HAVE_BOOLEAN /* Needs to match statement in jconfig.h */
+#endif
 #include "jpeglib.h" /* Needed for JPEG_LIB_VERSION */
 
 static unsigned char cluster_0[] = { 0, 0, 2, 0, 138, 139 };
