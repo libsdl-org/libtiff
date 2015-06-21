@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.28 2014-11-20 16:47:21 erouault Exp $" */
+/* $Id: fax2ps.c,v 1.29 2015-06-21 01:09:09 bfriesen Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -323,8 +323,10 @@ static	void usage(int code);
 int
 main(int argc, char** argv)
 {
+#if !HAVE_DECL_OPTARG
     extern int optind;
     extern char* optarg;
+#endif
     uint16 *pages = NULL, npages = 0, pageNumber;
     int c, dowarnings = 0;		/* if 1, enable library warnings */
     TIFF* tif;

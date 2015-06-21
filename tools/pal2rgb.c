@@ -1,4 +1,4 @@
-/* $Id: pal2rgb.c,v 1.14 2014-12-21 20:04:31 erouault Exp $ */
+/* $Id: pal2rgb.c,v 1.15 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -81,8 +81,11 @@ main(int argc, char* argv[])
 	int cmap = -1;
 	TIFF *in, *out;
 	int c;
+
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "C:c:p:r:")) != -1)
 		switch (c) {

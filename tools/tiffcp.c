@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.52 2015-05-28 13:17:35 bfriesen Exp $ */
+/* $Id: tiffcp.c,v 1.53 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -168,8 +168,10 @@ main(int argc, char* argv[])
 	char mode[10];
 	char* mp = mode;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	*mp++ = 'w';
 	*mp = '\0';

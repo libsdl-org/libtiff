@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.22 2013-07-10 00:44:22 fwarmerdam Exp $ */
+/* $Id: tiffinfo.c,v 1.23 2015-06-21 01:09:11 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -69,8 +69,10 @@ main(int argc, char* argv[])
 	int dirnum = -1, multiplefiles, c;
 	uint16 order = 0;
 	TIFF* tif;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 	long flags = 0;
 	uint64 diroff = 0;
 	int chopstrips = 0;		/* disable strip chopping */

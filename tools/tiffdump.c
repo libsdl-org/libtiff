@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.30 2014-12-22 02:52:38 bfriesen Exp $ */
+/* $Id: tiffdump.c,v 1.31 2015-06-21 01:09:11 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -97,8 +97,11 @@ const char* floatfmt = "%s%g";		/* FLOAT */
 const char* doublefmt = "%s%g";		/* DOUBLE */
 
 static void dump(int, uint64);
+
+#if !HAVE_DECL_OPTARG
 extern int optind;
 extern char* optarg;
+#endif
 
 void
 usage()

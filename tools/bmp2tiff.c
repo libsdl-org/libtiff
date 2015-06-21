@@ -1,4 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.25 2015-05-29 02:37:56 bfriesen Exp $
+/* $Id: bmp2tiff.c,v 1.26 2015-06-21 01:09:09 bfriesen Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
@@ -247,8 +247,10 @@ main(int argc, char* argv[])
 	uint32	row, clr;
 
 	int	c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:r:o:h")) != -1) {
 		switch (c) {

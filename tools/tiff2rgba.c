@@ -1,4 +1,4 @@
-/* $Id: tiff2rgba.c,v 1.20 2014-06-08 03:37:02 bfriesen Exp $ */
+/* $Id: tiff2rgba.c,v 1.21 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -65,8 +65,10 @@ main(int argc, char* argv[])
 {
 	TIFF *in, *out;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char *optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:r:t:bn8")) != -1)
 		switch (c) {

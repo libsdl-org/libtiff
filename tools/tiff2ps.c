@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.53 2015-06-13 05:49:18 faxguy Exp $ */
+/* $Id: tiff2ps.c,v 1.54 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -246,8 +246,10 @@ main(int argc, char* argv[])
 	double pageWidth = 0;
 	double pageHeight = 0;
 	uint32 diroff = 0;
+#if !HAVE_DECL_OPTARG
 	extern char *optarg;
 	extern int optind;
+#endif
 	FILE* output = stdout;
 
         pageOrientation[0] = '\0';

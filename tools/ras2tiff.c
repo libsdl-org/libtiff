@@ -1,4 +1,4 @@
-/* $Id: ras2tiff.c,v 1.21 2015-05-28 04:07:31 bfriesen Exp $ */
+/* $Id: ras2tiff.c,v 1.22 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -70,8 +70,10 @@ main(int argc, char* argv[])
 	uint16 config = PLANARCONFIG_CONTIG;
 	uint32 rowsperstrip = (uint32) -1;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:r:h")) != -1)
 		switch (c) {

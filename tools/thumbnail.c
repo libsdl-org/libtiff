@@ -1,4 +1,4 @@
-/* $Id: thumbnail.c,v 1.20 2014-12-21 20:04:31 erouault Exp $ */
+/* $Id: thumbnail.c,v 1.21 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -71,8 +71,10 @@ static	int generateThumbnail(TIFF*, TIFF*);
 static	void initScale();
 static	void usage(void);
 
+#if !HAVE_DECL_OPTARG
 extern	char* optarg;
 extern	int optind;
+#endif
 
 int
 main(int argc, char* argv[])

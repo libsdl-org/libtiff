@@ -1,4 +1,4 @@
-/* $Id: sgi2tiff.c,v 1.6 2010-03-10 18:56:49 bfriesen Exp $ */
+/* $Id: sgi2tiff.c,v 1.7 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -60,8 +60,10 @@ main(int argc, char* argv[])
 	IMAGE *in;
 	TIFF *out;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:p:r:")) != -1)
 		switch (c) {

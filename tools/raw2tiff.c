@@ -1,4 +1,4 @@
-/* $Id: raw2tiff.c,v 1.26 2015-05-30 16:13:29 bfriesen Exp $
+/* $Id: raw2tiff.c,v 1.27 2015-06-21 01:09:10 bfriesen Exp $
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images
@@ -105,8 +105,10 @@ main(int argc, char* argv[])
 	uint32 row, col, band;
 	int	c;
 	unsigned char *buf = NULL, *buf1 = NULL;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:r:H:w:l:b:d:LMp:si:o:h")) != -1) {
 		switch (c) {

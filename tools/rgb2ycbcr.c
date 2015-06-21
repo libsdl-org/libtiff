@@ -1,4 +1,4 @@
-/* $Id: rgb2ycbcr.c,v 1.15 2013-05-02 14:44:29 tgl Exp $ */
+/* $Id: rgb2ycbcr.c,v 1.16 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -72,8 +72,10 @@ main(int argc, char* argv[])
 {
 	TIFF *in, *out;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char *optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:h:r:v:z")) != -1)
 		switch (c) {

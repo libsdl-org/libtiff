@@ -1,4 +1,4 @@
-/* $Id: tiffdither.c,v 1.15 2015-03-02 16:16:38 erouault Exp $ */
+/* $Id: tiffdither.c,v 1.16 2015-06-21 01:09:11 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -210,8 +210,10 @@ main(int argc, char* argv[])
 	uint32 rowsperstrip = (uint32) -1;
 	uint16 fillorder = 0;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char *optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:f:r:t:")) != -1)
 		switch (c) {

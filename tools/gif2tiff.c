@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.17 2015-05-30 20:16:00 bfriesen Exp $ */
+/* $Id: gif2tiff.c,v 1.18 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -137,8 +137,11 @@ void	rasterize(int, char*);
 int
 main(int argc, char* argv[])
 {
+#if !HAVE_DECL_OPTARG
     extern int optind;
     extern char *optarg;
+#endif
+
     int c, status;
 
     while ((c = getopt(argc, argv, "c:r:")) != -1)

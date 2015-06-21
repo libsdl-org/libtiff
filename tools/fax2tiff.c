@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.22 2010-03-10 18:56:49 bfriesen Exp $ */
+/* $Id: fax2tiff.c,v 1.23 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -95,9 +95,11 @@ main(int argc, char* argv[])
 	int c;
 	int pn, npages;
 	float resY = 196.0;
+
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
-
+#endif
 
 	while ((c = getopt(argc, argv, "R:X:o:1234ABLMPUW5678abcflmprsuvwz?")) != -1)
 		switch (c) {

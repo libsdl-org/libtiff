@@ -1,4 +1,4 @@
-/* $Id: tiffmedian.c,v 1.12 2015-05-28 03:08:18 bfriesen Exp $ */
+/* $Id: tiffmedian.c,v 1.13 2015-06-21 01:09:11 bfriesen Exp $ */
 
 /*
  * Apply median cut on an image.
@@ -123,8 +123,10 @@ main(int argc, char* argv[])
 	float floatv;
 	uint32 longv;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 
 	num_colors = MAX_CMAP_SIZE;
 	while ((c = getopt(argc, argv, "c:C:r:f")) != -1)

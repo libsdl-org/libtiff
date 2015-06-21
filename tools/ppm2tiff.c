@@ -1,4 +1,4 @@
-/* $Id: ppm2tiff.c,v 1.18 2012-12-10 18:19:11 tgl Exp $ */
+/* $Id: ppm2tiff.c,v 1.19 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -98,8 +98,10 @@ main(int argc, char* argv[])
 	unsigned int w, h, prec, row;
 	char *infile;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char* optarg;
+#endif
 	tmsize_t scanline_size;
 
 	if (argc < 2) {

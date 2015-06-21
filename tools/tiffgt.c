@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.12 2015-06-14 21:44:17 faxguy Exp $ */
+/* $Id: tiffgt.c,v 1.13 2015-06-21 01:09:11 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -74,8 +74,11 @@ static void	raster_reshape(int, int);
 static void	raster_keys(unsigned char, int, int);
 static void	raster_special(int, int, int);
 
+#if !HAVE_DECL_OPTARG
 extern  char* optarg;
 extern  int optind;
+#endif
+
 static TIFF* tif = NULL;
 
 int

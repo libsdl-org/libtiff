@@ -1,4 +1,4 @@
-/* $Id: iptcutil.c,v 1.10 2015-05-29 13:43:47 bfriesen Exp $ */
+/* $Id: iptcutil.c,v 1.11 2015-06-21 01:09:09 bfriesen Exp $ */
 
 #include "tif_config.h"
 
@@ -801,11 +801,11 @@ void chstore(char *string,int max,char ch)
         switch(_p_flag&3)
           {
           case 1: 	    /* convert to upper */
-            c=toupper(ch);
+            c=toupper((int) ch);
             break;
 
           case 2: 	    /* convert to lower */
-            c=tolower(ch);
+            c=tolower((int) ch);
             break;
 
           default:	    /* use as is */
