@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.13 2015-06-21 01:09:11 bfriesen Exp $ */
+/* $Id: tiffgt.c,v 1.14 2015-06-25 02:28:01 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -31,11 +31,14 @@
 #include <string.h>
 #include <unistd.h>
 
-#if HAVE_APPLE_OPENGL_FRAMEWORK
+#ifdef HAVE_OPENGL_GL_H
 # include <OpenGL/gl.h>
-# include <GLUT/glut.h>
 #else
 # include <GL/gl.h>
+#endif
+#ifdef HAVE_GLUT_GLUT_H
+# include <GLUT/glut.h>
+#else
 # include <GL/glut.h>
 #endif
 

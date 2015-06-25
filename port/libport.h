@@ -1,4 +1,4 @@
-/* $Id: libport.h,v 1.2 2009-11-02 14:44:13 bfriesen Exp $ */
+/* $Id: libport.h,v 1.3 2015-06-25 02:28:01 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2009 Frank Warmerdam
@@ -46,6 +46,10 @@ unsigned long strtoul(const char *nptr, char **endptr, int base);
 void *
 lfind(const void *key, const void *base, size_t *nmemb, size_t size,
       int(*compar)(const void *, const void *));
+#endif
+
+#if !defined(HAVE_SNPRINTF) && !defined(HAVE__SNPRINTF)
+int snprintf(char* str, size_t size, const char* format, ...);
 #endif
 
 #endif /* ndef _LIBPORT_ */

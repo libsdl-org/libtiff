@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.84 2012-05-30 01:50:17 fwarmerdam Exp $ */
+/* $Id: tiffiop.h,v 1.85 2015-06-25 02:28:01 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -55,6 +55,10 @@
 #else
 extern void *lfind(const void *, const void *, size_t *, size_t,
 		   int (*)(const void *, const void *));
+#endif
+
+#if !defined(HAVE_SNPRINTF) && !defined(HAVE__SNPRINTF)
+extern int snprintf(char* str, size_t size, const char* format, ...);
 #endif
 
 #include "tiffio.h"
