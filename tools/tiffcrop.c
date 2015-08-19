@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.34 2015-06-21 01:09:10 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.35 2015-08-19 02:31:04 bfriesen Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -131,7 +131,7 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 #endif
 
 #ifndef HAVE_GETOPT
-extern int getopt(int, char**, char*);
+extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
 #ifdef NEED_LIBPORT
