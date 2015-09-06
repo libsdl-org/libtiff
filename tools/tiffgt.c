@@ -1,4 +1,4 @@
-/* $Id: tiffgt.c,v 1.14 2015-06-25 02:28:01 bfriesen Exp $ */
+/* $Id: tiffgt.c,v 1.15 2015-09-06 20:42:20 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -81,6 +81,12 @@ static void	raster_special(int, int, int);
 extern  char* optarg;
 extern  int optind;
 #endif
+
+/* GLUT framework on MacOS X produces deprecation warnings */
+# if defined(__GNUC__) && defined(__APPLE__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+# endif
 
 static TIFF* tif = NULL;
 
@@ -408,7 +414,10 @@ raster_special(int key, int x, int y)
         glutPostRedisplay();
 }
 
-
+/* GLUT framework on MacOS X produces deprecation warnings */
+# if defined(__GNUC__) && defined(__APPLE__)
+#  pragma GCC diagnostic pop
+# endif
 
 char* stuff[] = {
 "usage: tiffgt [options] file.tif",
