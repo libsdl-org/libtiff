@@ -1,4 +1,4 @@
-/* $Id: fax2ps.c,v 1.30 2015-08-19 02:31:04 bfriesen Exp $" */
+/* $Id: fax2ps.c,v 1.31 2015-09-06 18:24:27 bfriesen Exp $" */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -398,8 +398,14 @@ main(int argc, char** argv)
 #if defined(HAVE_SETMODE) && defined(O_BINARY)
 	setmode(fileno(stdin), O_BINARY);
 #endif
-	while ((n = read(fileno(stdin), buf, sizeof (buf))) > 0)
-	    write(fileno(fd), buf, n);
+	while ((n = read(fileno(stdin), buf, sizeof (buf))) > 0) {
+                if (write(fileno(fd), buf, n) != n) {
+                        fclose(fd);
+                        fprintf(stderr,
+                                "Could not copy stdin to temporary file.\n");
+                        exit(-2);  
+                }
+        }
 	_TIFF_lseek_f(fileno(fd), 0, SEEK_SET);
 #if defined(_WIN32) && defined(USE_WIN32_FILEIO)
 	tif = TIFFFdOpen(_get_osfhandle(fileno(fd)), "temp", "r");
