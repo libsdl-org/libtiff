@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.191 2015-09-05 20:31:41 bfriesen Exp $ */
+/* $Id: tif_dirread.c,v 1.192 2015-10-17 10:13:14 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4572,7 +4572,6 @@ TIFFFetchDirectory(TIFF* tif, uint64 diroff, TIFFDirEntry** pdir,
 		}
 		else
 		{
-			tmsize_t m;
 			uint64 dircount64;
 			m=off+sizeof(uint64);
 			if ((m<off)||(m<(tmsize_t)sizeof(uint64))||(m>tif->tif_size)) {
