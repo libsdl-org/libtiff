@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.196 2015-11-18 18:26:03 erouault Exp $ */
+/* $Id: tif_dirread.c,v 1.197 2015-11-18 20:35:09 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -3766,7 +3766,7 @@ TIFFReadDirectory(TIFF* tif)
 						tif->tif_dir.td_bitspersample);
 					    continue;
 					}
-					countpersample=(1L<<tif->tif_dir.td_bitspersample);
+					countpersample=(1U<<tif->tif_dir.td_bitspersample);
 					if ((dp->tdir_tag==TIFFTAG_TRANSFERFUNCTION)&&(dp->tdir_count==(uint64)countpersample))
 					{
 						countrequired=countpersample;
