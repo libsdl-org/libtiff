@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.197 2015-11-18 20:35:09 erouault Exp $ */
+/* $Id: tif_dirread.c,v 1.198 2015-11-22 22:37:27 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -4154,7 +4154,7 @@ TIFFReadDirectoryFindFieldInfo(TIFF* tif, uint16 tagid, uint32* fii)
 }
 
 /*
- * Read custom directory from the arbitarry offset.
+ * Read custom directory from the arbitrary offset.
  * The code is very similar to TIFFReadDirectory().
  */
 int
