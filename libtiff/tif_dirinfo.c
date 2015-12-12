@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.123 2015-12-06 23:51:44 erouault Exp $ */
+/* $Id: tif_dirinfo.c,v 1.124 2015-12-12 18:04:26 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -42,8 +42,16 @@
  *       values accordingly.
  */
 
+/* const object should be initialized */
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4132 )
+#endif
 static const TIFFFieldArray tiffFieldArray;
 static const TIFFFieldArray exifFieldArray;
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 static const TIFFField
 tiffFields[] = {
