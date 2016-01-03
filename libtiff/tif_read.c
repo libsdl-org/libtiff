@@ -1,4 +1,4 @@
-/* $Id: tif_read.c,v 1.46 2015-11-22 15:31:03 erouault Exp $ */
+/* $Id: tif_read.c,v 1.47 2016-01-03 10:01:25 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -492,9 +492,9 @@ TIFFFillStrip(TIFF* tif, uint32 strip)
 	static const char module[] = "TIFFFillStrip";
 	TIFFDirectory *td = &tif->tif_dir;
 
-    if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
-        return 0;
-        
+        if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
+            return 0;
+
 	if ((tif->tif_flags&TIFF_NOREADRAW)==0)
 	{
 		uint64 bytecount = td->td_stripbytecount[strip];
@@ -795,9 +795,9 @@ TIFFFillTile(TIFF* tif, uint32 tile)
 	static const char module[] = "TIFFFillTile";
 	TIFFDirectory *td = &tif->tif_dir;
 
-    if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
-        return 0;
-        
+        if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
+            return 0;
+
 	if ((tif->tif_flags&TIFF_NOREADRAW)==0)
 	{
 		uint64 bytecount = td->td_stripbytecount[tile];
@@ -957,8 +957,8 @@ TIFFStartStrip(TIFF* tif, uint32 strip)
 {
 	TIFFDirectory *td = &tif->tif_dir;
 
-    if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
-        return 0;
+        if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
+            return 0;
 
 	if ((tif->tif_flags & TIFF_CODERSETUP) == 0) {
 		if (!(*tif->tif_setupdecode)(tif))
