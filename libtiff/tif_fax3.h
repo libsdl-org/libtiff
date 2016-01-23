@@ -1,4 +1,4 @@
-/* $Id: tif_fax3.h,v 1.10 2016-01-09 22:19:21 erouault Exp $ */
+/* $Id: tif_fax3.h,v 1.11 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -39,7 +39,7 @@
 
 /*
  * To override the default routine used to image decoded
- * spans one can use the pseduo tag TIFFTAG_FAXFILLFUNC.
+ * spans one can use the pseudo tag TIFFTAG_FAXFILLFUNC.
  * The routine must have the type signature given below;
  * for example:
  *

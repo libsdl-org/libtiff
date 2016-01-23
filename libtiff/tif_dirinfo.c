@@ -1,4 +1,4 @@
-/* $Id: tif_dirinfo.c,v 1.124 2015-12-12 18:04:26 erouault Exp $ */
+/* $Id: tif_dirinfo.c,v 1.125 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -38,7 +38,7 @@
  * NOTE: The second field (field_readcount) and third field (field_writecount)
  *       sometimes use the values TIFF_VARIABLE (-1), TIFF_VARIABLE2 (-3)
  *       and TIFF_SPP (-2). The macros should be used but would throw off
- *       the formatting of the code, so please interprete the -1, -2 and -3
+ *       the formatting of the code, so please interpret the -1, -2 and -3
  *       values accordingly.
  */
 
@@ -285,7 +285,7 @@ static const TIFFFieldArray
 exifFieldArray = { tfiatExif, 0, TIFFArrayCount(exifFields), (TIFFField*) exifFields };
 
 /*
- *  We have our own local lfind() equivelent to avoid subtle differences
+ *  We have our own local lfind() equivalent to avoid subtle differences
  *  in types passed to lfind() on different systems. 
  */
 

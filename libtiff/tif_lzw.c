@@ -1,4 +1,4 @@
-/* $Id: tif_lzw.c,v 1.50 2015-11-22 15:31:03 erouault Exp $ */
+/* $Id: tif_lzw.c,v 1.51 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -936,7 +936,7 @@ LZWEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 				disp = 1;
 			do {
 				/*
-				 * Avoid pointer arithmetic 'cuz of
+				 * Avoid pointer arithmetic because of
 				 * wraparound problems with segments.
 				 */
 				if ((h -= disp) < 0)

@@ -1,4 +1,4 @@
-/* $Id: tiffiop.h,v 1.88 2015-10-19 12:04:24 erouault Exp $ */
+/* $Id: tiffiop.h,v 1.89 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -86,7 +86,7 @@ typedef struct client_info {
 
 /*
  * Typedefs for ``method pointers'' used internally.
- * these are depriciated and provided only for backwards compatibility
+ * these are deprecated and provided only for backwards compatibility.
  */
 typedef unsigned char tidataval_t;    /* internal image data value type */
 typedef tidataval_t* tidata_t;        /* reference to internal image data */
@@ -131,7 +131,7 @@ struct tiff {
 	uint64               tif_diroff;       /* file offset of current directory */
 	uint64               tif_nextdiroff;   /* file offset of following directory */
 	uint64*              tif_dirlist;      /* list of offsets to already seen directories to prevent IFD looping */
-	uint16               tif_dirlistsize;  /* number of entires in offset list */
+	uint16               tif_dirlistsize;  /* number of entries in offset list */
 	uint16               tif_dirnumber;    /* number of already seen directories */
 	TIFFDirectory        tif_dir;          /* internal rep of current directory */
 	TIFFDirectory        tif_customdir;    /* custom IFDs are separated from the main ones */

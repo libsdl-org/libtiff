@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.36 2015-11-22 15:31:03 erouault Exp $ */
+/* $Id: tif_predict.c,v 1.37 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -213,7 +213,7 @@ PredictorSetupEncode(TIFF* tif)
                 /*
                  * If the data is horizontally differenced 16-bit data that
                  * requires byte-swapping, then it must be byte swapped after
-                 * the differenciation step.  We do this with a special-purpose
+                 * the differentiation step.  We do this with a special-purpose
                  * routine and override the normal post decoding logic that
                  * the library setup when the directory was read.
                  */

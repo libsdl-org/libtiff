@@ -1,4 +1,4 @@
-/* $Id: tif_close.c,v 1.20 2015-12-06 10:51:14 erouault Exp $ */
+/* $Id: tif_close.c,v 1.21 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -36,7 +36,7 @@
 
 /**
  * Auxiliary function to free the TIFF structure. Given structure will be
- * completetly freed, so you should save opened file handle and pointer
+ * completely freed, so you should save opened file handle and pointer
  * to the close procedure in external variables before calling
  * _TIFFCleanup(), if you will need these ones to close the file.
  * 

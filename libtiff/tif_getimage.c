@@ -1,4 +1,4 @@
-/* $Id: tif_getimage.c,v 1.94 2015-12-26 17:32:03 erouault Exp $ */
+/* $Id: tif_getimage.c,v 1.95 2016-01-23 21:20:34 erouault Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -356,7 +356,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 			_TIFFmemcpy( img->greencmap, green_orig, n_color * 2 );
 			_TIFFmemcpy( img->bluecmap, blue_orig, n_color * 2 );
 
-			/* fall thru... */
+			/* fall through... */
 		case PHOTOMETRIC_MINISWHITE:
 		case PHOTOMETRIC_MINISBLACK:
 			if (planarconfig == PLANARCONFIG_CONTIG
@@ -2476,7 +2476,7 @@ buildMap(TIFFRGBAImage* img)
     case PHOTOMETRIC_SEPARATED:
 	if (img->bitspersample == 8)
 	    break;
-	/* fall thru... */
+	/* fall through... */
     case PHOTOMETRIC_MINISBLACK:
     case PHOTOMETRIC_MINISWHITE:
 	if (!setupMap(img))
