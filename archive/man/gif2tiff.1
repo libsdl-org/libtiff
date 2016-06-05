@@ -1,4 +1,4 @@
-.\" $Id: sgi2tiff.1,v 1.4 2006-04-20 12:17:19 dron Exp $
+.\" $Id: gif2tiff.1,v 1.1 2016-06-05 19:53:59 bfriesen Exp $
 .\"
 .\" Copyright (c) 1991-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -23,33 +23,27 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH SGI2TIFF 1 "November 2, 2005" "libtiff"
+.TH GIF2TIFF 1 "November 2, 2005" "libtiff"
 .SH NAME
-sgi2tiff \- create a
+gif2tiff \- create a
 .SM TIFF
-file from an
-.SM SGI
-image file
+file from a GIF87 format image file
 .SH SYNOPSIS
-.B sgi2tiff
+.B gif2tiff
 [
 .I options
 ]
-.I input.rgb
+.I input.gif
 .I output.tif
 .SH DESCRIPTION
-.I sgi2tiff
-converts a file in the 
-.SM SGI
-image format to
+.I Gif2tiff
+converts a file in the GIF87 format to
 .SM TIFF.
-By default, the
+The
 .SM TIFF
-image is created with data samples packed (\c
-.IR PlanarConfiguration =1),
+image is created as a palette image, with samples
 compressed with the Lempel-Ziv & Welch algorithm (\c
-.IR Compression =5),
-and with each strip no more than 8 kilobytes.
+.IR Compression =5).
 These characteristics can overridden, or explicitly specified
 with the options described below.
 .SH OPTIONS
@@ -59,31 +53,25 @@ Specify a compression scheme to use when writing image data:
 .B "\-c none"
 for no compression,
 .B "\-c packbits"
-for the PackBits compression algorithm),
-.B "\-c jpeg"
-for the baseline JPEG compression algorithm,
-.B "\-c zip
+for the PackBits compression algorithm,
+.B "\-c zip"
 for the Deflate compression algorithm,
 and
 .B "\-c lzw"
 for Lempel-Ziv & Welch (the default).
 .TP
-.B \-p
-Explicitly select the planar configuration used in organizing
-data samples in the output image:
-.B "\-p contig"
-for samples packed contiguously, and
-.B "\-p separate"
-for samples stored separately.
-By default samples are packed.
-.TP
 .B \-r
 Write data with a specified number of rows per strip;
 by default the number of rows/strip is selected so that each strip
 is approximately 8 kilobytes.
+.SH NOTES
+The program is based on Paul Haeberli's
+.I fromgif
+program which, in turn, is based on Marcel J.E. Mol's GIF reader.
 .SH BUGS
-Does not record colormap information.
+Should have more options to control output format.
 .SH "SEE ALSO"
+.BR pal2rgb (1),
 .BR tiffinfo (1),
 .BR tiffcp (1),
 .BR tiffmedian (1),

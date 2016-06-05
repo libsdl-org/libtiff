@@ -1,4 +1,4 @@
-/* $Id: sgi2tiff.c,v 1.7 2015-06-21 01:09:10 bfriesen Exp $ */
+/* $Id: sgi2tiff.c,v 1.1 2016-06-05 19:54:00 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler

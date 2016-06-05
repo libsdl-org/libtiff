@@ -1,4 +1,4 @@
-/* $Id: gif2tiff.c,v 1.18 2015-06-21 01:09:10 bfriesen Exp $ */
+/* $Id: gif2tiff.c,v 1.1 2016-06-05 19:53:59 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler

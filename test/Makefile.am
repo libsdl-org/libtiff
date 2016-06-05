@@ -66,9 +66,6 @@ check_PROGRAMS = \
 
 # Test scripts to execute
 TESTSCRIPTS = \
-	bmp2tiff_palette.sh \
-	bmp2tiff_rgb.sh \
-	gif2tiff.sh \
 	ppm2tiff_pbm.sh \
 	ppm2tiff_pgm.sh \
 	ppm2tiff_ppm.sh \
@@ -157,13 +154,6 @@ TIFFIMAGES = \
 	images/rgb-3c-8b.tiff \
 	images/quad-tile.jpg.tiff
 
-BMPIMAGES = \
-	images/palette-1c-8b.bmp \
-	images/rgb-3c-8b.bmp
-
-GIFIMAGES = \
-	images/palette-1c-8b.gif
-
 PNMIMAGES = \
 	images/minisblack-1c-8b.pgm \
 	images/miniswhite-1c-1b.pbm \
@@ -174,8 +164,6 @@ PNMIMAGES = \
 # files which are not currently used by the tests.
 IMAGES_EXTRA_DIST = \
 	images/README.txt \
-	$(BMPIMAGES) \
-	$(GIFIMAGES) \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 

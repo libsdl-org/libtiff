@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/Attic/rasterfile.h,v 1.4 2015-05-28 03:30:42 bfriesen Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/archive/tools/rasterfile.h,v 1.1 2016-06-05 19:54:00 bfriesen Exp $ */
 
 #include "tiff.h"
 
