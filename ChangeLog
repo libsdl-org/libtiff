@@ -1,3 +1,8 @@
+2016-06-15  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* libtiff/libtiff.def: Added _TIFFMultiply32 and _TIFFMultiply64
+	to libtiff.def
+
 2016-06-05  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
 
 	* tools/Makefile.am: The libtiff tools bmp2tiff, gif2tiff,
