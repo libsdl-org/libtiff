@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.32 2015-08-19 02:31:05 bfriesen Exp $ */
+/* $Id: tiffdump.c,v 1.33 2016-07-10 15:34:07 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -413,7 +413,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 		}
 		else
 		{
-			count = *(uint64*)dp;
+			memcpy(&count, dp, sizeof(uint64));
 			if (swabflag)
 				TIFFSwabLong8(&count);
 			dp += sizeof(uint64);
@@ -761,11 +761,10 @@ PrintData(FILE* fd, uint16 type, uint32 count, unsigned char* data)
 	case TIFF_LONG8: {
 		uint64 *llp = (uint64*)data;
 		while (count-- > 0) {
-#if defined(__WIN32__) && defined(_MSC_VER)
-			fprintf(fd, long8fmt, sep, (unsigned __int64) *llp++);
-#else
-			fprintf(fd, long8fmt, sep, (unsigned long long) *llp++);
-#endif
+                        uint64 val;
+                        memcpy(&val, llp, sizeof(uint64));
+                        llp ++;
+			fprintf(fd, long8fmt, sep, val);
 			sep = " ";
 		}
 		break;
@@ -773,11 +772,11 @@ PrintData(FILE* fd, uint16 type, uint32 count, unsigned char* data)
 	case TIFF_SLONG8: {
 		int64 *llp = (int64*)data;
 		while (count-- > 0)
-#if defined(__WIN32__) && defined(_MSC_VER)
-			fprintf(fd, slong8fmt, sep, (__int64) *llp++), sep = " ";
-#else
-			fprintf(fd, slong8fmt, sep, (long long) *llp++), sep = " ";
-#endif
+                        int64 val;
+                        memcpy(&val, llp, sizeof(int64));
+                        llp ++;
+                        fprintf(fd, slong8fmt, sep, val);
+                        sep = " ";
 		break;
 	}
 	case TIFF_RATIONAL: {
