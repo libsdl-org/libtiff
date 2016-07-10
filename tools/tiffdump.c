@@ -1,4 +1,4 @@
-/* $Id: tiffdump.c,v 1.33 2016-07-10 15:34:07 erouault Exp $ */
+/* $Id: tiffdump.c,v 1.34 2016-07-10 16:56:18 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -771,12 +771,13 @@ PrintData(FILE* fd, uint16 type, uint32 count, unsigned char* data)
 	}
 	case TIFF_SLONG8: {
 		int64 *llp = (int64*)data;
-		while (count-- > 0)
+		while (count-- > 0) {
                         int64 val;
                         memcpy(&val, llp, sizeof(int64));
                         llp ++;
                         fprintf(fd, slong8fmt, sep, val);
                         sep = " ";
+                }
 		break;
 	}
 	case TIFF_RATIONAL: {
