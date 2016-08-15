@@ -1,4 +1,4 @@
-/* $Id: rgb2ycbcr.c,v 1.16 2015-06-21 01:09:10 bfriesen Exp $ */
+/* $Id: rgb2ycbcr.c,v 1.17 2016-08-15 21:26:56 erouault Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -95,9 +95,13 @@ main(int argc, char* argv[])
 			break;
 		case 'h':
 			horizSubSampling = atoi(optarg);
+            if( horizSubSampling != 1 && horizSubSampling != 2 && horizSubSampling != 4 )
+                usage(-1);
 			break;
 		case 'v':
 			vertSubSampling = atoi(optarg);
+            if( vertSubSampling != 1 && vertSubSampling != 2 && vertSubSampling != 4 )
+                usage(-1);
 			break;
 		case 'r':
 			rowsperstrip = atoi(optarg);
