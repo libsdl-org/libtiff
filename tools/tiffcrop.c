@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.38 2016-08-15 21:05:40 erouault Exp $ */
+/* $Id: tiffcrop.c,v 1.39 2016-08-16 08:54:01 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -6001,6 +6001,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
     }
   else
     {
+    uint32 buffsize_check;
     readunit = STRIP;
     TIFFGetFieldDefaulted(in, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
     stsize = TIFFStripSize(in);
@@ -6017,7 +6018,6 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
 	TIFFError("loadImage", "Integer overflow when calculating buffer size");
 	exit(-1);
     }
-    uint32 buffsize_check;
     buffsize_check = ((length * width * spp * bps) + 7);
     if (length != ((buffsize_check - 7) / width / spp / bps))
     {
