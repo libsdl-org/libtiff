@@ -1,4 +1,4 @@
-/* $Id: tif_predict.c,v 1.37 2016-01-23 21:20:34 erouault Exp $ */
+/* $Id: tif_predict.c,v 1.38 2016-09-24 23:11:55 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -80,6 +80,15 @@ PredictorSetup(TIFF* tif)
 				    td->td_sampleformat);
 				return 0;
 			}
+                        if (td->td_bitspersample != 16
+                            && td->td_bitspersample != 24
+                            && td->td_bitspersample != 32
+                            && td->td_bitspersample != 64) { /* Should 64 be allowed? */
+                                TIFFErrorExt(tif->tif_clientdata, module,
+                                             "Floating point \"Predictor\" not supported with %d-bit samples",
+                                             td->td_bitspersample);
+				return 0;
+                            }
 			break;
 		default:
 			TIFFErrorExt(tif->tif_clientdata, module,
@@ -174,7 +183,7 @@ PredictorSetupDecode(TIFF* tif)
 		}
 		/*
 		 * Allocate buffer to keep the decoded bytes before
-		 * rearranging in the ight order
+		 * rearranging in the right order
 		 */
 	}
 
