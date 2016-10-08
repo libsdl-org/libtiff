@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.54 2016-10-08 15:04:31 erouault Exp $ */
+/* $Id: tiffcp.c,v 1.55 2016-10-08 15:54:57 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1338,7 +1338,7 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
 		uint32 colb = 0;
 		uint32 col;
 
-		for (col = 0; col < imagewidth; col += tw) {
+		for (col = 0; col < imagewidth && colb < imagew; col += tw) {
 			if (TIFFReadTile(in, tilebuf, col, row, 0, 0) < 0
 			    && !ignore) {
 				TIFFError(TIFFFileName(in),
@@ -1523,7 +1523,7 @@ DECLAREwriteFunc(writeBufferToContigTiles)
 		uint32 colb = 0;
 		uint32 col;
 
-		for (col = 0; col < imagewidth; col += tw) {
+		for (col = 0; col < imagewidth && colb < imagew; col += tw) {
 			/*
 			 * Tile is clipped horizontally.  Calculate
 			 * visible portion and skewing factors.
