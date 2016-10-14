@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.41 2016-10-08 15:04:31 erouault Exp $ */
+/* $Id: tiffcrop.c,v 1.42 2016-10-14 19:13:20 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -819,9 +819,18 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8* buf,
     }
     }
 
-  tilebuf = _TIFFmalloc(tile_buffsize);
+  /* Add 3 padding bytes for extractContigSamplesShifted32bits */
+  if( tile_buffsize > 0xFFFFFFFFU - 3 )
+  {
+      TIFFError("readContigTilesIntoBuffer", "Integer overflow when calculating buffer size.");
+      exit(-1);
+  }
+  tilebuf = _TIFFmalloc(tile_buffsize + 3);
   if (tilebuf == 0)
     return 0;
+  tilebuf[tile_buffsize] = 0;
+  tilebuf[tile_buffsize+1] = 0;
+  tilebuf[tile_buffsize+2] = 0;
 
   dst_rowsize = ((imagewidth * bps * spp) + 7) / 8;  
   for (row = 0; row < imagelength; row += tl)
