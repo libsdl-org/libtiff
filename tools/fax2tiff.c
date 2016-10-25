@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.24 2015-08-23 15:40:45 bfriesen Exp $ */
+/* $Id: fax2tiff.c,v 1.25 2016-10-25 22:22:45 erouault Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -116,7 +116,7 @@ main(int argc, char* argv[])
 	extern char* optarg;
 #endif
 
-	while ((c = getopt(argc, argv, "R:X:o:1234ABLMPUW5678abcflmprsuvwz?")) != -1)
+	while ((c = getopt(argc, argv, "R:X:o:r:1234ABLMPUW5678abcflmprsuvwz?")) != -1)
 		switch (c) {
 			/* input-related options */
 		case '3':		/* input is g3-encoded */
