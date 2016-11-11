@@ -1,4 +1,4 @@
-/* $Id: tif_dirread.c,v 1.202 2016-11-11 20:01:55 erouault Exp $ */
+/* $Id: tif_dirread.c,v 1.203 2016-11-11 20:22:01 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -5000,6 +5000,11 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 					if (err==TIFFReadDirEntryErrOk)
 					{
 						int m;
+                        if( data[dp->tdir_count-1] != '\0' )
+                        {
+                            TIFFWarningExt(tif->tif_clientdata,module,"ASCII value for tag \"%s\" does not end in null byte. Forcing it to be null",fip->field_name);
+                            data[dp->tdir_count-1] = '\0';
+                        }
 						m=TIFFSetField(tif,dp->tdir_tag,(uint16)(dp->tdir_count),data);
 						if (data!=0)
 							_TIFFfree(data);
@@ -5172,6 +5177,11 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				if (err==TIFFReadDirEntryErrOk)
 				{
 					int m;
+                    if( data[dp->tdir_count-1] != '\0' )
+                    {
+                        TIFFWarningExt(tif->tif_clientdata,module,"ASCII value for tag \"%s\" does not end in null byte. Forcing it to be null",fip->field_name);
+                        data[dp->tdir_count-1] = '\0';
+                    }
 					m=TIFFSetField(tif,dp->tdir_tag,(uint32)(dp->tdir_count),data);
 					if (data!=0)
 						_TIFFfree(data);
