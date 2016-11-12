@@ -1,4 +1,4 @@
-/* $Id: tiffinfo.c,v 1.24 2016-10-25 20:04:22 erouault Exp $ */
+/* $Id: tiffinfo.c,v 1.25 2016-11-12 20:06:05 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -295,7 +295,7 @@ TIFFReadContigTileData(TIFF* tif)
 {
 	unsigned char *buf;
 	tmsize_t rowsize = TIFFTileRowSize(tif);
-    tmsize_t tilesize = TIFFTileSize(tif);
+        tmsize_t tilesize = TIFFTileSize(tif);
 
 	buf = (unsigned char *)_TIFFmalloc(tilesize);
 	if (buf) {
@@ -306,7 +306,7 @@ TIFFReadContigTileData(TIFF* tif)
 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
 		TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw);
 		TIFFGetField(tif, TIFFTAG_TILELENGTH, &th);
-        if( rowsize == 0 || th > tilesize / rowsize )
+                if ( rowsize == 0 || th > (size_t) (tilesize / rowsize) )
         {
             fprintf(stderr, "Cannot display data: th * rowsize > tilesize\n");
             _TIFFfree(buf);
@@ -329,8 +329,8 @@ void
 TIFFReadSeparateTileData(TIFF* tif)
 {
 	unsigned char *buf;
-    tmsize_t rowsize = TIFFTileRowSize(tif);
-    tmsize_t tilesize = TIFFTileSize(tif);
+        tmsize_t rowsize = TIFFTileRowSize(tif);
+        tmsize_t tilesize = TIFFTileSize(tif);
 
 	buf = (unsigned char *)_TIFFmalloc(tilesize);
 	if (buf) {
@@ -343,7 +343,7 @@ TIFFReadSeparateTileData(TIFF* tif)
 		TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw);
 		TIFFGetField(tif, TIFFTAG_TILELENGTH, &th);
 		TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
-        if( rowsize == 0 || th > tilesize / rowsize )
+                if ( rowsize == 0 || th > (size_t) (tilesize / rowsize) )
         {
             fprintf(stderr, "Cannot display data: th * rowsize > tilesize\n");
             _TIFFfree(buf);
