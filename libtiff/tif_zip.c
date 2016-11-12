@@ -1,4 +1,4 @@
-/* $Id: tif_zip.c,v 1.35 2015-11-22 22:37:27 erouault Exp $ */
+/* $Id: tif_zip.c,v 1.36 2016-11-12 16:48:28 erouault Exp $ */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler
@@ -460,7 +460,7 @@ bad:
 		     "No space for ZIP state block");
 	return (0);
 }
-#endif /* ZIP_SUPORT */
+#endif /* ZIP_SUPPORT */
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
 /*
