@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.45 2016-11-12 19:57:16 bfriesen Exp $ */
+/* $Id: tiffcrop.c,v 1.46 2016-11-18 14:58:46 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -1349,6 +1349,7 @@ static int writeBufferToSeparateTiles (TIFF* out, uint8* buf, uint32 imagelength
   {
       TIFFError(TIFFFileName(out),
             "Error, uint32 overflow when computing (imagewidth * bps * spp) + 7");
+      _TIFFfree(obuf);
       return 1;
   }
   src_rowsize = ((imagewidth * spp * bps) + 7U) / 8;
