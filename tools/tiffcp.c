@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.57 2016-12-03 14:42:40 erouault Exp $ */
+/* $Id: tiffcp.c,v 1.58 2016-12-03 15:44:15 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1569,7 +1569,7 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 	uint8* bufp = (uint8*) buf;
 	uint32 tl, tw;
 	uint32 row;
-	uint16 bps, bytes_per_sample;
+	uint16 bps = 0, bytes_per_sample;
 
 	obuf = _TIFFmalloc(TIFFTileSize(out));
 	if (obuf == NULL)
@@ -1578,6 +1578,12 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 	(void) TIFFGetField(out, TIFFTAG_TILELENGTH, &tl);
 	(void) TIFFGetField(out, TIFFTAG_TILEWIDTH, &tw);
 	(void) TIFFGetField(out, TIFFTAG_BITSPERSAMPLE, &bps);
+        if( bps == 0 )
+        {
+            TIFFError(TIFFFileName(out), "Error, cannot read BitsPerSample");
+            _TIFFfree(obuf);
+            return 0;
+        }
 	assert( bps % 8 == 0 );
 	bytes_per_sample = bps/8;
 
