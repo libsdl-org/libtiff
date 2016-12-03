@@ -1,4 +1,4 @@
-/* $Id: tiffcp.c,v 1.58 2016-12-03 15:44:15 erouault Exp $ */
+/* $Id: tiffcp.c,v 1.59 2016-12-03 16:40:01 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -1163,7 +1163,7 @@ bad:
 
 static void
 cpStripToTile(uint8* out, uint8* in,
-    uint32 rows, uint32 cols, int outskew, int inskew)
+    uint32 rows, uint32 cols, int outskew, int64 inskew)
 {
 	while (rows-- > 0) {
 		uint32 j = cols;
@@ -1320,7 +1320,7 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
 	tdata_t tilebuf;
 	uint32 imagew = TIFFScanlineSize(in);
 	uint32 tilew  = TIFFTileRowSize(in);
-	int iskew = imagew - tilew;
+	int64 iskew = (int64)imagew - (int64)tilew;
 	uint8* bufp = (uint8*) buf;
 	uint32 tw, tl;
 	uint32 row;
@@ -1348,7 +1348,7 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
 				status = 0;
 				goto done;
 			}
-			if (colb + tilew > imagew) {
+			if (colb > iskew) {
 				uint32 width = imagew - colb;
 				uint32 oskew = tilew - width;
 				cpStripToTile(bufp + colb,
