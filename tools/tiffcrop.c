@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.46 2016-11-18 14:58:46 erouault Exp $ */
+/* $Id: tiffcrop.c,v 1.47 2016-12-03 11:35:56 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -3698,7 +3698,7 @@ static int readContigStripsIntoBuffer (TIFF* in, uint8* buf)
                                   (unsigned long) strip, (unsigned long)rows);
                         return 0;
                 }
-                bufp += bytes_read;
+                bufp += stripsize;
         }
 
         return 1;
