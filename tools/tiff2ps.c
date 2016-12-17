@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.54 2015-06-21 01:09:10 bfriesen Exp $ */
+/* $Id: tiff2ps.c,v 1.55 2016-12-17 19:45:28 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2440,6 +2440,11 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 	unsigned char *cp, c;
 
 	(void) w;
+        if( es <= 0 )
+        {
+            TIFFError(filename, "Inconsistent value of es: %d", es);
+            return;
+        }
 	tf_buf = (unsigned char *) _TIFFmalloc(tf_bytesperrow);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
@@ -2692,7 +2697,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 
 			if (alpha) {
 				int adjust;
-				while (cc-- > 0) {
+				while (cc-- > 1) {
 					DOBREAK(breaklen, 1, fd);
 					/*
 					 * For images with alpha, matte against
