@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.100 2016-12-20 17:24:35 erouault Exp $
+/* $Id: tiff2pdf.c,v 1.101 2016-12-20 17:28:17 erouault Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -2895,7 +2895,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				return(0);
 			}
 			if(TIFFGetField(input, TIFFTAG_JPEGTABLES, &count, &jpt) != 0) {
-				if (count >= 4) {
+				if (count > 4) {
                                         int retTIFFReadRawTile;
                     /* Ignore EOI marker of JpegTables */
 					_TIFFmemcpy(buffer, jpt, count - 2);
