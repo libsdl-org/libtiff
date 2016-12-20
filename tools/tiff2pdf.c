@@ -1,4 +1,4 @@
-/* $Id: tiff2pdf.c,v 1.98 2016-12-18 10:37:59 erouault Exp $
+/* $Id: tiff2pdf.c,v 1.99 2016-12-20 17:13:26 erouault Exp $
  *
  * tiff2pdf - converts a TIFF image to a PDF document
  *
@@ -3593,7 +3593,8 @@ void t2p_tile_collapse_left(
 	
 	edgescanwidth = (scanwidth * edgetilewidth + (tilewidth - 1))/ tilewidth;
 	for(i=0;i<tilelength;i++){
-		_TIFFmemcpy( 
+                /* We use memmove() since there can be overlaps in src and dst buffers for the first items */
+		memmove( 
 			&(((char*)buffer)[edgescanwidth*i]), 
 			&(((char*)buffer)[scanwidth*i]), 
 			edgescanwidth);
