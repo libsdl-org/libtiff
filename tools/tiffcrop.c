@@ -1,4 +1,4 @@
-/* $Id: tiffcrop.c,v 1.49 2016-12-03 13:00:04 erouault Exp $ */
+/* $Id: tiffcrop.c,v 1.50 2017-01-11 12:51:59 erouault Exp $ */
 
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
@@ -7996,7 +7996,6 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
   if (!TIFFWriteDirectory(out))
     {
     TIFFError("","Failed to write IFD for page number %d", pagenum);
-    TIFFClose(out);
     return (-1);
     }
 

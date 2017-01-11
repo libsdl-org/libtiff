@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.83 2016-10-25 21:35:15 erouault Exp $ */
+/* $Id: tif_dirwrite.c,v 1.84 2017-01-11 12:51:59 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -2094,10 +2094,15 @@ TIFFWriteDirectoryTagCheckedSlong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* d
 static int
 TIFFWriteDirectoryTagCheckedRational(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, uint16 tag, double value)
 {
+        static const char module[] = "TIFFWriteDirectoryTagCheckedRational";
 	uint32 m[2];
-	assert(value>=0.0);
 	assert(sizeof(uint32)==4);
-	if (value<=0.0)
+        if( value < 0 )
+        {
+            TIFFErrorExt(tif->tif_clientdata,module,"Negative value is illegal");
+            return 0;
+        }
+	else if (value==0.0)
 	{
 		m[0]=0;
 		m[1]=1;
