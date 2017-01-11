@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.124 2017-01-03 17:22:49 erouault Exp $ */
+/* $Id: tif_jpeg.c,v 1.125 2017-01-11 12:15:01 erouault Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1626,6 +1626,13 @@ JPEGSetupEncode(TIFF* tif)
 	case PHOTOMETRIC_YCBCR:
 		sp->h_sampling = td->td_ycbcrsubsampling[0];
 		sp->v_sampling = td->td_ycbcrsubsampling[1];
+                if( sp->h_sampling == 0 || sp->v_sampling == 0 )
+                {
+                    TIFFErrorExt(tif->tif_clientdata, module,
+                            "Invalig horizontal/vertical sampling value");
+                    return (0);
+                }
+
 		/*
 		 * A ReferenceBlackWhite field *must* be present since the
 		 * default value is inappropriate for YCbCr.  Fill in the
