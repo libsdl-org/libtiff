@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.125 2017-01-11 12:15:01 erouault Exp $ */
+/* $Id: tif_jpeg.c,v 1.126 2017-01-11 16:13:50 erouault Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -1630,6 +1630,13 @@ JPEGSetupEncode(TIFF* tif)
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
                             "Invalig horizontal/vertical sampling value");
+                    return (0);
+                }
+                if( td->td_bitspersample > 16 )
+                {
+                    TIFFErrorExt(tif->tif_clientdata, module,
+                                 "BitsPerSample %d not allowed for JPEG",
+                                 td->td_bitspersample);
                     return (0);
                 }
 
