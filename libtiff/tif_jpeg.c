@@ -1,4 +1,4 @@
-/* $Id: tif_jpeg.c,v 1.126 2017-01-11 16:13:50 erouault Exp $ */
+/* $Id: tif_jpeg.c,v 1.127 2017-01-31 13:02:27 erouault Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -697,9 +697,11 @@ static int
 JPEGFixupTags(TIFF* tif)
 {
 #ifdef CHECK_JPEG_YCBCR_SUBSAMPLING
+        JPEGState* sp = JState(tif);
 	if ((tif->tif_dir.td_photometric==PHOTOMETRIC_YCBCR)&&
 	    (tif->tif_dir.td_planarconfig==PLANARCONFIG_CONTIG)&&
-	    (tif->tif_dir.td_samplesperpixel==3))
+	    (tif->tif_dir.td_samplesperpixel==3) &&
+            !sp->ycbcrsampling_fetched)
 		JPEGFixupTagsSubsampling(tif);
 #endif
         
