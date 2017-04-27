@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.26 2016-11-20 18:04:52 bfriesen Exp $ */
+/* $Id: fax2tiff.c,v 1.27 2017-04-27 19:50:01 erouault Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -371,6 +371,10 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 	int ok;
 
 	tifin->tif_rawdatasize = (tmsize_t)TIFFGetFileSize(tifin);
+	if (tifin->tif_rawdatasize == 0) {
+		TIFFError(tifin->tif_name, "Empty input file");
+		return (0);
+	}
 	tifin->tif_rawdata = _TIFFmalloc(tifin->tif_rawdatasize);
 	if (tifin->tif_rawdata == NULL) {
 		TIFFError(tifin->tif_name, "Not enough memory");
