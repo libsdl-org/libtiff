@@ -1,4 +1,4 @@
-/* $Id: tiff2ps.c,v 1.55 2016-12-17 19:45:28 erouault Exp $ */
+/* $Id: tiff2ps.c,v 1.56 2017-04-27 15:46:22 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -466,10 +466,16 @@ main(int argc, char* argv[])
 		if (tif != NULL) {
 			if (dirnum != -1
                             && !TIFFSetDirectory(tif, (tdir_t)dirnum))
+                        {
+                                TIFFClose(tif);
 				return (-1);
+                        }
 			else if (diroff != 0 &&
 			    !TIFFSetSubDirectory(tif, diroff))
+                        {
+                                TIFFClose(tif);
 				return (-1);
+                        }
 			np = TIFF2PS(output, tif, pageWidth, pageHeight,
 				     leftmargin, bottommargin, centered);
                         if (np < 0)
