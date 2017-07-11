@@ -77,6 +77,7 @@ TESTSCRIPTS = \
 	tiffcp-g4.sh \
 	tiffcp-logluv.sh \
 	tiffcp-thumbnail.sh \
+	tiffcp-lzw-compat.sh \
 	tiffdump.sh \
 	tiffinfo.sh \
 	tiffcp-split.sh \
