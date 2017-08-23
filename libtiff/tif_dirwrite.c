@@ -1,4 +1,4 @@
-/* $Id: tif_dirwrite.c,v 1.87 2017-06-30 17:31:45 erouault Exp $ */
+/* $Id: tif_dirwrite.c,v 1.88 2017-08-23 13:21:42 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -821,7 +821,12 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64* pdiroff)
 			TIFFDirEntry* nb;
 			for (na=0, nb=dir; ; na++, nb++)
 			{
-				assert(na<ndir);
+				if( na == ndir )
+                                {
+                                    TIFFErrorExt(tif->tif_clientdata,module,
+                                                 "Cannot find SubIFD tag");
+                                    goto bad;
+                                }
 				if (nb->tdir_tag==TIFFTAG_SUBIFD)
 					break;
 			}
