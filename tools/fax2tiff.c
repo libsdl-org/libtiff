@@ -1,4 +1,4 @@
-/* $Id: fax2tiff.c,v 1.27 2017-04-27 19:50:01 erouault Exp $ */
+/* $Id: fax2tiff.c,v 1.28 2017-10-29 18:28:45 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler
@@ -283,11 +283,10 @@ main(int argc, char* argv[])
 		}
 #if defined(_WIN32) && defined(USE_WIN32_FILEIO)
                 client_data.fh = _get_osfhandle(fileno(in));
-                TIFFSetClientdata(faxTIFF, (thandle_t) client_data.fh);
 #else
                 client_data.fd = fileno(in);
-                TIFFSetClientdata(faxTIFF, (thandle_t) client_data.fd);
 #endif
+                TIFFSetClientdata(faxTIFF, (thandle_t) &client_data);
 		TIFFSetFileName(faxTIFF, (const char*)argv[optind]);
 		TIFFSetField(out, TIFFTAG_IMAGEWIDTH, xsize);
 		TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 1);
