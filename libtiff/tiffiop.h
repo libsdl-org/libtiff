@@ -1,5 +1,3 @@
-/* $Id: tiffiop.h,v 1.95 2017-09-07 14:02:52 erouault Exp $ */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

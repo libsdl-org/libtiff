@@ -1,5 +1,3 @@
-/* $Id: tif_stream.cxx,v 1.13 2015-05-28 01:50:22 bfriesen Exp $ */
-
 /*
  * Copyright (c) 1988-1996 Sam Leffler
  * Copyright (c) 1991-1996 Silicon Graphics, Inc.

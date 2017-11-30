@@ -1,5 +1,3 @@
-/* $Id: libport.h,v 1.5 2015-08-19 02:31:04 bfriesen Exp $ */
-
 /*
  * Copyright (c) 2009 Frank Warmerdam
  *

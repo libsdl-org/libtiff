@@ -1,5 +1,3 @@
-/* $Id: tiff2bw.c,v 1.21 2017-11-01 13:41:58 bfriesen Exp $ */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

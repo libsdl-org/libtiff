@@ -1,5 +1,3 @@
-/* $Id: strtoul.c,v 1.2 2005-07-07 16:34:06 dron Exp $ */
-
 /*
  * Copyright (c) 1990, 1993
  *	The Regents of the University of California.  All rights reserved.
