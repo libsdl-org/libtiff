@@ -17,6 +17,7 @@ autoconf_build()
     make
     make install
     make check
+    make distcheck
 }
 
 # Test autoconf build
