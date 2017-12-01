@@ -103,11 +103,15 @@ Notes on releasing.
 
       'git commit' and 'git push'
 
-14. In the source tree do
+14. In the source tree, create a signed tag
 
-      git tag -a Release-v4-0-0
+      git tag -s v4.0.0 -m "Create tag for v4.0.0"
 
     (or the appropriate name for the release)
+
+    and push it to "origin" (if "origin" points to the official repository)
+
+      git push origin v4.0.0
 
 15. Copy release packages from the build tree to the
     ftp.remotesensing.org ftp site.
