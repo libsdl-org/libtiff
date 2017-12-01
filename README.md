@@ -27,12 +27,12 @@ found online at http://www.simplesystems.org/libtiff/
 Source code repository
 ----------------------
 
-https://gitlab.com/libtiff/libtiff
+[GitLab](https://gitlab.com/libtiff/libtiff)
 
 Bug database
 ------------
 
-http://bugzilla.maptools.org/buglist.cgi?product=libtiff
+[Bugzilla](http://bugzilla.maptools.org/buglist.cgi?product=libtiff)
 
 
 Use and Copyright
