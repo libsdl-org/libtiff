@@ -1,5 +1,3 @@
-/* $Id: tiffcp.c,v 1.61 2017-01-11 19:26:14 erouault Exp $ */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

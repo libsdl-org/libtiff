@@ -1,5 +1,3 @@
-/* $Id: iptcutil.c,v 1.11 2015-06-21 01:09:09 bfriesen Exp $ */
-
 #include "tif_config.h"
 
 #include <stdio.h>

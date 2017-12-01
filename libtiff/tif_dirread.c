@@ -1,5 +1,3 @@
-/* $Id: tif_dirread.c,v 1.218 2017-09-09 21:44:42 erouault Exp $ */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

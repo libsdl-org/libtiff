@@ -1,5 +1,3 @@
-/* $Id: thumbnail.c,v 1.21 2015-06-21 01:09:10 bfriesen Exp $ */
-
 /*
  * Copyright (c) 1994-1997 Sam Leffler
  * Copyright (c) 1994-1997 Silicon Graphics, Inc.

@@ -1,5 +1,3 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/archive/tools/rasterfile.h,v 1.1 2016-06-05 19:54:00 bfriesen Exp $ */
-
 #include "tiff.h"
 
 /*

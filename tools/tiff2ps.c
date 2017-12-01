@@ -1,5 +1,3 @@
-/* $Id: tiff2ps.c,v 1.56 2017-04-27 15:46:22 erouault Exp $ */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

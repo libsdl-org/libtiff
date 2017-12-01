@@ -1,5 +1,4 @@
-/* $Id: bmp2tiff.c,v 1.1 2016-06-05 19:53:59 bfriesen Exp $
- *
+/*
  * Project:  libtiff tools
  * Purpose:  Convert Windows BMP files in TIFF.
  * Author:   Andrey Kiselev, dron@ak4719.spb.edu

@@ -1,4 +1,3 @@
-dnl $Id: ice_find_athena.m4,v 1.1 2006-10-13 10:13:31 dron Exp $
 dnl 
 dnl ice_find_athena.m4
 dnl 

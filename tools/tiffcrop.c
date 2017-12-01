@@ -1,5 +1,3 @@
-/* $Id: tiffcrop.c,v 1.50 2017-01-11 12:51:59 erouault Exp $ */
-
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
  *

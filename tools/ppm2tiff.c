@@ -1,5 +1,3 @@
-/* $Id: ppm2tiff.c,v 1.19 2015-06-21 01:09:10 bfriesen Exp $ */
-
 /*
  * Copyright (c) 1991-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

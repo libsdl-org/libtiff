@@ -1,5 +1,3 @@
-/* $Id: tif_jpeg.c,v 1.134 2017-10-17 19:04:47 erouault Exp $ */
-
 /*
  * Copyright (c) 1994-1997 Sam Leffler
  * Copyright (c) 1994-1997 Silicon Graphics, Inc.

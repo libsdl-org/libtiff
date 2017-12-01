@@ -1,5 +1,3 @@
-/* $Id: tif_jbig.c,v 1.16 2017-06-26 15:20:00 erouault Exp $ */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
