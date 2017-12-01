@@ -1,1 +1,12 @@
 autom4te.cache/
+configure
+Makefile.in
+config/compile
+config/config.guess
+config/config.sub
+config/depcomp
+config/install-sh
+config/ltmain.sh
+config/missing
+config/mkinstalldirs
+config/test-driver
