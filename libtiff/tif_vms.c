@@ -26,9 +26,9 @@
  * TIFF Library VMS-specific Routines.
  */
 
+#include "tiffiop.h"
 #include <stdlib.h>
 #include <unixio.h>
-#include "tiffiop.h"
 #if !HAVE_IEEEFP
 #include <math.h>
 #endif
