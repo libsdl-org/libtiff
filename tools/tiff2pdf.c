@@ -237,7 +237,7 @@ typedef struct {
 	float tiff_whitechromaticities[2];
 	float tiff_primarychromaticities[6];
 	float tiff_referenceblackwhite[2];
-	float* tiff_transferfunction[3];
+	uint16* tiff_transferfunction[3];
 	int pdf_image_interpolate;	/* 0 (default) : do not interpolate,
 					   1 : interpolate */
 	uint16 tiff_transferfunctioncount;
@@ -1048,7 +1048,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 	uint16 paged=0;
 	uint16 xuint16=0;
 	uint16 tiff_transferfunctioncount=0;
-	float* tiff_transferfunction[3];
+	uint16* tiff_transferfunction[3];
 
 	directorycount=TIFFNumberOfDirectories(input);
 	t2p->tiff_pages = (T2P_PAGE*) _TIFFmalloc(TIFFSafeMultiply(tmsize_t,directorycount,sizeof(T2P_PAGE)));
@@ -1153,8 +1153,8 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
                                  &(tiff_transferfunction[1]),
                                  &(tiff_transferfunction[2]))) {
 
-                        if((tiff_transferfunction[1] != (float*) NULL) &&
-                           (tiff_transferfunction[2] != (float*) NULL)
+                        if((tiff_transferfunction[1] != (uint16*) NULL) &&
+                           (tiff_transferfunction[2] != (uint16*) NULL)
                           ) {
                             tiff_transferfunctioncount=3;
                         } else {
@@ -1851,8 +1851,8 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 			 &(t2p->tiff_transferfunction[0]),
 			 &(t2p->tiff_transferfunction[1]),
 			 &(t2p->tiff_transferfunction[2]))) {
-		if((t2p->tiff_transferfunction[1] != (float*) NULL) &&
-                   (t2p->tiff_transferfunction[2] != (float*) NULL)
+		if((t2p->tiff_transferfunction[1] != (uint16*) NULL) &&
+                   (t2p->tiff_transferfunction[2] != (uint16*) NULL)
                   ) {
 			t2p->tiff_transferfunctioncount=3;
 		} else {
