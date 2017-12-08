@@ -774,7 +774,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryIfd8(TIFF* tif, TIFFDirEntry* di
 static enum TIFFReadDirEntryErr TIFFReadDirEntryDataAndRealloc(
                     TIFF* tif, uint64 offset, tmsize_t size, void** pdest)
 {
-#if SIZEOF_VOIDP == 8 || SIZEOF_SIZE_T == 8
+#if SIZEOF_SIZE_T == 8
         tmsize_t threshold = INITIAL_THRESHOLD;
 #endif
         tmsize_t already_read = 0;
@@ -795,7 +795,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryDataAndRealloc(
             void* new_dest;
             tmsize_t bytes_read;
             tmsize_t to_read = size - already_read;
-#if SIZEOF_VOIDP == 8 || SIZEOF_SIZE_T == 8
+#if SIZEOF_SIZE_T == 8
             if( to_read >= threshold && threshold < MAX_THRESHOLD )
             {
                 to_read = threshold;
