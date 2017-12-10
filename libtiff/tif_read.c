@@ -56,7 +56,7 @@ static int TIFFReadAndRealloc( TIFF* tif, tmsize_t size,
                                int is_strip, uint32 strip_or_tile,
                                const char* module )
 {
-#if SIZEOF_VOIDP == 8 || SIZEOF_SIZE_T == 8
+#if SIZEOF_SIZE_T == 8
         tmsize_t threshold = INITIAL_THRESHOLD;
 #endif
         tmsize_t already_read = 0;
@@ -71,7 +71,7 @@ static int TIFFReadAndRealloc( TIFF* tif, tmsize_t size,
         {
             tmsize_t bytes_read;
             tmsize_t to_read = size - already_read;
-#if SIZEOF_VOIDP == 8 || SIZEOF_SIZE_T == 8
+#if SIZEOF_SIZE_T == 8
             if( to_read >= threshold && threshold < MAX_THRESHOLD &&
                 already_read + to_read + rawdata_offset > tif->tif_rawdatasize )
             {
