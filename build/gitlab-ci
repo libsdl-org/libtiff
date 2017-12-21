@@ -13,7 +13,7 @@ autoconf_build()
     mkdir autoconf-build
     cd autoconf-build
     echo "Running ../configure --prefix=$(pwd)/../autoconf-install) ${opts}"
-    ../configure --prefix=$(pwd)/../autoconf-install ${opts}
+    ../configure --prefix=$(pwd)/../autoconf-install --with-zstd-include-dir=/tmp/include --with-zstd-lib-dir=/tmp/lib ${opts}
     make
     make install
     make check
@@ -29,8 +29,8 @@ cmake_build()
     fi
     mkdir cmake-build
     cd cmake-build
-    echo "Running cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../autoconf-install ${opts} .."
-    cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../autoconf-install ${opts} ..
+    echo "Running cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../autoconf-install -DZSTD_INCLUDE_DIR=/tmp/include -DZSTD_LIBRARY=/tmp/lib/libzstd.so ${opts} .."
+    cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../autoconf-install -DZSTD_INCLUDE_DIR=/tmp/include -DZSTD_LIBRARY=/tmp/lib/libzstd.so ${opts} ..
     cmake --build .
     cmake --build . --target install
     ctest -V
@@ -38,6 +38,17 @@ cmake_build()
 
 build=$1
 shift
+
+# Build zstd
+wget https://github.com/facebook/zstd/archive/v1.3.3.tar.gz
+tar xvzf v1.3.3.tar.gz
+cd zstd-1.3.3/lib
+# Faster build
+make -j3 PREFIX=/tmp ZSTD_LEGACY_SUPPORT=0 CFLAGS=-O1
+make install PREFIX=/tmp ZSTD_LEGACY_SUPPORT=0 CFLAGS=-O1
+cd ../..
+rm -rf zstd-1.3.3
+export LD_LIBRARY_PATH=/tmp/lib
 
 case $build in
     autoconf)
