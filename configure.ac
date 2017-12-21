@@ -827,6 +827,60 @@ fi
 AM_CONDITIONAL(HAVE_LZMA, test "$HAVE_LZMA" = 'yes')
 
 dnl ---------------------------------------------------------------------------
+dnl Check for libzstd.
+dnl ---------------------------------------------------------------------------
+
+HAVE_ZSTD=no
+
+AC_ARG_ENABLE(zstd,
+	      AS_HELP_STRING([--disable-zstd],
+			     [disable libzstd usage (required for zstd compression, enabled by default)]),,)
+AC_ARG_WITH(zstd-include-dir,
+	    AS_HELP_STRING([--with-zstd-include-dir=DIR],
+			   [location of libzstd headers]),,)
+AC_ARG_WITH(zstd-lib-dir,
+	    AS_HELP_STRING([--with-zstd-lib-dir=DIR],
+			   [location of libzstd library binary]),,)
+
+if test "x$enable_zstd" != "xno" ; then
+
+  if test "x$with_zstd_lib_dir" != "x" ; then
+    LDFLAGS="-L$with_zstd_lib_dir $LDFLAGS"
+  fi
+  
+  AC_CHECK_LIB(zstd, ZSTD_decompressStream, [zstd_lib=yes], [zstd_lib=no],)
+  if test "$zstd_lib" = "no" -a "x$with_zstd_lib_dir" != "x"; then
+    AC_MSG_ERROR([zstd library not found at $with_zstd_lib_dir])
+  fi
+    
+  if test "x$with_zstd_include_dir" != "x" ; then
+    CPPFLAGS="-I$with_zstd_include_dir $CPPFLAGS"
+  fi
+  AC_CHECK_HEADER(zstd.h, [zstd_h=yes], [zstd_h=no])
+  if test "$zstd_h" = "no" -a "x$with_zstd_include_dir" != "x" ; then
+    AC_MSG_ERROR([Libzstd headers not found at $with_zstd_include_dir])
+  fi
+
+  if test "$zstd_lib" = "yes" -a "$zstd_h" = "yes" ; then
+    HAVE_ZSTD=yes
+  fi
+
+fi
+
+if test "$HAVE_ZSTD" = "yes" ; then
+  AC_DEFINE(ZSTD_SUPPORT,1,[Support zstd compression])
+  LIBS="-lzstd $LIBS"
+  tiff_libs_private="-lzstd ${tiff_libs_private}"
+
+  if test "$HAVE_RPATH" = "yes" -a "x$with_zstd_lib_dir" != "x" ; then
+    LIBDIR="-R $with_zstd_lib_dir $LIBDIR"
+  fi
+
+fi
+
+AM_CONDITIONAL(HAVE_ZSTD, test "$HAVE_ZSTD" = 'yes')
+
+dnl ---------------------------------------------------------------------------
 dnl Should 8/12 bit jpeg mode be enabled?
 dnl ---------------------------------------------------------------------------
 
@@ -1103,6 +1157,7 @@ LOC_MSG([  Old JPEG support:                   ${HAVE_OJPEG}])
 LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEG12}])
 LOC_MSG([  ISO JBIG support:                   ${HAVE_JBIG}])
 LOC_MSG([  LZMA2 support:                      ${HAVE_LZMA}])
+LOC_MSG([  ZSTD support:                       ${HAVE_ZSTD}])
 LOC_MSG()
 LOC_MSG([  C++ support:                        ${HAVE_CXX}])
 LOC_MSG()

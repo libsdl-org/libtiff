@@ -422,6 +422,9 @@ extern int TIFFInitSGILog(TIFF*, int);
 #ifdef LZMA_SUPPORT
 extern int TIFFInitLZMA(TIFF*, int);
 #endif
+#ifdef ZSTD_SUPPORT
+extern int TIFFInitZSTD(TIFF*, int);
+#endif
 #ifdef VMS
 extern const TIFFCodec _TIFFBuiltinCODECS[];
 #else
