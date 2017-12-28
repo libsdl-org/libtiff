@@ -28,8 +28,7 @@ set(port_optional_SOURCES
   getopt.c
   lfind.c
   strcasecmp.c
-  strtoul.c
-  strtoull.c)
+  strtoul.c)
 
 set(port_USED_FILES ${port_SOURCES} ${port_HEADERS})
 
@@ -47,9 +46,6 @@ if(NOT HAVE_STRCASECMP)
 endif()
 if(NOT HAVE_STRTOUL)
   list(APPEND port_USED_FILES strtoul.c)
-endif()
-if(NOT HAVE_STRTOULL)
-  list(APPEND port_USED_FILES strtoull.c)
 endif()
 
 add_library(port STATIC ${port_USED_FILES})

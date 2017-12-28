@@ -213,9 +213,6 @@ check_include_file(dlfcn.h     HAVE_DLFCN_H)
 check_include_file(fcntl.h     HAVE_FCNTL_H)
 check_include_file(inttypes.h  HAVE_INTTYPES_H)
 check_include_file(io.h        HAVE_IO_H)
-check_include_file(limits.h    HAVE_LIMITS_H)
-check_include_file(malloc.h    HAVE_MALLOC_H)
-check_include_file(memory.h    HAVE_MEMORY_H)
 check_include_file(search.h    HAVE_SEARCH_H)
 check_include_file(stdint.h    HAVE_STDINT_H)
 check_include_file(string.h    HAVE_STRING_H)
@@ -271,8 +268,6 @@ int main(void){
 
 # Check type sizes
 # NOTE: Could be replaced with C99 <stdint.h>
-check_type_size("signed short" SIZEOF_SIGNED_SHORT)
-check_type_size("unsigned short" SIZEOF_UNSIGNED_SHORT)
 check_type_size("signed int" SIZEOF_SIGNED_INT)
 check_type_size("unsigned int" SIZEOF_UNSIGNED_INT)
 check_type_size("signed long" SIZEOF_SIGNED_LONG)
@@ -388,34 +383,10 @@ endif()
 #              TIFF_SSIZE_T TIFF_SSIZE_FORMAT
 #              TIFF_PTRDIFF_T TIFF_PTRDIFF_FORMAT)
 
-# Nonstandard int types
-check_type_size(INT8 int8)
-set(HAVE_INT8 ${INT8})
-check_type_size(INT16 int16)
-set(HAVE_INT16 ${INT16})
-check_type_size(INT32 int32)
-set(HAVE_INT32 ${INT32})
-
-# Check functions
-set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
-set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${M_LIBRARY})
-check_function_exists(floor HAVE_FLOOR)
-check_function_exists(pow   HAVE_POW)
-check_function_exists(sqrt  HAVE_SQRT)
-set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
-
-check_function_exists(isascii    HAVE_ISASCII)
-check_function_exists(memmove    HAVE_MEMMOVE)
-check_function_exists(memset     HAVE_MEMSET)
 check_function_exists(mmap       HAVE_MMAP)
 check_function_exists(setmode    HAVE_SETMODE)
 check_function_exists(strcasecmp HAVE_STRCASECMP)
-check_function_exists(strchr     HAVE_STRCHR)
-check_function_exists(strrchr    HAVE_STRRCHR)
-check_function_exists(strstr     HAVE_STRSTR)
-check_function_exists(strtol     HAVE_STRTOL)
 check_function_exists(strtol     HAVE_STRTOUL)
-check_function_exists(strtoull   HAVE_STRTOULL)
 check_function_exists(getopt     HAVE_GETOPT)
 check_function_exists(lfind      HAVE_LFIND)
 
