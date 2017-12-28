@@ -93,7 +93,7 @@ include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckIncludeFile)
 include(CheckTypeSize)
-include(CheckFunctionExists)
+include(CheckSymbolExists)
 enable_testing()
 
 macro(current_date var)
@@ -383,22 +383,13 @@ endif()
 #              TIFF_SSIZE_T TIFF_SSIZE_FORMAT
 #              TIFF_PTRDIFF_T TIFF_PTRDIFF_FORMAT)
 
-check_function_exists(mmap       HAVE_MMAP)
-check_function_exists(setmode    HAVE_SETMODE)
-check_function_exists(strcasecmp HAVE_STRCASECMP)
-check_function_exists(strtol     HAVE_STRTOUL)
-check_function_exists(getopt     HAVE_GETOPT)
-check_function_exists(lfind      HAVE_LFIND)
-
-# May be inlined, so check it compiles:
-check_c_source_compiles("
-#include <stdio.h>
-int main(void) {
-  char buf[10];
-  snprintf(buf, 10, \"Test %d\", 1);
-  return 0;
-}"
-  HAVE_SNPRINTF)
+check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
+check_symbol_exists(setmode "unistd.h" HAVE_SETMODE)
+check_symbol_exists(snprintf "stdio.h" HAVE_SNPRINTF)
+check_symbol_exists(strcasecmp "strings.h" HAVE_STRCASECMP)
+check_symbol_exists(strtol "stdlib.h" HAVE_STRTOUL)
+check_symbol_exists(getopt "unistd.h" HAVE_GETOPT)
+check_symbol_exists(lfind "search.h" HAVE_LFIND)
 
 if(NOT HAVE_SNPRINTF)
   add_definitions(-DNEED_LIBPORT)
@@ -531,12 +522,9 @@ else()
   set(JBIG_FOUND FALSE)
 endif()
 
-set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
 set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${JBIG_INCLUDE_DIR})
-set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${JBIG_LIBRARY})
-check_function_exists(jbg_newlen HAVE_JBG_NEWLEN)
-set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
+check_symbol_exists(jbg_newlen "jbig.h" HAVE_JBG_NEWLEN)
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAVE})
 
 # liblzma2
