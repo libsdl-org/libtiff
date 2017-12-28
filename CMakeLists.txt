@@ -580,12 +580,8 @@ set(win32_io FALSE)
 if(WIN32)
   set(win32_io TRUE)
 endif()
-set(USE_WIN32_FILEIO ${win32_io} CACHE BOOL "Use win32 IO system (Microsoft Windows only)")
-if (USE_WIN32_FILEIO)
-  set(USE_WIN32_FILEIO TRUE)
-else()
-  set(USE_WIN32_FILEIO FALSE)
-endif()
+
+set(USE_WIN32_FILEIO ${win32_io})
 
 # Orthogonal features
 
