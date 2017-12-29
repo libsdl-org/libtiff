@@ -408,8 +408,7 @@ include(TestBigEndian)
 test_big_endian(HOST_BIG_ENDIAN)
 
 # IEEE floating point
-set(HAVE_IEEEFP 1 CACHE STRING "IEEE floating point is available")
-mark_as_advanced(HAVE_IEEEFP)
+set(HAVE_IEEEFP 1)
 
 report_values(CMAKE_HOST_SYSTEM_PROCESSOR HOST_FILLORDER
               HOST_BIG_ENDIAN HAVE_IEEEFP)
