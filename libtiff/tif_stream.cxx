@@ -374,7 +374,7 @@ _tiffStreamOpen(const char* name, const char* mode, void *fd)
 				_tiffDummyMapProc,
                                 _tiffDummyUnmapProc);
 		if (!tif) {
-            delete data;
+			delete data;
 		}
 	} else {
 		tiffis_data	*data = new tiffis_data;
@@ -391,7 +391,7 @@ _tiffStreamOpen(const char* name, const char* mode, void *fd)
 				_tiffDummyMapProc,
                                 _tiffDummyUnmapProc);
 		if (!tif) {
-            delete data;
+			delete data;
 		}
 	}
 
