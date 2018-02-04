@@ -436,7 +436,8 @@ PrintIntDiff(uint32 row, int sample, uint32 pix, uint32 w1, uint32 w2)
 	    {
 		int32 mask1, mask2, s;
 
-		mask1 =  ~((-1) << bitspersample);
+        /* mask1 should have the n lowest bits set, where n == bitspersample */
+        mask1 = ((int32)1 << bitspersample) - 1;
 		s = (8 - bitspersample);
 		mask2 = mask1 << s;
 		for (; mask2 && pix < imagewidth;

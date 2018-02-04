@@ -926,6 +926,7 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
             {
 	    case IN_WHITE:
 	      _p_state=IN_TOKEN; /* switch states */
+          /* Fall through */
 
 	    case IN_TOKEN:		 /* these 2 are     */
 	    case IN_QUOTE:		 /*  identical here */

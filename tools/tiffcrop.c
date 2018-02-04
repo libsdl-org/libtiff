@@ -2210,8 +2210,9 @@ main(int argc, char* argv[])
   unsigned int  total_pages  = 0;
   unsigned int  total_images = 0;
   unsigned int  end_of_input = FALSE;
-  int    seg, length;
-  char   temp_filename[PATH_MAX + 1];
+  int    seg;
+  size_t length;
+  char   temp_filename[PATH_MAX + 16]; /* Extra space keeps the compiler from complaining */
 
   little_endian = *((unsigned char *)&little_endian) & '1';
 
@@ -2303,8 +2304,8 @@ main(int argc, char* argv[])
           if (dump.infile != NULL)
             fclose (dump.infile);
 
-          /* dump.infilename is guaranteed to be NUL termimated and have 20 bytes 
-             fewer than PATH_MAX */ 
+          /* dump.infilename is guaranteed to be NUL terminated and have 20 bytes
+             fewer than PATH_MAX */
           snprintf(temp_filename, sizeof(temp_filename), "%s-read-%03d.%s",
 		   dump.infilename, dump_images,
                   (dump.format == DUMP_TEXT) ? "txt" : "raw");
@@ -2322,7 +2323,7 @@ main(int argc, char* argv[])
           if (dump.outfile != NULL)
             fclose (dump.outfile);
 
-          /* dump.outfilename is guaranteed to be NUL termimated and have 20 bytes 
+          /* dump.outfilename is guaranteed to be NUL terminated and have 20 bytes
              fewer than PATH_MAX */ 
           snprintf(temp_filename, sizeof(temp_filename), "%s-write-%03d.%s",
 		   dump.outfilename, dump_images,
@@ -9055,8 +9056,9 @@ mirrorImage(uint16 spp, uint16 bps, uint16 mirror, uint32 width, uint32 length, 
                _TIFFfree(line_buff);
              if (mirror == MIRROR_VERT)
                break;
+             /* Fall through */
     case MIRROR_HORIZ :
-              if ((bps % 8) == 0) /* byte alligned data */
+              if ((bps % 8) == 0) /* byte aligned data */
                 { 
                 for (row = 0; row < length; row++)
                   {
@@ -9201,7 +9203,7 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
 		bytebuff2 = 4 - (uint8)(*src & 48  >> 4);
 		bytebuff3 = 4 - (uint8)(*src & 12  >> 2);
 		bytebuff4 = 4 - (uint8)(*src & 3);
-		*src = (bytebuff1 << 6) || (bytebuff2 << 4) || (bytebuff3 << 2) || bytebuff4;
+		*src = (bytebuff1 << 6) | (bytebuff2 << 4) | (bytebuff3 << 2) | bytebuff4;
                 src++;
                 }
             break;
