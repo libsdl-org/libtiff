@@ -174,7 +174,7 @@ case "${host_os}" in
 esac
 
 dnl Checks for header files.
-AC_CHECK_HEADERS([assert.h fcntl.h io.h limits.h malloc.h search.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([assert.h fcntl.h io.h search.h unistd.h])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -195,12 +195,6 @@ AC_CHECK_DECLS([optarg])
 dnl ---------------------------------------------------------------------------
 dnl Compute sized types for current CPU and compiler options
 dnl ---------------------------------------------------------------------------
-
-# Obtain size of an 'signed short' and define as SIZEOF_SIGNED_SHORT
-AC_CHECK_SIZEOF(signed short)
-
-# Obtain size of an 'unsigned short' and define as SIZEOF_UNSIGNED_SHORT
-AC_CHECK_SIZEOF(unsigned short)
 
 # Obtain size of an 'signed int' and define as SIZEOF_SIGNED_INT
 AC_CHECK_SIZEOF(signed int)
@@ -412,24 +406,15 @@ AC_MSG_RESULT($PTRDIFF_T)
 AC_DEFINE_UNQUOTED(TIFF_PTRDIFF_T,$PTRDIFF_T,[Pointer difference type])
 AC_DEFINE_UNQUOTED(TIFF_PTRDIFF_FORMAT,$PTRDIFF_FORMAT,[Pointer difference type formatter])
 
-dnl Some compilers (IBM VisualAge) has these types defined, so check it here:
-AC_CHECK_TYPES([int8, int16, int32],,,
-[
-#if HAVE_INTTYPES_H
-# include <inttypes.h>
-#endif
-])
-
 dnl Checks for library functions.
-AC_CHECK_FUNCS([floor isascii memmove memset mmap pow setmode snprintf sqrt \
-strchr strrchr strstr strtol strtoul strtoull])
+AC_CHECK_FUNCS([mmap setmode snprintf \
+strtoul])
 
 dnl Will use local replacements for unavailable functions
 AC_REPLACE_FUNCS(getopt)
 AC_REPLACE_FUNCS(snprintf)
 AC_REPLACE_FUNCS(strcasecmp)
 AC_REPLACE_FUNCS(strtoul)
-AC_REPLACE_FUNCS(strtoull)
 AC_REPLACE_FUNCS(lfind)
 
 dnl ---------------------------------------------------------------------------
