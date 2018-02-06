@@ -138,7 +138,7 @@ install(TARGETS tiff
 install(FILES ${tiff_HEADERS} ${nodist_tiff_HEADERS}
         DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 
-if(cxx)
+if(CXX_SUPPORT)
   add_library(tiffxx ${tiffxx_SOURCES} ${tiffxx_HEADERS})
   target_link_libraries(tiffxx tiff)
   set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION})
