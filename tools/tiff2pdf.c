@@ -68,6 +68,8 @@ extern int getopt(int, char**, char*);
 
 #define PS_UNIT_SIZE	72.0F
 
+#define TIFF_DIR_MAX    65534
+
 /* This type is of PDF color spaces. */
 typedef enum {
 	T2P_CS_BILEVEL = 0x01,	/* Bilevel, black and white */
@@ -1051,6 +1053,14 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 	uint16* tiff_transferfunction[3];
 
 	directorycount=TIFFNumberOfDirectories(input);
+	if(directorycount > TIFF_DIR_MAX) {
+		TIFFError(
+			TIFF2PDF_MODULE,
+			"TIFF contains too many directories, %s",
+			TIFFFileName(input));
+		t2p->t2p_error = T2P_ERR_ERROR;
+		return;
+	}
 	t2p->tiff_pages = (T2P_PAGE*) _TIFFmalloc(TIFFSafeMultiply(tmsize_t,directorycount,sizeof(T2P_PAGE)));
 	if(t2p->tiff_pages==NULL){
 		TIFFError(
