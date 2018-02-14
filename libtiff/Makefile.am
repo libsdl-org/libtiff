@@ -99,7 +99,8 @@ libtiff_la_SOURCES = \
 	tif_version.c \
 	tif_warning.c \
 	tif_write.c \
-	tif_zip.c
+	tif_zip.c \
+	tif_zstd.c
 
 libtiffxx_la_SOURCES = \
 	tif_stream.cxx

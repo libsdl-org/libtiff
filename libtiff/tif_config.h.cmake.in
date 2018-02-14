@@ -104,6 +104,9 @@
 /* Support LZMA2 compression */
 #cmakedefine LZMA_SUPPORT 1
 
+/* Support ZSTD compression */
+#cmakedefine ZSTD_SUPPORT 1
+
 /* Name of package */
 #define PACKAGE "@PACKAGE_NAME@"
 

@@ -320,6 +320,9 @@
 /* Support Deflate compression */
 #undef ZIP_SUPPORT
 
+/* Support zstd compression */
+#undef ZSTD_SUPPORT
+
 /* Enable large inode numbers on Mac OS X 10.5.  */
 #ifndef _DARWIN_USE_64_BIT_INODE
 # define _DARWIN_USE_64_BIT_INODE 1
