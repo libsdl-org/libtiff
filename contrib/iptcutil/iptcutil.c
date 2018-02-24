@@ -782,7 +782,7 @@ int sindex(char ch,char *string)
   char *cp;
   for(cp=string;*cp;++cp)
     if(ch==*cp)
-      return (int)(cp-string);	/* return postion of character */
+      return (int)(cp-string);	/* return position of character */
   return -1;			/* eol ... no match found */
 }
 

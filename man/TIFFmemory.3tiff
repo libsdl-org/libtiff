@@ -77,7 +77,7 @@ C routines:
 .IR memcpy ,
 and
 .IR memcmp ,
-repsectively.
+respectively.
 .SH DIAGNOSTICS
 None.
 .SH "SEE ALSO"

@@ -43,7 +43,7 @@ product tiff
 	    exp	"tiff.sw.tools"
 	endsubsys
 	subsys dev
-	    id	"${TIFF_NAME} Developement Software"
+	    id	"${TIFF_NAME} Development Software"
 	    exp	"tiff.sw.dev"
 	endsubsys
     endimage

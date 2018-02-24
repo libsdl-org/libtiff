@@ -25,7 +25,7 @@
  * ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE
  * OR PERFORMANCE OF THIS SOFTWARE.
  *
- * Some portions of the current code are derived from tiffcp, primarly in 
+ * Some portions of the current code are derived from tiffcp, primarily in 
  * the areas of lowlevel reading and writing of TAGS, scanlines and tiles though
  * some of the original functions have been extended to support arbitrary bit
  * depths. These functions are presented at the top of this file.
@@ -1685,7 +1685,7 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
 		  *defconfig = PLANARCONFIG_CONTIG;
 		else
 		  {
-		  TIFFError ("Unkown planar configuration", "%s", optarg);
+		  TIFFError ("Unknown planar configuration", "%s", optarg);
                   TIFFError ("For valid options type", "tiffcrop -h");
                   exit (-1);
                   }
@@ -6782,12 +6782,12 @@ extractImageSection(struct image_data *image, struct pageseg *section,
 #endif
 
       bytebuff1 = bytebuff2 = 0;
-      if (shift1 == 0) /* the region is byte and sample alligned */
+      if (shift1 == 0) /* the region is byte and sample aligned */
         {
 	_TIFFmemcpy (sect_buff + dst_offset, src_buff + offset1, full_bytes);
 
 #ifdef DEVELMODE
-	TIFFError ("", "        Alligned data src offset1: %8d, Dst offset: %8d\n", offset1, dst_offset); 
+	TIFFError ("", "        Aligned data src offset1: %8d, Dst offset: %8d\n", offset1, dst_offset); 
 	sprintf(&bitarray[18], "\n");
 	sprintf(&bitarray[19], "\t");
         for (j = 20, k = 7; j < 28; j++, k--)
@@ -7730,7 +7730,7 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
  * original code assumes we are always copying all samples.
  * Use of global variables for config, compression and others
  * should be replaced by addition to the crop_mask struct (which
- * will be renamed to proc_opts indicating that is controlls
+ * will be renamed to proc_opts indicating that is controls
  * user supplied processing options, not just cropping) and 
  * then passed in as an argument.
  */
@@ -8425,7 +8425,7 @@ rotateImage(uint16 rotation, struct image_data *image, uint32 *img_width,
   ibuff = *ibuff_ptr;
   switch (rotation)
     {
-    case 180: if ((bps % 8) == 0) /* byte alligned data */
+    case 180: if ((bps % 8) == 0) /* byte aligned data */
                 { 
                 src = ibuff;
                 pix_offset = (spp * bps) / 8;
