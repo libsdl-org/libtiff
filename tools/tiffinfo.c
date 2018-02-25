@@ -84,7 +84,7 @@ main(int argc, char* argv[])
 			break;
 		case 'd':
 			showdata++;
-			/* fall thru... */
+			/* fall through... */
 		case 'D':
 			readdata++;
 			break;

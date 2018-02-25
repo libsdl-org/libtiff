@@ -657,7 +657,7 @@ tiffcp(TIFF* in, TIFF* out)
 		case ORIENTATION_RIGHTBOT:	/* XXX */
 			TIFFWarning(TIFFFileName(in), "using bottom-left orientation");
 			orientation = ORIENTATION_BOTLEFT;
-		/* fall thru... */
+		/* fall through... */
 		case ORIENTATION_LEFTBOT:	/* XXX */
 		case ORIENTATION_BOTLEFT:
 			break;
@@ -666,7 +666,7 @@ tiffcp(TIFF* in, TIFF* out)
 		default:
 			TIFFWarning(TIFFFileName(in), "using top-left orientation");
 			orientation = ORIENTATION_TOPLEFT;
-		/* fall thru... */
+		/* fall through... */
 		case ORIENTATION_LEFTTOP:	/* XXX */
 		case ORIENTATION_TOPLEFT:
 			break;

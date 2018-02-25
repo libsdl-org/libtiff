@@ -525,15 +525,15 @@ setrow(uint8* row, uint32 nrows, const uint8* rows[])
 	    default:
 		for (i = fw; i > 8; i--)
 		    acc += bits[*src++];
-		/* fall thru... */
-	    case 8: acc += bits[*src++]; /* fall thru */
-	    case 7: acc += bits[*src++]; /* fall thru */
-	    case 6: acc += bits[*src++]; /* fall thru */
-	    case 5: acc += bits[*src++]; /* fall thru */
-	    case 4: acc += bits[*src++]; /* fall thru */
-	    case 3: acc += bits[*src++]; /* fall thru */
-	    case 2: acc += bits[*src++]; /* fall thru */
-	    case 1: acc += bits[*src++]; /* fall thru */
+		/* fall through... */
+	    case 8: acc += bits[*src++]; /* fall through */
+	    case 7: acc += bits[*src++]; /* fall through */
+	    case 6: acc += bits[*src++]; /* fall through */
+	    case 5: acc += bits[*src++]; /* fall through */
+	    case 4: acc += bits[*src++]; /* fall through */
+	    case 3: acc += bits[*src++]; /* fall through */
+	    case 2: acc += bits[*src++]; /* fall through */
+	    case 1: acc += bits[*src++]; /* fall through */
 	    case 0: break;
 	    }
 	    acc += bits[*src & mask1];
