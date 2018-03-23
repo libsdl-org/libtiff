@@ -36,8 +36,17 @@ int strcasecmp(const char *s1, const char *s2);
 #  define HAVE_GETOPT 1
 #endif
 
-#if 0
+#if HAVE_STRTOL
+long strtol(const char *nptr, char **endptr, int base);
+#endif
+#if HAVE_STRTOLL
+long long strtoll(const char *nptr, char **endptr, int base);
+#endif
+#if HAVE_STRTOUL
 unsigned long strtoul(const char *nptr, char **endptr, int base);
+#endif
+#if HAVE_STRTOULL
+unsigned long long strtoull(const char *nptr, char **endptr, int base);
 #endif
 
 #if 0

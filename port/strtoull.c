@@ -36,8 +36,8 @@ __RCSID("$NetBSD: strtoul.c,v 1.3 2008/08/20 19:58:34 oster Exp $");
 #include <stdint.h>
 #include <stdlib.h>
 
-#define	_FUNCNAME	strtoul
-#define	__UINT		unsigned long int
-#define	__UINT_MAX	ULONG_MAX
+#define	_FUNCNAME	strtoull
+#define	__UINT		unsigned long long int
+#define	__UINT_MAX	ULLONG_MAX
 
 #include "_strtoul.h"
