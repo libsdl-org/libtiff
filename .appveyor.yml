@@ -32,6 +32,10 @@ environment:
       shared: OFF
     - compiler: vc14-nmake
       configuration: Release
+    - compiler: vc9-cmake
+      configuration: Debug
+      generator: Visual Studio 9 2008
+      shared: ON
 
 cache:
   - 'c:\projects\download -> appveyor.yml'
@@ -68,6 +72,7 @@ before_build:
   - 'if %compiler%==cygwin-cmake bash -c "cmake -G \"%generator%\" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%"'
   - 'if %compiler%==mingw64-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
   - 'if %compiler%==vc14-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
+  - 'if %compiler%==vc9-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
 
 build_script:
   - if NOT %compiler%==vc14-nmake cd %AV_TIFF_BUILD%
@@ -75,6 +80,7 @@ build_script:
   - 'if %compiler%==cygwin-cmake bash -c "cmake --build . --config %configuration% --target install"'
   - 'if %compiler%==mingw64-cmake cmake --build . --config %configuration% --target install'
   - 'if %compiler%==vc14-cmake cmake --build . --config %configuration% --target install'
+  - 'if %compiler%==vc9-cmake cmake --build . --config %configuration% --target install'
   - 'if %compiler%==vc14-nmake nmake /f Makefile.vc EXTRAFLAGS=/DHAVE_SNPRINTF=1'
   - 'if %compiler%==vc14-nmake mkdir %AV_TIFF_INSTALL%'
   - 'if %compiler%==vc14-nmake mkdir %AV_TIFF_INSTALL%\bin'
@@ -100,6 +106,7 @@ before_test:
   - 'if %compiler%==cygwin-cmake bash -c "ctest -V -C %configuration%"'
   - 'if %compiler%==mingw64-cmake ctest -V -C %configuration%'
   - 'if %compiler%==vc14-cmake ctest -V -C %configuration%'
+  - 'if %compiler%==vc9-cmake ctest -V -C %configuration%'
 # vc14-nmake does not support unit tests
 
 # AppVeyor don't yet have a configurable retention policy, so this will

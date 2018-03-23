@@ -32,6 +32,8 @@
  * NetBSD: src/lib/libc/locale/_wcstoul.h,v 1.2 2003/08/07 16:43:03 agc Exp
  */
 
+#include <assert.h>
+
 /*
  * function template for strtoul, strtoull and strtoumax.
  *
@@ -40,40 +42,24 @@
  *      __UINT     : return type
  *      __UINT_MAX : upper limit of the return type
  */
-#if defined(_KERNEL) || defined(_STANDALONE) || \
-    defined(HAVE_NBTOOL_CONFIG_H) || defined(BCS_ONLY)
 __UINT
 _FUNCNAME(const char *nptr, char **endptr, int base)
-#else
-#include <locale.h>
-#include "setlocale_local.h"
-#define INT_FUNCNAME_(pre, name, post)	pre ## name ## post
-#define INT_FUNCNAME(pre, name, post)	INT_FUNCNAME_(pre, name, post)
-
-static __UINT
-INT_FUNCNAME(_int_, _FUNCNAME, _l)(const char *nptr, char **endptr,
-				   int base, locale_t loc)
-#endif
 {
 	const char *s;
 	__UINT acc, cutoff;
 	unsigned char c;
 	int i, neg, any, cutlim;
 
-	_DIAGASSERT(nptr != NULL);
+	assert(nptr != NULL);
 	/* endptr may be NULL */
 
 	/* check base value */
 	if (base && (base < 2 || base > 36)) {
-#if !defined(_KERNEL) && !defined(_STANDALONE)
 		errno = EINVAL;
 		if (endptr != NULL)
 			/* LINTED interface specification */
-			*endptr = __UNCONST(nptr);
+			*endptr = (char *)(nptr);
 		return 0;
-#else
-		panic("%s: invalid base %d", __func__, base);
-#endif
 	}
 
 	/*
@@ -82,16 +68,9 @@ INT_FUNCNAME(_int_, _FUNCNAME, _l)(const char *nptr, char **endptr,
 	 * assume decimal; if base is already 16, allow 0x.
 	 */
 	s = nptr;
-#if defined(_KERNEL) || defined(_STANDALONE) || \
-    defined(HAVE_NBTOOL_CONFIG_H) || defined(BCS_ONLY)
 	do {
 		c = *s++;
 	} while (isspace(c));
-#else
-	do {
-		c = *s++;
-	} while (isspace_l(c, loc));
-#endif
 	if (c == '-') {
 		neg = 1;
 		c = *s++;
@@ -108,14 +87,6 @@ INT_FUNCNAME(_int_, _FUNCNAME, _l)(const char *nptr, char **endptr,
 		c = s[1];
 		s += 2;
 		base = 16;
-#if 0
-	} else if ((base == 0 || base == 2) &&
-	    c == '0' && (*s == 'b' || *s == 'B') &&
-	    (s[1] >= '0' && s[1] <= '1')) {
-		c = s[1];
-		s += 2;
-		base = 2;
-#endif
 	} else if (base == 0)
 		base = (c == '0' ? 8 : 10);
 
@@ -139,13 +110,8 @@ INT_FUNCNAME(_int_, _FUNCNAME, _l)(const char *nptr, char **endptr,
 			continue;
 		if (acc > cutoff || (acc == cutoff && i > cutlim)) {
 			acc = __UINT_MAX;
-#if !defined(_KERNEL) && !defined(_STANDALONE)
 			any = -1;
 			errno = ERANGE;
-#else
-			any = 0;
-			break;
-#endif
 		} else {
 			any = 1;
 			acc *= (__UINT)base;
@@ -156,21 +122,6 @@ INT_FUNCNAME(_int_, _FUNCNAME, _l)(const char *nptr, char **endptr,
 		acc = -acc;
 	if (endptr != NULL)
 		/* LINTED interface specification */
-		*endptr = __UNCONST(any ? s - 1 : nptr);
+		*endptr = (char *)(any ? s - 1 : nptr);
 	return(acc);
 }
-
-#if !defined(_KERNEL) && !defined(_STANDALONE) && \
-    !defined(HAVE_NBTOOL_CONFIG_H) && !defined(BCS_ONLY)
-__UINT
-_FUNCNAME(const char *nptr, char **endptr, int base)
-{
-	return INT_FUNCNAME(_int_, _FUNCNAME, _l)(nptr, endptr, base, _current_locale());
-}
-
-__UINT
-INT_FUNCNAME(, _FUNCNAME, _l)(const char *nptr, char **endptr, int base, locale_t loc)
-{
-	return INT_FUNCNAME(_int_, _FUNCNAME, _l)(nptr, endptr, base, loc);
-}
-#endif

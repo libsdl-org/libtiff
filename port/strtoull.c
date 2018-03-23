@@ -27,13 +27,14 @@
  * SUCH DAMAGE.
  */
 
+#if 0
 __RCSID("$NetBSD: strtoul.c,v 1.3 2008/08/20 19:58:34 oster Exp $");
+#endif
 
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
-#include <stdint.h>
 #include <stdlib.h>
 
 #define	_FUNCNAME	strtoull
