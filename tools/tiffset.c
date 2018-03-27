@@ -188,6 +188,9 @@ main(int argc, char* argv[])
                                     size = 4;
                                     break;
 
+                                case TIFF_LONG8:
+                                case TIFF_SLONG8:
+                                case TIFF_IFD8:
                                 case TIFF_DOUBLE:
                                     size = 8;
                                     break;
@@ -224,7 +227,16 @@ main(int argc, char* argv[])
                             case TIFF_SLONG:
                             case TIFF_IFD:
                                 for (i = 0; i < wc; i++)
-                                    ((uint32 *)array)[i] = atol(argv[arg_index+i]);
+                                    ((int32 *)array)[i] = atol(argv[arg_index+i]);
+                                break;
+                            case TIFF_LONG8:
+                                for (i = 0; i < wc; i++)
+                                    ((uint64 *)array)[i] = strtoll(argv[arg_index+i], (char **)NULL, 10);
+                                break;
+                            case TIFF_SLONG8:
+                            case TIFF_IFD8:
+                                for (i = 0; i < wc; i++)
+                                    ((int64 *)array)[i] = strtoll(argv[arg_index+i], (char **)NULL, 10);
                                 break;
                             case TIFF_DOUBLE:
                                 for (i = 0; i < wc; i++)
@@ -274,6 +286,12 @@ main(int argc, char* argv[])
                             case TIFF_IFD:
                                 ret = TIFFSetField(tiff, TIFFFieldTag(fip),
                                                    atol(argv[arg_index++]));
+                                break;
+                            case TIFF_LONG8:
+                            case TIFF_SLONG8:
+                            case TIFF_IFD8:
+                                ret = TIFFSetField(tiff, TIFFFieldTag(fip),
+                                                   strtoll(argv[arg_index++], (char **)NULL, 10));
                                 break;
                             case TIFF_DOUBLE:
                                 ret = TIFFSetField(tiff, TIFFFieldTag(fip),

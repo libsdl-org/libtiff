@@ -407,14 +407,16 @@ AC_DEFINE_UNQUOTED(TIFF_PTRDIFF_T,$PTRDIFF_T,[Pointer difference type])
 AC_DEFINE_UNQUOTED(TIFF_PTRDIFF_FORMAT,$PTRDIFF_FORMAT,[Pointer difference type formatter])
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS([mmap setmode snprintf \
-strtoul])
+AC_CHECK_FUNCS([mmap setmode snprintf])
 
 dnl Will use local replacements for unavailable functions
 AC_REPLACE_FUNCS(getopt)
 AC_REPLACE_FUNCS(snprintf)
 AC_REPLACE_FUNCS(strcasecmp)
+AC_REPLACE_FUNCS(strtol)
+AC_REPLACE_FUNCS(strtoll)
 AC_REPLACE_FUNCS(strtoul)
+AC_REPLACE_FUNCS(strtoull)
 AC_REPLACE_FUNCS(lfind)
 
 dnl ---------------------------------------------------------------------------

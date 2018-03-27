@@ -83,8 +83,17 @@
 /* Define to 1 if you have the <string.h> header file. */
 #cmakedefine HAVE_STRING_H 1
 
+/* Define to 1 if you have the `strtol' function. */
+#cmakedefine HAVE_STRTOL 1
+
+/* Define to 1 if you have the `strtoll' function. */
+#cmakedefine HAVE_STRTOLL 1
+
 /* Define to 1 if you have the `strtoul' function. */
 #cmakedefine HAVE_STRTOUL 1
+
+/* Define to 1 if you have the `strtoull' function. */
+#cmakedefine HAVE_STRTOULL 1
 
 /* Define to 1 if you have the <sys/time.h> header file. */
 #cmakedefine HAVE_SYS_TIME_H 1

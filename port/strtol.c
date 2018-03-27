@@ -1,4 +1,4 @@
-/* $NetBSD: strtoul.c,v 1.3 2008/08/20 19:58:34 oster Exp $ */
+/* $NetBSD: strtol.c,v 1.18 2008/08/20 12:42:26 joerg Exp $ */
 
 /*-
  * Copyright (c) 2005 The DragonFly Project.  All rights reserved.
@@ -28,7 +28,7 @@
  */
 
 #if 0
-__RCSID("$NetBSD: strtoul.c,v 1.3 2008/08/20 19:58:34 oster Exp $");
+__RCSID("$NetBSD: strtol.c,v 1.18 2008/08/20 12:42:26 joerg Exp $");
 #endif
 
 #include <assert.h>
@@ -37,8 +37,9 @@ __RCSID("$NetBSD: strtoul.c,v 1.3 2008/08/20 19:58:34 oster Exp $");
 #include <limits.h>
 #include <stdlib.h>
 
-#define	_FUNCNAME	strtoul
-#define	__UINT		unsigned long int
-#define	__UINT_MAX	ULONG_MAX
+#define	_FUNCNAME	strtol
+#define	__INT		long
+#define	__INT_MIN	LONG_MIN
+#define	__INT_MAX	LONG_MAX
 
-#include "_strtoul.h"
+#include "_strtol.h"
