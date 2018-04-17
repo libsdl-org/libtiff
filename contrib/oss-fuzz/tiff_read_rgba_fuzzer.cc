@@ -46,7 +46,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
       return 0;
   }
   uint32 w, h;
-  size_t npixels;
   uint32* raster;
 
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
@@ -56,7 +55,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
       TIFFClose(tif);
       return 0;
   }
-  uint64 bufsize = TIFFTileSize64(tif) * 4;
+  uint64 bufsize = TIFFTileSize64(tif);
   /* don't continue if the buffer size greater than the max allowed by the fuzzer */
   if (bufsize > MAX_SIZE || bufsize == 0) {
       TIFFClose(tif);
@@ -73,13 +72,12 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
       TIFFClose(tif);
       return 0;
   }
-  npixels = w * h;
   uint32 size = __TIFFSafeMultiply(uint32, w, h);
   if (size > MAX_SIZE || size == 0) {
       TIFFClose(tif);
       return 0;
   }
-  raster = (uint32*) _TIFFmalloc(npixels * sizeof (uint32));
+  raster = (uint32*) _TIFFmalloc(size * sizeof (uint32));
   if (raster != NULL) {
       TIFFReadRGBAImage(tif, w, h, raster, 0);
       _TIFFfree(raster);
