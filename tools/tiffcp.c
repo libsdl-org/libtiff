@@ -392,6 +392,9 @@ processCompressOptions(char* opt)
 	} else if (strneq(opt, "zstd", 4)) {
 		processZIPOptions(opt);
 		defcompression = COMPRESSION_ZSTD;
+	} else if (strneq(opt, "webp", 4)) {
+		processZIPOptions(opt);
+		defcompression = COMPRESSION_WEBP;
 	} else if (strneq(opt, "jbig", 4)) {
 		defcompression = COMPRESSION_JBIG;
 	} else if (strneq(opt, "sgilog", 6)) {
@@ -431,6 +434,7 @@ char* stuff[] = {
 " -c zip[:opts]   compress output with deflate encoding",
 " -c lzma[:opts]  compress output with LZMA2 encoding",
 " -c zstd[:opts]  compress output with ZSTD encoding",
+" -c webp[:opts]  compress output with WEBP encoding",
 " -c jpeg[:opts]  compress output with JPEG encoding",
 " -c jbig         compress output with ISO JBIG encoding",
 " -c packbits     compress output with packbits encoding",
@@ -450,7 +454,7 @@ char* stuff[] = {
 " r               output color image as RGB rather than YCbCr",
 "For example, -c jpeg:r:50 to get JPEG-encoded RGB data with 50% comp. quality",
 "",
-"LZW, Deflate (ZIP), LZMA2 and ZSTD options:",
+"LZW, Deflate (ZIP), LZMA2, ZSTD and WEBP options:",
 " #               set predictor value",
 " p#              set compression level (preset)",
 "For example, -c lzw:2 to get LZW-encoded data with horizontal differencing,",
@@ -736,6 +740,7 @@ tiffcp(TIFF* in, TIFF* out)
 		case COMPRESSION_DEFLATE:
                 case COMPRESSION_LZMA:
                 case COMPRESSION_ZSTD:
+								case COMPRESSION_WEBP:
 			if (predictor != (uint16)-1)
 				TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
 			else
@@ -748,6 +753,13 @@ tiffcp(TIFF* in, TIFF* out)
 					TIFFSetField(out, TIFFTAG_LZMAPRESET, preset);
 				else if (compression == COMPRESSION_ZSTD)
 					TIFFSetField(out, TIFFTAG_ZSTD_LEVEL, preset);
+				else if (compression == COMPRESSION_WEBP) {
+					if (preset == 100) {
+						TIFFSetField(out, TIFFTAG_WEBP_LOSSLESS, TRUE);
+					} else {
+						TIFFSetField(out, TIFFTAG_WEBP_LEVEL, preset);						
+					}
+				}
                         }
 			break;
 		case COMPRESSION_CCITTFAX3:
