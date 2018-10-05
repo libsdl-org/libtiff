@@ -868,6 +868,60 @@ fi
 AM_CONDITIONAL(HAVE_ZSTD, test "$HAVE_ZSTD" = 'yes')
 
 dnl ---------------------------------------------------------------------------
+dnl Check for libwebp.
+dnl ---------------------------------------------------------------------------
+
+HAVE_WEBP=no
+
+AC_ARG_ENABLE(webp,
+	      AS_HELP_STRING([--disable-webp],
+			     [disable libwebp usage (required for webp compression, enabled by default)]),,)
+AC_ARG_WITH(webp-include-dir,
+	    AS_HELP_STRING([--with-webp-include-dir=DIR],
+			   [location of libwebp headers]),,)
+AC_ARG_WITH(webp-lib-dir,
+	    AS_HELP_STRING([--with-webp-lib-dir=DIR],
+			   [location of libwebp library binary]),,)
+
+if test "x$enable_webp" != "xno" ; then
+
+  if test "x$with_webp_lib_dir" != "x" ; then
+    LDFLAGS="-L$with_webp_lib_dir $LDFLAGS"
+  fi
+  
+  AC_CHECK_LIB(webp, WebPDecode, [webp_lib=yes], [webp_lib=no],)
+  if test "$webp_lib" = "no" -a "x$with_webp_lib_dir" != "x"; then
+    AC_MSG_ERROR([webp library not found at $with_webp_lib_dir])
+  fi
+    
+  if test "x$with_webp_include_dir" != "x" ; then
+    CPPFLAGS="-I$with_webp_include_dir $CPPFLAGS"
+  fi
+  AC_CHECK_HEADER(webp/decode.h, [webp_h=yes], [webp_h=no])
+  if test "$webp_h" = "no" -a "x$with_webp_include_dir" != "x" ; then
+    AC_MSG_ERROR([Libwebp headers not found at $with_webp_include_dir])
+  fi
+
+  if test "$webp_lib" = "yes" -a "$webp_h" = "yes" ; then
+    HAVE_WEBP=yes
+  fi
+
+fi
+
+if test "$HAVE_WEBP" = "yes" ; then
+  AC_DEFINE(WEBP_SUPPORT,1,[Support webp compression])
+  LIBS="-lwebp $LIBS"
+  tiff_libs_private="-lwebp ${tiff_libs_private}"
+
+  if test "$HAVE_RPATH" = "yes" -a "x$with_webp_lib_dir" != "x" ; then
+    LIBDIR="-R $with_webp_lib_dir $LIBDIR"
+  fi
+
+fi
+
+AM_CONDITIONAL(HAVE_WEBP, test "$HAVE_WEBP" = 'yes')
+
+dnl ---------------------------------------------------------------------------
 dnl Should 8/12 bit jpeg mode be enabled?
 dnl ---------------------------------------------------------------------------
 
@@ -1145,6 +1199,7 @@ LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEG12}])
 LOC_MSG([  ISO JBIG support:                   ${HAVE_JBIG}])
 LOC_MSG([  LZMA2 support:                      ${HAVE_LZMA}])
 LOC_MSG([  ZSTD support:                       ${HAVE_ZSTD}])
+LOC_MSG([  WEBP support:                       ${HAVE_WEBP}])
 LOC_MSG()
 LOC_MSG([  C++ support:                        ${HAVE_CXX}])
 LOC_MSG()
