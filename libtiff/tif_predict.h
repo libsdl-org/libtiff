@@ -25,8 +25,8 @@
 #ifndef _TIFFPREDICT_
 #define	_TIFFPREDICT_
 
-#include "tiff.h"
 #include "tiffio.h"
+#include "tiffiop.h"
 
 /*
  * ``Library-private'' Support for the Predictor Tag
