@@ -38,6 +38,7 @@
 #endif
 
 #include "tiffio.h"
+#include "tiffiop.h"
 
 #define	streq(a,b)	(strcmp((a),(b)) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
@@ -221,6 +222,11 @@ main(int argc, char* argv[])
 	TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
 	TIFFSetField(out, TIFFTAG_SOFTWARE, "tiff2bw");
 	outbuf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+        if( !outbuf )
+        {
+            fprintf(stderr, "Out of memory\n");
+            goto tiff2bw_error;
+        }
 	TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
 	    TIFFDefaultStripSize(out, rowsperstrip));
 
@@ -244,6 +250,11 @@ main(int argc, char* argv[])
 #undef CVT
 		}
 		inbuf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
+                if( !inbuf )
+                {
+                    fprintf(stderr, "Out of memory\n");
+                    goto tiff2bw_error;
+                }
 		for (row = 0; row < h; row++) {
 			if (TIFFReadScanline(in, inbuf, row, 0) < 0)
 				break;
@@ -254,6 +265,11 @@ main(int argc, char* argv[])
 		break;
 	case pack(PHOTOMETRIC_RGB, PLANARCONFIG_CONTIG):
 		inbuf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
+                if( !inbuf )
+                {
+                    fprintf(stderr, "Out of memory\n");
+                    goto tiff2bw_error;
+                }
 		for (row = 0; row < h; row++) {
 			if (TIFFReadScanline(in, inbuf, row, 0) < 0)
 				break;
@@ -263,8 +279,16 @@ main(int argc, char* argv[])
 		}
 		break;
 	case pack(PHOTOMETRIC_RGB, PLANARCONFIG_SEPARATE):
+        {
+                tmsize_t inbufsize;
 		rowsize = TIFFScanlineSize(in);
-		inbuf = (unsigned char *)_TIFFmalloc(3*rowsize);
+                inbufsize = TIFFSafeMultiply(tmsize_t, 3, rowsize);
+		inbuf = (unsigned char *)_TIFFmalloc(inbufsize);
+                if( !inbuf )
+                {
+                    fprintf(stderr, "Out of memory\n");
+                    goto tiff2bw_error;
+                }
 		for (row = 0; row < h; row++) {
 			for (s = 0; s < 3; s++)
 				if (TIFFReadScanline(in,
@@ -276,6 +300,7 @@ main(int argc, char* argv[])
 				break;
 		}
 		break;
+        }
 	}
 #undef pack
         if (inbuf)
