@@ -283,6 +283,8 @@ main(int argc, char* argv[])
 		if (TIFFWriteScanline(out, buf, row, 0) < 0)
 			break;
 	}
+	if (in != stdin)
+		fclose(in);
 	(void) TIFFClose(out);
 	if (buf)
 		_TIFFfree(buf);
