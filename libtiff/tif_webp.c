@@ -594,6 +594,7 @@ TWebPVGetField(TIFF* tif, uint32 tag, va_list ap)
     break;
   case TIFFTAG_WEBP_LOSSLESS:
     *va_arg(ap, int*) = sp->lossless;
+    break;
   default:
     return (*sp->vgetparent)(tif, tag, ap);
   }
