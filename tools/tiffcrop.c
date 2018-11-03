@@ -2109,7 +2109,7 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
   {
   static int findex = 0;    /* file sequence indicator */
   char  *sep;
-  char   filenum[16];
+  char   filenum[18];
   char   export_ext[16];
   char   exportname[PATH_MAX];
 
@@ -2124,7 +2124,7 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
   memset (exportname, '\0', PATH_MAX);
 
   /* Leave room for page number portion of the new filename */
-  strncpy (exportname, outname, PATH_MAX - 16);
+  strncpy (exportname, outname, PATH_MAX - sizeof(filenum));
   if (*tiffout == NULL)   /* This is a new export file */
     {
     if (autoindex)
@@ -2146,9 +2146,9 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
         return 1;
         }
 
-      snprintf(filenum, sizeof(filenum), "-%03d%s", findex, export_ext);
-      filenum[14] = '\0';
-      strncat (exportname, filenum, 15);
+      snprintf(filenum, sizeof(filenum), "-%03d%.5s", findex, export_ext);
+      filenum[sizeof(filenum)-1] = '\0';
+      strncat (exportname, filenum, sizeof(filenum)-1);
       }
     exportname[PATH_MAX - 1] = '\0';
 
