@@ -40,9 +40,6 @@
 #include "tiffio.h"
 #include "tiffiop.h"
 
-#define	streq(a,b)	(strcmp((a),(b)) == 0)
-#define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
-
 /* x% weighting -> fraction of full color */
 #define	PCT(x)	(((x)*256+50)/100)
 int	RED = PCT(30);		/* 30% */

@@ -148,11 +148,6 @@ extern int getopt(int argc, char * const argv[], const char *optstring);
 
 #define TIFF_UINT32_MAX     0xFFFFFFFFU
 
-#ifndef streq
-#define	streq(a,b)	(strcmp((a),(b)) == 0)
-#endif
-#define	strneq(a,b,n)	(strncmp((a),(b),(n)) == 0)
-
 #define	TRUE	1
 #define	FALSE	0
 
