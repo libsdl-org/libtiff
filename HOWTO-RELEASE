@@ -101,7 +101,7 @@ Notes on releasing.
 
 13. In the source tree do
 
-      'git commit' and 'git push'
+      'git status', 'git add .', 'git commit' and 'git push'
 
 14. In the source tree, create a signed tag
 
@@ -113,11 +113,22 @@ Notes on releasing.
 
       git push origin v4.0.0
 
-15. Copy release packages from the build tree to the
+15. Sign the release files in the build tree using your private key
+
+      export GPG_TTY=$(tty)
+      for file in tiff-*.tar.gz tiff-*.zip ; do \
+        gpg2 --output ${file}.sig --detach-sig $file ; \
+      done
+
+      for file in tiff-*.tar.gz tiff-*.zip ; do \
+        gpg2 --verify ${file}.sig $file ; \
+      done
+
+16. Copy release packages from the build tree to the
     ftp.remotesensing.org ftp site.
 
       scp tiff-*.tar.gz tiff-*.zip \
     	 bfriesen@upload.osgeo.org:/osgeo/download/libtiff
 
-16. Announce to list, tiff@lists.maptools.org
+17. Announce to list, tiff@lists.maptools.org
 
