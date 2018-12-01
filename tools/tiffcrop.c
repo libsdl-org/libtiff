@@ -2103,7 +2103,7 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
  * autoindex is set to non-zero. Update page and file counters
  * so TIFFTAG PAGENUM will be correct in image.
  */
-static int 
+static int
 update_output_file (TIFF **tiffout, char *mode, int autoindex,
                     char *outname, unsigned int *page)
   {
@@ -2114,17 +2114,18 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
   char   exportname[PATH_MAX];
 
   if (autoindex && (*tiffout != NULL))
-    {   
+    {
     /* Close any export file that was previously opened */
     TIFFClose (*tiffout);
     *tiffout = NULL;
     }
 
   strcpy (export_ext, ".tiff");
-  memset (exportname, '\0', PATH_MAX);
+  memset (filenum, '\0', sizeof(filenum));
+  memset (exportname, '\0', sizeof(exportname));
 
   /* Leave room for page number portion of the new filename */
-  strncpy (exportname, outname, PATH_MAX - sizeof(filenum));
+  strncpy (exportname, outname, sizeof(exportname) - sizeof(filenum));
   if (*tiffout == NULL)   /* This is a new export file */
     {
     if (autoindex)
@@ -2141,16 +2142,17 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
 
       /* MAX_EXPORT_PAGES limited to 6 digits to prevent string overflow of pathname */
       if (findex > MAX_EXPORT_PAGES)
-	{
-	TIFFError("update_output_file", "Maximum of %d pages per file exceeded", MAX_EXPORT_PAGES);
+        {
+        TIFFError("update_output_file", "Maximum of %d pages per file exceeded", MAX_EXPORT_PAGES);
         return 1;
         }
 
       snprintf(filenum, sizeof(filenum), "-%03d%.5s", findex, export_ext);
       filenum[sizeof(filenum)-1] = '\0';
-      strncat (exportname, filenum, sizeof(filenum)-1);
+      /* We previously assured that there will be space for 'filenum' */
+      strcat (exportname, filenum);
       }
-    exportname[PATH_MAX - 1] = '\0';
+    exportname[sizeof(exportname) - 1] = '\0';
 
     *tiffout = TIFFOpen(exportname, mode);
     if (*tiffout == NULL)
@@ -2158,11 +2160,11 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
       TIFFError("update_output_file", "Unable to open output file %s", exportname);
       return 1;
       }
-    *page = 0; 
+    *page = 0;
 
     return 0;
     }
-  else 
+  else
     (*page)++;
 
   return 0;
