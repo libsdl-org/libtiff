@@ -3020,6 +3020,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
                                         "for t2p_readwrite_pdf_image_tile, %s", 
 					(unsigned long) t2p->tiff_datasize, 
 					TIFFFileName(input));
+				_TIFFfree(buffer);
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
