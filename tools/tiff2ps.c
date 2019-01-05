@@ -2444,9 +2444,9 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 	unsigned char *cp, c;
 
 	(void) w;
-        if( es <= 0 )
+        if( es < 0 )
         {
-            TIFFError(filename, "Inconsistent value of es: %d", es);
+            TIFFError(filename, "Inconsistent value of es: %d (samplesperpixel=%u, nc=%d)", es, samplesperpixel, nc);
             return;
         }
 	tf_buf = (unsigned char *) _TIFFmalloc(tf_bytesperrow);
