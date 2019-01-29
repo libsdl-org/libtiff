@@ -194,6 +194,9 @@ target_link_libraries(defer_strile_loading tiff port)
 add_executable(defer_strile_writing defer_strile_writing.c)
 target_link_libraries(defer_strile_writing tiff port)
 
+add_executable(testtypes testtypes.c)
+target_link_libraries(testtypes tiff port)
+
 set(TEST_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/output")
 file(MAKE_DIRECTORY "${TEST_OUTPUT}")
 
@@ -391,3 +394,7 @@ add_convert_tests(tiffcrop  doubleflip "-F both"                  TIFFIMAGES TRU
 add_convert_tests(tiffcrop  extract    "-U px -E top -X 60 -Y 60" TIFFIMAGES TRUE)
 # Test extracting the first and fourth quarters from the left side.
 add_convert_tests(tiffcrop  extractz14 "-E left -Z1:4,2:4"        TIFFIMAGES TRUE)
+
+# test types
+add_test(NAME "testtypes"
+         COMMAND "testtypes")
