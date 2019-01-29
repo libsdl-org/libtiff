@@ -43,6 +43,8 @@ tools/fax2tiff
 tools/pal2rgb
 tools/ppm2tiff
 tools/raw2tiff
+tools/rgb2ycbcr
+tools/thumbnail
 tools/tiff2bw
 tools/tiff2pdf
 tools/tiff2ps
@@ -52,7 +54,18 @@ tools/tiffcp
 tools/tiffcrop
 tools/tiffdither
 tools/tiffdump
+tools/tiffgt
 tools/tiffinfo
 tools/tiffmedian
 tools/tiffset
 tools/tiffsplit
+test/ascii_tag
+test/custom_dir
+test/long_tag
+test/raw_decode
+test/rewrite
+test/short_tag
+test/strip_rw
+test/*.log
+test/*.trs
+test/o-*
