@@ -285,6 +285,18 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
                 _TIFFfree(td->td_smaxsamplevalue);
                 td->td_smaxsamplevalue = NULL;
             }
+            /* Test if 3 transfer functions instead of just one are now needed
+               See http://bugzilla.maptools.org/show_bug.cgi?id=2820 */
+            if( td->td_transferfunction[0] != NULL && (v - td->td_extrasamples > 1) &&
+                !(td->td_samplesperpixel - td->td_extrasamples > 1))
+            {
+                    TIFFWarningExt(tif->tif_clientdata,module,
+                        "SamplesPerPixel tag value is changing, "
+                        "but TransferFunction was read with a different value. Cancelling it");
+                    TIFFClrFieldBit(tif,FIELD_TRANSFERFUNCTION);
+                    _TIFFfree(td->td_transferfunction[0]);
+                    td->td_transferfunction[0] = NULL;
+            }
         }
 		td->td_samplesperpixel = (uint16) v;
 		break;
@@ -361,6 +373,16 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 		_TIFFsetShortArray(&td->td_colormap[2], va_arg(ap, uint16*), v32);
 		break;
 	case TIFFTAG_EXTRASAMPLES:
+            if ( td->td_transferfunction[0] != NULL && (td->td_samplesperpixel - v > 1) &&
+                 !(td->td_samplesperpixel - td->td_extrasamples > 1))
+            {
+                    TIFFWarningExt(tif->tif_clientdata,module,
+                        "ExtraSamples tag value is changing, "
+                        "but TransferFunction was read with a different value. Cancelling it");
+                    TIFFClrFieldBit(tif,FIELD_TRANSFERFUNCTION);
+                    _TIFFfree(td->td_transferfunction[0]);
+                    td->td_transferfunction[0] = NULL;
+            }
 		if (!setExtraSamples(td, ap, &v))
 			goto badvalue;
 		break;
