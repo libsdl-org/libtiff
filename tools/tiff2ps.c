@@ -2264,7 +2264,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		if (alpha) {
 			int adjust, i, j = 0;
 			int ncomps = samplesperpixel - extrasamples;
-			for (i = 0; i < byte_count; i+=samplesperpixel) {
+			for (i = 0; (i + ncomps) < byte_count; i+=samplesperpixel) {
 				adjust = 255 - buf_data[i + ncomps];
 				switch (ncomps) {
 					case 1:
