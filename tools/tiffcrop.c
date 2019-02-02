@@ -2108,8 +2108,8 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
                     char *outname, unsigned int *page)
   {
   static int findex = 0;    /* file sequence indicator */
+  size_t basename_len;
   char  *sep;
-  char   filenum[18];
   char   export_ext[16];
   char   exportname[PATH_MAX];
 
@@ -2120,12 +2120,13 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
     *tiffout = NULL;
     }
 
-  strcpy (export_ext, ".tiff");
-  memset (filenum, '\0', sizeof(filenum));
+  memcpy (export_ext, ".tiff", 6);
   memset (exportname, '\0', sizeof(exportname));
 
-  /* Leave room for page number portion of the new filename */
-  strncpy (exportname, outname, sizeof(exportname) - sizeof(filenum));
+  /* Leave room for page number portion of the new filename :
+   * hyphen + 6 digits + dot + 4 extension characters + null terminator */
+  #define FILENUM_MAX_LENGTH (1+6+1+4+1)
+  strncpy (exportname, outname, sizeof(exportname) - FILENUM_MAX_LENGTH);
   if (*tiffout == NULL)   /* This is a new export file */
     {
     if (autoindex)
@@ -2137,8 +2138,9 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
         *sep = '\0';
         }
       else
-        strncpy (export_ext, ".tiff", 5);
+        memcpy (export_ext, ".tiff", 5);
       export_ext[5] = '\0';
+      basename_len = strlen(exportname);
 
       /* MAX_EXPORT_PAGES limited to 6 digits to prevent string overflow of pathname */
       if (findex > MAX_EXPORT_PAGES)
@@ -2147,10 +2149,8 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
         return 1;
         }
 
-      snprintf(filenum, sizeof(filenum), "-%03d%.5s", findex, export_ext);
-      filenum[sizeof(filenum)-1] = '\0';
-      /* We previously assured that there will be space for 'filenum' */
-      strcat (exportname, filenum);
+      /* We previously assured that there will be space left */
+      snprintf(exportname + basename_len, sizeof(exportname) - basename_len, "-%03d%.5s", findex, export_ext);
       }
     exportname[sizeof(exportname) - 1] = '\0';
 
