@@ -2966,10 +2966,10 @@ tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw
 
         for ( ; raw_l > 3; raw_l -= 4 )
         {
-            val32  = *(++raw_p) << 24;
-            val32 += *(++raw_p) << 16;
-            val32 += *(++raw_p) <<  8;
-            val32 += *(++raw_p);
+            val32  = (uint32)*(++raw_p) << 24;
+            val32 += (uint32)*(++raw_p) << 16;
+            val32 += (uint32)*(++raw_p) <<  8;
+            val32 += (uint32)*(++raw_p);
     
             if ( val32 == 0 )                   /* Special case */
             {
