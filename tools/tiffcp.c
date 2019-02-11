@@ -1408,7 +1408,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
 	int status = 1;
 	uint32 imagew = TIFFRasterScanlineSize(in);
 	uint32 tilew = TIFFTileRowSize(in);
-	int iskew  = imagew - tilew*spp;
+	int iskew;
 	tsize_t tilesize = TIFFTileSize(in);
 	tdata_t tilebuf;
 	uint8* bufp = (uint8*) buf;
@@ -1416,6 +1416,12 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
 	uint32 row;
 	uint16 bps = 0, bytes_per_sample;
 
+	if (spp > (0x7fffffff / tilew))
+	{
+		TIFFError(TIFFFileName(in), "Error, cannot handle that much samples per tile row (Tile Width * Samples/Pixel)");
+		return 0;
+	}
+	iskew = imagew - tilew*spp;
 	tilebuf = _TIFFmalloc(tilesize);
 	if (tilebuf == 0)
 		return 0;
