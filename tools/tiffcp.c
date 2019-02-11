@@ -41,6 +41,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include <ctype.h>
 
@@ -1416,7 +1417,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
 	uint32 row;
 	uint16 bps = 0, bytes_per_sample;
 
-	if (spp > (0x7fffffff / tilew))
+	if (spp > (INT_MAX / tilew))
 	{
 		TIFFError(TIFFFileName(in), "Error, cannot handle that much samples per tile row (Tile Width * Samples/Pixel)");
 		return 0;
