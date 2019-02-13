@@ -3118,19 +3118,26 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 
 		if(t2p->pdf_sample & T2P_SAMPLE_LAB_SIGNED_TO_UNSIGNED){
 			t2p->tiff_datasize=t2p_sample_lab_signed_to_unsigned(
-				(tdata_t)buffer, 
+				(tdata_t)buffer,
 				t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth
 				*t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength);
 		}
 	}
 
 	if(t2p_tile_is_right_edge(t2p->tiff_tiles[t2p->pdf_page], tile) != 0){
-		t2p_tile_collapse_left(
-			buffer, 
-			TIFFTileRowSize(input),
-			t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth,
-			t2p->tiff_tiles[t2p->pdf_page].tiles_edgetilewidth, 
-			t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength);
+		if ((uint64)t2p->tiff_datasize < (uint64)TIFFTileRowSize(input) * (uint64)t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength) {
+			/* we don't know how to handle PLANARCONFIG_CONTIG, PHOTOMETRIC_YCBCR with 3 samples per pixel */
+			TIFFWarning(
+				TIFF2PDF_MODULE,
+				"Don't know how to collapse tile to the left");
+		} else {
+			t2p_tile_collapse_left(
+				buffer,
+				TIFFTileRowSize(input),
+				t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth,
+				t2p->tiff_tiles[t2p->pdf_page].tiles_edgetilewidth,
+				t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength);
+		}
 	}
 
 
