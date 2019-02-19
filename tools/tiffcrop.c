@@ -9144,7 +9144,6 @@ static int
 invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 length, unsigned char *work_buff)
   {
   uint32   row, col;
-  unsigned char  bytebuff1, bytebuff2, bytebuff3, bytebuff4;
   unsigned char *src;
   uint16        *src_uint16;
   uint32        *src_uint32;
@@ -9174,7 +9173,7 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
              for (row = 0; row < length; row++)
                for (col = 0; col < width; col++)
                  {
-		 *src_uint32 = (uint32)0xFFFFFFFF - *src_uint32;
+		 *src_uint32 = ~(*src_uint32);
                   src_uint32++;
                  }
             break;
@@ -9182,39 +9181,15 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
              for (row = 0; row < length; row++)
                for (col = 0; col < width; col++)
                  {
-		 *src_uint16 = (uint16)0xFFFF - *src_uint16;
+		 *src_uint16 = ~(*src_uint16);
                   src_uint16++;
                  }
             break;
-    case 8: for (row = 0; row < length; row++)
-              for (col = 0; col < width; col++)
-                {
-		*src = (uint8)255 - *src;
-                 src++;
-                }
-            break;
-    case 4: for (row = 0; row < length; row++)
-              for (col = 0; col < width; col++)
-                {
-		bytebuff1 = 16 - (uint8)(*src & 240 >> 4);
-		bytebuff2 = 16 - (*src & 15);
-		*src = bytebuff1 << 4 & bytebuff2;
-                src++;
-                }
-            break;
-    case 2: for (row = 0; row < length; row++)
-              for (col = 0; col < width; col++)
-                {
-		bytebuff1 = 4 - (uint8)(*src & 192 >> 6);
-		bytebuff2 = 4 - (uint8)(*src & 48  >> 4);
-		bytebuff3 = 4 - (uint8)(*src & 12  >> 2);
-		bytebuff4 = 4 - (uint8)(*src & 3);
-		*src = (bytebuff1 << 6) | (bytebuff2 << 4) | (bytebuff3 << 2) | bytebuff4;
-                src++;
-                }
-            break;
+    case 8:
+    case 4:
+    case 2:
     case 1: for (row = 0; row < length; row++)
-              for (col = 0; col < width; col += 8 /(spp * bps))
+              for (col = 0; col < width; col += 8 / bps)
                 {
                 *src = ~(*src);
                 src++;
