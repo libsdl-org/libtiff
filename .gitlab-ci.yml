@@ -4,6 +4,7 @@ before_script:
 
 stages:
   - build
+  - pages
 
 autoconf:
   stage: build
@@ -19,3 +20,14 @@ cmake-ninja:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
+
+pages:
+  stage: pages
+  script:
+    - cp -r html public
+  artifacts:
+    name: $CI_PROJECT_NAME-$CI_JOB_NAME
+    paths:
+    - public
+  only:
+  - master
