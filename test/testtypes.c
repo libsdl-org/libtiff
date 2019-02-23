@@ -51,7 +51,7 @@ main()
 	CHECK_TYPE(TIFF_UINT32_T, 4)
 	CHECK_TYPE(TIFF_UINT64_T, 8)
 	CHECK_TYPE(TIFF_SIZE_T, sizeof(size_t))
-	CHECK_TYPE(TIFF_SSIZE_T, sizeof(unsigned char *))
+	CHECK_TYPE(TIFF_SSIZE_T, sizeof(size_t))
 	return 0;
 }
 
