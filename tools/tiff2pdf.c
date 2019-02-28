@@ -1292,10 +1292,10 @@ int t2p_cmp_t2p_page(const void* e1, const void* e2){
 void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 
 	int i=0;
-	uint16* r;
-	uint16* g;
-	uint16* b;
-	uint16* a;
+	uint16* r = NULL;
+	uint16* g = NULL;
+	uint16* b = NULL;
+	uint16* a = NULL;
 	uint16 xuint16;
 	uint16* xuint16p;
 	float* xfloatp;
@@ -1522,12 +1522,19 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 			t2p->pdf_palettesize=0x0001<<t2p->tiff_bitspersample;
 			if(!TIFFGetField(input, TIFFTAG_COLORMAP, &r, &g, &b)){
 				TIFFError(
-					TIFF2PDF_MODULE, 
-					"Palettized image %s has no color map", 
+					TIFF2PDF_MODULE,
+					"Palettized image %s has no color map",
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return;
-			} 
+			}
+			if(r == NULL || g == NULL || b == NULL){
+				TIFFError(
+					TIFF2PDF_MODULE,
+					"Error getting 3 components from color map");
+				t2p->t2p_error = T2P_ERR_ERROR;
+				return;
+			}
 			if(t2p->pdf_palette != NULL){
 				_TIFFfree(t2p->pdf_palette);
 				t2p->pdf_palette=NULL;
@@ -1591,12 +1598,19 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 			t2p->pdf_palettesize=0x0001<<t2p->tiff_bitspersample;
 			if(!TIFFGetField(input, TIFFTAG_COLORMAP, &r, &g, &b, &a)){
 				TIFFError(
-					TIFF2PDF_MODULE, 
-					"Palettized image %s has no color map", 
+					TIFF2PDF_MODULE,
+					"Palettized image %s has no color map",
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return;
-			} 
+			}
+			if(r == NULL || g == NULL || b == NULL || a == NULL){
+				TIFFError(
+					TIFF2PDF_MODULE,
+					"Error getting 4 components from color map");
+				t2p->t2p_error = T2P_ERR_ERROR;
+				return;
+			}
 			if(t2p->pdf_palette != NULL){
 				_TIFFfree(t2p->pdf_palette);
 				t2p->pdf_palette=NULL;
