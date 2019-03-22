@@ -70,6 +70,7 @@ TESTSCRIPTS = \
 	ppm2tiff_pbm.sh \
 	ppm2tiff_pgm.sh \
 	ppm2tiff_ppm.sh \
+	fax2tiff.sh \
 	tiffcp-g3.sh \
 	tiffcp-g3-1d.sh \
 	tiffcp-g3-1d-fill.sh \
@@ -172,6 +173,7 @@ PNMIMAGES = \
 # files which are not currently used by the tests.
 IMAGES_EXTRA_DIST = \
 	images/README.txt \
+	images/miniswhite-1c-1b.g3 \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 
