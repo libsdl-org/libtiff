@@ -1372,7 +1372,8 @@ TIFFFillTile(TIFF* tif, uint32 tile)
                         tif->tif_rawdataoff = 0;
                         tif->tif_rawdataloaded = bytecountm;
                         
-			if (!isFillOrder(tif, td->td_fillorder) &&
+			if (tif->tif_rawdata != NULL &&
+                            !isFillOrder(tif, td->td_fillorder) &&
 			    (tif->tif_flags & TIFF_NOBITREV) == 0)
 				TIFFReverseBits(tif->tif_rawdata,
                                                 tif->tif_rawdataloaded);
