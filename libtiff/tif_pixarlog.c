@@ -819,9 +819,7 @@ PixarLogDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "Decoding error at scanline %lu, %s",
 			    (unsigned long) tif->tif_row, sp->stream.msg ? sp->stream.msg : "(null)");
-			/* if (inflateSync(&sp->stream) != Z_OK) */
 			return (0);
-			continue;
 		}
 		if (state != Z_OK) {
 			TIFFErrorExt(tif->tif_clientdata, module, "ZLib error: %s",
