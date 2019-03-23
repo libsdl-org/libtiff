@@ -103,6 +103,11 @@ static int TIFFReadAndRealloc( TIFF* tif, tmsize_t size,
                 }
                 tif->tif_rawdata = new_rawdata;
             }
+            if( tif->tif_rawdata == NULL )
+            {
+                /* should not happen in practice but helps CoverityScan */
+                return 0;
+            }
 
             bytes_read = TIFFReadFile(tif,
                 tif->tif_rawdata + rawdata_offset + already_read, to_read);
