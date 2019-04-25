@@ -2468,7 +2468,7 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 		if (alpha) {
 			int adjust;
 			cc = 0;
-			for (; cc < tf_bytesperrow; cc += samplesperpixel) {
+			for (; (cc + nc) <= tf_bytesperrow; cc += samplesperpixel) {
 				DOBREAK(breaklen, nc, fd);
 				/*
 				 * For images with alpha, matte against
@@ -2487,7 +2487,7 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 			}
 		} else {
 			cc = 0;
-			for (; cc < tf_bytesperrow; cc += samplesperpixel) {
+			for (; (cc + nc) <= tf_bytesperrow; cc += samplesperpixel) {
 				DOBREAK(breaklen, nc, fd);
 				switch (nc) {
 				case 4: c = *cp++; PUTHEX(c,fd);

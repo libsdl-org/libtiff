@@ -10,6 +10,8 @@ autoconf:
   stage: build
   script:
     - sh build/gitlab-ci autoconf
+  after_script:
+    - 'cat autoconf-build/test/test-suite.log'
 
 cmake-makefiles:
   stage: build

@@ -34,6 +34,7 @@ TESTS_ENVIRONMENT = \
 	MEMCHECK="$(MEMCHECK)"
 
 EXTRA_DIST = \
+	$(REFFILES) \
 	$(TESTSCRIPTS) \
 	$(IMAGES_EXTRA_DIST) \
 	CMakeLists.txt \
@@ -143,6 +144,14 @@ TESTSCRIPTS = \
 	tiff2rgba-rgb-3c-16b.sh \
 	tiff2rgba-rgb-3c-8b.sh \
 	$(JPEG_DEPENDENT_TESTSCRIPTS)
+
+# This list should contain the references files
+# from the 'refs' subdirectory
+REFFILES = \
+	refs/o-tiff2ps-EPS1.ps \
+	refs/o-tiff2ps-PS1.ps \
+	refs/o-tiff2ps-PS2.ps \
+	refs/o-tiff2ps-PS3.ps
 
 # This list should contain all of the TIFF files in the 'images'
 # subdirectory which are intended to be used as input images for
