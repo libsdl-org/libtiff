@@ -1651,6 +1651,29 @@ TIFFWriteDirectoryTagShortLong(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, uint1
 		return(TIFFWriteDirectoryTagCheckedLong(tif,ndir,dir,tag,value));
 }
 
+static int WriteAsLong8(TIFF* tif, uint64 strile_size)
+{
+    const uint16 compression = tif->tif_dir.td_compression;
+    if ( compression == COMPRESSION_NONE )
+    {
+        return strile_size >= 0xFFFFFFFFU;
+    }
+    else if ( compression == COMPRESSION_JPEG ||
+              compression == COMPRESSION_LZW ||
+              compression == COMPRESSION_ADOBE_DEFLATE ||
+              compression == COMPRESSION_LZMA ||
+              compression == COMPRESSION_LERC ||
+              compression == COMPRESSION_ZSTD ||
+              compression == COMPRESSION_WEBP )
+    {
+        /* For a few select compression types, we assume that in the worst */
+        /* case the compressed size will be 10 times the uncompressed size */
+        /* This is overly pessismistic ! */
+        return strile_size >= 0xFFFFFFFFU / 10;
+    }
+    return 1;
+}
+
 /************************************************************************/
 /*                TIFFWriteDirectoryTagLongLong8Array()                 */
 /*                                                                      */
@@ -1675,10 +1698,28 @@ TIFFWriteDirectoryTagLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, 
         return(1);
     }
 
-    /* We always write LONG8 for BigTIFF, no checking needed. */
     if( tif->tif_flags&TIFF_BIGTIFF )
-        return TIFFWriteDirectoryTagCheckedLong8Array(tif,ndir,dir,
-                                                      tag,count,value);
+    {
+        int write_aslong8 = 1;
+        /* In the case of ByteCounts array, we may be able to write them on */
+        /* LONG if the strip/tilesize is not too big. */
+        /* Also do that for count > 1 in the case someone would want to create */
+        /* a single-strip file with a growing height, in which case using */
+        /* LONG8 will be safer. */
+        if( count > 1 && tag == TIFFTAG_STRIPBYTECOUNTS )
+        {
+            write_aslong8 = WriteAsLong8(tif, TIFFStripSize64(tif));
+        }
+        else if( count > 1 && tag == TIFFTAG_TILEBYTECOUNTS )
+        {
+            write_aslong8 = WriteAsLong8(tif, TIFFTileSize64(tif));
+        }
+        if( write_aslong8 )
+        {
+            return TIFFWriteDirectoryTagCheckedLong8Array(tif,ndir,dir,
+                                                        tag,count,value);
+        }
+    }
 
     /*
     ** For classic tiff we want to verify everything is in range for LONG
@@ -2826,8 +2867,20 @@ _TIFFRewriteField(TIFF* tif, uint16 tag, TIFFDataType in_datatype,
         else
             datatype = in_datatype;
     }
-    else 
-        datatype = in_datatype;
+    else
+    {
+        if( in_datatype == TIFF_LONG8 &&
+            (entry_type == TIFF_LONG || entry_type == TIFF_LONG8 ) )
+            datatype = entry_type;
+        else if( in_datatype == TIFF_SLONG8 &&
+            (entry_type == TIFF_SLONG || entry_type == TIFF_SLONG8 ) )
+            datatype = entry_type;
+        if( in_datatype == TIFF_IFD8 &&
+            (entry_type == TIFF_IFD || entry_type == TIFF_IFD8 ) )
+            datatype = entry_type;
+        else
+            datatype = in_datatype;
+    }
 
 /* -------------------------------------------------------------------- */
 /*      Prepare buffer of actual data to write.  This includes          */
@@ -2875,6 +2928,12 @@ _TIFFRewriteField(TIFF* tif, uint16 tag, TIFFDataType in_datatype,
                 return 0;
             }
         }
+    }
+    else
+    {
+        TIFFErrorExt( tif->tif_clientdata, module,
+                      "Unhandled type conversion." );
+        return 0;
     }
 
     if( TIFFDataWidth(datatype) > 1 && (tif->tif_flags&TIFF_SWAB) )
