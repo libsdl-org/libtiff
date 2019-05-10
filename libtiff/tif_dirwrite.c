@@ -1651,12 +1651,12 @@ TIFFWriteDirectoryTagShortLong(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, uint1
 		return(TIFFWriteDirectoryTagCheckedLong(tif,ndir,dir,tag,value));
 }
 
-static int WriteAsLong8(TIFF* tif, uint64 strile_size)
+static int _WriteAsType(TIFF* tif, uint64 strile_size, uint64 uncompressed_threshold)
 {
     const uint16 compression = tif->tif_dir.td_compression;
     if ( compression == COMPRESSION_NONE )
     {
-        return strile_size >= 0xFFFFFFFFU;
+        return strile_size > uncompressed_threshold;
     }
     else if ( compression == COMPRESSION_JPEG ||
               compression == COMPRESSION_LZW ||
@@ -1669,27 +1669,34 @@ static int WriteAsLong8(TIFF* tif, uint64 strile_size)
         /* For a few select compression types, we assume that in the worst */
         /* case the compressed size will be 10 times the uncompressed size */
         /* This is overly pessismistic ! */
-        return strile_size >= 0xFFFFFFFFU / 10;
+        return strile_size >= uncompressed_threshold / 10;
     }
     return 1;
+}
+
+static int WriteAsLong8(TIFF* tif, uint64 strile_size)
+{
+    return _WriteAsType(tif, strile_size, 0xFFFFFFFFU);
+}
+
+static int WriteAsLong4(TIFF* tif, uint64 strile_size)
+{
+    return _WriteAsType(tif, strile_size, 0xFFFFU);
 }
 
 /************************************************************************/
 /*                TIFFWriteDirectoryTagLongLong8Array()                 */
 /*                                                                      */
-/*      Write out LONG8 array as LONG8 for BigTIFF or LONG for          */
-/*      Classic TIFF with some checking.                                */
+/*      Write out LONG8 array and write a SHORT/LONG/LONG8 depending    */
+/*      on strile size and Classic/BigTIFF mode.                        */
 /************************************************************************/
 
 static int
 TIFFWriteDirectoryTagLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, uint16 tag, uint32 count, uint64* value)
 {
     static const char module[] = "TIFFWriteDirectoryTagLongLong8Array";
-    uint64* ma;
-    uint32 mb;
-    uint32* p;
-    uint32* q;
     int o;
+    int write_aslong4;
 
     /* is this just a counting pass? */
     if (dir==NULL)
@@ -1721,32 +1728,77 @@ TIFFWriteDirectoryTagLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, 
         }
     }
 
-    /*
-    ** For classic tiff we want to verify everything is in range for LONG
-    ** and convert to long format.
-    */
-
-    p = _TIFFmalloc(count*sizeof(uint32));
-    if (p==NULL)
+    write_aslong4 = 1;
+    if( count > 1 && tag == TIFFTAG_STRIPBYTECOUNTS )
     {
-        TIFFErrorExt(tif->tif_clientdata,module,"Out of memory");
-        return(0);
+        write_aslong4 = WriteAsLong4(tif, TIFFStripSize64(tif));
     }
-
-    for (q=p, ma=value, mb=0; mb<count; ma++, mb++, q++)
+    else if( count > 1 && tag == TIFFTAG_TILEBYTECOUNTS )
     {
-        if (*ma>0xFFFFFFFF)
+        write_aslong4 = WriteAsLong4(tif, TIFFTileSize64(tif));
+    }
+    if( write_aslong4 )
+    {
+        /*
+        ** For classic tiff we want to verify everything is in range for LONG
+        ** and convert to long format.
+        */
+
+        uint32* p = _TIFFmalloc(count*sizeof(uint32));
+        uint32* q;
+        uint64* ma;
+        uint32 mb;
+
+        if (p==NULL)
         {
-            TIFFErrorExt(tif->tif_clientdata,module,
-                         "Attempt to write value larger than 0xFFFFFFFF in Classic TIFF file.");
-            _TIFFfree(p);
+            TIFFErrorExt(tif->tif_clientdata,module,"Out of memory");
             return(0);
         }
-        *q= (uint32)(*ma);
-    }
 
-    o=TIFFWriteDirectoryTagCheckedLongArray(tif,ndir,dir,tag,count,p);
-    _TIFFfree(p);
+        for (q=p, ma=value, mb=0; mb<count; ma++, mb++, q++)
+        {
+            if (*ma>0xFFFFFFFF)
+            {
+                TIFFErrorExt(tif->tif_clientdata,module,
+                            "Attempt to write value larger than 0xFFFFFFFF in LONG array.");
+                _TIFFfree(p);
+                return(0);
+            }
+            *q= (uint32)(*ma);
+        }
+
+        o=TIFFWriteDirectoryTagCheckedLongArray(tif,ndir,dir,tag,count,p);
+        _TIFFfree(p);
+    }
+    else
+    {
+        uint16* p = _TIFFmalloc(count*sizeof(uint16));
+        uint16* q;
+        uint64* ma;
+        uint32 mb;
+
+        if (p==NULL)
+        {
+            TIFFErrorExt(tif->tif_clientdata,module,"Out of memory");
+            return(0);
+        }
+
+        for (q=p, ma=value, mb=0; mb<count; ma++, mb++, q++)
+        {
+            if (*ma>0xFFFF)
+            {
+                /* Should not happen normally given the check we did before */
+                TIFFErrorExt(tif->tif_clientdata,module,
+                            "Attempt to write value larger than 0xFFFF in SHORT array.");
+                _TIFFfree(p);
+                return(0);
+            }
+            *q= (uint16)(*ma);
+        }
+
+        o=TIFFWriteDirectoryTagCheckedShortArray(tif,ndir,dir,tag,count,p);
+        _TIFFfree(p);
+    }
 
     return(o);
 }
@@ -2859,7 +2911,7 @@ _TIFFRewriteField(TIFF* tif, uint16 tag, TIFFDataType in_datatype,
     if( TIFFDataWidth(in_datatype) == 8 && !(tif->tif_flags&TIFF_BIGTIFF) )
     {
         if( in_datatype == TIFF_LONG8 )
-            datatype = TIFF_LONG;
+            datatype = entry_type == TIFF_SHORT ? TIFF_SHORT : TIFF_LONG;
         else if( in_datatype == TIFF_SLONG8 )
             datatype = TIFF_SLONG;
         else if( in_datatype == TIFF_IFD8 )
@@ -2870,7 +2922,8 @@ _TIFFRewriteField(TIFF* tif, uint16 tag, TIFFDataType in_datatype,
     else
     {
         if( in_datatype == TIFF_LONG8 &&
-            (entry_type == TIFF_LONG || entry_type == TIFF_LONG8 ) )
+            (entry_type == TIFF_SHORT || entry_type == TIFF_LONG ||
+             entry_type == TIFF_LONG8 ) )
             datatype = entry_type;
         else if( in_datatype == TIFF_SLONG8 &&
             (entry_type == TIFF_SLONG || entry_type == TIFF_SLONG8 ) )
@@ -2925,6 +2978,23 @@ _TIFFRewriteField(TIFF* tif, uint16 tag, TIFFDataType in_datatype,
                 _TIFFfree( buf_to_write );
                 TIFFErrorExt( tif->tif_clientdata, module, 
                               "Value exceeds 32bit range of output type." );
+                return 0;
+            }
+        }
+    }
+    else if( datatype == TIFF_SHORT && in_datatype == TIFF_LONG8 )
+    {
+	tmsize_t i;
+
+        for( i = 0; i < count; i++ )
+        {
+            ((uint16 *) buf_to_write)[i] =
+                (uint16) ((uint64 *) data)[i];
+            if( (uint64) ((uint16 *) buf_to_write)[i] != ((uint64 *) data)[i] )
+            {
+                _TIFFfree( buf_to_write );
+                TIFFErrorExt( tif->tif_clientdata, module,
+                              "Value exceeds 16bit range of output type." );
                 return 0;
             }
         }
