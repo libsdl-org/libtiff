@@ -623,7 +623,7 @@ if(strip-chopping)
 endif()
 
 # Defer loading of strip/tile offsets
-option(defer-strile-load "enable deferred strip/tile offset/size loading (experimental)" OFF)
+option(defer-strile-load "enable deferred strip/tile offset/size loading (also available at runtime with the 'D' flag of TIFFOpen())" OFF)
 set(DEFER_STRILE_LOAD ${defer-strile-load})
 
 # CHUNKY_STRIP_READ_SUPPORT
