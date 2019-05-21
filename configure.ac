@@ -1070,17 +1070,16 @@ fi
 
 dnl ---------------------------------------------------------------------------
 dnl Should we try to defer loading of strip/tile offsets and sizes to 
-dnl optimize directory scanning?  These is an experimental feature for 
-dnl libtiff 4.0.
+dnl optimize directory scanning?
 dnl ---------------------------------------------------------------------------
 
 AC_ARG_ENABLE(defer-strile-load,
 	      AS_HELP_STRING([--enable-defer-strile-load],
-			     [enable deferred strip/tile offset/size loading (experimental)]),
+			     [enable deferred strip/tile offset/size loading (also available at runtime with the 'D' flag of TIFFOpen()]),
 	      [HAVE_DEFER_STRILE_LOAD=$enableval], [HAVE_DEFER_STRILE_LOAD=no])
 
 if test "$HAVE_DEFER_STRILE_LOAD" = "yes" ; then
-  AC_DEFINE(DEFER_STRILE_LOAD,1,[enable deferred strip/tile offset/size loading (experimental)])
+  AC_DEFINE(DEFER_STRILE_LOAD,1,[enable deferred strip/tile offset/size loading])
 
 fi
 
