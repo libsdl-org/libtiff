@@ -49,6 +49,10 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFGetReadProc
 	TIFFGetSeekProc
 	TIFFGetSizeProc
+	TIFFGetStrileByteCount
+	TIFFGetStrileByteCountWithErr
+	TIFFGetStrileOffset
+	TIFFGetStrileOffsetWithErr
 	TIFFGetTagListCount
 	TIFFGetTagListEntry
 	TIFFGetUnmapFileProc
