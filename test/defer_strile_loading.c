@@ -45,7 +45,8 @@ int test(int classictif, int height, int tiled)
     const char* filename = "defer_strile_loading.tif";
     TIFF* tif;
     int i;
-    int ret;
+    int ret = 0;
+    (void)ret;
 
     tif = TIFFOpen(filename, classictif ? "wDO" : "w8DO"); /* O should be ignored in write mode */
     if(!tif)
