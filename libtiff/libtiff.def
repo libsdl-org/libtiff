@@ -86,6 +86,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFReadEXIFDirectory
 	TIFFReadEncodedStrip
 	TIFFReadEncodedTile
+	TIFFReadFromUserBuffer
 	TIFFReadRGBAImage
 	TIFFReadRGBAImageOriented
 	TIFFReadRGBAStrip
