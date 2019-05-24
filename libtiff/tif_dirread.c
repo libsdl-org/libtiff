@@ -5990,7 +5990,7 @@ int _TIFFPartialReadStripArray( TIFF* tif, TIFFDirEntry* dirent,
     else
     {
         TIFFErrorExt(tif->tif_clientdata, module,
-                 "Invalid type for [Strip|Tile][Offset/ByteCounnt] tag");
+                 "Invalid type for [Strip|Tile][Offset/ByteCount] tag");
         panVals[strile] = 0;
         return 0;
     }
