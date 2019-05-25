@@ -191,6 +191,9 @@ target_link_libraries(custom_dir tiff port)
 add_executable(defer_strile_loading defer_strile_loading.c)
 target_link_libraries(defer_strile_loading tiff port)
 
+add_executable(defer_strile_writing defer_strile_writing.c)
+target_link_libraries(defer_strile_writing tiff port)
+
 set(TEST_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/output")
 file(MAKE_DIRECTORY "${TEST_OUTPUT}")
 
