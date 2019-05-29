@@ -46,6 +46,8 @@ int test(int classictif, int height, int tiled)
     TIFF* tif;
     int i;
     int ret = 0;
+    FILE* f;
+
     (void)ret;
 
     tif = TIFFOpen(filename, classictif ? "wDO" : "w8DO"); /* O should be ignored in write mode */
@@ -97,12 +99,17 @@ int test(int classictif, int height, int tiled)
     }
     TIFFClose(tif);
 
+    f = fopen(filename, "rb");
+    if( !f )
+        return 1;
+
     for( i = 0; i < 2; i++ )
     {
         tif = TIFFOpen(filename, i == 0 ? "rD" : "rO");
         if(!tif)
         {
             fprintf(stderr, "cannot open %s\n", filename);
+            fclose(f);
             return 1;
         }
         if( tiled )
@@ -111,10 +118,11 @@ int test(int classictif, int height, int tiled)
             for( j = 0; j < (height+15) / 16; j++ )
             {
                 int retry;
+                unsigned char expected_c = (unsigned char)j;
+
                 for( retry = 0; retry < 2; retry++ )
                 {
                     unsigned char tilebuffer[256];
-                    unsigned char expected_c = (unsigned char)j;
                     memset(tilebuffer,0, 256);
                     ret = TIFFReadEncodedTile( tif, j, tilebuffer, 256 );
                     assert(ret == 256);
@@ -124,19 +132,42 @@ int test(int classictif, int height, int tiled)
                         fprintf(stderr, "unexpected value at tile %d: %d %d\n",
                                 j, tilebuffer[0], tilebuffer[255]);
                         TIFFClose(tif);
+                        fclose(f);
                         return 1;
                     }
                 }
 
                 {
                     int err = 0;
-                    ret = TIFFGetStrileOffsetWithErr(tif, j, &err);
-                    assert(ret != 0);
+                    int offset, size;
+                    unsigned char inputbuffer[256];
+                    unsigned char tilebuffer[256];
+
+                    offset = TIFFGetStrileOffsetWithErr(tif, j, &err);
+                    assert(offset != 0);
                     assert(err == 0);
 
-                    ret = TIFFGetStrileByteCountWithErr(tif, j, &err);
-                    assert(ret == 256);
+                    size = TIFFGetStrileByteCountWithErr(tif, j, &err);
+                    assert(size == 256);
                     assert(err == 0);
+
+                    fseek(f, offset, SEEK_SET);
+                    fread(inputbuffer, 256, 1, f);
+
+                    memset(tilebuffer,0, 256);
+                    ret = TIFFReadFromUserBuffer(tif, j,
+                                                    inputbuffer, 256,
+                                                    tilebuffer, 256 );
+                    assert(ret == 1);
+                    if( tilebuffer[0] != expected_c ||
+                        tilebuffer[255] != expected_c )
+                    {
+                        fprintf(stderr, "unexpected value at tile %d: %d %d\n",
+                                j, tilebuffer[0], tilebuffer[255]);
+                        TIFFClose(tif);
+                        fclose(f);
+                        return 1;
+                    }
                 }
             }
         }
@@ -146,10 +177,10 @@ int test(int classictif, int height, int tiled)
             for( j = 0; j < height; j++ )
             {
                 int retry;
+                unsigned char expected_c = (unsigned char)j;
                 for( retry = 0; retry < 2; retry++ )
                 {
                     unsigned char c = 0;
-                    unsigned char expected_c = (unsigned char)j;
                     ret = TIFFReadEncodedStrip( tif, j, &c, 1 );
                     assert(ret == 1);
                     if( c != expected_c )
@@ -157,19 +188,41 @@ int test(int classictif, int height, int tiled)
                         fprintf(stderr, "unexpected value at line %d: %d\n",
                                 j, c);
                         TIFFClose(tif);
+                        fclose(f);
                         return 1;
                     }
                 }
 
                 {
                     int err = 0;
-                    ret = TIFFGetStrileOffsetWithErr(tif, j, &err);
-                    assert(ret != 0);
+                    int offset, size;
+                    unsigned char inputbuffer[1];
+                    unsigned char tilebuffer[1];
+
+                    offset = TIFFGetStrileOffsetWithErr(tif, j, &err);
+                    assert(offset != 0);
                     assert(err == 0);
 
-                    ret = TIFFGetStrileByteCountWithErr(tif, j, &err);
-                    assert(ret == 1);
+                    size = TIFFGetStrileByteCountWithErr(tif, j, &err);
+                    assert(size == 1);
                     assert(err == 0);
+
+                    fseek(f, offset, SEEK_SET);
+                    fread(inputbuffer, 1, 1, f);
+
+                    memset(tilebuffer,0, 1);
+                    ret = TIFFReadFromUserBuffer(tif, j,
+                                                    inputbuffer, 1,
+                                                    tilebuffer, 1 );
+                    assert(ret == 1);
+                    if( tilebuffer[0] != expected_c )
+                    {
+                        fprintf(stderr, "unexpected value at line %d: %d\n",
+                                j, tilebuffer[0]);
+                        TIFFClose(tif);
+                        fclose(f);
+                        return 1;
+                    }
                 }
 
                 if( j == 1 && height > 100000 )
@@ -231,6 +284,7 @@ int test(int classictif, int height, int tiled)
 
         TIFFClose(tif);
     }
+    fclose(f);
 
     unlink(filename);
     return 0;
