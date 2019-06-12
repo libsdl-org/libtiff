@@ -1417,7 +1417,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
 	uint32 row;
 	uint16 bps = 0, bytes_per_sample;
 
-	if (spp > (INT_MAX / tilew))
+	if (tilew && spp > (INT_MAX / tilew))
 	{
 		TIFFError(TIFFFileName(in), "Error, cannot handle that much samples per tile row (Tile Width * Samples/Pixel)");
 		return 0;
