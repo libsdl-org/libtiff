@@ -63,8 +63,8 @@ endif
 
 # Executable programs which need to be built in order to support tests
 check_PROGRAMS = \
-	ascii_tag long_tag short_tag strip_rw rewrite custom_dir defer_strile_loading \
-	defer_strile_writing \
+	ascii_tag long_tag short_tag strip_rw rewrite custom_dir \
+	defer_strile_loading defer_strile_writing testtypes \
 	$(JPEG_DEPENDENT_CHECK_PROG)
 
 # Test scripts to execute

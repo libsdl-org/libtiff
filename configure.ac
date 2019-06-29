@@ -365,15 +365,15 @@ AC_DEFINE_UNQUOTED([TIFF_SIZE_FORMAT],[$SIZE_FORMAT],[Size type formatter])
 AC_MSG_CHECKING(for signed size type)
 SSIZE_T='unknown'
 SSIZE_FORMAT='unknown'
-if test $ac_cv_sizeof_signed_int -eq $ac_cv_sizeof_unsigned_char_p
+if test $ac_cv_sizeof_signed_int -eq $ac_cv_sizeof_size_t
 then
   SSIZE_T='signed int'
   SSIZE_FORMAT='"%d"'
-elif test $ac_cv_sizeof_signed_long -eq $ac_cv_sizeof_unsigned_char_p
+elif test $ac_cv_sizeof_signed_long -eq $ac_cv_sizeof_size_t
 then
   SSIZE_T='signed long'
   SSIZE_FORMAT='"%ld"'
-elif test $ac_cv_sizeof_signed_long_long -eq $ac_cv_sizeof_unsigned_char_p
+elif test $ac_cv_sizeof_signed_long_long -eq $ac_cv_sizeof_size_t
 then
   SSIZE_T='signed long long'
   case "${host_os}" in
