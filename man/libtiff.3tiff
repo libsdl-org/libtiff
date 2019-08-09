@@ -354,7 +354,7 @@ tags whose values lie in a range outside the valid range of
 .SM TIFF
 tags.
 These tags are termed
-.I pseud-tags
+.I pseudo-tags
 and are used to control various codec-specific functions within the library.
 The table below summarizes the defined pseudo-tags.
 .sp
