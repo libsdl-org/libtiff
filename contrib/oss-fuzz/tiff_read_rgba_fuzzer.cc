@@ -22,6 +22,7 @@
  */
 
 #include <cstdint>
+#include <cstdlib>
 #include <sstream>
 #include <tiffio.h>
 #include <tiffio.hxx>
@@ -40,6 +41,14 @@ extern "C" void handle_error(const char *unused, const char *unused2, va_list un
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   TIFFSetErrorHandler(handle_error);
   TIFFSetWarningHandler(handle_error);
+#if defined(__has_feature)
+#  if __has_feature(memory_sanitizer)
+  // libjpeg-turbo has issues with MSAN and SIMD code
+  // See https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=7547
+  // and https://github.com/libjpeg-turbo/libjpeg-turbo/pull/365
+  setenv("JSIMD_FORCENONE" ,"YES", 1);
+#  endif
+#endif
   std::istringstream s(std::string(Data,Data+Size));
   TIFF* tif = TIFFStreamOpen("MemTIFF", &s);
   if (!tif) {
