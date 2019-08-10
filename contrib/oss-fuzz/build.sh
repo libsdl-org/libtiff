@@ -37,7 +37,14 @@ popd
 
 # Build libjbig
 pushd "$SRC/jbigkit"
-make lib
+if [ "$ARCHITECTURE" = "i386" ]; then
+    echo "#!/bin/bash" > gcc
+    echo "clang -m32 \$*" >> gcc
+    chmod +x gcc
+    PATH=$PWD:$PATH make lib
+else
+    make lib
+fi
 mv "$SRC"/jbigkit/libjbig/*.a "$WORK/lib/"
 mv "$SRC"/jbigkit/libjbig/*.h "$WORK/include/"
 popd
@@ -48,7 +55,7 @@ make install
 
 $CXX $CXXFLAGS -std=c++11 -I$WORK/include \
     $SRC/libtiff/contrib/oss-fuzz/tiff_read_rgba_fuzzer.cc -o $OUT/tiff_read_rgba_fuzzer \
-    -lFuzzingEngine $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
+    $LIB_FUZZING_ENGINE $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
     $WORK/lib/libjbig.a $WORK/lib/libjbig85.a
 
 mkdir afl_testcases
