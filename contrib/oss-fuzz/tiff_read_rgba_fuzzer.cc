@@ -46,7 +46,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   // libjpeg-turbo has issues with MSAN and SIMD code
   // See https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=7547
   // and https://github.com/libjpeg-turbo/libjpeg-turbo/pull/365
-  setenv("JSIMD_FORCENONE" ,"YES", 1);
+  setenv("JSIMD_FORCENONE" ,"1", 1);
 #  endif
 #endif
   std::istringstream s(std::string(Data,Data+Size));
