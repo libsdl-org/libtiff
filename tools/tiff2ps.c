@@ -682,8 +682,8 @@ isCCITTCompression(TIFF* tif)
 
 static	tsize_t tf_bytesperrow;
 static	tsize_t ps_bytesperrow;
-static	tsize_t	tf_rowsperstrip;
-static	tsize_t	tf_numberstrips;
+static	uint32	tf_rowsperstrip;
+static	uint32	tf_numberstrips;
 static	char *hex = "0123456789abcdef";
 
 /*
@@ -1798,7 +1798,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	int use_rawdata;
 	uint32 tile_width, tile_height;
 	uint16 predictor, minsamplevalue, maxsamplevalue;
-	int repeat_count;
+	uint32 repeat_count;
 	char im_h[64], im_x[64], im_y[64];
 	char * imageOp = "image";
 
@@ -1850,7 +1850,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	fputs("{ % exec\n", fd);
 
 	if (repeat_count > 1)
-		fprintf(fd, "%d { %% repeat\n", repeat_count);
+		fprintf(fd, "%u { %% repeat\n", repeat_count);
 
 	/*
 	 * Output filter options and image dictionary.
@@ -2766,7 +2766,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 
 	bufsize = (uint32) bc[0];
 
-	for ( s = 0; ++s < (tstrip_t)tf_numberstrips; ) {
+	for ( s = 0; ++s < tf_numberstrips; ) {
 		if ( bc[s] > bufsize )
 			bufsize = (uint32) bc[s];
 	}
@@ -2799,7 +2799,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	}
 #endif
 
-	for (s = 0; s < (tstrip_t) tf_numberstrips; s++) {
+	for (s = 0; s < tf_numberstrips; s++) {
 		cc = TIFFReadRawStrip(tif, s, tf_buf, (tmsize_t) bc[s]);
 		if (cc < 0) {
 			TIFFError(filename, "Can't read strip");
