@@ -679,7 +679,7 @@ OJPEGPreDecode(TIFF* tif, uint16 s)
 		if (OJPEGReadSecondarySos(tif,s)==0)
 			return(0);
 	}
-	if isTiled(tif)
+	if (isTiled(tif))
 		m=tif->tif_curtile;
 	else
 		m=tif->tif_curstrip;
@@ -1084,7 +1084,7 @@ OJPEGReadHeaderInfo(TIFF* tif)
 	assert(sp->readheader_done==0);
 	sp->image_width=tif->tif_dir.td_imagewidth;
 	sp->image_length=tif->tif_dir.td_imagelength;
-	if isTiled(tif)
+	if (isTiled(tif))
 	{
 		sp->strile_width=tif->tif_dir.td_tilewidth;
 		sp->strile_length=tif->tif_dir.td_tilelength;
