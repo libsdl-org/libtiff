@@ -2123,7 +2123,7 @@ JPEGEncodeRaw(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
 	/* data is expected to be supplied in multiples of a clumpline */
 	/* a clumpline is equivalent to v_sampling desubsampled scanlines */
 	/* TODO: the following calculation of bytesperclumpline, should substitute calculation of sp->bytesperline, except that it is per v_sampling lines */
-	bytesperclumpline = (((sp->cinfo.c.image_width+sp->h_sampling-1)/sp->h_sampling)
+	bytesperclumpline = ((((tmsize_t)sp->cinfo.c.image_width+sp->h_sampling-1)/sp->h_sampling)
 			     *(sp->h_sampling*sp->v_sampling+2)*sp->cinfo.c.data_precision+7)
 			    /8;
 
