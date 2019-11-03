@@ -72,3 +72,4 @@ test/testtypes
 test/*.log
 test/*.trs
 test/o-*
+*~
