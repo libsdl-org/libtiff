@@ -1,5 +1,7 @@
 2019-11-03  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
 
+	libtiff 4.1.0 released.
+
 	Added a step for updating the legacy ChangeLog file.
 
 	Ignore emacs temporary files (ending with tilde character).
