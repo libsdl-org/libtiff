@@ -52,7 +52,7 @@
 #include "tiffio.h"
 
 #ifndef HAVE_GETOPT
-extern int getopt(int, char**, char*);
+extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
 #if defined(VMS)
