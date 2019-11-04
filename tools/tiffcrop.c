@@ -1334,9 +1334,10 @@ static int writeBufferToSeparateTiles (TIFF* out, uint8* buf, uint32 imagelength
   if (obuf == NULL)
     return 1;
 
-  TIFFGetField(out, TIFFTAG_TILELENGTH, &tl);
-  TIFFGetField(out, TIFFTAG_TILEWIDTH, &tw);
-  TIFFGetField(out, TIFFTAG_BITSPERSAMPLE, &bps);
+  if( !TIFFGetField(out, TIFFTAG_TILELENGTH, &tl) ||
+      !TIFFGetField(out, TIFFTAG_TILEWIDTH, &tw) ||
+      !TIFFGetField(out, TIFFTAG_BITSPERSAMPLE, &bps) )
+      return 1;
 
   if( imagewidth == 0 ||
       (uint32)bps * (uint32)spp > TIFF_UINT32_MAX / imagewidth ||
