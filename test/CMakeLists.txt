@@ -105,7 +105,9 @@ set(TESTSCRIPTS
     tiff2rgba-palette-1c-8b.sh
     tiff2rgba-rgb-3c-16b.sh
     tiff2rgba-rgb-3c-8b.sh
-    tiff2rgba-quad-tile.jpg.sh)
+    tiff2rgba-quad-tile.jpg.sh
+    tiff2rgba-ojpeg_zackthecat_subsamp22_single_strip.sh
+    tiff2rgba-ojpeg_chewey_subsamp21_multi_strip.sh)
 
 # This list should contain all of the TIFF files in the 'images'
 # subdirectory which are intended to be used as input images for
@@ -123,7 +125,9 @@ set(TIFFIMAGES
     images/rgb-3c-8b.tiff
     images/quad-tile.jpg.tiff
     images/quad-lzw-compat.tiff
-    images/lzw-single-strip.tiff)
+    images/lzw-single-strip.tiff
+    images/ojpeg_zackthecat_subsamp22_single_strip.tiff
+    images/ojpeg_chewey_subsamp21_multi_strip.tiff)
 
 set(BMPIMAGES
     images/palette-1c-8b.bmp
