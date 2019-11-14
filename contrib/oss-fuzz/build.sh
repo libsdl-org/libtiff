@@ -56,7 +56,7 @@ make install
 $CXX $CXXFLAGS -std=c++11 -I$WORK/include \
     $SRC/libtiff/contrib/oss-fuzz/tiff_read_rgba_fuzzer.cc -o $OUT/tiff_read_rgba_fuzzer \
     $LIB_FUZZING_ENGINE $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
-    $WORK/lib/libjbig.a $WORK/lib/libjbig85.a
+    $WORK/lib/libjbig.a $WORK/lib/libjbig85.a -Wl,-Bstatic -llzma -Wl,-Bdynamic
 
 mkdir afl_testcases
 (cd afl_testcases; tar xf "$SRC/afl_testcases.tgz")
