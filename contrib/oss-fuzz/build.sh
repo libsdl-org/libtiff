@@ -45,9 +45,15 @@ if [ "$ARCHITECTURE" = "i386" ]; then
 else
     make lib
 fi
+
 mv "$SRC"/jbigkit/libjbig/*.a "$WORK/lib/"
 mv "$SRC"/jbigkit/libjbig/*.h "$WORK/include/"
 popd
+
+if [ "$ARCHITECTURE" = "i386" ]; then
+    dpkg --add-architecture i386
+    apt-get install -y liblzma-dev:i386
+fi
 
 cmake . -DCMAKE_INSTALL_PREFIX=$WORK -DBUILD_SHARED_LIBS=off
 make -j$(nproc)
