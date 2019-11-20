@@ -53,6 +53,8 @@ popd
 if [ "$ARCHITECTURE" = "i386" ]; then
     dpkg --add-architecture i386
     apt-get install -y liblzma-dev:i386
+else
+    apt-get install -y liblzma-dev
 fi
 
 cmake . -DCMAKE_INSTALL_PREFIX=$WORK -DBUILD_SHARED_LIBS=off
