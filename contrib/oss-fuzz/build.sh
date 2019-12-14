@@ -50,9 +50,7 @@ mv "$SRC"/jbigkit/libjbig/*.a "$WORK/lib/"
 mv "$SRC"/jbigkit/libjbig/*.h "$WORK/include/"
 popd
 
-if [ "$ARCHITECTURE" = "i386" ]; then
-    # Nothing
-else
+if [ "$ARCHITECTURE" != "i386" ]; then
     apt-get install -y liblzma-dev
 fi
 
