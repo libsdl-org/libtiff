@@ -23,13 +23,45 @@
 # Makefile for MS Visual C and Watcom C compilers.
 #
 # To build:
-# C:\libtiff\port> nmake /f makefile.vc 
+# C:\libtiff\port> nmake /f makefile.vc
 
 !INCLUDE ..\nmake.opt
 
+!IF $(HAVE_STRTOL)
+STRTOL_OBJ =
+EXTRAFLAGS	= -DHAVE_STRTOL $(EXTRAFLAGS)
+!ELSE
+STRTOL_OBJ = strtol.obj
+!ENDIF
+
+!IF $(HAVE_STRTOUL)
+STRTOUL_OBJ =
+EXTRAFLAGS	= -DHAVE_STRTOUL $(EXTRAFLAGS)
+!ELSE
+STRTOUL_OBJ = strtoul.obj
+!ENDIF
+
+!IF $(HAVE_STRTOLL)
+STRTOLL_OBJ =
+EXTRAFLAGS	= -DHAVE_STRTOLL $(EXTRAFLAGS)
+!ELSE
+STRTOLL_OBJ = strtoll.obj
+!ENDIF
+
+!IF $(HAVE_STRTOULL)
+STRTOULL_OBJ =
+EXTRAFLAGS	= -DHAVE_STRTOULL $(EXTRAFLAGS)
+!ELSE
+STRTOULL_OBJ = strtoull.obj
+!ENDIF
+
 OBJ	= \
-        snprintf.obj \
+	snprintf.obj \
 	strcasecmp.obj \
+	$(STRTOL_OBJ) \
+	$(STRTOUL_OBJ) \
+	$(STRTOLL_OBJ) \
+	$(STRTOULL_OBJ) \
 	getopt.obj
 
 all:	libport.lib
