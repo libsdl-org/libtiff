@@ -36,16 +36,16 @@ int strcasecmp(const char *s1, const char *s2);
 #  define HAVE_GETOPT 1
 #endif
 
-#if defined(HAVE_STRTOL)
+#if !defined(HAVE_STRTOL)
 long strtol(const char *nptr, char **endptr, int base);
 #endif
-#if defined(HAVE_STRTOLL)
+#if !defined(HAVE_STRTOLL)
 long long strtoll(const char *nptr, char **endptr, int base);
 #endif
-#if defined(HAVE_STRTOUL)
+#if !defined(HAVE_STRTOUL)
 unsigned long strtoul(const char *nptr, char **endptr, int base);
 #endif
-#if defined(HAVE_STRTOULL)
+#if !defined(HAVE_STRTOULL)
 unsigned long long strtoull(const char *nptr, char **endptr, int base);
 #endif
 

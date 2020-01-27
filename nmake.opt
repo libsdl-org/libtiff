@@ -109,12 +109,11 @@ CHECK_JPEG_YCBCR_SUBSAMPLING = 1
 ####################### Compiler related options. #######################
 #
 
-# If your MSVC does not provide strtol() and strtoul(), then these
-# should be set to 0.
+
+# Indicate if the compiler provides strtol/strtoul/strtoll/strtoull.
+# Users of MSVC++ 14.0 ("Visual Studio 2015") and later should set all of these to 1
 HAVE_STRTOL = 1
 HAVE_STRTOUL = 1
-
-# Users of MSVC 19.20 ("Visual Studio 2019") and later should set these to 1
 HAVE_STRTOLL = 0
 HAVE_STRTOULL = 0
 
