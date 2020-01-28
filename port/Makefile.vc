@@ -55,6 +55,8 @@ EXTRAFLAGS	= -DHAVE_STRTOULL $(EXTRAFLAGS)
 STRTOULL_OBJ = strtoull.obj
 !ENDIF
 
+INCL = -I..\libtiff
+
 OBJ	= \
 	snprintf.obj \
 	strcasecmp.obj \
