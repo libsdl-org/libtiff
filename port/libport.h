@@ -24,6 +24,10 @@
 #ifndef _LIBPORT_
 #define	_LIBPORT_
 
+#if defined(HAVE_CONFIG_H)
+#  include <tif_config.h>
+#endif
+
 int getopt(int argc, char * const argv[], const char *optstring);
 extern   char *optarg;
 extern   int opterr;
