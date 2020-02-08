@@ -64,6 +64,97 @@ static	void usage(void);
 static	int processCompressOptions(char*);
 
 static void
+pack_none (unsigned char *buf, unsigned int smpls, uint16 bps)
+{
+	return;
+}
+
+static void
+pack_swab (unsigned char *buf, unsigned int smpls, uint16 bps)
+{
+	unsigned int s;
+	unsigned char h;
+	unsigned char l;
+
+	for (s = 0; smpls > s; s++) {
+
+		h = buf [s * 2 + 0];
+		l = buf [s * 2 + 1];
+
+		buf [s * 2 + 0] = l;
+		buf [s * 2 + 1] = h;
+	}
+	return;
+}
+
+static void
+pack_bytes (unsigned char *buf, unsigned int smpls, uint16 bps)
+{
+	unsigned int s;
+	unsigned int in;
+	unsigned int out;
+	int bits;
+	uint16 t;
+
+	in   = 0;
+	out  = 0;
+	bits = 0;
+	t    = 0;
+
+	for (s = 0; smpls > s; s++) {
+
+		t <<= bps;
+		t |= (uint16) buf [in++];
+
+		bits += bps;
+
+		if (8 <= bits) {
+			bits -= 8;
+			buf [out++] = (t >> bits) & 0xFF;
+		}
+	}
+	if (0 != bits)
+		buf [out] = (t << (8 - bits)) & 0xFF;
+}
+
+static void
+pack_words (unsigned char *buf, unsigned int smpls, uint16 bps)
+{
+	unsigned int s;
+	unsigned int in;
+	unsigned int out;
+	int bits;
+	uint32 t;
+
+	in   = 0;
+	out  = 0;
+	bits = 0;
+	t    = 0;
+
+	for (s = 0; smpls > s; s++) {
+
+		t <<= bps;
+		t |= (uint32) buf [in++] << 8;
+		t |= (uint32) buf [in++] << 0;
+
+		bits += bps;
+
+		if (16 <= bits) {
+
+			bits -= 16;
+			buf [out++] = (t >> (bits + 8));
+			buf [out++] = (t >> (bits + 0));
+		}
+	}
+	if (0 != bits) {
+		t <<= 16 - bits;
+
+		buf [out++] = (t >> (16 + 8));
+		buf [out++] = (t >> (16 + 0));
+	}
+}
+
+static void
 BadPPM(char* file)
 {
 	fprintf(stderr, "%s: Not a PPM file.\n", file);
@@ -90,8 +181,10 @@ main(int argc, char* argv[])
 	double resolution = -1;
 	unsigned char *buf = NULL;
 	tmsize_t linebytes = 0;
+	int pbm;
 	uint16 spp = 1;
 	uint16 bpp = 8;
+	void (*pack_func) (unsigned char *buf, unsigned int smpls, uint16 bps);
 	TIFF *out;
 	FILE *in;
 	unsigned int w, h, prec, row;
@@ -152,17 +245,17 @@ main(int argc, char* argv[])
 		BadPPM(infile);
 	switch (fgetc(in)) {
 		case '4':			/* it's a PBM file */
-			bpp = 1;
+			pbm = !0;
 			spp = 1;
 			photometric = PHOTOMETRIC_MINISWHITE;
 			break;
 		case '5':			/* it's a PGM file */
-			bpp = 8;
+			pbm = 0;
 			spp = 1;
 			photometric = PHOTOMETRIC_MINISBLACK;
 			break;
 		case '6':			/* it's a PPM file */
-			bpp = 8;
+			pbm = 0;
 			spp = 3;
 			photometric = PHOTOMETRIC_RGB;
 			if (compression == COMPRESSION_JPEG &&
@@ -193,19 +286,52 @@ main(int argc, char* argv[])
 		ungetc(c, in);
 		break;
 	}
-	switch (bpp) {
-	case 1:
+	if (pbm) {
 		if (fscanf(in, " %u %u", &w, &h) != 2)
 			BadPPM(infile);
 		if (fgetc(in) != '\n')
 			BadPPM(infile);
-		break;
-	case 8:
+		bpp = 1;
+		pack_func = pack_none;
+	} else {
 		if (fscanf(in, " %u %u %u", &w, &h, &prec) != 3)
 			BadPPM(infile);
-		if (fgetc(in) != '\n' || prec != 255)
+		if (fgetc(in) != '\n' || 0 == prec || 65535 < prec)
 			BadPPM(infile);
-		break;
+
+		if (0 != (prec & (prec + 1))) {
+			fprintf(stderr, "%s: unsupported maxval %u.\n",
+				infile, prec);
+			exit(-2);
+		}
+		bpp = 0;
+		if ((prec + 1) & 0xAAAAAAAA) bpp |=  1;
+		if ((prec + 1) & 0xCCCCCCCC) bpp |=  2;
+		if ((prec + 1) & 0xF0F0F0F0) bpp |=  4;
+		if ((prec + 1) & 0xFF00FF00) bpp |=  8;
+		if ((prec + 1) & 0xFFFF0000) bpp |= 16;
+
+		switch (bpp) {
+		case 8:
+			pack_func = pack_none;
+			break;
+		case 16:
+			{
+				const unsigned short i = 0x0100;
+
+				if (0 == *(unsigned char*) &i)
+					pack_func = pack_swab;
+				else
+					pack_func = pack_none;
+			}
+			break;
+		default:
+			if (8 >= bpp)
+				pack_func = pack_bytes;
+			else
+				pack_func = pack_words;
+			break;
+		}
 	}
 	out = TIFFOpen(argv[optind], "w");
 	if (out == NULL)
@@ -232,22 +358,19 @@ main(int argc, char* argv[])
 		TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, g3opts);
 		break;
 	}
-	switch (bpp) {
-		case 1:
-			/* if round-up overflows, result will be zero, OK */
-			linebytes = (multiply_ms(spp, w) + (8 - 1)) / 8;
-			if (rowsperstrip == (uint32) -1) {
-				TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, h);
-			} else {
-				TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
-				    TIFFDefaultStripSize(out, rowsperstrip));
-			}
-			break;
-		case 8:
-			linebytes = multiply_ms(spp, w);
-			TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
-			    TIFFDefaultStripSize(out, rowsperstrip));
-			break;
+	if (pbm) {
+		/* if round-up overflows, result will be zero, OK */
+		linebytes = (multiply_ms(spp, w) + (8 - 1)) / 8;
+	} else if (bpp <= 8) {
+		linebytes = multiply_ms(spp, w);
+	} else {
+		linebytes = multiply_ms(2 * spp, w);
+	}
+	if (rowsperstrip == (uint32) -1) {
+		TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, h);
+	} else {
+		TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
+		    TIFFDefaultStripSize(out, rowsperstrip));
 	}
 	if (linebytes == 0) {
 		fprintf(stderr, "%s: scanline size overflow\n", infile);
@@ -280,6 +403,7 @@ main(int argc, char* argv[])
 			    infile, (unsigned long) row);
 			break;
 		}
+		pack_func (buf, w * spp, bpp);
 		if (TIFFWriteScanline(out, buf, row, 0) < 0)
 			break;
 	}
