@@ -372,7 +372,7 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
 	_TIFF_stat_s filestat;
 	uint32	    w, h, scanlinesize, imagesize;
 	uint32	    depth = TIFFDataWidth(dtype);
-	float	    cor_coef = 0, tmp;
+	double	    cor_coef = 0, tmp;
 
 	if (_TIFF_fstat_f(fd, &filestat) == -1) {
                 fprintf(stderr, "Failed to obtain file size.\n");
@@ -419,22 +419,28 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
 		     w++) {
 			if (imagesize % w == 0) {
 				scanlinesize = w * depth;
+				h = imagesize / w;
+				if (h < 2)
+					continue;
+				/* reads 2 lines at the middle of the image and calculate their correlation.
+				 * it works for h >= 2. (in this case it will compare line 0 and line 1 */
 				buf1 = _TIFFmalloc(scanlinesize);
 				buf2 = _TIFFmalloc(scanlinesize);
-				h = imagesize / w;
                                 do {
-                                        if (_TIFF_lseek_f(fd, hdr_size + (int)(h/2)*scanlinesize,
+                                        if (_TIFF_lseek_f(fd, hdr_size + (int)((h - 1)/2)*scanlinesize,
                                                   SEEK_SET) == (_TIFF_off_t)-1) {
                                                 fprintf(stderr, "seek error.\n");
                                                 fail=1;
                                                 break;
                                         }
+                                        /* read line (h-1)/2 */
                                         if (read(fd, buf1, scanlinesize) !=
                                             (long) scanlinesize) {
                                                 fprintf(stderr, "read error.\n");
                                                 fail=1;
                                                 break;
                                         }
+                                        /* read line ((h-1)/2)+1 */
                                         if (read(fd, buf2, scanlinesize) !=
                                             (long) scanlinesize) {
                                                 fprintf(stderr, "read error.\n");
@@ -445,11 +451,15 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
                                                 swapBytesInScanline(buf1, w, dtype);
                                                 swapBytesInScanline(buf2, w, dtype);
                                         }
-                                        tmp = (float) fabs(correlation(buf1, buf2,
-                                                                       w, dtype));
-                                        if (tmp > cor_coef) {
-                                                cor_coef = tmp;
+                                        if (0 == memcmp(buf1, buf2, scanlinesize)) {
                                                 *width = w, *length = h;
+                                        } else {
+                                                tmp = fabs(correlation(buf1, buf2,
+                                                                       w, dtype));
+                                                if (tmp > cor_coef) {
+                                                        cor_coef = tmp;
+                                                        *width = w, *length = h;
+                                                }
                                         }
                                 } while (0);
 
@@ -564,6 +574,7 @@ correlation(void *buf1, void *buf2, uint32 n_elem, TIFFDataType dtype)
 	M2 /= n_elem;
 	D1 -= M1 * M1 * n_elem;
 	D2 -= M2 * M2 * n_elem;
+	if (D1 * D2 == 0.0) return 0.0;	/* avoid divide by zero */
 	K = (K - M1 * M2 * n_elem) / sqrt(D1 * D2);
 
 	return K;
