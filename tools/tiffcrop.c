@@ -4024,9 +4024,9 @@ combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
         {
 	src = in[s] + src_offset + src_byte;
         if (little_endian)
-	  buff1 = (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
+	  buff1 = ((uint32)src[0] << 24) | ((uint32)src[1] << 16) | ((uint32)src[2] << 8) | (uint32)src[3];
         else
-	  buff1 = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
+	  buff1 = ((uint32)src[3] << 24) | ((uint32)src[2] << 16) | ((uint32)src[1] << 8) | (uint32)src[0];
 	buff1 = (buff1 & matchbits) << (src_bit);
 
 	/* If we have a full buffer's worth, write it out */
