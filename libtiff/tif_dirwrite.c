@@ -2704,6 +2704,7 @@ void DoubleToSrational_direct(double value,  long *num,  long *denom)
 * Calculates the rational fractional of a double input value
 * using the Euclidean algorithm to find the greatest common divisor (GCD)
 ------------------------------------------------------------------------*/
+static
 void ToRationalEuclideanGCD(double value, int blnUseSignedRange, int blnUseSmallRange, unsigned long long *ullNum, unsigned long long *ullDenom)
 {
 	/* Internally, the integer variables can be bigger than the external ones,
