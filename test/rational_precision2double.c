@@ -46,8 +46,9 @@
 #define GOTOFAILURE
 #endif
 
-
+#ifdef _MSC_VER
 #pragma warning( disable : 4101)
+#endif
 
 #include "tif_config.h"
 #include <stdio.h>
@@ -153,6 +154,7 @@ _XTIFFDefaultDirectory(TIFF *tif)
 	n = N(tifFieldInfo);
 	//_TIFFMergeFields(tif, const TIFFField info[], uint32 n);
 	nadded = _TIFFMergeFields(tif, tifFieldInfo, n);
+        (void)nadded;
 
 	/* Since an XTIFF client module may have overridden
 	* the default directory method, we call it now to
@@ -182,7 +184,7 @@ main()
 	/* delete file, if exists */
 	ret = unlink(filenameClassicTiff);
 	errorNo = errno;
-	if (ret != 0 && errno != ENOENT) {
+	if (ret != 0 && errorNo != ENOENT) {
 		fprintf(stderr, "Can't delete test TIFF file %s.\n", filenameClassicTiff);
 	}
 
@@ -199,7 +201,7 @@ main()
 	/*--- Test with BIG-TIFF ---*/
 	/* delete file, if exists */
 	ret = unlink(filenameBigTiff);
-	if (ret != 0 && errno != ENOENT) {
+	if (ret != 0 && errorNo != ENOENT) {
 		fprintf(stderr, "Can't delete test TIFF file %s.\n", filenameBigTiff);
 	}
 
@@ -218,7 +220,7 @@ main()
 	/* delete file, if exists */
 	ret = unlink(filenameClassicTiff);
 	errorNo = errno;
-	if (ret != 0 && errno != ENOENT) {
+	if (ret != 0 && errorNo != ENOENT) {
 		fprintf(stderr, "Can't delete test TIFF file %s.\n", filenameClassicTiff);
 	}
 
@@ -256,9 +258,7 @@ int
 write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 	unsigned char	buf[SPP] = {0, 127, 255};
 	/*-- Additional variables --*/
-	int				retCode, retCode2;
-	unsigned char* pGpsVersion;
-	char			auxStr[200];
+	int				retCode;
 	float			auxFloat = 0.0f;
 	double			auxDouble = 0.0;
 	uint16			auxUint16 = 0;
@@ -271,7 +271,6 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 	long	nTags;
 
 	const TIFFFieldArray* tFieldArray;
-	const TIFFField** tifFields;          /* actual field info */
 	unsigned long			tTag;
 	TIFFDataType			tType;
 	short					tWriteCount;
@@ -286,9 +285,6 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 #define VARIABLE_ARRAY_SIZE 6
 
 	/* -- Test data for writing -- */
-	char			auxCharArrayW[N_SIZE];
-	short			auxShortArrayW[N_SIZE];
-	long			auxLongArrayW[N_SIZE];
 	float			auxFloatArrayW[N_SIZE];
 	double			auxDoubleArrayW[N_SIZE];
 	char			auxTextArrayW[N_SIZE][STRSIZE];
@@ -309,33 +305,18 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 		float	flt2;
 	} auxDblUnion;
 
-	float* pFloat;
 	void* pVoidArray;
 	float* pFloatArray;
-	double* pDoubleArray;
-	char* pAscii;
-	char		auxCharArray[2 * STRSIZE];
-	short		auxShortArray[2 * N_SIZE];
-	long		auxLongArray[2 * N_SIZE];
 	float		auxFloatArray[2 * N_SIZE];
 	double		auxDoubleArray[2 * N_SIZE];
 	double		dblDiff, dblDiffLimit;
-	float		fltDiff, fltDiffLimit;
+	float		fltDiff;
 #define RATIONAL_EPS (1.0/30000.0) /* reduced difference of rational values, approx 3.3e-5 */
 
 
 	/*-- Fill test data arrays for writing ----------- */
 	for (i = 0; i < N_SIZE; i++) {
 		sprintf(auxTextArrayW[i], "N%d-String-%d_tttttttttttttttttttttttttttttx", i, i);
-	}
-	for (i = 0; i < N_SIZE; i++) {
-		auxCharArrayW[i] = (char)(i + 1);
-	}
-	for (i = 0; i < N_SIZE; i++) {
-		auxShortArrayW[i] = (short)(i + 1) * 7;
-	}
-	for (i = 0; i < N_SIZE; i++) {
-		auxLongArrayW[i] = (i + 1) * 133;
 	}
 	for (i = 0; i < N_SIZE; i++) {
 		auxFloatArrayW[i] = (float)((i + 1) * 133) / 3.3f;
@@ -601,7 +582,7 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 	}	/* blnAllCustomTags */  /*==== END END - Automatically check all custom rational tags  == WRITING END ===*/
 
 	/*-- Write dummy pixel data. --*/
-	if (!TIFFWriteScanline(tif, buf, 0, 0) < 0) {
+	if (TIFFWriteScanline(tif, buf, 0, 0) < 0) {
 		fprintf (stderr, "Can't write image data.\n");
 		goto failure;
 	}

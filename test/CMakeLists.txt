@@ -194,8 +194,12 @@ endif()
 add_executable(custom_dir custom_dir.c)
 target_link_libraries(custom_dir tiff port)
 
+if(NOT BUILD_SHARED_LIBS)
 add_executable(rational_precision2double rational_precision2double.c)
 target_link_libraries(rational_precision2double tiff port)
+add_test(NAME "rational_precision2double"
+         COMMAND "rational_precision2double")
+endif()
 
 add_executable(defer_strile_loading defer_strile_loading.c)
 target_link_libraries(defer_strile_loading tiff port)
