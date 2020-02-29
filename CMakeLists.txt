@@ -203,7 +203,9 @@ else()
 endif()
 
 # Find libm, if available
-find_library(M_LIBRARY m)
+if(NOT MINGW)
+  find_library(M_LIBRARY m)
+endif()
 
 check_include_file(assert.h    HAVE_ASSERT_H)
 check_include_file(dlfcn.h     HAVE_DLFCN_H)
@@ -671,7 +673,7 @@ endif()
 
 # Libraries required by libtiff
 set(TIFF_LIBRARY_DEPS)
-if(M_LIBRARY)
+if(NOT MINGW AND M_LIBRARY)
   list(APPEND TIFF_LIBRARY_DEPS ${M_LIBRARY})
 endif()
 if(ZLIB_LIBRARIES)
