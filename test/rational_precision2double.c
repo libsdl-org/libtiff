@@ -498,7 +498,8 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 				fprintf(stderr, "Can't set TIFFTAG_RATIONAL_DOUBLE tag.\n");
 				goto failure;
 			}
-			if (!TIFFSetField(tif, TIFFTAG_SRATIONAL_DOUBLE, (-1.0 * auxDoubleArrayW[101]))) {
+			/* test for plain integers */
+			if (!TIFFSetField(tif, TIFFTAG_SRATIONAL_DOUBLE, (-1.0 ))) {
 				fprintf(stderr, "Can't set TIFFTAG_SRATIONAL_DOUBLE tag.\n");
 				goto failure;
 			}
@@ -764,7 +765,7 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 			auxDblUnion.dbl = 0;
 			retCode = TIFFGetField(tif, TIFFTAG_SRATIONAL_DOUBLE, &auxDblUnion.dbl);
 			if (!retCode) { fprintf(stderr, "Can't read %s\n", "TIFFTAG_SRATIONAL_DOUBLE"); GOTOFAILURE }
-			auxDouble = -1.0 * auxDoubleArrayW[101];
+			auxDouble = -1.0; 
 			dblDiffLimit = RATIONAL_EPS * auxDouble;
 			dblDiff = auxDblUnion.dbl - auxDouble;
 			if (fabs(dblDiff) > fabs(dblDiffLimit)) {
