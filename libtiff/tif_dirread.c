@@ -4545,6 +4545,17 @@ TIFFReadEXIFDirectory(TIFF* tif, toff_t diroff)
 	return TIFFReadCustomDirectory(tif, diroff, exifFieldArray);  
 }
 
+/*
+ *--: EXIF-GPS custom directory reading as another special case of custom IFD.
+ */
+int
+TIFFReadGPSDirectory(TIFF* tif, toff_t diroff)
+{
+	const TIFFFieldArray* gpsFieldArray;
+	gpsFieldArray = _TIFFGetGpsFields();
+	return TIFFReadCustomDirectory(tif, diroff, gpsFieldArray);  
+}
+
 static int
 EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16 dircount)
 {
