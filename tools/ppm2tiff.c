@@ -66,6 +66,9 @@ static	int processCompressOptions(char*);
 static void
 pack_none (unsigned char *buf, unsigned int smpls, uint16 bps)
 {
+	(void)buf;
+	(void)smpls;
+	(void)bps;
 	return;
 }
 
@@ -75,6 +78,7 @@ pack_swab (unsigned char *buf, unsigned int smpls, uint16 bps)
 	unsigned int s;
 	unsigned char h;
 	unsigned char l;
+	(void)bps;
 
 	for (s = 0; smpls > s; s++) {
 
