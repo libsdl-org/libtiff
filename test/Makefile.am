@@ -186,6 +186,7 @@ TIFFIMAGES = \
 PNMIMAGES = \
 	images/minisblack-1c-8b.pgm \
 	images/miniswhite-1c-1b.pbm \
+	images/rgb-3c-16b.ppm \
 	images/rgb-3c-8b.ppm
 
 # This list should include all of the files in the 'images'
