@@ -149,6 +149,7 @@ TESTSCRIPTS = \
 	tiff2rgba-palette-1c-8b.sh \
 	tiff2rgba-rgb-3c-16b.sh \
 	tiff2rgba-rgb-3c-8b.sh \
+	testfax4.sh \
 	$(JPEG_DEPENDENT_TESTSCRIPTS)
 
 # This list should contain the references files
@@ -157,7 +158,8 @@ REFFILES = \
 	refs/o-tiff2ps-EPS1.ps \
 	refs/o-tiff2ps-PS1.ps \
 	refs/o-tiff2ps-PS2.ps \
-	refs/o-tiff2ps-PS3.ps
+	refs/o-tiff2ps-PS3.ps \
+	refs/o-testfax4.tiff
 
 # This list should contain all of the TIFF files in the 'images'
 # subdirectory which are intended to be used as input images for
@@ -178,7 +180,8 @@ TIFFIMAGES = \
 	images/lzw-single-strip.tiff \
 	images/ojpeg_zackthecat_subsamp22_single_strip.tiff \
 	images/ojpeg_chewey_subsamp21_multi_strip.tiff \
-	images/ojpeg_single_strip_no_rowsperstrip.tiff
+	images/ojpeg_single_strip_no_rowsperstrip.tiff \
+	images/testfax4.tiff
 
 PNMIMAGES = \
 	images/minisblack-1c-8b.pgm \
