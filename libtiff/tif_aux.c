@@ -292,7 +292,7 @@ TIFFVGetFieldDefaulted(TIFF* tif, uint32 tag, va_list ap)
 	case TIFFTAG_YCBCRCOEFFICIENTS:
 		{
 			/* defaults are from CCIR Recommendation 601-1 */
-			static float ycbcrcoeffs[] = { 0.299f, 0.587f, 0.114f };
+			static const float ycbcrcoeffs[] = { 0.299f, 0.587f, 0.114f };
 			*va_arg(ap, const float **) = ycbcrcoeffs;
 			return 1;
 		}
@@ -305,12 +305,13 @@ TIFFVGetFieldDefaulted(TIFF* tif, uint32 tag, va_list ap)
 		return (1);
 	case TIFFTAG_WHITEPOINT:
 		{
-			static float whitepoint[2];
 			/* TIFF 6.0 specification tells that it is no default
 			   value for the WhitePoint, but AdobePhotoshop TIFF
 			   Technical Note tells that it should be CIE D50. */
-			whitepoint[0] =	D50_X0 / (D50_X0 + D50_Y0 + D50_Z0);
-			whitepoint[1] =	D50_Y0 / (D50_X0 + D50_Y0 + D50_Z0);
+			static const float whitepoint[] = {
+						D50_X0 / (D50_X0 + D50_Y0 + D50_Z0),
+						D50_Y0 / (D50_X0 + D50_Y0 + D50_Z0)
+			};
 			*va_arg(ap, const float **) = whitepoint;
 			return 1;
 		}
