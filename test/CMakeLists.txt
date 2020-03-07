@@ -204,6 +204,11 @@ add_test(NAME "rational_precision2double"
          COMMAND "rational_precision2double")
 endif()
 
+add_executable(custom_dir_EXIF_231 custom_dir_EXIF_231.c)
+target_link_libraries(custom_dir_EXIF_231 tiff port)
+add_test(NAME "custom_dir_EXIF_231"
+         COMMAND "custom_dir_EXIF_231")
+
 add_executable(defer_strile_loading defer_strile_loading.c)
 target_link_libraries(defer_strile_loading tiff port)
 
