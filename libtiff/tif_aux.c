@@ -270,7 +270,7 @@ TIFFVGetFieldDefaulted(TIFF* tif, uint32 tag, va_list ap)
 		return (1);
 	case TIFFTAG_EXTRASAMPLES:
 		*va_arg(ap, uint16 *) = td->td_extrasamples;
-		*va_arg(ap, uint16 **) = td->td_sampleinfo;
+		*va_arg(ap, const uint16 **) = td->td_sampleinfo;
 		return (1);
 	case TIFFTAG_MATTEING:
 		*va_arg(ap, uint16 *) =
@@ -293,7 +293,7 @@ TIFFVGetFieldDefaulted(TIFF* tif, uint32 tag, va_list ap)
 		{
 			/* defaults are from CCIR Recommendation 601-1 */
 			static float ycbcrcoeffs[] = { 0.299f, 0.587f, 0.114f };
-			*va_arg(ap, float **) = ycbcrcoeffs;
+			*va_arg(ap, const float **) = ycbcrcoeffs;
 			return 1;
 		}
 	case TIFFTAG_YCBCRSUBSAMPLING:
@@ -306,13 +306,12 @@ TIFFVGetFieldDefaulted(TIFF* tif, uint32 tag, va_list ap)
 	case TIFFTAG_WHITEPOINT:
 		{
 			static float whitepoint[2];
-
 			/* TIFF 6.0 specification tells that it is no default
 			   value for the WhitePoint, but AdobePhotoshop TIFF
 			   Technical Note tells that it should be CIE D50. */
 			whitepoint[0] =	D50_X0 / (D50_X0 + D50_Y0 + D50_Z0);
 			whitepoint[1] =	D50_Y0 / (D50_X0 + D50_Y0 + D50_Z0);
-			*va_arg(ap, float **) = whitepoint;
+			*va_arg(ap, const float **) = whitepoint;
 			return 1;
 		}
 	case TIFFTAG_TRANSFERFUNCTION:
@@ -321,16 +320,16 @@ TIFFVGetFieldDefaulted(TIFF* tif, uint32 tag, va_list ap)
 			TIFFErrorExt(tif->tif_clientdata, tif->tif_name, "No space for \"TransferFunction\" tag");
 			return (0);
 		}
-		*va_arg(ap, uint16 **) = td->td_transferfunction[0];
+		*va_arg(ap, const uint16 **) = td->td_transferfunction[0];
 		if (td->td_samplesperpixel - td->td_extrasamples > 1) {
-			*va_arg(ap, uint16 **) = td->td_transferfunction[1];
-			*va_arg(ap, uint16 **) = td->td_transferfunction[2];
+			*va_arg(ap, const uint16 **) = td->td_transferfunction[1];
+			*va_arg(ap, const uint16 **) = td->td_transferfunction[2];
 		}
 		return (1);
 	case TIFFTAG_REFERENCEBLACKWHITE:
 		if (!td->td_refblackwhite && !TIFFDefaultRefBlackWhite(td))
 			return (0);
-		*va_arg(ap, float **) = td->td_refblackwhite;
+		*va_arg(ap, const float **) = td->td_refblackwhite;
 		return (1);
 	}
 	return 0;
