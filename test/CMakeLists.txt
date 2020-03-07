@@ -143,6 +143,7 @@ set(GIFIMAGES
 set(PNMIMAGES
     images/minisblack-1c-8b.pgm
     images/miniswhite-1c-1b.pbm
+    images/rgb-3c-16b.ppm
     images/rgb-3c-8b.ppm)
 
 # All uncompressed image files
@@ -353,6 +354,7 @@ add_convert_test(gif2tiff palette "" "images/palette-1c-8b.gif" TRUE)
 # PPM
 add_convert_test(ppm2tiff miniswhite "" "images/miniswhite-1c-1b.pbm" TRUE)
 add_convert_test(ppm2tiff minisblack "" "images/minisblack-1c-8b.pgm" TRUE)
+add_convert_test(ppm2tiff rgb        "" "images/rgb-3c-16b.ppm"       TRUE)
 add_convert_test(ppm2tiff rgb        "" "images/rgb-3c-8b.ppm"        TRUE)
 
 # tiffcp
