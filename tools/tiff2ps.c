@@ -40,6 +40,13 @@
 
 #include "tiffio.h"
 
+#ifndef EXIT_SUCCESS
+#define EXIT_SUCCESS 0
+#endif
+#ifndef EXIT_FAILURE
+#define EXIT_FAILURE 1
+#endif
+
 /*
  * Revision history
  * 2013-Jan-21
@@ -332,7 +339,7 @@ main(int argc, char* argv[])
                           case '9': diroff = (uint32) strtoul(optarg, NULL, 0);
 			          break;
                           default: TIFFError ("-o", "Offset must be a numeric value.");
-			    exit (1);
+			    exit (EXIT_FAILURE);
 			  }
 			break;
 		case 'O':		/* XXX too bad -o is already taken */
@@ -341,21 +348,21 @@ main(int argc, char* argv[])
 				fprintf(stderr,
 				    "%s: %s: Cannot open output file.\n",
 				    argv[0], optarg);
-				exit(-2);
+			    exit (EXIT_FAILURE);
 			}
 			break;
 		case 'P':
-                        switch (optarg[0])
-                          {
-                          case 'l':
-                          case 'L': strcpy (pageOrientation, "Landscape");
-			            break; 
-                          case 'p':
-                          case 'P': strcpy (pageOrientation, "Portrait");
-			            break; 
-                          default: TIFFError ("-P", "Page orientation must be Landscape or Portrait");
-			           exit (-1);
-			  }
+			switch (optarg[0])
+			{
+			  case 'l':
+			  case 'L': strcpy (pageOrientation, "Landscape");
+				break;
+			  case 'p':
+			  case 'P': strcpy (pageOrientation, "Portrait");
+				break;
+			  default: TIFFError ("-P", "Page orientation must be Landscape or Portrait");
+			    exit (EXIT_FAILURE);
+			}
 			break;
 		case 'l':
 			leftmargin = atof(optarg);
@@ -386,7 +393,7 @@ main(int argc, char* argv[])
 			    break;
 			  default:
                             fprintf (stderr, "Rotation angle must be 90, 180, 270 (degrees ccw) or auto\n");
-			    exit (-1);
+			    exit (EXIT_FAILURE);
 			  }
 			break;
 		case 's':
@@ -424,7 +431,7 @@ main(int argc, char* argv[])
 			res_unit = RESUNIT_INCH;
 			break;
 		case '?':
-			usage(-1);
+			usage(EXIT_FAILURE);
 		}
 
         if (useImagemask == TRUE)
@@ -432,14 +439,14 @@ main(int argc, char* argv[])
 	  if ((level2 == FALSE) && (level3 == FALSE))
             {
 	    TIFFError ("-m "," imagemask operator requres Postscript Level2 or Level3");
-	    exit (1);
+	    exit (EXIT_FAILURE);
             }
           }
 
         if (pageWidth && (maxPageWidth > pageWidth))
 	  {
 	  TIFFError ("-W", "Max viewport width cannot exceed page width");
-	  exit (1);
+	  exit (EXIT_FAILURE);
           }
 
         /* auto rotate requires a specified page width and height */
@@ -452,13 +459,13 @@ main(int argc, char* argv[])
           if ((maxPageWidth > 0) || (maxPageHeight > 0))
             {
 	    TIFFError ("-r auto", " is incompatible with maximum page width/height specified by -H or -W");
-            exit (1);
+            exit (EXIT_FAILURE);
             }
           }
         if ((maxPageWidth > 0) && (maxPageHeight > 0))
             {
 	    TIFFError ("-H and -W", " Use only one of -H or -W to define a viewport");
-            exit (1);
+            exit (EXIT_FAILURE);
             }
 
         if ((generateEPSF == TRUE) && (printAll == TRUE))
@@ -489,13 +496,13 @@ main(int argc, char* argv[])
                             && !TIFFSetDirectory(tif, (tdir_t)dirnum))
                         {
                                 TIFFClose(tif);
-				return (-1);
+				return (EXIT_FAILURE);
                         }
 			else if (diroff != 0 &&
 			    !TIFFSetSubDirectory(tif, diroff))
                         {
                                 TIFFClose(tif);
-				return (-1);
+				return (EXIT_FAILURE);
                         }
 			np = TIFF2PS(output, tif, pageWidth, pageHeight,
 				     leftmargin, bottommargin, centered);
@@ -509,10 +516,10 @@ main(int argc, char* argv[])
 	if (np)
 		PSTail(output, np);
 	else
-		usage(-1);
+		usage(EXIT_FAILURE);
 	if (output != stdout)
 		fclose(output);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static	uint16 samplesperpixel;
@@ -3080,7 +3087,7 @@ tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw
 #endif	/* EXP_ASCII85ENCODER */
 
 
-char* stuff[] = {
+const char* stuff[] = {
 "usage: tiff2ps [options] input.tif ...",
 "where options are:",
 " -1            generate PostScript Level 1 (default)",
@@ -3120,13 +3127,12 @@ NULL
 static void
 usage(int code)
 {
-	char buf[BUFSIZ];
 	int i;
+	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-	setbuf(stderr, buf);
-        fprintf(stderr, "%s\n\n", TIFFGetVersion());
+	fprintf(out, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(stderr, "%s\n", stuff[i]);
+		fprintf(out, "%s\n", stuff[i]);
 	exit(code);
 }
 
