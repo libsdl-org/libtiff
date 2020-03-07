@@ -263,7 +263,7 @@ typedef struct {
 
 /* These functions are called by main. */
 
-void tiff2pdf_usage(void);
+static void tiff2pdf_usage(int);
 int tiff2pdf_match_paper_size(float*, float*, char*);
 
 /* These functions are used to generate a PDF from a TIFF. */ 
@@ -754,11 +754,12 @@ int main(int argc, char** argv){
 			case 'b':
 				t2p->pdf_image_interpolate = 1;
 				break;
-			case 'h': 
-			case '?': 
-				tiff2pdf_usage();
+			case 'h':
+				tiff2pdf_usage(EXIT_SUCCESS);
 				goto success;
-				break;
+			case '?':
+				tiff2pdf_usage(EXIT_FAILURE);
+				goto fail;
 		}
 	}
 
@@ -775,14 +776,14 @@ int main(int argc, char** argv){
 		}
 	} else {
 		TIFFError(TIFF2PDF_MODULE, "No input file specified"); 
-		tiff2pdf_usage();
+		tiff2pdf_usage(EXIT_FAILURE);
 		goto fail;
 	}
 
 	if(argc > optind) {
 		TIFFError(TIFF2PDF_MODULE, 
 			  "No support for multiple input files"); 
-		tiff2pdf_usage();
+		tiff2pdf_usage(EXIT_FAILURE);
 		goto fail;
 	}
 
@@ -844,8 +845,8 @@ success:
   
 }
 
-void tiff2pdf_usage(){
-	char* lines[]={
+static void tiff2pdf_usage(int code) {
+	static const char* lines[]={
 	"usage:  tiff2pdf [options] input.tiff",
 	"options:",
 	" -o: output to file name",
@@ -866,7 +867,7 @@ void tiff2pdf_usage(){
 	" -l: length in units",
 	" -r: 'd' for resolution default, 'o' for resolution override",
 	" -p: paper size, eg \"letter\", \"legal\", \"A4\"",
-  " -F: make the tiff fill the PDF page",
+	" -F: make the tiff fill the PDF page",
 	" -f: set PDF \"Fit Window\" user preference",
 	" -e: date, overrides image or current date/time default, YYYYMMDDHHMMSS",
 	" -c: sets document creator, overrides image software default",
@@ -880,10 +881,11 @@ void tiff2pdf_usage(){
 	NULL
 	};
 	int i=0;
+	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-	fprintf(stderr, "%s\n\n", TIFFGetVersion());
+	fprintf(out, "%s\n\n", TIFFGetVersion());
 	for (i=0;lines[i]!=NULL;i++){
-		fprintf(stderr, "%s\n", lines[i]);
+		fprintf(out, "%s\n", lines[i]);
 	}
 
 	return;
