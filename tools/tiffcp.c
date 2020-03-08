@@ -741,11 +741,12 @@ tiffcp(TIFF* in, TIFF* out)
 		case COMPRESSION_DEFLATE:
                 case COMPRESSION_LZMA:
                 case COMPRESSION_ZSTD:
-								case COMPRESSION_WEBP:
 			if (predictor != (uint16)-1)
 				TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
 			else
 				CopyField(TIFFTAG_PREDICTOR, predictor);
+			/*fallthrough*/
+		case COMPRESSION_WEBP:
 			if (preset != -1) {
                                 if (compression == COMPRESSION_ADOBE_DEFLATE
                                          || compression == COMPRESSION_DEFLATE)
