@@ -565,7 +565,15 @@ typedef enum {
 						   into ICC profile space */
 #define TIFFTAG_CURRENTICCPROFILE	50833	/* & */
 #define TIFFTAG_CURRENTPREPROFILEMATRIX	50834	/* & */
+
+#define TIFFTAG_RPCCOEFFICIENT          50844   /* Define by GDAL for geospatial georeferencing through RPC: http://geotiff.maptools.org/rpc_prop.html */
+
 #define	TIFFTAG_ALIAS_LAYER_METADATA	50784	/* Alias Sketchbook Pro layer usage description. */
+
+/* GeoTIFF DGIWG */
+#define TIFFTAG_TIFF_RSID               50908   /* https://www.awaresystems.be/imaging/tiff/tifftags/tiff_rsid.html */
+#define TIFFTAG_GEO_METADATA            50909   /* https://www.awaresystems.be/imaging/tiff/tifftags/geo_metadata.html */
+
 #define TIFFTAG_EXTRACAMERAPROFILES 50933  /* http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/products/photoshop/pdfs/dng_spec_1.4.0.0.pdf */
 
 /* tag 65535 is an undefined tag used by Eastman Kodak */
