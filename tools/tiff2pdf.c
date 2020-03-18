@@ -4993,9 +4993,11 @@ tsize_t t2p_write_pdf_xobject_cs(T2P* t2p, TIFF* output){
 			X_W = t2p->tiff_whitechromaticities[0];
 			Y_W = t2p->tiff_whitechromaticities[1];
 			Z_W = 1.0F - (X_W + Y_W);
-			X_W /= Y_W;
-			Z_W /= Y_W;
-			Y_W = 1.0F;
+			if (Y_W != 0.0F) {
+				X_W /= Y_W;
+				Z_W /= Y_W;
+				Y_W = 1.0F;
+			}
 			buflen=snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n", X_W, Y_W, Z_W);
 			check_snprintf_ret(t2p, buflen, buffer);
 			written += t2pWriteFile(output, (tdata_t) buffer, buflen);
@@ -5124,9 +5126,11 @@ tsize_t t2p_write_pdf_xobject_calcs(T2P* t2p, TIFF* output){
 		X_W = t2p->tiff_whitechromaticities[0];
 		Y_W = t2p->tiff_whitechromaticities[1];
 		Z_W = 1.0F - (X_W + Y_W);
-		X_W /= Y_W;
-		Z_W /= Y_W;
-		Y_W = 1.0F;
+		if (Y_W != 0.0F) {
+			X_W /= Y_W;
+			Z_W /= Y_W;
+			Y_W = 1.0F;
+		}
 	}
 	if(t2p->pdf_colorspace & T2P_CS_CALRGB){
 		written += t2pWriteFile(output, (tdata_t) "/CalRGB ", 8);
@@ -5151,9 +5155,11 @@ tsize_t t2p_write_pdf_xobject_calcs(T2P* t2p, TIFF* output){
 		X_W = (X_R * R) + (X_G * G) + (X_B * B);
 		Y_W = (Y_R * R) + (Y_G * G) + (Y_B * B);
 		Z_W = (Z_R * R) + (Z_G * G) + (Z_B * B);
-		X_W /= Y_W;
-		Z_W /= Y_W;
-		Y_W = 1.0;
+		if (Y_W != 0.0F) {
+			X_W /= Y_W;
+			Z_W /= Y_W;
+			Y_W = 1.0;
+		}
 	}
 	written += t2pWriteFile(output, (tdata_t) "<< \n", 4);
 	if(t2p->pdf_colorspace & T2P_CS_CALGRAY){
