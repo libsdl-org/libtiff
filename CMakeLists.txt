@@ -402,6 +402,9 @@ endif()
 # CPU endianness
 include(TestBigEndian)
 test_big_endian(HOST_BIG_ENDIAN)
+if(HOST_BIG_ENDIAN)
+  add_definitions(-DWORDS_BIGENDIAN)
+endif()
 
 # IEEE floating point
 set(HAVE_IEEEFP 1)
