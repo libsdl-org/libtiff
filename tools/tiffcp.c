@@ -114,9 +114,6 @@ static void* limitMalloc(tmsize_t s)
 	return _TIFFmalloc(s);
 }
 
-/* use the custom malloc function for all code below */
-#define _TIFFmalloc	limitMalloc
-
 static int nextSrcImage (TIFF *tif, char **imageSpec)
 /*
   seek to the next image specified in *imageSpec
@@ -886,7 +883,7 @@ DECLAREcpFunc(cpContig2ContigByRow)
 	tdata_t buf;
 	uint32 row;
 
-	buf = _TIFFmalloc(scanlinesize);
+	buf = limitMalloc(scanlinesize);
 	if (!buf)
 		return 0;
 	_TIFFmemset(buf, 0, scanlinesize);
@@ -960,8 +957,8 @@ DECLAREcpFunc(cpBiasedContig2Contig)
 			subtractLine = lineSubtractFn (sampleBits);
 			if (subtractLine) {
 				uint32 row;
-				buf = _TIFFmalloc(bufSize);
-				biasBuf = _TIFFmalloc(bufSize);
+				buf = limitMalloc(bufSize);
+				biasBuf = limitMalloc(bufSize);
 				for (row = 0; row < imagelength; row++) {
 					if (TIFFReadScanline(in, buf, row, 0) < 0
 					    && !ignore) {
@@ -1023,7 +1020,7 @@ bad:
 DECLAREcpFunc(cpDecodedStrips)
 {
 	tsize_t stripsize  = TIFFStripSize(in);
-	tdata_t buf = _TIFFmalloc(stripsize);
+	tdata_t buf = limitMalloc(stripsize);
 
 	(void) imagewidth; (void) spp;
 	if (buf) {
@@ -1073,7 +1070,7 @@ DECLAREcpFunc(cpSeparate2SeparateByRow)
 	tsample_t s;
 
 	(void) imagewidth;
-	buf = _TIFFmalloc(scanlinesize);
+	buf = limitMalloc(scanlinesize);
 	if (!buf)
 		return 0;
 	_TIFFmemset(buf, 0, scanlinesize);
@@ -1124,8 +1121,8 @@ DECLAREcpFunc(cpContig2SeparateByRow)
             return 0;
         }
 
-	inbuf = _TIFFmalloc(scanlinesizein);
-	outbuf = _TIFFmalloc(scanlinesizeout);
+	inbuf = limitMalloc(scanlinesizein);
+	outbuf = limitMalloc(scanlinesizeout);
 	if (!inbuf || !outbuf)
 		goto bad;
 	_TIFFmemset(inbuf, 0, scanlinesizein);
@@ -1187,8 +1184,8 @@ DECLAREcpFunc(cpSeparate2ContigByRow)
             return 0;
         }
 
-	inbuf = _TIFFmalloc(scanlinesizein);
-	outbuf = _TIFFmalloc(scanlinesizeout);
+	inbuf = limitMalloc(scanlinesizein);
+	outbuf = limitMalloc(scanlinesizeout);
 	if (!inbuf || !outbuf)
                 goto bad;
 	_TIFFmemset(inbuf, 0, scanlinesizein);
@@ -1294,7 +1291,7 @@ cpImage(TIFF* in, TIFF* out, readFunc fin, writeFunc fout,
 	if (scanlinesize
 	    && imagelength
 	    && bytes / (tsize_t)imagelength == scanlinesize) {
-		buf = _TIFFmalloc(bytes);
+		buf = limitMalloc(bytes);
 		if (buf) {
 			if ((*fin)(in, (uint8*)buf, imagelength,
 			    imagewidth, spp)) {
@@ -1342,7 +1339,7 @@ DECLAREreadFunc(readSeparateStripsIntoBuffer)
 	if (!scanlinesize)
 		return 0;
 
-	scanline = _TIFFmalloc(scanlinesize);
+	scanline = limitMalloc(scanlinesize);
 	if (!scanline)
 		return 0;
 	_TIFFmemset(scanline, 0, scanlinesize);
@@ -1391,7 +1388,7 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
 	uint32 row;
 
 	(void) spp;
-	tilebuf = _TIFFmalloc(tilesize);
+	tilebuf = limitMalloc(tilesize);
 	if (tilebuf == 0)
 		return 0;
 	_TIFFmemset(tilebuf, 0, tilesize);
@@ -1451,7 +1448,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
 		return 0;
 	}
 	iskew = imagew - tilew*spp;
-	tilebuf = _TIFFmalloc(tilesize);
+	tilebuf = limitMalloc(tilesize);
 	if (tilebuf == 0)
 		return 0;
 	_TIFFmemset(tilebuf, 0, tilesize);
@@ -1552,7 +1549,7 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
 	tstrip_t strip = 0;
 	tsample_t s;
 
-	obuf = _TIFFmalloc(stripsize);
+	obuf = limitMalloc(stripsize);
 	if (obuf == NULL)
 		return (0);
 	_TIFFmemset(obuf, 0, stripsize);
@@ -1594,7 +1591,7 @@ DECLAREwriteFunc(writeBufferToContigTiles)
 
 	(void) spp;
 
-	obuf = _TIFFmalloc(TIFFTileSize(out));
+	obuf = limitMalloc(TIFFTileSize(out));
 	if (obuf == NULL)
 		return 0;
 	_TIFFmemset(obuf, 0, tilesize);
@@ -1647,7 +1644,7 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 	uint32 row;
 	uint16 bps = 0, bytes_per_sample;
 
-	obuf = _TIFFmalloc(TIFFTileSize(out));
+	obuf = limitMalloc(TIFFTileSize(out));
 	if (obuf == NULL)
 		return 0;
 	_TIFFmemset(obuf, 0, tilesize);
