@@ -65,6 +65,12 @@ extern int getopt(int argc, char * const argv[], const char *optstring);
 #define	TRUE	1
 #define	FALSE	0
 
+#define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
+
+/* malloc size limit (in bytes)
+ * disabled when set to 0 */
+static tmsize_t maxMalloc = DEFAULT_MAX_MALLOC;
+
 static int outtiled = -1;
 static uint32 tilewidth;
 static uint32 tilelength;
@@ -93,6 +99,23 @@ static char comma = ',';  /* (default) comma separator character */
 static TIFF* bias = NULL;
 static int pageNum = 0;
 static int pageInSeq = 0;
+
+/**
+ * This custom malloc function enforce a maximum allocation size
+ */
+static void* limitMalloc(tmsize_t s)
+{
+	if (maxMalloc && (s > maxMalloc)) {
+		fprintf(stderr, "MemoryLimitError: allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ".\n",
+		        (uint64)s, (uint64)maxMalloc);
+		fprintf(stderr, "                  use -m option to change limit.\n");
+		return NULL;
+	}
+	return _TIFFmalloc(s);
+}
+
+/* use the custom malloc function for all code below */
+#define _TIFFmalloc	limitMalloc
 
 static int nextSrcImage (TIFF *tif, char **imageSpec)
 /*
@@ -173,8 +196,11 @@ main(int argc, char* argv[])
 
 	*mp++ = 'w';
 	*mp = '\0';
-	while ((c = getopt(argc, argv, ",:b:c:f:l:o:p:r:w:aistBLMC8x")) != -1)
+	while ((c = getopt(argc, argv, "m:,:b:c:f:l:o:p:r:w:aistBLMC8x")) != -1)
 		switch (c) {
+		case 'm':
+			maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+			break;
 		case ',':
 			if (optarg[0] != '=') usage();
 			comma = optarg[1];
@@ -423,6 +449,7 @@ char* stuff[] = {
 " -i              ignore read errors",
 " -b file[,#]     bias (dark) monochrome image to be subtracted from all others",
 " -,=%            use % rather than , to separate image #'s (per Note below)",
+" -m size         set maximum memory allocation size (MiB). 0 to disable limit.",
 "",
 " -r #            make each strip have no more than # rows",
 " -w #            set output tile width (pixels)",
