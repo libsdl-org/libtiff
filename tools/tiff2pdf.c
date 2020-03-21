@@ -207,14 +207,19 @@ typedef struct {
 	char pdf_datetime[TIFF2PDF_DATETIME_SIZE];
 #define TIFF2PDF_CREATOR_SIZE 512
 	char pdf_creator[TIFF2PDF_CREATOR_SIZE];
+	int pdf_creator_set;
 #define TIFF2PDF_AUTHOR_SIZE 512
 	char pdf_author[TIFF2PDF_AUTHOR_SIZE];
+	int pdf_author_set;
 #define TIFF2PDF_TITLE_SIZE 512
 	char pdf_title[TIFF2PDF_TITLE_SIZE];
+	int pdf_title_set;
 #define TIFF2PDF_SUBJECT_SIZE 512
 	char pdf_subject[TIFF2PDF_SUBJECT_SIZE];
+	int pdf_subject_set;
 #define TIFF2PDF_KEYWORDS_SIZE 512
 	char pdf_keywords[TIFF2PDF_KEYWORDS_SIZE];
+	int pdf_keywords_set;
 	t2p_cs_t pdf_colorspace;
 	uint16 pdf_colorspace_invert;
 	uint16 pdf_switchdecode;
@@ -301,8 +306,8 @@ tsize_t t2p_sample_lab_signed_to_unsigned(tdata_t, uint32);
 tsize_t t2p_write_pdf_header(T2P*, TIFF*);
 tsize_t t2p_write_pdf_obj_start(uint32, TIFF*);
 tsize_t t2p_write_pdf_obj_end(TIFF*);
-tsize_t t2p_write_pdf_name(unsigned char*, TIFF*);
-tsize_t t2p_write_pdf_string(char*, TIFF*);
+tsize_t t2p_write_pdf_name(const unsigned char*, TIFF*);
+tsize_t t2p_write_pdf_string(const char*, TIFF*);
 tsize_t t2p_write_pdf_stream(tdata_t, tsize_t, TIFF*);
 tsize_t t2p_write_pdf_stream_start(TIFF*);
 tsize_t t2p_write_pdf_stream_end(TIFF*);
@@ -718,22 +723,27 @@ int main(int argc, char** argv){
 			case 'c': 
 				strncpy(t2p->pdf_creator, optarg, sizeof(t2p->pdf_creator) - 1);
 				t2p->pdf_creator[sizeof(t2p->pdf_creator) - 1] = '\0';
+				t2p->pdf_creator_set = 1;
 				break;
 			case 'a': 
 				strncpy(t2p->pdf_author, optarg, sizeof(t2p->pdf_author) - 1);
 				t2p->pdf_author[sizeof(t2p->pdf_author) - 1] = '\0';
+				t2p->pdf_author_set = 1;
 				break;
 			case 't': 
 				strncpy(t2p->pdf_title, optarg, sizeof(t2p->pdf_title) - 1);
 				t2p->pdf_title[sizeof(t2p->pdf_title) - 1] = '\0';
+				t2p->pdf_title_set = 1;
 				break;
 			case 's': 
 				strncpy(t2p->pdf_subject, optarg, sizeof(t2p->pdf_subject) - 1);
 				t2p->pdf_subject[sizeof(t2p->pdf_subject) - 1] = '\0';
+				t2p->pdf_subject_set = 1;
 				break;
 			case 'k': 
 				strncpy(t2p->pdf_keywords, optarg, sizeof(t2p->pdf_keywords) - 1);
 				t2p->pdf_keywords[sizeof(t2p->pdf_keywords) - 1] = '\0';
+				t2p->pdf_keywords_set = 1;
 				break;
 			case 'b':
 				t2p->pdf_image_interpolate = 1;
@@ -3891,7 +3901,7 @@ tsize_t t2p_write_pdf_obj_end(TIFF* output){
 	This function writes a PDF name object to output.
 */
 
-tsize_t t2p_write_pdf_name(unsigned char* name, TIFF* output){
+tsize_t t2p_write_pdf_name(const unsigned char* name, TIFF* output){
 
 	tsize_t written=0;
 	uint32 i=0;
@@ -3989,7 +3999,7 @@ tsize_t t2p_write_pdf_name(unsigned char* name, TIFF* output){
  * This function writes a PDF string object to output.
  */
 	
-tsize_t t2p_write_pdf_string(char* pdfstr, TIFF* output)
+tsize_t t2p_write_pdf_string(const char* pdfstr, TIFF* output)
 {
 	tsize_t written = 0;
 	uint32 i = 0;
@@ -4180,7 +4190,7 @@ tsize_t t2p_write_pdf_catalog(T2P* t2p, TIFF* output)
 tsize_t t2p_write_pdf_info(T2P* t2p, TIFF* input, TIFF* output)
 {
 	tsize_t written = 0;
-	char* info;
+	const char* info;
 	char buffer[512];
 
 	if(t2p->pdf_datetime[0] == '\0')
@@ -4195,60 +4205,51 @@ tsize_t t2p_write_pdf_info(T2P* t2p, TIFF* input, TIFF* output)
 	snprintf(buffer, sizeof(buffer), "libtiff / tiff2pdf - %d", TIFFLIB_VERSION);
 	written += t2p_write_pdf_string(buffer, output);
 	written += t2pWriteFile(output, (tdata_t) "\n", 1);
+	if (!t2p->pdf_creator_set) {
+		if (TIFFGetField(input, TIFFTAG_SOFTWARE, &info) != 0 && info) {
+			strncpy(t2p->pdf_creator, info, sizeof(t2p->pdf_creator) - 1);
+			t2p->pdf_creator[sizeof(t2p->pdf_creator) - 1] = '\0';
+		}
+	}
 	if (t2p->pdf_creator[0] != '\0') {
 		written += t2pWriteFile(output, (tdata_t) "/Creator ", 9);
 		written += t2p_write_pdf_string(t2p->pdf_creator, output);
 		written += t2pWriteFile(output, (tdata_t) "\n", 1);
-	} else {
-		if (TIFFGetField(input, TIFFTAG_SOFTWARE, &info) != 0 && info) {
-			if(strlen(info) >= sizeof(t2p->pdf_creator))
-				info[sizeof(t2p->pdf_creator) - 1] = '\0';
-			written += t2pWriteFile(output, (tdata_t) "/Creator ", 9);
-			written += t2p_write_pdf_string(info, output);
-			written += t2pWriteFile(output, (tdata_t) "\n", 1);
+	}
+	if (!t2p->pdf_author_set) {
+		if ((TIFFGetField(input, TIFFTAG_ARTIST, &info) != 0
+		     || TIFFGetField(input, TIFFTAG_COPYRIGHT, &info) != 0)
+		    && info) {
+			strncpy(t2p->pdf_author, info, sizeof(t2p->pdf_author) - 1);
+			t2p->pdf_author[sizeof(t2p->pdf_author) - 1] = '\0';
 		}
 	}
 	if (t2p->pdf_author[0] != '\0') {
 		written += t2pWriteFile(output, (tdata_t) "/Author ", 8);
 		written += t2p_write_pdf_string(t2p->pdf_author, output);
 		written += t2pWriteFile(output, (tdata_t) "\n", 1);
-	} else {
-		if ((TIFFGetField(input, TIFFTAG_ARTIST, &info) != 0
-		     || TIFFGetField(input, TIFFTAG_COPYRIGHT, &info) != 0)
-		    && info) {
-			if (strlen(info) >= sizeof(t2p->pdf_author))
-				info[sizeof(t2p->pdf_author) - 1] = '\0';
-			written += t2pWriteFile(output, (tdata_t) "/Author ", 8);
-			written += t2p_write_pdf_string(info, output);
-			written += t2pWriteFile(output, (tdata_t) "\n", 1);
+	}
+	if (!t2p->pdf_title_set) {
+		if (TIFFGetField(input, TIFFTAG_DOCUMENTNAME, &info) != 0 && info) {
+			strncpy(t2p->pdf_title, info, sizeof(t2p->pdf_title) - 1);
+			t2p->pdf_title[sizeof(t2p->pdf_title) - 1] = '\0';
 		}
 	}
 	if (t2p->pdf_title[0] != '\0') {
 		written += t2pWriteFile(output, (tdata_t) "/Title ", 7);
 		written += t2p_write_pdf_string(t2p->pdf_title, output);
 		written += t2pWriteFile(output, (tdata_t) "\n", 1);
-	} else {
-		if (TIFFGetField(input, TIFFTAG_DOCUMENTNAME, &info) != 0){
-			if(strlen(info) > 511) {
-				info[512] = '\0';
-			}
-			written += t2pWriteFile(output, (tdata_t) "/Title ", 7);
-			written += t2p_write_pdf_string(info, output);
-			written += t2pWriteFile(output, (tdata_t) "\n", 1);
+	}
+	if (!t2p->pdf_subject_set) {
+		if (TIFFGetField(input, TIFFTAG_IMAGEDESCRIPTION, &info) != 0 && info) {
+			strncpy(t2p->pdf_subject, info, sizeof(t2p->pdf_subject) - 1);
+			t2p->pdf_subject[sizeof(t2p->pdf_subject) - 1] = '\0';
 		}
 	}
 	if (t2p->pdf_subject[0] != '\0') {
 		written += t2pWriteFile(output, (tdata_t) "/Subject ", 9);
 		written += t2p_write_pdf_string(t2p->pdf_subject, output);
 		written += t2pWriteFile(output, (tdata_t) "\n", 1);
-	} else {
-		if (TIFFGetField(input, TIFFTAG_IMAGEDESCRIPTION, &info) != 0 && info) {
-			if (strlen(info) >= sizeof(t2p->pdf_subject))
-				info[sizeof(t2p->pdf_subject) - 1] = '\0';
-			written += t2pWriteFile(output, (tdata_t) "/Subject ", 9);
-			written += t2p_write_pdf_string(info, output);
-			written += t2pWriteFile(output, (tdata_t) "\n", 1);
-		}
 	}
 	if (t2p->pdf_keywords[0] != '\0') {
 		written += t2pWriteFile(output, (tdata_t) "/Keywords ", 10);
