@@ -174,6 +174,12 @@
 #define	FALSE	0
 #endif
 
+#define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
+
+/* malloc size limit (in bytes)
+ * disabled when set to 0 */
+static tmsize_t maxMalloc = DEFAULT_MAX_MALLOC;
+
 int	ascii85 = FALSE;		/* use ASCII85 encoding */
 int	interpolate = TRUE;		/* interpolate level2 image */
 int	level2 = FALSE;			/* generate PostScript level 2 */
@@ -234,6 +240,20 @@ tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw
 
 static	void usage(int);
 
+/**
+ * This custom malloc function enforce a maximum allocation size
+ */
+static void* limitMalloc(tmsize_t s)
+{
+	if (maxMalloc && (s > maxMalloc)) {
+		fprintf(stderr, "MemoryLimitError: allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ".\n",
+		        (uint64)s, (uint64)maxMalloc);
+		fprintf(stderr, "                  use -M option to change limit.\n");
+		return NULL;
+	}
+	return _TIFFmalloc(s);
+}
+
 int
 main(int argc, char* argv[])
 {
@@ -252,8 +272,11 @@ main(int argc, char* argv[])
 
         pageOrientation[0] = '\0';
 
-	while ((c = getopt(argc, argv, "b:d:h:H:W:L:i:w:l:o:O:P:C:r:t:acemxyzps1238DT")) != -1)
+	while ((c = getopt(argc, argv, "b:d:h:H:W:L:M:i:w:l:o:O:P:C:r:t:acemxyzps1238DT")) != -1)
 		switch (c) {
+		case 'M':
+			maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+			break;
 		case 'b':
 			bottommargin = atof(optarg);
 			break;
@@ -2187,7 +2210,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		else
 			chunk_size = TIFFStripSize(tif);
 	}
-	buf_data = (unsigned char *)_TIFFmalloc(chunk_size);
+	buf_data = (unsigned char *)limitMalloc(chunk_size);
 	if (!buf_data) {
 		TIFFError(filename, "Can't alloc %lu bytes for %s.",
 			(unsigned long) chunk_size, tiled_image ? "tiles" : "strips");
@@ -2205,7 +2228,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	     * 5*chunk_size/4.
 	     */
 
-	    ascii85_p = _TIFFmalloc( (chunk_size+(chunk_size/2)) + 8 );
+	    ascii85_p = limitMalloc( (chunk_size+(chunk_size/2)) + 8 );
 
 	    if ( !ascii85_p ) {
 		_TIFFfree( buf_data );
@@ -2449,7 +2472,7 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
             TIFFError(filename, "Inconsistent value of es: %d (samplesperpixel=%u, nc=%d)", es, samplesperpixel, nc);
             return;
         }
-	tf_buf = (unsigned char *) _TIFFmalloc(tf_bytesperrow);
+	tf_buf = (unsigned char *) limitMalloc(tf_bytesperrow);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
 		return;
@@ -2517,7 +2540,7 @@ PSDataColorSeparate(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 	unsigned char *cp, c;
 
 	(void) w;
-	tf_buf = (unsigned char *) _TIFFmalloc(tf_bytesperrow);
+	tf_buf = (unsigned char *) limitMalloc(tf_bytesperrow);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
 		return;
@@ -2563,7 +2586,7 @@ PSDataPalette(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		return;
 	}
 	nc = 3 * (8 / bitspersample);
-	tf_buf = (unsigned char *) _TIFFmalloc(tf_bytesperrow);
+	tf_buf = (unsigned char *) limitMalloc(tf_bytesperrow);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
 		return;
@@ -2628,7 +2651,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 #endif
 
 	(void) w; (void) h;
-	tf_buf = (unsigned char *) _TIFFmalloc(stripsize);
+	tf_buf = (unsigned char *) limitMalloc(stripsize);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
 		return;
@@ -2648,7 +2671,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	     * 5*stripsize/4.
 	     */
 
-	    ascii85_p = _TIFFmalloc( (stripsize+(stripsize/2)) + 8 );
+	    ascii85_p = limitMalloc( (stripsize+(stripsize/2)) + 8 );
 
 	    if ( !ascii85_p ) {
 		_TIFFfree( tf_buf );
@@ -2775,7 +2798,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 			bufsize = (uint32) bc[s];
 	}
 
-	tf_buf = (unsigned char*) _TIFFmalloc(bufsize);
+	tf_buf = (unsigned char*) limitMalloc(bufsize);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for strip buffer");
 		return;
@@ -2792,7 +2815,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	     * 5*bufsize/4.
 	     */
 
-	    ascii85_p = _TIFFmalloc( (bufsize+(bufsize/2)) + 8 );
+	    ascii85_p = limitMalloc( (bufsize+(bufsize/2)) + 8 );
 
 	    if ( !ascii85_p ) {
 		_TIFFfree( tf_buf );
@@ -3079,6 +3102,7 @@ char* stuff[] = {
 " -i #          enable/disable (Nz/0) pixel interpolation (default: enable)",
 " -l #          set the left margin to # inches",
 " -m            use \"imagemask\" operator instead of \"image\"",
+" -M size       set the memory allocation limit in MiB. 0 to disable limit",
 " -o #          convert directory at file offset # bytes",
 " -O file       write PostScript to file instead of standard output",
 " -p            generate regular (non-encapsulated) PostScript",
