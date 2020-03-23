@@ -70,6 +70,8 @@ extern int getopt(int argc, char * const argv[], const char *optstring);
 
 #define TIFF_DIR_MAX    65534
 
+#define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
+
 /* This type is of PDF color spaces. */
 typedef enum {
 	T2P_CS_BILEVEL = 0x01,	/* Bilevel, black and white */
@@ -176,6 +178,7 @@ typedef struct {
 	uint16 tiff_orientation;
 	toff_t tiff_dataoffset;
 	tsize_t tiff_datasize;
+	tsize_t tiff_maxdatasize;
 	uint16 tiff_resunit;
 	uint16 pdf_centimeters;
 	uint16 pdf_overrideres;
@@ -622,8 +625,11 @@ int main(int argc, char** argv){
 
 	while (argv &&
 	       (c = getopt(argc, argv,
-			   "o:q:u:x:y:w:l:r:p:e:c:a:t:s:k:jzndifbhF")) != -1){
+			   "m:o:q:u:x:y:w:l:r:p:e:c:a:t:s:k:jzndifbhF")) != -1){
 		switch (c) {
+			case 'm':
+				t2p->tiff_maxdatasize = (tsize_t)strtoul(optarg, NULL, 0) << 20;
+				break;
 			case 'o':
 				outfilename = optarg;
 				break;
@@ -869,6 +875,7 @@ void tiff2pdf_usage(){
 	" -s: sets document subject, overrides image image description default",
 	" -k: sets document keywords",
 	" -b: set PDF \"Interpolate\" user preference",
+	" -m: set memory allocation limit (in MiB). set to 0 to disable limit",
 	" -h: usage",
 	NULL
 	};
@@ -964,6 +971,7 @@ T2P* t2p_init()
 	t2p->pdf_defaultpagewidth=612.0;
 	t2p->pdf_defaultpagelength=792.0;
 	t2p->pdf_xrefcount=3; /* Catalog, Info, Pages */
+	t2p->tiff_maxdatasize = DEFAULT_MAX_MALLOC;
 	
 	return(t2p);
 }
@@ -5626,6 +5634,13 @@ tsize_t t2p_write_pdf(T2P* t2p, TIFF* input, TIFF* output){
 			written += t2p_write_pdf_stream_start(output);
 			streamlen=written;
 			t2p_read_tiff_size(t2p, input);
+			if (t2p->tiff_maxdatasize && (t2p->tiff_datasize > t2p->tiff_maxdatasize)) {
+				TIFFError(TIFF2PDF_MODULE,
+					"Allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ". Use -m option to change limit",
+					(uint64)t2p->tiff_datasize, (uint64)t2p->tiff_maxdatasize);
+				t2p->t2p_error = T2P_ERR_ERROR;
+				return (0);
+			}
 			written += t2p_readwrite_pdf_image(t2p, input, output);
 			t2p_write_advance_directory(t2p, output);
 			if(t2p->t2p_error!=T2P_ERR_OK){return(0);}
