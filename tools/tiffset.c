@@ -343,6 +343,12 @@ main(int argc, char* argv[])
             }
 
             text = (char *) malloc(1000000);
+            if(text == NULL) {
+                fprintf( stderr,
+                         "Memory allocation error\n");
+                fclose( fp );
+                continue;
+            }
             len = fread( text, 1, 999999, fp );
             text[len] = '\0';
 
