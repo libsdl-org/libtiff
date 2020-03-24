@@ -451,7 +451,7 @@ ReadDirectory(int fd, unsigned int ix, uint64 off)
 			{
 				datafits = 0;
 				datamem = NULL;
-				dataoffset = *(uint64*)dp;
+				memcpy(&dataoffset, dp, sizeof(uint64));
 				if (swabflag)
 					TIFFSwabLong8(&dataoffset);
 			}
