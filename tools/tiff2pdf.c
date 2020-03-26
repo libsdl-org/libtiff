@@ -232,7 +232,7 @@ typedef struct {
 	t2p_compress_t pdf_defaultcompression;
 	uint16 pdf_defaultcompressionquality;
 	t2p_compress_t pdf_compression;
-	uint16 pdf_compressionquality;
+	uint16 pdf_compressionquality;	/* for deflate : 100 * zipquality + predictor */
 	uint16 pdf_nopassthrough;
 	t2p_transcode_t pdf_transcode;
 	t2p_sample_t pdf_sample;
@@ -1822,8 +1822,12 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 		if(t2p->tiff_compression== COMPRESSION_ADOBE_DEFLATE 
 			|| t2p->tiff_compression==COMPRESSION_DEFLATE){
 			if(TIFFIsTiled(input) || (TIFFNumberOfStrips(input)==1) ){
+				uint16 predictor;
 				t2p->pdf_transcode = T2P_TRANSCODE_RAW;
 				t2p->pdf_compression=T2P_COMPRESS_ZIP;
+				TIFFGetField(input, TIFFTAG_PREDICTOR, &predictor);
+				t2p->pdf_compressionquality = predictor;
+				/* TIFFTAG_ZIPQUALITY is always Z_DEFAULT_COMPRESSION on reading */
 			}
 		}
 #endif
