@@ -152,12 +152,14 @@ static TIFF* openSrcImage (char **imageSpec)
   no images specified, or a pointer to the next image number text
 */
 {
+	/* disable strip shopping when using jbig compression */
+	const char *mode = (defcompression == COMPRESSION_JBIG) ? "rc" : "r";
 	TIFF *tif;
 	char *fn = *imageSpec;
 	*imageSpec = strchr (fn, comma);
 	if (*imageSpec) {  /* there is at least one image number specifier */
 		**imageSpec = '\0';
-		tif = TIFFOpen (fn, "r");
+		tif = TIFFOpen (fn, mode);
 		/* but, ignore any single trailing comma */
 		if (!(*imageSpec)[1]) {*imageSpec = NULL; return tif;}
 		if (tif) {
@@ -168,7 +170,7 @@ static TIFF* openSrcImage (char **imageSpec)
 			}
 		}
 	}else
-		tif = TIFFOpen (fn, "r");
+		tif = TIFFOpen (fn, mode);
 	return tif;
 }
 
