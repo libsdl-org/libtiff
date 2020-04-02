@@ -22,7 +22,7 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFGetField 3TIFF "March 18, 2005" "libtiff"
+.TH TIFFGetField 3TIFF "March 29, 2020" "libtiff"
 .SH NAME
 TIFFGetField, TIFFVGetField \- get the value(s) of a tag in an open
 .SM TIFF
@@ -156,16 +156,16 @@ TIFFTAG_SMAXSAMPLEVALUE	1	double*
 TIFFTAG_SMINSAMPLEVALUE	1	double*
 TIFFTAG_SOFTWARE	1	const char**
 TIFFTAG_STONITS	1	const double**
-TIFFTAG_STRIPBYTECOUNTS	1	const uint32**
-TIFFTAG_STRIPOFFSETS	1	const uint32**
+TIFFTAG_STRIPBYTECOUNTS	1	const uint64**
+TIFFTAG_STRIPOFFSETS	1	const uint64**
 TIFFTAG_SUBFILETYPE	1	uint32*
 TIFFTAG_SUBIFD	2	uint16*,const uint64**	count & offsets array
 TIFFTAG_TARGETPRINTER	1	const char**
 TIFFTAG_THRESHHOLDING	1	uint16*
-TIFFTAG_TILEBYTECOUNTS	1	const uint32**
+TIFFTAG_TILEBYTECOUNTS	1	const uint64**
 TIFFTAG_TILEDEPTH	1	uint32*
 TIFFTAG_TILELENGTH	1	uint32*
-TIFFTAG_TILEOFFSETS	1	const uint32**
+TIFFTAG_TILEOFFSETS	1	const uint64**
 TIFFTAG_TILEWIDTH	1	uint32*
 TIFFTAG_TRANSFERFUNCTION	1 or 3\(dg	const uint16**1<<BitsPerSample entry arrays
 TIFFTAG_WHITEPOINT	1	const float**	2-entry array
