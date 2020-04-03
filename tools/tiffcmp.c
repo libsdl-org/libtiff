@@ -333,7 +333,6 @@ ContigCompare(int sample, uint32 row,
 	      unsigned char* p1, unsigned char* p2, tsize_t size)
 {
     uint32 pix;
-    int ppb = 8 / bitspersample;
     int	 samples_to_test;
 
     if (memcmp(p1, p2, size) == 0)
@@ -345,9 +344,10 @@ ContigCompare(int sample, uint32 row,
       case 1: case 2: case 4: case 8: 
       {
           unsigned char *pix1 = p1, *pix2 = p2;
+          unsigned bits = 0;
 
-          for (pix = 0; pix < imagewidth; pix += ppb) {
-              int		s;
+          for (pix = 0; pix < imagewidth; pix++) {
+              int s;
 
               for(s = 0; s < samples_to_test; s++) {
                   if (*pix1 != *pix2) {
@@ -357,8 +357,10 @@ ContigCompare(int sample, uint32 row,
                           PrintIntDiff(row, sample, pix, *pix1, *pix2);
                   }
 
-                  pix1++;
-                  pix2++;
+                  bits += bitspersample;
+                  pix1 += (bits / 8);
+                  pix2 += (bits / 8);
+                  bits &= 7;
               }
           }
           break;
@@ -449,7 +451,7 @@ PrintIntDiff(uint32 row, int sample, uint32 pix, uint32 w1, uint32 w2)
 			if ((w1 & mask2) ^ (w2 & mask2)) {
 				printf(
 			"Scanline %lu, pixel %lu, sample %d: %01x %01x\n",
-	    				(unsigned long) row,
+					(unsigned long) row,
 					(unsigned long) pix,
 					sample,
 					(unsigned int)((w1 >> s) & mask1),
