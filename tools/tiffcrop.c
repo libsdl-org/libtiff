@@ -333,7 +333,7 @@ struct paperdef {
 /* European page sizes corrected from update sent by 
  * thomas . jarosch @ intra2net . com on 5/7/2010
  * Paper Size       Width   Length  Aspect Ratio */
-struct paperdef PaperTable[MAX_PAPERNAMES] = {
+const struct paperdef PaperTable[MAX_PAPERNAMES] = {
   {"default",         8.500,  14.000,  0.607},
   {"pa4",             8.264,  11.000,  0.751},
   {"letter",          8.500,  11.000,  0.773},
@@ -617,6 +617,27 @@ static int  dump_buffer (FILE *, int, uint32, uint32, uint32, unsigned char *);
 /* Functions derived in whole or in part from tiffcp */
 /* The following functions are taken largely intact from tiffcp */
 
+#define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
+
+/* malloc size limit (in bytes)
+ * disabled when set to 0 */
+static tmsize_t maxMalloc = DEFAULT_MAX_MALLOC;
+
+/**
+ * This custom malloc function enforce a maximum allocation size
+ */
+static void* limitMalloc(tmsize_t s)
+{
+  if (maxMalloc && (s > maxMalloc)) {
+    fprintf(stderr, "MemoryLimitError: allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ".\n",
+            (uint64)s, (uint64)maxMalloc);
+    fprintf(stderr, "                  use -k option to change limit.\n"); return NULL;
+  }
+  return _TIFFmalloc(s);
+}
+
+
+
 static   char* usage_info[] = {
 "usage: tiffcrop [options] source1 ... sourceN  destination",
 "where options are:",
@@ -630,6 +651,7 @@ static   char* usage_info[] = {
 " -s		Write output in strips",
 " -t		Write output in tiles",
 " -i		Ignore read errors",
+" -k size       set the memory allocation limit in MiB. 0 to disable limit",
 " ",
 " -r #		Make each strip have no more than # rows",
 " -w #		Set output tile width (pixels)",
@@ -822,7 +844,7 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8* buf,
       TIFFError("readContigTilesIntoBuffer", "Integer overflow when calculating buffer size.");
       exit(-1);
   }
-  tilebuf = _TIFFmalloc(tile_buffsize + 3);
+  tilebuf = limitMalloc(tile_buffsize + 3);
   if (tilebuf == 0)
     return 0;
   tilebuf[tile_buffsize] = 0;
@@ -986,7 +1008,7 @@ static int  readSeparateTilesIntoBuffer (TIFF* in, uint8 *obuf,
   for (sample = 0; (sample < spp) && (sample < MAX_SAMPLES); sample++)
     {
     srcbuffs[sample] = NULL;
-    tbuff = (unsigned char *)_TIFFmalloc(tilesize + 8);
+    tbuff = (unsigned char *)limitMalloc(tilesize + 8);
     if (!tbuff)
       {
       TIFFError ("readSeparateTilesIntoBuffer", 
@@ -1181,7 +1203,7 @@ writeBufferToSeparateStrips (TIFF* out, uint8* buf,
   }
   rowstripsize = rowsperstrip * bytes_per_sample * (width + 1); 
 
-  obuf = _TIFFmalloc (rowstripsize);
+  obuf = limitMalloc (rowstripsize);
   if (obuf == NULL)
     return 1;
   
@@ -1275,7 +1297,7 @@ static int writeBufferToContigTiles (TIFF* out, uint8* buf, uint32 imagelength,
   }
   src_rowsize = ((imagewidth * spp * bps) + 7U) / 8;
 
-  tilebuf = _TIFFmalloc(tile_buffsize);
+  tilebuf = limitMalloc(tile_buffsize);
   if (tilebuf == 0)
     return 1;
   for (row = 0; row < imagelength; row += tl)
@@ -1323,7 +1345,7 @@ static int writeBufferToSeparateTiles (TIFF* out, uint8* buf, uint32 imagelength
 				       uint32 imagewidth, tsample_t spp, 
                                        struct dump_opts * dump)
   {
-  tdata_t obuf = _TIFFmalloc(TIFFTileSize(out));
+  tdata_t obuf = limitMalloc(TIFFTileSize(out));
   uint32 tl, tw;
   uint32 row, col, nrow, ncol;
   uint32 src_rowsize, col_offset;
@@ -1612,7 +1634,7 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
     *mp++ = 'w';
     *mp = '\0';
     while ((c = getopt(argc, argv,
-       "ac:d:e:f:hil:m:p:r:stvw:z:BCD:E:F:H:I:J:K:LMN:O:P:R:S:U:V:X:Y:Z:")) != -1)
+       "ac:d:e:f:hik:l:m:p:r:stvw:z:BCD:E:F:H:I:J:K:LMN:O:P:R:S:U:V:X:Y:Z:")) != -1)
       {
     good_args++;
     switch (c) {
@@ -1670,6 +1692,8 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
       case 'h':	usage();
 		break;
       case 'i':	ignore = TRUE;		/* ignore errors */
+		break;
+      case 'k':	maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
 		break;
       case 'l':	outtiled = TRUE;	 /* tile length */
 		*deftilelength = atoi(optarg);
@@ -4831,7 +4855,7 @@ static int readSeparateStripsIntoBuffer (TIFF *in, uint8 *obuf, uint32 length,
   for (s = 0; (s < spp) && (s < MAX_SAMPLES); s++)
     {
     srcbuffs[s] = NULL;
-    buff = _TIFFmalloc(stripsize + 3);
+    buff = limitMalloc(stripsize + 3);
     if (!buff)
       {
       TIFFError ("readSeparateStripsIntoBuffer", 
@@ -6138,7 +6162,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
         TIFFError("loadImage", "Unable to allocate/reallocate read buffer");
         return (-1);
     }
-    read_buff = (unsigned char *)_TIFFmalloc(buffsize+3);
+    read_buff = (unsigned char *)limitMalloc(buffsize+3);
   }
   else
     {
@@ -6153,7 +6177,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
       if (!new_buff)
         {
 	free (read_buff);
-        read_buff = (unsigned char *)_TIFFmalloc(buffsize+3);
+        read_buff = (unsigned char *)limitMalloc(buffsize+3);
         }
       else
         read_buff = new_buff;
@@ -7336,7 +7360,7 @@ createImageSection(uint32 sectsize, unsigned char **sect_buff_ptr)
 
   if (!sect_buff)
     {
-    sect_buff = (unsigned char *)_TIFFmalloc(sectsize);
+    sect_buff = (unsigned char *)limitMalloc(sectsize);
     *sect_buff_ptr = sect_buff;
     _TIFFmemset(sect_buff, 0, sectsize);
     }
@@ -7347,8 +7371,8 @@ createImageSection(uint32 sectsize, unsigned char **sect_buff_ptr)
       new_buff = _TIFFrealloc(sect_buff, sectsize);
       if (!new_buff)
         {
-	free (sect_buff);
-        sect_buff = (unsigned char *)_TIFFmalloc(sectsize);
+          _TIFFfree (sect_buff);
+        sect_buff = (unsigned char *)limitMalloc(sectsize);
         }
       else
         sect_buff = new_buff;
@@ -7389,7 +7413,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
     cropsize = crop->bufftotal;
     crop_buff = seg_buffs[0].buffer; 
     if (!crop_buff)
-      crop_buff = (unsigned char *)_TIFFmalloc(cropsize);
+      crop_buff = (unsigned char *)limitMalloc(cropsize);
     else
       {
       prev_cropsize = seg_buffs[0].size;
@@ -7399,7 +7423,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
         if (! next_buff)
           {
           _TIFFfree (crop_buff);
-          crop_buff = (unsigned char *)_TIFFmalloc(cropsize);
+          crop_buff = (unsigned char *)limitMalloc(cropsize);
           }
         else
           crop_buff = next_buff;
@@ -7491,7 +7515,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
       cropsize = crop->bufftotal;
       crop_buff = seg_buffs[i].buffer; 
       if (!crop_buff)
-        crop_buff = (unsigned char *)_TIFFmalloc(cropsize);
+        crop_buff = (unsigned char *)limitMalloc(cropsize);
       else
         {
         prev_cropsize = seg_buffs[0].size;
@@ -7501,7 +7525,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
           if (! next_buff)
             {
             _TIFFfree (crop_buff);
-            crop_buff = (unsigned char *)_TIFFmalloc(cropsize);
+            crop_buff = (unsigned char *)limitMalloc(cropsize);
             }
           else
             crop_buff = next_buff;
@@ -7627,7 +7651,7 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
   crop_buff = *crop_buff_ptr;
   if (!crop_buff)
     {
-    crop_buff = (unsigned char *)_TIFFmalloc(cropsize);
+    crop_buff = (unsigned char *)limitMalloc(cropsize);
     *crop_buff_ptr = crop_buff;
     _TIFFmemset(crop_buff, 0, cropsize);
     prev_cropsize = cropsize;
@@ -7640,7 +7664,7 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
       if (!new_buff)
         {
 	free (crop_buff);
-        crop_buff = (unsigned char *)_TIFFmalloc(cropsize);
+        crop_buff = (unsigned char *)limitMalloc(cropsize);
         }
       else
         crop_buff = new_buff;
@@ -8413,7 +8437,7 @@ rotateImage(uint16 rotation, struct image_data *image, uint32 *img_width,
               return (-1);
     }
 
-  if (!(rbuff = (unsigned char *)_TIFFmalloc(buffsize)))
+  if (!(rbuff = (unsigned char *)limitMalloc(buffsize)))
     {
     TIFFError("rotateImage", "Unable to allocate rotation buffer of %1u bytes", buffsize);
     return (-1);
@@ -9043,7 +9067,7 @@ mirrorImage(uint16 spp, uint16 bps, uint16 mirror, uint32 width, uint32 length, 
     {
     case MIRROR_BOTH:
     case MIRROR_VERT: 
-             line_buff = (unsigned char *)_TIFFmalloc(rowsize);
+             line_buff = (unsigned char *)limitMalloc(rowsize);
              if (line_buff == NULL)
                {
 	       TIFFError ("mirrorImage", "Unable to allocate mirror line buffer of %1u bytes", rowsize);
@@ -9080,7 +9104,7 @@ mirrorImage(uint16 spp, uint16 bps, uint16 mirror, uint32 width, uint32 length, 
 		}
 	      else
                 { /* non 8 bit per sample  data */
-                if (!(line_buff = (unsigned char *)_TIFFmalloc(rowsize + 1)))
+                if (!(line_buff = (unsigned char *)limitMalloc(rowsize + 1)))
                   {
                   TIFFError("mirrorImage", "Unable to allocate mirror line buffer");
                   return (-1);
