@@ -2282,6 +2282,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			TIFFReadRawStrip(input, 0, (tdata_t) buffer,
 					 t2p->tiff_datasize);
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
@@ -2310,7 +2311,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
-                        memset(buffer, 0, t2p->tiff_datasize);
+			memset(buffer, 0, t2p->tiff_datasize);
 			TIFFReadRawStrip(input, 0, (tdata_t) buffer,
 					 t2p->tiff_datasize);
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB) {
@@ -2337,7 +2338,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 					t2p->t2p_error = T2P_ERR_ERROR;
 					return(0);
 				}
-                                memset(buffer, 0, t2p->tiff_datasize);
+				memset(buffer, 0, t2p->tiff_datasize);
 				if(t2p->pdf_ojpegiflength==0){
 					inputoffset=t2pSeekFile(input, 0,
 								 SEEK_CUR);
@@ -2413,7 +2414,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 					t2p->t2p_error = T2P_ERR_ERROR;
 					return(0);
 				}
-                                memset(buffer, 0, t2p->tiff_datasize);
+				memset(buffer, 0, t2p->tiff_datasize);
 				_TIFFmemcpy(buffer, t2p->pdf_ojpegdata, t2p->pdf_ojpegdatalength);
 				bufferoffset=t2p->pdf_ojpegdatalength;
 				stripcount=TIFFNumberOfStrips(input);
@@ -2462,7 +2463,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
-                        memset(buffer, 0, t2p->tiff_datasize);
+			memset(buffer, 0, t2p->tiff_datasize);
 			if (TIFFGetField(input, TIFFTAG_JPEGTABLES, &count, &jpt) != 0) {
 				if(count > 4) {
 					_TIFFmemcpy(buffer, jpt, count);
@@ -2485,6 +2486,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(stripbuffer, 0, max_striplength);
 			for(i=0;i<stripcount;i++){
 				striplength=TIFFReadRawStrip(input, i, (tdata_t) stripbuffer, -1);
 				if(!t2p_process_jpeg_strip(
@@ -2525,7 +2527,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 			t2p->t2p_error = T2P_ERR_ERROR;
 			return(0);
 		}
-                memset(buffer, 0, t2p->tiff_datasize);
+		memset(buffer, 0, t2p->tiff_datasize);
 		stripsize=TIFFStripSize(input);
 		stripcount=TIFFNumberOfStrips(input);
 		for(i=0;i<stripcount;i++){
@@ -2563,7 +2565,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
-                        memset(buffer, 0, t2p->tiff_datasize);
+			memset(buffer, 0, t2p->tiff_datasize);
 			samplebuffer = (unsigned char*) _TIFFmalloc(stripsize);
 			if(samplebuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
@@ -2613,7 +2615,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 			t2p->t2p_error = T2P_ERR_ERROR;
 			return(0);
 		}
-                memset(buffer, 0, t2p->tiff_datasize);
+		memset(buffer, 0, t2p->tiff_datasize);
 		stripsize=TIFFStripSize(input);
 		stripcount=TIFFNumberOfStrips(input);
 		for(i=0;i<stripcount;i++){
@@ -2877,6 +2879,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			TIFFReadRawTile(input, tile, (tdata_t) buffer, t2p->tiff_datasize);
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
 					TIFFReverseBits(buffer, t2p->tiff_datasize);
@@ -2898,6 +2901,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			TIFFReadRawTile(input, tile, (tdata_t) buffer, t2p->tiff_datasize);
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
 					TIFFReverseBits(buffer, t2p->tiff_datasize);
@@ -2927,6 +2931,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			_TIFFmemcpy(buffer, t2p->pdf_ojpegdata, t2p->pdf_ojpegdatalength);
 			if(edge!=0){
 				if(t2p_tile_is_bottom_edge(t2p->tiff_tiles[t2p->pdf_page], tile)){
@@ -2968,6 +2973,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			if(TIFFGetField(input, TIFFTAG_JPEGTABLES, &count, &jpt) != 0) {
 				if (count > 4) {
                                         int retTIFFReadRawTile;
@@ -3016,6 +3022,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			t2p->t2p_error = T2P_ERR_ERROR;
 			return(0);
 		}
+		memset(buffer, 0, t2p->tiff_datasize);
 
 		read = TIFFReadEncodedTile(
 			input, 
@@ -3049,6 +3056,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			samplebuffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(samplebuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
@@ -3060,6 +3068,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(samplebuffer, 0, t2p->tiff_datasize);
 			samplebufferoffset=0;
 			for(i=0;i<t2p->tiff_samplesperpixel;i++){
 				read = 
@@ -3099,6 +3108,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return(0);
 			}
+			memset(buffer, 0, t2p->tiff_datasize);
 			read = TIFFReadEncodedTile(
 				input, 
 				tile, 
