@@ -407,11 +407,11 @@ ShowRawWords(uint16* pp, uint32 n)
 	putchar('\n');
 }
 
-void
-TIFFReadRawData(TIFF* tif, int bitrev)
+static void
+TIFFReadRawDataStriped(TIFF* tif, int bitrev)
 {
 	tstrip_t nstrips = TIFFNumberOfStrips(tif);
-	const char* what = TIFFIsTiled(tif) ? "Tile" : "Strip";
+	const char* what = "Strip";
 	uint64* stripbc=NULL;
 
 	TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &stripbc);
@@ -452,6 +452,22 @@ TIFFReadRawData(TIFF* tif, int bitrev)
 		}
 		if (buf != NULL)
 			_TIFFfree(buf);
+	}
+}
+
+static void
+TIFFReadRawDataTiled(TIFF* tif, int bitrev)
+{
+	const char* what = "Tile";
+}
+
+void
+TIFFReadRawData(TIFF* tif, int bitrev)
+{
+	if (TIFFIsTiled(tif)) {
+		TIFFReadRawDataTiled(tif, bitrev);
+	} else {
+		TIFFReadRawDataStriped(tif, bitrev);
 	}
 }
 
