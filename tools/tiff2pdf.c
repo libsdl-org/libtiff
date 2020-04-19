@@ -2283,8 +2283,13 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				return(0);
 			}
 			memset(buffer, 0, t2p->tiff_datasize);
-			TIFFReadRawStrip(input, 0, (tdata_t) buffer,
-					 t2p->tiff_datasize);
+			if (TIFFReadRawStrip(input, 0, (tdata_t) buffer,
+					 t2p->tiff_datasize) < 0) {
+				TIFFError(TIFF2PDF_MODULE,
+					"TIFFReadRawStrip() failed");
+				_TIFFfree(buffer);
+				return(0);
+			}
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
 					/*
 					 * make sure is lsb-to-msb
@@ -2312,8 +2317,13 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				return(0);
 			}
 			memset(buffer, 0, t2p->tiff_datasize);
-			TIFFReadRawStrip(input, 0, (tdata_t) buffer,
-					 t2p->tiff_datasize);
+			if (TIFFReadRawStrip(input, 0, (tdata_t) buffer,
+					 t2p->tiff_datasize) < 0) {
+				TIFFError(TIFF2PDF_MODULE,
+					"TIFFReadRawStrip() failed");
+				_TIFFfree(buffer);
+				return(0);
+			}
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB) {
 					TIFFReverseBits(buffer,
 							t2p->tiff_datasize);
@@ -2419,14 +2429,22 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				bufferoffset=t2p->pdf_ojpegdatalength;
 				stripcount=TIFFNumberOfStrips(input);
 				for(i=0;i<stripcount;i++){
+					tsize_t retTIFFReadRawStrip;
 					if(i != 0){
 						buffer[bufferoffset++]=0xff;
 						buffer[bufferoffset++]=(0xd0 | ((i-1)%8));
 					}
-					bufferoffset+=TIFFReadRawStrip(input, 
+					retTIFFReadRawStrip = TIFFReadRawStrip(input,
 						i, 
 						(tdata_t) &(((unsigned char*)buffer)[bufferoffset]), 
 						-1);
+					if (retTIFFReadRawStrip < 0) {
+						TIFFError(TIFF2PDF_MODULE, "TIFFReadRawStrip()");
+						_TIFFfree(buffer);
+						t2p->t2p_error = T2P_ERR_ERROR;
+						return(0);
+					}
+					bufferoffset += retTIFFReadRawStrip;
 				}
 				if( ! ( (buffer[bufferoffset-1]==0xd9) && (buffer[bufferoffset-2]==0xff) ) ){
 						buffer[bufferoffset++]=0xff;
@@ -2489,6 +2507,13 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 			memset(stripbuffer, 0, max_striplength);
 			for(i=0;i<stripcount;i++){
 				striplength=TIFFReadRawStrip(input, i, (tdata_t) stripbuffer, -1);
+				if (striplength < 0) {
+					TIFFError(TIFF2PDF_MODULE, "TIFFReadRawStrip() failed");
+					_TIFFfree(samplebuffer);
+					_TIFFfree(buffer);
+					t2p->t2p_error = T2P_ERR_ERROR;
+					return(0);
+				}
 				if(!t2p_process_jpeg_strip(
 					stripbuffer, 
 					&striplength, 
@@ -2880,7 +2905,13 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				return(0);
 			}
 			memset(buffer, 0, t2p->tiff_datasize);
-			TIFFReadRawTile(input, tile, (tdata_t) buffer, t2p->tiff_datasize);
+			if (TIFFReadRawTile(input, tile, (tdata_t) buffer, t2p->tiff_datasize) < 0) {
+				TIFFError(TIFF2PDF_MODULE,
+					"TIFFReadRawTile() failed");
+				_TIFFfree(buffer);
+				t2p->t2p_error = T2P_ERR_ERROR;
+				return(0);
+			}
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
 					TIFFReverseBits(buffer, t2p->tiff_datasize);
 			}
@@ -2902,7 +2933,13 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				return(0);
 			}
 			memset(buffer, 0, t2p->tiff_datasize);
-			TIFFReadRawTile(input, tile, (tdata_t) buffer, t2p->tiff_datasize);
+			if (TIFFReadRawTile(input, tile, (tdata_t) buffer, t2p->tiff_datasize) < 0) {
+				TIFFError(TIFF2PDF_MODULE,
+					"TIFFReadRawTile() failed");
+				_TIFFfree(buffer);
+				t2p->t2p_error = T2P_ERR_ERROR;
+				return(0);
+			}
 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
 					TIFFReverseBits(buffer, t2p->tiff_datasize);
 			}
@@ -2913,6 +2950,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 #endif
 #ifdef OJPEG_SUPPORT
 		if(t2p->tiff_compression == COMPRESSION_OJPEG){
+			tsize_t retTIFFReadRawTile;
 			if(! t2p->pdf_ojpegdata){
 				TIFFError(TIFF2PDF_MODULE, 
 					"No support for OJPEG image %s with "
@@ -2947,11 +2985,18 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 						(t2p->tiff_tiles[t2p->pdf_page].tiles_edgetilewidth ) & 0xff;
 				}
 			}
-			bufferoffset=t2p->pdf_ojpegdatalength;
-			bufferoffset+=TIFFReadRawTile(input, 
+			bufferoffset = t2p->pdf_ojpegdatalength;
+			retTIFFReadRawTile = TIFFReadRawTile(input,
 					tile, 
 					(tdata_t) &(((unsigned char*)buffer)[bufferoffset]), 
 					-1);
+			if (retTIFFReadRawTile < 0) {
+				TIFFError(TIFF2PDF_MODULE, "TIFFReadRawTile() failed");
+				_TIFFfree(buffer);
+				t2p->t2p_error = T2P_ERR_ERROR;
+				return(0);
+			}
+			bufferoffset += retTIFFReadRawTile;
 			((unsigned char*)buffer)[bufferoffset++]=0xff;
 			((unsigned char*)buffer)[bufferoffset++]=0xd9;
 			t2pWriteFile(output, (tdata_t) buffer, bufferoffset);
@@ -2976,7 +3021,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			memset(buffer, 0, t2p->tiff_datasize);
 			if(TIFFGetField(input, TIFFTAG_JPEGTABLES, &count, &jpt) != 0) {
 				if (count > 4) {
-                                        int retTIFFReadRawTile;
+                                        tsize_t retTIFFReadRawTile;
                     /* Ignore EOI marker of JpegTables */
 					_TIFFmemcpy(buffer, jpt, count - 2);
 					bufferoffset += count - 2;
@@ -2985,7 +3030,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 					table_end[1] = buffer[bufferoffset-1];
 					xuint32 = bufferoffset;
                                         bufferoffset -= 2;
-                                        retTIFFReadRawTile= TIFFReadRawTile(
+                                        retTIFFReadRawTile = TIFFReadRawTile(
 						input, 
 						tile, 
 						(tdata_t) &(((unsigned char*)buffer)[bufferoffset]), 
