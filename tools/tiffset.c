@@ -321,6 +321,7 @@ main(int argc, char* argv[])
             const TIFFField *fip;
             char    *text;
             size_t  len;
+            int ret;
 
             arg_index++;
             fip = GetField(tiff, argv[arg_index]);
@@ -354,7 +355,12 @@ main(int argc, char* argv[])
 
             fclose( fp );
 
-            if(TIFFSetField( tiff, TIFFFieldTag(fip), text ) != 1) {
+            if(TIFFFieldPassCount( fip )) {
+                ret = TIFFSetField( tiff, TIFFFieldTag(fip), (uint16)len, text );
+            } else {
+                ret = TIFFSetField( tiff, TIFFFieldTag(fip), text );
+            }
+            if(!ret) {
                 fprintf(stderr, "Failed to set %s from file %s\n", 
                         TIFFFieldName(fip), argv[arg_index]);
             }
