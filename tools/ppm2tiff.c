@@ -51,6 +51,13 @@
 extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
+#ifndef EXIT_SUCCESS
+#define EXIT_SUCCESS 0
+#endif
+#ifndef EXIT_FAILURE
+#define EXIT_FAILURE 1
+#endif
+
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
@@ -60,7 +67,7 @@ static	int quality = 75;	/* JPEG quality */
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
 static  uint32 g3opts;
 
-static	void usage(void);
+static	void usage(int code);
 static	int processCompressOptions(char*);
 
 static void
@@ -162,7 +169,7 @@ static void
 BadPPM(char* file)
 {
 	fprintf(stderr, "%s: Not a PPM file.\n", file);
-	exit(-2);
+	exit(EXIT_FAILURE);
 }
 
 
@@ -202,13 +209,13 @@ main(int argc, char* argv[])
 
 	if (argc < 2) {
 	    fprintf(stderr, "%s: Too few arguments\n", argv[0]);
-	    usage();
+	    usage(EXIT_FAILURE);
 	}
-	while ((c = getopt(argc, argv, "c:r:R:")) != -1)
+	while ((c = getopt(argc, argv, "c:r:R:h")) != -1)
 		switch (c) {
 		case 'c':		/* compression scheme */
 			if (!processCompressOptions(optarg))
-				usage();
+				usage(EXIT_FAILURE);
 			break;
 		case 'r':		/* rows/strip */
 			rowsperstrip = atoi(optarg);
@@ -216,14 +223,16 @@ main(int argc, char* argv[])
 		case 'R':		/* resolution */
 			resolution = atof(optarg);
 			break;
+		case 'h':
+			usage(EXIT_SUCCESS);
 		case '?':
-			usage();
+			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
 		}
 
 	if (optind + 2 < argc) {
 	    fprintf(stderr, "%s: Too many arguments\n", argv[0]);
-	    usage();
+	    usage(EXIT_FAILURE);
 	}
 
 	/*
@@ -235,7 +244,7 @@ main(int argc, char* argv[])
 		in = fopen(infile, "rb");
 		if (in == NULL) {
 			fprintf(stderr, "%s: Can not open.\n", infile);
-			return (-1);
+			return (EXIT_FAILURE);
 		}
 	} else {
 		infile = "<stdin>";
@@ -306,7 +315,7 @@ main(int argc, char* argv[])
 		if (0 != (prec & (prec + 1))) {
 			fprintf(stderr, "%s: unsupported maxval %u.\n",
 				infile, prec);
-			exit(-2);
+			exit(EXIT_FAILURE);
 		}
 		bpp = 0;
 		if ((prec + 1) & 0xAAAAAAAA) bpp |=  1;
@@ -339,7 +348,7 @@ main(int argc, char* argv[])
 	}
 	out = TIFFOpen(argv[optind], "w");
 	if (out == NULL)
-		return (-4);
+		return (EXIT_FAILURE);
 	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32) w);
 	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32) h);
 	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
@@ -379,13 +388,13 @@ main(int argc, char* argv[])
 	if (linebytes == 0) {
 		fprintf(stderr, "%s: scanline size overflow\n", infile);
 		(void) TIFFClose(out);
-		exit(-2);					
+		exit(EXIT_FAILURE);
 	}
 	scanline_size = TIFFScanlineSize(out);
 	if (scanline_size == 0) {
 		/* overflow - TIFFScanlineSize already printed a message */
 		(void) TIFFClose(out);
-		exit(-2);					
+		exit(EXIT_FAILURE);
 	}
 	if (scanline_size < linebytes)
 		buf = (unsigned char *)_TIFFmalloc(linebytes);
@@ -394,7 +403,7 @@ main(int argc, char* argv[])
 	if (buf == NULL) {
 		fprintf(stderr, "%s: Not enough memory\n", infile);
 		(void) TIFFClose(out);
-		exit(-2);
+		exit(EXIT_FAILURE);
 	}
 	if (resolution > 0) {
 		TIFFSetField(out, TIFFTAG_XRESOLUTION, resolution);
@@ -416,7 +425,7 @@ main(int argc, char* argv[])
 	(void) TIFFClose(out);
 	if (buf)
 		_TIFFfree(buf);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static void
@@ -433,7 +442,7 @@ processG3Options(char* cp)
                         else if (strneq(cp, "fill", 4))
                                 g3opts |= GROUP3OPT_FILLBITS;
                         else
-                                usage();
+                                usage(EXIT_FAILURE);
                 } while( (cp = strchr(cp, ':')) );
         }
 }
@@ -456,7 +465,7 @@ processCompressOptions(char* opt)
                     else if (cp[1] == 'r' )
 			jpegcolormode = JPEGCOLORMODE_RAW;
                     else
-                        usage();
+                        usage(EXIT_FAILURE);
 
                     cp = strchr(cp+1,':');
                 }
@@ -480,7 +489,7 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-char* stuff[] = {
+const char* stuff[] = {
 "usage: ppm2tiff [options] input.ppm output.tif",
 "where options are:",
 " -r #		make each strip have no more than # rows",
@@ -504,16 +513,15 @@ NULL
 };
 
 static void
-usage(void)
+usage(int code)
 {
-	char buf[BUFSIZ];
 	int i;
+	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-	setbuf(stderr, buf);
-        fprintf(stderr, "%s\n\n", TIFFGetVersion());
+        fprintf(out, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(stderr, "%s\n", stuff[i]);
-	exit(-1);
+		fprintf(out, "%s\n", stuff[i]);
+	exit(code);
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */

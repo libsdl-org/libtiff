@@ -51,6 +51,13 @@
 
 #include "tiffio.h"
 
+#ifndef EXIT_SUCCESS
+#define EXIT_SUCCESS 0
+#endif
+#ifndef EXIT_FAILURE
+#define EXIT_FAILURE 1
+#endif
+
 #ifndef HAVE_GETOPT
 extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
@@ -93,7 +100,7 @@ static int defpreset =  -1;
 
 static int tiffcp(TIFF*, TIFF*);
 static int processCompressOptions(char*);
-static void usage(void);
+static void usage(int code);
 
 static char comma = ',';  /* (default) comma separator character */
 static TIFF* bias = NULL;
@@ -134,7 +141,7 @@ static int nextSrcImage (TIFF *tif, char **imageSpec)
 				fprintf (stderr,
 				    "Expected a %c separated image # list after %s\n",
 				    comma, TIFFFileName (tif));
-				exit (-4);   /* syntax error */
+				exit (EXIT_FAILURE);   /* syntax error */
 			}
 		}
 		if (TIFFSetDirectory (tif, nextImage)) return 1;
@@ -195,33 +202,33 @@ main(int argc, char* argv[])
 
 	*mp++ = 'w';
 	*mp = '\0';
-	while ((c = getopt(argc, argv, "m:,:b:c:f:l:o:p:r:w:aistBLMC8x")) != -1)
+	while ((c = getopt(argc, argv, "m:,:b:c:f:l:o:p:r:w:aistBLMC8xh")) != -1)
 		switch (c) {
 		case 'm':
 			maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
 			break;
 		case ',':
-			if (optarg[0] != '=') usage();
+			if (optarg[0] != '=') usage(EXIT_FAILURE);
 			comma = optarg[1];
 			break;
 		case 'b':   /* this file is bias image subtracted from others */
 			if (bias) {
 				fputs ("Only 1 bias image may be specified\n", stderr);
-				exit (-2);
+				exit (EXIT_FAILURE);
 			}
 			{
 				uint16 samples = (uint16) -1;
 				char **biasFn = &optarg;
 				bias = openSrcImage (biasFn);
-				if (!bias) exit (-5);
+				if (!bias) exit (EXIT_FAILURE);
 				if (TIFFIsTiled (bias)) {
 					fputs ("Bias image must be organized in strips\n", stderr);
-					exit (-7);
+					exit (EXIT_FAILURE);
 				}
 				TIFFGetField(bias, TIFFTAG_SAMPLESPERPIXEL, &samples);
 				if (samples != 1) {
 					fputs ("Bias image must be monochrome\n", stderr);
-					exit (-7);
+					exit (EXIT_FAILURE);
 				}
 			}
 			break;
@@ -230,7 +237,7 @@ main(int argc, char* argv[])
 			break;
 		case 'c':   /* compression scheme */
 			if (!processCompressOptions(optarg))
-				usage();
+				usage(EXIT_FAILURE);
 			break;
 		case 'f':   /* fill order */
 			if (streq(optarg, "lsb2msb"))
@@ -238,7 +245,7 @@ main(int argc, char* argv[])
 			else if (streq(optarg, "msb2lsb"))
 				deffillorder = FILLORDER_MSB2LSB;
 			else
-				usage();
+				usage(EXIT_FAILURE);
 			break;
 		case 'i':   /* ignore errors */
 			ignore = TRUE;
@@ -256,7 +263,7 @@ main(int argc, char* argv[])
 			else if (streq(optarg, "contig"))
 				defconfig = PLANARCONFIG_CONTIG;
 			else
-				usage();
+				usage(EXIT_FAILURE);
 			break;
 		case 'r':   /* rows/strip */
 			defrowsperstrip = atol(optarg);
@@ -289,15 +296,18 @@ main(int argc, char* argv[])
 		case 'x':
 			pageInSeq = 1;
 			break;
+		case 'h':
+			usage(EXIT_SUCCESS);
+			/*NOTREACHED*/
 		case '?':
-			usage();
+			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
 		}
 	if (argc - optind < 2)
-		usage();
+		usage(EXIT_FAILURE);
 	out = TIFFOpen(argv[argc-1], mode);
 	if (out == NULL)
-		return (-2);
+		return (EXIT_FAILURE);
 	if ((argc - optind) == 2)
 		pageNum = -1;
 	for (; optind < argc-1 ; optind++) {
@@ -305,14 +315,14 @@ main(int argc, char* argv[])
 		in = openSrcImage (&imageCursor);
 		if (in == NULL) {
 			(void) TIFFClose(out);
-			return (-3);
+			return (EXIT_FAILURE);
 		}
 		if (diroff != 0 && !TIFFSetSubDirectory(in, diroff)) {
 			TIFFError(TIFFFileName(in),
 			    "Error, setting subdirectory at " TIFF_UINT64_FORMAT, diroff);
 			(void) TIFFClose(in);
 			(void) TIFFClose(out);
-			return (1);
+			return (EXIT_FAILURE);
 		}
 		for (;;) {
 			config = defconfig;
@@ -327,7 +337,7 @@ main(int argc, char* argv[])
 			if (!tiffcp(in, out) || !TIFFWriteDirectory(out)) {
 				(void) TIFFClose(in);
 				(void) TIFFClose(out);
-				return (1);
+				return (EXIT_FAILURE);
 			}
 			if (imageCursor) { /* seek next image directory */
 				if (!nextSrcImage(in, &imageCursor)) break;
@@ -338,7 +348,7 @@ main(int argc, char* argv[])
 	}
 
 	(void) TIFFClose(out);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static void
@@ -352,7 +362,7 @@ processZIPOptions(char* cp)
 			else if (*cp == 'p')
 				defpreset = atoi(++cp);
 			else
-				usage();
+				usage(EXIT_FAILURE);
 		} while( (cp = strchr(cp, ':')) );
 	}
 }
@@ -372,7 +382,7 @@ processG3Options(char* cp)
 			else if (strneq(cp, "fill", 4))
 				defg3opts |= GROUP3OPT_FILLBITS;
 			else
-				usage();
+				usage(EXIT_FAILURE);
 		} while( (cp = strchr(cp, ':')) );
 	}
 }
@@ -395,7 +405,7 @@ processCompressOptions(char* opt)
 			else if (cp[1] == 'r' )
 				jpegcolormode = JPEGCOLORMODE_RAW;
 			else
-				usage();
+				usage(EXIT_FAILURE);
 
 			cp = strchr(cp+1,':');
 		}
@@ -430,7 +440,7 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-char* stuff[] = {
+static const char* stuff[] = {
 "usage: tiffcp [options] input... output",
 "where options are:",
 " -a              append to output instead of overwriting",
@@ -496,16 +506,15 @@ NULL
 };
 
 static void
-usage(void)
+usage(int code)
 {
-	char buf[BUFSIZ];
 	int i;
+	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-	setbuf(stderr, buf);
-	fprintf(stderr, "%s\n\n", TIFFGetVersion());
+	fprintf(out, "%s\n\n", TIFFGetVersion());
 	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(stderr, "%s\n", stuff[i]);
-	exit(-1);
+		fprintf(out, "%s\n", stuff[i]);
+	exit(code);
 }
 
 #define	CopyField(tag, v) \
