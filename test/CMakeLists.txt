@@ -220,6 +220,21 @@ target_link_libraries(defer_strile_writing tiff port)
 add_executable(testtypes testtypes.c)
 target_link_libraries(testtypes tiff port)
 
+if(WEBP_SUPPORT AND EMSCRIPTEN)
+  # Emscripten is pretty finnicky about linker flags.
+  # It needs --shared-memory if and only if atomics or bulk-memory is used.
+  foreach(target ascii_tag
+                 custom_dir
+                 defer_strile_loading
+                 defer_strile_writing
+                 long_tag
+                 rewrite
+                 short_tag
+                 strip_rw)
+    target_link_options(${target} PUBLIC "-Wl,--shared-memory")
+  endforeach()
+endif()
+
 set(TEST_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/output")
 file(MAKE_DIRECTORY "${TEST_OUTPUT}")
 
