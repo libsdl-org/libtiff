@@ -60,10 +60,10 @@ before_build:
   - set
   - 'if %compiler%==cygwin-cmake dir C:\Cygwin64\bin'
   - 'if %compiler%==cygwin-cmake dir C:\Cygwin64\bin\cmake.exe'
-  - 'if %compiler%==cygwin-cmake C:\Cygwin64\bin\cmake.exe --version || echo CMake not found"'
-  - 'if %compiler%==cygwin-cmake C:\Cygwin64\bin\cmake --version || echo CMake not found"'
-  - 'if %compiler%==cygwin-cmake cygpath --version || echo cygpath not found"'
-  - 'if %compiler%==cygwin-cmake cmake --version || echo CMake not found"'
+  - 'if %compiler%==cygwin-cmake C:\Cygwin64\bin\cmake.exe --version || echo CMake not found'
+  - 'if %compiler%==cygwin-cmake C:\Cygwin64\bin\cmake --version || echo CMake not found'
+  - 'if %compiler%==cygwin-cmake cygpath --version || echo cygpath not found'
+  - 'if %compiler%==cygwin-cmake cmake --version || echo CMake not found'
   - 'if %compiler%==mingw64-cmake set "PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%"'
   - set "AV_CMAKE_ARGS=-DBUILD_SHARED_LIBS:BOOL=%shared%"
   - 'if %compiler%==mingw64-cmake set "PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%"'
