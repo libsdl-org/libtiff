@@ -38,7 +38,7 @@ environment:
       shared: ON
 
 cache:
-  - 'c:\projects\download -> appveyor.yml'
+  #- 'c:\projects\download -> appveyor.yml'
 
 # Operating system (build VM template)
 os: 'Visual Studio 2017'
