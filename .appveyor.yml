@@ -41,7 +41,7 @@ cache:
   #- 'c:\projects\download -> appveyor.yml'
 
 # Operating system (build VM template)
-os: 'Visual Studio 2017'
+os: 'Visual Studio 2019'
 
 # clone directory
 clone_folder: 'c:\projects\libtiff'
