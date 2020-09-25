@@ -58,6 +58,9 @@ before_build:
   - 'if %compiler%==cygwin-cmake C:\Cygwin64\setup-x86_64 -q -R C:\Cygwin64 -s http://cygwin.mirror.constant.com -l %AV_TIFF_DOWNLOAD%\cygwin -P cmake,libjpeg-devel,zlib-devel'
   - 'if %compiler%==cygwin-cmake set "PATH=C:\Cygwin64\bin;%PATH%"'
   - 'if %compiler%==cygwin-cmake dir "C:\Cygwin64\bin"'
+  - 'if %compiler%==cygwin-cmake cygpath --version || echo cygpath not found"'
+  - 'if %compiler%==cygwin-cmake cmake --version || echo CMake not found"'
+  - 'if %compiler%==cygwin-cmake C:\cygwin64\bin\cmake --version || echo CMake not found"'
   - set
   - 'if %compiler%==mingw64-cmake set "PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%"'
   - set "AV_CMAKE_ARGS=-DBUILD_SHARED_LIBS:BOOL=%shared%"
