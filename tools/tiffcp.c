@@ -97,6 +97,7 @@ static int jpegcolormode = JPEGCOLORMODE_RGB;
 static uint16 defcompression = (uint16) -1;
 static uint16 defpredictor = (uint16) -1;
 static int defpreset =  -1;
+static int subcodec = -1;
 
 static int tiffcp(TIFF*, TIFF*);
 static int processCompressOptions(char*);
@@ -361,6 +362,8 @@ processZIPOptions(char* cp)
 				defpredictor = atoi(cp);
 			else if (*cp == 'p')
 				defpreset = atoi(++cp);
+			else if (*cp == 's')
+				subcodec = atoi(++cp);
 			else
 				usage(EXIT_FAILURE);
 		} while( (cp = strchr(cp, ':')) );
@@ -494,6 +497,9 @@ static const char* stuff[] = {
 "LZW, Deflate (ZIP), LZMA2, ZSTD and WEBP options:",
 " #               set predictor value",
 " p#              set compression level (preset)",
+#if LIBDEFLATE_SUPPORT
+" s#              set subcodec (0=zlib, 1=libdeflate) (only for Deflate/ZIP)",
+#endif
 "For example, -c lzw:2 to get LZW-encoded data with horizontal differencing,",
 "-c zip:3:p9 for Deflate encoding with maximum compression level and floating",
 "point predictor.",
@@ -780,6 +786,17 @@ tiffcp(TIFF* in, TIFF* out)
 				TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
 			else
 				CopyField(TIFFTAG_PREDICTOR, predictor);
+                        if( compression == COMPRESSION_ADOBE_DEFLATE ||
+                            compression == COMPRESSION_DEFLATE )
+                        {
+                            if( subcodec != -1 )
+                            {
+                                if( TIFFSetField(out, TIFFTAG_DEFLATE_SUBCODEC, subcodec) != 1 )
+                                {
+                                    return FALSE;
+                                }
+                            }
+                        }
 			/*fallthrough*/
 		case COMPRESSION_WEBP:
 			if (preset != -1) {
