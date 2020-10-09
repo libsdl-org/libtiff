@@ -677,7 +677,7 @@ endif()
 # Libraries required by libtiff
 set(TIFF_LIBRARY_DEPS)
 if(NOT MINGW AND M_LIBRARY)
-  list(APPEND TIFF_LIBRARY_DEPS ${M_LIBRARY})
+  list(APPEND TIFF_LIBRARY_DEPS "m")
 endif()
 if(ZLIB_LIBRARIES)
   list(APPEND TIFF_LIBRARY_DEPS ${ZLIB_LIBRARIES})
