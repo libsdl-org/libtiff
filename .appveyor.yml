@@ -67,6 +67,7 @@ before_build:
   - set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_INSTALL%"
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_CYG_SOURCE%'
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_CYG_INSTALL%'
+  - 'if %compiler%==mingw-cmake "PATH=C:\MinGW\bin;%PATH%"'
   - 'if %compiler%==vc14-nmake call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" %platform%'
   - mkdir %AV_TIFF_BUILD%
   - cd %AV_TIFF_BUILD%
