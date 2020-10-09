@@ -16,11 +16,11 @@ environment:
       shared: OFF
     - compiler: mingw64-cmake
       configuration: Release
-      generator: Unix Makefiles
+      generator: MinGW Makefiles
       shared: ON
     - compiler: mingw64-cmake
       configuration: Debug
-      generator: Unix Makefiles
+      generator: MinGW Makefiles
       shared: OFF
     - compiler: vc14-cmake
       configuration: Release
@@ -64,9 +64,7 @@ before_build:
   - 'if %compiler%==mingw64-cmake set "PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%"'
   - set "AV_CMAKE_ARGS=-DBUILD_SHARED_LIBS:BOOL=%shared%"
   - 'if %compiler%==mingw64-cmake set "PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%"'
-  - 'if %compiler%==mingw64-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS% -DCMAKE_MAKE_PROGRAM=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin\mingw32-make"'
-  - 'if %compiler%==mingw64-cmake set CC=gcc'
-  - 'if %compiler%==mingw64-cmake set CXX=g++'
+  - 'if %compiler%==mingw64-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS%"'
   - set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_SOURCE%"
   - set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_INSTALL%"
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_CYG_SOURCE%'
