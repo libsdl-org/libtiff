@@ -109,7 +109,8 @@ set(TESTSCRIPTS
     tiff2rgba-ojpeg_zackthecat_subsamp22_single_strip.sh
     tiff2rgba-ojpeg_chewey_subsamp21_multi_strip.sh
     tiff2rgba-ojpeg_single_strip_no_rowsperstrip.sh
-    testfax4.sh)
+    testfax4.sh
+    testdeflatelaststripextradata.sh)
 
 # This list should contain all of the TIFF files in the 'images'
 # subdirectory which are intended to be used as input images for

@@ -615,6 +615,63 @@ if test "$HAVE_ZLIB" = "yes" ; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl Check for libdeflate.
+dnl ---------------------------------------------------------------------------
+
+HAVE_LIBDEFLATE=no
+
+AC_ARG_ENABLE(libdeflate,
+	      AS_HELP_STRING([--disable-libdeflate],
+			     [disable libdeflate usage (optional for faster Deflate support (still requires zlib), enabled by default)]),,)
+AC_ARG_WITH(libdeflate-include-dir,
+	    AS_HELP_STRING([--with-libdeflate-include-dir=DIR],
+			   [location of libdeflate headers]),,)
+AC_ARG_WITH(libdeflate-lib-dir,
+	    AS_HELP_STRING([--with-libdeflate-lib-dir=DIR],
+			   [location of libdeflate library binary]),,)
+
+if test "x$enable_libdeflate" != "xno" ; then
+
+  if test "x$with_libdeflate_lib_dir" != "x" ; then
+    LDFLAGS="-L$with_libdeflate_lib_dir $LDFLAGS"
+  fi
+
+  AC_CHECK_LIB(deflate, libdeflate_zlib_decompress, [libdeflate_lib=yes], [libdeflate_lib=no],)
+  if test "$libdeflate_lib" = "no" -a "x$with_libdeflate_lib_dir" != "x"; then
+    AC_MSG_ERROR([libdeflate library not found at $with_libdeflate_lib_dir])
+  fi
+
+  if test "x$with_libdeflate_include_dir" != "x" ; then
+    CPPFLAGS="-I$with_libdeflate_include_dir $CPPFLAGS"
+  fi
+  AC_CHECK_HEADER(libdeflate.h, [libdeflate_h=yes], [libdeflate_h=no])
+  if test "$libdeflate_h" = "no" -a "x$with_libdeflate_include_dir" != "x" ; then
+    AC_MSG_ERROR([libdeflate headers not found at $with_libdeflate_include_dir])
+  fi
+
+  if test "$libdeflate_lib" = "yes" -a "$libdeflate_h" = "yes" ; then
+    HAVE_LIBDEFLATE=yes
+  fi
+
+fi
+
+if test "$HAVE_LIBDEFLATE" = "yes" -a "$HAVE_ZLIB" = "no" ; then
+  AC_MSG_WARN([libdeflate available but zlib is not. libdeflate cannot be used])
+  HAVE_LIBDEFLATE=no
+fi  
+
+if test "$HAVE_LIBDEFLATE" = "yes" ; then
+  AC_DEFINE(LIBDEFLATE_SUPPORT,1,[Support libdeflate enhanced compression])
+  LIBS="-ldeflate $LIBS"
+  tiff_libs_private="-ldeflate ${tiff_libs_private}"
+
+  if test "$HAVE_RPATH" = "yes" -a "x$with_libdeflate_lib_dir" != "x" ; then
+    LIBDIR="-R $with_libdeflate_lib_dir $LIBDIR"
+  fi
+
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl Check for Pixar log-format algorithm.
 dnl ---------------------------------------------------------------------------
 
@@ -1191,6 +1248,7 @@ LOC_MSG([  LogLuv high dynamic range encoding: ${HAVE_LOGLUV}])
 LOC_MSG()
 LOC_MSG([ Support for external codecs:])
 LOC_MSG([  ZLIB support:                       ${HAVE_ZLIB}])
+LOC_MSG([  libdeflate support:                 ${HAVE_LIBDEFLATE}])
 LOC_MSG([  Pixar log-format algorithm:         ${HAVE_PIXARLOG}])
 LOC_MSG([  JPEG support:                       ${HAVE_JPEG}])
 LOC_MSG([  Old JPEG support:                   ${HAVE_OJPEG}])
