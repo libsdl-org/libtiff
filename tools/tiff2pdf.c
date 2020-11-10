@@ -2229,6 +2229,9 @@ int t2p_tile_is_corner_edge(T2P_TILES tiles, ttile_t tile){
 	return(t2p_tile_is_right_edge(tiles, tile) & t2p_tile_is_bottom_edge(tiles, tile) );
 }
 
+#if defined(JPEG_SUPPORT) || defined(OJPEG_SUPPORT)
+static const unsigned char jpeg_eof_marker[] = { 0xff, 0xd9 };
+#endif
 
 /*
 	This function reads the raster image data from the input TIFF for an image and writes 
@@ -2448,11 +2451,10 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 					}
 					bufferoffset += retTIFFReadRawStrip;
 				}
-				if( ! ( (buffer[bufferoffset-1]==0xd9) && (buffer[bufferoffset-2]==0xff) ) ){
-						buffer[bufferoffset++]=0xff;
-						buffer[bufferoffset++]=0xd9;
-				}
 				t2pWriteFile(output, (tdata_t) buffer, bufferoffset);
+				if( ! ( (buffer[bufferoffset-1]==0xd9) && (buffer[bufferoffset-2]==0xff) ) ){
+					t2pWriteFile(output, (tdata_t) jpeg_eof_marker, sizeof(jpeg_eof_marker));
+				}
 				_TIFFfree(buffer);
 				return(bufferoffset);
 #if 0
@@ -2533,9 +2535,8 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 						return(0);
 				}
 			}
-			buffer[bufferoffset++]=0xff; 
-			buffer[bufferoffset++]=0xd9;
 			t2pWriteFile(output, (tdata_t) buffer, bufferoffset);
+			t2pWriteFile(output, (tdata_t) jpeg_eof_marker, sizeof(jpeg_eof_marker));
 			_TIFFfree(stripbuffer);
 			_TIFFfree(buffer);
 			return(bufferoffset);
@@ -2999,9 +3000,8 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 				return(0);
 			}
 			bufferoffset += retTIFFReadRawTile;
-			((unsigned char*)buffer)[bufferoffset++]=0xff;
-			((unsigned char*)buffer)[bufferoffset++]=0xd9;
 			t2pWriteFile(output, (tdata_t) buffer, bufferoffset);
+			t2pWriteFile(output, (tdata_t) jpeg_eof_marker, sizeof(jpeg_eof_marker));
 			_TIFFfree(buffer);
 			return(bufferoffset);
 		}
