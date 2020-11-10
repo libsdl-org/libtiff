@@ -2715,7 +2715,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 #if defined( EXP_ASCII85ENCODER )
 			if (alpha) {
 				int adjust, i;
-				for (i = 0; i < cc; i+=2) {
+				for (i = 0; i < (cc - 1); i+=2) {
 					adjust = 255 - cp[i + 1];
 				    cp[i / 2] = cp[i] + adjust;
 				}
