@@ -3048,7 +3048,7 @@ tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw
             tsize_t         len;                /* Output this many bytes */
     
             len = raw_l + 1;
-            val32 = *++raw_p << 24;             /* Prime the pump */
+            val32 = (uint32)*++raw_p << 24;             /* Prime the pump */
     
             if ( --raw_l > 0 )  val32 += *(++raw_p) << 16;
             if ( --raw_l > 0 )  val32 += *(++raw_p) <<  8;
