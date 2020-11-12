@@ -945,6 +945,10 @@ gtStripContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
 
 	flip = setorientation(img);
 	if (flip & FLIP_VERTICALLY) {
+		if ( w > 0x7FFFFFFFu ) {
+            TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "Width overflow");
+		    return (0);
+		}
 		y = h - 1;
 		toskew = -(int32)(w + w);
 	} else {
