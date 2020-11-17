@@ -5684,6 +5684,13 @@ tsize_t t2p_write_pdf(T2P* t2p, TIFF* input, TIFF* output){
 				written += t2p_write_pdf_stream_start(output);
 				streamlen=written;
 				t2p_read_tiff_size_tile(t2p, input, i2);
+				if (t2p->tiff_maxdatasize && (t2p->tiff_datasize > t2p->tiff_maxdatasize)) {
+					TIFFError(TIFF2PDF_MODULE,
+						"Allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ". Use -m option to change limit",
+						(uint64)t2p->tiff_datasize, (uint64)t2p->tiff_maxdatasize);
+					t2p->t2p_error = T2P_ERR_ERROR;
+					return (0);
+				}
 				written += t2p_readwrite_pdf_image_tile(t2p, input, output, i2);
 				t2p_write_advance_directory(t2p, output);
 				if(t2p->t2p_error!=T2P_ERR_OK){return(0);}
