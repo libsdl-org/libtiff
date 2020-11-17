@@ -1960,11 +1960,22 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 	return;
 }
 
-/*
+/**
+ * checks for overflow
+ */
+static void t2p_set_tiff_datasize(T2P* t2p, uint64 k) {
+	if (k != (uint64)(tmsize_t)k || (tmsize_t)k < 0) {
+		TIFFError(TIFF2PDF_MODULE, "Integer overflow");
+		t2p->t2p_error = T2P_ERR_ERROR;
+		return;
+	}
+	t2p->tiff_datasize = (tmsize_t)k;
+}
+
+/**
 	This function returns the necessary size of a data buffer to contain the raw or 
 	uncompressed image data from the input TIFF for a page.
 */
-
 void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 
 	uint64* sbc=NULL;
@@ -1973,28 +1984,20 @@ void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 	tstrip_t i=0;
 	tstrip_t stripcount=0;
 #endif
-        uint64 k = 0;
+	uint64 k = 0;
 
 	if(t2p->pdf_transcode == T2P_TRANSCODE_RAW){
-#ifdef CCITT_SUPPORT
-		if(t2p->pdf_compression == T2P_COMPRESS_G4 ){
-			TIFFGetField(input, TIFFTAG_STRIPBYTECOUNTS, &sbc);
-            if (sbc[0] != (uint64)(tmsize_t)sbc[0]) {
-                TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-                t2p->t2p_error = T2P_ERR_ERROR;
-            }
-			t2p->tiff_datasize=(tmsize_t)sbc[0];
-			return;
-		}
+#if defined(CCITT_SUPPORT) || defined(ZIP_SUPPORT)
+#if defined(CCITT_SUPPORT) && defined(ZIP_SUPPORT)
+		if(t2p->pdf_compression == T2P_COMPRESS_G4 || t2p->pdf_compression == T2P_COMPRESS_ZIP)
+#elif defined(CCITT_SUPPORT)
+		if(t2p->pdf_compression == T2P_COMPRESS_G4)
+#else
+		if(t2p->pdf_compression == T2P_COMPRESS_ZIP)
 #endif
-#ifdef ZIP_SUPPORT
-		if(t2p->pdf_compression == T2P_COMPRESS_ZIP){
+		{
 			TIFFGetField(input, TIFFTAG_STRIPBYTECOUNTS, &sbc);
-            if (sbc[0] != (uint64)(tmsize_t)sbc[0]) {
-                TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-                t2p->t2p_error = T2P_ERR_ERROR;
-            }
-			t2p->tiff_datasize=(tmsize_t)sbc[0];
+			t2p_set_tiff_datasize(t2p, sbc[0]);
 			return;
 		}
 #endif
@@ -2023,11 +2026,7 @@ void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 							k = checkAdd64(k, 6, t2p);
 							k = checkAdd64(k, stripcount, t2p);
 							k = checkAdd64(k, stripcount, t2p);
-							t2p->tiff_datasize = (tsize_t) k;
-							if ((uint64) t2p->tiff_datasize != k) {
-								TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-								t2p->t2p_error = T2P_ERR_ERROR;
-							}
+							t2p_set_tiff_datasize(t2p, k);
 							return;
 						}
 						return;
@@ -2043,11 +2042,7 @@ void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 			k = checkAdd64(k, stripcount, t2p);
 			k = checkAdd64(k, stripcount, t2p);
 			k = checkAdd64(k, 2048, t2p);
-			t2p->tiff_datasize = (tsize_t) k;
-			if ((uint64) t2p->tiff_datasize != k) {
-				TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-				t2p->t2p_error = T2P_ERR_ERROR;
-			}
+			t2p_set_tiff_datasize(t2p, k);
 			return;
 		}
 #endif
@@ -2077,11 +2072,7 @@ void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 			}
 			k = checkAdd64(k, 2, t2p); /* use EOI of last strip */
 			k = checkAdd64(k, 6, t2p); /* for DRI marker of first strip */
-			t2p->tiff_datasize = (tsize_t) k;
-			if ((uint64) t2p->tiff_datasize != k) {
-				TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-				t2p->t2p_error = T2P_ERR_ERROR;
-			}
+			t2p_set_tiff_datasize(t2p, k);
 			return;
 		}
 #endif
@@ -2104,11 +2095,7 @@ void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 		t2p->t2p_error = T2P_ERR_ERROR;
 	}
 
-	t2p->tiff_datasize = (tsize_t) k;
-	if ((uint64) t2p->tiff_datasize != k) {
-		TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-		t2p->t2p_error = T2P_ERR_ERROR;
-	}
+	t2p_set_tiff_datasize(t2p, k);
 
 	return;
 }
@@ -2161,11 +2148,7 @@ void t2p_read_tiff_size_tile(T2P* t2p, TIFF* input, ttile_t tile){
 				}
 			}
 #endif
-			t2p->tiff_datasize = (tsize_t) k;
-			if ((uint64) t2p->tiff_datasize != k) {
-				TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-				t2p->t2p_error = T2P_ERR_ERROR;
-			}
+			t2p_set_tiff_datasize(t2p, k);
 			return;
 		}
 	}
@@ -2178,11 +2161,7 @@ void t2p_read_tiff_size_tile(T2P* t2p, TIFF* input, ttile_t tile){
 		t2p->t2p_error = T2P_ERR_ERROR;
 	}
 
-	t2p->tiff_datasize = (tsize_t) k;
-	if ((uint64) t2p->tiff_datasize != k) {
-		TIFFError(TIFF2PDF_MODULE, "Integer overflow");
-		t2p->t2p_error = T2P_ERR_ERROR;
-	}
+	t2p_set_tiff_datasize(t2p, k);
 
 	return;
 }
