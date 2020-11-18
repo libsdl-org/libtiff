@@ -3329,6 +3329,14 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 		break;
 	}
 
+	if (TIFFStripSize(output) > t2p->tiff_datasize) {
+		TIFFError(TIFF2PDF_MODULE,
+		         "Size mismatch input %ld, output %ld",
+		          t2p->tiff_datasize, TIFFStripSize(output));
+		_TIFFfree(buffer);
+		t2p->t2p_error = T2P_ERR_ERROR;
+		return(0);
+	}
 	t2p_enable(output);
 	t2p->outputwritten = 0;
 	bufferoffset = TIFFWriteEncodedStrip(output, (tstrip_t) 0, buffer,
