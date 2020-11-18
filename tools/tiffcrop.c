@@ -3035,9 +3035,25 @@ extractContigSamples24bits (uint8 *in, uint8 *out, uint32 cols,
       src = in + src_byte;
       matchbits = maskbits << (32 - src_bit - bps); 
       if (little_endian)
-	buff1 = (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
+        {
+        buff1 = (src[0] << 24);
+        if (matchbits & 0x00ff0000)
+          buff1 |= (src[1] << 16);
+        if (matchbits & 0x0000ff00)
+          buff1 |= (src[2] << 8);
+        if (matchbits & 0x000000ff)
+          buff1 |= src[3];
+        }
       else
-	buff1 = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
+        {
+        buff1 = src[0];
+        if (matchbits & 0x0000ff00)
+          buff1 |= (src[1] << 8);
+        if (matchbits & 0x00ff0000)
+          buff1 |= (src[2] << 16);
+        if (matchbits & 0xff000000)
+          buff1 |= (src[3] << 24);
+        }
       buff1 = (buff1 & matchbits) << (src_bit);
 
       if (ready_bits < 16) /* add another bps bits to the buffer */
