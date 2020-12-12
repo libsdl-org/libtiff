@@ -464,7 +464,7 @@ option(libdeflate "use libdeflate (optional for faster Deflate support, still re
 if (libdeflate)
   set(DEFLATE_FOUND 0)
   find_path(DEFLATE_INCLUDE_DIR libdeflate.h)
-  set(DEFLATE_NAMES ${DEFLATE_NAMES} libdeflate)
+  set(DEFLATE_NAMES ${DEFLATE_NAMES} deflate)
   find_library(DEFLATE_LIBRARY NAMES ${DEFLATE_NAMES})
   if (DEFLATE_INCLUDE_DIR AND DEFLATE_LIBRARY)
     set(DEFLATE_FOUND 1)
