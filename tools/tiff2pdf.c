@@ -263,7 +263,7 @@ typedef struct {
 
 /* These functions are called by main. */
 
-static void tiff2pdf_usage(int);
+static void usage_info(int);
 int tiff2pdf_match_paper_size(float*, float*, char*);
 
 /* These functions are used to generate a PDF from a TIFF. */ 
@@ -557,8 +557,12 @@ checkMultiply64(uint64 first, uint64 second, T2P* t2p)
     options:
     -o: output to file name
 
+#ifdef JPEG_SUPPORT
     -j: compress with JPEG (requires libjpeg configured with libtiff)
-    -z: compress with Zip/Deflate (requires zlib configured with libtiff)
+#endif
+#ifdef ZIP_SUPPORT
+printf	(-z: compress with Zip/Deflate (requires zlib configured with libtiff));
+#endif
     -q: compression quality
     -n: no compressed data passthrough
     -d: do not compress (decompress)
@@ -755,10 +759,10 @@ int main(int argc, char** argv){
 				t2p->pdf_image_interpolate = 1;
 				break;
 			case 'h':
-				tiff2pdf_usage(EXIT_SUCCESS);
+				usage_info(EXIT_SUCCESS);
 				goto success;
 			case '?':
-				tiff2pdf_usage(EXIT_FAILURE);
+				usage_info(EXIT_FAILURE);
 				goto fail;
 		}
 	}
@@ -776,14 +780,14 @@ int main(int argc, char** argv){
 		}
 	} else {
 		TIFFError(TIFF2PDF_MODULE, "No input file specified"); 
-		tiff2pdf_usage(EXIT_FAILURE);
+		usage_info(EXIT_FAILURE);
 		goto fail;
 	}
 
 	if(argc > optind) {
 		TIFFError(TIFF2PDF_MODULE, 
 			  "No support for multiple input files"); 
-		tiff2pdf_usage(EXIT_FAILURE);
+		usage_info(EXIT_FAILURE);
 		goto fail;
 	}
 
@@ -845,10 +849,10 @@ success:
   
 }
 
-static void tiff2pdf_usage(int code) {
+static void usage_info(int code) {
 	static const char* lines[]={
 	"usage:  tiff2pdf [options] input.tiff",
-	"options:",
+	"where options are:",
 	" -o: output to file name",
 #ifdef JPEG_SUPPORT
 	" -j: compress with JPEG", 
@@ -856,9 +860,11 @@ static void tiff2pdf_usage(int code) {
 #ifdef ZIP_SUPPORT
 	" -z: compress with Zip/Deflate",
 #endif
+#if defined(JPEG_SUPPORT) || defined(ZIP_SUPPORT)
 	" -q: compression quality",
 	" -n: no compressed data passthrough",
 	" -d: do not compress (decompress)",
+#endif
 	" -i: invert colors",
 	" -u: set distance unit, 'i' for inch, 'm' for centimeter",
 	" -x: set x resolution default in dots per unit",
@@ -1968,7 +1974,7 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 void t2p_read_tiff_size(T2P* t2p, TIFF* input){
 
 	uint64* sbc=NULL;
-#if defined(JPEG_SUPPORT) || defined (OJPEG_SUPPORT)
+#if defined(JPEG_SUPPORT) || defined(OJPEG_SUPPORT)
 	unsigned char* jpt=NULL;
 	tstrip_t i=0;
 	tstrip_t stripcount=0;

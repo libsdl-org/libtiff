@@ -46,6 +46,10 @@
 #define EXIT_FAILURE 1
 #endif
 
+#ifndef HAVE_GETOPT
+extern int getopt(int argc, char * const argv[], const char *optstring);
+#endif
+
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	CopyField(tag, v) \
     if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
@@ -364,19 +368,33 @@ tiffcvt(TIFF* in, TIFF* out)
         return result;
 }
 
-const char* stuff[] = {
-    "usage: rgb2ycbcr [-c comp] [-r rows] [-h N] [-v N] input... output\n",
-    "where comp is one of the following compression algorithms:\n",
-    " jpeg\t\tJPEG encoding\n",
-    " lzw\t\tLempel-Ziv & Welch encoding\n",
-    " zip\t\tdeflate encoding\n",
-    " packbits\tPackBits encoding (default)\n",
-    " none\t\tno compression\n",
-    "and the other options are:\n",
-    " -r\trows/strip\n",
-    " -h\thorizontal sampling factor (1,2,4)\n",
-    " -v\tvertical sampling factor (1,2,4)\n",
-    NULL
+const char* usage_info[] = {
+/* Help information format modified for the sake of consistency with the other tiff tools */
+/*    "usage: rgb2ycbcr [-c comp] [-r rows] [-h N] [-v N] input... output\n", */
+/*     "where comp is one of the following compression algorithms:\n", */
+"usage: rgb2ycbcr [options] input output",
+"where options are:",
+#ifdef JPEG_SUPPORT
+" -c jpeg      JPEG encoding",
+#endif
+#ifdef ZIP_SUPPORT
+" -c zip       Zip/Deflate encoding",
+#endif
+#ifdef LZW_SUPPORT
+" -c lzw       Lempel-Ziv & Welch encoding",
+#endif
+#ifdef PACKBITS_SUPPORT
+" -c packbits  PackBits encoding (default)",
+#endif
+#if defined(JPEG_SUPPORT) || defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT)
+" -c none      no compression",
+#endif
+"",
+/*    "and the other options are:\n", */
+" -r   rows/strip",
+" -h   horizontal sampling factor (1,2,4)",
+" -v   vertical sampling factor (1,2,4)",
+NULL
 };
 
 static void
@@ -386,8 +404,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

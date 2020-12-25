@@ -443,7 +443,7 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-static const char* stuff[] = {
+static const char* usage_info[] = {
 "usage: tiffcp [options] input... output",
 "where options are:",
 " -a              append to output instead of overwriting",
@@ -470,44 +470,76 @@ static const char* stuff[] = {
 " -f lsb2msb      force lsb-to-msb FillOrder for output",
 " -f msb2lsb      force msb-to-lsb FillOrder for output",
 "",
+#ifdef LZW_SUPPORT
 " -c lzw[:opts]   compress output with Lempel-Ziv & Welch encoding",
-" -c zip[:opts]   compress output with deflate encoding",
-" -c lzma[:opts]  compress output with LZMA2 encoding",
-" -c zstd[:opts]  compress output with ZSTD encoding",
-" -c webp[:opts]  compress output with WEBP encoding",
-" -c jpeg[:opts]  compress output with JPEG encoding",
-" -c jbig         compress output with ISO JBIG encoding",
-" -c packbits     compress output with packbits encoding",
-" -c g3[:opts]    compress output with CCITT Group 3 encoding",
-" -c g4           compress output with CCITT Group 4 encoding",
-" -c sgilog       compress output with SGILOG encoding",
-" -c none         use no compression algorithm on output",
-"",
-"Group 3 options:",
-" 1d              use default CCITT Group 3 1D-encoding",
-" 2d              use optional CCITT Group 3 2D-encoding",
-" fill            byte-align EOL codes",
-"For example, -c g3:2d:fill to get G3-2D-encoded data with byte-aligned EOLs",
-"",
-"JPEG options:",
-" #               set compression quality level (0-100, default 75)",
-" r               output color image as RGB rather than YCbCr",
-"For example, -c jpeg:r:50 to get JPEG-encoded RGB data with 50% comp. quality",
-"",
-"LZW, Deflate (ZIP), LZMA2, ZSTD and WEBP options:",
-" #               set predictor value",
-" p#              set compression level (preset)",
-#if LIBDEFLATE_SUPPORT
-" s#              set subcodec (0=zlib, 1=libdeflate) (only for Deflate/ZIP)",
+/* "    LZW options:", */
+"    #            set predictor value",
+"    p#           set compression level (preset)",
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
 #endif
-"For example, -c lzw:2 to get LZW-encoded data with horizontal differencing,",
-"-c zip:3:p9 for Deflate encoding with maximum compression level and floating",
-"point predictor.",
+#ifdef ZIP_SUPPORT
+" -c zip[:opts]   compress output with deflate encoding",
+/* "    Deflate (ZIP) options:", */
+"    #            set predictor value",
+"    p#           set compression level (preset)",
+"    For example, -c zip:3:p9 for maximum compression level and floating",
+"                 point predictor.",
+#endif
+#if defined(ZIP_SUPPORT) && defined(LIBDEFLATE_SUPPORT)
+"    s#           set subcodec: 0=zlib, 1=libdeflate (default 1)",
+/* "                 (only for Deflate/ZIP)", */
+#endif
+#ifdef LZMA_SUPPORT
+" -c lzma[:opts]  compress output with LZMA2 encoding",
+/* "    LZMA options:", */
+"    #            set predictor value",
+"    p#           set compression level (preset)",
+#endif
+#ifdef ZSTD_SUPPORT
+" -c zstd[:opts]  compress output with ZSTD encoding",
+/* "    ZSTD options:", */
+"    #            set predictor value",
+"    p#           set compression level (preset)",
+#endif
+#ifdef WEBP_SUPPORT
+" -c webp[:opts]  compress output with WEBP encoding",
+/* "    WEBP options:", */
+"    #            set predictor value",
+"    p#           set compression level (preset)",
+#endif
+#ifdef JPEG_SUPPORT
+" -c jpeg[:opts]  compress output with JPEG encoding",
+/* "    JPEG options:", */
+"    #            set compression quality level (0-100, default 75)",
+"    r            output color image as RGB rather than YCbCr",
+"    For example, -c jpeg:r:50 for JPEG-encoded RGB with 50% comp. quality",
+#endif
+#ifdef JBIG_SUPPORT
+" -c jbig         compress output with ISO JBIG encoding",
+#endif
+#ifdef PACKBITS_SUPPORT
+" -c packbits     compress output with packbits encoding",
+#endif
+#ifdef CCITT_SUPPORT
+" -c g3[:opts]    compress output with CCITT Group 3 encoding",
+/* "    CCITT Group 3 options:", */
+"    1d           use default CCITT Group 3 1D-encoding",
+"    2d           use optional CCITT Group 3 2D-encoding",
+"    fill         byte-align EOL codes",
+"    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs",
+" -c g4           compress output with CCITT Group 4 encoding",
+#endif
+#ifdef LOGLUV_SUPPORT
+" -c sgilog       compress output with SGILOG encoding",
+#endif
+#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(LZMA_SUPPORT) || defined(ZSTD_SUPPORT) || defined(WEBP_SUPPORT) || defined(JPEG_SUPPORT) || defined(JBIG_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT) || defined(LOGLUV_SUPPORT)
+" -c none         use no compression algorithm on output",
+#endif
 "",
 "Note that input filenames may be of the form filename,x,y,z",
 "where x, y, and z specify image numbers in the filename to copy.",
-"example:  tiffcp -c none -b esp.tif,1 esp.tif,0 test.tif",
-"  subtract 2nd image in esp.tif from 1st yielding uncompressed result test.tif",
+"example: tiffcp -c none -b esp.tif,1 esp.tif,0 test.tif",
+"    subtract 2nd image in esp.tif from 1st yielding uncompressed result test.tif",
 NULL
 };
 
@@ -518,8 +550,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

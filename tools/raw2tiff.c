@@ -378,7 +378,7 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
 	char	    *buf1, *buf2;
 	_TIFF_stat_s filestat;
 	uint32	    w, h, scanlinesize, imagesize;
-	uint32	    depth = TIFFDataWidth(dtype);
+	uint32	    depth = TIFFDataWidth(dtype);	
 	double	    cor_coef = 0, tmp;
 
 	if (_TIFF_fstat_f(fd, &filestat) == -1) {
@@ -624,7 +624,7 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-static const char* stuff[] = {
+static const char* usage_info[] = {
 "raw2tiff --- tool for converting raw byte sequences in TIFF images",
 "usage: raw2tiff [options] input.raw output.tif",
 "where options are:",
@@ -665,20 +665,31 @@ static const char* stuff[] = {
 " pixel		pixel interleaved data (default)",
 " band		band interleaved data",
 "",
+#ifdef LZW_SUPPORT
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+/* "    LZW options:", */
+"    #  set predictor value",
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+#endif
+#ifdef ZIP_SUPPORT
 " -c zip[:opts]	compress output with deflate encoding",
+/* "    Deflate (ZIP) options:", */
+"    #  set predictor value",
+#endif
+#ifdef JPEG_SUPPORT
 " -c jpeg[:opts]	compress output with JPEG encoding",
+/* "    JPEG options:", */
+"    #  set compression quality level (0-100, default 75)",
+"    r  output color image as RGB rather than YCbCr",
+"    For example, -c jpeg:r:50 for JPEG-encoded RGB data with 50% comp. quality",
+#endif
+#ifdef PACKBITS_SUPPORT
 " -c packbits	compress output with packbits encoding",
+#endif
+#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(JPEG_SUPPORT) || defined(PACKBITS_SUPPORT)
 " -c none	use no compression algorithm on output",
+#endif
 "",
-"JPEG options:",
-" #		set compression quality level (0-100, default 75)",
-" r		output color image as RGB rather than YCbCr",
-"For example, -c jpeg:r:50 to get JPEG-encoded RGB data with 50% comp. quality",
-"",
-"LZW and deflate options:",
-" #		set predictor value",
-"For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
 " -o out.tif	write output to out.tif",
 " -h		this help message",
 NULL
@@ -691,8 +702,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

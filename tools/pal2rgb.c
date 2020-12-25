@@ -46,6 +46,10 @@
 #define EXIT_FAILURE 1
 #endif
 
+#ifndef HAVE_GETOPT
+extern int getopt(int argc, char * const argv[], const char *optstring);
+#endif
+
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
@@ -436,7 +440,7 @@ cpTags(TIFF* in, TIFF* out)
 }
 #undef NTAGS
 
-const char* stuff[] = {
+const char* usage_info[] = {
 "usage: pal2rgb [options] input.tif output.tif",
 "where options are:",
 " -p contig	pack samples contiguously (e.g. RGBRGB...)",
@@ -445,14 +449,23 @@ const char* stuff[] = {
 " -C 8		assume 8-bit colormap values (instead of 16-bit)",
 " -C 16		assume 16-bit colormap values",
 "",
+#ifdef LZW_SUPPORT
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+/* "    LZW options:", */
+"    #  set predictor value",
+"    For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
+#endif
+#ifdef ZIP_SUPPORT
 " -c zip[:opts]	compress output with deflate encoding",
+/* "    Deflate (ZIP) options:", */
+"    #  set predictor value",
+#endif
+#ifdef PACKBITS_SUPPORT
 " -c packbits	compress output with packbits encoding",
+#endif
+#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT)
 " -c none	use no compression algorithm on output",
-"",
-"LZW and deflate options:",
-" #		set predictor value",
-"For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
+#endif
 NULL
 };
 
@@ -463,8 +476,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

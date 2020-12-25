@@ -47,6 +47,10 @@
 #define EXIT_FAILURE 1
 #endif
 
+#ifndef HAVE_GETOPT
+extern int getopt(int argc, char * const argv[], const char *optstring);
+#endif
+
 /* x% weighting -> fraction of full color */
 #define	PCT(x)	(((x)*256+50)/100)
 int	RED = PCT(30);		/* 30% */
@@ -501,7 +505,7 @@ cpTags(TIFF* in, TIFF* out)
 }
 #undef NTAGS
 
-const char* stuff[] = {
+const char* usage_info[] = {
 "usage: tiff2bw [options] input.tif output.tif",
 "where options are:",
 " -R %		use #% from red channel",
@@ -510,16 +514,28 @@ const char* stuff[] = {
 "",
 " -r #		make each strip have no more than # rows",
 "",
+#ifdef LZW_SUPPORT
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+/* "    LZW options:", */
+"    #  set predictor value",
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+#endif
+#ifdef ZIP_SUPPORT
 " -c zip[:opts]	compress output with deflate encoding",
+/* "    Deflate (ZIP) options:", */
+"    #  set predictor value",
+#endif
+#ifdef PACKBITS_SUPPORT
 " -c packbits	compress output with packbits encoding",
+#endif
+#ifdef CCITT_SUPPORT
 " -c g3[:opts]	compress output with CCITT Group 3 encoding",
 " -c g4		compress output with CCITT Group 4 encoding",
+#endif
+#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
 " -c none	use no compression algorithm on output",
+#endif
 "",
-"LZW and deflate options:",
-" #		set predictor value",
-"For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
 NULL
 };
 
@@ -530,8 +546,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 
