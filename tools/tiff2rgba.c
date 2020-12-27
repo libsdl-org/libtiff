@@ -46,6 +46,10 @@
 #define EXIT_FAILURE 1
 #endif
 
+#ifndef HAVE_GETOPT
+extern int getopt(int argc, char * const argv[], const char *optstring);
+#endif
+
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	CopyField(tag, v) \
     if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
@@ -558,21 +562,35 @@ tiffcvt(TIFF* in, TIFF* out)
             return( cvt_whole_image( in, out ) );
 }
 
-static const char* stuff[] = {
-    "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] [-M size] input... output",
-    "where comp is one of the following compression algorithms:",
-    " jpeg\t\tJPEG encoding",
-    " zip\t\tZip/Deflate encoding",
-    " lzw\t\tLempel-Ziv & Welch encoding",
-    " packbits\tPackBits encoding",
-    " none\t\tno compression",
-    "and the other options are:",
-    " -r\trows/strip",
-    " -b (progress by block rather than as a whole image)",
-    " -n don't emit alpha component.",
-    " -8 write BigTIFF file instead of ClassicTIFF",
-    " -M set the memory allocation limit in MiB. 0 to disable limit",
-    NULL
+static const char* usage_info[] = {
+/* Help information format modified for the sake of consistency with the other tiff tools */
+/*    "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] [-M size] input... output", */
+/*     "where comp is one of the following compression algorithms:", */
+"usage: tiff2rgba [options] input output",
+"where options are:",
+#ifdef JPEG_SUPPORT
+" -c jpeg      JPEG encoding",
+#endif
+#ifdef ZIP_SUPPORT
+" -c zip       Zip/Deflate encoding",
+#endif
+#ifdef LZW_SUPPORT
+" -c lzw       Lempel-Ziv & Welch encoding",
+#endif
+#ifdef PACKBITS_SUPPORT
+" -c packbits  PackBits encoding",
+#endif
+#if defined(JPEG_SUPPORT) || defined(ZIP_SUPPORT) || defined(LZW_SUPPORT) || defined(PACKBITS_SUPPORT)
+" -c none      no compression",
+#endif
+"",
+/* "and the other options are:", */
+" -r rows/strip",
+" -b (progress by block rather than as a whole image)",
+" -n don't emit alpha component.",
+" -8 write BigTIFF file instead of ClassicTIFF",
+" -M set the memory allocation limit in MiB. 0 to disable limit",
+NULL
 };
 
 static void
@@ -582,8 +600,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

@@ -489,26 +489,40 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-const char* stuff[] = {
+const char* usage_info[] = {
 "usage: ppm2tiff [options] input.ppm output.tif",
 "where options are:",
 " -r #		make each strip have no more than # rows",
 " -R #		set x&y resolution (dpi)",
 "",
+#ifdef JPEG_SUPPORT
 " -c jpeg[:opts]  compress output with JPEG encoding",
+/*     "JPEG options:", */
+"    #  set compression quality level (0-100, default 75)",
+"    r  output color image as RGB rather than YCbCr",
+#endif
+#ifdef LZW_SUPPORT
 " -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
+/* "    LZW options:", */
+"    #  set predictor value",
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+#endif
+#ifdef ZIP_SUPPORT
 " -c zip[:opts]	compress output with deflate encoding",
-" -c packbits	compress output with packbits encoding (the default)",
+/* "    Deflate (ZIP) options:", */
+"    #  set predictor value",
+#endif
+#ifdef PACKBITS_SUPPORT
+" -c packbits   compress output with packbits encoding (the default)",
+#endif
+#ifdef CCITT_SUPPORT
 " -c g3[:opts]  compress output with CCITT Group 3 encoding",
 " -c g4         compress output with CCITT Group 4 encoding",
-" -c none	use no compression algorithm on output",
+#endif
+#if defined(JPEG_SUPPORT) || defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
+" -c none       use no compression algorithm on output",
+#endif
 "",
-"JPEG options:",
-" #		set compression quality level (0-100, default 75)",
-" r		output color image as RGB rather than YCbCr",
-"LZW and deflate options:",
-" #		set predictor value",
-"For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
 NULL
 };
 
@@ -519,8 +533,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

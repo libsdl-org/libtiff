@@ -57,6 +57,10 @@
 
 #define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
 
+#ifndef HAVE_GETOPT
+extern int getopt(int argc, char * const argv[], const char *optstring);
+#endif
+
 TIFF	*faxTIFF;
 char	*rowbuf;
 char	*refbuf;
@@ -428,7 +432,7 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 	return (row);
 }
 
-const char* stuff[] = {
+const char* usage_info[] = {
 "usage: fax2tiff [options] input.raw...",
 "where options are:",
 " -3		input data is G3-encoded		[default]",
@@ -446,6 +450,7 @@ const char* stuff[] = {
 " -X #		input data has # width			[default is 1728]",
 "",
 " -o out.tif	write output to out.tif",
+#ifdef CCITT_SUPPORT
 " -7		generate G3-encoded output		[default]",
 " -8		generate G4-encoded output",
 " -u		generate uncompressed output (G3 or G4)",
@@ -453,6 +458,7 @@ const char* stuff[] = {
 " -6		generate 2D-encoded output (G3 only)	[default]",
 " -p		generate not EOL-aligned output (G3 only)",
 " -a		generate EOL-aligned output (G3 only)	[default]",
+#endif
 " -c		generate \"classic\" TIFF format",
 " -f		generate TIFF Class F (TIFF/F) format	[default]",
 " -m		output fill order is MSB2LSB",
@@ -460,7 +466,9 @@ const char* stuff[] = {
 " -r #		make each strip have no more than # rows",
 " -s		stretch image by duplicating scanlines",
 " -v		print information about conversion work",
+#ifdef LZW_SUPPORT
 " -z		generate LZW compressed output",
+#endif
 NULL
 };
 
@@ -471,8 +479,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 

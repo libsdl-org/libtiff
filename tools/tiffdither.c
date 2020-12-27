@@ -46,6 +46,10 @@
 #define EXIT_FAILURE 1
 #endif
 
+#ifndef HAVE_GETOPT
+extern int getopt(int argc, char * const argv[], const char *optstring);
+#endif
+
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
@@ -305,29 +309,39 @@ main(int argc, char* argv[])
 	return (EXIT_SUCCESS);
 }
 
-static const char* stuff[] = {
+static const char* usage_info[] = {
 "usage: tiffdither [options] input.tif output.tif",
 "where options are:",
-" -r #		make each strip have no more than # rows",
-" -t #		set the threshold value for dithering (default 128)",
-" -f lsb2msb	force lsb-to-msb FillOrder for output",
-" -f msb2lsb	force msb-to-lsb FillOrder for output",
-" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-" -c zip[:opts]	compress output with deflate encoding",
-" -c packbits	compress output with packbits encoding",
-" -c g3[:opts]	compress output with CCITT Group 3 encoding",
-" -c g4		compress output with CCITT Group 4 encoding",
-" -c none	use no compression algorithm on output",
+" -r #      make each strip have no more than # rows",
+" -t #      set the threshold value for dithering (default 128)",
+" -f lsb2msb    force lsb-to-msb FillOrder for output",
+" -f msb2lsb    force msb-to-lsb FillOrder for output",
 "",
-"Group 3 options:",
-" 1d		use default CCITT Group 3 1D-encoding",
-" 2d		use optional CCITT Group 3 2D-encoding",
-" fill		byte-align EOL codes",
-"For example, -c g3:2d:fill to get G3-2D-encoded data with byte-aligned EOLs",
+#ifdef LZW_SUPPORT
+" -c lzw[:opts] compress output with Lempel-Ziv & Welch encoding",
+"    #          set predictor value",
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+#endif
+#ifdef ZIP_SUPPORT
+" -c zip[:opts] compress output with deflate encoding",
+"    #          set predictor value",
+#endif
+#ifdef PACKBITS_SUPPORT
+" -c packbits   compress output with packbits encoding",
+#endif
+#ifdef CCITT_SUPPORT
+" -c g3[:opts]  compress output with CCITT Group 3 encoding",
+"    Group 3 options:",
+"    1d	        use default CCITT Group 3 1D-encoding",
+"    2d	        use optional CCITT Group 3 2D-encoding",
+"    fill       byte-align EOL codes",
+"    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs",
+" -c g4         compress output with CCITT Group 4 encoding",
+#endif
+#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
+" -c none       use no compression algorithm on output",
+#endif
 "",
-"LZW and deflate options:",
-" #		set predictor value",
-"For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
 NULL
 };
 
@@ -338,8 +352,8 @@ usage(int code)
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+	for (i = 0; usage_info[i] != NULL; i++)
+		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
 
