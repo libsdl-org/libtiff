@@ -11,7 +11,7 @@ for file in config.guess config.sub
 do
     echo "$0: getting $file..."
     wget -q --timeout=5 -O config/$file.tmp \
-      "https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob_plain;f=config/${file};hb=HEAD" \
+      "https://git.savannah.gnu.org/cgit/config.git/plain/${file}" \
       && mv config/$file.tmp config/$file \
       && chmod a+x config/$file
     retval=$?
