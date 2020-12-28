@@ -130,24 +130,21 @@ main(int argc, char* argv[])
 	return (0);
 }
 
-static const char* stuff[] = {
-"usage: tiffcmp [options] file1 file2",
-"where options are:",
-" -l		list each byte of image data that differs between the files",
-" -z #		list specified number of bytes that differs between the files",
-" -t		ignore any differences in directory tags",
-NULL
-};
+static const char usage_info[] =
+"usage: tiffcmp [options] file1 file2\n"
+"where options are:\n"
+" -l		list each byte of image data that differs between the files\n"
+" -z #		list specified number of bytes that differs between the files\n"
+" -t		ignore any differences in directory tags\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

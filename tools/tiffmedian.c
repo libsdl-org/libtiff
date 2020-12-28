@@ -94,20 +94,20 @@ typedef struct {
 	int	entries[MAX_CMAP_SIZE][2];
 } C_cell;
 
-uint16	rm[MAX_CMAP_SIZE], gm[MAX_CMAP_SIZE], bm[MAX_CMAP_SIZE];
-int	num_colors;
-uint32	histogram[B_LEN][B_LEN][B_LEN];
-Colorbox *freeboxes;
-Colorbox *usedboxes;
-C_cell	**ColorCells;
-TIFF	*in, *out;
-uint32	rowsperstrip = (uint32) -1;
-uint16	compression = (uint16) -1;
-uint16	bitspersample = 1;
-uint16	samplesperpixel;
-uint32	imagewidth;
-uint32	imagelength;
-uint16	predictor = 0;
+static uint16	rm[MAX_CMAP_SIZE], gm[MAX_CMAP_SIZE], bm[MAX_CMAP_SIZE];
+static int	num_colors;
+static uint32	histogram[B_LEN][B_LEN][B_LEN];
+static Colorbox *freeboxes;
+static Colorbox *usedboxes;
+static C_cell	**ColorCells;
+static TIFF	*in, *out;
+static uint32	rowsperstrip = (uint32) -1;
+static uint16	compression = (uint16) -1;
+static uint16	bitspersample = 1;
+static uint16	samplesperpixel;
+static uint32	imagewidth;
+static uint32	imagelength;
+static uint16	predictor = 0;
 
 static	void get_histogram(TIFF*, Colorbox*);
 static	void splitbox(Colorbox*);
@@ -329,43 +329,40 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-char* usage_info[] = {
-"usage: tiffmedian [options] input.tif output.tif",
-"where options are:",
-" -r #  make each strip have no more than # rows",
-" -C #  create a colormap with # entries",
-" -f    use Floyd-Steinberg dithering",
-"",
+static const char usage_info[] =
+"usage: tiffmedian [options] input.tif output.tif\n"
+"where options are:\n"
+" -r #  make each strip have no more than # rows\n"
+" -C #  create a colormap with # entries\n"
+" -f    use Floyd-Steinberg dithering\n"
+"\n"
 #ifdef LZW_SUPPORT
-" -c lzw[:opts] compress output with Lempel-Ziv & Welch encoding",
-/* "    LZW options:", */
-"    #  set predictor value",
-"    For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
+" -c lzw[:opts] compress output with Lempel-Ziv & Welch encoding\n"
+/* "    LZW options:" */
+"    #  set predictor value\n"
+"    For example, -c lzw:2 to get LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts] compress output with deflate encoding",
-/* "    Deflate (ZIP) options:", */
-"    #  set predictor value",
+" -c zip[:opts] compress output with deflate encoding\n"
+/* "    Deflate (ZIP) options:" */
+"    #  set predictor value\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits   compress output with packbits encoding",
+" -c packbits   compress output with packbits encoding\n"
 #endif
 #if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT)
-" -c none       use no compression algorithm on output",
+" -c none       use no compression algorithm on output\n"
 #endif
-"",
-NULL
-};
+"\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

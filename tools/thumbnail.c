@@ -221,7 +221,7 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 #undef CopyField2
 #undef CopyField
 
-static struct cpTag {
+static const struct cpTag {
     uint16	tag;
     uint16	count;
     TIFFDataType type;
@@ -279,7 +279,7 @@ static struct cpTag {
 static void
 cpTags(TIFF* in, TIFF* out)
 {
-    struct cpTag *p;
+    const struct cpTag *p;
     for (p = tags; p < &tags[NTAGS]; p++)
 	{
 		/* Horrible: but TIFFGetField() expects 2 arguments to be passed */

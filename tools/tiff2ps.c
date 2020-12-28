@@ -605,7 +605,7 @@ checkImage(TIFF* tif)
 #define PS_UNIT_SIZE	72.0F
 #define	PSUNITS(npix,res)	((npix) * (PS_UNIT_SIZE / (res)))
 
-static	char RGBcolorimage[] = "\
+static const char RGBcolorimage[] = "\
 /bwproc {\n\
     rgbproc\n\
     dup length 3 idiv string 0 3 0\n\
@@ -1653,7 +1653,7 @@ int TIFF2PS(FILE* fd, TIFF* tif, double pgwidth, double pgheight, double lm, dou
 return(npages);
 }
 
-static char DuplexPreamble[] = "\
+static const char DuplexPreamble[] = "\
 %%BeginFeature: *Duplex True\n\
 systemdict begin\n\
   /languagelevel where { pop languagelevel } { 1 } ifelse\n\
@@ -1664,7 +1664,7 @@ end\n\
 %%EndFeature\n\
 ";
 
-static char TumblePreamble[] = "\
+static const char TumblePreamble[] = "\
 %%BeginFeature: *Tumble True\n\
 systemdict begin\n\
   /languagelevel where { pop languagelevel } { 1 } ifelse\n\
@@ -1675,7 +1675,7 @@ end\n\
 %%EndFeature\n\
 ";
 
-static char AvoidDeadZonePreamble[] = "\
+static const char AvoidDeadZonePreamble[] = "\
 gsave newpath clippath pathbbox grestore\n\
   4 2 roll 2 copy translate\n\
   exch 3 1 roll sub 3 1 roll sub exch\n\
@@ -3087,52 +3087,49 @@ tsize_t Ascii85EncodeBlock( uint8 * ascii85_p, unsigned f_eod, const uint8 * raw
 #endif	/* EXP_ASCII85ENCODER */
 
 
-const char* stuff[] = {
-"usage: tiff2ps [options] input.tif ...",
-"where options are:",
-" -1            generate PostScript Level 1 (default)",
-" -2            generate PostScript Level 2",
-" -3            generate PostScript Level 3",
-" -8            disable use of ASCII85 encoding with PostScript Level 2/3",
-" -a            convert all directories in file (default is first), Not EPS",
-" -b #          set the bottom margin to # inches",
-" -c            center image (-b and -l still add to this)",
-" -C name       set postscript document creator name",
-" -d #          set initial directory to # counting from zero",
-" -D            enable duplex printing (two pages per sheet of paper)",
-" -e            generate Encapsulated PostScript (EPS) (implies -z)",
-" -h #          set printed page height to # inches (no default)",
-" -w #          set printed page width to # inches (no default)",
-" -H #          split image if height is more than # inches",
-" -W #          split image if width is more than # inches",
-" -L #          overLap split images by # inches",
-" -i #          enable/disable (Nz/0) pixel interpolation (default: enable)",
-" -l #          set the left margin to # inches",
-" -m            use \"imagemask\" operator instead of \"image\"",
-" -M size       set the memory allocation limit in MiB. 0 to disable limit",
-" -o #          convert directory at file offset # bytes",
-" -O file       write PostScript to file instead of standard output",
-" -p            generate regular (non-encapsulated) PostScript",
-" -P L or P     set optional PageOrientation DSC comment to Landscape or Portrait",
-" -r # or auto  rotate by 90, 180, 270 degrees or auto",
-" -s            generate PostScript for a single image",
-" -t name       set postscript document title. Otherwise the filename is used",
-" -T            print pages for top edge binding",
-" -x            override resolution units as centimeters",
-" -y            override resolution units as inches",
-" -z            enable printing in the deadzone (only for PostScript Level 2/3)",
-NULL
-};
+static const char usage_info[] =
+"usage: tiff2ps [options] input.tif ...\n"
+"where options are:\n"
+" -1            generate PostScript Level 1 (default)\n"
+" -2            generate PostScript Level 2\n"
+" -3            generate PostScript Level 3\n"
+" -8            disable use of ASCII85 encoding with PostScript Level 2/3\n"
+" -a            convert all directories in file (default is first), Not EPS\n"
+" -b #          set the bottom margin to # inches\n"
+" -c            center image (-b and -l still add to this)\n"
+" -C name       set postscript document creator name\n"
+" -d #          set initial directory to # counting from zero\n"
+" -D            enable duplex printing (two pages per sheet of paper)\n"
+" -e            generate Encapsulated PostScript (EPS) (implies -z)\n"
+" -h #          set printed page height to # inches (no default)\n"
+" -w #          set printed page width to # inches (no default)\n"
+" -H #          split image if height is more than # inches\n"
+" -W #          split image if width is more than # inches\n"
+" -L #          overLap split images by # inches\n"
+" -i #          enable/disable (Nz/0) pixel interpolation (default: enable)\n"
+" -l #          set the left margin to # inches\n"
+" -m            use \"imagemask\" operator instead of \"image\"\n"
+" -M size       set the memory allocation limit in MiB. 0 to disable limit\n"
+" -o #          convert directory at file offset # bytes\n"
+" -O file       write PostScript to file instead of standard output\n"
+" -p            generate regular (non-encapsulated) PostScript\n"
+" -P L or P     set optional PageOrientation DSC comment to Landscape or Portrait\n"
+" -r # or auto  rotate by 90, 180, 270 degrees or auto\n"
+" -s            generate PostScript for a single image\n"
+" -t name       set postscript document title. Otherwise the filename is used\n"
+" -T            print pages for top edge binding\n"
+" -x            override resolution units as centimeters\n"
+" -y            override resolution units as inches\n"
+" -z            enable printing in the deadzone (only for PostScript Level 2/3)\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

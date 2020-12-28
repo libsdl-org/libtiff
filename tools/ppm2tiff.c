@@ -225,6 +225,7 @@ main(int argc, char* argv[])
 			break;
 		case 'h':
 			usage(EXIT_SUCCESS);
+			break;
 		case '?':
 			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
@@ -489,52 +490,48 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-const char* usage_info[] = {
-"usage: ppm2tiff [options] input.ppm output.tif",
-"where options are:",
-" -r #		make each strip have no more than # rows",
-" -R #		set x&y resolution (dpi)",
-"",
+static const char usage_info[] =
+"usage: ppm2tiff [options] input.ppm output.tif\n"
+"where options are:\n"
+" -r #		make each strip have no more than # rows\n"
+" -R #		set x&y resolution (dpi)\n"
+"\n"
 #ifdef JPEG_SUPPORT
-" -c jpeg[:opts]  compress output with JPEG encoding",
-/*     "JPEG options:", */
-"    #  set compression quality level (0-100, default 75)",
-"    r  output color image as RGB rather than YCbCr",
+" -c jpeg[:opts]  compress output with JPEG encoding\n"
+/*     "JPEG options:\n" */
+"    #  set compression quality level (0-100, default 75)\n"
+"    r  output color image as RGB rather than YCbCr\n"
 #endif
 #ifdef LZW_SUPPORT
-" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-/* "    LZW options:", */
-"    #  set predictor value",
-"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding\n"
+/* "    LZW options:\n" */
+"    #  set predictor value\n"
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts]	compress output with deflate encoding",
-/* "    Deflate (ZIP) options:", */
-"    #  set predictor value",
+" -c zip[:opts]	compress output with deflate encoding\n"
+/* "    Deflate (ZIP) options:\n" */
+"    #  set predictor value\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits   compress output with packbits encoding (the default)",
+" -c packbits   compress output with packbits encoding (the default)\n"
 #endif
 #ifdef CCITT_SUPPORT
-" -c g3[:opts]  compress output with CCITT Group 3 encoding",
-" -c g4         compress output with CCITT Group 4 encoding",
+" -c g3[:opts]  compress output with CCITT Group 3 encoding\n"
+" -c g4         compress output with CCITT Group 4 encoding\n"
 #endif
 #if defined(JPEG_SUPPORT) || defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
-" -c none       use no compression algorithm on output",
+" -c none       use no compression algorithm on output\n"
 #endif
-"",
-NULL
-};
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

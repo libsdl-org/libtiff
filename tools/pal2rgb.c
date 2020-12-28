@@ -118,6 +118,7 @@ main(int argc, char* argv[])
 			break;
 		case 'h':
 			usage(EXIT_SUCCESS);
+			break;
 		case '?':
 			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
@@ -364,7 +365,7 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 #undef CopyField2
 #undef CopyField
 
-static struct cpTag {
+static const struct cpTag {
     uint16	tag;
     uint16	count;
     TIFFDataType type;
@@ -418,7 +419,7 @@ static struct cpTag {
 static void
 cpTags(TIFF* in, TIFF* out)
 {
-    struct cpTag *p;
+    const struct cpTag *p;
     for (p = tags; p < &tags[NTAGS]; p++)
     {
         if( p->tag == TIFFTAG_GROUP3OPTIONS )
@@ -440,44 +441,41 @@ cpTags(TIFF* in, TIFF* out)
 }
 #undef NTAGS
 
-const char* usage_info[] = {
-"usage: pal2rgb [options] input.tif output.tif",
-"where options are:",
-" -p contig	pack samples contiguously (e.g. RGBRGB...)",
-" -p separate	store samples separately (e.g. RRR...GGG...BBB...)",
-" -r #		make each strip have no more than # rows",
-" -C 8		assume 8-bit colormap values (instead of 16-bit)",
-" -C 16		assume 16-bit colormap values",
-"",
+static const char usage_info[] =
+"usage: pal2rgb [options] input.tif output.tif\n"
+"where options are:\n"
+" -p contig	pack samples contiguously (e.g. RGBRGB...)\n"
+" -p separate	store samples separately (e.g. RRR...GGG...BBB...)\n"
+" -r #		make each strip have no more than # rows\n"
+" -C 8		assume 8-bit colormap values (instead of 16-bit)\n"
+" -C 16		assume 16-bit colormap values\n"
+"\n"
 #ifdef LZW_SUPPORT
-" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-/* "    LZW options:", */
-"    #  set predictor value",
-"    For example, -c lzw:2 to get LZW-encoded data with horizontal differencing",
+" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding\n"
+/* "    LZW options:\n" */
+"    #  set predictor value\n"
+"    For example, -c lzw:2 to get LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts]	compress output with deflate encoding",
-/* "    Deflate (ZIP) options:", */
-"    #  set predictor value",
+" -c zip[:opts]	compress output with deflate encoding\n"
+/* "    Deflate (ZIP) options:\n" */
+"    #  set predictor value\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits	compress output with packbits encoding",
+" -c packbits	compress output with packbits encoding\n"
 #endif
 #if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT)
-" -c none	use no compression algorithm on output",
+" -c none	use no compression algorithm on output\n"
 #endif
-NULL
-};
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

@@ -59,11 +59,11 @@ extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 #define	roundup(x, y)	(howmany(x,y)*((uint32)(y)))
 
-uint16 compression = COMPRESSION_PACKBITS;
-uint32 rowsperstrip = (uint32) -1;
-int process_by_block = 0; /* default is whole image at once */
-int no_alpha = 0;
-int bigtiff_output = 0;
+static uint16 compression = COMPRESSION_PACKBITS;
+static uint32 rowsperstrip = (uint32) -1;
+static int process_by_block = 0; /* default is whole image at once */
+static int no_alpha = 0;
+static int bigtiff_output = 0;
 #define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
 /* malloc size limit (in bytes)
  * disabled when set to 0 */
@@ -562,46 +562,43 @@ tiffcvt(TIFF* in, TIFF* out)
             return( cvt_whole_image( in, out ) );
 }
 
-static const char* usage_info[] = {
+static const char usage_info[] =
 /* Help information format modified for the sake of consistency with the other tiff tools */
-/*    "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] [-M size] input... output", */
-/*     "where comp is one of the following compression algorithms:", */
-"usage: tiff2rgba [options] input output",
-"where options are:",
+/*    "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] [-M size] input... output" */
+/*     "where comp is one of the following compression algorithms:" */
+"usage: tiff2rgba [options] input output\n"
+"where options are:\n"
 #ifdef JPEG_SUPPORT
-" -c jpeg      JPEG encoding",
+" -c jpeg      JPEG encoding\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip       Zip/Deflate encoding",
+" -c zip       Zip/Deflate encoding\n"
 #endif
 #ifdef LZW_SUPPORT
-" -c lzw       Lempel-Ziv & Welch encoding",
+" -c lzw       Lempel-Ziv & Welch encoding\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits  PackBits encoding",
+" -c packbits  PackBits encoding\n"
 #endif
 #if defined(JPEG_SUPPORT) || defined(ZIP_SUPPORT) || defined(LZW_SUPPORT) || defined(PACKBITS_SUPPORT)
-" -c none      no compression",
+" -c none      no compression\n"
 #endif
-"",
-/* "and the other options are:", */
-" -r rows/strip",
-" -b (progress by block rather than as a whole image)",
-" -n don't emit alpha component.",
-" -8 write BigTIFF file instead of ClassicTIFF",
-" -M set the memory allocation limit in MiB. 0 to disable limit",
-NULL
-};
+"\n"
+/* "and the other options are:\n" */
+" -r rows/strip\n"
+" -b (progress by block rather than as a whole image)\n"
+" -n don't emit alpha component.\n"
+" -8 write BigTIFF file instead of ClassicTIFF\n"
+" -M set the memory allocation limit in MiB. 0 to disable limit\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

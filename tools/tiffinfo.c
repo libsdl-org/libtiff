@@ -172,34 +172,31 @@ main(int argc, char* argv[])
 	return (status);
 }
 
-static const char* stuff[] = {
-"usage: tiffinfo [options] input...",
-"where options are:",
-" -D		read data",
-" -i		ignore read errors",
-" -c		display data for grey/color response curve or colormap",
-" -d		display raw/decoded image data",
-" -f lsb2msb	force lsb-to-msb FillOrder for input",
-" -f msb2lsb	force msb-to-lsb FillOrder for input",
-" -j		show JPEG tables",
-" -o offset	set initial directory offset",
-" -r		read/display raw image data instead of decoded data",
-" -s		display strip offsets and byte counts",
-" -w		display raw data in words rather than bytes",
-" -z		enable strip chopping",
-" -#		set initial directory (first directory is # 0)",
-NULL
-};
+static const char usage_info[] =
+"usage: tiffinfo [options] input...\n"
+"where options are:\n"
+" -D		read data\n"
+" -i		ignore read errors\n"
+" -c		display data for grey/color response curve or colormap\n"
+" -d		display raw/decoded image data\n"
+" -f lsb2msb	force lsb-to-msb FillOrder for input\n"
+" -f msb2lsb	force msb-to-lsb FillOrder for input\n"
+" -j		show JPEG tables\n"
+" -o offset	set initial directory offset\n"
+" -r		read/display raw image data instead of decoded data\n"
+" -s		display strip offsets and byte counts\n"
+" -w		display raw data in words rather than bytes\n"
+" -z		enable strip chopping\n"
+" -#		set initial directory (first directory is # 0)\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; stuff[i] != NULL; i++)
-		fprintf(out, "%s\n", stuff[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 
