@@ -850,49 +850,45 @@ success:
 }
 
 static void usage_info(int code) {
-	static const char* lines[]={
-	"usage:  tiff2pdf [options] input.tiff",
-	"where options are:",
-	" -o: output to file name",
+	static const char lines[]=
+	"usage:  tiff2pdf [options] input.tiff\n"
+	"where options are:\n"
+	" -o: output to file name\n"
 #ifdef JPEG_SUPPORT
-	" -j: compress with JPEG", 
+	" -j: compress with JPEG\n"
 #endif
 #ifdef ZIP_SUPPORT
-	" -z: compress with Zip/Deflate",
+	" -z: compress with Zip/Deflate\n"
 #endif
 #if defined(JPEG_SUPPORT) || defined(ZIP_SUPPORT)
-	" -q: compression quality",
-	" -n: no compressed data passthrough",
-	" -d: do not compress (decompress)",
+	" -q: compression quality\n"
+	" -n: no compressed data passthrough\n"
+	" -d: do not compress (decompress)\n"
 #endif
-	" -i: invert colors",
-	" -u: set distance unit, 'i' for inch, 'm' for centimeter",
-	" -x: set x resolution default in dots per unit",
-	" -y: set y resolution default in dots per unit",
-	" -w: width in units",
-	" -l: length in units",
-	" -r: 'd' for resolution default, 'o' for resolution override",
-	" -p: paper size, eg \"letter\", \"legal\", \"A4\"",
-	" -F: make the tiff fill the PDF page",
-	" -f: set PDF \"Fit Window\" user preference",
-	" -e: date, overrides image or current date/time default, YYYYMMDDHHMMSS",
-	" -c: sets document creator, overrides image software default",
-	" -a: sets document author, overrides image artist default",
-	" -t: sets document title, overrides image document name default",
-	" -s: sets document subject, overrides image image description default",
-	" -k: sets document keywords",
-	" -b: set PDF \"Interpolate\" user preference",
-	" -m: set memory allocation limit (in MiB). set to 0 to disable limit",
-	" -h: usage",
-	NULL
-	};
-	int i=0;
+	" -i: invert colors\n"
+	" -u: set distance unit, 'i' for inch, 'm' for centimeter\n"
+	" -x: set x resolution default in dots per unit\n"
+	" -y: set y resolution default in dots per unit\n"
+	" -w: width in units\n"
+	" -l: length in units\n"
+	" -r: 'd' for resolution default, 'o' for resolution override\n"
+	" -p: paper size, eg \"letter\", \"legal\", \"A4\"\n"
+	" -F: make the tiff fill the PDF page\n"
+	" -f: set PDF \"Fit Window\" user preference\n"
+	" -e: date, overrides image or current date/time default, YYYYMMDDHHMMSS\n"
+	" -c: sets document creator, overrides image software default\n"
+	" -a: sets document author, overrides image artist default\n"
+	" -t: sets document title, overrides image document name default\n"
+	" -s: sets document subject, overrides image image description default\n"
+	" -k: sets document keywords\n"
+	" -b: set PDF \"Interpolate\" user preference\n"
+	" -m: set memory allocation limit (in MiB). set to 0 to disable limit\n"
+	" -h: usage\n"
+	;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i=0;lines[i]!=NULL;i++){
-		fprintf(out, "%s\n", lines[i]);
-	}
+        fprintf(out, "%s", lines);
 
 	return;
 }

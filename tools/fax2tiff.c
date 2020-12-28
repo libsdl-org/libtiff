@@ -222,6 +222,7 @@ main(int argc, char* argv[])
 			break;
 		case 'h':
 			usage(EXIT_SUCCESS);
+			break;
 		case '?':
 			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
@@ -432,55 +433,52 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 	return (row);
 }
 
-const char* usage_info[] = {
-"usage: fax2tiff [options] input.raw...",
-"where options are:",
-" -3		input data is G3-encoded		[default]",
-" -4		input data is G4-encoded",
-" -U		input data is uncompressed (G3 or G4)",
-" -1		input data is 1D-encoded (G3 only)	[default]",
-" -2		input data is 2D-encoded (G3 only)",
-" -P		input is not EOL-aligned (G3 only)	[default]",
-" -A		input is EOL-aligned (G3 only)",
-" -M		input data has MSB2LSB bit order",
-" -L		input data has LSB2MSB bit order	[default]",
-" -B		input data has min 0 means black",
-" -W		input data has min 0 means white	[default]",
-" -R #		input data has # resolution (lines/inch) [default is 196]",
-" -X #		input data has # width			[default is 1728]",
-"",
-" -o out.tif	write output to out.tif",
+static const char usage_info[] =
+"usage: fax2tiff [options] input.raw...\n"
+"where options are:\n"
+" -3		input data is G3-encoded		[default]\n"
+" -4		input data is G4-encoded\n"
+" -U		input data is uncompressed (G3 or G4)\n"
+" -1		input data is 1D-encoded (G3 only)	[default]\n"
+" -2		input data is 2D-encoded (G3 only)\n"
+" -P		input is not EOL-aligned (G3 only)	[default]\n"
+" -A		input is EOL-aligned (G3 only)\n"
+" -M		input data has MSB2LSB bit order\n"
+" -L		input data has LSB2MSB bit order	[default]\n"
+" -B		input data has min 0 means black\n"
+" -W		input data has min 0 means white	[default]\n"
+" -R #		input data has # resolution (lines/inch) [default is 196]\n"
+" -X #		input data has # width			[default is 1728]\n"
+"\n"
+" -o out.tif	write output to out.tif\n"
 #ifdef CCITT_SUPPORT
-" -7		generate G3-encoded output		[default]",
-" -8		generate G4-encoded output",
-" -u		generate uncompressed output (G3 or G4)",
-" -5		generate 1D-encoded output (G3 only)",
-" -6		generate 2D-encoded output (G3 only)	[default]",
-" -p		generate not EOL-aligned output (G3 only)",
-" -a		generate EOL-aligned output (G3 only)	[default]",
+" -7		generate G3-encoded output		[default]\n"
+" -8		generate G4-encoded output\n"
+" -u		generate uncompressed output (G3 or G4)\n"
+" -5		generate 1D-encoded output (G3 only)\n"
+" -6		generate 2D-encoded output (G3 only)	[default]\n"
+" -p		generate not EOL-aligned output (G3 only)\n"
+" -a		generate EOL-aligned output (G3 only)	[default]\n"
 #endif
-" -c		generate \"classic\" TIFF format",
-" -f		generate TIFF Class F (TIFF/F) format	[default]",
-" -m		output fill order is MSB2LSB",
-" -l		output fill order is LSB2MSB		[default]",
-" -r #		make each strip have no more than # rows",
-" -s		stretch image by duplicating scanlines",
-" -v		print information about conversion work",
+" -c		generate \"classic\" TIFF format\n"
+" -f		generate TIFF Class F (TIFF/F) format	[default]\n"
+" -m		output fill order is MSB2LSB\n"
+" -l		output fill order is LSB2MSB		[default]\n"
+" -r #		make each strip have no more than # rows\n"
+" -s		stretch image by duplicating scanlines\n"
+" -v		print information about conversion work\n"
 #ifdef LZW_SUPPORT
-" -z		generate LZW compressed output",
+" -z		generate LZW compressed output\n"
 #endif
-NULL
-};
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

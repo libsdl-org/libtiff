@@ -443,115 +443,112 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-static const char* usage_info[] = {
-"usage: tiffcp [options] input... output",
-"where options are:",
-" -a              append to output instead of overwriting",
-" -o offset       set initial directory offset",
-" -p contig       pack samples contiguously (e.g. RGBRGB...)",
-" -p separate     store samples separately (e.g. RRR...GGG...BBB...)",
-" -s              write output in strips",
-" -t              write output in tiles",
-" -x              force the merged tiff pages in sequence",
-" -8              write BigTIFF instead of default ClassicTIFF",
-" -B              write big-endian instead of native byte order",
-" -L              write little-endian instead of native byte order",
-" -M              disable use of memory-mapped files",
-" -C              disable strip chopping",
-" -i              ignore read errors",
-" -b file[,#]     bias (dark) monochrome image to be subtracted from all others",
-" -,=%            use % rather than , to separate image #'s (per Note below)",
-" -m size         set maximum memory allocation size (MiB). 0 to disable limit.",
-"",
-" -r #            make each strip have no more than # rows",
-" -w #            set output tile width (pixels)",
-" -l #            set output tile length (pixels)",
-"",
-" -f lsb2msb      force lsb-to-msb FillOrder for output",
-" -f msb2lsb      force msb-to-lsb FillOrder for output",
-"",
+static const char usage_info[] =
+"usage: tiffcp [options] input... output\n"
+"where options are:\n"
+" -a              append to output instead of overwriting\n"
+" -o offset       set initial directory offset\n"
+" -p contig       pack samples contiguously (e.g. RGBRGB...)\n"
+" -p separate     store samples separately (e.g. RRR...GGG...BBB...)\n"
+" -s              write output in strips\n"
+" -t              write output in tiles\n"
+" -x              force the merged tiff pages in sequence\n"
+" -8              write BigTIFF instead of default ClassicTIFF\n"
+" -B              write big-endian instead of native byte order\n"
+" -L              write little-endian instead of native byte order\n"
+" -M              disable use of memory-mapped files\n"
+" -C              disable strip chopping\n"
+" -i              ignore read errors\n"
+" -b file[,#]     bias (dark) monochrome image to be subtracted from all others\n"
+" -,=%            use % rather than , to separate image #'s (per Note below)\n"
+" -m size         set maximum memory allocation size (MiB). 0 to disable limit.\n"
+"\n"
+" -r #            make each strip have no more than # rows\n"
+" -w #            set output tile width (pixels)\n"
+" -l #            set output tile length (pixels)\n"
+"\n"
+" -f lsb2msb      force lsb-to-msb FillOrder for output\n"
+" -f msb2lsb      force msb-to-lsb FillOrder for output\n"
+"\n"
 #ifdef LZW_SUPPORT
-" -c lzw[:opts]   compress output with Lempel-Ziv & Welch encoding",
-/* "    LZW options:", */
-"    #            set predictor value",
-"    p#           set compression level (preset)",
-"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+" -c lzw[:opts]   compress output with Lempel-Ziv & Welch encoding\n"
+/* "    LZW options:" */
+"    #            set predictor value\n"
+"    p#           set compression level (preset)\n"
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts]   compress output with deflate encoding",
+" -c zip[:opts]   compress output with deflate encoding\n"
 /* "    Deflate (ZIP) options:", */
-"    #            set predictor value",
-"    p#           set compression level (preset)",
-"    For example, -c zip:3:p9 for maximum compression level and floating",
-"                 point predictor.",
+"    #            set predictor value\n"
+"    p#           set compression level (preset)\n"
+"    For example, -c zip:3:p9 for maximum compression level and floating\n"
+"                 point predictor.\n"
 #endif
 #if defined(ZIP_SUPPORT) && defined(LIBDEFLATE_SUPPORT)
-"    s#           set subcodec: 0=zlib, 1=libdeflate (default 1)",
+"    s#           set subcodec: 0=zlib, 1=libdeflate (default 1)\n"
 /* "                 (only for Deflate/ZIP)", */
 #endif
 #ifdef LZMA_SUPPORT
-" -c lzma[:opts]  compress output with LZMA2 encoding",
+" -c lzma[:opts]  compress output with LZMA2 encoding\n"
 /* "    LZMA options:", */
-"    #            set predictor value",
-"    p#           set compression level (preset)",
+"    #            set predictor value\n"
+"    p#           set compression level (preset)\n"
 #endif
 #ifdef ZSTD_SUPPORT
-" -c zstd[:opts]  compress output with ZSTD encoding",
+" -c zstd[:opts]  compress output with ZSTD encoding\n"
 /* "    ZSTD options:", */
-"    #            set predictor value",
-"    p#           set compression level (preset)",
+"    #            set predictor value\n"
+"    p#           set compression level (preset)\n"
 #endif
 #ifdef WEBP_SUPPORT
-" -c webp[:opts]  compress output with WEBP encoding",
+" -c webp[:opts]  compress output with WEBP encoding\n"
 /* "    WEBP options:", */
-"    #            set predictor value",
-"    p#           set compression level (preset)",
+"    #            set predictor value\n"
+"    p#           set compression level (preset)\n"
 #endif
 #ifdef JPEG_SUPPORT
-" -c jpeg[:opts]  compress output with JPEG encoding",
+" -c jpeg[:opts]  compress output with JPEG encoding\n"
 /* "    JPEG options:", */
-"    #            set compression quality level (0-100, default 75)",
-"    r            output color image as RGB rather than YCbCr",
-"    For example, -c jpeg:r:50 for JPEG-encoded RGB with 50% comp. quality",
+"    #            set compression quality level (0-100, default 75)\n"
+"    r            output color image as RGB rather than YCbCr\n"
+"    For example, -c jpeg:r:50 for JPEG-encoded RGB with 50% comp. quality\n"
 #endif
 #ifdef JBIG_SUPPORT
-" -c jbig         compress output with ISO JBIG encoding",
+" -c jbig         compress output with ISO JBIG encoding\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits     compress output with packbits encoding",
+" -c packbits     compress output with packbits encoding\n"
 #endif
 #ifdef CCITT_SUPPORT
-" -c g3[:opts]    compress output with CCITT Group 3 encoding",
+" -c g3[:opts]    compress output with CCITT Group 3 encoding\n"
 /* "    CCITT Group 3 options:", */
-"    1d           use default CCITT Group 3 1D-encoding",
-"    2d           use optional CCITT Group 3 2D-encoding",
-"    fill         byte-align EOL codes",
-"    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs",
-" -c g4           compress output with CCITT Group 4 encoding",
+"    1d           use default CCITT Group 3 1D-encoding\n"
+"    2d           use optional CCITT Group 3 2D-encoding\n"
+"    fill         byte-align EOL codes\n"
+"    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs\n"
+" -c g4           compress output with CCITT Group 4 encoding\n"
 #endif
 #ifdef LOGLUV_SUPPORT
-" -c sgilog       compress output with SGILOG encoding",
+" -c sgilog       compress output with SGILOG encoding\n"
 #endif
 #if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(LZMA_SUPPORT) || defined(ZSTD_SUPPORT) || defined(WEBP_SUPPORT) || defined(JPEG_SUPPORT) || defined(JBIG_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT) || defined(LOGLUV_SUPPORT)
-" -c none         use no compression algorithm on output",
+" -c none         use no compression algorithm on output\n"
 #endif
-"",
-"Note that input filenames may be of the form filename,x,y,z",
-"where x, y, and z specify image numbers in the filename to copy.",
-"example: tiffcp -c none -b esp.tif,1 esp.tif,0 test.tif",
-"    subtract 2nd image in esp.tif from 1st yielding uncompressed result test.tif",
-NULL
-};
+"\n"
+"Note that input filenames may be of the form filename,x,y,z\n"
+"where x, y, and z specify image numbers in the filename to copy.\n"
+"example: tiffcp -c none -b esp.tif,1 esp.tif,0 test.tif\n"
+"    subtract 2nd image in esp.tif from 1st yielding uncompressed result test.tif\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
 	fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 
@@ -619,7 +616,7 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 	}
 }
 
-static struct cpTag {
+static const struct cpTag {
 	uint16 tag;
 	uint16 count;
 	TIFFDataType type;
@@ -675,7 +672,7 @@ tiffcp(TIFF* in, TIFF* out)
 	uint16 input_compression, input_photometric = PHOTOMETRIC_MINISBLACK;
 	copyFunc cf;
 	uint32 width, length;
-	struct cpTag* p;
+	const struct cpTag* p;
 
 	CopyField(TIFFTAG_IMAGEWIDTH, width);
 	CopyField(TIFFTAG_IMAGELENGTH, length);

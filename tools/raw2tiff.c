@@ -624,86 +624,83 @@ processCompressOptions(char* opt)
 	return (1);
 }
 
-static const char* usage_info[] = {
-"raw2tiff --- tool for converting raw byte sequences in TIFF images",
-"usage: raw2tiff [options] input.raw output.tif",
-"where options are:",
-" -L		input data has LSB2MSB bit order (default)",
-" -M		input data has MSB2LSB bit order",
-" -r #		make each strip have no more than # rows",
-" -H #		size of input image file header in bytes (0 by default)",
-" -w #		width of input image in pixels",
-" -l #		length of input image in lines",
-" -b #		number of bands in input image (1 by default)",
-"",
-" -d data_type	type of samples in input image",
-"where data_type may be:",
-" byte		8-bit unsigned integer (default)",
-" short		16-bit unsigned integer",
-" long		32-bit unsigned integer",
-" sbyte		8-bit signed integer",
-" sshort		16-bit signed integer",
-" slong		32-bit signed integer",
-" float		32-bit IEEE floating point",
-" double		64-bit IEEE floating point",
-"",
-" -p photo	photometric interpretation (color space) of the input image",
-"where photo may be:",
-" miniswhite	white color represented with 0 value",
-" minisblack	black color represented with 0 value (default)",
-" rgb		image has RGB color model",
-" cmyk		image has CMYK (separated) color model",
-" ycbcr		image has YCbCr color model",
-" cielab		image has CIE L*a*b color model",
-" icclab		image has ICC L*a*b color model",
-" itulab		image has ITU L*a*b color model",
-"",
-" -s		swap bytes fetched from input file",
-"",
-" -i config	type of samples interleaving in input image",
-"where config may be:",
-" pixel		pixel interleaved data (default)",
-" band		band interleaved data",
-"",
+static const char usage_info[] =
+"raw2tiff --- tool for converting raw byte sequences in TIFF images\n"
+"usage: raw2tiff [options] input.raw output.tif\n"
+"where options are:\n"
+" -L		input data has LSB2MSB bit order (default)\n"
+" -M		input data has MSB2LSB bit order\n"
+" -r #		make each strip have no more than # rows\n"
+" -H #		size of input image file header in bytes (0 by default)\n"
+" -w #		width of input image in pixels\n"
+" -l #		length of input image in lines\n"
+" -b #		number of bands in input image (1 by default)\n"
+"\n"
+" -d data_type	type of samples in input image\n"
+"where data_type may be:\n"
+" byte		8-bit unsigned integer (default)\n"
+" short		16-bit unsigned integer\n"
+" long		32-bit unsigned integer\n"
+" sbyte		8-bit signed integer\n"
+" sshort		16-bit signed integer\n"
+" slong		32-bit signed integer\n"
+" float		32-bit IEEE floating point\n"
+" double		64-bit IEEE floating point\n"
+"\n"
+" -p photo	photometric interpretation (color space) of the input image\n"
+"where photo may be:\n"
+" miniswhite	white color represented with 0 value\n"
+" minisblack	black color represented with 0 value (default)\n"
+" rgb		image has RGB color model\n"
+" cmyk		image has CMYK (separated) color model\n"
+" ycbcr		image has YCbCr color model\n"
+" cielab		image has CIE L*a*b color model\n"
+" icclab		image has ICC L*a*b color model\n"
+" itulab		image has ITU L*a*b color model\n"
+"\n"
+" -s		swap bytes fetched from input file\n"
+"\n"
+" -i config	type of samples interleaving in input image\n"
+"where config may be:\n"
+" pixel		pixel interleaved data (default)\n"
+" band		band interleaved data\n"
+"\n"
 #ifdef LZW_SUPPORT
-" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding",
-/* "    LZW options:", */
-"    #  set predictor value",
-"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding\n"
+/* "    LZW options:\n" */
+"    #  set predictor value\n"
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts]	compress output with deflate encoding",
-/* "    Deflate (ZIP) options:", */
-"    #  set predictor value",
+" -c zip[:opts]	compress output with deflate encoding\n"
+/* "    Deflate (ZIP) options:\n" */
+"    #  set predictor value\n"
 #endif
 #ifdef JPEG_SUPPORT
-" -c jpeg[:opts]	compress output with JPEG encoding",
-/* "    JPEG options:", */
-"    #  set compression quality level (0-100, default 75)",
-"    r  output color image as RGB rather than YCbCr",
-"    For example, -c jpeg:r:50 for JPEG-encoded RGB data with 50% comp. quality",
+" -c jpeg[:opts]	compress output with JPEG encoding\n"
+/* "    JPEG options:\n" */
+"    #  set compression quality level (0-100, default 75)\n"
+"    r  output color image as RGB rather than YCbCr\n"
+"    For example, -c jpeg:r:50 for JPEG-encoded RGB data with 50% comp. quality\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits	compress output with packbits encoding",
+" -c packbits	compress output with packbits encoding\n"
 #endif
 #if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(JPEG_SUPPORT) || defined(PACKBITS_SUPPORT)
-" -c none	use no compression algorithm on output",
+" -c none	use no compression algorithm on output\n"
 #endif
-"",
-" -o out.tif	write output to out.tif",
-" -h		this help message",
-NULL
-};
+"\n"
+" -o out.tif	write output to out.tif\n"
+" -h		this help message\n"
+;
 
 static void
 usage(int code)
 {
-	int i;
 	FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
         fprintf(out, "%s\n\n", TIFFGetVersion());
-	for (i = 0; usage_info[i] != NULL; i++)
-		fprintf(out, "%s\n", usage_info[i]);
+        fprintf(out, "%s", usage_info);
 	exit(code);
 }
 

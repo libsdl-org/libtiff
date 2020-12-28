@@ -307,7 +307,7 @@ struct crop_mask {
   struct coordpairs corners[MAX_REGIONS]; /* Coordinates of upper left and lower right corner */
 };
 
-#define MAX_PAPERNAMES 49
+#define MAX_PAPERNAMES (sizeof(PaperTable)/sizeof(PaperTable[0])) /* was 49 */
 #define MAX_PAPERNAME_LENGTH 15
 #define DEFAULT_RESUNIT      RESUNIT_INCH
 #define DEFAULT_PAGE_HEIGHT   14.0
@@ -340,7 +340,7 @@ struct paperdef {
 /* European page sizes corrected from update sent by 
  * thomas . jarosch @ intra2net . com on 5/7/2010
  * Paper Size       Width   Length  Aspect Ratio */
-const struct paperdef PaperTable[MAX_PAPERNAMES] = {
+static const struct paperdef PaperTable[/*MAX_PAPERNAMES*/] = {
   {"default",         8.500,  14.000,  0.607},
   {"pa4",             8.264,  11.000,  0.751},
   {"letter",          8.500,  11.000,  0.773},
@@ -645,152 +645,151 @@ static void* limitMalloc(tmsize_t s)
 
 
 
-static const char* usage_info[] = {
-"usage: tiffcrop [options] source1 ... sourceN  destination",
-"where options are:",
-" -h       Print this syntax listing",
-" -v       Print tiffcrop version identifier and last revision date",
-" ",
-" -a       Append to output instead of overwriting",
-" -d       offset Set initial directory offset, counting first image as one, not zero",
-" -p       contig Pack samples contiguously (e.g. RGBRGB...)",
-" -p       separate  Store samples separately (e.g. RRR...GGG...BBB...)",
-" -s       Write output in strips",
-" -t       Write output in tiles",
-" -i       Ignore read errors",
-" -k size  set the memory allocation limit in MiB. 0 to disable limit",
-" ",
-" -r #     Make each strip have no more than # rows",
-" -w #     Set output tile width (pixels)",
-" -l #     Set output tile length (pixels)",
-" ",
-" -f lsb2msb     Force lsb-to-msb FillOrder for output",
-" -f msb2lsb     Force msb-to-lsb FillOrder for output",
-"",
+static const char usage_info[] =
+"usage: tiffcrop [options] source1 ... sourceN  destination\n"
+"where options are:\n"
+" -h       Print this syntax listing\n"
+" -v       Print tiffcrop version identifier and last revision date\n"
+" \n"
+" -a       Append to output instead of overwriting\n"
+" -d       offset Set initial directory offset, counting first image as one, not zero\n"
+" -p       contig Pack samples contiguously (e.g. RGBRGB...)\n"
+" -p       separate  Store samples separately (e.g. RRR...GGG...BBB...)\n"
+" -s       Write output in strips\n"
+" -t       Write output in tiles\n"
+" -i       Ignore read errors\n"
+" -k size  set the memory allocation limit in MiB. 0 to disable limit\n"
+" \n"
+" -r #     Make each strip have no more than # rows\n"
+" -w #     Set output tile width (pixels)\n"
+" -l #     Set output tile length (pixels)\n"
+" \n"
+" -f lsb2msb     Force lsb-to-msb FillOrder for output\n"
+" -f msb2lsb     Force msb-to-lsb FillOrder for output\n"
+"\n"
 #ifdef LZW_SUPPORT
-" -c lzw[:opts]  Compress output with Lempel-Ziv & Welch encoding",
-/* "    LZW options:", */
-"    #        Set predictor value",
-"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing",
+" -c lzw[:opts]  Compress output with Lempel-Ziv & Welch encoding\n"
+/* "    LZW options:\n" */
+"    #        Set predictor value\n"
+"    For example, -c lzw:2 for LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts]  Compress output with deflate encoding",
-/* "          Deflate (ZIP) options:", */
-"    #        Set predictor value",
+" -c zip[:opts]  Compress output with deflate encoding\n"
+/* "          Deflate (ZIP) options:\n" */
+"    #        Set predictor value\n"
 #endif
 #ifdef JPEG_SUPPORT
-" -c jpeg[:opts] Compress output with JPEG encoding",
-/* "    JPEG options:", */
-"    #        Set compression quality level (0-100, default 100)",
-"    raw      Output color image as raw YCbCr (default)",
-"    rgb      Output color image as RGB",
-"    For example, -c jpeg:rgb:50 for JPEG-encoded RGB with 50% comp. quality",
+" -c jpeg[:opts] Compress output with JPEG encoding\n"
+/* "    JPEG options:\n" */
+"    #        Set compression quality level (0-100, default 100)\n"
+"    raw      Output color image as raw YCbCr (default)\n"
+"    rgb      Output color image as RGB\n"
+"    For example, -c jpeg:rgb:50 for JPEG-encoded RGB with 50% comp. quality\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits Compress output with packbits encoding",
+" -c packbits Compress output with packbits encoding\n"
 #endif
 #ifdef CCITT_SUPPORT
-" -c g3[:opts] Compress output with CCITT Group 3 encoding",
-/* "    CCITT Group 3 options:", */
-"    1d        Use default CCITT Group 3 1D-encoding",
-"    2d        Use optional CCITT Group 3 2D-encoding",
-"    fill      Byte-align EOL codes",
-"    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs",
-" -c g4        Compress output with CCITT Group 4 encoding",
+" -c g3[:opts] Compress output with CCITT Group 3 encoding\n"
+/* "    CCITT Group 3 options:\n" */
+"    1d        Use default CCITT Group 3 1D-encoding\n"
+"    2d        Use optional CCITT Group 3 2D-encoding\n"
+"    fill      Byte-align EOL codes\n"
+"    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs\n"
+" -c g4        Compress output with CCITT Group 4 encoding\n"
 #endif
 #if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(JPEG_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
-" -c none      Use no compression algorithm on output",
+" -c none      Use no compression algorithm on output\n"
 #endif
-" ",
-"Page and selection options:",
-" -N odd|even|#,#-#,#|last         sequences and ranges of images within file to process",
-"             The words odd or even may be used to specify all odd or even numbered images.",
-"             The word last may be used in place of a number in the sequence to indicate.",
-"             The final image in the file without knowing how many images there are.",
-"             Numbers are counted from one even though TIFF IFDs are counted from zero.",
-" ",
-" -E t|l|r|b  edge to use as origin for width and length of crop region",
-" -U units    [in, cm, px ] inches, centimeters or pixels",
-" ",
-" -m #,#,#,#  margins from edges for selection: top, left, bottom, right separated by commas",
-" -X #        horizontal dimension of region to extract expressed in current units",
-" -Y #        vertical dimension of region to extract expressed in current units",
-" -Z #:#,#:#  zones of the image designated as position X of Y,",
-"             eg 1:3 would be first of three equal portions measured from reference edge",
-" -z x1,y1,x2,y2:...:xN,yN,xN+1,yN+1",
-"             regions of the image designated by upper left and lower right coordinates",
-"",
-"Export grouping options:",
-" -e c|d|i|m|s    export mode for images and selections from input images.",
-"                 When exporting a composite image from multiple zones or regions",
-"                 (combined and image modes), the selections must have equal sizes",
-"                 for the axis perpendicular to the edge specified with -E.",
-"    c|combined   All images and selections are written to a single file (default).",
-"                 with multiple selections from one image combined into a single image.",
-"    d|divided    All images and selections are written to a single file",
-"                 with each selection from one image written to a new image.",
-"    i|image      Each input image is written to a new file (numeric filename sequence)",
-"                 with multiple selections from the image combined into one image.",
-"    m|multiple   Each input image is written to a new file (numeric filename sequence)",
-"                 with each selection from the image written to a new image.",
-"    s|separated  Individual selections from each image are written to separate files.",
-"",
-"Output options:",
-" -H #        Set horizontal resolution of output images to #",
-" -V #        Set vertical resolution of output images to #",
-" -J #        Set horizontal margin of output page to # expressed in current units",
-"             when sectioning image into columns x rows using the -S cols:rows option",
-" -K #        Set verticalal margin of output page to # expressed in current units",
-"             when sectioning image into columns x rows using the -S cols:rows option",
-" ",
-" -O orient    orientation for output image, portrait, landscape, auto",
-" -P page      page size for output image segments, eg letter, legal, tabloid, etc",
-"              use #.#x#.# to specify a custom page size in the currently defined units",
-"              where #.# represents the width and length",        
-" -S cols:rows Divide the image into equal sized segments using cols across and rows down.",
-" ",
-" -F hor|vert|both",
-"             flip (mirror) image or region horizontally, vertically, or both",
-" -R #        [90,180,or 270] degrees clockwise rotation of image or extracted region",
-" -I [black|white|data|both]",
-"             invert color space, eg dark to light for bilevel and grayscale images",
-"             If argument is white or black, set the PHOTOMETRIC_INTERPRETATION ",
-"             tag to MinIsBlack or MinIsWhite without altering the image data",
-"             If the argument is data or both, the image data are modified:",
-"             both inverts the data and the PHOTOMETRIC_INTERPRETATION tag,",
-"             data inverts the data but not the PHOTOMETRIC_INTERPRETATION tag",
-" ",
-"-D opt1:value1,opt2:value2,opt3:value3:opt4:value4",
-"             Debug/dump program progress and/or data to non-TIFF files.",
-"             Options include the following and must be joined as a comma",
-"             separate list. The use of this option is generally limited to",
-"             program debugging and development of future options.",
-" ",
-"   debug:N   Display limited program progress indicators where larger N",
-"             increase the level of detail. Note: Tiffcrop may be compiled with",
-"             -DDEVELMODE to enable additional very low level debug reporting.",
-"",
-"   Format:txt|raw  Format any logged data as ASCII text or raw binary ",
-"             values. ASCII text dumps include strings of ones and zeroes",
-"             representing the binary values in the image data plus identifying headers.",
-" ",
-"   level:N   Specify the level of detail presented in the dump files.",
-"             This can vary from dumps of the entire input or output image data to dumps",
-"             of data processed by specific functions. Current range of levels is 1 to 3.",
-" ",
-"   input:full-path-to-directory/input-dumpname",
-" ",
-"   output:full-path-to-directory/output-dumpnaem",
-" ",
-"             When dump files are being written, each image will be written to a separate",
-"             file with the name built by adding a numeric sequence value to the dumpname",
-"             and an extension of .txt for ASCII dumps or .bin for binary dumps.",
-" ",
-"             The four debug/dump options are independent, though it makes little sense to",
-"             specify a dump file without specifying a detail level.",
-" ",
-NULL
-};
+"\n"
+"Page and selection options:\n"
+" -N odd|even|#,#-#,#|last         sequences and ranges of images within file to process\n"
+"             The words odd or even may be used to specify all odd or even numbered images.\n"
+"             The word last may be used in place of a number in the sequence to indicate.\n"
+"             The final image in the file without knowing how many images there are.\n"
+"             Numbers are counted from one even though TIFF IFDs are counted from zero.\n"
+"\n"
+" -E t|l|r|b  edge to use as origin for width and length of crop region\n"
+" -U units    [in, cm, px ] inches, centimeters or pixels\n"
+" \n"
+" -m #,#,#,#  margins from edges for selection: top, left, bottom, right separated by commas\n"
+" -X #        horizontal dimension of region to extract expressed in current units\n"
+" -Y #        vertical dimension of region to extract expressed in current units\n"
+" -Z #:#,#:#  zones of the image designated as position X of Y,\n"
+"             eg 1:3 would be first of three equal portions measured from reference edge\n"
+" -z x1,y1,x2,y2:...:xN,yN,xN+1,yN+1\n"
+"             regions of the image designated by upper left and lower right coordinates\n"
+"\n"
+"Export grouping options:\n"
+" -e c|d|i|m|s    export mode for images and selections from input images.\n"
+"                 When exporting a composite image from multiple zones or regions\n"
+"                 (combined and image modes), the selections must have equal sizes\n"
+"                 for the axis perpendicular to the edge specified with -E.\n"
+"    c|combined   All images and selections are written to a single file (default).\n"
+"                 with multiple selections from one image combined into a single image.\n"
+"    d|divided    All images and selections are written to a single file\n"
+"                 with each selection from one image written to a new image.\n"
+"    i|image      Each input image is written to a new file (numeric filename sequence)\n"
+"                 with multiple selections from the image combined into one image.\n"
+"    m|multiple   Each input image is written to a new file (numeric filename sequence)\n"
+"                 with each selection from the image written to a new image.\n"
+"    s|separated  Individual selections from each image are written to separate files.\n"
+"\n"
+"Output options:\n"
+" -H #        Set horizontal resolution of output images to #\n"
+" -V #        Set vertical resolution of output images to #\n"
+" -J #        Set horizontal margin of output page to # expressed in current units\n"
+"             when sectioning image into columns x rows using the -S cols:rows option\n"
+" -K #        Set verticalal margin of output page to # expressed in current units\n"
+"             when sectioning image into columns x rows using the -S cols:rows option\n"
+" \n"
+" -O orient    orientation for output image, portrait, landscape, auto\n"
+" -P page      page size for output image segments, eg letter, legal, tabloid, etc\n"
+"              use #.#x#.# to specify a custom page size in the currently defined units\n"
+"              where #.# represents the width and length\n"
+" -S cols:rows Divide the image into equal sized segments using cols across and rows down.\n"
+"\n"
+" -F hor|vert|both\n"
+"             flip (mirror) image or region horizontally, vertically, or both\n"
+" -R #        [90,180,or 270] degrees clockwise rotation of image or extracted region\n"
+" -I [black|white|data|both]\n"
+"             invert color space, eg dark to light for bilevel and grayscale images\n"
+"             If argument is white or black, set the PHOTOMETRIC_INTERPRETATION \n"
+"             tag to MinIsBlack or MinIsWhite without altering the image data\n"
+"             If the argument is data or both, the image data are modified:\n"
+"             both inverts the data and the PHOTOMETRIC_INTERPRETATION tag,\n"
+"             data inverts the data but not the PHOTOMETRIC_INTERPRETATION tag\n"
+"\n"
+"-D opt1:value1,opt2:value2,opt3:value3:opt4:value4\n"
+"             Debug/dump program progress and/or data to non-TIFF files.\n"
+"             Options include the following and must be joined as a comma\n"
+"             separate list. The use of this option is generally limited to\n"
+"             program debugging and development of future options.\n"
+"\n"
+"   debug:N   Display limited program progress indicators where larger N\n"
+"             increase the level of detail. Note: Tiffcrop may be compiled with\n"
+"             -DDEVELMODE to enable additional very low level debug reporting.\n"
+"\n"
+"   Format:txt|raw  Format any logged data as ASCII text or raw binary \n"
+"             values. ASCII text dumps include strings of ones and zeroes\n"
+"             representing the binary values in the image data plus identifying headers.\n"
+"\n"
+"   level:N   Specify the level of detail presented in the dump files.\n"
+"             This can vary from dumps of the entire input or output image data to dumps\n"
+"             of data processed by specific functions. Current range of levels is 1 to 3.\n"
+"\n"
+"   input:full-path-to-directory/input-dumpname\n"
+"\n"
+"   output:full-path-to-directory/output-dumpnaem\n"
+"\n"
+"             When dump files are being written, each image will be written to a separate\n"
+"             file with the name built by adding a numeric sequence value to the dumpname\n"
+"             and an extension of .txt for ASCII dumps or .bin for binary dumps.\n"
+"\n"
+"             The four debug/dump options are independent, though it makes little sense to\n"
+"             specify a dump file without specifying a detail level.\n"
+"\n"
+;
 
 /* This function could be modified to pass starting sample offset 
  * and number of samples as args to select fewer than spp
@@ -1515,15 +1514,13 @@ processCompressOptions(char* opt)
 
 static void
 usage(int code)
-  {
-  int i;
-  FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
+{
+        FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-  fprintf(out, "\n%s\n", TIFFGetVersion());
-  for (i = 0; usage_info[i] != NULL; i++)
-    fprintf(out, "%s\n", usage_info[i]);
-  exit(code);
-  }
+        fprintf(out, "\n%s\n", TIFFGetVersion());
+        fprintf(out, "%s", usage_info);
+        exit(code);
+}
 
 #define	CopyField(tag, v) \
     if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
@@ -1589,7 +1586,7 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 	}
 }
 
-static struct cpTag {
+static const struct cpTag {
 	uint16	tag;
 	uint16	count;
 	TIFFDataType type;
@@ -5013,7 +5010,7 @@ static int
 get_page_geometry (char *name, struct pagedef *page)
     {
     char *ptr;
-    int n; 
+    unsigned int n;
 
     for (ptr = name; *ptr; ptr++)
       *ptr = (char)tolower((int)*ptr);
@@ -7122,7 +7119,7 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
   uint16 bps, spp;
   uint16 input_compression, input_photometric;
   uint16 input_planar;
-  struct cpTag* p;
+  const struct cpTag* p;
 
   /*  Calling this seems to reset the compression mode on the TIFF *in file.
   TIFFGetField(in, TIFFTAG_JPEGCOLORMODE, &input_jpeg_colormode);
@@ -7799,7 +7796,7 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
   uint16 bps, spp;
   uint16 input_compression, input_photometric;
   uint16 input_planar;
-  struct cpTag* p;
+  const struct cpTag* p;
 
   input_compression = image->compression;
   input_photometric = image->photometric;
