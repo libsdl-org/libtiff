@@ -83,7 +83,7 @@ static int NotConfigured(TIFF*, int);
 #ifdef VMS
 const TIFFCodec _TIFFBuiltinCODECS[] = {
 #else
-TIFFCodec _TIFFBuiltinCODECS[] = {
+const TIFFCodec _TIFFBuiltinCODECS[] = {
 #endif
     { "None",		COMPRESSION_NONE,	TIFFInitDumpMode },
     { "LZW",		COMPRESSION_LZW,	TIFFInitLZW },

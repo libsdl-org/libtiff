@@ -459,7 +459,7 @@ extern int TIFFInitWebP(TIFF*, int);
 #ifdef VMS
 extern const TIFFCodec _TIFFBuiltinCODECS[];
 #else
-extern TIFFCodec _TIFFBuiltinCODECS[];
+extern const TIFFCodec _TIFFBuiltinCODECS[];
 #endif
 
 #if defined(__cplusplus)
