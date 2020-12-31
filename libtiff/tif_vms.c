@@ -350,7 +350,7 @@ asm("_$$PsectAttributes_NOSHR$$_TIFFerrorHandler")
 
 
 #if !HAVE_IEEEFP
-/* IEEE floting point handling */
+/* IEEE floating point handling */
 
 typedef	struct ieeedouble {
 	unsigned long	mant2;          /* fix NDR: full 8-byte swap */

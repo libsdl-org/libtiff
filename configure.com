@@ -46,7 +46,7 @@ $ENDIF
 $MMS = F$SEARCH("SYS$SYSTEM:MMS.EXE") .NES. ""
 $MMK = F$TYPE(MMK) 
 $IF (MMS .OR. MMK.NES."") THEN GOTO TEST_LIBRARIES
-$! I cant find any make tool
+$! I cannot find any make tool
 $GOTO EXIT
 $!
 $!
@@ -1126,7 +1126,7 @@ CLEAN :
 $!
 $!
 $!
-$!copiing and patching TIFF_CONF.H, TIF_CONFIG.H
+$!copying and patching TIFF_CONF.H, TIF_CONFIG.H
 $!
 $CURRENT = F$ENVIRONMENT (""DEFAULT"")
 $CURRENT[F$LOCATE("]",CURRENT),9]:=".LIBTIFF]"
@@ -1158,7 +1158,7 @@ $COPY SYS$INPUT 'CURRENT'TIFFCONF.H
 
 /* Compatibility stuff. */
 
-/* Define as 0 or 1 according to the floating point format suported by the
+/* Define as 0 or 1 according to the floating point format supported by the
    machine */
 
 #ifdef __IEEE_FLOAT
@@ -1202,7 +1202,7 @@ $COPY SYS$INPUT 'CURRENT'TIFFCONF.H
 /* #undef ZIP_SUPPORT */
 
 /* Support strip chopping (whether or not to convert single-strip uncompressed
-   images to mutiple strips of ~8Kb to reduce memory usage) */
+   images to multiple strips of ~8Kb to reduce memory usage) */
 #define STRIPCHOP_DEFAULT TIFF_STRIPCHOP
 
 /* Enable SubIFD tag (330) support */
@@ -1244,7 +1244,7 @@ $COPY SYS$INPUT 'CURRENT'TIF_CONFIG.H
 /* Define to 1 if you have the <fcntl.h> header file. */
 #define HAVE_FCNTL_H 1
 
-/* Define as 0 or 1 according to the floating point format suported by the
+/* Define as 0 or 1 according to the floating point format supported by the
    machine */
 
 #ifdef __IEEE_FLOAT

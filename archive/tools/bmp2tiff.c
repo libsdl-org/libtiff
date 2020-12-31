@@ -76,7 +76,7 @@ enum BMPType
  * BMPInfoHeader structure. An array of BMPColorEntry structures (also called
  * a colour table) follows the bitmap information header structure. The colour
  * table is followed by a second array of indexes into the colour table (the
- * actual bitmap data). Data may be comressed, for 4-bpp and 8-bpp used RLE
+ * actual bitmap data). Data may be compressed, for 4-bpp and 8-bpp used RLE
  * compression.
  *
  * +---------------------+

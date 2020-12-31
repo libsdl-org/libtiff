@@ -21,7 +21,7 @@
 # OF THIS SOFTWARE.
 #
 # Makefile for MS Visual C and Watcom C compilers.
-# Edit nmake.opt file if you want to ajust building options.
+# Edit nmake.opt file if you want to adjust building options.
 #
 # To build:
 # C:\libtiff> nmake /f makefile.vc 

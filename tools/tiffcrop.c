@@ -102,7 +102,7 @@
  *                includes annotations for image parameters and scanline info. Level
  *                selects which functions dump data, with higher numbers selecting
  *                lower level, scanline level routines. Debug reports a limited set
- *                of messages to monitor progess without enabling dump logs.
+ *                of messages to monitor progress without enabling dump logs.
  */
 
 static   char tiffcrop_version_id[] = "2.4";
@@ -1933,11 +1933,11 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
 		TIFFError ("For valid options type", "tiffcrop -h");
                 exit (EXIT_FAILURE);
 		break;
-      case 'J': /* horizontal margin for sectioned ouput pages */ 
+      case 'J': /* horizontal margin for sectioned output pages */
 		page->hmargin = atof(optarg);
                 page->mode |= PAGE_MODE_MARGINS;
 		break;
-      case 'K': /* vertical margin for sectioned ouput pages*/ 
+      case 'K': /* vertical margin for sectioned output pages*/
                 page->vmargin = atof(optarg);
                 page->mode |= PAGE_MODE_MARGINS;
 		break;
@@ -5899,7 +5899,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
   TIFFGetFieldDefaulted(in, TIFFTAG_PLANARCONFIG, &planar);
   TIFFGetFieldDefaulted(in, TIFFTAG_ORIENTATION, &orientation);
   if (! TIFFGetFieldDefaulted(in, TIFFTAG_PHOTOMETRIC, &input_photometric))
-    TIFFError("loadImage","Image lacks Photometric interpreation tag");
+    TIFFError("loadImage","Image lacks Photometric interpretation tag");
   if (! TIFFGetField(in, TIFFTAG_IMAGEWIDTH,  &width))
     TIFFError("loadimage","Image lacks image width tag");
   if(! TIFFGetField(in, TIFFTAG_IMAGELENGTH, &length))
@@ -7655,7 +7655,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
 
 /* Copy the crop section of the data from the current image into a buffer
  * and adjust the IFD values to reflect the new size. If no cropping is
- * required, use the origial read buffer as the crop buffer.
+ * required, use the original read buffer as the crop buffer.
  *
  * There is quite a bit of redundancy between this routine and the more
  * specialized processCropSelections, but this provides

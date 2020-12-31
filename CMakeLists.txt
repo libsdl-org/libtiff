@@ -634,7 +634,7 @@ set(USE_WIN32_FILEIO ${win32_io})
 # Orthogonal features
 
 # Strip chopping
-option(strip-chopping "strip chopping (whether or not to convert single-strip uncompressed images to mutiple strips of specified size to reduce memory usage)" ON)
+option(strip-chopping "strip chopping (whether or not to convert single-strip uncompressed images to multiple strips of specified size to reduce memory usage)" ON)
 set(TIFF_DEFAULT_STRIP_SIZE 8192 CACHE STRING "default size of the strip in bytes (when strip chopping is enabled)")
 
 set(STRIPCHOP_DEFAULT)

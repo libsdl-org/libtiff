@@ -329,7 +329,7 @@ DECLAREContigPutFunc(putContig1bitTile)
     int wb = WIDTHBYTES(w);
     u_char*  ucp = (u_char*)cp;
 
-    /* Conver 'w' to bytes from pixels (rounded up) */
+    /* Convert 'w' to bytes from pixels (rounded up) */
     w = (w+7)/8;
 
     while (h-- > 0) {
