@@ -129,7 +129,6 @@ option(fatal-warnings "Compiler warnings are errors" OFF)
 # Check if the compiler supports each of the following additional
 # flags, and enable them if supported.  This greatly improves the
 # quality of the build by checking for a number of common problems,
-# quality of the build by checking for a number of common problems,
 # some of which are quite serious.
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
    CMAKE_C_COMPILER_ID MATCHES "Clang")
