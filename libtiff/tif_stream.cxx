@@ -80,10 +80,10 @@ extern "C" {
 	static tmsize_t _tiffisReadProc(thandle_t fd, void* buf, tmsize_t size);
 	static tmsize_t _tiffosWriteProc(thandle_t fd, void* buf, tmsize_t size);
 	static tmsize_t _tiffisWriteProc(thandle_t, void*, tmsize_t);
-	static uint64   _tiffosSeekProc(thandle_t fd, uint64 off, int whence);
-	static uint64   _tiffisSeekProc(thandle_t fd, uint64 off, int whence);
-	static uint64   _tiffosSizeProc(thandle_t fd);
-	static uint64   _tiffisSizeProc(thandle_t fd);
+	static uint64_t   _tiffosSeekProc(thandle_t fd, uint64_t off, int whence);
+	static uint64_t   _tiffisSeekProc(thandle_t fd, uint64_t off, int whence);
+	static uint64_t   _tiffosSizeProc(thandle_t fd);
+	static uint64_t   _tiffisSizeProc(thandle_t fd);
 	static int      _tiffosCloseProc(thandle_t fd);
 	static int      _tiffisCloseProc(thandle_t fd);
 	static int 	_tiffDummyMapProc(thandle_t , void** base, toff_t* size );
@@ -146,26 +146,26 @@ _tiffisWriteProc(thandle_t, void*, tmsize_t)
 	return 0;
 }
 
-static uint64
-_tiffosSeekProc(thandle_t fd, uint64 off, int whence)
+static uint64_t
+_tiffosSeekProc(thandle_t fd, uint64_t off, int whence)
 {
 	tiffos_data	*data = reinterpret_cast<tiffos_data *>(fd);
 	ostream		*os = data->stream;
 
 	// if the stream has already failed, don't do anything
 	if( os->fail() )
-		return static_cast<uint64>(-1);
+		return static_cast<uint64_t>(-1);
 
 	switch(whence) {
 	case SEEK_SET:
 		{
 			// Compute 64-bit offset
-			uint64 new_offset = static_cast<uint64>(data->start_pos) + off;
+			uint64_t new_offset = static_cast<uint64_t>(data->start_pos) + off;
 
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(new_offset);
-			if (static_cast<uint64>(offset) != new_offset)
-				return static_cast<uint64>(-1);
+			if (static_cast<uint64_t>(offset) != new_offset)
+				return static_cast<uint64_t>(-1);
 			
 			os->seekp(offset, ios::beg);
 		break;
@@ -174,8 +174,8 @@ _tiffosSeekProc(thandle_t fd, uint64 off, int whence)
 		{
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(off);
-			if (static_cast<uint64>(offset) != off)
-				return static_cast<uint64>(-1);
+			if (static_cast<uint64_t>(offset) != off)
+				return static_cast<uint64_t>(-1);
 
 			os->seekp(offset, ios::cur);
 			break;
@@ -184,8 +184,8 @@ _tiffosSeekProc(thandle_t fd, uint64 off, int whence)
 		{
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(off);
-			if (static_cast<uint64>(offset) != off)
-				return static_cast<uint64>(-1);
+			if (static_cast<uint64_t>(offset) != off)
+				return static_cast<uint64_t>(-1);
 
 			os->seekp(offset, ios::end);
 			break;
@@ -220,28 +220,28 @@ _tiffosSeekProc(thandle_t fd, uint64 off, int whence)
 		os->clear(old_state);	
 
 		// only do something if desired seek position is valid
-		if( (static_cast<uint64>(origin) + off) > static_cast<uint64>(data->start_pos) ) {
-			uint64	num_fill;
+		if((static_cast<uint64_t>(origin) + off) > static_cast<uint64_t>(data->start_pos) ) {
+			uint64_t	num_fill;
 
 			// clear the fail bit 
 			os->clear(os->rdstate() & ~ios::failbit);
 
 			// extend the stream to the expected size
 			os->seekp(0, ios::end);
-			num_fill = (static_cast<uint64>(origin)) + off - os->tellp();
-			for( uint64 i = 0; i < num_fill; i++ )
+			num_fill = (static_cast<uint64_t>(origin)) + off - os->tellp();
+			for(uint64_t i = 0; i < num_fill; i++ )
 				os->put('\0');
 
 			// retry the seek
-			os->seekp(static_cast<ios::off_type>(static_cast<uint64>(origin) + off), ios::beg);
+			os->seekp(static_cast<ios::off_type>(static_cast<uint64_t>(origin) + off), ios::beg);
 		}
 	}
 
-	return static_cast<uint64>(os->tellp());
+	return static_cast<uint64_t>(os->tellp());
 }
 
-static uint64
-_tiffisSeekProc(thandle_t fd, uint64 off, int whence)
+static uint64_t
+_tiffisSeekProc(thandle_t fd, uint64_t off, int whence)
 {
 	tiffis_data	*data = reinterpret_cast<tiffis_data *>(fd);
 
@@ -249,12 +249,12 @@ _tiffisSeekProc(thandle_t fd, uint64 off, int whence)
 	case SEEK_SET:
 		{
 			// Compute 64-bit offset
-			uint64 new_offset = static_cast<uint64>(data->start_pos) + off;
+			uint64_t new_offset = static_cast<uint64_t>(data->start_pos) + off;
 			
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(new_offset);
-			if (static_cast<uint64>(offset) != new_offset)
-				return static_cast<uint64>(-1);
+			if (static_cast<uint64_t>(offset) != new_offset)
+				return static_cast<uint64_t>(-1);
 
 			data->stream->seekg(offset, ios::beg);
 			break;
@@ -263,8 +263,8 @@ _tiffisSeekProc(thandle_t fd, uint64 off, int whence)
 		{
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(off);
-			if (static_cast<uint64>(offset) != off)
-				return static_cast<uint64>(-1);
+			if (static_cast<uint64_t>(offset) != off)
+				return static_cast<uint64_t>(-1);
 
 			data->stream->seekg(offset, ios::cur);
 			break;
@@ -273,18 +273,18 @@ _tiffisSeekProc(thandle_t fd, uint64 off, int whence)
 		{
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(off);
-			if (static_cast<uint64>(offset) != off)
-				return static_cast<uint64>(-1);
+			if (static_cast<uint64_t>(offset) != off)
+				return static_cast<uint64_t>(-1);
 
 			data->stream->seekg(offset, ios::end);
 			break;
 		}
 	}
 
-	return (uint64) (data->stream->tellg() - data->start_pos);
+	return (uint64_t) (data->stream->tellg() - data->start_pos);
 }
 
-static uint64
+static uint64_t
 _tiffosSizeProc(thandle_t fd)
 {
 	tiffos_data	*data = reinterpret_cast<tiffos_data *>(fd);
@@ -296,10 +296,10 @@ _tiffosSizeProc(thandle_t fd)
 	len = os->tellp();
 	os->seekp(pos);
 
-	return (uint64) len;
+	return (uint64_t) len;
 }
 
-static uint64
+static uint64_t
 _tiffisSizeProc(thandle_t fd)
 {
 	tiffis_data	*data = reinterpret_cast<tiffis_data *>(fd);
@@ -310,7 +310,7 @@ _tiffisSizeProc(thandle_t fd)
 	len = data->stream->tellg();
 	data->stream->seekg(pos);
 
-	return (uint64) len;
+	return (uint64_t) len;
 }
 
 static int

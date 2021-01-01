@@ -142,7 +142,7 @@ NotConfigured(TIFF* tif, int scheme)
  */
 
 int
-TIFFIsCODECConfigured(uint16 scheme)
+TIFFIsCODECConfigured(uint16_t scheme)
 {
 	const TIFFCodec* codec = TIFFFindCODEC(scheme);
 

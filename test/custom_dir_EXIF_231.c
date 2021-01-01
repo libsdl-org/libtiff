@@ -87,12 +87,12 @@ static const char filename[] = "custom_dir_EXIF_231.tif";
 static const char filenameBigTiff[] = "custom_dir_EXIF_231_Big.tif";
 
 #define	SPP	3		/* Samples per pixel */
-const uint16	width = 1;
-const uint16	length = 1;
-const uint16	bps = 8;
-const uint16	photometric = PHOTOMETRIC_RGB;
-const uint16	rows_per_strip = 1;
-const uint16	planarconfig = PLANARCONFIG_CONTIG;
+const uint16_t	width = 1;
+const uint16_t	length = 1;
+const uint16_t	bps = 8;
+const uint16_t	photometric = PHOTOMETRIC_RGB;
+const uint16_t	rows_per_strip = 1;
+const uint16_t	planarconfig = PLANARCONFIG_CONTIG;
 
 
 int
@@ -149,9 +149,9 @@ int
 write_test_tiff(TIFF *tif, const char *filenameRead)
 {
 	unsigned char	buf[SPP] = { 0, 127, 255 };
-	uint64          dir_offset = 0;
-	uint64			dir_offset_GPS = 0, dir_offset_EXIF = 0;
-	uint64          read_dir_offset = 0;
+	uint64_t          dir_offset = 0;
+	uint64_t			dir_offset_GPS = 0, dir_offset_EXIF = 0;
+	uint64_t          read_dir_offset = 0;
     /*-- Additional variables --*/
 	int				retCode, retCode2;
 	unsigned char	exifVersion[4] = {'0','2','3','1'};		/* EXIF 2.31 version is 4 characters of a string! */
@@ -160,7 +160,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	float			auxFloat = 0.0f;
 	double			auxDouble = 0.0;
 	char			auxChar = 0;
-	uint32			auxUint32 = 0;
+	uint32_t			auxUint32 = 0;
 	short			auxShort=0;
 	long			auxLong = 0;
 	void			*pVoid;
@@ -199,7 +199,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	float			auxFloatArrayN2[3] = { -1.0f / 7.0f, -61.23456789012345f, -62.3f };
 
 	/* -- Variables for reading -- */
-	uint16      count16 = 0;
+	uint16_t      count16 = 0;
 	union  {
 		long		Long;
 		short		Short1;

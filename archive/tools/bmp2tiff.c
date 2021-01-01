@@ -117,9 +117,9 @@ enum BMPLCSType                 /* Type of logical color space. */
 
 typedef struct
 {
-    int32   iCIEX;
-    int32   iCIEY;
-    int32   iCIEZ;
+    int32_t   iCIEX;
+    int32_t   iCIEY;
+    int32_t   iCIEZ;
 } BMPCIEXYZ;
 
 typedef struct                  /* This structure contains the x, y, and z */
@@ -133,13 +133,13 @@ typedef struct                  /* This structure contains the x, y, and z */
 typedef struct
 {
     char	bType[2];       /* Signature "BM" */
-    uint32	iSize;          /* Size in bytes of the bitmap file. Should
+    uint32_t	iSize;          /* Size in bytes of the bitmap file. Should
 				 * always be ignored while reading because
 				 * of error in Windows 3.0 SDK's description
 				 * of this field */
-    uint16	iReserved1;     /* Reserved, set as 0 */
-    uint16	iReserved2;     /* Reserved, set as 0 */
-    uint32	iOffBits;       /* Offset of the image from file start in bytes */
+    uint16_t	iReserved1;     /* Reserved, set as 0 */
+    uint16_t	iReserved2;     /* Reserved, set as 0 */
+    uint32_t	iOffBits;       /* Offset of the image from file start in bytes */
 } BMPFileHeader;
 
 /* File header size in bytes: */
@@ -147,29 +147,29 @@ const int       BFH_SIZE = 14;
 
 typedef struct
 {
-    uint32	iSize;          /* Size of BMPInfoHeader structure in bytes.
+    uint32_t	iSize;          /* Size of BMPInfoHeader structure in bytes.
 				 * Should be used to determine start of the
 				 * colour table */
-    int32	iWidth;         /* Image width */
-    int32	iHeight;        /* Image height. If positive, image has bottom
+    int32_t	iWidth;         /* Image width */
+    int32_t	iHeight;        /* Image height. If positive, image has bottom
 				 * left origin, if negative --- top left. */
-    int16	iPlanes;        /* Number of image planes (must be set to 1) */
-    int16	iBitCount;      /* Number of bits per pixel (1, 4, 8, 16, 24
+    int16_t	iPlanes;        /* Number of image planes (must be set to 1) */
+    int16_t	iBitCount;      /* Number of bits per pixel (1, 4, 8, 16, 24
 				 * or 32). If 0 then the number of bits per
 				 * pixel is specified or is implied by the
 				 * JPEG or PNG format. */
-    uint32	iCompression;	/* Compression method */
-    uint32	iSizeImage;     /* Size of uncomressed image in bytes. May
+    uint32_t	iCompression;	/* Compression method */
+    uint32_t	iSizeImage;     /* Size of uncomressed image in bytes. May
 				 * be 0 for BMPC_RGB bitmaps. If iCompression
 				 * is BI_JPEG or BI_PNG, iSizeImage indicates
 				 * the size of the JPEG or PNG image buffer. */
-    int32	iXPelsPerMeter; /* X resolution, pixels per meter (0 if not used) */
-    int32	iYPelsPerMeter; /* Y resolution, pixels per meter (0 if not used) */
-    uint32	iClrUsed;       /* Size of colour table. If 0, iBitCount should
+    int32_t	iXPelsPerMeter; /* X resolution, pixels per meter (0 if not used) */
+    int32_t	iYPelsPerMeter; /* Y resolution, pixels per meter (0 if not used) */
+    uint32_t	iClrUsed;       /* Size of colour table. If 0, iBitCount should
 				 * be used to calculate this value
 				 * (1<<iBitCount). This value should be
 				 * unsigned for proper shifting. */
-    int32	iClrImportant;  /* Number of important colours. If 0, all
+    int32_t	iClrImportant;  /* Number of important colours. If 0, all
 				 * colours are required */
 
     /*
@@ -177,23 +177,23 @@ typedef struct
      * and earlier. Windows 98/Me, Windows 2000/XP introduces additional fields:
      */
 
-    int32	iRedMask;       /* Colour mask that specifies the red component
+    int32_t	iRedMask;       /* Colour mask that specifies the red component
 				 * of each pixel, valid only if iCompression
 				 * is set to BI_BITFIELDS. */
-    int32	iGreenMask;     /* The same for green component */
-    int32	iBlueMask;      /* The same for blue component */
-    int32	iAlphaMask;     /* Colour mask that specifies the alpha
+    int32_t	iGreenMask;     /* The same for green component */
+    int32_t	iBlueMask;      /* The same for blue component */
+    int32_t	iAlphaMask;     /* Colour mask that specifies the alpha
 				 * component of each pixel. */
-    uint32	iCSType;        /* Colour space of the DIB. */
+    uint32_t	iCSType;        /* Colour space of the DIB. */
     BMPCIEXYZTriple sEndpoints; /* This member is ignored unless the iCSType
 				 * member specifies BMPLT_CALIBRATED_RGB. */
-    int32	iGammaRed;      /* Toned response curve for red. This member
+    int32_t	iGammaRed;      /* Toned response curve for red. This member
 				 * is ignored unless color values are
 				 * calibrated RGB values and iCSType is set to
 				 * BMPLT_CALIBRATED_RGB. Specified
 				 * in 16^16 format. */
-    int32	iGammaGreen;    /* Toned response curve for green. */
-    int32	iGammaBlue;     /* Toned response curve for blue. */
+    int32_t	iGammaGreen;    /* Toned response curve for green. */
+    int32_t	iGammaBlue;     /* Toned response curve for blue. */
 } BMPInfoHeader;
 
 /*
@@ -216,23 +216,23 @@ typedef struct
     char       bReserved;      /* Must be 0 */
 } BMPColorEntry;
 
-static	uint16 compression = (uint16) -1;
+static	uint16_t compression = (uint16_t) -1;
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
 static	int quality = 75;		/* JPEG quality */
-static	uint16 predictor = 0;
+static	uint16_t predictor = 0;
 
 static void usage(void);
 static int processCompressOptions(char*);
-static void rearrangePixels(char *, uint32, uint32);
+static void rearrangePixels(char *, uint32_t, uint32_t);
 
 int
 main(int argc, char* argv[])
 {
-	uint32	width, length;
-	uint16	nbands = 1;		/* number of bands in input image */
-        uint16	depth = 8;		/* bits per pixel in input image */
-	uint32	rowsperstrip = (uint32) -1;
-        uint16	photometric = PHOTOMETRIC_MINISBLACK;
+	uint32_t	width, length;
+	uint16_t	nbands = 1;		/* number of bands in input image */
+        uint16_t	depth = 8;		/* bits per pixel in input image */
+	uint32_t	rowsperstrip = (uint32_t) -1;
+        uint16_t	photometric = PHOTOMETRIC_MINISBLACK;
 	int	fd = 0;
 	_TIFF_stat_s instat;
 	char	*outfilename = NULL, *infilename = NULL;
@@ -241,10 +241,10 @@ main(int argc, char* argv[])
 	BMPFileHeader file_hdr;
         BMPInfoHeader info_hdr;
         int     bmp_type;
-        uint32  clr_tbl_size, n_clr_elems = 3;
+        uint32_t  clr_tbl_size, n_clr_elems = 3;
         unsigned char *clr_tbl;
 	unsigned short *red_tbl = NULL, *green_tbl = NULL, *blue_tbl = NULL;
-	uint32	row, clr;
+	uint32_t	row, clr;
 
 	int	c;
 #if !HAVE_DECL_OPTARG
@@ -370,16 +370,16 @@ main(int argc, char* argv[])
                                 goto bad;
                         }
 #ifdef WORDS_BIGENDIAN
-			TIFFSwabLong((uint32*) &info_hdr.iWidth);
-			TIFFSwabLong((uint32*) &info_hdr.iHeight);
-			TIFFSwabShort((uint16*) &info_hdr.iPlanes);
-			TIFFSwabShort((uint16*) &info_hdr.iBitCount);
-			TIFFSwabLong((uint32*) &info_hdr.iCompression);
-			TIFFSwabLong((uint32*) &info_hdr.iSizeImage);
-			TIFFSwabLong((uint32*) &info_hdr.iXPelsPerMeter);
-			TIFFSwabLong((uint32*) &info_hdr.iYPelsPerMeter);
-			TIFFSwabLong((uint32*) &info_hdr.iClrUsed);
-			TIFFSwabLong((uint32*) &info_hdr.iClrImportant);
+			TIFFSwabLong((uint32_t*) &info_hdr.iWidth);
+			TIFFSwabLong((uint32_t*) &info_hdr.iHeight);
+			TIFFSwabShort((uint16_t*) &info_hdr.iPlanes);
+			TIFFSwabShort((uint16_t*) &info_hdr.iBitCount);
+			TIFFSwabLong((uint32_t*) &info_hdr.iCompression);
+			TIFFSwabLong((uint32_t*) &info_hdr.iSizeImage);
+			TIFFSwabLong((uint32_t*) &info_hdr.iXPelsPerMeter);
+			TIFFSwabLong((uint32_t*) &info_hdr.iYPelsPerMeter);
+			TIFFSwabLong((uint32_t*) &info_hdr.iClrUsed);
+			TIFFSwabLong((uint32_t*) &info_hdr.iClrImportant);
 #endif
 			n_clr_elems = 4;
 		}
@@ -393,7 +393,7 @@ main(int argc, char* argv[])
 		}
 
 		if (bmp_type == BMPT_OS21) {
-			int16  iShort;
+			int16_t  iShort;
 
 			if ( read(fd, &iShort, 2) != 2 ) {
                                 TIFFError(infilename, "Failed to read from file (%s)",
@@ -401,7 +401,7 @@ main(int argc, char* argv[])
                                 goto bad;
                         }
 #ifdef WORDS_BIGENDIAN
-			TIFFSwabShort((uint16*) &iShort);
+			TIFFSwabShort((uint16_t*) &iShort);
 #endif
 			info_hdr.iWidth = iShort;
 			if ( read(fd, &iShort, 2) != 2 ) {
@@ -410,7 +410,7 @@ main(int argc, char* argv[])
                                 goto bad;
                         }
 #ifdef WORDS_BIGENDIAN
-			TIFFSwabShort((uint16*) &iShort);
+			TIFFSwabShort((uint16_t*) &iShort);
 #endif
 			info_hdr.iHeight = iShort;
 			if (read(fd, &iShort, 2) != 2 ) {
@@ -419,7 +419,7 @@ main(int argc, char* argv[])
                                 goto bad;
                         }
 #ifdef WORDS_BIGENDIAN
-			TIFFSwabShort((uint16*) &iShort);
+			TIFFSwabShort((uint16_t*) &iShort);
 #endif
 			info_hdr.iPlanes = iShort;
 			if ( read(fd, &iShort, 2) != 2 ) {
@@ -428,7 +428,7 @@ main(int argc, char* argv[])
                                 goto bad;
                         }
 #ifdef WORDS_BIGENDIAN
-			TIFFSwabShort((uint16*) &iShort);
+			TIFFSwabShort((uint16_t*) &iShort);
 #endif
 			info_hdr.iBitCount = iShort;
 			info_hdr.iCompression = BMPC_RGB;
@@ -466,8 +466,8 @@ main(int argc, char* argv[])
 				/* Allocate memory for colour table and read it. */
 				if (info_hdr.iClrUsed)
                                         clr_tbl_size =
-                                                ((uint32)(1<<depth)<info_hdr.iClrUsed)
-                                                ? (uint32) (1 << depth)
+                                                ((uint32_t)(1<<depth)<info_hdr.iClrUsed)
+                                                ? (uint32_t) (1 << depth)
                                                 : info_hdr.iClrUsed;
 				else
                                         clr_tbl_size = 1 << depth;
@@ -557,7 +557,7 @@ main(int argc, char* argv[])
 				     red_tbl, green_tbl, blue_tbl);
 		}
 		
-		if (compression == (uint16) -1)
+		if (compression == (uint16_t) -1)
 			compression = COMPRESSION_PACKBITS;
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 		switch (compression) {
@@ -580,7 +580,7 @@ main(int argc, char* argv[])
                 /* -------------------------------------------------------------------- */
 
 		if (info_hdr.iCompression == BMPC_RGB) {
-			uint32 offset, size;
+			uint32_t offset, size;
 			char *scanbuf;
 
 			/* XXX: Avoid integer overflow. We can calculate size
@@ -645,8 +645,8 @@ main(int argc, char* argv[])
 
 		} else if ( info_hdr.iCompression == BMPC_RLE8
 			    || info_hdr.iCompression == BMPC_RLE4 ) {
-			uint32		i, j, k, runlength;
-			uint32		compr_size, uncompr_size;
+			uint32_t		i, j, k, runlength;
+			uint32_t		compr_size, uncompr_size;
 			unsigned char   *comprbuf;
 			unsigned char   *uncomprbuf;
 
@@ -660,9 +660,9 @@ main(int argc, char* argv[])
                                 return -1;
                         }
                         if ( (compr_size == 0) ||
-                             (compr_size > ((uint32) ~0) >> 1) ||
+                             (compr_size > ((uint32_t) ~0) >> 1) ||
                              (uncompr_size == 0) ||
-                             (uncompr_size > ((uint32) ~0) >> 1) ) {
+                             (uncompr_size > ((uint32_t) ~0) >> 1) ) {
                                 TIFFError(infilename,
                                           "Invalid dimensions of BMP file" );
                                 close(fd);
@@ -819,10 +819,10 @@ main(int argc, char* argv[])
  * pixels to RGB (RGBA) format.
  */
 static void
-rearrangePixels(char *buf, uint32 width, uint32 bit_count)
+rearrangePixels(char *buf, uint32_t width, uint32_t bit_count)
 {
 	char tmp;
-	uint32 i;
+	uint32_t i;
 
         switch(bit_count) {
 		case 16:    /* FIXME: need a sample file */

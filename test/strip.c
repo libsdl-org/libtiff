@@ -115,11 +115,11 @@ read_strips(TIFF *tif, const tdata_t array, const tsize_t size)
 }
 
 int
-create_image_striped(const char *name, uint32 width, uint32 length,
-		      uint32 rowsperstrip, uint16 compression,
-		      uint16 spp, uint16 bps, uint16 photometric,
-		      uint16 sampleformat, uint16 planarconfig,
-		      const tdata_t array, const tsize_t size)
+create_image_striped(const char *name, uint32_t width, uint32_t length,
+                     uint32_t rowsperstrip, uint16_t compression,
+                     uint16_t spp, uint16_t bps, uint16_t photometric,
+                     uint16_t sampleformat, uint16_t planarconfig,
+                     const tdata_t array, const tsize_t size)
 {
 	TIFF		*tif;
 
@@ -179,15 +179,15 @@ openfailure:
 }
 
 int
-read_image_striped(const char *name, uint32 width, uint32 length,
-		    uint32 rowsperstrip, uint16 compression,
-		    uint16 spp, uint16 bps, uint16 photometric,
-		    uint16 sampleformat, uint16 planarconfig,
-		    const tdata_t array, const tsize_t size)
+read_image_striped(const char *name, uint32_t width, uint32_t length,
+                   uint32_t rowsperstrip, uint16_t compression,
+                   uint16_t spp, uint16_t bps, uint16_t photometric,
+                   uint16_t sampleformat, uint16_t planarconfig,
+                   const tdata_t array, const tsize_t size)
 {
 	TIFF		*tif;
-	uint16		value_u16;
-	uint32		value_u32;
+	uint16_t		value_u16;
+	uint32_t		value_u32;
 
 	/* Test whether we can read written values. */
 	tif = TIFFOpen(name, "r");
@@ -259,7 +259,7 @@ openfailure:
 int
 write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 {
-	uint32		length, row;
+	uint32_t		length, row;
 	tsize_t		scanlinesize, offset;
         (void) size;
 

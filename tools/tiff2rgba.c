@@ -50,10 +50,10 @@
 #ifndef howmany
 #define	howmany(x, y)	(((x)+((y)-1))/(y))
 #endif
-#define	roundup(x, y)	(howmany(x,y)*((uint32)(y)))
+#define	roundup(x, y)	(howmany(x,y)*((uint32_t)(y)))
 
-static uint16 compression = COMPRESSION_PACKBITS;
-static uint32 rowsperstrip = (uint32) -1;
+static uint16_t compression = COMPRESSION_PACKBITS;
+static uint32_t rowsperstrip = (uint32_t) -1;
 static int process_by_block = 0; /* default is whole image at once */
 static int no_alpha = 0;
 static int bigtiff_output = 0;
@@ -153,13 +153,13 @@ static int
 cvt_by_tile( TIFF *in, TIFF *out )
 
 {
-    uint32* raster;			/* retrieve RGBA image */
-    uint32  width, height;		/* image width & height */
-    uint32  tile_width, tile_height;
-    uint32  row, col;
-    uint32  *wrk_line;
+    uint32_t* raster;			/* retrieve RGBA image */
+    uint32_t  width, height;		/* image width & height */
+    uint32_t  tile_width, tile_height;
+    uint32_t  row, col;
+    uint32_t  *wrk_line;
     int	    ok = 1;
-    uint32  rastersize, wrk_linesize;
+    uint32_t  rastersize, wrk_linesize;
 
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
     TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
@@ -176,13 +176,13 @@ cvt_by_tile( TIFF *in, TIFF *out )
     /*
      * Allocate tile buffer
      */
-    rastersize = tile_width * tile_height * sizeof (uint32);
-    if (tile_width != (rastersize / tile_height) / sizeof( uint32))
+    rastersize = tile_width * tile_height * sizeof (uint32_t);
+    if (tile_width != (rastersize / tile_height) / sizeof( uint32_t))
     {
 	TIFFError(TIFFFileName(in), "Integer overflow when calculating raster buffer");
 	exit(EXIT_FAILURE);
     }
-    raster = (uint32*)_TIFFmalloc(rastersize);
+    raster = (uint32_t*)_TIFFmalloc(rastersize);
     if (raster == 0) {
         TIFFError(TIFFFileName(in), "No space for raster buffer");
         return (0);
@@ -192,13 +192,13 @@ cvt_by_tile( TIFF *in, TIFF *out )
      * Allocate a scanline buffer for swapping during the vertical
      * mirroring pass.
      */
-    wrk_linesize = tile_width * sizeof (uint32);
-    if (tile_width != wrk_linesize / sizeof (uint32))
+    wrk_linesize = tile_width * sizeof (uint32_t);
+    if (tile_width != wrk_linesize / sizeof (uint32_t))
     {
         TIFFError(TIFFFileName(in), "Integer overflow when calculating wrk_line buffer");
 	exit(EXIT_FAILURE);
     }
-    wrk_line = (uint32*)_TIFFmalloc(wrk_linesize);
+    wrk_line = (uint32_t*)_TIFFmalloc(wrk_linesize);
     if (!wrk_line) {
         TIFFError(TIFFFileName(in), "No space for raster scanline buffer");
         ok = 0;
@@ -211,7 +211,7 @@ cvt_by_tile( TIFF *in, TIFF *out )
     {
         for( col = 0; ok && col < width; col += tile_width )
         {
-            uint32 i_row;
+            uint32_t i_row;
 
             /* Read the tile into an RGBA array */
             if (!TIFFReadRGBATile(in, col, row, raster)) {
@@ -234,7 +234,7 @@ cvt_by_tile( TIFF *in, TIFF *out )
              */
             for( i_row = 0; i_row < tile_height / 2; i_row++ )
             {
-                uint32	*top_line, *bottom_line;
+                uint32_t	*top_line, *bottom_line;
 
                 top_line = raster + tile_width * i_row;
                 bottom_line = raster + tile_width * (tile_height-i_row-1);
@@ -269,12 +269,12 @@ static int
 cvt_by_strip( TIFF *in, TIFF *out )
 
 {
-    uint32* raster;			/* retrieve RGBA image */
-    uint32  width, height;		/* image width & height */
-    uint32  row;
-    uint32  *wrk_line;
+    uint32_t* raster;			/* retrieve RGBA image */
+    uint32_t  width, height;		/* image width & height */
+    uint32_t  row;
+    uint32_t  *wrk_line;
     int	    ok = 1;
-    uint32  rastersize, wrk_linesize;
+    uint32_t  rastersize, wrk_linesize;
 
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
     TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
@@ -289,13 +289,13 @@ cvt_by_strip( TIFF *in, TIFF *out )
     /*
      * Allocate strip buffer
      */
-    rastersize = width * rowsperstrip * sizeof (uint32);
-    if (width != (rastersize / rowsperstrip) / sizeof( uint32))
+    rastersize = width * rowsperstrip * sizeof (uint32_t);
+    if (width != (rastersize / rowsperstrip) / sizeof( uint32_t))
     {
 	TIFFError(TIFFFileName(in), "Integer overflow when calculating raster buffer");
 	exit(EXIT_FAILURE);
     }
-    raster = (uint32*)_TIFFmalloc(rastersize);
+    raster = (uint32_t*)_TIFFmalloc(rastersize);
     if (raster == 0) {
         TIFFError(TIFFFileName(in), "No space for raster buffer");
         return (0);
@@ -305,13 +305,13 @@ cvt_by_strip( TIFF *in, TIFF *out )
      * Allocate a scanline buffer for swapping during the vertical
      * mirroring pass.
      */
-    wrk_linesize = width * sizeof (uint32);
-    if (width != wrk_linesize / sizeof (uint32))
+    wrk_linesize = width * sizeof (uint32_t);
+    if (width != wrk_linesize / sizeof (uint32_t))
     {
         TIFFError(TIFFFileName(in), "Integer overflow when calculating wrk_line buffer");
 	exit(EXIT_FAILURE);
     }
-    wrk_line = (uint32*)_TIFFmalloc(wrk_linesize);
+    wrk_line = (uint32_t*)_TIFFmalloc(wrk_linesize);
     if (!wrk_line) {
         TIFFError(TIFFFileName(in), "No space for raster scanline buffer");
         ok = 0;
@@ -353,7 +353,7 @@ cvt_by_strip( TIFF *in, TIFF *out )
 
         for( i_row = 0; i_row < rows_to_write / 2; i_row++ )
         {
-            uint32	*top_line, *bottom_line;
+            uint32_t	*top_line, *bottom_line;
 
             top_line = raster + width * i_row;
             bottom_line = raster + width * (rows_to_write-i_row-1);
@@ -393,9 +393,9 @@ static int
 cvt_whole_image( TIFF *in, TIFF *out )
 
 {
-    uint32* raster;			/* retrieve RGBA image */
-    uint32  width, height;		/* image width & height */
-    uint32  row;
+    uint32_t* raster;			/* retrieve RGBA image */
+    uint32_t  width, height;		/* image width & height */
+    uint32_t  row;
     size_t pixel_count;
         
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
@@ -409,20 +409,20 @@ cvt_whole_image( TIFF *in, TIFF *out )
 		  (unsigned long)width, (unsigned long)height);
         return 0;
     }
-    if (maxMalloc != 0 && (tmsize_t)pixel_count * (tmsize_t)sizeof(uint32) > maxMalloc) {
+    if (maxMalloc != 0 && (tmsize_t)pixel_count * (tmsize_t)sizeof(uint32_t) > maxMalloc) {
 	TIFFError(TIFFFileName(in),
-		  "Raster size %" TIFF_UINT64_FORMAT " over memory limit (%" TIFF_UINT64_FORMAT "), try -b option.",
-		  (uint64)pixel_count * sizeof(uint32), (uint64)maxMalloc);
+		  "Raster size %" PRIu64 " over memory limit (%" PRIu64 "), try -b option.",
+              (uint64_t)pixel_count * sizeof(uint32_t), (uint64_t)maxMalloc);
         return 0;
     }
 
     rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
     TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
 
-    raster = (uint32*)_TIFFCheckMalloc(in, pixel_count, sizeof(uint32), "raster buffer");
+    raster = (uint32_t*)_TIFFCheckMalloc(in, pixel_count, sizeof(uint32_t), "raster buffer");
     if (raster == 0) {
         TIFFError(TIFFFileName(in), "Failed to allocate buffer (%lu elements of %lu each)",
-		  (unsigned long)pixel_count, (unsigned long)sizeof(uint32));
+		  (unsigned long)pixel_count, (unsigned long)sizeof(uint32_t));
         return (0);
     }
 
@@ -502,12 +502,12 @@ cvt_whole_image( TIFF *in, TIFF *out )
 static int
 tiffcvt(TIFF* in, TIFF* out)
 {
-	uint32 width, height;		/* image width & height */
-	uint16 shortv;
+	uint32_t width, height;		/* image width & height */
+	uint16_t shortv;
 	float floatv;
 	char *stringv;
-	uint32 longv;
-        uint16 v[1];
+	uint32_t longv;
+        uint16_t v[1];
 
 	TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
 	TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
@@ -543,8 +543,8 @@ tiffcvt(TIFF* in, TIFF* out)
 	if (maxMalloc != 0 && TIFFStripSize(in) > maxMalloc)
 	{
 		TIFFError(TIFFFileName(in),
-			  "Strip Size %" TIFF_UINT64_FORMAT " over memory limit (%" TIFF_UINT64_FORMAT ")",
-			  (uint64)TIFFStripSize(in), (uint64)maxMalloc);
+			  "Strip Size %" PRIu64 " over memory limit (%" PRIu64 ")",
+                  (uint64_t)TIFFStripSize(in), (uint64_t)maxMalloc);
 		return 0;
 	}
         if( process_by_block && TIFFIsTiled( in ) )

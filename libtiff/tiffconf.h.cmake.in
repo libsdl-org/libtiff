@@ -7,19 +7,11 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
-/* Define to 1 if you have the <inttypes.h> header file. */
-#cmakedefine TIFF_HAVE_INTTYPES_H 1
-
-/* Define to 1 if you have the <stdint.h> header file. */
-#cmakedefine TIFF_HAVE_STDINT_H 1
 
 #include <stddef.h>
-#ifdef TIFF_HAVE_STDINT_H
 #include <stdint.h>
-#endif
-#ifdef TIFF_HAVE_INTTYPES_H
 #include <inttypes.h>
-#endif
+
 
 /* Signed 16-bit type */
 #define TIFF_INT16_T @TIFF_INT16_T@
@@ -45,14 +37,8 @@
 /* Unsigned 8-bit type */
 #define TIFF_UINT8_T @TIFF_UINT8_T@
 
-/* Unsigned size type */
-#define TIFF_SIZE_T @TIFF_SIZE_T@
-
 /* Signed size type */
 #define TIFF_SSIZE_T @TIFF_SSIZE_T@
-
-/* Pointer difference type */
-#define TIFF_PTRDIFF_T @TIFF_PTRDIFF_T@
 
 /* Compatibility stuff. */
 

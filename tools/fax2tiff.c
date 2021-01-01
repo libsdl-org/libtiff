@@ -52,17 +52,17 @@
 # define EXIT_FAILURE	1
 #endif
 
-#define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
+#define TIFFhowmany8(x) (((x)&0x07)?((uint32_t)(x)>>3)+1:(uint32_t)(x)>>3)
 
 TIFF	*faxTIFF;
 char	*rowbuf;
 char	*refbuf;
 
-uint32	xsize = 1728;
+uint32_t	xsize = 1728;
 int	verbose;
 int	stretch;
-uint16	badfaxrun;
-uint32	badfaxlines;
+uint16_t	badfaxrun;
+uint32_t	badfaxlines;
 
 int	copyFaxFile(TIFF* tifin, TIFF* tifout);
 static	void usage(int code);
@@ -88,12 +88,12 @@ main(int argc, char* argv[])
 	int compression_out = COMPRESSION_CCITTFAX3;
 	int fillorder_in = FILLORDER_LSB2MSB;
 	int fillorder_out = FILLORDER_LSB2MSB;
-	uint32 group3options_in = 0;	/* 1d-encoded */
-	uint32 group3options_out = 0;	/* 1d-encoded */
-	uint32 group4options_in = 0;	/* compressed */
-	uint32 group4options_out = 0;	/* compressed */
-	uint32 defrowsperstrip = (uint32) 0;
-	uint32 rowsperstrip;
+	uint32_t group3options_in = 0;	/* 1d-encoded */
+	uint32_t group3options_out = 0;	/* 1d-encoded */
+	uint32_t group4options_in = 0;	/* compressed */
+	uint32_t group4options_out = 0;	/* compressed */
+	uint32_t defrowsperstrip = (uint32_t) 0;
+	uint32_t rowsperstrip;
 	int photometric_in = PHOTOMETRIC_MINISWHITE;
 	int photometric_out = PHOTOMETRIC_MINISWHITE;
 	int mode = FAXMODE_CLASSF;
@@ -148,7 +148,7 @@ main(int argc, char* argv[])
 			resY = (float) atof(optarg);
 			break;
 		case 'X':		/* input width */
-			xsize = (uint32) atoi(optarg);
+			xsize = (uint32_t) atoi(optarg);
 			break;
 
 			/* output-related options */
@@ -295,7 +295,7 @@ main(int argc, char* argv[])
 				     group3options_out);
 			TIFFSetField(out, TIFFTAG_FAXMODE, mode);
 			rowsperstrip =
-				(defrowsperstrip)?defrowsperstrip:(uint32)-1L;
+				(defrowsperstrip)?defrowsperstrip:(uint32_t)-1L;
 			break;
 
 			/* g4 */
@@ -304,7 +304,7 @@ main(int argc, char* argv[])
 				     group4options_out);
 			TIFFSetField(out, TIFFTAG_FAXMODE, mode);
 			rowsperstrip =
-				(defrowsperstrip)?defrowsperstrip:(uint32)-1L;
+				(defrowsperstrip)?defrowsperstrip:(uint32_t)-1L;
 			break;
 
 			default:
@@ -358,9 +358,9 @@ main(int argc, char* argv[])
 int
 copyFaxFile(TIFF* tifin, TIFF* tifout)
 {
-	uint32 row;
-	uint32 linesize = TIFFhowmany8(xsize);
-	uint16 badrun;
+	uint32_t row;
+	uint32_t linesize = TIFFhowmany8(xsize);
+	uint16_t badrun;
 	int ok;
 
 	tifin->tif_rawdatasize = (tmsize_t)TIFFGetFileSize(tifin);

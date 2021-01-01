@@ -33,7 +33,7 @@
 /* safe multiply returns either the multiplied value or 0 if it overflowed */
 #define __TIFFSafeMultiply(t,v,m) ((((t)(m) != (t)0) && (((t)(((v)*(m))/(m))) == (t)(v))) ? (t)((v)*(m)) : (t)0)
 
-const uint64 MAX_SIZE = 500000000;
+const uint64_t MAX_SIZE = 500000000;
 
 extern "C" void handle_error(const char *unused, const char *unused2, va_list unused3) {
     return;
@@ -57,8 +57,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   if (!tif) {
       return 0;
   }
-  uint32 w, h;
-  uint32* raster;
+  uint32_t w, h;
+  uint32_t* raster;
 
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
@@ -67,29 +67,29 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
       TIFFClose(tif);
       return 0;
   }
-  uint64 bufsize = TIFFTileSize64(tif);
+  uint64_t bufsize = TIFFTileSize64(tif);
   /* don't continue if the buffer size greater than the max allowed by the fuzzer */
   if (bufsize > MAX_SIZE || bufsize == 0) {
       TIFFClose(tif);
       return 0;
   }
   /* another hack to work around an OOM in tif_fax3.c */
-  uint32 tilewidth = 0;
-  uint32 imagewidth = 0;
+  uint32_t tilewidth = 0;
+  uint32_t imagewidth = 0;
   TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tilewidth);
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &imagewidth);
-  tilewidth = __TIFFSafeMultiply(uint32, tilewidth, 2);
-  imagewidth = __TIFFSafeMultiply(uint32, imagewidth, 2);
+  tilewidth = __TIFFSafeMultiply(uint32_t, tilewidth, 2);
+  imagewidth = __TIFFSafeMultiply(uint32_t, imagewidth, 2);
   if (tilewidth * 2 > MAX_SIZE || imagewidth * 2 > MAX_SIZE || tilewidth == 0 || imagewidth == 0) {
       TIFFClose(tif);
       return 0;
   }
-  uint32 size = __TIFFSafeMultiply(uint32, w, h);
+  uint32_t size = __TIFFSafeMultiply(uint32_t, w, h);
   if (size > MAX_SIZE || size == 0) {
       TIFFClose(tif);
       return 0;
   }
-  raster = (uint32*) _TIFFmalloc(size * sizeof (uint32));
+  raster = (uint32_t*) _TIFFmalloc(size * sizeof (uint32_t));
   if (raster != NULL) {
       TIFFReadRGBAImage(tif, w, h, raster, 0);
       _TIFFfree(raster);

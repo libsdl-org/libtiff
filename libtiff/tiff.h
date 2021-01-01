@@ -56,24 +56,26 @@
 /*
  * Intrinsic data types required by the file format:
  *
- * 8-bit quantities     int8/uint8
- * 16-bit quantities    int16/uint16
- * 32-bit quantities    int32/uint32
- * 64-bit quantities    int64/uint64
+ * 8-bit quantities     int8_t/uint_8_t
+ * 16-bit quantities    int16_t/uint_16_t
+ * 32-bit quantities    int32_t/uint_32_t
+ * 64-bit quantities    int64_t/uint_64_t
  * strings              unsigned char*
  */
 
-typedef TIFF_INT8_T   int8;
-typedef TIFF_UINT8_T  uint8;
 
-typedef TIFF_INT16_T  int16;
-typedef TIFF_UINT16_T uint16;
+typedef int8_t   int8;
+typedef uint8_t  uint8;
 
-typedef TIFF_INT32_T  int32;
-typedef TIFF_UINT32_T uint32;
+typedef int16_t  int16;
+typedef uint16_t uint16;
 
-typedef TIFF_INT64_T  int64;
-typedef TIFF_UINT64_T uint64;
+typedef int32_t  int32;
+typedef uint32_t uint32;
+
+typedef int64_t  int64;
+typedef uint64_t uint64;
+
 
 /*
  * Some types as promoted in a variable argument list
@@ -89,20 +91,20 @@ typedef int uint16_vap;
  * TIFF header.
  */
 typedef struct {
-	uint16 tiff_magic;      /* magic number (defines byte order) */
-	uint16 tiff_version;    /* TIFF version number */
+	uint16_t tiff_magic;      /* magic number (defines byte order) */
+	uint16_t tiff_version;    /* TIFF version number */
 } TIFFHeaderCommon;
 typedef struct {
-	uint16 tiff_magic;      /* magic number (defines byte order) */
-	uint16 tiff_version;    /* TIFF version number */
-	uint32 tiff_diroff;     /* byte offset to first directory */
+	uint16_t tiff_magic;      /* magic number (defines byte order) */
+	uint16_t tiff_version;    /* TIFF version number */
+	uint32_t tiff_diroff;     /* byte offset to first directory */
 } TIFFHeaderClassic;
 typedef struct {
-	uint16 tiff_magic;      /* magic number (defines byte order) */
-	uint16 tiff_version;    /* TIFF version number */
-	uint16 tiff_offsetsize; /* size of offsets, should be 8 */
-	uint16 tiff_unused;     /* unused word, should be 0 */
-	uint64 tiff_diroff;     /* byte offset to first directory */
+	uint16_t tiff_magic;      /* magic number (defines byte order) */
+	uint16_t tiff_version;    /* TIFF version number */
+	uint16_t tiff_offsetsize; /* size of offsets, should be 8 */
+	uint16_t tiff_unused;     /* unused word, should be 0 */
+	uint64_t tiff_diroff;     /* byte offset to first directory */
 } TIFFHeaderBig;
 
 

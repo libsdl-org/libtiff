@@ -48,8 +48,8 @@ TIFFFaxTabEnt WhiteTable[4096];
 TIFFFaxTabEnt BlackTable[8192];
 
 struct proto {
-    uint16 code;		/* right justified, lsb-first, zero filled */
-    uint16 val;		/* (pixel count)<<4 + code width  */
+    uint16_t code;		/* right justified, lsb-first, zero filled */
+    uint16_t val;		/* (pixel count)<<4 + code width  */
 };
 
 static struct proto Pass[] = {
