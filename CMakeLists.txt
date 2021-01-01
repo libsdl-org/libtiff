@@ -207,7 +207,6 @@ if(NOT MINGW)
 endif()
 
 check_include_file(assert.h    HAVE_ASSERT_H)
-check_include_file(dlfcn.h     HAVE_DLFCN_H)
 check_include_file(fcntl.h     HAVE_FCNTL_H)
 check_include_file(inttypes.h  TIFF_HAVE_INTTYPES_H)
 check_include_file(io.h        HAVE_IO_H)

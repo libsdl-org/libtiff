@@ -174,7 +174,7 @@ case "${host_os}" in
 esac
 
 dnl Checks for header files.
-AC_CHECK_HEADERS([assert.h fcntl.h io.h search.h unistd.h])
+AC_CHECK_HEADERS([assert.h fcntl.h inttypes.h io.h search.h stdint.h unistd.h])
 
 AC_CHECK_HEADER([inttypes.h], [TIFF_HAVE_INTTYPES_H=1], [TIFF_HAVE_INTTYPES_H=0])
 AC_CHECK_HEADER([stdint.h], [TIFF_HAVE_STDINT_H=1], [TIFF_HAVE_STDINT_H=0])
