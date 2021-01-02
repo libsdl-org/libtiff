@@ -34,9 +34,7 @@ extra_dist(
   SConstruct
   tif_config.h-vms
   tif_config.vc.h
-  tif_config.wince.h
   tiffconf.vc.h
-  tiffconf.wince.h
   libtiff.def
   libtiff.map
   libtiffxx.map)
