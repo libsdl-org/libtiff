@@ -52,7 +52,7 @@ opts.Add(BoolOption('logluv', \
     'enable support for LogLuv high dynamic range encoding', \
     'yes'))
 opts.Add(BoolOption('strip_chopping', \
-    'support for strip chopping (whether or not to convert single-strip uncompressed images to mutiple strips of ~8Kb to reduce memory usage)', \
+    'support for strip chopping (whether or not to convert single-strip uncompressed images to multiple strips of ~8Kb to reduce memory usage)', \
     'yes'))
 opts.Add(BoolOption('extrasample_as_alpha', \
     'the RGBA interface will treat a fourth sample with no EXTRASAMPLE_ value as being ASSOCALPHA. Many packages produce RGBA files but don\'t mark the alpha properly', \

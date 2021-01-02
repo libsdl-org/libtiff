@@ -4,7 +4,7 @@
  *
  * The function LoadTIFFinDIB in this source file let you load 
  * a TIFF file and build a memory DIB with it and return the 
- * HANDLE (HDIB) of the memory bloc containing the DIB.
+ * HANDLE (HDIB) of the memory block containing the DIB.
  *
  *  Example : 
  * 
@@ -49,7 +49,7 @@ static int checkcmap(int n, uint16* r, uint16* g, uint16* b);
  * Description:
  *
  * This function load a TIFF file and build a memory DIB with it
- * and return the HANDLE (HDIB) of the memory bloc containing
+ * and return the HANDLE (HDIB) of the memory block containing
  * the DIB.
  *
  * 4/12/95   Philippe Tenenhaus   100423.3705@compuserve.com

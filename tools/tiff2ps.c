@@ -64,7 +64,7 @@
  *    warning messages for incompatible command line options.
  *    Add new command line options to specify PageOrientation
  *    Document Structuring Comment for landscape or portrait
- *    and code to determine the values from ouput width and height
+ *    and code to determine the values from output width and height
  *    if not specified on the command line.
  *    Add new command line option to specify document creator
  *    as an alterntive to the string "tiff2ps" following model
@@ -85,7 +85,7 @@
  *
  *    Identified incompatible options and returned errors, eg
  *    -i for imagemask operator is only available for Level2 or
- *    Level3 Postscript in the current implmentation since there
+ *    Level3 Postscript in the current implementation since there
  *    is a difference in the way the operands are called for Level1
  *    and there is no function to provide the Level1 version.
  *    -H was not handled properly if -h and/or -w were specified.
@@ -96,7 +96,7 @@
  *    Conversion of TIFF to Postscript with optional rotations
  *    of 90, 180, 270, or auto degrees counterclockwise
  *    Conversion of TIFF to Postscript with entire image scaled
- *    to maximum of values spedified with -h or -w while
+ *    to maximum of values specified with -h or -w while
  *    maintaining aspect ratio. Same rotations apply.
  *    Conversion of TIFF to Postscript with clipping of output
  *    viewport to height specified with -H, producing multiple
@@ -438,7 +438,7 @@ main(int argc, char* argv[])
           {
 	  if ((level2 == FALSE) && (level3 == FALSE))
             {
-	    TIFFError ("-m "," imagemask operator requres Postscript Level2 or Level3");
+	    TIFFError ("-m "," imagemask operator requires Postscript Level2 or Level3");
 	    exit (EXIT_FAILURE);
             }
           }
@@ -1312,19 +1312,19 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
 
     if (((maxsource == pswidth) && (maxtarget != reqwidth)) ||
         ((maxsource == psheight) && (maxtarget != reqheight)))
-      {  /* optimal orientaion does not match input orientation */
+      {  /* optimal orientation does not match input orientation */
       *rotation = 90;
       xscale = (reqwidth - left_offset)/psheight;
       yscale = (reqheight - bottom_offset)/pswidth;
       }
-    else /* optimal orientaion matches input orientation */
+    else /* optimal orientation matches input orientation */
       {
       xscale = (reqwidth - left_offset)/pswidth;
       yscale = (reqheight - bottom_offset)/psheight;
       }
     *scale = (xscale < yscale) ? xscale : yscale;
 
-    /* Do not scale image beyound original size */
+    /* Do not scale image beyond original size */
     if (*scale > 1.0)
       *scale = 1.0;
 
@@ -1594,7 +1594,7 @@ int TIFF2PS(FILE* fd, TIFF* tif, double pgwidth, double pgheight, double lm, dou
            {
            if (pgwidth != 0 || pgheight != 0)
              {
-             /* User did not specify a maxium page height or width using -H or -W flag
+             /* User did not specify a maximum page height or width using -H or -W flag
               * but did use -h or -w flag to scale to a specific size page.
               */
              npages++;
@@ -1765,7 +1765,7 @@ PS_Lvl2colorspace(FILE* fd, TIFF* tif)
 
 	/*
 	 * Set up PostScript Level 2 colorspace according to
-	 * section 4.8 in the PostScript refenence manual.
+	 * section 4.8 in the PostScript reference manual.
 	 */
 	fputs("% PostScript Level 2 only.\n", fd);
 	if (photometric != PHOTOMETRIC_PALETTE) {
@@ -1927,7 +1927,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 			case COMPRESSION_CCITTFAX4:
 				/*
 				 * Manage inverting with /Blackis1 flag
-				 * since there migth be uncompressed parts
+				 * since there might be uncompressed parts
 				 */
 				fputs("  /Decode [0 1]\n", fd);
 				break;

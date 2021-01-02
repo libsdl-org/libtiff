@@ -59,7 +59,7 @@
    "JPEGLib: JPEG parameter struct mismatch: library thinks size is 432,
    caller expects 464"
 
-   For such users we wil fix the problem here. See install.doc file from
+   For such users we will fix the problem here. See install.doc file from
    the JPEG library distribution for details.
 */
 
@@ -271,7 +271,7 @@ main(int argc, char **argv)
 
 	/*
 	 * Currently TIFFReadRGBATile() just uses JPEGCOLORMODE_RGB so this
-	 * trivally matches the last results.  Eventually we should actually
+	 * trivially matches the last results.  Eventually we should actually
 	 * accomplish it from the YCbCr subsampled buffer ourselves in which
 	 * case the results may be subtly different but similar.
 	 */

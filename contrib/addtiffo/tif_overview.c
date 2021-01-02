@@ -782,7 +782,7 @@ void TIFFBuildOverviews( TIFF *hTIFF, int nOverviews, int * panOvList,
     }
 
 /* -------------------------------------------------------------------- */
-/*      Turn off warnings to avoid alot of repeated warnings while      */
+/*      Turn off warnings to avoid a lot of repeated warnings while      */
 /*      rereading directories.                                          */
 /* -------------------------------------------------------------------- */
     pfnWarning = TIFFSetWarningHandler( NULL );
@@ -803,7 +803,7 @@ void TIFFBuildOverviews( TIFF *hTIFF, int nOverviews, int * panOvList,
     }
 
 /* -------------------------------------------------------------------- */
-/*	Capture the pallette if there is one.				*/
+/*	Capture the palette if there is one.				*/
 /* -------------------------------------------------------------------- */
     if( TIFFGetField( hTIFF, TIFFTAG_COLORMAP,
                       &panRedMap, &panGreenMap, &panBlueMap ) )

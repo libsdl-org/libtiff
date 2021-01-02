@@ -456,7 +456,7 @@ dnl Set the floating point format.
 dnl FIXME: write appropriate test.
 dnl ---------------------------------------------------------------------------
 HAVE_IEEEFP=1
-AC_DEFINE_UNQUOTED(HAVE_IEEEFP, $HAVE_IEEEFP, [Define as 0 or 1 according to the floating point format suported by the machine])
+AC_DEFINE_UNQUOTED(HAVE_IEEEFP, $HAVE_IEEEFP, [Define as 0 or 1 according to the floating point format supported by the machine])
 
 dnl ---------------------------------------------------------------------------
 dnl Enable run-time paths to libraries usage.
@@ -1106,7 +1106,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_ARG_ENABLE(strip-chopping,
 	      AS_HELP_STRING([--disable-strip-chopping],
-			     [disable support for strip chopping (whether or not to convert single-strip uncompressed images to mutiple strips of specified size to reduce memory usage)]),
+			     [disable support for strip chopping (whether or not to convert single-strip uncompressed images to multiple strips of specified size to reduce memory usage)]),
 	      [HAVE_STRIPCHOP=$enableval], [HAVE_STRIPCHOP=yes])
 AC_ARG_WITH(default-strip-size,
 	    AS_HELP_STRING([--with-default-strip-size=SIZE],
@@ -1114,7 +1114,7 @@ AC_ARG_WITH(default-strip-size,
 
 if test "$HAVE_STRIPCHOP" = "yes" \
 	-a "x$with_default_strip_size" != "xno"; then
-  AC_DEFINE(STRIPCHOP_DEFAULT,TIFF_STRIPCHOP,[Support strip chopping (whether or not to convert single-strip uncompressed images to mutiple strips of specified size to reduce memory usage)])
+  AC_DEFINE(STRIPCHOP_DEFAULT,TIFF_STRIPCHOP,[Support strip chopping (whether or not to convert single-strip uncompressed images to multiple strips of specified size to reduce memory usage)])
 
   if test "x$with_default_strip_size" = "x" \
 	  -o "x$with_default_strip_size" = "xyes"; then

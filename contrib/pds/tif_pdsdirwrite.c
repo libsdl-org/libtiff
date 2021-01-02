@@ -124,7 +124,7 @@ static	int TIFFWriteRational(TIFF*,
    the main, standard TIFF directories that does not apply to special
    private subdirectories, so such a reimplementation for the sake of
    eliminating redundant or duplicate code is probably not possible,
-   unless we also pass in a Main flag to indiciate which type of handling
+   unless we also pass in a Main flag to indicate which type of handling
    to do, which would be kind of a hack. I've marked those places where I
    changed or ripped out code which would have to be re-inserted to
    generalize this function. If it can be done in a clean and graceful way,

@@ -109,7 +109,7 @@ transparently.
 Raster pixels are returned uncorrected by any colorimetry information
 present in the directory.
 .PP
-The paramater
+The parameter
 .I stopOnError
 specifies how to act if an error is encountered while reading
 the image.
