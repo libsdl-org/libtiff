@@ -34,7 +34,6 @@ EXTRA_DIST = \
 	libtiff.def \
 	libtiff.map \
 	libtiffxx.map \
-	tif_config.h-vms \
 	tif_config.h.cmake.in \
 	tif_config.vc.h \
 	tif_config.wince.h \

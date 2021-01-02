@@ -253,18 +253,7 @@ operating system-dependencies
 as possible in two files: <B>tiffcomp.h</B> and
 <B>libtiff/tif_&lt;os&gt;.c</B>.  The latter file contains
 operating system-specific routines to do I/O and I/O-related operations.
-The UNIX (<B>tif_unix.c</B>),
-Macintosh (<B>tif_apple.c</B>),
-and VMS (<B>tif_vms.c</B>)
-code has had the most use;
-the MS/DOS support (<B>tif_msdos.c</B>) assumes
-some level of UNIX system call emulation (i.e.
-<TT>open</TT>,
-<TT>read</TT>,
-<TT>write</TT>,
-<TT>fstat</TT>,
-<TT>malloc</TT>,
-<TT>free</TT>).
+The UNIX (<B>tif_unix.c</B>) code has had the most use.
 
 <P>
 Native CPU byte order is determined on the fly by

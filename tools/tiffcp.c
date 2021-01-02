@@ -62,10 +62,6 @@
 extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
-#if defined(VMS)
-# define unlink delete
-#endif
-
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 

@@ -145,10 +145,6 @@ extern int getopt(int argc, char * const argv[], const char *optstring);
 
 #include "tiffio.h"
 
-#if defined(VMS)
-# define unlink delete
-#endif
-
 #ifndef PATH_MAX
 #define PATH_MAX 1024
 #endif

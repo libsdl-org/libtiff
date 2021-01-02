@@ -28,9 +28,7 @@
 #include "tiffiop.h"
 #include <iostream>
 
-#ifndef __VMS
 using namespace std;
-#endif
 
 /*
   ISO C++ uses a 'std::streamsize' type to define counts.  This makes
@@ -199,11 +197,7 @@ _tiffosSeekProc(thandle_t fd, uint64 off, int whence)
 	// ostrstream/ostringstream does. In that situation, add intermediate
 	// '\0' characters.
 	if( os->fail() ) {
-#ifdef __VMS
-		int		old_state;
-#else
 		ios::iostate	old_state;
-#endif
 		ios::pos_type	origin;
 
 		old_state = os->rdstate();
