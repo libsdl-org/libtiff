@@ -1660,7 +1660,7 @@
 		- Discussion in https://gitlab.com/libtiff/libtiff/merge_requests/39
 		- http://bugzilla.maptools.org/show_bug.cgi?id=2540
 
-x	Comments and indentation adapted.
+	Comments and indentation adapted.
 
 	Preparation to rebase onto master
 
