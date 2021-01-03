@@ -94,6 +94,8 @@ install(TARGETS fax2ps
                 pal2rgb
                 ppm2tiff
                 raw2tiff
+                rgb2ycbcr
+                thumbnail
                 tiff2bw
                 tiff2pdf
                 tiff2ps
