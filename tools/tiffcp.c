@@ -538,8 +538,8 @@ static const char usage_info[] =
 "\n"
 "Note that input filenames may be of the form filename,x,y,z\n"
 "where x, y, and z specify image numbers in the filename to copy.\n"
-"example: tiffcp -c none -b esp.tif,1 esp.tif,0 test.tif\n"
-"    subtract 2nd image in esp.tif from 1st yielding uncompressed result test.tif\n"
+"example: tiffcp -b esp.tif,1 esp.tif,0 test.tif\n"
+"    subtract 2nd image in esp.tif from 1st yielding result test.tif\n"
 ;
 
 static void
