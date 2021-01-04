@@ -42,7 +42,6 @@ EXTRA_DIST = \
 	Makefile.vc \
 	SConstruct \
 	autogen.sh \
-	configure.com \
 	libtiff-4.pc.in \
 	nmake.opt
 

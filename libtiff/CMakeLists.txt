@@ -32,7 +32,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
 
 extra_dist(
   SConstruct
-  tif_config.h-vms
   tif_config.vc.h
   tif_config.wince.h
   tiffconf.vc.h

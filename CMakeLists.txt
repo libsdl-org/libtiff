@@ -115,7 +115,6 @@ set(EXTRA_DIST
   Makefile.vc
   SConstruct
   autogen.sh
-  configure.com
   nmake.opt
   libtiff-4.pc.in)
 
