@@ -26,6 +26,7 @@
  * Convert a CCITT Group 3 or 4 FAX file to TIFF Group 3 or 4 format.
  */
 #include "tif_config.h"
+#include "libport.h"
 
 #include <stdio.h>
 #include <stdlib.h>		/* should have atof & getopt */
@@ -42,10 +43,6 @@
 # include <io.h>
 #endif
 
-#ifdef NEED_LIBPORT
-# include "libport.h"
-#endif
-
 #include "tiffiop.h"
 
 #ifndef EXIT_SUCCESS
@@ -56,10 +53,6 @@
 #endif
 
 #define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
-
-#ifndef HAVE_GETOPT
-extern int getopt(int argc, char * const argv[], const char *optstring);
-#endif
 
 TIFF	*faxTIFF;
 char	*rowbuf;

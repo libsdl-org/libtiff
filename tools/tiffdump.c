@@ -23,6 +23,7 @@
  */
 
 #include "tif_config.h"
+#include "libport.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,14 +45,6 @@
 
 #ifdef HAVE_IO_H
 # include <io.h>
-#endif
-
-#ifdef NEED_LIBPORT
-# include "libport.h"
-#endif
-
-#ifndef HAVE_GETOPT
-extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
 #include "tiffio.h"

@@ -23,6 +23,7 @@
  */
 
 #include "tif_config.h"
+#include "libport.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,10 +31,6 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
-#endif
-
-#ifdef NEED_LIBPORT
-# include "libport.h"
 #endif
 
 #include "tiffio.h"
@@ -44,10 +41,6 @@
 #endif
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE 1
-#endif
-
-#ifndef HAVE_GETOPT
-extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
 #define	streq(a,b)	(strcmp(a,b) == 0)
