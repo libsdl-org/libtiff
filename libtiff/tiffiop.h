@@ -38,9 +38,7 @@
 # include <sys/types.h>
 #endif
 
-#ifdef HAVE_STRING_H
-# include <string.h>
-#endif
+#include <string.h>
 
 #ifdef HAVE_ASSERT_H
 # include <assert.h>
