@@ -115,6 +115,7 @@ target_include_directories(tiff
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    PRIVATE
         ${TIFF_INCLUDES}
 )
 target_link_libraries(tiff ${TIFF_LIBRARY_DEPS})

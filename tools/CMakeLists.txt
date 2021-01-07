@@ -37,7 +37,7 @@ target_include_directories(fax2ps PRIVATE ${TOOL_INCLUDES})
 
 add_executable(fax2tiff fax2tiff.c)
 target_link_libraries(fax2tiff tiff port)
-target_include_directories(fax2tiff PUBLIC ${TOOL_INCLUDES})
+target_include_directories(fax2tiff PRIVATE ${TOOL_INCLUDES})
 
 add_executable(pal2rgb pal2rgb.c)
 target_link_libraries(pal2rgb tiff port)
@@ -134,14 +134,9 @@ install(TARGETS fax2ps
         RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}")
 
 if(HAVE_OPENGL)
-  if(OPENGL_INCLUDE_DIR)
-    include_directories(${OPENGL_INCLUDE_DIR})
-  endif()
-  if(GLUT_INCLUDE_DIR)
-    include_directories(${GLUT_INCLUDE_DIR})
-  endif()
-
   add_executable(tiffgt tiffgt.c)
+  target_include_directories(tiffgt PRIVATE
+          ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR})
   target_link_libraries(tiffgt tiff port ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES})
 
   install(TARGETS tiffgt

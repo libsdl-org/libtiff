@@ -22,11 +22,6 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-include_directories(${PROJECT_SOURCE_DIR}/libtiff
-                    ${PROJECT_BINARY_DIR}/libtiff
-                    ${CMAKE_CURRENT_BINARY_DIR}
-                    ${TIFF_INCLUDES})
-
 # Test scripts (not used by CMake)
 set(TESTSCRIPTS
     bmp2tiff_palette.sh
@@ -192,6 +187,7 @@ target_link_libraries(rewrite tiff port)
 
 if(JPEG_SUPPORT)
   add_executable(raw_decode raw_decode.c)
+  target_include_directories(raw_decode PRIVATE ${JPEG_INCLUDE_DIR})
   target_link_libraries(raw_decode tiff port)
 endif()
 
