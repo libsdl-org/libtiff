@@ -30,6 +30,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
                @ONLY)
 
+include_directories(${PROJECT_SOURCE_DIR}/libtiff
+                    ${PROJECT_BINARY_DIR}/libtiff
+                    ${PROJECT_SOURCE_DIR}/port
+                    ${CMAKE_CURRENT_BINARY_DIR})
+
 extra_dist(
   SConstruct
   tif_config.vc.h
