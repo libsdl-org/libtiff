@@ -30,11 +30,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
                @ONLY)
 
-include_directories(${PROJECT_SOURCE_DIR}/libtiff
-                    ${PROJECT_BINARY_DIR}/libtiff
-                    ${PROJECT_SOURCE_DIR}/port
-                    ${CMAKE_CURRENT_BINARY_DIR})
-
 extra_dist(
   SConstruct
   tif_config.vc.h
@@ -172,6 +167,7 @@ endif()
 
 add_executable(mkg3states mkg3states.c tif_fax3.h)
 target_link_libraries(mkg3states tiff port)
+target_include_directories(mkg3states PRIVATE ${PROJECT_SOURCE_DIR}/port)
 
 add_custom_target(faxtable
         DEPENDS mkg3states
