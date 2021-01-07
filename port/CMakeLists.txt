@@ -66,3 +66,7 @@ foreach(file ${port_USED_FILES})
   list(APPEND tiff_port_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
 endforeach()
 set(tiff_port_SOURCES ${tiff_port_SOURCES} PARENT_SCOPE)
+
+target_include_directories(port
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+)
