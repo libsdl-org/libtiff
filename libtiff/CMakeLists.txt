@@ -168,7 +168,6 @@ endif()
 
 add_executable(mkg3states mkg3states.c tif_fax3.h)
 target_link_libraries(mkg3states tiff port)
-target_include_directories(mkg3states PRIVATE)
 
 add_custom_target(faxtable
         DEPENDS mkg3states
