@@ -24,6 +24,8 @@
  */
 
 #include "tif_config.h"
+#include "libport.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,10 +55,6 @@
 #endif
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE 1
-#endif
-
-#ifndef HAVE_GETOPT
-extern int getopt(int argc, char * const argv[], const char *optstring);
 #endif
 
 static  uint32  width = 0, height = 0;          /* window width & height */

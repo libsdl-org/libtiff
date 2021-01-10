@@ -22,6 +22,7 @@
  * OF THIS SOFTWARE.
  */
 #include "tif_config.h"
+#include "libport.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -39,10 +40,6 @@
 
 #ifdef HAVE_IO_H
 # include <io.h>
-#endif
-
-#ifdef NEED_LIBPORT
-# include "libport.h"
 #endif
 
 #include "tiffiop.h"

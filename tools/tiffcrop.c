@@ -109,6 +109,7 @@ static   char tiffcrop_version_id[] = "2.4";
 static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #include "tif_config.h"
+#include "libport.h"
 #include "tiffiop.h"
 
 #include <stdio.h>
@@ -133,14 +134,6 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 #endif
 #ifndef EXIT_FAILURE
 #define EXIT_FAILURE 1
-#endif
-
-#ifndef HAVE_GETOPT
-extern int getopt(int argc, char * const argv[], const char *optstring);
-#endif
-
-#ifdef NEED_LIBPORT
-# include "libport.h"
 #endif
 
 #include "tiffio.h"

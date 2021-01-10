@@ -25,6 +25,7 @@
  */
 
 #include "tif_config.h"
+#include "libport.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,16 +47,8 @@
 # include <io.h>
 #endif
 
-#ifdef NEED_LIBPORT
-# include "libport.h"
-#endif
-
 #include "tiffiop.h"
 #include "tiffio.h"
-
-#ifndef HAVE_GETOPT
-extern int getopt(int argc, char * const argv[], const char *optstring);
-#endif
 
 #ifndef EXIT_SUCCESS
 # define EXIT_SUCCESS	0
