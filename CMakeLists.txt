@@ -474,7 +474,6 @@ endif()
 if(DEFLATE_FOUND AND NOT ZIP_SUPPORT)
   message(WARNING "libdeflate available but zlib is not. libdeflate cannot be used")
 endif()
-set(LIBDEFLATE_SUPPORT ${LIBDEFLATE_SUPPORT})
 
 # Option for Pixar log-format algorithm
 # Pixar log format
