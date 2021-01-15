@@ -2553,7 +2553,7 @@ PSDataColorSeparate(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 	for (row = 0; row < h; row++) {
 		for (s = 0; s < maxs; s++) {
 			if (TIFFReadScanline(tif, tf_buf, row, s) < 0)
-				break;
+				goto end_loop;
 			for (cp = tf_buf, cc = 0; cc < tf_bytesperrow; cc++) {
 				DOBREAK(breaklen, 1, fd);
 				c = *cp++;
@@ -2561,6 +2561,7 @@ PSDataColorSeparate(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 			}
 		}
 	}
+end_loop:
 	_TIFFfree((char *) tf_buf);
 }
 
@@ -2607,7 +2608,7 @@ PSDataPalette(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 	}
 	for (row = 0; row < h; row++) {
 		if (TIFFReadScanline(tif, tf_buf, row, 0) < 0)
-			break;
+			goto end_loop;
 		for (cp = tf_buf, cc = 0; cc < tf_bytesperrow; cc++) {
 			DOBREAK(breaklen, nc, fd);
 			switch (bitspersample) {
@@ -2637,6 +2638,7 @@ PSDataPalette(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 			}
 		}
 	}
+end_loop:
 	_TIFFfree((char *) tf_buf);
 }
 
