@@ -250,7 +250,7 @@ static	void usage(int);
 static void* limitMalloc(tmsize_t s)
 {
 	if (maxMalloc && (s > maxMalloc)) {
-		fprintf(stderr, "MemoryLimitError: allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ".\n",
+		fprintf(stderr, "MemoryLimitError: allocation of %" TIFF_UINT64_FORMAT " bytes is forbidden. Limit is %" TIFF_UINT64_FORMAT ".\n",
 		        (uint64)s, (uint64)maxMalloc);
 		fprintf(stderr, "                  use -M option to change limit.\n");
 		return NULL;

@@ -1080,7 +1080,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 	if(t2p->tiff_pages==NULL){
 		TIFFError(
 			TIFF2PDF_MODULE, 
-			"Can't allocate " TIFF_SIZE_FORMAT " bytes of memory for tiff_pages array, %s", 
+			"Can't allocate %" TIFF_SIZE_FORMAT " bytes of memory for tiff_pages array, %s", 
 			(TIFF_SIZE_T) directorycount * sizeof(T2P_PAGE), 
 			TIFFFileName(input));
 		t2p->t2p_error = T2P_ERR_ERROR;
@@ -1091,7 +1091,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 	if(t2p->tiff_tiles==NULL){
 		TIFFError(
 			TIFF2PDF_MODULE, 
-			"Can't allocate " TIFF_SIZE_FORMAT " bytes of memory for tiff_tiles array, %s", 
+			"Can't allocate %" TIFF_SIZE_FORMAT " bytes of memory for tiff_tiles array, %s", 
 			(TIFF_SIZE_T) directorycount * sizeof(T2P_TILES), 
 			TIFFFileName(input));
 		t2p->t2p_error = T2P_ERR_ERROR;
@@ -1264,7 +1264,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 			if( t2p->tiff_tiles[i].tiles_tiles == NULL){
 				TIFFError(
 					TIFF2PDF_MODULE, 
-					"Can't allocate " TIFF_SIZE_FORMAT " bytes of memory for t2p_read_tiff_init, %s", 
+					"Can't allocate %" TIFF_SIZE_FORMAT " bytes of memory for t2p_read_tiff_init, %s", 
 					(TIFF_SIZE_T) t2p->tiff_tiles[i].tiles_tilecount * sizeof(T2P_TILE), 
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2995,7 +2995,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-					"Can't allocate " TIFF_SIZE_FORMAT " bytes of memory "
+					"Can't allocate %" TIFF_SIZE_FORMAT " bytes of memory "
                                         "for t2p_readwrite_pdf_image_tile, %s", 
                                           (TIFF_SIZE_T) t2p->tiff_datasize, 
 					TIFFFileName(input));
@@ -3305,7 +3305,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 
 	if (TIFFStripSize(output) > t2p->tiff_datasize) {
 		TIFFError(TIFF2PDF_MODULE,
-		         "Size mismatch input %ld, output %ld",
+		         "Size mismatch input %" TIFF_SSIZE_FORMAT ", output %" TIFF_SSIZE_FORMAT,
 		          t2p->tiff_datasize, TIFFStripSize(output));
 		_TIFFfree(buffer);
 		t2p->t2p_error = T2P_ERR_ERROR;
@@ -5668,7 +5668,7 @@ tsize_t t2p_write_pdf(T2P* t2p, TIFF* input, TIFF* output){
 				t2p_read_tiff_size_tile(t2p, input, i2);
 				if (t2p->tiff_maxdatasize && (t2p->tiff_datasize > t2p->tiff_maxdatasize)) {
 					TIFFError(TIFF2PDF_MODULE,
-						"Allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ". Use -m option to change limit",
+						"Allocation of %" TIFF_UINT64_FORMAT " bytes is forbidden. Limit is %" TIFF_UINT64_FORMAT ". Use -m option to change limit",
 						(uint64)t2p->tiff_datasize, (uint64)t2p->tiff_maxdatasize);
 					t2p->t2p_error = T2P_ERR_ERROR;
 					return (0);
@@ -5698,7 +5698,7 @@ tsize_t t2p_write_pdf(T2P* t2p, TIFF* input, TIFF* output){
 			t2p_read_tiff_size(t2p, input);
 			if (t2p->tiff_maxdatasize && (t2p->tiff_datasize > t2p->tiff_maxdatasize)) {
 				TIFFError(TIFF2PDF_MODULE,
-					"Allocation of " TIFF_UINT64_FORMAT " bytes is forbidden. Limit is " TIFF_UINT64_FORMAT ". Use -m option to change limit",
+					"Allocation of %" TIFF_UINT64_FORMAT " bytes is forbidden. Limit is %" TIFF_UINT64_FORMAT ". Use -m option to change limit",
 					(uint64)t2p->tiff_datasize, (uint64)t2p->tiff_maxdatasize);
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return (0);

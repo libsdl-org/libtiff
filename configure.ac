@@ -174,7 +174,13 @@ case "${host_os}" in
 esac
 
 dnl Checks for header files.
-AC_CHECK_HEADERS([assert.h fcntl.h io.h search.h unistd.h])
+AC_CHECK_HEADERS([assert.h fcntl.h inttypes.h io.h search.h stdint.h unistd.h])
+
+AC_CHECK_HEADER([inttypes.h], [TIFF_HAVE_INTTYPES_H=1], [TIFF_HAVE_INTTYPES_H=0])
+AC_CHECK_HEADER([stdint.h], [TIFF_HAVE_STDINT_H=1], [TIFF_HAVE_STDINT_H=0])
+
+AC_DEFINE_UNQUOTED([TIFF_HAVE_INTTYPES_H], [$TIFF_HAVE_INTTYPES_H], [Define to 1 if you have the <inttypes.h> header file.])
+AC_DEFINE_UNQUOTED([TIFF_HAVE_STDINT_H], [$TIFF_HAVE_STDINT_H], [Define to 1 if you have the <stdint.h> header file.])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -226,184 +232,250 @@ AC_CHECK_SIZEOF(unsigned char *)
 # available in ac_cv_sizeof_size_t
 AC_CHECK_SIZEOF([size_t])
 
+# Check if ptrdiff_t type exists.
+AC_CHECK_TYPE(ptrdiff_t,[PTRDIFF_T=ptrdiff_t])
+
+if test $TIFF_HAVE_INTTYPES_H -eq 1 -a $TIFF_HAVE_STDINT_H -eq 1
+then
+  # C99 fixed-size integer types
+  INT8_T='int8_t'
+  UINT8_T='uint8_t'
+
+  INT16_T='int16_t'
+  UINT16_T='uint16_t'
+
+  INT32_T='int32_t'
+  UINT32_T='uint32_t'
+  INT32_FORMAT='PRId32'
+  UINT32_FORMAT='PRIu32'
+
+  INT64_T='int64_t'
+  UINT64_T='uint64_t'
+  INT64_FORMAT='PRId64'
+  UINT64_FORMAT='PRIu64'
+
+  SIZE_T='size_t'
+  SIZE_FORMAT='"zu"'
+  if test $ac_cv_sizeof_size_t -eq 4
+  then
+    SSIZE_T='int32_t'
+    SSIZE_FORMAT='PRId32'
+  elif test $ac_cv_sizeof_size_t -eq 8
+  then
+    SSIZE_T='int64_t'
+    SSIZE_FORMAT='PRId64'
+  else
+    AC_MSG_ERROR([Unsupported size_t size ${ac_cv_sizeof_size_t}; please add support])
+  fi
+
+  PTRDIFF_FORMAT='"td"'
+else
+  # Fallback to pre-C99 basic types
+  INT8_T='signed char'
+  UINT8_T='unsigned char'
+
+  INT16_T='signed short'
+  UINT16_T='unsigned short'
+
+  INT32_T='none'
+  INT32_FORMAT='none'
+  if test $ac_cv_sizeof_signed_int -eq 4
+  then
+    INT32_T='signed int'
+    INT32_FORMAT='"d"'
+  elif test $ac_cv_sizeof_signed_long -eq 4
+  then
+    INT32_T='signed long'
+    INT32_FORMAT='"ld"'
+  fi
+
+  UINT32_T='none'
+  UINT32_FORMAT='none'
+  if test $ac_cv_sizeof_unsigned_int -eq 4
+  then
+    UINT32_T='unsigned int'
+    UINT32_FORMAT='"u"'
+  elif test $ac_cv_sizeof_unsigned_long -eq 4
+  then
+    UINT32_T='unsigned long'
+    UINT32_FORMAT='"lu"'
+  fi
+
+  INT64_T='none'
+  INT64_FORMAT='none'
+  if test $ac_cv_sizeof_signed_long -eq 8
+  then
+    INT64_T='signed long'
+    INT64_FORMAT='"ld"'
+  elif test $ac_cv_sizeof_signed_long_long -eq 8
+  then
+    INT64_T='signed long long'
+    case "${host_os}" in
+      mingw32*)
+        # MinGW32 understands 'long long', but uses printf from WIN32 CRT
+        INT64_FORMAT='"I64d"'
+        ;;
+      *)
+        INT64_FORMAT='"lld"'
+        ;;
+    esac
+  fi
+
+  UINT64_T='none'
+  UINT64_FORMAT='none'
+  if test $ac_cv_sizeof_unsigned_long -eq 8
+  then
+    UINT64_T='unsigned long'
+    UINT64_FORMAT='"lu"'
+  elif test $ac_cv_sizeof_unsigned_long_long -eq 8
+  then
+    UINT64_T='unsigned long long'
+    case "${host_os}" in
+      mingw32*)
+        # MinGW32 understands 'unsigned long long', but uses printf from WIN32 CRT
+        UINT64_FORMAT='"I64u"'
+        ;;
+      *)
+        UINT64_FORMAT='"llu"'
+        ;;
+    esac
+  fi
+
+  # Determine formatting specifier for 'size_t'.  While the size should
+  # be precise, the type determined may not match the system definition.
+  # A named type is provided to allow casting to the type we determined
+  # without changing the actual size.
+  SIZE_T='unknown'
+  SIZE_FORMAT='unknown'
+  if test $ac_cv_sizeof_unsigned_int -eq $ac_cv_sizeof_size_t
+  then
+    SIZE_T='unsigned int'
+    SIZE_FORMAT='"u"'
+  elif test $ac_cv_sizeof_unsigned_long -eq $ac_cv_sizeof_size_t
+  then
+    SIZE_T='unsigned long'
+    SIZE_FORMAT='"lu"'
+  elif test $ac_cv_sizeof_unsigned_long_long -eq $ac_cv_sizeof_size_t
+  then
+    SIZE_T='unsigned long long'
+    case "${host_os}" in
+      mingw32*)
+        # MinGW32 understands 'unsigned long long', but uses printf from WIN32 CRT
+        SIZE_FORMAT='"I64u"'
+        ;;
+      *)
+        SIZE_FORMAT='"llu"'
+        ;;
+    esac
+  fi
+
+  SSIZE_T='unknown'
+  SSIZE_FORMAT='unknown'
+  if test $ac_cv_sizeof_signed_int -eq $ac_cv_sizeof_size_t
+  then
+    SSIZE_T='signed int'
+    SSIZE_FORMAT='"d"'
+  elif test $ac_cv_sizeof_signed_long -eq $ac_cv_sizeof_size_t
+  then
+    SSIZE_T='signed long'
+    SSIZE_FORMAT='"ld"'
+  elif test $ac_cv_sizeof_signed_long_long -eq $ac_cv_sizeof_size_t
+  then
+    SSIZE_T='signed long long'
+    case "${host_os}" in
+      mingw32*)
+        # MinGW32 understands 'long long', but uses printf from WIN32 CRT
+        SSIZE_FORMAT='"I64d"'
+        ;;
+      *)
+        SSIZE_FORMAT='"lld"'
+        ;;
+    esac
+  fi
+
+  PTRDIFF_FORMAT='"ld"'
+fi
+
+
 AC_MSG_CHECKING(for signed 8-bit type)
-INT8_T='signed char'
 AC_MSG_RESULT($INT8_T)
 AC_DEFINE_UNQUOTED(TIFF_INT8_T,$INT8_T,[Signed 8-bit type])
 
 AC_MSG_CHECKING(for unsigned 8-bit type)
-UINT8_T='unsigned char'
 AC_MSG_RESULT($UINT8_T)
 AC_DEFINE_UNQUOTED(TIFF_UINT8_T,$UINT8_T,[Unsigned 8-bit type])
 
 AC_MSG_CHECKING(for signed 16-bit type)
-INT16_T='signed short'
 AC_MSG_RESULT($INT16_T)
 AC_DEFINE_UNQUOTED(TIFF_INT16_T,$INT16_T,[Signed 16-bit type])
 
-
 AC_MSG_CHECKING(for unsigned 16-bit type)
-UINT16_T='unsigned short'
 AC_MSG_RESULT($UINT16_T)
 AC_DEFINE_UNQUOTED(TIFF_UINT16_T,$UINT16_T,[Unsigned 16-bit type])
 
 AC_MSG_CHECKING(for signed 32-bit type)
-INT32_T='none'
-INT32_FORMAT='none'
-if test $ac_cv_sizeof_signed_int -eq 4
-then
-  INT32_T='signed int'
-  INT32_FORMAT='"%d"'
-elif test $ac_cv_sizeof_signed_long -eq 4
-then
-  INT32_T='signed long'
-  INT32_FORMAT='"%ld"'
-fi
 AC_MSG_RESULT($INT32_T)
 AC_DEFINE_UNQUOTED(TIFF_INT32_T,$INT32_T,[Signed 32-bit type])
+
+AC_MSG_CHECKING(for signed 32-bit format)
+AC_MSG_RESULT($INT32_FORMAT)
 AC_DEFINE_UNQUOTED(TIFF_INT32_FORMAT,$INT32_FORMAT,[Signed 32-bit type formatter])
 
 AC_MSG_CHECKING(for unsigned 32-bit type)
-UINT32_T='none'
-UINT32_FORMAT='none'
-if test $ac_cv_sizeof_unsigned_int -eq 4
-then
-  UINT32_T='unsigned int'
-  UINT32_FORMAT='"%u"'
-elif test $ac_cv_sizeof_unsigned_long -eq 4
-then
-  UINT32_T='unsigned long'
-  UINT32_FORMAT='"%lu"'
-fi
 AC_MSG_RESULT($UINT32_T)
 AC_DEFINE_UNQUOTED(TIFF_UINT32_T,$UINT32_T,[Unsigned 32-bit type])
+
+AC_MSG_CHECKING(for unsigned 32-bit format)
+AC_MSG_RESULT($UINT32_FORMAT)
 AC_DEFINE_UNQUOTED(TIFF_UINT32_FORMAT,$UINT32_FORMAT,[Unsigned 32-bit type formatter])
 
 AC_MSG_CHECKING(for signed 64-bit type)
-INT64_T='none'
-INT64_FORMAT='none'
-if test $ac_cv_sizeof_signed_long -eq 8
-then
-  INT64_T='signed long'
-  INT64_FORMAT='"%ld"'
-elif test $ac_cv_sizeof_signed_long_long -eq 8
-then
-  INT64_T='signed long long'
-  case "${host_os}" in
-    mingw32*)
-      # MinGW32 understands 'long long', but uses printf from WIN32 CRT
-      INT64_FORMAT='"%I64d"'
-      ;;
-    *)
-      INT64_FORMAT='"%lld"'
-      ;;
-  esac
-fi
-
-
 AC_MSG_RESULT($INT64_T)
 AC_DEFINE_UNQUOTED(TIFF_INT64_T,$INT64_T,[Signed 64-bit type])
+
+AC_MSG_CHECKING(for signed 64-bit format)
+AC_MSG_RESULT($INT64_FORMAT)
 AC_DEFINE_UNQUOTED(TIFF_INT64_FORMAT,$INT64_FORMAT,[Signed 64-bit type formatter])
 
 AC_MSG_CHECKING(for unsigned 64-bit type)
-UINT64_T='none'
-UINT64_FORMAT='none'
-if test $ac_cv_sizeof_unsigned_long -eq 8
-then
-  UINT64_T='unsigned long'
-  UINT64_FORMAT='"%lu"'
-elif test $ac_cv_sizeof_unsigned_long_long -eq 8
-then
-  UINT64_T='unsigned long long'
-  case "${host_os}" in
-    mingw32*)
-      # MinGW32 understands 'unsigned long long', but uses printf from WIN32 CRT
-      UINT64_FORMAT='"%I64u"'
-      ;;
-    *)
-      UINT64_FORMAT='"%llu"'
-      ;;
-  esac
-fi
 AC_MSG_RESULT($UINT64_T)
 AC_DEFINE_UNQUOTED(TIFF_UINT64_T,$UINT64_T,[Unsigned 64-bit type])
+
+AC_MSG_CHECKING(for unsigned 64-bit format)
+AC_MSG_RESULT($UINT64_FORMAT)
 AC_DEFINE_UNQUOTED(TIFF_UINT64_FORMAT,$UINT64_FORMAT,[Unsigned 64-bit type formatter])
 
-# Determine formatting specifier for 'size_t'.  While the size should
-# be precise, the type determined may not match the system definition.
-# A named type is provided to allow casting to the type we determined
-# without changing the actual size.
-AC_MSG_CHECKING([for 'size_t' format specifier])
-SIZE_T='unknown'
-SIZE_FORMAT='unknown'
-if test $ac_cv_sizeof_unsigned_int -eq $ac_cv_sizeof_size_t
-then
-  SIZE_T='unsigned int'
-  SIZE_FORMAT='"%u"'
-elif test $ac_cv_sizeof_unsigned_long -eq $ac_cv_sizeof_size_t
-then
-  SIZE_T='unsigned long'
-  SIZE_FORMAT='"%lu"'
-elif test $ac_cv_sizeof_unsigned_long_long -eq $ac_cv_sizeof_size_t
-then
-  SIZE_T='unsigned long long'
-  case "${host_os}" in
-    mingw32*)
-      # MinGW32 understands 'unsigned long long', but uses printf from WIN32 CRT
-      SIZE_FORMAT='"%I64u"'
-      ;;
-    *)
-      SIZE_FORMAT='"%llu"'
-      ;;
-  esac
-fi
-AC_MSG_RESULT([$SIZE_FORMAT])
+AC_MSG_CHECKING([for 'size_t' type])
+AC_MSG_RESULT([$SIZE_T])
 AC_DEFINE_UNQUOTED([TIFF_SIZE_T],[$SIZE_T],[Unsigned size type])
-AC_DEFINE_UNQUOTED([TIFF_SIZE_FORMAT],[$SIZE_FORMAT],[Size type formatter])
+
+AC_MSG_CHECKING([for 'size_t' format])
+AC_MSG_RESULT([$SIZE_FORMAT])
+AC_DEFINE_UNQUOTED([TIFF_SIZE_FORMAT],[$SIZE_FORMAT],[Unsigned size type formatter])
 
 # Determine TIFF equivalent of ssize_t
 AC_MSG_CHECKING(for signed size type)
-SSIZE_T='unknown'
-SSIZE_FORMAT='unknown'
-if test $ac_cv_sizeof_signed_int -eq $ac_cv_sizeof_size_t
-then
-  SSIZE_T='signed int'
-  SSIZE_FORMAT='"%d"'
-elif test $ac_cv_sizeof_signed_long -eq $ac_cv_sizeof_size_t
-then
-  SSIZE_T='signed long'
-  SSIZE_FORMAT='"%ld"'
-elif test $ac_cv_sizeof_signed_long_long -eq $ac_cv_sizeof_size_t
-then
-  SSIZE_T='signed long long'
-  case "${host_os}" in
-    mingw32*)
-      # MinGW32 understands 'long long', but uses printf from WIN32 CRT
-      SSIZE_FORMAT='"%I64d"'
-      ;;
-    *)
-      SSIZE_FORMAT='"%lld"'
-      ;;
-  esac
-fi
 AC_MSG_RESULT($SSIZE_T)
 AC_DEFINE_UNQUOTED(TIFF_SSIZE_T,$SSIZE_T,[Signed size type])
+
+AC_MSG_CHECKING(for signed size format)
+AC_MSG_RESULT($SSIZE_FORMAT)
 AC_DEFINE_UNQUOTED(TIFF_SSIZE_FORMAT,$SSIZE_FORMAT,[Signed size type formatter])
 
 # Determine the type to use for the difference between two pointers.
 # We will default to the POSIX ptrdiff_t if it is available, but will
 # be prepared for the case when it is not.
-PTRDIFF_T='unknown'
-PTRDIFF_FORMAT='"%ld"'
-AC_CHECK_TYPE(ptrdiff_t,[PTRDIFF_T=ptrdiff_t])
+AC_MSG_CHECKING(for pointer difference type)
 if test $PTRDIFF_T = unknown
 then
   PTRDIFF_T=$SSIZE_T
   PTRDIFF_FORMAT=$SSIZE_FORMAT
 fi
-AC_MSG_CHECKING(for pointer difference type)
 AC_MSG_RESULT($PTRDIFF_T)
 AC_DEFINE_UNQUOTED(TIFF_PTRDIFF_T,$PTRDIFF_T,[Pointer difference type])
+
+AC_MSG_CHECKING(for pointer difference format)
+AC_MSG_RESULT($PTRDIFF_FORMAT)
 AC_DEFINE_UNQUOTED(TIFF_PTRDIFF_FORMAT,$PTRDIFF_FORMAT,[Pointer difference type formatter])
 
 dnl Checks for library functions.
