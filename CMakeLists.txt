@@ -420,7 +420,6 @@ check_symbol_exists(strtoll "stdlib.h" HAVE_STRTOLL)
 check_symbol_exists(strtoul "stdlib.h" HAVE_STRTOUL)
 check_symbol_exists(strtoull "stdlib.h" HAVE_STRTOULL)
 check_symbol_exists(getopt "unistd.h;stdio.h" HAVE_GETOPT)
-check_symbol_exists(lfind "search.h" HAVE_LFIND)
 
 if(NOT HAVE_SNPRINTF)
   add_definitions(-DNEED_LIBPORT)
