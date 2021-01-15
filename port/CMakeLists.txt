@@ -26,7 +26,6 @@ set(port_HEADERS libport.h)
 set(port_SOURCES dummy.c)
 set(port_optional_SOURCES
   getopt.c
-  lfind.c
   strtol.c
   strtoll.c
   strtoul.c
@@ -36,9 +35,6 @@ set(port_USED_FILES ${port_SOURCES} ${port_HEADERS})
 
 if(NOT HAVE_GETOPT)
   list(APPEND port_USED_FILES getopt.c)
-endif()
-if(NOT HAVE_LFIND)
-  list(APPEND port_USED_FILES lfind.c)
 endif()
 if(MSVC AND NOT HAVE_SNPRINTF)
   list(APPEND port_USED_FILES snprintf.c)

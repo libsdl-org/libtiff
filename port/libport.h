@@ -51,12 +51,6 @@ unsigned long strtoul(const char *nptr, char **endptr, int base);
 unsigned long long strtoull(const char *nptr, char **endptr, int base);
 #endif
 
-#if 0
-void *
-lfind(const void *key, const void *base, size_t *nmemb, size_t size,
-      int(*compar)(const void *, const void *));
-#endif
-
 #if !defined(HAVE_SNPRINTF)
 #undef vsnprintf
 #define vsnprintf _TIFF_vsnprintf_f

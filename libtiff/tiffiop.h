@@ -46,13 +46,6 @@
 # define assert(x) 
 #endif
 
-#ifdef HAVE_SEARCH_H
-# include <search.h>
-#else
-extern void *lfind(const void *, const void *, size_t *, size_t,
-		   int (*)(const void *, const void *));
-#endif
-
 #if !defined(HAVE_SNPRINTF) && !defined(HAVE__SNPRINTF)
 #undef snprintf
 #define snprintf _TIFF_snprintf_f
