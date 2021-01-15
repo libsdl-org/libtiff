@@ -34,8 +34,6 @@ extern   int opterr;
 extern   int optind;
 extern   int optopt;
 
-int strcasecmp(const char *s1, const char *s2);
-
 #ifndef HAVE_GETOPT
 #  define HAVE_GETOPT 1
 #endif

@@ -65,7 +65,6 @@ INCL = -I..\libtiff
 
 OBJ	= \
 	snprintf.obj \
-	strcasecmp.obj \
 	$(STRTOL_OBJ) \
 	$(STRTOUL_OBJ) \
 	$(STRTOLL_OBJ) \

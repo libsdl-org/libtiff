@@ -416,7 +416,6 @@ report_values(TIFF_INT8_T
 check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
 check_symbol_exists(setmode "unistd.h" HAVE_SETMODE)
 check_symbol_exists(snprintf "stdio.h" HAVE_SNPRINTF)
-check_symbol_exists(strcasecmp "strings.h" HAVE_STRCASECMP)
 check_symbol_exists(strtol "stdlib.h" HAVE_STRTOL)
 check_symbol_exists(strtoll "stdlib.h" HAVE_STRTOLL)
 check_symbol_exists(strtoul "stdlib.h" HAVE_STRTOUL)

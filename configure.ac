@@ -484,7 +484,6 @@ AC_CHECK_FUNCS([mmap setmode snprintf])
 dnl Will use local replacements for unavailable functions
 AC_REPLACE_FUNCS(getopt)
 AC_REPLACE_FUNCS(snprintf)
-AC_REPLACE_FUNCS(strcasecmp)
 AC_REPLACE_FUNCS(strtol)
 AC_REPLACE_FUNCS(strtoll)
 AC_REPLACE_FUNCS(strtoul)

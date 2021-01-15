@@ -27,7 +27,6 @@ set(port_SOURCES dummy.c)
 set(port_optional_SOURCES
   getopt.c
   lfind.c
-  strcasecmp.c
   strtol.c
   strtoll.c
   strtoul.c
@@ -43,9 +42,6 @@ if(NOT HAVE_LFIND)
 endif()
 if(MSVC AND NOT HAVE_SNPRINTF)
   list(APPEND port_USED_FILES snprintf.c)
-endif()
-if(NOT HAVE_STRCASECMP)
-  list(APPEND port_USED_FILES strcasecmp.c)
 endif()
 if(NOT HAVE_STRTOL)
   list(APPEND port_USED_FILES strtol.c)
