@@ -231,17 +231,10 @@ LogL16Decode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			}
 		}
 		if (i != npixels) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Not enough data at row %lu (short %I64d pixels)",
-				     (unsigned long) tif->tif_row,
-				     (unsigned __int64) (npixels - i));
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Not enough data at row %lu (short %llu pixels)",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long long) (npixels - i));
-#endif
+			    "Not enough data at row %"PRIu32" (short %"PRId64" pixels)",
+				     tif->tif_row,
+				     npixels - i);
 			tif->tif_rawcp = (uint8_t*) bp;
 			tif->tif_rawcc = cc;
 			return (0);
@@ -294,17 +287,10 @@ LogLuvDecode24(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	tif->tif_rawcp = (uint8_t*) bp;
 	tif->tif_rawcc = cc;
 	if (i != npixels) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at row %lu (short %I64d pixels)",
-			     (unsigned long) tif->tif_row,
-			     (unsigned __int64) (npixels - i));
-#else
-		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at row %lu (short %llu pixels)",
-			     (unsigned long) tif->tif_row,
-			     (unsigned long long) (npixels - i));
-#endif
+			"Not enough data at row %"PRIu32" (short %"PRId64" pixels)",
+			     tif->tif_row,
+			     npixels - i);
 		return (0);
 	}
 	(*sp->tfunc)(sp, op, npixels);
@@ -367,17 +353,10 @@ LogLuvDecode32(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			}
 		}
 		if (i != npixels) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at row %lu (short %I64d pixels)",
-				     (unsigned long) tif->tif_row,
-				     (unsigned __int64) (npixels - i));
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at row %lu (short %llu pixels)",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long long) (npixels - i));
-#endif
+			"Not enough data at row %"PRIu32" (short %"PRId64" pixels)",
+				     tif->tif_row,
+				     npixels - i);
 			tif->tif_rawcp = (uint8_t*) bp;
 			tif->tif_rawcc = cc;
 			return (0);
@@ -1294,7 +1273,7 @@ LogL16InitState(TIFF* tif)
 	if( td->td_samplesperpixel != 1 )
 	{
 		TIFFErrorExt(tif->tif_clientdata, module,
-		             "Sorry, can not handle LogL image with %s=%d",
+		             "Sorry, can not handle LogL image with %s=%"PRIu16,
 			     "Samples/pixel", td->td_samplesperpixel);
 		return 0;
 	}
@@ -1495,7 +1474,7 @@ LogLuvSetupDecode(TIFF* tif)
 		return (1);
 	default:
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Inappropriate photometric interpretation %d for SGILog compression; %s",
+		    "Inappropriate photometric interpretation %"PRIu16" for SGILog compression; %s",
 		    td->td_photometric, "must be either LogLUV or LogL");
 		break;
 	}
@@ -1559,7 +1538,7 @@ LogLuvSetupEncode(TIFF* tif)
 		break;
 	default:
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Inappropriate photometric interpretation %d for SGILog compression; %s",
+		    "Inappropriate photometric interpretation %"PRIu16" for SGILog compression; %s",
 		    td->td_photometric, "must be either LogLUV or LogL");
 		return (0);
 	}

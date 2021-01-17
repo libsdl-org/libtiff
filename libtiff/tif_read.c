@@ -109,8 +109,8 @@ static int TIFFReadAndRealloc(TIFF* tif, tmsize_t size,
                 if( new_rawdata == 0 )
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
-                        "No space for data buffer at scanline %lu",
-                        (unsigned long) tif->tif_row);
+                        "No space for data buffer at scanline %"PRIu32,
+                        tif->tif_row);
                     _TIFFfree(tif->tif_rawdata);
                     tif->tif_rawdata = 0;
                     tif->tif_rawdatasize = 0;
@@ -130,49 +130,26 @@ static int TIFFReadAndRealloc(TIFF* tif, tmsize_t size,
             if (bytes_read != to_read) {
                 memset( tif->tif_rawdata + rawdata_offset + already_read, 0,
                         tif->tif_rawdatasize - rawdata_offset - already_read );
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
                 if( is_strip )
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
-                        "Read error at scanline %lu; got %I64u bytes, "
-                        "expected %I64u",
-                                        (unsigned long) tif->tif_row,
-                                        (unsigned __int64) already_read,
-                                        (unsigned __int64) size);
+                        "Read error at scanline %"PRIu32"; got %"PRId64" bytes, "
+                        "expected %"PRId64,
+                                        tif->tif_row,
+                                        already_read,
+                                        size);
                 }
                 else
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
-                        "Read error at row %lu, col %lu, tile %lu; "
-                        "got %I64u bytes, expected %I64u",
-                                        (unsigned long) tif->tif_row,
-                                        (unsigned long) tif->tif_col,
-                                        (unsigned long) strip_or_tile,
-                                        (unsigned __int64) already_read,
-                                        (unsigned __int64) size);
+                        "Read error at row %"PRIu32", col %"PRIu32", tile %"PRIu32"; "
+                        "got %"PRId64" bytes, expected %"PRId64"",
+                                        tif->tif_row,
+                                        tif->tif_col,
+                                        strip_or_tile,
+                                        already_read,
+                                        size);
                 }
-#else
-                if( is_strip )
-                {
-                    TIFFErrorExt(tif->tif_clientdata, module,
-                        "Read error at scanline %lu; got %llu bytes, "
-                        "expected %llu",
-                                        (unsigned long) tif->tif_row,
-                                        (unsigned long long) already_read,
-                                        (unsigned long long) size);
-                }
-                else
-                {
-                    TIFFErrorExt(tif->tif_clientdata, module,
-                        "Read error at row %lu, col %lu, tile %lu; "
-                        "got %llu bytes, expected %llu",
-                                        (unsigned long) tif->tif_row,
-                                        (unsigned long) tif->tif_col,
-                                        (unsigned long) strip_or_tile,
-                                        (unsigned long long) already_read,
-                                        (unsigned long long) size);
-                }
-#endif
                 return 0;
             }
         }
@@ -211,8 +188,8 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
                 tif->tif_curstrip = NOSTRIP;
                 if ((tif->tif_flags & TIFF_MYBUFFER) == 0) {
                         TIFFErrorExt(tif->tif_clientdata, module,
-                                     "Data buffer too small to hold part of strip %lu",
-                                     (unsigned long) strip);
+                                     "Data buffer too small to hold part of strip %d",
+                                     strip);
                         return (0);
                 }
         }
@@ -246,8 +223,8 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
 
         if (!SeekOK(tif, read_offset)) {
                 TIFFErrorExt(tif->tif_clientdata, module,
-                             "Seek error at scanline %lu, strip %lu",
-                             (unsigned long) tif->tif_row, (unsigned long) strip);
+                             "Seek error at scanline %"PRIu32", strip %d",
+                             tif->tif_row, strip);
                 return 0;
         }
 
@@ -338,16 +315,16 @@ TIFFSeek(TIFF* tif, uint32_t row, uint16_t sample )
         */
 	if (row >= td->td_imagelength) {	/* out of range */
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-		    "%lu: Row out of range, max %lu",
-		    (unsigned long) row,
-		    (unsigned long) td->td_imagelength);
+		    "%"PRIu32": Row out of range, max %"PRIu32"",
+		    row,
+		    td->td_imagelength);
 		return (0);
 	}
 	if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {
 		if (sample >= td->td_samplesperpixel) {
 			TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-			    "%lu: Sample out of range, max %lu",
-			    (unsigned long) sample, (unsigned long) td->td_samplesperpixel);
+			    "%"PRIu16": Sample out of range, max %"PRIu16"",
+			    sample, td->td_samplesperpixel);
 			return (0);
 		}
 		strip = (uint32_t)sample * td->td_stripsperimage + row / td->td_rowsperstrip;
@@ -499,8 +476,8 @@ static tmsize_t TIFFReadEncodedStripGetStripSize(TIFF* tif, uint32_t strip, uint
 	if (strip>=td->td_nstrips)
 	{
 		TIFFErrorExt(tif->tif_clientdata,module,
-		    "%lu: Strip out of range, max %lu",(unsigned long)strip,
-		    (unsigned long)td->td_nstrips);
+		    "%"PRIu32": Strip out of range, max %"PRIu32, strip,
+		    td->td_nstrips);
 		return((tmsize_t)(-1));
 	}
 
@@ -615,25 +592,17 @@ TIFFReadRawStrip1(TIFF* tif, uint32_t strip, void* buf, tmsize_t size,
 
 		if (!SeekOK(tif, TIFFGetStrileOffset(tif, strip))) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Seek error at scanline %lu, strip %lu",
-			    (unsigned long) tif->tif_row, (unsigned long) strip);
+			    "Seek error at scanline %"PRIu32", strip %"PRIu32,
+			    tif->tif_row, strip);
 			return ((tmsize_t)(-1));
 		}
 		cc = TIFFReadFile(tif, buf, size);
 		if (cc != size) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-		"Read error at scanline %lu; got %I64u bytes, expected %I64u",
-				     (unsigned long) tif->tif_row,
-				     (unsigned __int64) cc,
-				     (unsigned __int64) size);
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-		"Read error at scanline %lu; got %llu bytes, expected %llu",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long long) cc,
-				     (unsigned long long) size);
-#endif
+		"Read error at scanline %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+				     tif->tif_row,
+				     cc,
+				     size);
 			return ((tmsize_t)(-1));
 		}
 	} else {
@@ -657,21 +626,12 @@ TIFFReadRawStrip1(TIFF* tif, uint32_t strip, void* buf, tmsize_t size,
                             n=size;
                 }
 		if (n!=size) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-	"Read error at scanline %lu, strip %lu; got %I64u bytes, expected %I64u",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long) strip,
-				     (unsigned __int64) n,
-				     (unsigned __int64) size);
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-	"Read error at scanline %lu, strip %lu; got %llu bytes, expected %llu",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long) strip,
-				     (unsigned long long) n,
-				     (unsigned long long) size);
-#endif
+	"Read error at scanline %"PRIu32", strip %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+				     tif->tif_row,
+				     strip,
+				     n,
+				     size);
 			return ((tmsize_t)(-1));
 		}
 		_TIFFmemcpy(buf, tif->tif_base + ma,
@@ -691,17 +651,17 @@ TIFFReadRawStripOrTile2(TIFF* tif, uint32_t strip_or_tile, int is_strip,
             if( is_strip )
             {
                 TIFFErrorExt(tif->tif_clientdata, module,
-                    "Seek error at scanline %lu, strip %lu",
-                    (unsigned long) tif->tif_row,
-                    (unsigned long) strip_or_tile);
+                    "Seek error at scanline %"PRIu32", strip %"PRIu32,
+                    tif->tif_row,
+                    strip_or_tile);
             }
             else
             {
                 TIFFErrorExt(tif->tif_clientdata, module,
-                    "Seek error at row %lu, col %lu, tile %lu",
-                    (unsigned long) tif->tif_row,
-                    (unsigned long) tif->tif_col,
-                    (unsigned long) strip_or_tile);
+                    "Seek error at row %"PRIu32", col %"PRIu32", tile %"PRIu32,
+                    tif->tif_row,
+                    tif->tif_col,
+                    strip_or_tile);
             }
             return ((tmsize_t)(-1));
         }
@@ -730,9 +690,9 @@ TIFFReadRawStrip(TIFF* tif, uint32_t strip, void* buf, tmsize_t size)
 		return ((tmsize_t)(-1));
 	if (strip >= td->td_nstrips) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		     "%lu: Strip out of range, max %lu",
-		     (unsigned long) strip,
-		     (unsigned long) td->td_nstrips);
+		     "%"PRIu32": Strip out of range, max %"PRIu32,
+		     strip,
+		     td->td_nstrips);
 		return ((tmsize_t)(-1));
 	}
 	if (tif->tif_flags&TIFF_NOREADRAW)
@@ -772,17 +732,10 @@ TIFFFillStrip(TIFF* tif, uint32_t strip)
 	{
 		uint64_t bytecount = TIFFGetStrileByteCount(tif, strip);
 		if( bytecount == 0 || bytecount > (uint64_t)TIFF_INT64_MAX ) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-				"Invalid strip byte count %I64u, strip %lu",
-				     (unsigned __int64) bytecount,
-				     (unsigned long) strip);
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-				"Invalid strip byte count %llu, strip %lu",
-				     (unsigned long long) bytecount,
-				     (unsigned long) strip);
-#endif
+				"Invalid strip byte count %"PRIu64", strip %"PRIu32,
+				     bytecount,
+				     strip);
 			return (0);
 		}
 
@@ -800,19 +753,11 @@ TIFFFillStrip(TIFF* tif, uint32_t strip)
 				uint64_t newbytecount = (uint64_t)stripsize * 10 + 4096;
 				if( newbytecount == 0 || newbytecount > (uint64_t)TIFF_INT64_MAX )
 				{
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-					TIFFWarningExt(tif->tif_clientdata, module,
-					  "Too large strip byte count %I64u, strip %lu. Limiting to %I64u",
-					     (unsigned __int64) bytecount,
-					     (unsigned long) strip,
-					     (unsigned __int64) newbytecount);
-#else
 					TIFFErrorExt(tif->tif_clientdata, module,
-					  "Too large strip byte count %llu, strip %lu. Limiting to %llu",
-					     (unsigned long long) bytecount,
-					     (unsigned long) strip,
-					     (unsigned long long) newbytecount);
-#endif
+					  "Too large strip byte count %"PRIu64", strip %"PRIu32". Limiting to %"PRIu64,
+					     bytecount,
+					     strip,
+					     newbytecount);
 					bytecount = newbytecount;
 				}
 			}
@@ -835,23 +780,13 @@ TIFFFillStrip(TIFF* tif, uint32_t strip)
 				 * it's what would happen if a read were done
 				 * instead.
 				 */
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 				TIFFErrorExt(tif->tif_clientdata, module,
 
-					"Read error on strip %lu; "
-					"got %I64u bytes, expected %I64u",
-					(unsigned long) strip,
-					(unsigned __int64) NoSanitizeSubUInt64(tif->tif_size, TIFFGetStrileOffset(tif, strip)),
-					(unsigned __int64) bytecount);
-#else
-				TIFFErrorExt(tif->tif_clientdata, module,
-
-					"Read error on strip %lu; "
-					"got %llu bytes, expected %llu",
-					(unsigned long) strip,
-					(unsigned long long) NoSanitizeSubUInt64(tif->tif_size, TIFFGetStrileOffset(tif, strip)),
-					(unsigned long long) bytecount);
-#endif
+					"Read error on strip %"PRIu32"; "
+                    "got %"PRIu64" bytes, expected %"PRIu64,
+					strip,
+					NoSanitizeSubUInt64(tif->tif_size, TIFFGetStrileOffset(tif, strip)),
+					bytecount);
 				tif->tif_curstrip = NOSTRIP;
 				return (0);
 			}
@@ -906,8 +841,8 @@ TIFFFillStrip(TIFF* tif, uint32_t strip)
 				tif->tif_curstrip = NOSTRIP;
 				if ((tif->tif_flags & TIFF_MYBUFFER) == 0) {
 					TIFFErrorExt(tif->tif_clientdata, module,
-					    "Data buffer too small to hold strip %lu",
-					    (unsigned long) strip);
+					    "Data buffer too small to hold strip %"PRIu32,
+					    strip);
 					return (0);
 				}
 			}
@@ -985,8 +920,8 @@ TIFFReadEncodedTile(TIFF* tif, uint32_t tile, void* buf, tmsize_t size)
 		return ((tmsize_t)(-1));
 	if (tile >= td->td_nstrips) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "%lu: Tile out of range, max %lu",
-		    (unsigned long) tile, (unsigned long) td->td_nstrips);
+		    "%"PRIu32": Tile out of range, max %"PRIu32,
+		    tile, td->td_nstrips);
 		return ((tmsize_t)(-1));
 	}
 
@@ -1062,8 +997,8 @@ _TIFFReadEncodedTileAndAllocBuffer(TIFF* tif, uint32_t tile,
             return ((tmsize_t)(-1));
     if (tile >= td->td_nstrips) {
             TIFFErrorExt(tif->tif_clientdata, module,
-                "%lu: Tile out of range, max %lu",
-                (unsigned long) tile, (unsigned long) td->td_nstrips);
+                "%"PRIu32": Tile out of range, max %"PRIu32,
+                tile, td->td_nstrips);
             return ((tmsize_t)(-1));
     }
 
@@ -1099,29 +1034,20 @@ TIFFReadRawTile1(TIFF* tif, uint32_t tile, void* buf, tmsize_t size, const char*
 
 		if (!SeekOK(tif, TIFFGetStrileOffset(tif, tile))) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Seek error at row %lu, col %lu, tile %lu",
-			    (unsigned long) tif->tif_row,
-			    (unsigned long) tif->tif_col,
-			    (unsigned long) tile);
+			    "Seek error at row %"PRIu32", col %"PRIu32", tile %"PRIu32,
+			    tif->tif_row,
+			    tif->tif_col,
+			    tile);
 			return ((tmsize_t)(-1));
 		}
 		cc = TIFFReadFile(tif, buf, size);
 		if (cc != size) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-	"Read error at row %lu, col %lu; got %I64u bytes, expected %I64u",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long) tif->tif_col,
-				     (unsigned __int64) cc,
-				     (unsigned __int64) size);
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-	"Read error at row %lu, col %lu; got %llu bytes, expected %llu",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long) tif->tif_col,
-				     (unsigned long long) cc,
-				     (unsigned long long) size);
-#endif
+	"Read error at row %"PRIu32", col %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+				     tif->tif_row,
+				     tif->tif_col,
+				     cc,
+				     size);
 			return ((tmsize_t)(-1));
 		}
 	} else {
@@ -1136,23 +1062,13 @@ TIFFReadRawTile1(TIFF* tif, uint32_t tile, void* buf, tmsize_t size, const char*
 		else
 			n=size;
 		if (n!=size) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-"Read error at row %lu, col %lu, tile %lu; got %I64u bytes, expected %I64u",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long) tif->tif_col,
-				     (unsigned long) tile,
-				     (unsigned __int64) n,
-				     (unsigned __int64) size);
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-"Read error at row %lu, col %lu, tile %lu; got %llu bytes, expected %llu",
-				     (unsigned long) tif->tif_row,
-				     (unsigned long) tif->tif_col,
-				     (unsigned long) tile,
-				     (unsigned long long) n,
-				     (unsigned long long) size);
-#endif
+"Read error at row %"PRIu32", col %"PRIu32", tile %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+				     tif->tif_row,
+				     tif->tif_col,
+				     tile,
+				     n,
+				     size);
 			return ((tmsize_t)(-1));
 		}
 		_TIFFmemcpy(buf, tif->tif_base + ma, size);
@@ -1175,8 +1091,8 @@ TIFFReadRawTile(TIFF* tif, uint32_t tile, void* buf, tmsize_t size)
 		return ((tmsize_t)(-1));
 	if (tile >= td->td_nstrips) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "%lu: Tile out of range, max %lu",
-		    (unsigned long) tile, (unsigned long) td->td_nstrips);
+		    "%"PRIu32": Tile out of range, max %"PRIu32,
+		    tile, td->td_nstrips);
 		return ((tmsize_t)(-1));
 	}
 	if (tif->tif_flags&TIFF_NOREADRAW)
@@ -1210,17 +1126,10 @@ TIFFFillTile(TIFF* tif, uint32_t tile)
 	{
 		uint64_t bytecount = TIFFGetStrileByteCount(tif, tile);
 		if( bytecount == 0 || bytecount > (uint64_t)TIFF_INT64_MAX ) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 			TIFFErrorExt(tif->tif_clientdata, module,
-				"%I64u: Invalid tile byte count, tile %lu",
-				     (unsigned __int64) bytecount,
-				     (unsigned long) tile);
-#else
-			TIFFErrorExt(tif->tif_clientdata, module,
-				"%llu: Invalid tile byte count, tile %lu",
-				     (unsigned long long) bytecount,
-				     (unsigned long) tile);
-#endif
+				"%"PRIu64": Invalid tile byte count, tile %"PRIu32,
+				     bytecount,
+				     tile);
 			return (0);
 		}
 
@@ -1238,19 +1147,11 @@ TIFFFillTile(TIFF* tif, uint32_t tile)
 				uint64_t newbytecount = (uint64_t)stripsize * 10 + 4096;
 				if( newbytecount == 0 || newbytecount > (uint64_t)TIFF_INT64_MAX )
 				{
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-					TIFFWarningExt(tif->tif_clientdata, module,
-					  "Too large tile byte count %I64u, tile %lu. Limiting to %I64u",
-					     (unsigned __int64) bytecount,
-					     (unsigned long) tile,
-					     (unsigned __int64) newbytecount);
-#else
 					TIFFErrorExt(tif->tif_clientdata, module,
-					  "Too large tile byte count %llu, tile %lu. Limiting to %llu",
-					     (unsigned long long) bytecount,
-					     (unsigned long) tile,
-					     (unsigned long long) newbytecount);
-#endif
+					  "Too large tile byte count %"PRIu64", tile %"PRIu32". Limiting to %"PRIu64,
+					     bytecount,
+					     tile,
+					     newbytecount);
 					bytecount = newbytecount;
 				}
 			}
@@ -1317,8 +1218,8 @@ TIFFFillTile(TIFF* tif, uint32_t tile)
 				tif->tif_curtile = NOTILE;
 				if ((tif->tif_flags & TIFF_MYBUFFER) == 0) {
 					TIFFErrorExt(tif->tif_clientdata, module,
-					    "Data buffer too small to hold tile %lu",
-					    (unsigned long) tile);
+					    "Data buffer too small to hold tile %"PRIu32,
+					    tile);
 					return (0);
 				}
 			}
@@ -1406,8 +1307,8 @@ TIFFReadBufferSetup(TIFF* tif, void* bp, tmsize_t size)
 	}
 	if (tif->tif_rawdata == NULL) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "No space for data buffer at scanline %lu",
-		    (unsigned long) tif->tif_row);
+		    "No space for data buffer at scanline %"PRIu32,
+		    tif->tif_row);
 		tif->tif_rawdatasize = 0;
 		return (0);
 	}

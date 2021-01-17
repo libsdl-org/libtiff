@@ -202,7 +202,7 @@ ShowStrip(tstrip_t strip, unsigned char* pp, uint32_t nrow, tsize_t scanline)
 {
 	register tsize_t cc;
 
-	printf("Strip %"PRIu32":\n", (unsigned long) strip);
+	printf("Strip %"PRIu32":\n", strip);
 	while (nrow-- > 0) {
 		for (cc = 0; cc < scanline; cc++) {
 			printf(" %02x", *pp++);

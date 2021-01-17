@@ -2483,7 +2483,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				_TIFFmalloc(max_striplength);
 			if(stripbuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+					"Can't allocate %"PRId32" bytes of memory for t2p_readwrite_pdf_image, %s",
 					max_striplength,
 					TIFFFileName(input));
 				_TIFFfree(buffer);

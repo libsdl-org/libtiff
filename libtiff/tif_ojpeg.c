@@ -641,9 +641,9 @@ OJPEGPrintDir(TIFF* tif, FILE* fd, long flags)
 		fprintf(fd,"\n");
 	}
 	if (TIFFFieldSet(tif,FIELD_OJPEG_JPEGPROC))
-		fprintf(fd,"  JpegProc: %u\n",(unsigned int)sp->jpeg_proc);
+		fprintf(fd,"  JpegProc: %"PRIu8"\n", sp->jpeg_proc);
 	if (TIFFFieldSet(tif,FIELD_OJPEG_JPEGRESTARTINTERVAL))
-		fprintf(fd,"  JpegRestartInterval: %u\n",(unsigned int)sp->restart_interval);
+		fprintf(fd,"  JpegRestartInterval: %"PRIu16"\n", sp->restart_interval);
 	if (sp->printdir)
 		(*sp->printdir)(tif, fd, flags);
 }
@@ -1027,21 +1027,21 @@ OJPEGSubsamplingCorrect(TIFF* tif)
 		if (((sp->subsampling_hor!=mh) || (sp->subsampling_ver!=mv)) && (sp->subsampling_force_desubsampling_inside_decompression==0))
 		{
 			if (sp->subsampling_tag==0)
-				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling tag is not set, yet subsampling inside JPEG data [%d,%d] does not match default values [2,2]; assuming subsampling inside JPEG data is correct",sp->subsampling_hor,sp->subsampling_ver);
+				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling tag is not set, yet subsampling inside JPEG data [%"PRIu8",%"PRIu8"] does not match default values [2,2]; assuming subsampling inside JPEG data is correct",sp->subsampling_hor,sp->subsampling_ver);
 			else
-				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling inside JPEG data [%d,%d] does not match subsampling tag values [%d,%d]; assuming subsampling inside JPEG data is correct",sp->subsampling_hor,sp->subsampling_ver,mh,mv);
+				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling inside JPEG data [%"PRIu8",%"PRIu8"] does not match subsampling tag values [%"PRIu8",%"PRIu8"]; assuming subsampling inside JPEG data is correct",sp->subsampling_hor,sp->subsampling_ver,mh,mv);
 		}
 		if (sp->subsampling_force_desubsampling_inside_decompression!=0)
 		{
 			if (sp->subsampling_tag==0)
 				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling tag is not set, yet subsampling inside JPEG data does not match default values [2,2] (nor any other values allowed in TIFF); assuming subsampling inside JPEG data is correct and desubsampling inside JPEG decompression");
 			else
-				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling inside JPEG data does not match subsampling tag values [%d,%d] (nor any other values allowed in TIFF); assuming subsampling inside JPEG data is correct and desubsampling inside JPEG decompression",mh,mv);
+				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling inside JPEG data does not match subsampling tag values [%"PRIu8",%"PRIu8"] (nor any other values allowed in TIFF); assuming subsampling inside JPEG data is correct and desubsampling inside JPEG decompression",mh,mv);
 		}
 		if (sp->subsampling_force_desubsampling_inside_decompression==0)
 		{
 			if (sp->subsampling_hor<sp->subsampling_ver)
-				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling values [%d,%d] are not allowed in TIFF",sp->subsampling_hor,sp->subsampling_ver);
+				TIFFWarningExt(tif->tif_clientdata,module,"Subsampling values [%"PRIu8",%"PRIu8"] are not allowed in TIFF",sp->subsampling_hor,sp->subsampling_ver);
 		}
 	}
 	sp->subsamplingcorrect_done=1;
@@ -1081,7 +1081,7 @@ OJPEGReadHeaderInfo(TIFF* tif)
 	{
 		if (tif->tif_dir.td_samplesperpixel!=3)
 		{
-			TIFFErrorExt(tif->tif_clientdata,module,"SamplesPerPixel %d not supported for this compression scheme",sp->samples_per_pixel);
+			TIFFErrorExt(tif->tif_clientdata,module,"SamplesPerPixel %"PRIu8" not supported for this compression scheme",sp->samples_per_pixel);
 			return(0);
 		}
 		sp->samples_per_pixel=3;
@@ -1266,8 +1266,8 @@ OJPEGWriteHeaderInfo(TIFF* tif)
 		return(0);
         if(sp->libjpeg_jpeg_decompress_struct.image_width != sp->strile_width ) {
             TIFFErrorExt(tif->tif_clientdata,module,
-                         "jpeg_start_decompress() returned image_width = %d, "
-                         "expected %d",
+                         "jpeg_start_decompress() returned image_width = %u, "
+                         "expected %"PRIu32,
                          sp->libjpeg_jpeg_decompress_struct.image_width,
                          sp->strile_width);
             return 0;
@@ -1276,7 +1276,7 @@ OJPEGWriteHeaderInfo(TIFF* tif)
            sp->libjpeg_jpeg_decompress_struct.max_v_samp_factor != sp->subsampling_ver) {
             TIFFErrorExt(tif->tif_clientdata,module,
                          "jpeg_start_decompress() returned max_h_samp_factor = %d "
-                         "and max_v_samp_factor = %d, expected %d and %d",
+                         "and max_v_samp_factor = %d, expected %"PRIu8" and %"PRIu8,
                          sp->libjpeg_jpeg_decompress_struct.max_h_samp_factor,
                          sp->libjpeg_jpeg_decompress_struct.max_v_samp_factor,
                          sp->subsampling_hor,
@@ -1401,7 +1401,7 @@ OJPEGReadHeaderInfoSec(TIFF* tif)
 					return(0);
 				break;
 			default:
-				TIFFErrorExt(tif->tif_clientdata,module,"Unknown marker type %d in JPEG data",m);
+				TIFFErrorExt(tif->tif_clientdata,module,"Unknown marker type %"PRIu8" in JPEG data", m);
 				return(0);
 		}
 	} while(m!=JPEG_MARKER_SOS);
