@@ -783,12 +783,12 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	retCode = TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &auxUint32 );
 	if (!retCode) { fprintf(stderr, "Can't read %s\n", "TIFFTAG_IMAGEWIDTH"); }
 	if (auxUint32 != width) {
-		fprintf (stderr, "Read value of IMAGEWIDTH %d differs from set value %d\n", auxUint32, width);
+		fprintf (stderr, "Read value of IMAGEWIDTH %"PRIu32" differs from set value %"PRIu16"\n", auxUint32, width);
 	}
 	retCode = TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &auxUint32 );
 	if (!retCode) { fprintf(stderr, "Can't read %s\n", "TIFFTAG_IMAGELENGTH"); }
 	if (auxUint32 != width) {
-		fprintf (stderr, "Read value of TIFFTAG_IMAGELENGTH %d differs from set value %d\n", auxUint32, length);
+		fprintf (stderr, "Read value of TIFFTAG_IMAGELENGTH %"PRIu32" differs from set value %"PRIu16"\n", auxUint32, length);
 	}
 
 #ifdef ADDITIONAL_TAGS
