@@ -73,26 +73,20 @@ static int bigendian;
 static int bigtiff;
 static uint32_t maxitems = 24;   /* maximum indirect data items to print */
 
-static const char bytefmt[] = "%s%#02x";	/* BYTE */
-static const char sbytefmt[] = "%s%d";		/* SBYTE */
-static const char shortfmtd[] = "%s%u";		/* SHORT */
-static const char shortfmth[] = "%s%#x";
-static const char sshortfmtd[] = "%s%d";	/* SSHORT */
-static const char sshortfmth[] = "%s%#x";
-static const char longfmtd[] = "%s%lu";		/* LONG */
-static const char longfmth[] = "%s%#lx";
-static const char slongfmtd[] = "%s%ld";	/* SLONG */
-static const char slongfmth[] = "%s%#lx";
-static const char ifdfmt[] = "%s%#04lx";	/* IFD offset */
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-static const char long8fmt[] = "%s%I64u";	/* LONG8 */
-static const char slong8fmt[] = "%s%I64d";	/* SLONG8 */
-static const char ifd8fmt[] = "%s%#08I64x";	/* IFD offset8*/
-#else
-static const char long8fmt[] = "%s%llu";	/* LONG8 */
-static const char slong8fmt[] = "%s%lld";	/* SLONG8 */
-static const char ifd8fmt[] = "%s%#08llx";	/* IFD offset8 */
-#endif
+static const char bytefmt[] = "%s%#02" PRIx8;	/* BYTE */
+static const char sbytefmt[] = "%s%" PRId8;		/* SBYTE */
+static const char shortfmtd[] = "%s%" PRIu16;		/* SHORT */
+static const char shortfmth[] = "%s%#" PRIx16;
+static const char sshortfmtd[] = "%s%" PRId16;	/* SSHORT */
+static const char sshortfmth[] = "%s%#" PRIx16;
+static const char longfmtd[] = "%s%" PRIu32;		/* LONG */
+static const char longfmth[] = "%s%#" PRIx32;
+static const char slongfmtd[] = "%s%" PRId32;	/* SLONG */
+static const char slongfmth[] = "%s%#" PRIx32;
+static const char ifdfmt[] = "%s%#04" PRIx32;	/* IFD offset */
+static const char long8fmt[] = "%s%" PRIu64;	/* LONG8 */
+static const char slong8fmt[] = "%s%" PRId64;	/* SLONG8 */
+static const char ifd8fmt[] = "%s%#08" PRIx64;	/* IFD offset8 */
 static const char rationalfmt[] = "%s%g";	/* RATIONAL */
 static const char srationalfmt[] = "%s%g";	/* SRATIONAL */
 static const char floatfmt[] = "%s%g";		/* FLOAT */
@@ -347,13 +341,8 @@ ReadDirectory(int fd, unsigned int ix, uint64_t off)
 	if (n != dircount*direntrysize) {
 		n /= direntrysize;
 		Error(
-#if defined(__WIN32__) && defined(_MSC_VER)
-	    "Could only read %lu of %u entries in directory at offset %#I64x",
-		      (unsigned long)n, dircount, (unsigned __int64) off);
-#else
-	    "Could only read %lu of %u entries in directory at offset %#llx",
-		      (unsigned long)n, dircount, (unsigned long long) off);
-#endif
+	    "Could only read %" PRIu32 " of %" PRIu16 " entries in directory at offset %#" PRIu64,
+		      n, dircount, off);
 		dircount = n;
 		nextdiroff = 0;
 	} else {
@@ -371,15 +360,8 @@ ReadDirectory(int fd, unsigned int ix, uint64_t off)
 				TIFFSwabLong8(&nextdiroff);
 		}
 	}
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-	printf("Directory %u: offset %I64u (%#I64x) next %I64u (%#I64x)\n", ix,
-	    (unsigned __int64)off, (unsigned __int64)off,
-	    (unsigned __int64)nextdiroff, (unsigned __int64)nextdiroff);
-#else
-	printf("Directory %u: offset %llu (%#llx) next %llu (%#llx)\n", ix,
-	    (unsigned long long)off, (unsigned long long)off,
-	    (unsigned long long)nextdiroff, (unsigned long long)nextdiroff);
-#endif
+	printf("Directory %u: offset %" PRIu64 " (%#" PRIx64 ") next %" PRIu64 " (%#" PRIx64 ")\n",
+        ix, off, off, nextdiroff, nextdiroff);
 	for (dp = (uint8_t*)dirmem, n = dircount; n > 0; n--) {
 		uint16_t tag;
 		uint16_t type;
@@ -420,11 +402,7 @@ ReadDirectory(int fd, unsigned int ix, uint64_t off)
 				TIFFSwabLong8(&count);
 			dp += sizeof(uint64_t);
 		}
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-		printf("%I64u<", (unsigned __int64)count);
-#else
-		printf("%llu<", (unsigned long long)count);
-#endif
+		printf("%" PRIu64 "<", count);
 		if (type >= NWIDTHS)
 			typewidth = 0;
 		else
@@ -749,7 +727,7 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
 	case TIFF_LONG: {
 		uint32_t *lp = (uint32_t*)data;
 		while (count-- > 0) {
-			fprintf(fd, hex_mode ? longfmth : longfmtd, sep, (unsigned long) *lp++);
+			fprintf(fd, hex_mode ? longfmth : longfmtd, sep, *lp++);
 			sep = " ";
 		}
 		break;
@@ -757,7 +735,7 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
 	case TIFF_SLONG: {
 		int32_t *lp = (int32_t*)data;
 		while (count-- > 0)
-			fprintf(fd, hex_mode ? slongfmth : slongfmtd, sep, (long) *lp++), sep = " ";
+			fprintf(fd, hex_mode ? slongfmth : slongfmtd, sep, *lp++), sep = " ";
 		break;
 	}
 	case TIFF_LONG8: {
@@ -766,7 +744,7 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
                         uint64_t val;
                         memcpy(&val, llp, sizeof(uint64_t));
                         llp ++;
-			fprintf(fd, long8fmt, sep, (unsigned long long) val);
+			fprintf(fd, long8fmt, sep, val);
 			sep = " ";
 		}
 		break;
@@ -777,7 +755,7 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
                         int64_t val;
                         memcpy(&val, llp, sizeof(int64_t));
                         llp ++;
-                        fprintf(fd, slong8fmt, sep, (long long) val);
+                        fprintf(fd, slong8fmt, sep, val);
                         sep = " ";
                 }
 		break;
@@ -786,9 +764,8 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
 		uint32_t *lp = (uint32_t*)data;
 		while (count-- > 0) {
 			if (lp[1] == 0)
-				fprintf(fd, "%sNan (%lu/%lu)", sep,
-				    (unsigned long) lp[0],
-				    (unsigned long) lp[1]);
+				fprintf(fd, "%sNan (%"PRIu32"/%"PRIu32")", sep,
+				    lp[0], lp[1]);
 			else
 				fprintf(fd, rationalfmt, sep,
 				    (double)lp[0] / (double)lp[1]);
@@ -801,8 +778,8 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
 		int32_t *lp = (int32_t*)data;
 		while (count-- > 0) {
 			if (lp[1] == 0)
-				fprintf(fd, "%sNan (%ld/%ld)", sep,
-				    (long) lp[0], (long) lp[1]);
+				fprintf(fd, "%sNan (%"PRId32"/%"PRId32")", sep,
+				    lp[0], lp[1]);
 			else
 				fprintf(fd, srationalfmt, sep,
 				    (double)lp[0] / (double)lp[1]);
@@ -826,7 +803,7 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
 	case TIFF_IFD: {
 		uint32_t *lp = (uint32_t*)data;
 		while (count-- > 0) {
-			fprintf(fd, ifdfmt, sep, (unsigned long) *lp++);
+			fprintf(fd, ifdfmt, sep, *lp++);
 			sep = " ";
 		}
 		break;
@@ -834,11 +811,8 @@ PrintData(FILE* fd, uint16_t type, uint32_t count, unsigned char* data)
 	case TIFF_IFD8: {
 		uint64_t *llp = (uint64_t*)data;
 		while (count-- > 0) {
-#if defined(__WIN32__) && defined(_MSC_VER)
-			fprintf(fd, ifd8fmt, sep, (unsigned __int64) *llp++);
-#else
-			fprintf(fd, ifd8fmt, sep, (unsigned long long) *llp++);
-#endif
+			fprintf(fd, ifd8fmt, sep, *llp++);
+			sep = " ";
 			sep = " ";
 		}
 		break;
