@@ -70,31 +70,36 @@ main(int argc, char* argv[])
 		strncpy(fname, argv[2], sizeof(fname));
 		fname[sizeof(fname) - 1] = '\0';
 	}
+
 	in = TIFFOpen(argv[1], "r");
-	if (in != NULL) {
-		do {
-			size_t path_len;
-			char *path;
-			
-			newfilename();
+        if (in == NULL) {
+                return EXIT_FAILURE;
+        }
 
-			path_len = strlen(fname) + sizeof(TIFF_SUFFIX);
-			path = (char *) _TIFFmalloc(path_len);
-			strncpy(path, fname, path_len);
-			path[path_len - 1] = '\0';
-			strncat(path, TIFF_SUFFIX, path_len - strlen(path) - 1);
-			out = TIFFOpen(path, TIFFIsBigEndian(in)?"wb":"wl");
-			_TIFFfree(path);
+        do {
+                size_t path_len;
+                char *path;
 
-			if (out == NULL)
-				return (EXIT_FAILURE);
-			if (!tiffcp(in, out))
-				return (EXIT_FAILURE);
-			TIFFClose(out);
-		} while (TIFFReadDirectory(in));
-		(void) TIFFClose(in);
-	}
-	return (EXIT_SUCCESS);
+                newfilename();
+
+                path_len = strlen(fname) + sizeof(TIFF_SUFFIX);
+                path = (char *) _TIFFmalloc(path_len);
+                strncpy(path, fname, path_len);
+                path[path_len - 1] = '\0';
+                strncat(path, TIFF_SUFFIX, path_len - strlen(path) - 1);
+                out = TIFFOpen(path, TIFFIsBigEndian(in)?"wb":"wl");
+                _TIFFfree(path);
+
+                if (out == NULL)
+                        return (EXIT_FAILURE);
+                if (!tiffcp(in, out))
+                        return (EXIT_FAILURE);
+                TIFFClose(out);
+        } while (TIFFReadDirectory(in));
+
+        (void) TIFFClose(in);
+
+        return (EXIT_SUCCESS);
 }
 
 static void
