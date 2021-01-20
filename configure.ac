@@ -488,7 +488,6 @@ AC_REPLACE_FUNCS(strtol)
 AC_REPLACE_FUNCS(strtoll)
 AC_REPLACE_FUNCS(strtoul)
 AC_REPLACE_FUNCS(strtoull)
-AC_REPLACE_FUNCS(lfind)
 
 dnl ---------------------------------------------------------------------------
 dnl Check the native cpu bit order.
