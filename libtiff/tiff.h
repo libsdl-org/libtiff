@@ -62,19 +62,28 @@
  * 64-bit quantities    int64_t/uint_64_t
  * strings              unsigned char*
  */
+#ifdef __GNUC__
+#define TIFF_GCC_DEPRECATED __attribute__((deprecated))
+#else
+#define TIFF_GCC_DEPRECATED
+#endif
+#ifdef _MSC_VER
+#define TIFF_MSC_DEPRECATED __declspec(deprecated("libtiff type deprecated; please use corresponding C99 stdint.h type"))
+#else
+#define TIFF_MSC_DEPRECATED
+#endif
 
+typedef TIFF_MSC_DEPRECATED int8_t   int8   TIFF_GCC_DEPRECATED;
+typedef TIFF_MSC_DEPRECATED uint8_t  uint8  TIFF_GCC_DEPRECATED;
 
-typedef int8_t   int8;
-typedef uint8_t  uint8;
+typedef TIFF_MSC_DEPRECATED int16_t  int16  TIFF_GCC_DEPRECATED;
+typedef TIFF_MSC_DEPRECATED uint16_t uint16 TIFF_GCC_DEPRECATED;
 
-typedef int16_t  int16;
-typedef uint16_t uint16;
+typedef TIFF_MSC_DEPRECATED int32_t  int32  TIFF_GCC_DEPRECATED;
+typedef TIFF_MSC_DEPRECATED uint32_t uint32 TIFF_GCC_DEPRECATED;
 
-typedef int32_t  int32;
-typedef uint32_t uint32;
-
-typedef int64_t  int64;
-typedef uint64_t uint64;
+typedef TIFF_MSC_DEPRECATED int64_t  int64  TIFF_GCC_DEPRECATED;
+typedef TIFF_MSC_DEPRECATED uint64_t uint64 TIFF_GCC_DEPRECATED;
 
 
 /*
