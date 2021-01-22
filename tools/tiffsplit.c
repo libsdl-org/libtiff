@@ -61,7 +61,7 @@ main(int argc, char* argv[])
 {
 	TIFF *in, *out;
 
-	if (argc < 2) {
+        if (argc < 2 || argc > 3) {
                 fprintf(stderr, "%s\n\n", TIFFGetVersion());
 		fprintf(stderr, "usage: tiffsplit input.tif [prefix]\n");
 		return (EXIT_FAILURE);
