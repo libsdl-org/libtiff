@@ -260,6 +260,9 @@ int main(void){
 }"
   TM_IN_SYS_TIME)
 
+# Disable deprecated features to ensure clean build
+add_definitions(-DTIFF_DISABLE_DEPRECATED)
+
 # Check type sizes
 set(CMAKE_EXTRA_INCLUDE_FILES_SAVE ${CMAKE_EXTRA_INCLUDE_FILES})
 set(CMAKE_EXTRA_INCLUDE_FILES ${CMAKE_EXTRA_INCLUDE_FILES} "stddef.h")

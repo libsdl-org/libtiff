@@ -193,6 +193,13 @@ dnl Check if optarg (and presumably related externs) already declared in headers
 AC_CHECK_DECLS([optarg])
 
 dnl ---------------------------------------------------------------------------
+dnl Deprecated features and backward compatibilty
+dnl ---------------------------------------------------------------------------
+
+# Disable deprecated features to ensure clean build
+CPPFLAGS="-DTIFF_DISABLE_DEPRECATED $CPPFLAGS"
+
+dnl ---------------------------------------------------------------------------
 dnl Compute sized types for current CPU and compiler options
 dnl ---------------------------------------------------------------------------
 
