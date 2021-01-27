@@ -142,14 +142,12 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 #define PATH_MAX 1024
 #endif
 
-#define TIFF_UINT32_MAX     0xFFFFFFFFU
-
 #define	TRUE	1
 #define	FALSE	0
 
 #ifndef TIFFhowmany
-#define TIFFhowmany(x, y) ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y)))
-#define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
+#define TIFFhowmany(x, y) ((((uint32_t)(x))+(((uint32_t)(y))-1))/((uint32_t)(y)))
+#define TIFFhowmany8(x) (((x)&0x07)?((uint32_t)(x)>>3)+1:(uint32_t)(x)>>3)
 #endif
 
 /*
@@ -210,16 +208,16 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 /* Offsets into buffer for margins and fixed width and length segments */
 struct offset {
-  uint32  tmargin;
-  uint32  lmargin;
-  uint32  bmargin;
-  uint32  rmargin;
-  uint32  crop_width;
-  uint32  crop_length;
-  uint32  startx;
-  uint32  endx;
-  uint32  starty;
-  uint32  endy;
+  uint32_t  tmargin;
+  uint32_t  lmargin;
+  uint32_t  bmargin;
+  uint32_t  rmargin;
+  uint32_t  crop_width;
+  uint32_t  crop_length;
+  uint32_t  startx;
+  uint32_t  endx;
+  uint32_t  starty;
+  uint32_t  endy;
 };
 
 /* Description of a zone within the image. Position 1 of 3 zones would be 
@@ -229,7 +227,7 @@ struct offset {
  */
 
 struct  buffinfo {
-  uint32 size;           /* size of this buffer */
+  uint32_t size;           /* size of this buffer */
   unsigned char *buffer; /* address of the allocated buffer */
 };
 
@@ -239,13 +237,13 @@ struct  zone {
   };
 
 struct  pageseg {
-  uint32 x1;        /* index of left edge */
-  uint32 x2;        /* index of right edge */
-  uint32 y1;        /* index of top edge */
-  uint32 y2;        /* index of bottom edge */
+  uint32_t x1;        /* index of left edge */
+  uint32_t x2;        /* index of right edge */
+  uint32_t y1;        /* index of top edge */
+  uint32_t y2;        /* index of bottom edge */
   int    position;  /* ordinal of segment to be extracted */
   int    total;     /* total equal sized divisions of crop area */
-  uint32 buffsize;  /* size of buffer needed to hold the cropped zone */
+  uint32_t buffsize;  /* size of buffer needed to hold the cropped zone */
 };
 
 struct  coordpairs {
@@ -256,13 +254,13 @@ struct  coordpairs {
 };
 
 struct  region {
-  uint32 x1;        /* pixel offset of left edge */
-  uint32 x2;        /* pixel offset of right edge */
-  uint32 y1;        /* pixel offset of top edge */
-  uint32 y2;        /* picel offset of bottom edge */
-  uint32 width;     /* width in pixels */
-  uint32 length;    /* length in pixels */
-  uint32 buffsize;  /* size of buffer needed to hold the cropped region */
+  uint32_t x1;        /* pixel offset of left edge */
+  uint32_t x2;        /* pixel offset of right edge */
+  uint32_t y1;        /* pixel offset of top edge */
+  uint32_t y2;        /* picel offset of bottom edge */
+  uint32_t width;     /* width in pixels */
+  uint32_t length;    /* length in pixels */
+  uint32_t buffsize;  /* size of buffer needed to hold the cropped region */
   unsigned char *buffptr; /* address of start of the region */
 };
 
@@ -276,22 +274,22 @@ struct crop_mask {
   double margins[4];      /* Top, left, bottom, right margins */
   float  xres;            /* Horizontal resolution read from image*/
   float  yres;            /* Vertical resolution read from image */
-  uint32 combined_width;  /* Width of combined cropped zones */
-  uint32 combined_length; /* Length of combined cropped zones */
-  uint32 bufftotal;       /* Size of buffer needed to hold all the cropped region */
-  uint16 img_mode;        /* Composite or separate images created from zones or regions */
-  uint16 exp_mode;        /* Export input images or selections to one or more files */
-  uint16 crop_mode;       /* Crop options to be applied */
-  uint16 res_unit;        /* Resolution unit for margins and selections */
-  uint16 edge_ref;        /* Reference edge for sections extraction and combination */
-  uint16 rotation;        /* Clockwise rotation of the extracted region or image */
-  uint16 mirror;          /* Mirror extracted region or image horizontally or vertically */
-  uint16 invert;          /* Invert the color map of image or region */
-  uint16 photometric;     /* Status of photometric interpretation for inverted image */
-  uint16 selections;      /* Number of regions or zones selected */
-  uint16 regions;         /* Number of regions delimited by corner coordinates */
+  uint32_t combined_width;  /* Width of combined cropped zones */
+  uint32_t combined_length; /* Length of combined cropped zones */
+  uint32_t bufftotal;       /* Size of buffer needed to hold all the cropped region */
+  uint16_t img_mode;        /* Composite or separate images created from zones or regions */
+  uint16_t exp_mode;        /* Export input images or selections to one or more files */
+  uint16_t crop_mode;       /* Crop options to be applied */
+  uint16_t res_unit;        /* Resolution unit for margins and selections */
+  uint16_t edge_ref;        /* Reference edge for sections extraction and combination */
+  uint16_t rotation;        /* Clockwise rotation of the extracted region or image */
+  uint16_t mirror;          /* Mirror extracted region or image horizontally or vertically */
+  uint16_t invert;          /* Invert the color map of image or region */
+  uint16_t photometric;     /* Status of photometric interpretation for inverted image */
+  uint16_t selections;      /* Number of regions or zones selected */
+  uint16_t regions;         /* Number of regions delimited by corner coordinates */
   struct region regionlist[MAX_REGIONS]; /* Regions within page or master crop region */
-  uint16 zones;           /* Number of zones delimited by Ordinal:Total requested */
+  uint16_t zones;           /* Number of zones delimited by Ordinal:Total requested */
   struct zone zonelist[MAX_REGIONS]; /* Zones indices to define a region */
   struct coordpairs corners[MAX_REGIONS]; /* Coordinates of upper left and lower right corner */
 };
@@ -385,16 +383,16 @@ static const struct paperdef PaperTable[/*MAX_PAPERNAMES*/] = {
 struct image_data {
   float  xres;
   float  yres;
-  uint32 width;
-  uint32 length;
-  uint16 res_unit;
-  uint16 bps;
-  uint16 spp;
-  uint16 planar;
-  uint16 photometric;
-  uint16 orientation;
-  uint16 compression;
-  uint16 adjustments;
+  uint32_t width;
+  uint32_t length;
+  uint16_t res_unit;
+  uint16_t bps;
+  uint16_t spp;
+  uint16_t planar;
+  uint16_t photometric;
+  uint16_t orientation;
+  uint16_t compression;
+  uint16_t adjustments;
 };
 
 /* Structure to define the output image modifiers */
@@ -406,8 +404,8 @@ struct pagedef {
   double        vmargin;  /* margins to subtract from height of sections */
   double        hres;     /* horizontal resolution for output */
   double        vres;     /* vertical resolution for output */
-  uint32        mode;     /* bitmask of modifiers to page format */
-  uint16        res_unit; /* resolution unit for output image */
+  uint32_t        mode;     /* bitmask of modifiers to page format */
+  uint16_t        res_unit; /* resolution unit for output image */
   unsigned int  rows;     /* number of section rows */
   unsigned int  cols;     /* number of section cols */
   unsigned int  orient;   /* portrait, landscape, seascape, auto */
@@ -426,36 +424,36 @@ struct dump_opts {
 
 /* globals */
 static int    outtiled = -1;
-static uint32 tilewidth = 0;
-static uint32 tilelength = 0;
+static uint32_t tilewidth = 0;
+static uint32_t tilelength = 0;
 
-static uint16 config = 0;
-static uint16 compression = 0;
-static uint16 predictor = 0;
-static uint16 fillorder = 0;
-static uint32 rowsperstrip = 0;
-static uint32 g3opts = 0;
+static uint16_t config = 0;
+static uint16_t compression = 0;
+static uint16_t predictor = 0;
+static uint16_t fillorder = 0;
+static uint32_t rowsperstrip = 0;
+static uint32_t g3opts = 0;
 static int    ignore = FALSE;		/* if true, ignore read errors */
-static uint32 defg3opts = (uint32) -1;
+static uint32_t defg3opts = (uint32_t) -1;
 static int    quality = 100;		/* JPEG quality */
 /* static int    jpegcolormode = -1;        was JPEGCOLORMODE_RGB;  */
 static int    jpegcolormode = JPEGCOLORMODE_RGB;
-static uint16 defcompression = (uint16) -1;
-static uint16 defpredictor = (uint16) -1;
+static uint16_t defcompression = (uint16_t) -1;
+static uint16_t defpredictor = (uint16_t) -1;
 static int    pageNum = 0;
 static int    little_endian = 1;
 
 /* Functions adapted from tiffcp with additions or significant modifications */
-static int  readContigStripsIntoBuffer   (TIFF*, uint8*);
-static int  readSeparateStripsIntoBuffer (TIFF*, uint8*, uint32, uint32, tsample_t, struct dump_opts *);
-static int  readContigTilesIntoBuffer    (TIFF*, uint8*, uint32, uint32, uint32, uint32, tsample_t, uint16);
-static int  readSeparateTilesIntoBuffer  (TIFF*, uint8*, uint32, uint32, uint32, uint32, tsample_t, uint16);
-static int  writeBufferToContigStrips    (TIFF*, uint8*, uint32);
-static int  writeBufferToContigTiles     (TIFF*, uint8*, uint32, uint32, tsample_t, struct dump_opts *);
-static int  writeBufferToSeparateStrips  (TIFF*, uint8*, uint32, uint32, tsample_t, struct dump_opts *);
-static int  writeBufferToSeparateTiles   (TIFF*, uint8*, uint32, uint32, tsample_t, struct dump_opts *);
-static int  extractContigSamplesToBuffer (uint8 *, uint8 *, uint32, uint32, tsample_t, 
-                                         uint16, uint16, struct dump_opts *);
+static int  readContigStripsIntoBuffer   (TIFF*, uint8_t*);
+static int  readSeparateStripsIntoBuffer (TIFF*, uint8_t*, uint32_t, uint32_t, tsample_t, struct dump_opts *);
+static int  readContigTilesIntoBuffer    (TIFF*, uint8_t*, uint32_t, uint32_t, uint32_t, uint32_t, tsample_t, uint16_t);
+static int  readSeparateTilesIntoBuffer  (TIFF*, uint8_t*, uint32_t, uint32_t, uint32_t, uint32_t, tsample_t, uint16_t);
+static int  writeBufferToContigStrips    (TIFF*, uint8_t*, uint32_t);
+static int  writeBufferToContigTiles     (TIFF*, uint8_t*, uint32_t, uint32_t, tsample_t, struct dump_opts *);
+static int  writeBufferToSeparateStrips  (TIFF*, uint8_t*, uint32_t, uint32_t, tsample_t, struct dump_opts *);
+static int  writeBufferToSeparateTiles   (TIFF*, uint8_t*, uint32_t, uint32_t, tsample_t, struct dump_opts *);
+static int  extractContigSamplesToBuffer (uint8_t *, uint8_t *, uint32_t, uint32_t, tsample_t,
+                                          uint16_t, uint16_t, struct dump_opts *);
 static int processCompressOptions(char*);
 static void usage(int code);
 
@@ -466,10 +464,10 @@ static void initPageSetup (struct pagedef *, struct pageseg *, struct buffinfo [
 static void initDumpOptions(struct dump_opts *);
 
 /* Command line and file naming functions */
-void  process_command_opts (int, char *[], char *, char *, uint32 *,
-	                    uint16 *, uint16 *, uint32 *, uint32 *, uint32 *,
-		            struct crop_mask *, struct pagedef *, 
-                            struct dump_opts *, 
+void  process_command_opts (int, char *[], char *, char *, uint32_t *,
+                            uint16_t *, uint16_t *, uint32_t *, uint32_t *, uint32_t *,
+                            struct crop_mask *, struct pagedef *,
+                            struct dump_opts *,
                             unsigned int *, unsigned int *);
 static  int update_output_file (TIFF **, char *, int, char *, unsigned int *);
 
@@ -491,12 +489,12 @@ static int  writeSelections(TIFF *, TIFF **, struct crop_mask *, struct image_da
                             char *, char *, unsigned int*, unsigned int);
 
 /* Section functions */
-static int  createImageSection(uint32, unsigned char **);
+static int  createImageSection(uint32_t, unsigned char **);
 static int  extractImageSection(struct image_data *, struct pageseg *, 
                                 unsigned char *, unsigned char *);
 static int  writeSingleSection(TIFF *, TIFF *, struct image_data *,
-                               struct dump_opts *, uint32, uint32,
-			       double, double, unsigned char *);
+                               struct dump_opts *, uint32_t, uint32_t,
+                               double, double, unsigned char *);
 static int  writeImageSections(TIFF *, TIFF *, struct image_data *,
                                struct pagedef *, struct pageseg *, 
                                struct dump_opts *, unsigned char *, 
@@ -506,108 +504,108 @@ static int  createCroppedImage(struct image_data *, struct crop_mask *,
                                unsigned char **, unsigned char **);
 static int  writeCroppedImage(TIFF *, TIFF *, struct image_data *image,
                               struct dump_opts * dump,
-                              uint32, uint32, unsigned char *, int, int);
+                              uint32_t, uint32_t, unsigned char *, int, int);
 
 /* Image manipulation functions */
-static int rotateContigSamples8bits(uint16, uint16, uint16, uint32, 
-                                    uint32,   uint32, uint8 *, uint8 *);
-static int rotateContigSamples16bits(uint16, uint16, uint16, uint32, 
-                                     uint32,   uint32, uint8 *, uint8 *);
-static int rotateContigSamples24bits(uint16, uint16, uint16, uint32, 
-                                     uint32,   uint32, uint8 *, uint8 *);
-static int rotateContigSamples32bits(uint16, uint16, uint16, uint32, 
-                                     uint32,   uint32, uint8 *, uint8 *);
-static int rotateImage(uint16, struct image_data *, uint32 *, uint32 *,
- 		       unsigned char **);
-static int mirrorImage(uint16, uint16, uint16, uint32, uint32,
-		       unsigned char *);
-static int invertImage(uint16, uint16, uint16, uint32, uint32,
-		       unsigned char *);
+static int rotateContigSamples8bits(uint16_t, uint16_t, uint16_t, uint32_t,
+                                    uint32_t, uint32_t, uint8_t *, uint8_t *);
+static int rotateContigSamples16bits(uint16_t, uint16_t, uint16_t, uint32_t,
+                                     uint32_t, uint32_t, uint8_t *, uint8_t *);
+static int rotateContigSamples24bits(uint16_t, uint16_t, uint16_t, uint32_t,
+                                     uint32_t, uint32_t, uint8_t *, uint8_t *);
+static int rotateContigSamples32bits(uint16_t, uint16_t, uint16_t, uint32_t,
+                                     uint32_t, uint32_t, uint8_t *, uint8_t *);
+static int rotateImage(uint16_t, struct image_data *, uint32_t *, uint32_t *,
+                       unsigned char **);
+static int mirrorImage(uint16_t, uint16_t, uint16_t, uint32_t, uint32_t,
+                       unsigned char *);
+static int invertImage(uint16_t, uint16_t, uint16_t, uint32_t, uint32_t,
+                       unsigned char *);
 
 /* Functions to reverse the sequence of samples in a scanline */
-static int reverseSamples8bits  (uint16, uint16, uint32, uint8 *, uint8 *);
-static int reverseSamples16bits (uint16, uint16, uint32, uint8 *, uint8 *);
-static int reverseSamples24bits (uint16, uint16, uint32, uint8 *, uint8 *);
-static int reverseSamples32bits (uint16, uint16, uint32, uint8 *, uint8 *);
-static int reverseSamplesBytes  (uint16, uint16, uint32, uint8 *, uint8 *);
+static int reverseSamples8bits  (uint16_t, uint16_t, uint32_t, uint8_t *, uint8_t *);
+static int reverseSamples16bits (uint16_t, uint16_t, uint32_t, uint8_t *, uint8_t *);
+static int reverseSamples24bits (uint16_t, uint16_t, uint32_t, uint8_t *, uint8_t *);
+static int reverseSamples32bits (uint16_t, uint16_t, uint32_t, uint8_t *, uint8_t *);
+static int reverseSamplesBytes  (uint16_t, uint16_t, uint32_t, uint8_t *, uint8_t *);
 
 /* Functions for manipulating individual samples in an image */
 static int extractSeparateRegion(struct image_data *, struct crop_mask *,
 		 		 unsigned char *, unsigned char *, int);
 static int extractCompositeRegions(struct image_data *,  struct crop_mask *,
 				   unsigned char *, unsigned char *);
-static int extractContigSamples8bits (uint8 *, uint8 *, uint32,
- 	                             tsample_t, uint16, uint16, 
-                                     tsample_t, uint32, uint32);
-static int extractContigSamples16bits (uint8 *, uint8 *, uint32,
- 	                              tsample_t, uint16, uint16, 
-                                      tsample_t, uint32, uint32);
-static int extractContigSamples24bits (uint8 *, uint8 *, uint32,
- 	                              tsample_t, uint16, uint16, 
-                                      tsample_t, uint32, uint32);
-static int extractContigSamples32bits (uint8 *, uint8 *, uint32,
-	                              tsample_t, uint16, uint16, 
-                                      tsample_t, uint32, uint32);
-static int extractContigSamplesBytes (uint8 *, uint8 *, uint32, 
-                                      tsample_t, uint16, uint16, 
-				      tsample_t, uint32, uint32);
-static int extractContigSamplesShifted8bits (uint8 *, uint8 *, uint32,
- 	                                     tsample_t, uint16, uint16,
-                                             tsample_t, uint32, uint32,
+static int extractContigSamples8bits (uint8_t *, uint8_t *, uint32_t,
+                                      tsample_t, uint16_t, uint16_t,
+                                      tsample_t, uint32_t, uint32_t);
+static int extractContigSamples16bits (uint8_t *, uint8_t *, uint32_t,
+                                       tsample_t, uint16_t, uint16_t,
+                                       tsample_t, uint32_t, uint32_t);
+static int extractContigSamples24bits (uint8_t *, uint8_t *, uint32_t,
+                                       tsample_t, uint16_t, uint16_t,
+                                       tsample_t, uint32_t, uint32_t);
+static int extractContigSamples32bits (uint8_t *, uint8_t *, uint32_t,
+                                       tsample_t, uint16_t, uint16_t,
+                                       tsample_t, uint32_t, uint32_t);
+static int extractContigSamplesBytes (uint8_t *, uint8_t *, uint32_t,
+                                      tsample_t, uint16_t, uint16_t,
+                                      tsample_t, uint32_t, uint32_t);
+static int extractContigSamplesShifted8bits (uint8_t *, uint8_t *, uint32_t,
+                                             tsample_t, uint16_t, uint16_t,
+                                             tsample_t, uint32_t, uint32_t,
                                              int);
-static int extractContigSamplesShifted16bits (uint8 *, uint8 *, uint32,
- 	                                      tsample_t, uint16, uint16, 
-				              tsample_t, uint32, uint32,
+static int extractContigSamplesShifted16bits (uint8_t *, uint8_t *, uint32_t,
+                                              tsample_t, uint16_t, uint16_t,
+                                              tsample_t, uint32_t, uint32_t,
                                               int);
-static int extractContigSamplesShifted24bits (uint8 *, uint8 *, uint32,
- 	                                      tsample_t, uint16, uint16, 
-				              tsample_t, uint32, uint32,
+static int extractContigSamplesShifted24bits (uint8_t *, uint8_t *, uint32_t,
+                                              tsample_t, uint16_t, uint16_t,
+                                              tsample_t, uint32_t, uint32_t,
                                               int);
-static int extractContigSamplesShifted32bits (uint8 *, uint8 *, uint32,
-	                                      tsample_t, uint16, uint16, 
-				              tsample_t, uint32, uint32,
+static int extractContigSamplesShifted32bits (uint8_t *, uint8_t *, uint32_t,
+                                              tsample_t, uint16_t, uint16_t,
+                                              tsample_t, uint32_t, uint32_t,
                                               int);
-static int extractContigSamplesToTileBuffer(uint8 *, uint8 *, uint32, uint32,
-  	                                    uint32, uint32, tsample_t, uint16,
-					    uint16, uint16, struct dump_opts *);
+static int extractContigSamplesToTileBuffer(uint8_t *, uint8_t *, uint32_t, uint32_t,
+                                            uint32_t, uint32_t, tsample_t, uint16_t,
+                                            uint16_t, uint16_t, struct dump_opts *);
 
 /* Functions to combine separate planes into interleaved planes */
-static int combineSeparateSamples8bits (uint8 *[], uint8 *, uint32, uint32,
-                                        uint16, uint16, FILE *, int, int);
-static int combineSeparateSamples16bits (uint8 *[], uint8 *, uint32, uint32,
-                                         uint16, uint16, FILE *, int, int);
-static int combineSeparateSamples24bits (uint8 *[], uint8 *, uint32, uint32,
-                                         uint16, uint16, FILE *, int, int);
-static int combineSeparateSamples32bits (uint8 *[], uint8 *, uint32, uint32,
-                                         uint16, uint16, FILE *, int, int);
+static int combineSeparateSamples8bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                        uint16_t, uint16_t, FILE *, int, int);
+static int combineSeparateSamples16bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                         uint16_t, uint16_t, FILE *, int, int);
+static int combineSeparateSamples24bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                         uint16_t, uint16_t, FILE *, int, int);
+static int combineSeparateSamples32bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                         uint16_t, uint16_t, FILE *, int, int);
 static int combineSeparateSamplesBytes (unsigned char *[], unsigned char *,
-					uint32, uint32, tsample_t, uint16,
+                                        uint32_t, uint32_t, tsample_t, uint16_t,
                                         FILE *, int, int);
 
-static int combineSeparateTileSamples8bits (uint8 *[], uint8 *, uint32, uint32,
-                                            uint32, uint32, uint16, uint16, 
+static int combineSeparateTileSamples8bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                            uint32_t, uint32_t, uint16_t, uint16_t,
                                             FILE *, int, int);
-static int combineSeparateTileSamples16bits (uint8 *[], uint8 *, uint32, uint32,
-                                             uint32, uint32, uint16, uint16,
+static int combineSeparateTileSamples16bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                             uint32_t, uint32_t, uint16_t, uint16_t,
                                              FILE *, int, int);
-static int combineSeparateTileSamples24bits (uint8 *[], uint8 *, uint32, uint32,
-                                             uint32, uint32, uint16, uint16,
+static int combineSeparateTileSamples24bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                             uint32_t, uint32_t, uint16_t, uint16_t,
                                              FILE *, int, int);
-static int combineSeparateTileSamples32bits (uint8 *[], uint8 *, uint32, uint32,
-                                             uint32, uint32, uint16, uint16,
+static int combineSeparateTileSamples32bits (uint8_t *[], uint8_t *, uint32_t, uint32_t,
+                                             uint32_t, uint32_t, uint16_t, uint16_t,
                                              FILE *, int, int);
 static int combineSeparateTileSamplesBytes (unsigned char *[], unsigned char *,
-			  		    uint32, uint32, uint32, uint32, 
-                                            tsample_t, uint16, FILE *, int, int);
+                                            uint32_t, uint32_t, uint32_t, uint32_t,
+                                            tsample_t, uint16_t, FILE *, int, int);
 
 /* Dump functions for debugging */
 static void dump_info  (FILE *, int, char *, char *, ...);
-static int  dump_data  (FILE *, int, char *, unsigned char *, uint32);
+static int  dump_data  (FILE *, int, char *, unsigned char *, uint32_t);
 static int  dump_byte  (FILE *, int, char *, unsigned char);
-static int  dump_short (FILE *, int, char *, uint16);
-static int  dump_long  (FILE *, int, char *, uint32);
-static int  dump_wide  (FILE *, int, char *, uint64);
-static int  dump_buffer (FILE *, int, uint32, uint32, uint32, unsigned char *);
+static int  dump_short (FILE *, int, char *, uint16_t);
+static int  dump_long  (FILE *, int, char *, uint32_t);
+static int  dump_wide  (FILE *, int, char *, uint64_t);
+static int  dump_buffer (FILE *, int, uint32_t, uint32_t, uint32_t, unsigned char *);
 
 /* End function declarations */
 /* Functions derived in whole or in part from tiffcp */
@@ -625,8 +623,8 @@ static tmsize_t maxMalloc = DEFAULT_MAX_MALLOC;
 static void* limitMalloc(tmsize_t s)
 {
   if (maxMalloc && (s > maxMalloc)) {
-    fprintf(stderr, "MemoryLimitError: allocation of %" TIFF_UINT64_FORMAT " bytes is forbidden. Limit is %" TIFF_UINT64_FORMAT ".\n",
-            (uint64)s, (uint64)maxMalloc);
+    fprintf(stderr, "MemoryLimitError: allocation of %" PRIu64 " bytes is forbidden. Limit is %" PRIu64 ".\n",
+            (uint64_t)s, (uint64_t)maxMalloc);
     fprintf(stderr, "                  use -k option to change limit.\n"); return NULL;
   }
   return _TIFFmalloc(s);
@@ -785,24 +783,24 @@ static const char usage_info[] =
  * from input image. These would then be passed to individual 
  * extractContigSampleXX routines.
  */
-static int readContigTilesIntoBuffer (TIFF* in, uint8* buf, 
-                                      uint32 imagelength, 
-                                      uint32 imagewidth, 
-                                      uint32 tw, uint32 tl,
-                                      tsample_t spp, uint16 bps)
+static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
+                                      uint32_t imagelength,
+                                      uint32_t imagewidth,
+                                      uint32_t tw, uint32_t tl,
+                                      tsample_t spp, uint16_t bps)
   {
   int status = 1;
   tsample_t sample = 0;
   tsample_t count = spp; 
-  uint32 row, col, trow;
-  uint32 nrow, ncol;
-  uint32 dst_rowsize, shift_width;
-  uint32 bytes_per_sample, bytes_per_pixel;
-  uint32 trailing_bits, prev_trailing_bits;
-  uint32 tile_rowsize  = TIFFTileRowSize(in);
-  uint32 src_offset, dst_offset;
-  uint32 row_offset, col_offset;
-  uint8 *bufp = (uint8*) buf;
+  uint32_t row, col, trow;
+  uint32_t nrow, ncol;
+  uint32_t dst_rowsize, shift_width;
+  uint32_t bytes_per_sample, bytes_per_pixel;
+  uint32_t trailing_bits, prev_trailing_bits;
+  uint32_t tile_rowsize  = TIFFTileRowSize(in);
+  uint32_t src_offset, dst_offset;
+  uint32_t row_offset, col_offset;
+  uint8_t *bufp = (uint8_t*) buf;
   unsigned char *src = NULL;
   unsigned char *dst = NULL;
   tsize_t tbytes = 0, tile_buffsize = 0;
@@ -992,20 +990,20 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8* buf,
   return status;
   }
 
-static int  readSeparateTilesIntoBuffer (TIFF* in, uint8 *obuf, 
-					 uint32 imagelength, uint32 imagewidth, 
-                                         uint32 tw, uint32 tl,
-                                         uint16 spp, uint16 bps)
+static int  readSeparateTilesIntoBuffer (TIFF* in, uint8_t *obuf,
+                                         uint32_t imagelength, uint32_t imagewidth,
+                                         uint32_t tw, uint32_t tl,
+                                         uint16_t spp, uint16_t bps)
   {
   int     i, status = 1, sample;
   int     shift_width, bytes_per_pixel;
-  uint16  bytes_per_sample;
-  uint32  row, col;     /* Current row and col of image */
-  uint32  nrow, ncol;   /* Number of rows and cols in current tile */
-  uint32  row_offset, col_offset; /* Output buffer offsets */
+  uint16_t  bytes_per_sample;
+  uint32_t  row, col;     /* Current row and col of image */
+  uint32_t  nrow, ncol;   /* Number of rows and cols in current tile */
+  uint32_t  row_offset, col_offset; /* Output buffer offsets */
   tsize_t tbytes = 0, tilesize = TIFFTileSize(in);
   tsample_t s;
-  uint8*  bufp = (uint8*)obuf;
+  uint8_t*  bufp = (uint8_t*)obuf;
   unsigned char *srcbuffs[MAX_SAMPLES];
   unsigned char *tbuff = NULL;
 
@@ -1139,9 +1137,9 @@ static int  readSeparateTilesIntoBuffer (TIFF* in, uint8 *obuf,
   return status;
   }
 
-static int writeBufferToContigStrips(TIFF* out, uint8* buf, uint32 imagelength)
+static int writeBufferToContigStrips(TIFF* out, uint8_t* buf, uint32_t imagelength)
   {
-  uint32 row, nrows, rowsperstrip;
+  uint32_t row, nrows, rowsperstrip;
   tstrip_t strip = 0;
   tsize_t stripsize;
 
@@ -1171,14 +1169,14 @@ static int writeBufferToContigStrips(TIFF* out, uint8* buf, uint32 imagelength)
  * before any strips or tiles of a different plane are stored.
  */
 static int 
-writeBufferToSeparateStrips (TIFF* out, uint8* buf, 
-			     uint32 length, uint32 width, uint16 spp,
-			     struct dump_opts *dump)
+writeBufferToSeparateStrips (TIFF* out, uint8_t* buf,
+                             uint32_t length, uint32_t width, uint16_t spp,
+                             struct dump_opts *dump)
   {
-  uint8   *src;
-  uint16   bps;
-  uint32   row, nrows, rowsize, rowsperstrip;
-  uint32   bytes_per_sample;
+  uint8_t   *src;
+  uint16_t   bps;
+  uint32_t   row, nrows, rowsize, rowsperstrip;
+  uint32_t   bytes_per_sample;
   tsample_t s;
   tstrip_t strip = 0;
   tsize_t  stripsize = TIFFStripSize(out);
@@ -1190,20 +1188,20 @@ writeBufferToSeparateStrips (TIFF* out, uint8* buf,
   (void) TIFFGetFieldDefaulted(out, TIFFTAG_BITSPERSAMPLE, &bps);
   bytes_per_sample = (bps + 7) / 8;
   if( width == 0 ||
-      (uint32)bps * (uint32)spp > TIFF_UINT32_MAX / width ||
-      bps * spp * width > TIFF_UINT32_MAX - 7U )
+      (uint32_t)bps * (uint32_t)spp > UINT32_MAX / width ||
+      bps * spp * width > UINT32_MAX - 7U )
   {
       TIFFError(TIFFFileName(out),
-            "Error, uint32 overflow when computing (bps * spp * width) + 7");
+            "Error, uint32_t overflow when computing (bps * spp * width) + 7");
       return 1;
   }
   rowsize = ((bps * spp * width) + 7U) / 8; /* source has interleaved samples */
   if( bytes_per_sample == 0 ||
-      rowsperstrip > TIFF_UINT32_MAX / bytes_per_sample ||
-      rowsperstrip * bytes_per_sample > TIFF_UINT32_MAX / (width + 1) )
+      rowsperstrip > UINT32_MAX / bytes_per_sample ||
+      rowsperstrip * bytes_per_sample > UINT32_MAX / (width + 1) )
   {
       TIFFError(TIFFFileName(out),
-                "Error, uint32 overflow when computing rowsperstrip * "
+                "Error, uint32_t overflow when computing rowsperstrip * "
                 "bytes_per_sample * (width + 1)");
       return 1;
   }
@@ -1252,16 +1250,16 @@ writeBufferToSeparateStrips (TIFF* out, uint8* buf,
 /* Extract all planes from contiguous buffer into a single tile buffer 
  * to be written out as a tile.
  */
-static int writeBufferToContigTiles (TIFF* out, uint8* buf, uint32 imagelength,
-				       uint32 imagewidth, tsample_t spp, 
-                                       struct dump_opts* dump)
+static int writeBufferToContigTiles (TIFF* out, uint8_t* buf, uint32_t imagelength,
+                                     uint32_t imagewidth, tsample_t spp,
+                                     struct dump_opts* dump)
   {
-  uint16 bps;
-  uint32 tl, tw;
-  uint32 row, col, nrow, ncol;
-  uint32 src_rowsize, col_offset;
-  uint32 tile_rowsize  = TIFFTileRowSize(out);
-  uint8* bufp = (uint8*) buf;
+  uint16_t bps;
+  uint32_t tl, tw;
+  uint32_t row, col, nrow, ncol;
+  uint32_t src_rowsize, col_offset;
+  uint32_t tile_rowsize  = TIFFTileRowSize(out);
+  uint8_t* bufp = (uint8_t*) buf;
   tsize_t tile_buffsize = 0;
   tsize_t tilesize = TIFFTileSize(out);
   unsigned char *tilebuf = NULL;
@@ -1294,11 +1292,11 @@ static int writeBufferToContigTiles (TIFF* out, uint8* buf, uint32 imagelength,
     }
 
   if( imagewidth == 0 ||
-      (uint32)bps * (uint32)spp > TIFF_UINT32_MAX / imagewidth ||
-      bps * spp * imagewidth > TIFF_UINT32_MAX - 7U )
+      (uint32_t)bps * (uint32_t)spp > UINT32_MAX / imagewidth ||
+      bps * spp * imagewidth > UINT32_MAX - 7U )
   {
       TIFFError(TIFFFileName(out),
-            "Error, uint32 overflow when computing (imagewidth * bps * spp) + 7");
+            "Error, uint32_t overflow when computing (imagewidth * bps * spp) + 7");
       return 1;
   }
   src_rowsize = ((imagewidth * spp * bps) + 7U) / 8;
@@ -1347,17 +1345,17 @@ static int writeBufferToContigTiles (TIFF* out, uint8* buf, uint32 imagelength,
 /* Extract each plane from contiguous buffer into a single tile buffer 
  * to be written out as a tile.
  */
-static int writeBufferToSeparateTiles (TIFF* out, uint8* buf, uint32 imagelength,
-				       uint32 imagewidth, tsample_t spp, 
+static int writeBufferToSeparateTiles (TIFF* out, uint8_t* buf, uint32_t imagelength,
+                                       uint32_t imagewidth, tsample_t spp,
                                        struct dump_opts * dump)
   {
   tdata_t obuf = limitMalloc(TIFFTileSize(out));
-  uint32 tl, tw;
-  uint32 row, col, nrow, ncol;
-  uint32 src_rowsize, col_offset;
-  uint16 bps;
+  uint32_t tl, tw;
+  uint32_t row, col, nrow, ncol;
+  uint32_t src_rowsize, col_offset;
+  uint16_t bps;
   tsample_t s;
-  uint8* bufp = (uint8*) buf;
+  uint8_t* bufp = (uint8_t*) buf;
 
   if (obuf == NULL)
     return 1;
@@ -1368,11 +1366,11 @@ static int writeBufferToSeparateTiles (TIFF* out, uint8* buf, uint32 imagelength
       return 1;
 
   if( imagewidth == 0 ||
-      (uint32)bps * (uint32)spp > TIFF_UINT32_MAX / imagewidth ||
-      bps * spp * imagewidth > TIFF_UINT32_MAX - 7 )
+      (uint32_t)bps * (uint32_t)spp > UINT32_MAX / imagewidth ||
+      bps * spp * imagewidth > UINT32_MAX - 7 )
   {
       TIFFError(TIFFFileName(out),
-            "Error, uint32 overflow when computing (imagewidth * bps * spp) + 7");
+            "Error, uint32_t overflow when computing (imagewidth * bps * spp) + 7");
       _TIFFfree(obuf);
       return 1;
   }
@@ -1425,7 +1423,7 @@ static void
 processG3Options(char* cp)
 {
 	if( (cp = strchr(cp, ':')) ) {
-		if (defg3opts == (uint32) -1)
+		if (defg3opts == (uint32_t) -1)
 			defg3opts = 0;
 		do {
 			cp++;
@@ -1521,27 +1519,27 @@ usage(int code)
     if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4)) TIFFSetField(out, tag, v1, v2, v3, v4)
 
 static void
-cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
+cpTag(TIFF* in, TIFF* out, uint16_t tag, uint16_t count, TIFFDataType type)
 {
 	switch (type) {
 	case TIFF_SHORT:
 		if (count == 1) {
-			uint16 shortv;
+			uint16_t shortv;
 			CopyField(tag, shortv);
 		} else if (count == 2) {
-			uint16 shortv1, shortv2;
+			uint16_t shortv1, shortv2;
 			CopyField2(tag, shortv1, shortv2);
 		} else if (count == 4) {
-			uint16 *tr, *tg, *tb, *ta;
+			uint16_t *tr, *tg, *tb, *ta;
 			CopyField4(tag, tr, tg, tb, ta);
-		} else if (count == (uint16) -1) {
-			uint16 shortv1;
-			uint16* shortav;
+		} else if (count == (uint16_t) -1) {
+			uint16_t shortv1;
+			uint16_t* shortav;
 			CopyField2(tag, shortv1, shortav);
 		}
 		break;
 	case TIFF_LONG:
-		{ uint32 longv;
+		{ uint32_t longv;
 		  CopyField(tag, longv);
 		}
 		break;
@@ -1549,7 +1547,7 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 		if (count == 1) {
 			float floatv;
 			CopyField(tag, floatv);
-		} else if (count == (uint16) -1) {
+		} else if (count == (uint16_t) -1) {
 			float* floatav;
 			CopyField(tag, floatav);
 		}
@@ -1563,7 +1561,7 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 		if (count == 1) {
 			double doublev;
 			CopyField(tag, doublev);
-		} else if (count == (uint16) -1) {
+		} else if (count == (uint16_t) -1) {
 			double* doubleav;
 			CopyField(tag, doubleav);
 		}
@@ -1576,8 +1574,8 @@ cpTag(TIFF* in, TIFF* out, uint16 tag, uint16 count, TIFFDataType type)
 }
 
 static const struct cpTag {
-	uint16	tag;
-	uint16	count;
+	uint16_t	tag;
+	uint16_t	count;
 	TIFFDataType type;
 } tags[] = {
 	{ TIFFTAG_SUBFILETYPE,		1, TIFF_LONG },
@@ -1588,41 +1586,41 @@ static const struct cpTag {
 	{ TIFFTAG_MODEL,		1, TIFF_ASCII },
 	{ TIFFTAG_MINSAMPLEVALUE,	1, TIFF_SHORT },
 	{ TIFFTAG_MAXSAMPLEVALUE,	1, TIFF_SHORT },
-	{ TIFFTAG_XRESOLUTION,		1, TIFF_RATIONAL },
-	{ TIFFTAG_YRESOLUTION,		1, TIFF_RATIONAL },
-	{ TIFFTAG_PAGENAME,		1, TIFF_ASCII },
-	{ TIFFTAG_XPOSITION,		1, TIFF_RATIONAL },
-	{ TIFFTAG_YPOSITION,		1, TIFF_RATIONAL },
-	{ TIFFTAG_RESOLUTIONUNIT,	1, TIFF_SHORT },
-	{ TIFFTAG_SOFTWARE,		1, TIFF_ASCII },
-	{ TIFFTAG_DATETIME,		1, TIFF_ASCII },
-	{ TIFFTAG_ARTIST,		1, TIFF_ASCII },
-	{ TIFFTAG_HOSTCOMPUTER,		1, TIFF_ASCII },
-	{ TIFFTAG_WHITEPOINT,		(uint16) -1, TIFF_RATIONAL },
-	{ TIFFTAG_PRIMARYCHROMATICITIES,(uint16) -1,TIFF_RATIONAL },
-	{ TIFFTAG_HALFTONEHINTS,	2, TIFF_SHORT },
-	{ TIFFTAG_INKSET,		1, TIFF_SHORT },
-	{ TIFFTAG_DOTRANGE,		2, TIFF_SHORT },
-	{ TIFFTAG_TARGETPRINTER,	1, TIFF_ASCII },
-	{ TIFFTAG_SAMPLEFORMAT,		1, TIFF_SHORT },
-	{ TIFFTAG_YCBCRCOEFFICIENTS,	(uint16) -1,TIFF_RATIONAL },
-	{ TIFFTAG_YCBCRSUBSAMPLING,	2, TIFF_SHORT },
-	{ TIFFTAG_YCBCRPOSITIONING,	1, TIFF_SHORT },
-	{ TIFFTAG_REFERENCEBLACKWHITE,	(uint16) -1,TIFF_RATIONAL },
-	{ TIFFTAG_EXTRASAMPLES,		(uint16) -1, TIFF_SHORT },
-	{ TIFFTAG_SMINSAMPLEVALUE,	1, TIFF_DOUBLE },
-	{ TIFFTAG_SMAXSAMPLEVALUE,	1, TIFF_DOUBLE },
-	{ TIFFTAG_STONITS,		1, TIFF_DOUBLE },
+	{ TIFFTAG_XRESOLUTION,		1,                 TIFF_RATIONAL },
+	{ TIFFTAG_YRESOLUTION,		1,                 TIFF_RATIONAL },
+	{ TIFFTAG_PAGENAME,		1,                    TIFF_ASCII },
+	{ TIFFTAG_XPOSITION,		1,                   TIFF_RATIONAL },
+	{ TIFFTAG_YPOSITION,		1,                   TIFF_RATIONAL },
+	{ TIFFTAG_RESOLUTIONUNIT,	1,                  TIFF_SHORT },
+	{ TIFFTAG_SOFTWARE,		1,                    TIFF_ASCII },
+	{ TIFFTAG_DATETIME,		1,                    TIFF_ASCII },
+	{ TIFFTAG_ARTIST,		1,                      TIFF_ASCII },
+	{ TIFFTAG_HOSTCOMPUTER,		1,                TIFF_ASCII },
+	{ TIFFTAG_WHITEPOINT,		(uint16_t) -1,      TIFF_RATIONAL },
+	{ TIFFTAG_PRIMARYCHROMATICITIES,(uint16_t) -1,   TIFF_RATIONAL },
+	{ TIFFTAG_HALFTONEHINTS,	2,                   TIFF_SHORT },
+	{ TIFFTAG_INKSET,		1,                      TIFF_SHORT },
+	{ TIFFTAG_DOTRANGE,		2,                    TIFF_SHORT },
+	{ TIFFTAG_TARGETPRINTER,	1,                   TIFF_ASCII },
+	{ TIFFTAG_SAMPLEFORMAT,		1,                TIFF_SHORT },
+	{ TIFFTAG_YCBCRCOEFFICIENTS,	(uint16_t) -1,   TIFF_RATIONAL },
+	{ TIFFTAG_YCBCRSUBSAMPLING,	2,                TIFF_SHORT },
+	{ TIFFTAG_YCBCRPOSITIONING,	1,                TIFF_SHORT },
+	{ TIFFTAG_REFERENCEBLACKWHITE,	(uint16_t) -1, TIFF_RATIONAL },
+	{ TIFFTAG_EXTRASAMPLES,		(uint16_t) -1,    TIFF_SHORT },
+	{ TIFFTAG_SMINSAMPLEVALUE,	1,                 TIFF_DOUBLE },
+	{ TIFFTAG_SMAXSAMPLEVALUE,	1,                 TIFF_DOUBLE },
+	{ TIFFTAG_STONITS,		1,                     TIFF_DOUBLE },
 };
 #define	NTAGS	(sizeof (tags) / sizeof (tags[0]))
 
 #define	CopyTag(tag, count, type)	cpTag(in, out, tag, count, type)
 
 /* Functions written by Richard Nolde, with exceptions noted. */
-void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32 *dirnum,
-	                    uint16 *defconfig, uint16 *deffillorder, uint32 *deftilewidth,
-                            uint32 *deftilelength, uint32 *defrowsperstrip,
-		            struct crop_mask *crop_data, struct pagedef *page, 
+void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32_t *dirnum,
+                            uint16_t *defconfig, uint16_t *deffillorder, uint32_t *deftilewidth,
+                            uint32_t *deftilelength, uint32_t *defrowsperstrip,
+                            struct crop_mask *crop_data, struct pagedef *page,
                             struct dump_opts *dump,
                             unsigned int     *imagelist, unsigned int   *image_count )
     {
@@ -2033,11 +2031,11 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
 		crop_data->crop_mode |= CROP_ROTATE;
 		switch (strtoul(optarg, NULL, 0))
                   {
-		  case  90:  crop_data->rotation = (uint16)90;
+		  case  90:  crop_data->rotation = (uint16_t)90;
                              break;
-                  case  180: crop_data->rotation = (uint16)180;
+                  case  180: crop_data->rotation = (uint16_t)180;
                              break;
-                  case  270: crop_data->rotation = (uint16)270;
+                  case  270: crop_data->rotation = (uint16_t)270;
                              break;
 		  default:   TIFFError ("Rotation must be 90, 180, or 270 degrees clockwise", "%s", optarg);
 			     TIFFError ("For valid options type", "tiffcrop -h");
@@ -2208,12 +2206,12 @@ main(int argc, char* argv[])
 #if !HAVE_DECL_OPTARG
   extern int optind;
 #endif
-  uint16 defconfig = (uint16) -1;
-  uint16 deffillorder = 0;
-  uint32 deftilewidth = (uint32) 0;
-  uint32 deftilelength = (uint32) 0;
-  uint32 defrowsperstrip = (uint32) 0;
-  uint32 dirnum = 0;
+  uint16_t defconfig = (uint16_t) -1;
+  uint16_t deffillorder = 0;
+  uint32_t deftilewidth = (uint32_t) 0;
+  uint32_t deftilelength = (uint32_t) 0;
+  uint32_t defrowsperstrip = (uint32_t) 0;
+  uint32_t dirnum = 0;
 
   TIFF *in = NULL;
   TIFF *out = NULL;
@@ -2513,10 +2511,10 @@ main(int argc, char* argv[])
 
 
 /* Debugging functions */
-static int dump_data (FILE *dumpfile, int format, char *dump_tag, unsigned char *data, uint32 count)
+static int dump_data (FILE *dumpfile, int format, char *dump_tag, unsigned char *data, uint32_t count)
   {
   int j, k;
-  uint32 i;
+  uint32_t i;
   char  dump_array[10];
   unsigned char bitset;
 
@@ -2588,7 +2586,7 @@ static int dump_byte (FILE *dumpfile, int format, char *dump_tag, unsigned char 
   return (0);
   }
 
-static int dump_short (FILE *dumpfile, int format, char *dump_tag, uint16 data)
+static int dump_short (FILE *dumpfile, int format, char *dump_tag, uint16_t data)
   {
   int j, k;
   char  dump_array[20];
@@ -2625,7 +2623,7 @@ static int dump_short (FILE *dumpfile, int format, char *dump_tag, uint16 data)
   return (0);
   }
 
-static int dump_long (FILE *dumpfile, int format, char *dump_tag, uint32 data)
+static int dump_long (FILE *dumpfile, int format, char *dump_tag, uint32_t data)
   {
   int j, k;
   char  dump_array[40];
@@ -2642,7 +2640,7 @@ static int dump_long (FILE *dumpfile, int format, char *dump_tag, uint32 data)
     fprintf (dumpfile," %s  ", dump_tag);
     for (j = 0, k = 31; k >= 0; j++, k--)
       {
-      bitset = data & (((uint32)1 << k)) ? 1 : 0;
+      bitset = data & (((uint32_t)1 << k)) ? 1 : 0;
       sprintf(&dump_array[j], (bitset) ? "1" : "0");
       if ((k % 8) == 0)
           sprintf(&dump_array[++j], " ");
@@ -2661,7 +2659,7 @@ static int dump_long (FILE *dumpfile, int format, char *dump_tag, uint32 data)
   return (0);
   }
 
-static int dump_wide (FILE *dumpfile, int format, char *dump_tag, uint64 data)
+static int dump_wide (FILE *dumpfile, int format, char *dump_tag, uint64_t data)
   {
   int j, k;
   char  dump_array[80];
@@ -2678,7 +2676,7 @@ static int dump_wide (FILE *dumpfile, int format, char *dump_tag, uint64 data)
     fprintf (dumpfile," %s  ", dump_tag);
     for (j = 0, k = 63; k >= 0; j++, k--)
       {
-      bitset = data & (((uint64)1 << k)) ? 1 : 0;
+      bitset = data & (((uint64_t)1 << k)) ? 1 : 0;
       sprintf(&dump_array[j], (bitset) ? "1" : "0");
       if ((k % 8) == 0)
           sprintf(&dump_array[++j], " ");
@@ -2711,11 +2709,11 @@ static void dump_info(FILE *dumpfile, int format, char *prefix, char *msg, ...)
     }
   }
 
-static int dump_buffer (FILE* dumpfile, int format, uint32 rows, uint32 width, 
-                 uint32 row, unsigned char *buff)
+static int dump_buffer (FILE* dumpfile, int format, uint32_t rows, uint32_t width,
+                        uint32_t row, unsigned char *buff)
   {
   int j, k;
-  uint32 i;
+  uint32_t i;
   unsigned char * dump_ptr;
 
   if (dumpfile == NULL)
@@ -2747,15 +2745,15 @@ static int dump_buffer (FILE* dumpfile, int format, uint32 rows, uint32 width,
  */
 
 static int 
-extractContigSamplesBytes (uint8 *in, uint8 *out, uint32 cols, 
-                           tsample_t sample, uint16 spp, uint16 bps, 
-                           tsample_t count, uint32 start, uint32 end)
+extractContigSamplesBytes (uint8_t *in, uint8_t *out, uint32_t cols,
+                           tsample_t sample, uint16_t spp, uint16_t bps,
+                           tsample_t count, uint32_t start, uint32_t end)
   {
   int i, bytes_per_sample, sindex;
-  uint32 col, dst_rowsize, bit_offset;
-  uint32 src_byte /*, src_bit */;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, dst_rowsize, bit_offset;
+  uint32_t src_byte /*, src_bit */;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((src == NULL) || (dst == NULL))
     {
@@ -2813,16 +2811,16 @@ extractContigSamplesBytes (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamplesBytes */
 
 static int
-extractContigSamples8bits (uint8 *in, uint8 *out, uint32 cols,
-                           tsample_t sample, uint16 spp, uint16 bps, 
-                           tsample_t count, uint32 start, uint32 end)
+extractContigSamples8bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                           tsample_t sample, uint16_t spp, uint16_t bps,
+                           tsample_t count, uint32_t start, uint32_t end)
   {
   int    ready_bits = 0, sindex = 0;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint8  maskbits = 0, matchbits = 0;
-  uint8  buff1 = 0, buff2 = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint8_t  maskbits = 0, matchbits = 0;
+  uint8_t  buff1 = 0, buff2 = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((src == NULL) || (dst == NULL))
     {
@@ -2844,7 +2842,7 @@ extractContigSamples8bits (uint8 *in, uint8 *out, uint32 cols,
     }
   
   ready_bits = 0;
-  maskbits =  (uint8)-1 >> ( 8 - bps);
+  maskbits =  (uint8_t)-1 >> (8 - bps);
   buff1 = buff2 = 0;
   for (col = start; col < end; col++)
     {    /* Compute src byte(s) and bits within byte(s) */
@@ -2890,17 +2888,17 @@ extractContigSamples8bits (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamples8bits */
 
 static int
-extractContigSamples16bits (uint8 *in, uint8 *out, uint32 cols, 
-                            tsample_t sample, uint16 spp, uint16 bps, 
-                            tsample_t count, uint32 start, uint32 end)
+extractContigSamples16bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                            tsample_t sample, uint16_t spp, uint16_t bps,
+                            tsample_t count, uint32_t start, uint32_t end)
   {
   int    ready_bits = 0, sindex = 0;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint16 maskbits = 0, matchbits = 0;
-  uint16 buff1 = 0, buff2 = 0;
-  uint8  bytebuff = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint16_t maskbits = 0, matchbits = 0;
+  uint16_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((src == NULL) || (dst == NULL))
     {
@@ -2922,7 +2920,7 @@ extractContigSamples16bits (uint8 *in, uint8 *out, uint32 cols,
     }
 
   ready_bits = 0;
-  maskbits = (uint16)-1 >> (16 - bps);
+  maskbits = (uint16_t)-1 >> (16 - bps);
 
   for (col = start; col < end; col++)
     {    /* Compute src byte(s) and bits within byte(s) */
@@ -2979,17 +2977,17 @@ extractContigSamples16bits (uint8 *in, uint8 *out, uint32 cols,
 
 
 static int
-extractContigSamples24bits (uint8 *in, uint8 *out, uint32 cols,
- 	                    tsample_t sample, uint16 spp, uint16 bps, 
-                            tsample_t count, uint32 start, uint32 end)
+extractContigSamples24bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                            tsample_t sample, uint16_t spp, uint16_t bps,
+                            tsample_t count, uint32_t start, uint32_t end)
   {
   int    ready_bits = 0, sindex = 0;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint32 maskbits = 0, matchbits = 0;
-  uint32 buff1 = 0, buff2 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint32_t maskbits = 0, matchbits = 0;
+  uint32_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((in == NULL) || (out == NULL))
     {
@@ -3011,7 +3009,7 @@ extractContigSamples24bits (uint8 *in, uint8 *out, uint32 cols,
     }
 
   ready_bits = 0;
-  maskbits =  (uint32)-1 >> ( 32 - bps);
+  maskbits =  (uint32_t)-1 >> (32 - bps);
   for (col = start; col < end; col++)
     {
     /* Compute src byte(s) and bits within byte(s) */
@@ -3088,18 +3086,18 @@ extractContigSamples24bits (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamples24bits */
 
 static int
-extractContigSamples32bits (uint8 *in, uint8 *out, uint32 cols,
-                            tsample_t sample, uint16 spp, uint16 bps, 
- 			    tsample_t count, uint32 start, uint32 end)
+extractContigSamples32bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                            tsample_t sample, uint16_t spp, uint16_t bps,
+                            tsample_t count, uint32_t start, uint32_t end)
   {
   int    ready_bits = 0, sindex = 0 /*, shift_width = 0 */;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint32 longbuff1 = 0, longbuff2 = 0;
-  uint64 maskbits = 0, matchbits = 0;
-  uint64 buff1 = 0, buff2 = 0, buff3 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint32_t longbuff1 = 0, longbuff2 = 0;
+  uint64_t maskbits = 0, matchbits = 0;
+  uint64_t buff1 = 0, buff2 = 0, buff3 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((in == NULL) || (out == NULL))
     {
@@ -3123,7 +3121,7 @@ extractContigSamples32bits (uint8 *in, uint8 *out, uint32 cols,
 
   /* shift_width = ((bps + 7) / 8) + 1; */ 
   ready_bits = 0;
-  maskbits =  (uint64)-1 >> ( 64 - bps);
+  maskbits =  (uint64_t)-1 >> (64 - bps);
   for (col = start; col < end; col++)
     {
     /* Compute src byte(s) and bits within byte(s) */
@@ -3154,7 +3152,7 @@ extractContigSamples32bits (uint8 *in, uint8 *out, uint32 cols,
 	longbuff2 = longbuff1;
 	}
 
-      buff3 = ((uint64)longbuff1 << 32) | longbuff2;
+      buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
       buff1 = (buff3 & matchbits) << (src_bit);
 
       /* If we have a full buffer's worth, write it out */
@@ -3193,17 +3191,17 @@ extractContigSamples32bits (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamples32bits */
 
 static int
-extractContigSamplesShifted8bits (uint8 *in, uint8 *out, uint32 cols,
-                                  tsample_t sample, uint16 spp, uint16 bps, 
-			          tsample_t count, uint32 start, uint32 end,
- 	                          int shift)
+extractContigSamplesShifted8bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                                  tsample_t sample, uint16_t spp, uint16_t bps,
+                                  tsample_t count, uint32_t start, uint32_t end,
+                                  int shift)
   {
   int    ready_bits = 0, sindex = 0;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint8  maskbits = 0, matchbits = 0;
-  uint8  buff1 = 0, buff2 = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint8_t  maskbits = 0, matchbits = 0;
+  uint8_t  buff1 = 0, buff2 = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((src == NULL) || (dst == NULL))
     {
@@ -3225,7 +3223,7 @@ extractContigSamplesShifted8bits (uint8 *in, uint8 *out, uint32 cols,
     }
 
   ready_bits = shift;
-  maskbits =  (uint8)-1 >> ( 8 - bps);
+  maskbits =  (uint8_t)-1 >> (8 - bps);
   buff1 = buff2 = 0;
   for (col = start; col < end; col++)
     {    /* Compute src byte(s) and bits within byte(s) */
@@ -3247,7 +3245,7 @@ extractContigSamplesShifted8bits (uint8 *in, uint8 *out, uint32 cols,
       matchbits = maskbits << (8 - src_bit - bps); 
       buff1 = ((*src) & matchbits) << (src_bit);
       if ((col == start) && (sindex == sample))
-        buff2 = *src & ((uint8)-1) << (shift);
+        buff2 = *src & ((uint8_t)-1) << (shift);
 
       /* If we have a full buffer's worth, write it out */
       if (ready_bits >= 8)
@@ -3273,18 +3271,18 @@ extractContigSamplesShifted8bits (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamplesShifted8bits */
 
 static int
-extractContigSamplesShifted16bits (uint8 *in, uint8 *out, uint32 cols, 
-                                   tsample_t sample, uint16 spp, uint16 bps, 
-  			           tsample_t count, uint32 start, uint32 end,
- 	                           int shift)
+extractContigSamplesShifted16bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                                   tsample_t sample, uint16_t spp, uint16_t bps,
+                                   tsample_t count, uint32_t start, uint32_t end,
+                                   int shift)
   {
   int    ready_bits = 0, sindex = 0;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint16 maskbits = 0, matchbits = 0;
-  uint16 buff1 = 0, buff2 = 0;
-  uint8  bytebuff = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint16_t maskbits = 0, matchbits = 0;
+  uint16_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
   
   if ((src == NULL) || (dst == NULL))
     {
@@ -3306,7 +3304,7 @@ extractContigSamplesShifted16bits (uint8 *in, uint8 *out, uint32 cols,
     }
 
   ready_bits = shift;
-  maskbits = (uint16)-1 >> (16 - bps);
+  maskbits = (uint16_t)-1 >> (16 - bps);
   for (col = start; col < end; col++)
     {    /* Compute src byte(s) and bits within byte(s) */
     bit_offset = col * bps * spp;
@@ -3331,7 +3329,7 @@ extractContigSamplesShifted16bits (uint8 *in, uint8 *out, uint32 cols,
         buff1 = (src[1] << 8) | src[0];
 
       if ((col == start) && (sindex == sample))
-        buff2 = buff1 & ((uint16)-1) << (8 - shift);
+        buff2 = buff1 & ((uint16_t)-1) << (8 - shift);
 
       buff1 = (buff1 & matchbits) << (src_bit);
 
@@ -3363,18 +3361,18 @@ extractContigSamplesShifted16bits (uint8 *in, uint8 *out, uint32 cols,
 
 
 static int
-extractContigSamplesShifted24bits (uint8 *in, uint8 *out, uint32 cols,
- 	                           tsample_t sample, uint16 spp, uint16 bps, 
-                                   tsample_t count, uint32 start, uint32 end,
-	                           int shift)
+extractContigSamplesShifted24bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                                   tsample_t sample, uint16_t spp, uint16_t bps,
+                                   tsample_t count, uint32_t start, uint32_t end,
+                                   int shift)
   {
   int    ready_bits = 0, sindex = 0;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint32 maskbits = 0, matchbits = 0;
-  uint32 buff1 = 0, buff2 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint32_t maskbits = 0, matchbits = 0;
+  uint32_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((in == NULL) || (out == NULL))
     {
@@ -3396,7 +3394,7 @@ extractContigSamplesShifted24bits (uint8 *in, uint8 *out, uint32 cols,
     }
 
   ready_bits = shift;
-  maskbits =  (uint32)-1 >> ( 32 - bps);
+  maskbits =  (uint32_t)-1 >> (32 - bps);
   for (col = start; col < end; col++)
     {
     /* Compute src byte(s) and bits within byte(s) */
@@ -3422,7 +3420,7 @@ extractContigSamplesShifted24bits (uint8 *in, uint8 *out, uint32 cols,
 	buff1 = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
 
       if ((col == start) && (sindex == sample))
-        buff2 = buff1 & ((uint32)-1) << (16 - shift);
+        buff2 = buff1 & ((uint32_t)-1) << (16 - shift);
 
       buff1 = (buff1 & matchbits) << (src_bit);
 
@@ -3461,19 +3459,19 @@ extractContigSamplesShifted24bits (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamplesShifted24bits */
 
 static int
-extractContigSamplesShifted32bits (uint8 *in, uint8 *out, uint32 cols,
-                                   tsample_t sample, uint16 spp, uint16 bps, 
- 			           tsample_t count, uint32 start, uint32 end,
-	                           int shift)
+extractContigSamplesShifted32bits (uint8_t *in, uint8_t *out, uint32_t cols,
+                                   tsample_t sample, uint16_t spp, uint16_t bps,
+                                   tsample_t count, uint32_t start, uint32_t end,
+                                   int shift)
   {
   int    ready_bits = 0, sindex = 0 /*, shift_width = 0 */;
-  uint32 col, src_byte, src_bit, bit_offset;
-  uint32 longbuff1 = 0, longbuff2 = 0;
-  uint64 maskbits = 0, matchbits = 0;
-  uint64 buff1 = 0, buff2 = 0, buff3 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
-  uint8 *src = in;
-  uint8 *dst = out;
+  uint32_t col, src_byte, src_bit, bit_offset;
+  uint32_t longbuff1 = 0, longbuff2 = 0;
+  uint64_t maskbits = 0, matchbits = 0;
+  uint64_t buff1 = 0, buff2 = 0, buff3 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
+  uint8_t *src = in;
+  uint8_t *dst = out;
 
   if ((in == NULL) || (out == NULL))
     {
@@ -3497,7 +3495,7 @@ extractContigSamplesShifted32bits (uint8 *in, uint8 *out, uint32 cols,
 
   /* shift_width = ((bps + 7) / 8) + 1; */ 
   ready_bits = shift;
-  maskbits =  (uint64)-1 >> ( 64 - bps);
+  maskbits =  (uint64_t)-1 >> (64 - bps);
   for (col = start; col < end; col++)
     {
     /* Compute src byte(s) and bits within byte(s) */
@@ -3528,9 +3526,9 @@ extractContigSamplesShifted32bits (uint8 *in, uint8 *out, uint32 cols,
 	longbuff2 = longbuff1;
 	}
 
-      buff3 = ((uint64)longbuff1 << 32) | longbuff2;
+      buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
       if ((col == start) && (sindex == sample))
-        buff2 = buff3 & ((uint64)-1) << (32 - shift);
+        buff2 = buff3 & ((uint64_t)-1) << (32 - shift);
 
       buff1 = (buff3 & matchbits) << (src_bit);
 
@@ -3569,15 +3567,15 @@ extractContigSamplesShifted32bits (uint8 *in, uint8 *out, uint32 cols,
   } /* end extractContigSamplesShifted32bits */
 
 static int
-extractContigSamplesToBuffer(uint8 *out, uint8 *in, uint32 rows, uint32 cols,
-  	                     tsample_t sample, uint16 spp, uint16 bps, 
+extractContigSamplesToBuffer(uint8_t *out, uint8_t *in, uint32_t rows, uint32_t cols,
+                             tsample_t sample, uint16_t spp, uint16_t bps,
                              struct dump_opts *dump)
   {
   int    shift_width, bytes_per_sample, bytes_per_pixel;
-  uint32 src_rowsize, src_offset, row, first_col = 0;
-  uint32 dst_rowsize, dst_offset;
+  uint32_t src_rowsize, src_offset, row, first_col = 0;
+  uint32_t dst_rowsize, dst_offset;
   tsample_t count = 1;
-  uint8 *src, *dst;
+  uint8_t *src, *dst;
 
   bytes_per_sample = (bps + 7) / 8; 
   bytes_per_pixel  = ((bps * spp) + 7) / 8;
@@ -3645,14 +3643,14 @@ extractContigSamplesToBuffer(uint8 *out, uint8 *in, uint32 rows, uint32 cols,
   } /* end extractContigSamplesToBuffer */
 
 static int
-extractContigSamplesToTileBuffer(uint8 *out, uint8 *in, uint32 rows, uint32 cols,
-  	                         uint32 imagewidth, uint32 tilewidth, tsample_t sample,
-				 uint16 count, uint16 spp, uint16 bps, struct dump_opts *dump)
+extractContigSamplesToTileBuffer(uint8_t *out, uint8_t *in, uint32_t rows, uint32_t cols,
+                                 uint32_t imagewidth, uint32_t tilewidth, tsample_t sample,
+                                 uint16_t count, uint16_t spp, uint16_t bps, struct dump_opts *dump)
   {
   int    shift_width, bytes_per_sample, bytes_per_pixel;
-  uint32 src_rowsize, src_offset, row;
-  uint32 dst_rowsize, dst_offset;
-  uint8 *src, *dst;
+  uint32_t src_rowsize, src_offset, row;
+  uint32_t dst_rowsize, dst_offset;
+  uint8_t *src, *dst;
 
   bytes_per_sample = (bps + 7) / 8; 
   bytes_per_pixel  = ((bps * spp) + 7) / 8;
@@ -3721,14 +3719,14 @@ extractContigSamplesToTileBuffer(uint8 *out, uint8 *in, uint32 rows, uint32 cols
   return (0);
   } /* end extractContigSamplesToTileBuffer */
 
-static int readContigStripsIntoBuffer (TIFF* in, uint8* buf)
+static int readContigStripsIntoBuffer (TIFF* in, uint8_t* buf)
 {
-        uint8* bufp = buf;
-        int32  bytes_read = 0;
-        uint32 strip, nstrips   = TIFFNumberOfStrips(in);
-        uint32 stripsize = TIFFStripSize(in);
-        uint32 rows = 0;
-        uint32 rps = TIFFGetFieldDefaulted(in, TIFFTAG_ROWSPERSTRIP, &rps);
+        uint8_t* bufp = buf;
+        int32_t  bytes_read = 0;
+        uint32_t strip, nstrips   = TIFFNumberOfStrips(in);
+        uint32_t stripsize = TIFFStripSize(in);
+        uint32_t rows = 0;
+        uint32_t rps = TIFFGetFieldDefaulted(in, TIFFTAG_ROWSPERSTRIP, &rps);
         tsize_t scanline_size = TIFFScanlineSize(in);
 
         if (scanline_size == 0) {
@@ -3739,7 +3737,7 @@ static int readContigStripsIntoBuffer (TIFF* in, uint8* buf)
         for (strip = 0; strip < nstrips; strip++) {
                 bytes_read = TIFFReadEncodedStrip (in, strip, bufp, -1);
                 rows = bytes_read / scanline_size;
-                if ((strip < (nstrips - 1)) && (bytes_read != (int32)stripsize))
+                if ((strip < (nstrips - 1)) && (bytes_read != (int32_t)stripsize))
                         TIFFError("", "Strip %d: read %lu bytes, strip size %lu",
                                   (int)strip + 1, (unsigned long) bytes_read,
                                   (unsigned long)stripsize);
@@ -3757,11 +3755,11 @@ static int readContigStripsIntoBuffer (TIFF* in, uint8* buf)
 
 static int 
 combineSeparateSamplesBytes (unsigned char *srcbuffs[], unsigned char *out,
-                             uint32 cols, uint32 rows, uint16 spp, uint16 bps,
+                             uint32_t cols, uint32_t rows, uint16_t spp, uint16_t bps,
                              FILE *dumpfile, int format, int level)
   {
   int i, bytes_per_sample;
-  uint32 row, col, col_offset, src_rowsize, dst_rowsize, row_offset;
+  uint32_t row, col, col_offset, src_rowsize, dst_rowsize, row_offset;
   unsigned char *src;
   unsigned char *dst;
   tsample_t s;
@@ -3814,17 +3812,17 @@ combineSeparateSamplesBytes (unsigned char *srcbuffs[], unsigned char *out,
   } /* end combineSeparateSamplesBytes */
 
 static int
-combineSeparateSamples8bits (uint8 *in[], uint8 *out, uint32 cols,
-                            uint32 rows, uint16 spp, uint16 bps, 
- 	                    FILE *dumpfile, int format, int level)
+combineSeparateSamples8bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                             uint32_t rows, uint16_t spp, uint16_t bps,
+                             FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0;
   /* int    bytes_per_sample = 0; */
-  uint32 src_rowsize, dst_rowsize, src_offset; 
-  uint32 bit_offset;
-  uint32 row, col, src_byte = 0, src_bit = 0;
-  uint8  maskbits = 0, matchbits = 0;
-  uint8  buff1 = 0, buff2 = 0;
+  uint32_t src_rowsize, dst_rowsize, src_offset;
+  uint32_t bit_offset;
+  uint32_t row, col, src_byte = 0, src_bit = 0;
+  uint8_t  maskbits = 0, matchbits = 0;
+  uint8_t  buff1 = 0, buff2 = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -3839,7 +3837,7 @@ combineSeparateSamples8bits (uint8 *in[], uint8 *out, uint32 cols,
   /* bytes_per_sample = (bps + 7) / 8; */ 
   src_rowsize = ((bps * cols) + 7) / 8;
   dst_rowsize = ((bps * cols * spp) + 7) / 8;
-  maskbits =  (uint8)-1 >> ( 8 - bps);
+  maskbits =  (uint8_t)-1 >> (8 - bps);
 
   for (row = 0; row < rows; row++)
     {
@@ -3914,17 +3912,17 @@ combineSeparateSamples8bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateSamples8bits */
 
 static int
-combineSeparateSamples16bits (uint8 *in[], uint8 *out, uint32 cols,
-                              uint32 rows, uint16 spp, uint16 bps, 
- 	                      FILE *dumpfile, int format, int level)
+combineSeparateSamples16bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                              uint32_t rows, uint16_t spp, uint16_t bps,
+                              FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0 /*, bytes_per_sample = 0 */;
-  uint32 src_rowsize, dst_rowsize; 
-  uint32 bit_offset, src_offset;
-  uint32 row, col, src_byte = 0, src_bit = 0;
-  uint16 maskbits = 0, matchbits = 0;
-  uint16 buff1 = 0, buff2 = 0;
-  uint8  bytebuff = 0;
+  uint32_t src_rowsize, dst_rowsize;
+  uint32_t bit_offset, src_offset;
+  uint32_t row, col, src_byte = 0, src_bit = 0;
+  uint16_t maskbits = 0, matchbits = 0;
+  uint16_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -3939,7 +3937,7 @@ combineSeparateSamples16bits (uint8 *in[], uint8 *out, uint32 cols,
   /* bytes_per_sample = (bps + 7) / 8; */ 
   src_rowsize = ((bps * cols) + 7) / 8;
   dst_rowsize = ((bps * cols * spp) + 7) / 8;
-  maskbits = (uint16)-1 >> (16 - bps);
+  maskbits = (uint16_t)-1 >> (16 - bps);
 
   for (row = 0; row < rows; row++)
     {
@@ -4024,17 +4022,17 @@ combineSeparateSamples16bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateSamples16bits */
 
 static int
-combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
-                              uint32 rows, uint16 spp, uint16 bps, 
-	                      FILE *dumpfile, int format, int level)
+combineSeparateSamples24bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                              uint32_t rows, uint16_t spp, uint16_t bps,
+                              FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0 /*, bytes_per_sample = 0 */;
-  uint32 src_rowsize, dst_rowsize; 
-  uint32 bit_offset, src_offset;
-  uint32 row, col, src_byte = 0, src_bit = 0;
-  uint32 maskbits = 0, matchbits = 0;
-  uint32 buff1 = 0, buff2 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0;
+  uint32_t src_rowsize, dst_rowsize;
+  uint32_t bit_offset, src_offset;
+  uint32_t row, col, src_byte = 0, src_bit = 0;
+  uint32_t maskbits = 0, matchbits = 0;
+  uint32_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -4049,7 +4047,7 @@ combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
   /* bytes_per_sample = (bps + 7) / 8; */ 
   src_rowsize = ((bps * cols) + 7) / 8;
   dst_rowsize = ((bps * cols * spp) + 7) / 8;
-  maskbits =  (uint32)-1 >> ( 32 - bps);
+  maskbits =  (uint32_t)-1 >> (32 - bps);
 
   for (row = 0; row < rows; row++)
     {
@@ -4069,9 +4067,9 @@ combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
         {
 	src = in[s] + src_offset + src_byte;
         if (little_endian)
-	  buff1 = ((uint32)src[0] << 24) | ((uint32)src[1] << 16) | ((uint32)src[2] << 8) | (uint32)src[3];
+	  buff1 = ((uint32_t)src[0] << 24) | ((uint32_t)src[1] << 16) | ((uint32_t)src[2] << 8) | (uint32_t)src[3];
         else
-	  buff1 = ((uint32)src[3] << 24) | ((uint32)src[2] << 16) | ((uint32)src[1] << 8) | (uint32)src[0];
+	  buff1 = ((uint32_t)src[3] << 24) | ((uint32_t)src[2] << 16) | ((uint32_t)src[1] << 8) | (uint32_t)src[0];
 	buff1 = (buff1 & matchbits) << (src_bit);
 
 	/* If we have a full buffer's worth, write it out */
@@ -4148,18 +4146,18 @@ combineSeparateSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateSamples24bits */
 
 static int
-combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
-                              uint32 rows, uint16 spp, uint16 bps, 
-	                      FILE *dumpfile, int format, int level)
+combineSeparateSamples32bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                              uint32_t rows, uint16_t spp, uint16_t bps,
+                              FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0 /*, bytes_per_sample = 0, shift_width = 0 */;
-  uint32 src_rowsize, dst_rowsize, bit_offset, src_offset;
-  uint32 src_byte = 0, src_bit = 0;
-  uint32 row, col;
-  uint32 longbuff1 = 0, longbuff2 = 0;
-  uint64 maskbits = 0, matchbits = 0;
-  uint64 buff1 = 0, buff2 = 0, buff3 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
+  uint32_t src_rowsize, dst_rowsize, bit_offset, src_offset;
+  uint32_t src_byte = 0, src_bit = 0;
+  uint32_t row, col;
+  uint32_t longbuff1 = 0, longbuff2 = 0;
+  uint64_t maskbits = 0, matchbits = 0;
+  uint64_t buff1 = 0, buff2 = 0, buff3 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -4174,7 +4172,7 @@ combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
   /* bytes_per_sample = (bps + 7) / 8; */ 
   src_rowsize = ((bps * cols) + 7) / 8;
   dst_rowsize = ((bps * cols * spp) + 7) / 8;
-  maskbits =  (uint64)-1 >> ( 64 - bps);
+  maskbits =  (uint64_t)-1 >> (64 - bps);
   /* shift_width = ((bps + 7) / 8) + 1; */ 
 
   for (row = 0; row < rows; row++)
@@ -4204,7 +4202,7 @@ combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
 	  longbuff1 = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
           longbuff2 = longbuff1;
 	  }
-	buff3 = ((uint64)longbuff1 << 32) | longbuff2;
+	buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
 	buff1 = (buff3 & matchbits) << (src_bit);
 
 	/* If we have a full buffer's worth, write it out */
@@ -4280,12 +4278,12 @@ combineSeparateSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
 
 static int 
 combineSeparateTileSamplesBytes (unsigned char *srcbuffs[], unsigned char *out,
-                                 uint32 cols, uint32 rows, uint32 imagewidth,
-                                 uint32 tw, uint16 spp, uint16 bps,
+                                 uint32_t cols, uint32_t rows, uint32_t imagewidth,
+                                 uint32_t tw, uint16_t spp, uint16_t bps,
                                  FILE *dumpfile, int format, int level)
   {
   int i, bytes_per_sample;
-  uint32 row, col, col_offset, src_rowsize, dst_rowsize, src_offset;
+  uint32_t row, col, col_offset, src_rowsize, dst_rowsize, src_offset;
   unsigned char *src;
   unsigned char *dst;
   tsample_t s;
@@ -4340,17 +4338,17 @@ combineSeparateTileSamplesBytes (unsigned char *srcbuffs[], unsigned char *out,
   } /* end combineSeparateTileSamplesBytes */
 
 static int
-combineSeparateTileSamples8bits (uint8 *in[], uint8 *out, uint32 cols,
-                                 uint32 rows, uint32 imagewidth, 
-                                 uint32 tw, uint16 spp, uint16 bps, 
- 	                         FILE *dumpfile, int format, int level)
+combineSeparateTileSamples8bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                                 uint32_t rows, uint32_t imagewidth,
+                                 uint32_t tw, uint16_t spp, uint16_t bps,
+                                 FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0;
-  uint32 src_rowsize, dst_rowsize, src_offset; 
-  uint32 bit_offset;
-  uint32 row, col, src_byte = 0, src_bit = 0;
-  uint8  maskbits = 0, matchbits = 0;
-  uint8  buff1 = 0, buff2 = 0;
+  uint32_t src_rowsize, dst_rowsize, src_offset;
+  uint32_t bit_offset;
+  uint32_t row, col, src_byte = 0, src_bit = 0;
+  uint8_t  maskbits = 0, matchbits = 0;
+  uint8_t  buff1 = 0, buff2 = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -4364,7 +4362,7 @@ combineSeparateTileSamples8bits (uint8 *in[], uint8 *out, uint32 cols,
 
   src_rowsize = ((bps * tw) + 7) / 8;
   dst_rowsize = ((imagewidth * bps * spp) + 7) / 8;
-  maskbits =  (uint8)-1 >> ( 8 - bps);
+  maskbits =  (uint8_t)-1 >> (8 - bps);
 
   for (row = 0; row < rows; row++)
     {
@@ -4439,18 +4437,18 @@ combineSeparateTileSamples8bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateTileSamples8bits */
 
 static int
-combineSeparateTileSamples16bits (uint8 *in[], uint8 *out, uint32 cols,
-                                  uint32 rows, uint32 imagewidth, 
-                                  uint32 tw, uint16 spp, uint16 bps, 
- 	                          FILE *dumpfile, int format, int level)
+combineSeparateTileSamples16bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                                  uint32_t rows, uint32_t imagewidth,
+                                  uint32_t tw, uint16_t spp, uint16_t bps,
+                                  FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0;
-  uint32 src_rowsize, dst_rowsize; 
-  uint32 bit_offset, src_offset;
-  uint32 row, col, src_byte = 0, src_bit = 0;
-  uint16 maskbits = 0, matchbits = 0;
-  uint16 buff1 = 0, buff2 = 0;
-  uint8  bytebuff = 0;
+  uint32_t src_rowsize, dst_rowsize;
+  uint32_t bit_offset, src_offset;
+  uint32_t row, col, src_byte = 0, src_bit = 0;
+  uint16_t maskbits = 0, matchbits = 0;
+  uint16_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -4464,7 +4462,7 @@ combineSeparateTileSamples16bits (uint8 *in[], uint8 *out, uint32 cols,
 
   src_rowsize = ((bps * tw) + 7) / 8;
   dst_rowsize = ((imagewidth * bps * spp) + 7) / 8;
-  maskbits = (uint16)-1 >> (16 - bps);
+  maskbits = (uint16_t)-1 >> (16 - bps);
 
   for (row = 0; row < rows; row++)
     {
@@ -4548,18 +4546,18 @@ combineSeparateTileSamples16bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateTileSamples16bits */
 
 static int
-combineSeparateTileSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
-                                  uint32 rows, uint32 imagewidth, 
-                                  uint32 tw, uint16 spp, uint16 bps, 
- 	                          FILE *dumpfile, int format, int level)
+combineSeparateTileSamples24bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                                  uint32_t rows, uint32_t imagewidth,
+                                  uint32_t tw, uint16_t spp, uint16_t bps,
+                                  FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0;
-  uint32 src_rowsize, dst_rowsize; 
-  uint32 bit_offset, src_offset;
-  uint32 row, col, src_byte = 0, src_bit = 0;
-  uint32 maskbits = 0, matchbits = 0;
-  uint32 buff1 = 0, buff2 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0;
+  uint32_t src_rowsize, dst_rowsize;
+  uint32_t bit_offset, src_offset;
+  uint32_t row, col, src_byte = 0, src_bit = 0;
+  uint32_t maskbits = 0, matchbits = 0;
+  uint32_t buff1 = 0, buff2 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -4573,7 +4571,7 @@ combineSeparateTileSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
 
   src_rowsize = ((bps * tw) + 7) / 8;
   dst_rowsize = ((imagewidth * bps * spp) + 7) / 8;
-  maskbits =  (uint32)-1 >> ( 32 - bps);
+  maskbits =  (uint32_t)-1 >> (32 - bps);
 
   for (row = 0; row < rows; row++)
     {
@@ -4672,19 +4670,19 @@ combineSeparateTileSamples24bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateTileSamples24bits */
 
 static int
-combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
-                                  uint32 rows, uint32 imagewidth, 
-                                  uint32 tw, uint16 spp, uint16 bps, 
- 	                          FILE *dumpfile, int format, int level)
+combineSeparateTileSamples32bits (uint8_t *in[], uint8_t *out, uint32_t cols,
+                                  uint32_t rows, uint32_t imagewidth,
+                                  uint32_t tw, uint16_t spp, uint16_t bps,
+                                  FILE *dumpfile, int format, int level)
   {
   int    ready_bits = 0 /*, shift_width = 0 */;
-  uint32 src_rowsize, dst_rowsize, bit_offset, src_offset;
-  uint32 src_byte = 0, src_bit = 0;
-  uint32 row, col;
-  uint32 longbuff1 = 0, longbuff2 = 0;
-  uint64 maskbits = 0, matchbits = 0;
-  uint64 buff1 = 0, buff2 = 0, buff3 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
+  uint32_t src_rowsize, dst_rowsize, bit_offset, src_offset;
+  uint32_t src_byte = 0, src_bit = 0;
+  uint32_t row, col;
+  uint32_t longbuff1 = 0, longbuff2 = 0;
+  uint64_t maskbits = 0, matchbits = 0;
+  uint64_t buff1 = 0, buff2 = 0, buff3 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
   tsample_t s;
   unsigned char *src = in[0];
   unsigned char *dst = out;
@@ -4698,7 +4696,7 @@ combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
 
   src_rowsize = ((bps * tw) + 7) / 8;
   dst_rowsize = ((imagewidth * bps * spp) + 7) / 8;
-  maskbits =  (uint64)-1 >> ( 64 - bps);
+  maskbits =  (uint64_t)-1 >> (64 - bps);
   /* shift_width = ((bps + 7) / 8) + 1; */ 
 
   for (row = 0; row < rows; row++)
@@ -4729,7 +4727,7 @@ combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
           longbuff2 = longbuff1;
 	  }
 
-	buff3 = ((uint64)longbuff1 << 32) | longbuff2;
+	buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
 	buff1 = (buff3 & matchbits) << (src_bit);
 
 	/* If we have a full buffer's worth, write it out */
@@ -4804,18 +4802,18 @@ combineSeparateTileSamples32bits (uint8 *in[], uint8 *out, uint32 cols,
   } /* end combineSeparateTileSamples32bits */
 
 
-static int readSeparateStripsIntoBuffer (TIFF *in, uint8 *obuf, uint32 length, 
-                                         uint32 width, uint16 spp,
+static int readSeparateStripsIntoBuffer (TIFF *in, uint8_t *obuf, uint32_t length,
+                                         uint32_t width, uint16_t spp,
                                          struct dump_opts *dump)
   {
   int i, bytes_per_sample, bytes_per_pixel, shift_width, result = 1;
-  uint32 j;
-  int32  bytes_read = 0;
-  uint16 bps = 0, planar;
-  uint32 nstrips;
-  uint32 strips_per_sample;
-  uint32 src_rowsize, dst_rowsize, rows_processed, rps;
-  uint32 rows_this_strip = 0;
+  uint32_t j;
+  int32_t  bytes_read = 0;
+  uint16_t bps = 0, planar;
+  uint32_t nstrips;
+  uint32_t strips_per_sample;
+  uint32_t src_rowsize, dst_rowsize, rows_processed, rps;
+  uint32_t rows_this_strip = 0;
   tsample_t s;
   tstrip_t  strip;
   tsize_t scanlinesize = TIFFScanlineSize(in);
@@ -5041,11 +5039,11 @@ initPageSetup (struct pagedef *page, struct pageseg *pagelist,
 
    for (i = 0; i < MAX_SECTIONS; i++)
      {
-     pagelist[i].x1 = (uint32)0;
-     pagelist[i].x2 = (uint32)0;
-     pagelist[i].y1 = (uint32)0;
-     pagelist[i].y2 = (uint32)0;
-     pagelist[i].buffsize = (uint32)0;
+     pagelist[i].x1 = (uint32_t)0;
+     pagelist[i].x2 = (uint32_t)0;
+     pagelist[i].y1 = (uint32_t)0;
+     pagelist[i].y2 = (uint32_t)0;
+     pagelist[i].buffsize = (uint32_t)0;
      pagelist[i].position = 0;
      pagelist[i].total = 0;
      }
@@ -5086,15 +5084,15 @@ initCropMasks (struct crop_mask *cps)
    cps->length = 0;
    for (i = 0; i < 4; i++)
      cps->margins[i] = 0.0;
-   cps->bufftotal = (uint32)0;
-   cps->combined_width = (uint32)0;
-   cps->combined_length = (uint32)0;
-   cps->rotation = (uint16)0;
+   cps->bufftotal = (uint32_t)0;
+   cps->combined_width = (uint32_t)0;
+   cps->combined_length = (uint32_t)0;
+   cps->rotation = (uint16_t)0;
    cps->photometric = INVERT_DATA_AND_TAG;
-   cps->mirror   = (uint16)0;
-   cps->invert   = (uint16)0;
-   cps->zones    = (uint32)0;
-   cps->regions  = (uint32)0;
+   cps->mirror   = (uint16_t)0;
+   cps->invert   = (uint16_t)0;
+   cps->zones    = (uint32_t)0;
+   cps->regions  = (uint32_t)0;
    for (i = 0; i < MAX_REGIONS; i++)
      {
      cps->corners[i].X1 = 0.0;
@@ -5137,12 +5135,12 @@ computeInputPixelOffsets(struct crop_mask *crop, struct image_data *image,
   float xres, yres;
   /* Values for these offsets are in pixels from start of image, not bytes,
    * and are indexed from zero to width - 1 or length - 1 */
-  uint32 tmargin, bmargin, lmargin, rmargin;
-  uint32 startx, endx;   /* offsets of first and last columns to extract */
-  uint32 starty, endy;   /* offsets of first and last row to extract */
-  uint32 width, length, crop_width, crop_length; 
-  uint32 i, max_width, max_length, zwidth, zlength, buffsize;
-  uint32 x1, x2, y1, y2;
+  uint32_t tmargin, bmargin, lmargin, rmargin;
+  uint32_t startx, endx;   /* offsets of first and last columns to extract */
+  uint32_t starty, endy;   /* offsets of first and last row to extract */
+  uint32_t width, length, crop_width, crop_length;
+  uint32_t i, max_width, max_length, zwidth, zlength, buffsize;
+  uint32_t x1, x2, y1, y2;
 
   if (image->res_unit != RESUNIT_INCH && image->res_unit != RESUNIT_CENTIMETER)
     {
@@ -5187,38 +5185,38 @@ computeInputPixelOffsets(struct crop_mask *crop, struct image_data *image,
       {
       if ((crop->res_unit == RESUNIT_INCH) || (crop->res_unit == RESUNIT_CENTIMETER))
         {
-	x1 = (uint32) (crop->corners[i].X1 * scale * xres);
-	x2 = (uint32) (crop->corners[i].X2 * scale * xres);
-	y1 = (uint32) (crop->corners[i].Y1 * scale * yres);
-	y2 = (uint32) (crop->corners[i].Y2 * scale * yres);
+	x1 = (uint32_t) (crop->corners[i].X1 * scale * xres);
+	x2 = (uint32_t) (crop->corners[i].X2 * scale * xres);
+	y1 = (uint32_t) (crop->corners[i].Y1 * scale * yres);
+	y2 = (uint32_t) (crop->corners[i].Y2 * scale * yres);
         }
       else
         {
-	x1 = (uint32) (crop->corners[i].X1);
-	x2 = (uint32) (crop->corners[i].X2);
-	y1 = (uint32) (crop->corners[i].Y1);
-	y2 = (uint32) (crop->corners[i].Y2);       
+	x1 = (uint32_t) (crop->corners[i].X1);
+	x2 = (uint32_t) (crop->corners[i].X2);
+	y1 = (uint32_t) (crop->corners[i].Y1);
+	y2 = (uint32_t) (crop->corners[i].Y2);
 	}
       if (x1 < 1)
         crop->regionlist[i].x1 = 0;
       else
-        crop->regionlist[i].x1 = (uint32) (x1 - 1);
+        crop->regionlist[i].x1 = (uint32_t) (x1 - 1);
 
       if (x2 > image->width - 1)
         crop->regionlist[i].x2 = image->width - 1;
       else
-        crop->regionlist[i].x2 = (uint32) (x2 - 1);
+        crop->regionlist[i].x2 = (uint32_t) (x2 - 1);
       zwidth  = crop->regionlist[i].x2 - crop->regionlist[i].x1 + 1; 
 
       if (y1 < 1)
         crop->regionlist[i].y1 = 0;
       else
-        crop->regionlist[i].y1 = (uint32) (y1 - 1);
+        crop->regionlist[i].y1 = (uint32_t) (y1 - 1);
 
       if (y2 > image->length - 1)
         crop->regionlist[i].y2 = image->length - 1;
       else
-        crop->regionlist[i].y2 = (uint32) (y2 - 1);
+        crop->regionlist[i].y2 = (uint32_t) (y2 - 1);
 
       zlength = crop->regionlist[i].y2 - crop->regionlist[i].y1 + 1; 
 
@@ -5227,7 +5225,7 @@ computeInputPixelOffsets(struct crop_mask *crop, struct image_data *image,
       if (zlength > max_length)
         max_length = zlength;
 
-      buffsize = (uint32)
+      buffsize = (uint32_t)
           (((zwidth * image->bps * image->spp + 7 ) / 8) * (zlength + 1));
 
       crop->regionlist[i].buffsize = buffsize;
@@ -5260,64 +5258,64 @@ computeInputPixelOffsets(struct crop_mask *crop, struct image_data *image,
     {
     if (crop->res_unit != RESUNIT_INCH && crop->res_unit != RESUNIT_CENTIMETER)
       { /* User has specified pixels as reference unit */
-      tmargin = (uint32)(crop->margins[0]);
-      lmargin = (uint32)(crop->margins[1]);
-      bmargin = (uint32)(crop->margins[2]);
-      rmargin = (uint32)(crop->margins[3]);
+      tmargin = (uint32_t)(crop->margins[0]);
+      lmargin = (uint32_t)(crop->margins[1]);
+      bmargin = (uint32_t)(crop->margins[2]);
+      rmargin = (uint32_t)(crop->margins[3]);
       }
     else
       { /* inches or centimeters specified */
-      tmargin = (uint32)(crop->margins[0] * scale * yres);
-      lmargin = (uint32)(crop->margins[1] * scale * xres);
-      bmargin = (uint32)(crop->margins[2] * scale * yres);
-      rmargin = (uint32)(crop->margins[3] * scale * xres);
+      tmargin = (uint32_t)(crop->margins[0] * scale * yres);
+      lmargin = (uint32_t)(crop->margins[1] * scale * xres);
+      bmargin = (uint32_t)(crop->margins[2] * scale * yres);
+      rmargin = (uint32_t)(crop->margins[3] * scale * xres);
       }
 
     if ((lmargin + rmargin) > image->width)
       {
       TIFFError("computeInputPixelOffsets", "Combined left and right margins exceed image width");
-      lmargin = (uint32) 0;
-      rmargin = (uint32) 0;
+      lmargin = (uint32_t) 0;
+      rmargin = (uint32_t) 0;
       return (-1);
       }
     if ((tmargin + bmargin) > image->length)
       {
       TIFFError("computeInputPixelOffsets", "Combined top and bottom margins exceed image length"); 
-      tmargin = (uint32) 0; 
-      bmargin = (uint32) 0;
+      tmargin = (uint32_t) 0;
+      bmargin = (uint32_t) 0;
       return (-1);
       }
     }
   else
     { /* no margins requested */
-    tmargin = (uint32) 0;
-    lmargin = (uint32) 0;
-    bmargin = (uint32) 0;
-    rmargin = (uint32) 0;
+    tmargin = (uint32_t) 0;
+    lmargin = (uint32_t) 0;
+    bmargin = (uint32_t) 0;
+    rmargin = (uint32_t) 0;
     }
 
   /* Width, height, and margins are expressed as pixel offsets into image */
   if (crop->res_unit != RESUNIT_INCH && crop->res_unit != RESUNIT_CENTIMETER)
     {
     if (crop->crop_mode & CROP_WIDTH)
-      width = (uint32)crop->width;
+      width = (uint32_t)crop->width;
     else
       width = image->width - lmargin - rmargin;
 
     if (crop->crop_mode & CROP_LENGTH)
-      length  = (uint32)crop->length;
+      length  = (uint32_t)crop->length;
     else
       length = image->length - tmargin - bmargin;
     }
   else
     {
     if (crop->crop_mode & CROP_WIDTH)
-      width = (uint32)(crop->width * scale * image->xres);
+      width = (uint32_t)(crop->width * scale * image->xres);
     else
       width = image->width - lmargin - rmargin;
 
     if (crop->crop_mode & CROP_LENGTH)
-      length  = (uint32)(crop->length * scale * image->yres);
+      length  = (uint32_t)(crop->length * scale * image->yres);
     else
       length = image->length - tmargin - bmargin;
     }
@@ -5421,15 +5419,15 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
   {
   struct offset offsets;
   int    i;
-  int32  test;
-  uint32 seg, total, need_buff = 0;
-  uint32 buffsize;
-  uint32 zwidth, zlength;
+  int32_t  test;
+  uint32_t seg, total, need_buff = 0;
+  uint32_t buffsize;
+  uint32_t zwidth, zlength;
 
   memset(&offsets, '\0', sizeof(struct offset));
   crop->bufftotal = 0;
-  crop->combined_width  = (uint32)0;
-  crop->combined_length = (uint32)0;
+  crop->combined_width  = (uint32_t)0;
+  crop->combined_length = (uint32_t)0;
   crop->selections = 0;
 
   /* Compute pixel offsets if margins or fixed width or length specified */
@@ -5508,14 +5506,14 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
            crop->regionlist[i].y2 = offsets.endy;
 
            crop->regionlist[i].x1 = offsets.startx + 
-                                  (uint32)(offsets.crop_width * 1.0 * (seg - 1) / total);
-           test = (int32)offsets.startx + 
-                  (int32)(offsets.crop_width * 1.0 * seg / total);
+                                  (uint32_t)(offsets.crop_width * 1.0 * (seg - 1) / total);
+           test = (int32_t)offsets.startx +
+                  (int32_t)(offsets.crop_width * 1.0 * seg / total);
            if (test < 1 )
              crop->regionlist[i].x2 = 0;
            else
 	     {
-	     if (test > (int32)(image->width - 1))
+	     if (test > (int32_t)(image->width - 1))
                crop->regionlist[i].x2 = image->width - 1;
              else
 	       crop->regionlist[i].x2 = test - 1;
@@ -5523,18 +5521,18 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
            zwidth = crop->regionlist[i].x2 - crop->regionlist[i].x1  + 1;
 
 	   /* This is passed to extractCropZone or extractCompositeZones */
-           crop->combined_length = (uint32)zlength;
+           crop->combined_length = (uint32_t)zlength;
            if (crop->exp_mode == COMPOSITE_IMAGES)
-             crop->combined_width += (uint32)zwidth;
+             crop->combined_width += (uint32_t)zwidth;
            else
-             crop->combined_width = (uint32)zwidth;
+             crop->combined_width = (uint32_t)zwidth;
            break;
       case EDGE_BOTTOM: /* width from left, zones from bottom to top */
            zwidth = offsets.crop_width;
 	   crop->regionlist[i].x1 = offsets.startx;
            crop->regionlist[i].x2 = offsets.endx;
 
-           test = offsets.endy - (uint32)(offsets.crop_length * 1.0 * seg / total);
+           test = offsets.endy - (uint32_t)(offsets.crop_length * 1.0 * seg / total);
            if (test < 1 )
 	     crop->regionlist[i].y1 = 0;
            else
@@ -5545,7 +5543,7 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
              crop->regionlist[i].y2 = 0;
            else
 	     {
-             if (test > (int32)(image->length - 1))
+             if (test > (int32_t)(image->length - 1))
                crop->regionlist[i].y2 = image->length - 1;
              else 
                crop->regionlist[i].y2 = test;
@@ -5554,10 +5552,10 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
 
 	   /* This is passed to extractCropZone or extractCompositeZones */
            if (crop->exp_mode == COMPOSITE_IMAGES)
-             crop->combined_length += (uint32)zlength;
+             crop->combined_length += (uint32_t)zlength;
            else
-             crop->combined_length = (uint32)zlength;
-           crop->combined_width = (uint32)zwidth;
+             crop->combined_length = (uint32_t)zlength;
+           crop->combined_width = (uint32_t)zwidth;
            break;
       case EDGE_RIGHT: /* zones from right to left, length from top */
            zlength = offsets.crop_length;
@@ -5565,14 +5563,14 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
            crop->regionlist[i].y2 = offsets.endy;
 
            crop->regionlist[i].x1 = offsets.startx +
-                                  (uint32)(offsets.crop_width  * (total - seg) * 1.0 / total);
+                                  (uint32_t)(offsets.crop_width * (total - seg) * 1.0 / total);
            test = offsets.startx + 
 	          (offsets.crop_width * (total - seg + 1) * 1.0 / total);
            if (test < 1 )
              crop->regionlist[i].x2 = 0;
            else
 	     {
-	     if (test > (int32)(image->width - 1))
+	     if (test > (int32_t)(image->width - 1))
                crop->regionlist[i].x2 = image->width - 1;
              else
                crop->regionlist[i].x2 = test - 1;
@@ -5580,11 +5578,11 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
            zwidth = crop->regionlist[i].x2 - crop->regionlist[i].x1  + 1;
 
 	   /* This is passed to extractCropZone or extractCompositeZones */
-           crop->combined_length = (uint32)zlength;
+           crop->combined_length = (uint32_t)zlength;
            if (crop->exp_mode == COMPOSITE_IMAGES)
-             crop->combined_width += (uint32)zwidth;
+             crop->combined_width += (uint32_t)zwidth;
            else
-             crop->combined_width = (uint32)zwidth;
+             crop->combined_width = (uint32_t)zwidth;
            break;
       case EDGE_TOP: /* width from left, zones from top to bottom */
       default:
@@ -5592,13 +5590,13 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
 	   crop->regionlist[i].x1 = offsets.startx;
            crop->regionlist[i].x2 = offsets.endx;
 
-           crop->regionlist[i].y1 = offsets.starty + (uint32)(offsets.crop_length * 1.0 * (seg - 1) / total);
-           test = offsets.starty + (uint32)(offsets.crop_length * 1.0 * seg / total);
+           crop->regionlist[i].y1 = offsets.starty + (uint32_t)(offsets.crop_length * 1.0 * (seg - 1) / total);
+           test = offsets.starty + (uint32_t)(offsets.crop_length * 1.0 * seg / total);
            if (test < 1 )
              crop->regionlist[i].y2 = 0;
            else
 	     {
-	     if (test > (int32)(image->length - 1))
+	     if (test > (int32_t)(image->length - 1))
 	       crop->regionlist[i].y2 = image->length - 1;
              else
 	       crop->regionlist[i].y2 = test - 1;
@@ -5607,26 +5605,26 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
 
 	   /* This is passed to extractCropZone or extractCompositeZones */
            if (crop->exp_mode == COMPOSITE_IMAGES)
-             crop->combined_length += (uint32)zlength;
+             crop->combined_length += (uint32_t)zlength;
            else
-             crop->combined_length = (uint32)zlength;
-           crop->combined_width = (uint32)zwidth;
+             crop->combined_length = (uint32_t)zlength;
+           crop->combined_width = (uint32_t)zwidth;
            break;
       } /* end switch statement */
 
-    buffsize = (uint32)
+    buffsize = (uint32_t)
           ((((zwidth * image->bps * image->spp) + 7 ) / 8) * (zlength + 1));
-    crop->regionlist[i].width = (uint32) zwidth;
-    crop->regionlist[i].length = (uint32) zlength;
+    crop->regionlist[i].width = (uint32_t) zwidth;
+    crop->regionlist[i].length = (uint32_t) zlength;
     crop->regionlist[i].buffsize = buffsize;
     crop->bufftotal += buffsize;
 
 
   if (dump->outfile != NULL)
-    dump_info (dump->outfile, dump->format, "",  "Zone %d, width: %4d, length: %4d, x1: %4d  x2: %4d  y1: %4d  y2: %4d",
-                    i + 1, (uint32)zwidth, (uint32)zlength,
-		    crop->regionlist[i].x1, crop->regionlist[i].x2, 
-                    crop->regionlist[i].y1, crop->regionlist[i].y2);
+    dump_info (dump->outfile, dump->format, "", "Zone %d, width: %4d, length: %4d, x1: %4d  x2: %4d  y1: %4d  y2: %4d",
+                    i + 1, (uint32_t)zwidth, (uint32_t)zlength,
+               crop->regionlist[i].x1, crop->regionlist[i].x2,
+               crop->regionlist[i].y1, crop->regionlist[i].y2);
     }
 
   return (0);
@@ -5640,13 +5638,13 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
   {
   double scale;
   double pwidth, plength;          /* Output page width and length in user units*/
-  uint32 iwidth, ilength;          /* Input image width and length in pixels*/
-  uint32 owidth, olength;          /* Output image width and length in pixels*/
-  uint32 orows, ocols;             /* rows and cols for output */
-  uint32 hmargin, vmargin;         /* Horizontal and vertical margins */
-  uint32 x1, x2, y1, y2, line_bytes;
+  uint32_t iwidth, ilength;          /* Input image width and length in pixels*/
+  uint32_t owidth, olength;          /* Output image width and length in pixels*/
+  uint32_t orows, ocols;             /* rows and cols for output */
+  uint32_t hmargin, vmargin;         /* Horizontal and vertical margins */
+  uint32_t x1, x2, y1, y2, line_bytes;
   /* unsigned int orientation; */
-  uint32 i, j, k;
+  uint32_t i, j, k;
  
   scale = 1.0;
   if (page->res_unit == RESUNIT_NONE)
@@ -5716,27 +5714,27 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
     {
     if (page->res_unit == RESUNIT_INCH || page->res_unit == RESUNIT_CENTIMETER)
       { /* inches or centimeters specified */
-      hmargin = (uint32)(page->hmargin * scale * page->hres * ((image->bps + 7)/ 8));
-      vmargin = (uint32)(page->vmargin * scale * page->vres * ((image->bps + 7)/ 8));
+      hmargin = (uint32_t)(page->hmargin * scale * page->hres * ((image->bps + 7) / 8));
+      vmargin = (uint32_t)(page->vmargin * scale * page->vres * ((image->bps + 7) / 8));
       }
     else
       { /* Otherwise user has specified pixels as reference unit */
-      hmargin = (uint32)(page->hmargin * scale * ((image->bps + 7)/ 8));
-      vmargin = (uint32)(page->vmargin * scale * ((image->bps + 7)/ 8));
+      hmargin = (uint32_t)(page->hmargin * scale * ((image->bps + 7) / 8));
+      vmargin = (uint32_t)(page->vmargin * scale * ((image->bps + 7) / 8));
       }
 
     if ((hmargin * 2.0) > (pwidth * page->hres))
       {
       TIFFError("computeOutputPixelOffsets", 
                 "Combined left and right margins exceed page width");
-      hmargin = (uint32) 0;
+      hmargin = (uint32_t) 0;
       return (-1);
       }
     if ((vmargin * 2.0) > (plength * page->vres))
       {
       TIFFError("computeOutputPixelOffsets", 
                 "Combined top and bottom margins exceed page length"); 
-      vmargin = (uint32) 0; 
+      vmargin = (uint32_t) 0;
       return (-1);
       }
     }
@@ -5760,13 +5758,13 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
     {
     if (page->mode & PAGE_MODE_PAPERSIZE )
       {
-      owidth  = (uint32)((pwidth * page->hres) - (hmargin * 2));
-      olength = (uint32)((plength * page->vres) - (vmargin * 2));
+      owidth  = (uint32_t)((pwidth * page->hres) - (hmargin * 2));
+      olength = (uint32_t)((plength * page->vres) - (vmargin * 2));
       }
     else
       {
-      owidth = (uint32)(iwidth - (hmargin * 2 * page->hres));
-      olength = (uint32)(ilength - (vmargin * 2 * page->vres));
+      owidth = (uint32_t)(iwidth - (hmargin * 2 * page->hres));
+      olength = (uint32_t)(ilength - (vmargin * 2 * page->vres));
       }
     }
 
@@ -5841,14 +5839,14 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
   /* build the list of offsets for each output section */
   for (k = 0, i = 0 && k <= MAX_SECTIONS; i < orows; i++)
     {
-    y1 = (uint32)(olength * i);
-    y2 = (uint32)(olength * (i +  1) - 1);
+    y1 = (uint32_t)(olength * i);
+    y2 = (uint32_t)(olength * (i + 1) - 1);
     if (y2 >= ilength)
       y2 = ilength - 1;
     for (j = 0; j < ocols; j++, k++)
       {
-      x1 = (uint32)(owidth * j); 
-      x2 = (uint32)(owidth * (j + 1) - 1);
+      x1 = (uint32_t)(owidth * j);
+      x2 = (uint32_t)(owidth * (j + 1) - 1);
       if (x2 >= iwidth)
         x2 = iwidth - 1;
       sections[k].x1 = x1;
@@ -5866,22 +5864,22 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
 static int
 loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned char **read_ptr)
   {
-  uint32   i;
+  uint32_t   i;
   float    xres = 0.0, yres = 0.0;
-  uint32   nstrips = 0, ntiles = 0;
-  uint16   planar = 0;
-  uint16   bps = 0, spp = 0, res_unit = 0;
-  uint16   orientation = 0;
-  uint16   input_compression = 0, input_photometric = 0;
-  uint16   subsampling_horiz, subsampling_vert;
-  uint32   width = 0, length = 0;
-  uint32   stsize = 0, tlsize = 0, buffsize = 0, scanlinesize = 0;
-  uint32   tw = 0, tl = 0;       /* Tile width and length */
-  uint32   tile_rowsize = 0;
+  uint32_t   nstrips = 0, ntiles = 0;
+  uint16_t   planar = 0;
+  uint16_t   bps = 0, spp = 0, res_unit = 0;
+  uint16_t   orientation = 0;
+  uint16_t   input_compression = 0, input_photometric = 0;
+  uint16_t   subsampling_horiz, subsampling_vert;
+  uint32_t   width = 0, length = 0;
+  uint32_t   stsize = 0, tlsize = 0, buffsize = 0, scanlinesize = 0;
+  uint32_t   tw = 0, tl = 0;       /* Tile width and length */
+  uint32_t   tile_rowsize = 0;
   unsigned char *read_buff = NULL;
   unsigned char *new_buff  = NULL;
   int      readunit = 0;
-  static   uint32  prev_readsize = 0;
+  static   uint32_t  prev_readsize = 0;
 
   TIFFGetFieldDefaulted(in, TIFFTAG_BITSPERSAMPLE, &bps);
   TIFFGetFieldDefaulted(in, TIFFTAG_SAMPLESPERPIXEL, &spp);
@@ -6089,7 +6087,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
 	exit(EXIT_FAILURE);
     }
 
-    if (buffsize < (uint32)(ntiles * tl * tile_rowsize))
+    if (buffsize < (uint32_t)(ntiles * tl * tile_rowsize))
       {
       buffsize = ntiles * tl * tile_rowsize;
       if (ntiles != (buffsize / tl / tile_rowsize))
@@ -6112,7 +6110,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
     }
   else
     {
-    uint32 buffsize_check;
+    uint32_t buffsize_check;
     readunit = STRIP;
     TIFFGetFieldDefaulted(in, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
     stsize = TIFFStripSize(in);
@@ -6135,7 +6133,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
 	TIFFError("loadImage", "Integer overflow detected.");
 	exit(EXIT_FAILURE);
     }
-    if (buffsize < (uint32) (((length * width * spp * bps) + 7) / 8))
+    if (buffsize < (uint32_t) (((length * width * spp * bps) + 7) / 8))
       {
       buffsize =  ((length * width * spp * bps) + 7) / 8;
 #ifdef DEBUG2
@@ -6280,7 +6278,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
 
 static int  correct_orientation(struct image_data *image, unsigned char **work_buff_ptr)
   {
-  uint16 mirror, rotation;
+  uint16_t mirror, rotation;
   unsigned char *work_buff;
 
   work_buff = *work_buff_ptr;
@@ -6292,7 +6290,7 @@ static int  correct_orientation(struct image_data *image, unsigned char **work_b
 
   if ((image->adjustments & MIRROR_HORIZ) || (image->adjustments & MIRROR_VERT))
     {
-    mirror = (uint16)(image->adjustments & MIRROR_BOTH);
+    mirror = (uint16_t)(image->adjustments & MIRROR_BOTH);
     if (mirrorImage(image->spp, image->bps, mirror, 
         image->width, image->length, work_buff))
       {
@@ -6304,13 +6302,13 @@ static int  correct_orientation(struct image_data *image, unsigned char **work_b
   if (image->adjustments & ROTATE_ANY)
     {
     if (image->adjustments & ROTATECW_90)
-      rotation = (uint16) 90;
+      rotation = (uint16_t) 90;
     else
     if (image->adjustments & ROTATECW_180)
-      rotation = (uint16) 180;
+      rotation = (uint16_t) 180;
     else
     if (image->adjustments & ROTATECW_270)
-      rotation = (uint16) 270;
+      rotation = (uint16_t) 270;
     else
       {
       TIFFError ("correct_orientation", "Invalid rotation value: %d", 
@@ -6336,13 +6334,13 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                         unsigned char *read_buff, unsigned char *crop_buff)
   {
   int       shift_width, bytes_per_sample, bytes_per_pixel;
-  uint32    i, trailing_bits, prev_trailing_bits;
-  uint32    row, first_row, last_row, first_col, last_col;
-  uint32    src_rowsize, dst_rowsize, src_offset, dst_offset;
-  uint32    crop_width, crop_length, img_width /*, img_length */;
-  uint32    prev_length, prev_width, composite_width;
-  uint16    bps, spp;
-  uint8    *src, *dst;
+  uint32_t    i, trailing_bits, prev_trailing_bits;
+  uint32_t    row, first_row, last_row, first_col, last_col;
+  uint32_t    src_rowsize, dst_rowsize, src_offset, dst_offset;
+  uint32_t    crop_width, crop_length, img_width /*, img_length */;
+  uint32_t    prev_length, prev_width, composite_width;
+  uint16_t    bps, spp;
+  uint8_t    *src, *dst;
   tsample_t count, sample = 0;   /* Update to extract one or more samples */
 
   img_width = image->width;
@@ -6585,13 +6583,13 @@ extractSeparateRegion(struct image_data *image,  struct crop_mask *crop,
                       int region)
   {
   int     shift_width, prev_trailing_bits = 0;
-  uint32  bytes_per_sample, bytes_per_pixel;
-  uint32  src_rowsize, dst_rowsize;
-  uint32  row, first_row, last_row, first_col, last_col;
-  uint32  src_offset, dst_offset;
-  uint32  crop_width, crop_length, img_width /*, img_length */;
-  uint16  bps, spp;
-  uint8  *src, *dst;
+  uint32_t  bytes_per_sample, bytes_per_pixel;
+  uint32_t  src_rowsize, dst_rowsize;
+  uint32_t  row, first_row, last_row, first_col, last_col;
+  uint32_t  src_offset, dst_offset;
+  uint32_t  crop_width, crop_length, img_width /*, img_length */;
+  uint16_t  bps, spp;
+  uint8_t  *src, *dst;
   tsample_t count, sample = 0;   /* Update to extract more or more samples */
 
   img_width = image->width;
@@ -6711,19 +6709,19 @@ extractImageSection(struct image_data *image, struct pageseg *section,
   /* unsigned  char *src, *dst; */
 #endif
 
-  uint32    img_width, img_rowsize;
+  uint32_t    img_width, img_rowsize;
 #ifdef DEVELMODE
-  uint32    img_length;
+  uint32_t    img_length;
 #endif
-  uint32    j, shift1, shift2, trailing_bits;
-  uint32    row, first_row, last_row, first_col, last_col;
-  uint32    src_offset, dst_offset, row_offset, col_offset;
-  uint32    offset1, offset2, full_bytes;
-  uint32    sect_width;
+  uint32_t    j, shift1, shift2, trailing_bits;
+  uint32_t    row, first_row, last_row, first_col, last_col;
+  uint32_t    src_offset, dst_offset, row_offset, col_offset;
+  uint32_t    offset1, offset2, full_bytes;
+  uint32_t    sect_width;
 #ifdef DEVELMODE
-  uint32    sect_length;
+  uint32_t    sect_length;
 #endif
-  uint16    bps, spp;
+  uint16_t    bps, spp;
 
 #ifdef DEVELMODE
   int      k;
@@ -7048,7 +7046,7 @@ writeImageSections(TIFF *in, TIFF *out, struct image_data *image,
                    unsigned char **sect_buff_ptr)
   {
   double  hres, vres;
-  uint32  i, k, width, length, sectsize;
+  uint32_t  i, k, width, length, sectsize;
   unsigned char *sect_buff = *sect_buff_ptr;
 
   hres = page->hres;
@@ -7066,7 +7064,7 @@ writeImageSections(TIFF *in, TIFF *out, struct image_data *image,
     {
     width  = sections[i].x2 - sections[i].x1 + 1;
     length = sections[i].y2 - sections[i].y1 + 1;
-    sectsize = (uint32)
+    sectsize = (uint32_t)
 	    ceil((width * image->bps + 7) / (double)8) * image->spp * length;
     /* allocate a buffer if we don't have one already */
     if (createImageSection(sectsize, sect_buff_ptr))
@@ -7101,13 +7099,13 @@ writeImageSections(TIFF *in, TIFF *out, struct image_data *image,
  */
 static int  
 writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
-                   struct dump_opts *dump, uint32 width, uint32 length,
+                   struct dump_opts *dump, uint32_t width, uint32_t length,
                    double hres, double vres,
                    unsigned char *sect_buff)
   {
-  uint16 bps, spp;
-  uint16 input_compression, input_photometric;
-  uint16 input_planar;
+  uint16_t bps, spp;
+  uint16_t input_compression, input_photometric;
+  uint16_t input_planar;
   const struct cpTag* p;
 
   /*  Calling this seems to reset the compression mode on the TIFF *in file.
@@ -7132,8 +7130,8 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
    * if the user has specified a command line option for 
    * a compression option.  Should be passed around in one
    * of the parameters instead of as a global. If no user
-   * option specified it will still be (uint16) -1. */
-  if (compression != (uint16)-1)
+   * option specified it will still be (uint16_t) -1. */
+  if (compression != (uint16_t)-1)
     TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
   else
     { /* OJPEG is no longer supported for writing so upgrade to JPEG */
@@ -7217,9 +7215,9 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
      * input image or, if nothing is defined, use the
      * library default.
      */
-    if (tilewidth == (uint32) 0)
+    if (tilewidth == (uint32_t) 0)
       TIFFGetField(in, TIFFTAG_TILEWIDTH, &tilewidth);
-    if (tilelength == (uint32) 0)
+    if (tilelength == (uint32_t) 0)
       TIFFGetField(in, TIFFTAG_TILELENGTH, &tilelength);
 
     if (tilewidth == 0 || tilelength == 0)
@@ -7233,7 +7231,7 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
 	* value from the input image or, if nothing is defined,
 	* use the library default.
 	*/
-	if (rowsperstrip == (uint32) 0)
+	if (rowsperstrip == (uint32_t) 0)
           {
 	  if (!TIFFGetField(in, TIFFTAG_ROWSPERSTRIP, &rowsperstrip))
 	    rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
@@ -7244,13 +7242,13 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
 	    }
 	  }
 	else 
-          if (rowsperstrip == (uint32) -1)
+          if (rowsperstrip == (uint32_t) -1)
 	    rowsperstrip = length;
 	TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
 	}
 
   TIFFGetFieldDefaulted(in, TIFFTAG_PLANARCONFIG, &input_planar);
-  if (config != (uint16) -1)
+  if (config != (uint16_t) -1)
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
   else
     CopyField(TIFFTAG_PLANARCONFIG, config);
@@ -7279,7 +7277,7 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
    case COMPRESSION_LZW:
    case COMPRESSION_ADOBE_DEFLATE:
    case COMPRESSION_DEFLATE:
-	if (predictor != (uint16)-1)
+	if (predictor != (uint16_t)-1)
           TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
 	else
 	  CopyField(TIFFTAG_PREDICTOR, predictor);
@@ -7287,7 +7285,7 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
    case COMPRESSION_CCITTFAX3:
    case COMPRESSION_CCITTFAX4:
 	if (compression == COMPRESSION_CCITTFAX3) {
-          if (g3opts != (uint32) -1)
+          if (g3opts != (uint32_t) -1)
 	    TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, g3opts);
 	  else
 	    CopyField(TIFFTAG_GROUP3OPTIONS, g3opts);
@@ -7302,12 +7300,12 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
         CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
 	break;
    }
-   { uint32 len32;
+   { uint32_t len32;
      void** data;
      if (TIFFGetField(in, TIFFTAG_ICCPROFILE, &len32, &data))
        TIFFSetField(out, TIFFTAG_ICCPROFILE, len32, data);
    }
-   { uint16 ninks;
+   { uint16_t ninks;
      const char* inknames;
      if (TIFFGetField(in, TIFFTAG_NUMBEROFINKS, &ninks)) {
        TIFFSetField(out, TIFFTAG_NUMBEROFINKS, ninks);
@@ -7371,11 +7369,11 @@ writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
 
 /* Create a buffer to write one section at a time */
 static int
-createImageSection(uint32 sectsize, unsigned char **sect_buff_ptr)
+createImageSection(uint32_t sectsize, unsigned char **sect_buff_ptr)
   {
   unsigned  char *sect_buff = NULL;
   unsigned  char *new_buff  = NULL;
-  static    uint32  prev_sectsize = 0;
+  static    uint32_t  prev_sectsize = 0;
   
   sect_buff = *sect_buff_ptr;
 
@@ -7420,7 +7418,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
                       unsigned char **read_buff_ptr, struct buffinfo seg_buffs[])
   {
   int       i;
-  uint32    width, length, total_width, total_length;
+  uint32_t    width, length, total_width, total_length;
   tsize_t   cropsize;
   unsigned  char *crop_buff = NULL;
   unsigned  char *read_buff = NULL;
@@ -7778,13 +7776,13 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
  * then passed in as an argument.
  */
 static int  
-writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image, 
-                  struct dump_opts *dump, uint32 width, uint32 length, 
+writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
+                  struct dump_opts *dump, uint32_t width, uint32_t length,
                   unsigned char *crop_buff, int pagenum, int total_pages)
   {
-  uint16 bps, spp;
-  uint16 input_compression, input_photometric;
-  uint16 input_planar;
+  uint16_t bps, spp;
+  uint16_t input_compression, input_photometric;
+  uint16_t input_planar;
   const struct cpTag* p;
 
   input_compression = image->compression;
@@ -7803,7 +7801,7 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
 	    ((input_compression == COMPRESSION_JPEG) ?  "New Jpeg" : "Non Jpeg"));
 #endif
 
-  if (compression != (uint16)-1)
+  if (compression != (uint16_t)-1)
     TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
   else
     {
@@ -7892,9 +7890,9 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
      * input image or, if nothing is defined, use the
      * library default.
      */
-    if (tilewidth == (uint32) 0)
+    if (tilewidth == (uint32_t) 0)
       TIFFGetField(in, TIFFTAG_TILEWIDTH, &tilewidth);
-    if (tilelength == (uint32) 0)
+    if (tilelength == (uint32_t) 0)
       TIFFGetField(in, TIFFTAG_TILELENGTH, &tilelength);
 
     if (tilewidth == 0 || tilelength == 0)
@@ -7907,7 +7905,7 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
 	* value from the input image or, if nothing is defined,
 	* use the library default.
 	*/
-	if (rowsperstrip == (uint32) 0)
+	if (rowsperstrip == (uint32_t) 0)
           {
 	  if (!TIFFGetField(in, TIFFTAG_ROWSPERSTRIP, &rowsperstrip))
 	    rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
@@ -7918,13 +7916,13 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
 	    }
 	  }
 	else 
-          if (rowsperstrip == (uint32) -1)
+          if (rowsperstrip == (uint32_t) -1)
 	    rowsperstrip = length;
 	TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
 	}
 
   TIFFGetFieldDefaulted(in, TIFFTAG_PLANARCONFIG, &input_planar);
-  if (config != (uint16) -1)
+  if (config != (uint16_t) -1)
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
   else
     CopyField(TIFFTAG_PLANARCONFIG, config);
@@ -7950,7 +7948,7 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
    case COMPRESSION_LZW:
    case COMPRESSION_ADOBE_DEFLATE:
    case COMPRESSION_DEFLATE:
-	if (predictor != (uint16)-1)
+	if (predictor != (uint16_t)-1)
           TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
 	else
 	  CopyField(TIFFTAG_PREDICTOR, predictor);
@@ -7964,7 +7962,7 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
           return (-1);
 	  }
 	if (compression == COMPRESSION_CCITTFAX3) {
-          if (g3opts != (uint32) -1)
+          if (g3opts != (uint32_t) -1)
 	    TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, g3opts);
 	  else
 	    CopyField(TIFFTAG_GROUP3OPTIONS, g3opts);
@@ -7982,12 +7980,12 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
          break;
     default: break;
    }
-   { uint32 len32;
+   { uint32_t len32;
      void** data;
      if (TIFFGetField(in, TIFFTAG_ICCPROFILE, &len32, &data))
        TIFFSetField(out, TIFFTAG_ICCPROFILE, len32, data);
    }
-   { uint16 ninks;
+   { uint16_t ninks;
      const char* inknames;
      if (TIFFGetField(in, TIFFTAG_NUMBEROFINKS, &ninks)) {
        TIFFSetField(out, TIFFTAG_NUMBEROFINKS, ninks);
@@ -8054,15 +8052,15 @@ writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
   } /* end writeCroppedImage */
 
 static int
-rotateContigSamples8bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width, 
-                         uint32 length,   uint32 col, uint8 *src, uint8 *dst)
+rotateContigSamples8bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_t width,
+                         uint32_t length, uint32_t col, uint8_t *src, uint8_t *dst)
   {
   int      ready_bits = 0;
-  uint32   src_byte = 0, src_bit = 0;
-  uint32   row, rowsize = 0, bit_offset = 0;
-  uint8    matchbits = 0, maskbits = 0;
-  uint8    buff1 = 0, buff2 = 0;
-  uint8   *next;
+  uint32_t   src_byte = 0, src_bit = 0;
+  uint32_t   row, rowsize = 0, bit_offset = 0;
+  uint8_t    matchbits = 0, maskbits = 0;
+  uint8_t    buff1 = 0, buff2 = 0;
+  uint8_t   *next;
   tsample_t sample;
 
   if ((src == NULL) || (dst == NULL))
@@ -8073,7 +8071,7 @@ rotateContigSamples8bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
 
   rowsize = ((bps * spp * width) + 7) / 8;
   ready_bits = 0;
-  maskbits =  (uint8)-1 >> ( 8 - bps);
+  maskbits =  (uint8_t)-1 >> (8 - bps);
   buff1 = buff2 = 0;
 
   for (row = 0; row < length ; row++)
@@ -8130,16 +8128,16 @@ rotateContigSamples8bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
 
 
 static int
-rotateContigSamples16bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width, 
-                         uint32 length,   uint32 col, uint8 *src, uint8 *dst)
+rotateContigSamples16bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_t width,
+                          uint32_t length, uint32_t col, uint8_t *src, uint8_t *dst)
   {
   int      ready_bits = 0;
-  uint32   row, rowsize, bit_offset;
-  uint32   src_byte = 0, src_bit = 0;
-  uint16   matchbits = 0, maskbits = 0;
-  uint16   buff1 = 0, buff2 = 0;
-  uint8    bytebuff = 0;
-  uint8   *next;
+  uint32_t   row, rowsize, bit_offset;
+  uint32_t   src_byte = 0, src_bit = 0;
+  uint16_t   matchbits = 0, maskbits = 0;
+  uint16_t   buff1 = 0, buff2 = 0;
+  uint8_t    bytebuff = 0;
+  uint8_t   *next;
   tsample_t sample;
 
   if ((src == NULL) || (dst == NULL))
@@ -8150,7 +8148,7 @@ rotateContigSamples16bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
 
   rowsize = ((bps * spp * width) + 7) / 8;
   ready_bits = 0;
-  maskbits =  (uint16)-1 >> (16 - bps);
+  maskbits =  (uint16_t)-1 >> (16 - bps);
   buff1 = buff2 = 0;
   for (row = 0; row < length; row++)
     {
@@ -8213,16 +8211,16 @@ rotateContigSamples16bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
   }  /* end rotateContigSamples16bits */
 
 static int
-rotateContigSamples24bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width, 
-                          uint32 length,   uint32 col, uint8 *src, uint8 *dst)
+rotateContigSamples24bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_t width,
+                          uint32_t length, uint32_t col, uint8_t *src, uint8_t *dst)
   {
   int      ready_bits = 0;
-  uint32   row, rowsize, bit_offset;
-  uint32   src_byte = 0, src_bit = 0;
-  uint32   matchbits = 0, maskbits = 0;
-  uint32   buff1 = 0, buff2 = 0;
-  uint8    bytebuff1 = 0, bytebuff2 = 0;
-  uint8   *next;
+  uint32_t   row, rowsize, bit_offset;
+  uint32_t   src_byte = 0, src_bit = 0;
+  uint32_t   matchbits = 0, maskbits = 0;
+  uint32_t   buff1 = 0, buff2 = 0;
+  uint8_t    bytebuff1 = 0, bytebuff2 = 0;
+  uint8_t   *next;
   tsample_t sample;
 
 
@@ -8234,7 +8232,7 @@ rotateContigSamples24bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
 
   rowsize = ((bps * spp * width) + 7) / 8;
   ready_bits = 0;
-  maskbits =  (uint32)-1 >> (32 - bps);
+  maskbits =  (uint32_t)-1 >> (32 - bps);
   buff1 = buff2 = 0;
   for (row = 0; row < length; row++)
     {
@@ -8304,18 +8302,18 @@ rotateContigSamples24bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
   }  /* end rotateContigSamples24bits */
 
 static int
-rotateContigSamples32bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width, 
-                          uint32 length,   uint32 col, uint8 *src, uint8 *dst)
+rotateContigSamples32bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_t width,
+                          uint32_t length, uint32_t col, uint8_t *src, uint8_t *dst)
   {
   int    ready_bits = 0 /*, shift_width = 0 */;
   /* int    bytes_per_sample, bytes_per_pixel; */
-  uint32 row, rowsize, bit_offset;
-  uint32 src_byte, src_bit;
-  uint32 longbuff1 = 0, longbuff2 = 0;
-  uint64 maskbits = 0, matchbits = 0;
-  uint64 buff1 = 0, buff2 = 0, buff3 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
-  uint8   *next;
+  uint32_t row, rowsize, bit_offset;
+  uint32_t src_byte, src_bit;
+  uint32_t longbuff1 = 0, longbuff2 = 0;
+  uint64_t maskbits = 0, matchbits = 0;
+  uint64_t buff1 = 0, buff2 = 0, buff3 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
+  uint8_t   *next;
   tsample_t sample;
 
 
@@ -8334,7 +8332,7 @@ rotateContigSamples32bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
 
   rowsize = ((bps * spp * width) + 7) / 8;
   ready_bits = 0;
-  maskbits =  (uint64)-1 >> (64 - bps);
+  maskbits =  (uint64_t)-1 >> (64 - bps);
   buff1 = buff2 = 0;
   for (row = 0; row < length; row++)
     {
@@ -8373,7 +8371,7 @@ rotateContigSamples32bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
         longbuff2 = longbuff1;
 	}
 
-      buff3 = ((uint64)longbuff1 << 32) | longbuff2;
+      buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
       buff1 = (buff3 & matchbits) << (src_bit);
 
       if (ready_bits < 32)
@@ -8413,18 +8411,18 @@ rotateContigSamples32bits(uint16 rotation, uint16 spp, uint16 bps, uint32 width,
 
 /* Rotate an image by a multiple of 90 degrees clockwise */
 static int
-rotateImage(uint16 rotation, struct image_data *image, uint32 *img_width, 
-            uint32 *img_length, unsigned char **ibuff_ptr)
+rotateImage(uint16_t rotation, struct image_data *image, uint32_t *img_width,
+            uint32_t *img_length, unsigned char **ibuff_ptr)
   {
   int      shift_width;
-  uint32   bytes_per_pixel, bytes_per_sample;
-  uint32   row, rowsize, src_offset, dst_offset;
-  uint32   i, col, width, length;
-  uint32   colsize, buffsize, col_offset, pix_offset;
+  uint32_t   bytes_per_pixel, bytes_per_sample;
+  uint32_t   row, rowsize, src_offset, dst_offset;
+  uint32_t   i, col, width, length;
+  uint32_t   colsize, buffsize, col_offset, pix_offset;
   unsigned char *ibuff;
   unsigned char *src;
   unsigned char *dst;
-  uint16   spp, bps;
+  uint16_t   spp, bps;
   float    res_temp;
   unsigned char *rbuff = NULL;
 
@@ -8695,15 +8693,15 @@ rotateImage(uint16 rotation, struct image_data *image, uint32 *img_width,
   } /* end rotateImage */
 
 static int
-reverseSamples8bits (uint16 spp, uint16 bps, uint32 width, 
-                     uint8 *ibuff, uint8 *obuff)
+reverseSamples8bits (uint16_t spp, uint16_t bps, uint32_t width,
+                     uint8_t *ibuff, uint8_t *obuff)
   {
   int      ready_bits = 0;
-  uint32   col;
-  uint32   src_byte, src_bit;
-  uint32   bit_offset = 0;
-  uint8    match_bits = 0, mask_bits = 0;
-  uint8    buff1 = 0, buff2 = 0;
+  uint32_t   col;
+  uint32_t   src_byte, src_bit;
+  uint32_t   bit_offset = 0;
+  uint8_t    match_bits = 0, mask_bits = 0;
+  uint8_t    buff1 = 0, buff2 = 0;
   unsigned char *src;
   unsigned char *dst;
   tsample_t sample;
@@ -8715,7 +8713,7 @@ reverseSamples8bits (uint16 spp, uint16 bps, uint32 width,
     }
 
   ready_bits = 0;
-  mask_bits =  (uint8)-1 >> ( 8 - bps);
+  mask_bits =  (uint8_t)-1 >> (8 - bps);
   dst = obuff;
   for (col = width; col > 0; col--)
     {
@@ -8760,16 +8758,16 @@ reverseSamples8bits (uint16 spp, uint16 bps, uint32 width,
 
 
 static int
-reverseSamples16bits (uint16 spp, uint16 bps, uint32 width, 
-                      uint8 *ibuff, uint8 *obuff)
+reverseSamples16bits (uint16_t spp, uint16_t bps, uint32_t width,
+                      uint8_t *ibuff, uint8_t *obuff)
   {
   int      ready_bits = 0;
-  uint32   col;
-  uint32   src_byte = 0, high_bit = 0;
-  uint32   bit_offset = 0;
-  uint16   match_bits = 0, mask_bits = 0;
-  uint16   buff1 = 0, buff2 = 0;
-  uint8    bytebuff = 0;
+  uint32_t   col;
+  uint32_t   src_byte = 0, high_bit = 0;
+  uint32_t   bit_offset = 0;
+  uint16_t   match_bits = 0, mask_bits = 0;
+  uint16_t   buff1 = 0, buff2 = 0;
+  uint8_t    bytebuff = 0;
   unsigned char *src;
   unsigned char *dst;
   tsample_t sample;
@@ -8781,7 +8779,7 @@ reverseSamples16bits (uint16 spp, uint16 bps, uint32 width,
     }
 
   ready_bits = 0;
-  mask_bits =  (uint16)-1 >> (16 - bps);
+  mask_bits =  (uint16_t)-1 >> (16 - bps);
   dst = obuff;
   for (col = width; col > 0; col--)
     {
@@ -8835,16 +8833,16 @@ reverseSamples16bits (uint16 spp, uint16 bps, uint32 width,
   } /* end reverseSamples16bits */
 
 static int
-reverseSamples24bits (uint16 spp, uint16 bps, uint32 width, 
-                      uint8 *ibuff, uint8 *obuff)
+reverseSamples24bits (uint16_t spp, uint16_t bps, uint32_t width,
+                      uint8_t *ibuff, uint8_t *obuff)
   {
   int      ready_bits = 0;
-  uint32   col;
-  uint32   src_byte = 0, high_bit = 0;
-  uint32   bit_offset = 0;
-  uint32   match_bits = 0, mask_bits = 0;
-  uint32   buff1 = 0, buff2 = 0;
-  uint8    bytebuff1 = 0, bytebuff2 = 0;
+  uint32_t   col;
+  uint32_t   src_byte = 0, high_bit = 0;
+  uint32_t   bit_offset = 0;
+  uint32_t   match_bits = 0, mask_bits = 0;
+  uint32_t   buff1 = 0, buff2 = 0;
+  uint8_t    bytebuff1 = 0, bytebuff2 = 0;
   unsigned char *src;
   unsigned char *dst;
   tsample_t sample;
@@ -8856,7 +8854,7 @@ reverseSamples24bits (uint16 spp, uint16 bps, uint32 width,
     }
 
   ready_bits = 0;
-  mask_bits =  (uint32)-1 >> (32 - bps);
+  mask_bits =  (uint32_t)-1 >> (32 - bps);
   dst = obuff;
   for (col = width; col > 0; col--)
     {
@@ -8919,18 +8917,18 @@ reverseSamples24bits (uint16 spp, uint16 bps, uint32 width,
 
 
 static int
-reverseSamples32bits (uint16 spp, uint16 bps, uint32 width, 
-                      uint8 *ibuff, uint8 *obuff)
+reverseSamples32bits (uint16_t spp, uint16_t bps, uint32_t width,
+                      uint8_t *ibuff, uint8_t *obuff)
   {
   int    ready_bits = 0 /*, shift_width = 0 */;
   /* int    bytes_per_sample, bytes_per_pixel; */
-  uint32 bit_offset;
-  uint32 src_byte = 0, high_bit = 0;
-  uint32 col;
-  uint32 longbuff1 = 0, longbuff2 = 0;
-  uint64 mask_bits = 0, match_bits = 0;
-  uint64 buff1 = 0, buff2 = 0, buff3 = 0;
-  uint8  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
+  uint32_t bit_offset;
+  uint32_t src_byte = 0, high_bit = 0;
+  uint32_t col;
+  uint32_t longbuff1 = 0, longbuff2 = 0;
+  uint64_t mask_bits = 0, match_bits = 0;
+  uint64_t buff1 = 0, buff2 = 0, buff3 = 0;
+  uint8_t  bytebuff1 = 0, bytebuff2 = 0, bytebuff3 = 0, bytebuff4 = 0;
   unsigned char *src;
   unsigned char *dst;
   tsample_t sample;
@@ -8942,7 +8940,7 @@ reverseSamples32bits (uint16 spp, uint16 bps, uint32 width,
     }
 
   ready_bits = 0;
-  mask_bits =  (uint64)-1 >> (64 - bps);
+  mask_bits =  (uint64_t)-1 >> (64 - bps);
   dst = obuff;
 
   /* bytes_per_sample = (bps + 7) / 8; */
@@ -8981,7 +8979,7 @@ reverseSamples32bits (uint16 spp, uint16 bps, uint32 width,
 	longbuff1 = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
         longbuff2 = longbuff1;
 	}
-      buff3 = ((uint64)longbuff1 << 32) | longbuff2;
+      buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
       buff1 = (buff3 & match_bits) << (high_bit);
 
       if (ready_bits < 32)
@@ -9019,12 +9017,12 @@ reverseSamples32bits (uint16 spp, uint16 bps, uint32 width,
   } /* end reverseSamples32bits */
 
 static int
-reverseSamplesBytes (uint16 spp, uint16 bps, uint32 width, 
-                     uint8 *src, uint8 *dst)
+reverseSamplesBytes (uint16_t spp, uint16_t bps, uint32_t width,
+                     uint8_t *src, uint8_t *dst)
   {
   int i;
-  uint32  col, bytes_per_pixel, col_offset;
-  uint8   bytebuff1;
+  uint32_t  col, bytes_per_pixel, col_offset;
+  uint8_t   bytebuff1;
   unsigned char swapbuff[32];
   
   if ((src == NULL) || (dst == NULL))
@@ -9073,11 +9071,11 @@ reverseSamplesBytes (uint16 spp, uint16 bps, uint32 width,
 
 /* Mirror an image horizontally or vertically */
 static int
-mirrorImage(uint16 spp, uint16 bps, uint16 mirror, uint32 width, uint32 length, unsigned char *ibuff)
+mirrorImage(uint16_t spp, uint16_t bps, uint16_t mirror, uint32_t width, uint32_t length, unsigned char *ibuff)
   {
   int      shift_width;
-  uint32   bytes_per_pixel, bytes_per_sample;
-  uint32   row, rowsize, row_offset;
+  uint32_t   bytes_per_pixel, bytes_per_sample;
+  uint32_t   row, rowsize, row_offset;
   unsigned char *line_buff = NULL;
   unsigned char *src;
   unsigned char *dst;
@@ -9187,12 +9185,12 @@ mirrorImage(uint16 spp, uint16 bps, uint16 mirror, uint32 width, uint32 length, 
 
 /* Invert the light and dark values for a bilevel or grayscale image */
 static int
-invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 length, unsigned char *work_buff)
+invertImage(uint16_t photometric, uint16_t spp, uint16_t bps, uint32_t width, uint32_t length, unsigned char *work_buff)
   {
-  uint32   row, col;
+  uint32_t   row, col;
   unsigned char *src;
-  uint16        *src_uint16;
-  uint32        *src_uint32;
+  uint16_t        *src_uint16;
+  uint32_t        *src_uint32;
 
   if (spp != 1)
     {
@@ -9215,7 +9213,7 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
 
   switch (bps)
     {
-    case 32: src_uint32 = (uint32 *)src;
+    case 32: src_uint32 = (uint32_t *)src;
              for (row = 0; row < length; row++)
                for (col = 0; col < width; col++)
                  {
@@ -9223,7 +9221,7 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
                   src_uint32++;
                  }
             break;
-    case 16: src_uint16 = (uint16 *)src;
+    case 16: src_uint16 = (uint16_t *)src;
              for (row = 0; row < length; row++)
                for (col = 0; col < width; col++)
                  {

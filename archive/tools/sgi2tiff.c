@@ -34,13 +34,13 @@
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
 static	short config = PLANARCONFIG_CONTIG;
-static	uint16 compression = COMPRESSION_PACKBITS;
-static	uint16 predictor = 0;
-static	uint16 fillorder = 0;
-static	uint32 rowsperstrip = (uint32) -1;
+static	uint16_t compression = COMPRESSION_PACKBITS;
+static	uint16_t predictor = 0;
+static	uint16_t fillorder = 0;
+static	uint32_t rowsperstrip = (uint32_t) -1;
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
 static	int quality = 75;		/* JPEG quality */
-static	uint16 photometric;
+static	uint16_t photometric;
 
 static	void usage(void);
 static	int cpContig(IMAGE*, TIFF*);
@@ -100,8 +100,8 @@ main(int argc, char* argv[])
 	out = TIFFOpen(argv[optind+1], "w");
 	if (out == NULL)
 		return (-2);
-	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32) in->xsize);
-	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32) in->ysize);
+	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32_t) in->xsize);
+	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32_t) in->ysize);
 	TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 8);
 	TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	if (in->zsize == 1)
@@ -127,12 +127,12 @@ main(int argc, char* argv[])
 	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
 	TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, in->zsize);
 	if (in->zsize > 3) {
-	    uint16 v[1];
+	    uint16_t v[1];
 	    v[0] = EXTRASAMPLE_UNASSALPHA;
 	    TIFFSetField(out, TIFFTAG_EXTRASAMPLES, 1, v);
 	}
-	TIFFSetField(out, TIFFTAG_MINSAMPLEVALUE, (uint16) in->min);
-	TIFFSetField(out, TIFFTAG_MAXSAMPLEVALUE, (uint16) in->max);
+	TIFFSetField(out, TIFFTAG_MINSAMPLEVALUE, (uint16_t) in->min);
+	TIFFSetField(out, TIFFTAG_MAXSAMPLEVALUE, (uint16_t) in->max);
 	TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
 	if (config != PLANARCONFIG_SEPARATE)
 		TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
@@ -201,7 +201,7 @@ cpContig(IMAGE* in, TIFF* out)
 		g = r + in->xsize;
 		b = g + in->xsize;
 		for (y = in->ysize-1; y >= 0; y--) {
-			uint8* pp = (uint8*) buf;
+			uint8_t* pp = (uint8_t*) buf;
 
 			getrow(in, r, y, 0);
 			getrow(in, g, y, 1);
@@ -223,7 +223,7 @@ cpContig(IMAGE* in, TIFF* out)
 		b = g + in->xsize;
 		a = b + in->xsize;
 		for (y = in->ysize-1; y >= 0; y--) {
-			uint8* pp = (uint8*) buf;
+			uint8_t* pp = (uint8_t*) buf;
 
 			getrow(in, r, y, 0);
 			getrow(in, g, y, 1);
@@ -240,7 +240,7 @@ cpContig(IMAGE* in, TIFF* out)
 				goto bad;
 		}
 	} else {
-		uint8* pp = (uint8*) buf;
+		uint8_t* pp = (uint8_t*) buf;
 
 		r = (short *)_TIFFmalloc(in->xsize * sizeof (short));
 		for (y = in->ysize-1; y >= 0; y--) {
@@ -267,7 +267,7 @@ cpSeparate(IMAGE* in, TIFF* out)
 {
 	tdata_t buf = _TIFFmalloc(TIFFScanlineSize(out));
 	short *r = (short *)_TIFFmalloc(in->xsize * sizeof (short));
-	uint8* pp = (uint8*) buf;
+	uint8_t* pp = (uint8_t*) buf;
 	int x, y, z;
 
 	for (z = 0; z < in->zsize; z++) {

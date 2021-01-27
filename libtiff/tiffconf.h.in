@@ -7,19 +7,11 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
-/* Define to 1 if you have the <inttypes.h> header file. */
-#undef TIFF_HAVE_INTTYPES_H
-
-/* Define to 1 if you have the <stdint.h> header file. */
-#undef TIFF_HAVE_STDINT_H
 
 #include <stddef.h>
-#ifdef TIFF_HAVE_STDINT_H
 #include <stdint.h>
-#endif
-#ifdef TIFF_HAVE_INTTYPES_H
 #include <inttypes.h>
-#endif
+
 
 /* Signed 16-bit type */
 #undef TIFF_INT16_T
@@ -47,9 +39,6 @@
 
 /* Signed size type */
 #undef TIFF_SSIZE_T
-
-/* Pointer difference type */
-#undef TIFF_PTRDIFF_T
 
 /* Compatibility stuff. */
 

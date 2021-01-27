@@ -72,7 +72,7 @@ int	maxline = 512;		/* max output line of PostScript */
  * March 13-15, 1995.
  */
 static void
-printruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
+printruns(unsigned char* buf, uint32_t* runs, uint32_t* erun, uint32_t lastx)
 {
     static struct {
 	char white, black;
@@ -86,9 +86,9 @@ printruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
     static char* svalue =
 	" !\"#$&'*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abc";
     int colormode = 1;		/* 0 for white, 1 for black */
-    uint32 runlength = 0;
+    uint32_t runlength = 0;
     int n = maxline;
-    uint32 x = 0;
+    uint32_t x = 0;
     int l;
 
     (void) buf;
@@ -126,7 +126,7 @@ printruns(unsigned char* buf, uint32* runs, uint32* erun, uint32 lastx)
 		l++;
 	}
 	while (runlength > 0 && runlength <= 6) {
-	    uint32 bitsleft = 6;
+	    uint32_t bitsleft = 6;
 	    int t = 0;
 	    while (bitsleft) {
 		if (runlength <= bitsleft) {
@@ -198,10 +198,10 @@ emitFont(FILE* fd)
 }
 
 void
-printTIF(TIFF* tif, uint16 pageNumber)
+printTIF(TIFF* tif, uint16_t pageNumber)
 {
-    uint32 w, h;
-    uint16 unit, compression;
+    uint32_t w, h;
+    uint16_t unit, compression;
     float xres, yres, scale = 1.0;
     tstrip_t s, ns;
     time_t creation_time;
@@ -275,10 +275,10 @@ printTIF(TIFF* tif, uint16 pageNumber)
 TIFFGetField(tif, TIFFTAG_PAGENUMBER, &pn, &ptotal)
 
 int
-findPage(TIFF* tif, uint16 pageNumber)
+findPage(TIFF* tif, uint16_t pageNumber)
 {
-    uint16 pn = (uint16) -1;
-    uint16 ptotal = (uint16) -1;
+    uint16_t pn = (uint16_t) -1;
+    uint16_t ptotal = (uint16_t) -1;
     if (GetPageNumber(tif)) {
 	while (pn != (pageNumber-1) && TIFFReadDirectory(tif) && GetPageNumber(tif))
 	    ;
@@ -288,10 +288,10 @@ findPage(TIFF* tif, uint16 pageNumber)
 }
 
 void
-fax2ps(TIFF* tif, uint16 npages, uint16* pages, char* filename)
+fax2ps(TIFF* tif, uint16_t npages, uint16_t* pages, char* filename)
 {
     if (npages > 0) {
-	uint16 pn, ptotal;
+	uint16_t pn, ptotal;
 	int i;
 
 	if (!GetPageNumber(tif))
@@ -304,7 +304,7 @@ fax2ps(TIFF* tif, uint16 npages, uint16* pages, char* filename)
 		fprintf(stderr, "%s: No page number %d\n", filename, pages[i]);
 	}
     } else {
-	uint16 pageNumber = 0;
+	uint16_t pageNumber = 0;
 	do
 	    printTIF(tif, pageNumber++);
 	while (TIFFReadDirectory(tif));
@@ -330,7 +330,7 @@ main(int argc, char** argv)
     extern int optind;
     extern char* optarg;
 #endif
-    uint16 *pages = NULL, npages = 0, pageNumber;
+    uint16_t *pages = NULL, npages = 0, pageNumber;
     int c, dowarnings = 0;		/* if 1, enable library warnings */
     TIFF* tif;
 
@@ -346,11 +346,11 @@ main(int argc, char** argv)
 	    pageWidth = (float)atof(optarg);
 	    break;
 	case 'p':		/* print specific page */
-	    pageNumber = (uint16)atoi(optarg);
+	    pageNumber = (uint16_t)atoi(optarg);
 	    if (pages)
-		pages = (uint16*) realloc(pages, (npages+1)*sizeof(uint16));
+		pages = (uint16_t*) realloc(pages, (npages + 1) * sizeof(uint16_t));
 	    else
-		pages = (uint16*) malloc(sizeof(uint16));
+		pages = (uint16_t*) malloc(sizeof(uint16_t));
 	    if( pages == NULL )
 	    {
 		fprintf(stderr, "Out of memory\n");
@@ -377,7 +377,7 @@ main(int argc, char** argv)
 	    usage(EXIT_FAILURE);
 	}
     if (npages > 0)
-	qsort(pages, npages, sizeof(uint16), pcompar);
+	qsort(pages, npages, sizeof(uint16_t), pcompar);
     if (!dowarnings)
 	TIFFSetWarningHandler(0);
     if (optind < argc) {

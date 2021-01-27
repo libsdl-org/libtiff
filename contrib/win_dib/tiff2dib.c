@@ -30,7 +30,7 @@ static HDIB CreateDIB(DWORD dwWidth, DWORD dwHeight, WORD wBitCount);
 static LPSTR FindDIBBits(LPSTR lpDIB);
 static WORD PaletteSize(LPSTR lpDIB);
 static WORD DIBNumColors(LPSTR lpDIB);
-static int checkcmap(int n, uint16* r, uint16* g, uint16* b);
+static int checkcmap(int n, uint16_t* r, uint16_t* g, uint16_t* b);
 
 
 
@@ -127,10 +127,10 @@ HDIB LoadTIFFinDIB(LPSTR lpFileName)
         //PhotometricInterpretation = 3 image have a color palette              
         if (PhotometricInterpretation == 3)
         {
-          uint16* red;
-          uint16* green;
-          uint16* blue;
-          int16 i;
+          uint16_t* red;
+          uint16_t* green;
+          uint16_t* blue;
+          int16_t i;
           LPBITMAPINFO lpbmi;   
           int   Palette16Bits;          
            
@@ -220,7 +220,7 @@ imageWidth*SamplePerPixel);
 }
 
 
-static int checkcmap(int n, uint16* r, uint16* g, uint16* b)
+static int checkcmap(int n, uint16_t* r, uint16_t* g, uint16_t* b)
 {
     while (n-- > 0)
         if (*r++ >= 256 || *g++ >= 256 || *b++ >= 256)

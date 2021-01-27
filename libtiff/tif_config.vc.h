@@ -26,72 +26,33 @@
 /* Define to 1 if you have the declaration of `optarg', and to 0 if you don't. */
 #define HAVE_DECL_OPTARG 0
 
-/* The size of a `int', as computed by sizeof. */
-#define SIZEOF_INT 4
-
-/* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
-
-/* Signed 64-bit type formatter */
-#define TIFF_INT64_FORMAT "%I64d"
-
-/* Signed 64-bit type */
-#define TIFF_INT64_T signed __int64
-
-/* Unsigned 64-bit type formatter */
-#define TIFF_UINT64_FORMAT "%I64u"
-
-/* Unsigned 64-bit type */
-#define TIFF_UINT64_T unsigned __int64
-
 #if _WIN64
 /*
   Windows 64-bit build
 */
 
-/* Pointer difference type */
-#  define TIFF_PTRDIFF_T TIFF_INT64_T
-
 /* The size of `size_t', as computed by sizeof. */
 #  define SIZEOF_SIZE_T 8
 
-/* Size type formatter */
-#  define TIFF_SIZE_FORMAT TIFF_INT64_FORMAT
-
-/* Unsigned size type */
-#  define TIFF_SIZE_T TIFF_UINT64_T
-
 /* Signed size type formatter */
-#  define TIFF_SSIZE_FORMAT TIFF_INT64_FORMAT
+#  define TIFF_SSIZE_FORMAT PRId64
 
 /* Signed size type */
-#  define TIFF_SSIZE_T TIFF_INT64_T
+#  define TIFF_SSIZE_T int64_t
 
 #else
 /*
   Windows 32-bit build
 */
 
-/* Pointer difference type */
-#  define TIFF_PTRDIFF_T signed int
-
 /* The size of `size_t', as computed by sizeof. */
 #  define SIZEOF_SIZE_T 4
 
-/* Size type formatter */
-#  define TIFF_SIZE_FORMAT "%u"
-
-/* Size type formatter */
-#  define TIFF_SIZE_FORMAT "%u"
-
-/* Unsigned size type */
-#  define TIFF_SIZE_T unsigned int
-
 /* Signed size type formatter */
-#  define TIFF_SSIZE_FORMAT "%d"
+#  define TIFF_SSIZE_FORMAT PRId32
 
 /* Signed size type */
-#  define TIFF_SSIZE_T signed int
+#  define TIFF_SSIZE_T int32_t
 
 #endif
 

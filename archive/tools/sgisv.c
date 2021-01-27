@@ -32,18 +32,18 @@
 #include "tiffio.h"
 
 typedef unsigned char unsigned char;
-typedef unsigned long uint32;
+typedef unsigned long uint32_t;
 
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
-uint32	rowsperstrip = (uint32) -1;
-uint16	compression = COMPRESSION_PACKBITS;
-uint16	config = PLANARCONFIG_CONTIG;
-uint16	predictor = 0;
+uint32_t	rowsperstrip = (uint32_t) -1;
+uint16_t	compression = COMPRESSION_PACKBITS;
+uint16_t	config = PLANARCONFIG_CONTIG;
+uint16_t	predictor = 0;
 int	xmaxscreen;
 int	ymaxscreen;
-uint16	photometric = PHOTOMETRIC_RGB;
+uint16_t	photometric = PHOTOMETRIC_RGB;
 int	jpegcolormode = JPEGCOLORMODE_RGB;
 int	quality = 75;		/* JPEG quality */
 
@@ -151,7 +151,7 @@ usage(void)
 }
 
 static void
-svRGBSeparate(TIFF* tif, uint32* ss, int xsize, int ysize)
+svRGBSeparate(TIFF* tif, uint32_t* ss, int xsize, int ysize)
 {
 	tsize_t stripsize = TIFFStripSize(tif);
 	unsigned char *rbuf = (unsigned char *)_TIFFmalloc(3*stripsize);
@@ -162,7 +162,7 @@ svRGBSeparate(TIFF* tif, uint32* ss, int xsize, int ysize)
 	for (y = 0; y <= ysize; y += rowsperstrip) {
 		unsigned char *rp, *gp, *bp;
 		register int x;
-		register uint32 n;
+		register uint32_t n;
 
 		n = rowsperstrip;
 		if (n > ysize-y+1)
@@ -170,7 +170,7 @@ svRGBSeparate(TIFF* tif, uint32* ss, int xsize, int ysize)
 		rp = rbuf; gp = gbuf; bp = bbuf;
 		do {
 			for (x = 0; x <= xsize; x++) {
-				uint32 v = ss[x];
+				uint32_t v = ss[x];
 				rp[x] = v;
 				gp[x] = v >> 8;
 				bp[x] = v >> 16;
@@ -192,7 +192,7 @@ svRGBSeparate(TIFF* tif, uint32* ss, int xsize, int ysize)
 }
 
 static void
-svRGBContig(TIFF* tif, uint32* ss, int xsize, int ysize)
+svRGBContig(TIFF* tif, uint32_t* ss, int xsize, int ysize)
 {
 	register int x, y;
 	tsize_t stripsize = TIFFStripSize(tif);
@@ -200,14 +200,14 @@ svRGBContig(TIFF* tif, uint32* ss, int xsize, int ysize)
 
 	for (y = 0; y <= ysize; y += rowsperstrip) {
 		register unsigned char *pp = strip;
-		register uint32 n;
+		register uint32_t n;
 
 		n = rowsperstrip;
 		if (n > ysize-y+1)
 			n = ysize-y+1;
 		do {
 			for (x = 0; x <= xsize; x++) {
-				uint32 v = ss[x];
+				uint32_t v = ss[x];
 				pp[0] = v;
 				pp[1] = v >> 8;
 				pp[2] = v >> 16;
@@ -231,7 +231,7 @@ svRGBContig(TIFF* tif, uint32* ss, int xsize, int ysize)
 #define	BLUE	CVT(11)		/* 11% */
 
 static void
-svGrey(TIFF* tif, uint32* ss, int xsize, int ysize)
+svGrey(TIFF* tif, uint32_t* ss, int xsize, int ysize)
 {
 	register int x, y;
 	unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
@@ -241,7 +241,7 @@ svGrey(TIFF* tif, uint32* ss, int xsize, int ysize)
 			unsigned char *cp = (unsigned char *)&ss[x];
 			buf[x] = (RED*cp[3] + GREEN*cp[2] + BLUE*cp[1]) >> 8;
 		}
-		if (TIFFWriteScanline(tif, buf, (uint32) y, 0) < 0)
+		if (TIFFWriteScanline(tif, buf, (uint32_t) y, 0) < 0)
 			break;
 		ss += xsize+1;
 	}
@@ -257,7 +257,7 @@ tiffsv(char* name, int x1, int x2, int y1, int y2)
 	TIFF *tif;
 	int xsize, ysize;
 	int xorg, yorg;
-	uint32 *scrbuf;
+	uint32_t *scrbuf;
 
 	xorg = MIN(x1,x2);
 	yorg = MIN(y1,y2);
@@ -272,8 +272,8 @@ tiffsv(char* name, int x1, int x2, int y1, int y2)
 	if (yorg+ysize > ymaxscreen)
 		ysize = ymaxscreen-yorg;
 	tif = TIFFOpen(name, "w");
-	TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, (uint32) (xsize+1));
-	TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32) (ysize+1));
+	TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, (uint32_t) (xsize+1));
+	TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32_t) (ysize+1));
 	TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
 	TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL,
 	    photometric == PHOTOMETRIC_RGB ? 3 : 1);
@@ -295,7 +295,7 @@ tiffsv(char* name, int x1, int x2, int y1, int y2)
 	TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
 	rowsperstrip = TIFFDefaultStripSize(tif, rowsperstrip);
 	TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
-	scrbuf = (uint32 *)_TIFFmalloc((xsize+1)*(ysize+1)*sizeof (uint32));
+	scrbuf = (uint32_t *)_TIFFmalloc((xsize+1)*(ysize+1)*sizeof (uint32_t));
 	readdisplay(xorg, yorg, xorg+xsize, yorg+ysize, scrbuf, RD_FREEZE);
 	if (photometric == PHOTOMETRIC_RGB) {
 		if (config == PLANARCONFIG_SEPARATE)

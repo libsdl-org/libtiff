@@ -49,8 +49,8 @@
 #define	CopyField(tag, v) \
 	if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
 
-uint32	imagewidth;
-uint32	imagelength;
+uint32_t	imagewidth;
+uint32_t	imagelength;
 int	threshold = 128;
 
 static	void usage(int code);
@@ -66,8 +66,8 @@ fsdither(TIFF* in, TIFF* out)
 	short *thisline, *nextline, *tmpptr;
 	register unsigned char	*outptr;
 	register short *thisptr, *nextptr;
-	register uint32 i, j;
-	uint32 imax, jmax;
+	register uint32_t i, j;
+	uint32_t imax, jmax;
 	int lastline, lastpixel;
 	int bit;
 	tsize_t outlinesize;
@@ -153,9 +153,9 @@ fsdither(TIFF* in, TIFF* out)
 	return errcode;
 }
 
-static	uint16 compression = COMPRESSION_PACKBITS;
-static	uint16 predictor = 0;
-static	uint32 group3options = 0;
+static	uint16_t compression = COMPRESSION_PACKBITS;
+static	uint16_t predictor = 0;
+static	uint32_t group3options = 0;
 
 static void
 processG3Options(char* cp)
@@ -206,11 +206,11 @@ int
 main(int argc, char* argv[])
 {
 	TIFF *in, *out;
-	uint16 samplesperpixel, bitspersample = 1, shortv;
+	uint16_t samplesperpixel, bitspersample = 1, shortv;
 	float floatv;
 	char thing[1024];
-	uint32 rowsperstrip = (uint32) -1;
-	uint16 fillorder = 0;
+	uint32_t rowsperstrip = (uint32_t) -1;
+	uint16_t fillorder = 0;
 	int c;
 #if !HAVE_DECL_OPTARG
 	extern int optind;

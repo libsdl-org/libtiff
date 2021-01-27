@@ -54,17 +54,17 @@
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
-static	uint16 compression = COMPRESSION_PACKBITS;
-static	uint16 predictor = 0;
+static	uint16_t compression = COMPRESSION_PACKBITS;
+static	uint16_t predictor = 0;
 static	int quality = 75;	/* JPEG quality */
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
-static  uint32 g3opts;
+static  uint32_t g3opts;
 
 static	void usage(int code);
 static	int processCompressOptions(char*);
 
 static void
-pack_none (unsigned char *buf, unsigned int smpls, uint16 bps)
+pack_none (unsigned char *buf, unsigned int smpls, uint16_t bps)
 {
 	(void)buf;
 	(void)smpls;
@@ -73,7 +73,7 @@ pack_none (unsigned char *buf, unsigned int smpls, uint16 bps)
 }
 
 static void
-pack_swab (unsigned char *buf, unsigned int smpls, uint16 bps)
+pack_swab (unsigned char *buf, unsigned int smpls, uint16_t bps)
 {
 	unsigned int s;
 	unsigned char h;
@@ -92,13 +92,13 @@ pack_swab (unsigned char *buf, unsigned int smpls, uint16 bps)
 }
 
 static void
-pack_bytes (unsigned char *buf, unsigned int smpls, uint16 bps)
+pack_bytes (unsigned char *buf, unsigned int smpls, uint16_t bps)
 {
 	unsigned int s;
 	unsigned int in;
 	unsigned int out;
 	int bits;
-	uint16 t;
+	uint16_t t;
 
 	in   = 0;
 	out  = 0;
@@ -108,7 +108,7 @@ pack_bytes (unsigned char *buf, unsigned int smpls, uint16 bps)
 	for (s = 0; smpls > s; s++) {
 
 		t <<= bps;
-		t |= (uint16) buf [in++];
+		t |= (uint16_t) buf [in++];
 
 		bits += bps;
 
@@ -122,13 +122,13 @@ pack_bytes (unsigned char *buf, unsigned int smpls, uint16 bps)
 }
 
 static void
-pack_words (unsigned char *buf, unsigned int smpls, uint16 bps)
+pack_words (unsigned char *buf, unsigned int smpls, uint16_t bps)
 {
 	unsigned int s;
 	unsigned int in;
 	unsigned int out;
 	int bits;
-	uint32 t;
+	uint32_t t;
 
 	in   = 0;
 	out  = 0;
@@ -138,8 +138,8 @@ pack_words (unsigned char *buf, unsigned int smpls, uint16 bps)
 	for (s = 0; smpls > s; s++) {
 
 		t <<= bps;
-		t |= (uint32) buf [in++] << 8;
-		t |= (uint32) buf [in++] << 0;
+		t |= (uint32_t) buf [in++] << 8;
+		t |= (uint32_t) buf [in++] << 0;
 
 		bits += bps;
 
@@ -166,9 +166,6 @@ BadPPM(char* file)
 }
 
 
-#define TIFF_SIZE_T_MAX ((size_t) ~ ((size_t)0))
-#define TIFF_TMSIZE_T_MAX (tmsize_t)(TIFF_SIZE_T_MAX >> 1)
-
 static tmsize_t
 multiply_ms(tmsize_t m1, tmsize_t m2)
 {
@@ -180,15 +177,15 @@ multiply_ms(tmsize_t m1, tmsize_t m2)
 int
 main(int argc, char* argv[])
 {
-	uint16 photometric = 0;
-	uint32 rowsperstrip = (uint32) -1;
+	uint16_t photometric = 0;
+	uint32_t rowsperstrip = (uint32_t) -1;
 	double resolution = -1;
 	unsigned char *buf = NULL;
 	tmsize_t linebytes = 0;
 	int pbm;
-	uint16 spp = 1;
-	uint16 bpp = 8;
-	void (*pack_func) (unsigned char *buf, unsigned int smpls, uint16 bps);
+	uint16_t spp = 1;
+	uint16_t bpp = 8;
+	void (*pack_func) (unsigned char *buf, unsigned int smpls, uint16_t bps);
 	TIFF *out;
 	FILE *in;
 	unsigned int w, h, prec, row;
@@ -343,8 +340,8 @@ main(int argc, char* argv[])
 	out = TIFFOpen(argv[optind], "w");
 	if (out == NULL)
 		return (EXIT_FAILURE);
-	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32) w);
-	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32) h);
+	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32_t) w);
+	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32_t) h);
 	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
 	TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
 	TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
@@ -373,7 +370,7 @@ main(int argc, char* argv[])
 	} else {
 		linebytes = multiply_ms(2 * spp, w);
 	}
-	if (rowsperstrip == (uint32) -1) {
+	if (rowsperstrip == (uint32_t) -1) {
 		TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, h);
 	} else {
 		TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,

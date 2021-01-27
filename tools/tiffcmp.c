@@ -45,21 +45,21 @@
 
 static	int stopondiff = 1;
 static	int stoponfirsttag = 1;
-static	uint16 bitspersample = 1;
-static	uint16 samplesperpixel = 1;
-static	uint16 sampleformat = SAMPLEFORMAT_UINT;
-static	uint32 imagewidth;
-static	uint32 imagelength;
+static	uint16_t bitspersample = 1;
+static	uint16_t samplesperpixel = 1;
+static	uint16_t sampleformat = SAMPLEFORMAT_UINT;
+static	uint32_t imagewidth;
+static	uint32_t imagelength;
 
 static	void usage(int code);
 static	int tiffcmp(TIFF*, TIFF*);
 static	int cmptags(TIFF*, TIFF*);
-static	int ContigCompare(int, uint32, unsigned char*, unsigned char*, tsize_t);
-static	int SeparateCompare(int, int, uint32, unsigned char*, unsigned char*);
-static	void PrintIntDiff(uint32, int, uint32, uint32, uint32);
-static	void PrintFloatDiff(uint32, int, uint32, double, double);
+static	int ContigCompare(int, uint32_t, unsigned char*, unsigned char*, tsize_t);
+static	int SeparateCompare(int, int, uint32_t, unsigned char*, unsigned char*);
+static	void PrintIntDiff(uint32_t, int, uint32_t, uint32_t, uint32_t);
+static	void PrintFloatDiff(uint32_t, int, uint32_t, double, double);
 
-static	void leof(const char*, uint32, int);
+static	void leof(const char*, uint32_t, int);
 
 /*
  * exit with status :
@@ -156,9 +156,9 @@ static	int CheckStringTag(TIFF*, TIFF*, int, char*);
 static int
 tiffcmp(TIFF* tif1, TIFF* tif2)
 {
-	uint16 config1, config2;
+	uint16_t config1, config2;
 	tsize_t size1;
-	uint32 row;
+	uint32_t row;
 	tsample_t s;
 	unsigned char *buf1, *buf2;
 
@@ -264,7 +264,7 @@ bad1:
 static int
 cmptags(TIFF* tif1, TIFF* tif2)
 {
-	uint16 compression1, compression2;
+	uint16_t compression1, compression2;
 	CmpLongField(TIFFTAG_SUBFILETYPE,	"SubFileType");
 	CmpLongField(TIFFTAG_IMAGEWIDTH,	"ImageWidth");
 	CmpLongField(TIFFTAG_IMAGELENGTH,	"ImageLength");
@@ -303,13 +303,13 @@ cmptags(TIFF* tif1, TIFF* tif2)
 	CmpShortField(TIFFTAG_GRAYRESPONSEUNIT, "GrayResponseUnit");
 	CmpShortField(TIFFTAG_COLORRESPONSEUNIT, "ColorResponseUnit");
 #ifdef notdef
-	{ uint16 *graycurve;
+	{ uint16_t *graycurve;
 	  CmpField(TIFFTAG_GRAYRESPONSECURVE, graycurve);
 	}
-	{ uint16 *red, *green, *blue;
+	{ uint16_t *red, *green, *blue;
 	  CmpField3(TIFFTAG_COLORRESPONSECURVE, red, green, blue);
 	}
-	{ uint16 *red, *green, *blue;
+	{ uint16_t *red, *green, *blue;
 	  CmpField3(TIFFTAG_COLORMAP, red, green, blue);
 	}
 #endif
@@ -329,10 +329,10 @@ cmptags(TIFF* tif1, TIFF* tif2)
 }
 
 static int
-ContigCompare(int sample, uint32 row,
-	      unsigned char* p1, unsigned char* p2, tsize_t size)
+ContigCompare(int sample, uint32_t row,
+              unsigned char* p1, unsigned char* p2, tsize_t size)
 {
-    uint32 pix;
+    uint32_t pix;
     int	 samples_to_test;
 
     if (memcmp(p1, p2, size) == 0)
@@ -367,7 +367,7 @@ ContigCompare(int sample, uint32 row,
       }
       case 16: 
       {
-          uint16 *pix1 = (uint16 *)p1, *pix2 = (uint16 *)p2;
+          uint16_t *pix1 = (uint16_t *)p1, *pix2 = (uint16_t *)p2;
 
           for (pix = 0; pix < imagewidth; pix++) {
               int	s;
@@ -385,7 +385,7 @@ ContigCompare(int sample, uint32 row,
       case 32: 
 	if (sampleformat == SAMPLEFORMAT_UINT
 	    || sampleformat == SAMPLEFORMAT_INT) {
-		uint32 *pix1 = (uint32 *)p1, *pix2 = (uint32 *)p2;
+		uint32_t *pix1 = (uint32_t *)p1, *pix2 = (uint32_t *)p2;
 
 		for (pix = 0; pix < imagewidth; pix++) {
 			int	s;
@@ -431,7 +431,7 @@ ContigCompare(int sample, uint32 row,
 }
 
 static void
-PrintIntDiff(uint32 row, int sample, uint32 pix, uint32 w1, uint32 w2)
+PrintIntDiff(uint32_t row, int sample, uint32_t pix, uint32_t w1, uint32_t w2)
 {
 	if (sample < 0)
 		sample = 0;
@@ -440,10 +440,10 @@ PrintIntDiff(uint32 row, int sample, uint32 pix, uint32 w1, uint32 w2)
 	case 2:
 	case 4:
 	    {
-		int32 mask1, mask2, s;
+		int32_t mask1, mask2, s;
 
         /* mask1 should have the n lowest bits set, where n == bitspersample */
-        mask1 = ((int32)1 << bitspersample) - 1;
+        mask1 = ((int32_t)1 << bitspersample) - 1;
 		s = (8 - bitspersample);
 		mask2 = mask1 << s;
 		for (; mask2 && pix < imagewidth;
@@ -489,7 +489,7 @@ PrintIntDiff(uint32 row, int sample, uint32 pix, uint32 w1, uint32 w2)
 }
 
 static void
-PrintFloatDiff(uint32 row, int sample, uint32 pix, double w1, double w2)
+PrintFloatDiff(uint32_t row, int sample, uint32_t pix, double w1, double w2)
 {
 	if (sample < 0)
 		sample = 0;
@@ -506,10 +506,10 @@ PrintFloatDiff(uint32 row, int sample, uint32 pix, double w1, double w2)
 }
 
 static int
-SeparateCompare(int reversed, int sample, uint32 row,
-		unsigned char* cp1, unsigned char* p2)
+SeparateCompare(int reversed, int sample, uint32_t row,
+                unsigned char* cp1, unsigned char* p2)
 {
-	uint32 npixels = imagewidth;
+	uint32_t npixels = imagewidth;
 	int pixel;
 
 	cp1 += sample;
@@ -559,14 +559,14 @@ checkTag(TIFF* tif1, TIFF* tif2, int tag, char* name, void* p1, void* p2)
 static int
 CheckShortTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
-	uint16 v1, v2;
+	uint16_t v1, v2;
 	CHECK(v1 == v2, "%s: %u %u\n");
 }
 
 static int
 CheckShort2Tag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
-	uint16 v11, v12, v21, v22;
+	uint16_t v11, v12, v21, v22;
 
 	if (TIFFGetField(tif1, tag, &v11, &v12)) {
 		if (!TIFFGetField(tif2, tag, &v21, &v22)) {
@@ -587,8 +587,8 @@ CheckShort2Tag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 static int
 CheckShortArrayTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
-	uint16 n1, *a1;
-	uint16 n2, *a2;
+	uint16_t n1, *a1;
+	uint16_t n2, *a2;
 
 	if (TIFFGetField(tif1, tag, &n1, &a1)) {
 		if (!TIFFGetField(tif2, tag, &n2, &a2)) {
@@ -598,9 +598,9 @@ CheckShortArrayTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 		}
 		if (n1 == n2) {
 			char* sep;
-			uint16 i;
+			uint16_t i;
 
-			if (memcmp(a1, a2, n1 * sizeof(uint16)) == 0)
+			if (memcmp(a1, a2, n1 * sizeof(uint16_t)) == 0)
 				return (1);
 			printf("%s: value mismatch, <%u:", name, n1);
 			sep = "";
@@ -626,7 +626,7 @@ CheckShortArrayTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 static int
 CheckLongTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
-	uint32 v1, v2;
+	uint32_t v1, v2;
 	CHECK(v1 == v2, "%s: %u %u\n");
 }
 
@@ -645,7 +645,7 @@ CheckStringTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 }
 
 static void
-leof(const char* name, uint32 row, int s)
+leof(const char* name, uint32_t row, int s)
 {
 
 	printf("%s: EOF at scanline %lu", name, (unsigned long)row);

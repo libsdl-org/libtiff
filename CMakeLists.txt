@@ -62,6 +62,7 @@ message(STATUS "Building tiff version ${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_V
 message(STATUS "libtiff library version ${SO_MAJOR}.${SO_MINOR}.${SO_REVISION}")
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+set(CMAKE_C_STANDARD 99)
 
 # Project version
 project(tiff C)
@@ -208,9 +209,7 @@ endif()
 
 check_include_file(assert.h    HAVE_ASSERT_H)
 check_include_file(fcntl.h     HAVE_FCNTL_H)
-check_include_file(inttypes.h  TIFF_HAVE_INTTYPES_H)
 check_include_file(io.h        HAVE_IO_H)
-check_include_file(stdint.h    TIFF_HAVE_STDINT_H)
 check_include_file(strings.h   HAVE_STRINGS_H)
 check_include_file(sys/time.h  HAVE_SYS_TIME_H)
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
@@ -261,20 +260,13 @@ int main(void){
 }"
   TM_IN_SYS_TIME)
 
-# Check type sizes
-# NOTE: Could be replaced with C99 <stdint.h>
-check_type_size("signed int" SIZEOF_SIGNED_INT)
-check_type_size("unsigned int" SIZEOF_UNSIGNED_INT)
-check_type_size("signed long" SIZEOF_SIGNED_LONG)
-check_type_size("unsigned long" SIZEOF_UNSIGNED_LONG)
-check_type_size("signed long long" SIZEOF_SIGNED_LONG_LONG)
-check_type_size("unsigned long long" SIZEOF_UNSIGNED_LONG_LONG)
-check_type_size("unsigned char *" SIZEOF_UNSIGNED_CHAR_P)
+# Disable deprecated features to ensure clean build
+add_definitions(-DTIFF_DISABLE_DEPRECATED)
 
+# Check type sizes
 set(CMAKE_EXTRA_INCLUDE_FILES_SAVE ${CMAKE_EXTRA_INCLUDE_FILES})
 set(CMAKE_EXTRA_INCLUDE_FILES ${CMAKE_EXTRA_INCLUDE_FILES} "stddef.h")
 check_type_size("size_t" SIZEOF_SIZE_T)
-check_type_size("ptrdiff_t" SIZEOF_PTRDIFF_T)
 set(CMAKE_EXTRA_INCLUDE_FILES ${CMAKE_EXTRA_INCLUDE_FILES_SAVE})
 
 macro(report_values)
@@ -283,134 +275,29 @@ macro(report_values)
   endforeach()
 endmacro()
 
-if (TIFF_HAVE_STDINT_H AND TIFF_HAVE_INTTYPES_H)
-  # C99 fixed-size integer types
-  set(TIFF_INT8_T "int8_t")
-  set(TIFF_UINT8_T "uint8_t")
+# C99 fixed-size integer types
+set(TIFF_INT8_T "int8_t")
+set(TIFF_UINT8_T "uint8_t")
 
-  set(TIFF_INT16_T "int16_t")
-  set(TIFF_UINT16_T "uint16_t")
+set(TIFF_INT16_T "int16_t")
+set(TIFF_UINT16_T "uint16_t")
 
-  set(TIFF_INT32_T "int32_t")
-  set(TIFF_UINT32_T "uint32_t")
-  set(TIFF_INT32_FORMAT "PRId32")
-  set(TIFF_UINT32_FORMAT "PRIu32")
+set(TIFF_INT32_T "int32_t")
+set(TIFF_UINT32_T "uint32_t")
 
-  set(TIFF_INT64_T "int64_t")
-  set(TIFF_UINT64_T "uint64_t")
-  set(TIFF_INT64_FORMAT "PRId64")
-  set(TIFF_UINT64_FORMAT "PRIu64")
+set(TIFF_INT64_T "int64_t")
+set(TIFF_UINT64_T "uint64_t")
 
-  set(TIFF_SIZE_T "size_t")
-  set(TIFF_SIZE_FORMAT "\"zu\"")
-  if(SIZEOF_SIZE_T EQUAL 4)
-    set(TIFF_SSIZE_T "int32_t")
-    set(TIFF_SSIZE_FORMAT "PRId32")
-  elseif(SIZEOF_SIZE_T EQUAL 8)
-    set(TIFF_SSIZE_T "int64_t")
-    set(TIFF_SSIZE_FORMAT "PRId64")
-  else()
-    message(FATAL_ERROR "Unsupported size_t size ${SIZEOF_SIZE_T}; please add support")
-  endif()
 
-  if(NOT SIZEOF_PTRDIFF_T)
-    set(TIFF_PTRDIFF_T "${TIFF_SSIZE_T}")
-    set(TIFF_PTRDIFF_FORMAT "${SSIZE_FORMAT}")
-  else()
-    set(TIFF_PTRDIFF_T "ptrdiff_t")
-    set(TIFF_PTRDIFF_FORMAT "\"td\"")
-  endif()
-
+if(SIZEOF_SIZE_T EQUAL 4)
+  set(TIFF_SSIZE_T "int32_t")
+elseif(SIZEOF_SIZE_T EQUAL 8)
+  set(TIFF_SSIZE_T "int64_t")
 else()
-  # Fallback to pre-C99 basic types
-  set(TIFF_INT8_T "signed char")
-  set(TIFF_UINT8_T "unsigned char")
-
-  set(TIFF_INT16_T "signed short")
-  set(TIFF_UINT16_T "unsigned short")
-
-  if(SIZEOF_SIGNED_INT EQUAL 4)
-    set(TIFF_INT32_T "signed int")
-    set(TIFF_INT32_FORMAT "\"d\"")
-  elseif(SIZEOF_SIGNED_LONG EQUAL 4)
-    set(TIFF_INT32_T "signed long")
-    set(TIFF_INT32_FORMAT "\"ld\"")
-  endif()
-
-  if(SIZEOF_UNSIGNED_INT EQUAL 4)
-    set(TIFF_UINT32_T "unsigned int")
-    set(TIFF_UINT32_FORMAT "\"u\"")
-  elseif(SIZEOF_UNSIGNED_LONG EQUAL 4)
-    set(TIFF_UINT32_T "unsigned long")
-    set(TIFF_UINT32_FORMAT "\"lu\"")
-  endif()
-
-  if(SIZEOF_SIGNED_LONG EQUAL 8)
-    set(TIFF_INT64_T "signed long")
-    set(TIFF_INT64_FORMAT "\"ld\"")
-  elseif(SIZEOF_SIGNED_LONG_LONG EQUAL 8)
-    set(TIFF_INT64_T "signed long long")
-    if (MINGW)
-      set(TIFF_INT64_FORMAT "\"I64d\"")
-    else()
-      set(TIFF_INT64_FORMAT "\"lld\"")
-    endif()
-  endif()
-
-  if(SIZEOF_UNSIGNED_LONG EQUAL 8)
-    set(TIFF_UINT64_T "unsigned long")
-    set(TIFF_UINT64_FORMAT "\"lu\"")
-  elseif(SIZEOF_UNSIGNED_LONG_LONG EQUAL 8)
-    set(TIFF_UINT64_T "unsigned long long")
-    if (MINGW)
-      set(TIFF_UINT64_FORMAT "\"I64u\"")
-    else()
-      set(TIFF_UINT64_FORMAT "\"llu\"")
-    endif()
-  endif()
-
-  if(SIZEOF_UNSIGNED_INT EQUAL SIZEOF_SIZE_T)
-    set(TIFF_SIZE_T "unsigned int")
-    set(TIFF_SIZE_FORMAT "\"u\"")
-    set(TIFF_SSIZE_T "signed int")
-    set(TIFF_SSIZE_FORMAT "\"d\"")
-  elseif(SIZEOF_UNSIGNED_LONG EQUAL SIZEOF_SIZE_T)
-    set(TIFF_SIZE_T "unsigned long")
-    set(TIFF_SIZE_FORMAT "\"lu\"")
-    set(TIFF_SSIZE_T "signed long")
-    set(TIFF_SSIZE_FORMAT "\"ld\"")
-  elseif(SIZEOF_UNSIGNED_LONG_LONG EQUAL SIZEOF_SIZE_T)
-    set(TIFF_SIZE_T "unsigned long long")
-    set(TIFF_SSIZE_T "signed long long")
-    if (MINGW)
-      set(TIFF_SIZE_FORMAT "\"I64u\"")
-      set(TIFF_SSIZE_FORMAT "\"I64d\"")
-    else()
-      set(TIFF_SIZE_FORMAT "\"llu\"")
-      set(TIFF_SSIZE_FORMAT "\"lld\"")
-    endif()
-  endif()
-
-  if(NOT SIZEOF_PTRDIFF_T)
-    set(TIFF_PTRDIFF_T "${TIFF_SSIZE_T}")
-    set(TIFF_PTRDIFF_FORMAT "${SSIZE_FORMAT}")
-  else()
-    set(TIFF_PTRDIFF_T "ptrdiff_t")
-    set(TIFF_PTRDIFF_FORMAT "\"ld\"")
-  endif()
+  message(FATAL_ERROR "Unsupported size_t size ${SIZEOF_SIZE_T}; please add support")
 endif()
 
-report_values(TIFF_INT8_T
-              TIFF_UINT8_T
-              TIFF_INT16_T
-              TIFF_UINT16_T
-              TIFF_INT32_T TIFF_INT32_FORMAT
-              TIFF_UINT32_T TIFF_UINT32_FORMAT
-              TIFF_INT64_T TIFF_INT64_FORMAT
-              TIFF_UINT64_T TIFF_UINT64_FORMAT
-              TIFF_SIZE_T TIFF_SIZE_FORMAT
-              TIFF_SSIZE_T TIFF_SSIZE_FORMAT
-              TIFF_PTRDIFF_T TIFF_PTRDIFF_FORMAT)
+report_values(TIFF_SSIZE_T)
 
 check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
 check_symbol_exists(setmode "unistd.h" HAVE_SETMODE)

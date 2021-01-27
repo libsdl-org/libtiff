@@ -41,16 +41,16 @@
 static const char filename[] = "short_test.tiff";
 
 #define	SPP	3		/* Samples per pixel */
-const uint16	width = 1;
-const uint16	length = 1;
-const uint16	bps = 8;
-const uint16	photometric = PHOTOMETRIC_RGB;
-const uint16	rows_per_strip = 1;
-const uint16	planarconfig = PLANARCONFIG_CONTIG;
+const uint16_t	width = 1;
+const uint16_t	length = 1;
+const uint16_t	bps = 8;
+const uint16_t	photometric = PHOTOMETRIC_RGB;
+const uint16_t	rows_per_strip = 1;
+const uint16_t	planarconfig = PLANARCONFIG_CONTIG;
 
 static const struct {
 	const ttag_t	tag;
-	const uint16	value;
+	const uint16_t	value;
 } short_single_tags[] = {
 	{ TIFFTAG_COMPRESSION, COMPRESSION_NONE },
 	{ TIFFTAG_FILLORDER, FILLORDER_MSB2LSB },
@@ -66,7 +66,7 @@ static const struct {
 
 static const struct {
 	const ttag_t	tag;
-	const uint16	values[2];
+	const uint16_t	values[2];
 } short_paired_tags[] = {
 	{ TIFFTAG_PAGENUMBER, {1, 1} },
 	{ TIFFTAG_HALFTONEHINTS, {0, 255} },

@@ -47,10 +47,10 @@
 #define	streq(a,b)	(strcmp(a,b) == 0)
 #define	strneq(a,b,n)	(strncmp(a,b,n) == 0)
 
-static	uint16 compression = (uint16) -1;
+static	uint16_t compression = (uint16_t) -1;
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
 static	int quality = 75;		/* JPEG quality */
-static	uint16 predictor = 0;
+static	uint16_t predictor = 0;
 
 static void usage(void);
 static	int processCompressOptions(char*);
@@ -64,9 +64,9 @@ main(int argc, char* argv[])
 	TIFF *out;
 	FILE *in;
 	struct rasterfile h;
-	uint16 photometric;
-	uint16 config = PLANARCONFIG_CONTIG;
-	uint32 rowsperstrip = (uint32) -1;
+	uint16_t photometric;
+	uint16_t config = PLANARCONFIG_CONTIG;
+	uint32_t rowsperstrip = (uint32_t) -1;
 	int c;
 #if !HAVE_DECL_OPTARG
 	extern int optind;
@@ -100,23 +100,23 @@ main(int argc, char* argv[])
 	}
 	if (strcmp(h.ras_magic, RAS_MAGIC) == 0) {
 #ifndef WORDS_BIGENDIAN
-			TIFFSwabLong((uint32 *)&h.ras_width);
-			TIFFSwabLong((uint32 *)&h.ras_height);
-			TIFFSwabLong((uint32 *)&h.ras_depth);
-			TIFFSwabLong((uint32 *)&h.ras_length);
-			TIFFSwabLong((uint32 *)&h.ras_type);
-			TIFFSwabLong((uint32 *)&h.ras_maptype);
-			TIFFSwabLong((uint32 *)&h.ras_maplength);
+			TIFFSwabLong((uint32_t *)&h.ras_width);
+			TIFFSwabLong((uint32_t *)&h.ras_height);
+			TIFFSwabLong((uint32_t *)&h.ras_depth);
+			TIFFSwabLong((uint32_t *)&h.ras_length);
+			TIFFSwabLong((uint32_t *)&h.ras_type);
+			TIFFSwabLong((uint32_t *)&h.ras_maptype);
+			TIFFSwabLong((uint32_t *)&h.ras_maplength);
 #endif
 	} else if (strcmp(h.ras_magic, RAS_MAGIC_INV) == 0) {
 #ifdef WORDS_BIGENDIAN
-			TIFFSwabLong((uint32 *)&h.ras_width);
-			TIFFSwabLong((uint32 *)&h.ras_height);
-			TIFFSwabLong((uint32 *)&h.ras_depth);
-			TIFFSwabLong((uint32 *)&h.ras_length);
-			TIFFSwabLong((uint32 *)&h.ras_type);
-			TIFFSwabLong((uint32 *)&h.ras_maptype);
-			TIFFSwabLong((uint32 *)&h.ras_maplength);
+			TIFFSwabLong((uint32_t *)&h.ras_width);
+			TIFFSwabLong((uint32_t *)&h.ras_height);
+			TIFFSwabLong((uint32_t *)&h.ras_depth);
+			TIFFSwabLong((uint32_t *)&h.ras_length);
+			TIFFSwabLong((uint32_t *)&h.ras_type);
+			TIFFSwabLong((uint32_t *)&h.ras_maptype);
+			TIFFSwabLong((uint32_t *)&h.ras_maplength);
 #endif
 	} else {
 		fprintf(stderr, "%s: Not a rasterfile.\n", argv[optind]);
@@ -148,15 +148,15 @@ main(int argc, char* argv[])
 		fclose(in);
 		return (-4);
 	}
-	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32) h.ras_width);
-	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32) h.ras_height);
+	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, (uint32_t) h.ras_width);
+	TIFFSetField(out, TIFFTAG_IMAGELENGTH, (uint32_t) h.ras_height);
 	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
 	TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, h.ras_depth > 8 ? 3 : 1);
 	TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, h.ras_depth > 1 ? 8 : 1);
 	TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
 	if (h.ras_maptype != RMT_NONE) {
-		uint16* red;
-		register uint16* map;
+		uint16_t* red;
+		register uint16_t* map;
 		register int i, j;
 		int mapsize;
 
@@ -177,7 +177,7 @@ main(int argc, char* argv[])
 			    argv[optind], h.ras_maplength, mapsize*3);
 			return (-7);
 		}
-		red = (uint16*)_TIFFmalloc(mapsize * 3 * sizeof (uint16));
+		red = (uint16_t*)_TIFFmalloc(mapsize * 3 * sizeof (uint16_t));
 		if (red == NULL) {
 			fprintf(stderr, "No space for colormap.\n");
 			return (-8);
@@ -189,21 +189,21 @@ main(int argc, char* argv[])
 				*map++ = SCALE(*buf++);
 			if ((i = h.ras_maplength/3) < mapsize) {
 				i = mapsize - i;
-				_TIFFmemset(map, 0, i*sizeof (uint16));
+				_TIFFmemset(map, 0, i*sizeof (uint16_t));
 				map += i;
 			}
 		}
 		TIFFSetField(out, TIFFTAG_COLORMAP,
 		     red, red + mapsize, red + 2*mapsize);
 		photometric = PHOTOMETRIC_PALETTE;
-		if (compression == (uint16) -1)
+		if (compression == (uint16_t) -1)
 			compression = COMPRESSION_PACKBITS;
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	} else {
 		/* XXX this is bogus... */
 		photometric = h.ras_depth == 24 ?
 		    PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK;
-		if (compression == (uint16) -1)
+		if (compression == (uint16_t) -1)
 			compression = COMPRESSION_LZW;
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	}

@@ -72,37 +72,37 @@ typedef enum {
 	BAND
 } InterleavingType;
 
-static	uint16 compression = (uint16) -1;
+static	uint16_t compression = (uint16_t) -1;
 static	int jpegcolormode = JPEGCOLORMODE_RGB;
 static	int quality = 75;		/* JPEG quality */
-static	uint16 predictor = 0;
+static	uint16_t predictor = 0;
 
-static void swapBytesInScanline(void *, uint32, TIFFDataType);
-static int guessSize(int, TIFFDataType, _TIFF_off_t, uint32, int,
-		     uint32 *, uint32 *);
-static double correlation(void *, void *, uint32, TIFFDataType);
+static void swapBytesInScanline(void *, uint32_t, TIFFDataType);
+static int guessSize(int, TIFFDataType, _TIFF_off_t, uint32_t, int,
+					 uint32_t *, uint32_t *);
+static double correlation(void *, void *, uint32_t, TIFFDataType);
 static void usage(int);
 static	int processCompressOptions(char*);
 
 int
 main(int argc, char* argv[])
 {
-	uint32	width = 0, length = 0, linebytes, bufsize;
-	uint32	nbands = 1;		    /* number of bands in input image*/
+	uint32_t	width = 0, length = 0, linebytes, bufsize;
+	uint32_t	nbands = 1;		    /* number of bands in input image*/
 	_TIFF_off_t hdr_size = 0;	    /* size of the header to skip */
 	TIFFDataType dtype = TIFF_BYTE;
-	int16	depth = 1;		    /* bytes per pixel in input image */
+	int16_t	depth = 1;		    /* bytes per pixel in input image */
 	int	swab = 0;		    /* byte swapping flag */
 	InterleavingType interleaving = 0;  /* interleaving type flag */
-	uint32  rowsperstrip = (uint32) -1;
-	uint16	photometric = PHOTOMETRIC_MINISBLACK;
-	uint16	config = PLANARCONFIG_CONTIG;
-	uint16	fillorder = FILLORDER_LSB2MSB;
+	uint32_t    rowsperstrip = (uint32_t) -1;
+	uint16_t	photometric = PHOTOMETRIC_MINISBLACK;
+	uint16_t	config = PLANARCONFIG_CONTIG;
+	uint16_t	fillorder = FILLORDER_LSB2MSB;
 	int	fd;
 	char	*outfilename = NULL;
 	TIFF	*out;
 
-	uint32 row, col, band;
+	uint32_t row, col, band;
 	int	c;
 	unsigned char *buf = NULL, *buf1 = NULL;
 #if !HAVE_DECL_OPTARG
@@ -247,7 +247,7 @@ main(int argc, char* argv[])
 		TIFFSetField(out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_VOID);
 		break;
 	}
-	if (compression == (uint16) -1)
+	if (compression == (uint16_t) -1)
 		compression = COMPRESSION_PACKBITS;
 	TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	switch (compression) {
@@ -340,17 +340,17 @@ main(int argc, char* argv[])
 }
 
 static void
-swapBytesInScanline(void *buf, uint32 width, TIFFDataType dtype)
+swapBytesInScanline(void *buf, uint32_t width, TIFFDataType dtype)
 {
 	switch (dtype) {
 		case TIFF_SHORT:
 		case TIFF_SSHORT:
-			TIFFSwabArrayOfShort((uint16*)buf,
+			TIFFSwabArrayOfShort((uint16_t*)buf,
                                              (unsigned long)width);
 			break;
 		case TIFF_LONG:
 		case TIFF_SLONG:
-			TIFFSwabArrayOfLong((uint32*)buf,
+			TIFFSwabArrayOfLong((uint32_t*)buf,
                                             (unsigned long)width);
 			break;
 		/* case TIFF_FLOAT: */	/* FIXME */
@@ -364,14 +364,14 @@ swapBytesInScanline(void *buf, uint32 width, TIFFDataType dtype)
 }
 
 static int
-guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
-	  int swab, uint32 *width, uint32 *length)
+guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32_t nbands,
+		  int swab, uint32_t *width, uint32_t *length)
 {
 	const float longt = 40.0;    /* maximum possible height/width ratio */
 	char	    *buf1, *buf2;
 	_TIFF_stat_s filestat;
-	uint32	    w, h, scanlinesize, imagesize;
-	uint32	    depth = TIFFDataWidth(dtype);	
+	uint32_t	w, h, scanlinesize, imagesize;
+	uint32_t	depth = TIFFDataWidth(dtype);
 	double	    cor_coef = 0, tmp;
 
 	if (_TIFF_fstat_f(fd, &filestat) == -1) {
@@ -407,7 +407,7 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
 	} else if (*width == 0 && *length == 0) {
                 unsigned int fail = 0;
 		fprintf(stderr,	"Image width and height are not specified.\n");
-                w = (uint32) sqrt(imagesize / longt);
+                w = (uint32_t) sqrt(imagesize / longt);
                 if( w == 0 )
                 {
                     fprintf(stderr, "Too small image size.\n");
@@ -489,10 +489,10 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32 nbands,
 
 /* Calculate correlation coefficient between two numeric vectors */
 static double
-correlation(void *buf1, void *buf2, uint32 n_elem, TIFFDataType dtype)
+correlation(void *buf1, void *buf2, uint32_t n_elem, TIFFDataType dtype)
 {
 	double	X, Y, M1 = 0.0, M2 = 0.0, D1 = 0.0, D2 = 0.0, K = 0.0;
-	uint32	i;
+	uint32_t	i;
 
 	switch (dtype) {
 		case TIFF_BYTE:
@@ -516,8 +516,8 @@ correlation(void *buf1, void *buf2, uint32 n_elem, TIFFDataType dtype)
 			break;
 		case TIFF_SHORT:
                         for (i = 0; i < n_elem; i++) {
-				X = ((uint16 *)buf1)[i];
-				Y = ((uint16 *)buf2)[i];
+				X = ((uint16_t *)buf1)[i];
+				Y = ((uint16_t *)buf2)[i];
 				M1 += X, M2 += Y;
 				D1 += X * X, D2 += Y * Y;
 				K += X * Y;
@@ -525,8 +525,8 @@ correlation(void *buf1, void *buf2, uint32 n_elem, TIFFDataType dtype)
 			break;
 		case TIFF_SSHORT:
                         for (i = 0; i < n_elem; i++) {
-				X = ((int16 *)buf1)[i];
-				Y = ((int16 *)buf2)[i];
+				X = ((int16_t *)buf1)[i];
+				Y = ((int16_t *)buf2)[i];
 				M1 += X, M2 += Y;
 				D1 += X * X, D2 += Y * Y;
 				K += X * Y;
@@ -534,8 +534,8 @@ correlation(void *buf1, void *buf2, uint32 n_elem, TIFFDataType dtype)
 			break;
 		case TIFF_LONG:
                         for (i = 0; i < n_elem; i++) {
-				X = ((uint32 *)buf1)[i];
-				Y = ((uint32 *)buf2)[i];
+				X = ((uint32_t *)buf1)[i];
+				Y = ((uint32_t *)buf2)[i];
 				M1 += X, M2 += Y;
 				D1 += X * X, D2 += Y * Y;
 				K += X * Y;
@@ -543,8 +543,8 @@ correlation(void *buf1, void *buf2, uint32 n_elem, TIFFDataType dtype)
 			break;
 		case TIFF_SLONG:
                         for (i = 0; i < n_elem; i++) {
-				X = ((int32 *)buf1)[i];
-				Y = ((int32 *)buf2)[i];
+				X = ((int32_t *)buf1)[i];
+				Y = ((int32_t *)buf2)[i];
 				M1 += X, M2 += Y;
 				D1 += X * X, D2 += Y * Y;
 				K += X * Y;

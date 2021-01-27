@@ -40,7 +40,7 @@ DumpFixupTags(TIFF* tif)
  * Encode a hunk of pixels.
  */
 static int
-DumpModeEncode(TIFF* tif, uint8* pp, tmsize_t cc, uint16 s)
+DumpModeEncode(TIFF* tif, uint8_t* pp, tmsize_t cc, uint16_t s)
 {
 	(void) s;
 	while (cc > 0) {
@@ -73,7 +73,7 @@ DumpModeEncode(TIFF* tif, uint8* pp, tmsize_t cc, uint16 s)
  * Decode a hunk of pixels.
  */
 static int
-DumpModeDecode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
+DumpModeDecode(TIFF* tif, uint8_t* buf, tmsize_t cc, uint16_t s)
 {
 	static const char module[] = "DumpModeDecode";
 	(void) s;
@@ -108,7 +108,7 @@ DumpModeDecode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
  * Seek forwards nrows in the current strip.
  */
 static int
-DumpModeSeek(TIFF* tif, uint32 nrows)
+DumpModeSeek(TIFF* tif, uint32_t nrows)
 {
 	tif->tif_rawcp += nrows * tif->tif_scanlinesize;
 	tif->tif_rawcc -= nrows * tif->tif_scanlinesize;
