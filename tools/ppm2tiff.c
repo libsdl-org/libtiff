@@ -481,6 +481,7 @@ processCompressOptions(char* opt)
 }
 
 static const char usage_info[] =
+"Create a TIFF file from PPM, PGM and PBM image files\n\n"
 "usage: ppm2tiff [options] input.ppm output.tif\n"
 "where options are:\n"
 " -r #		make each strip have no more than # rows\n"

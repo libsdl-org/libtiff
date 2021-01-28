@@ -323,6 +323,7 @@ processCompressOptions(char* opt)
 }
 
 static const char usage_info[] =
+"Apply the median cut algorithm to an RGB TIFF file\n\n"
 "usage: tiffmedian [options] input.tif output.tif\n"
 "where options are:\n"
 " -r #  make each strip have no more than # rows\n"

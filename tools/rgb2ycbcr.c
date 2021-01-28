@@ -365,6 +365,7 @@ const char* usage_info[] = {
 /* Help information format modified for the sake of consistency with the other tiff tools */
 /*    "usage: rgb2ycbcr [-c comp] [-r rows] [-h N] [-v N] input... output\n", */
 /*     "where comp is one of the following compression algorithms:\n", */
+"Convert RGB color, greyscale, or bi-level TIFF images to YCbCr images\n\n"
 "usage: rgb2ycbcr [options] input output",
 "where options are:",
 #ifdef JPEG_SUPPORT

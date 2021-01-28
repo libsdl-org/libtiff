@@ -633,6 +633,7 @@ static void* limitMalloc(tmsize_t s)
 
 
 static const char usage_info[] =
+"Copy, crop, convert, extract, and/or process TIFF files\n\n"
 "usage: tiffcrop [options] source1 ... sourceN  destination\n"
 "where options are:\n"
 " -h       Print this syntax listing\n"
@@ -1504,7 +1505,7 @@ usage(int code)
 {
         FILE * out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-        fprintf(out, "\n%s\n", TIFFGetVersion());
+        fprintf(out, "\n%s\n\n", TIFFGetVersion());
         fprintf(out, "%s", usage_info);
         exit(code);
 }

@@ -3087,6 +3087,7 @@ tsize_t Ascii85EncodeBlock(uint8_t * ascii85_p, unsigned f_eod, const uint8_t * 
 
 
 static const char usage_info[] =
+"Convert a TIFF image to PostScript\n\n"
 "usage: tiff2ps [options] input.tif ...\n"
 "where options are:\n"
 " -1            generate PostScript Level 1 (default)\n"

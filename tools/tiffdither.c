@@ -303,6 +303,7 @@ main(int argc, char* argv[])
 }
 
 static const char usage_info[] =
+"Convert a greyscale image to bilevel using dithering\n\n"
 "usage: tiffdither [options] input.tif output.tif\n"
 "where options are:\n"
 " -r #      make each strip have no more than # rows\n"

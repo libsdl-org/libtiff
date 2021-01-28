@@ -170,6 +170,7 @@ main(int argc, char* argv[])
 }
 
 static const char usage_info[] =
+"Display information about TIFF files\n\n"
 "usage: tiffinfo [options] input...\n"
 "where options are:\n"
 " -D		read data\n"

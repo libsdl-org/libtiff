@@ -618,6 +618,7 @@ processCompressOptions(char* opt)
 }
 
 static const char usage_info[] =
+"Create a TIFF file from raw data\n\n"
 "raw2tiff --- tool for converting raw byte sequences in TIFF images\n"
 "usage: raw2tiff [options] input.raw output.tif\n"
 "where options are:\n"

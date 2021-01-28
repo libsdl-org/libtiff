@@ -124,6 +124,7 @@ main(int argc, char* argv[])
 }
 
 static const char usage_info[] =
+"Compare the tags and data in two TIFF files\n\n"
 "usage: tiffcmp [options] file1 file2\n"
 "where options are:\n"
 " -l		list each byte of image data that differs between the files\n"

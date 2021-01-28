@@ -651,6 +651,7 @@ generateThumbnail(TIFF* in, TIFF* out)
 }
 
 const char* usage_info[] = {
+"Create a TIFF file with thumbnail images\n\n"
 "usage: thumbnail [options] input.tif output.tif",
 "where options are:",
 " -h #		specify thumbnail image height (default is 274)",
