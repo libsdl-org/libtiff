@@ -109,8 +109,8 @@ _TIFFCheckRealloc(TIFF* tif, void* buffer,
 	if (cp == NULL) {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 			     "Failed to allocate memory for %s "
-			     "(%ld elements of %ld bytes each)",
-			     what,(long) nmemb, (long) elem_size);
+			     "(%"PRId64" elements of %"PRId64" bytes each)",
+			     what, nmemb, elem_size);
 	}
 
 	return cp;

@@ -238,8 +238,8 @@ PackBitsDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			if( occ < (tmsize_t)n )
 			{
 				TIFFWarningExt(tif->tif_clientdata, module,
-				    "Discarding %lu bytes to avoid buffer overrun",
-				    (unsigned long) ((tmsize_t)n - occ));
+				    "Discarding %"PRId64" bytes to avoid buffer overrun",
+				    (tmsize_t)n - occ);
 				n = (long)occ;
 			}
 			if( cc == 0 )
@@ -257,8 +257,8 @@ PackBitsDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			if (occ < (tmsize_t)(n + 1))
 			{
 				TIFFWarningExt(tif->tif_clientdata, module,
-				    "Discarding %lu bytes to avoid buffer overrun",
-				    (unsigned long) ((tmsize_t)n - occ + 1));
+				    "Discarding %"PRId64" bytes to avoid buffer overrun",
+				    (tmsize_t)n - occ + 1);
 				n = (long)occ - 1;
 			}
 			if (cc < (tmsize_t) (n+1)) 
@@ -276,8 +276,8 @@ PackBitsDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	tif->tif_rawcc = cc;
 	if (occ > 0) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Not enough data for scanline %lu",
-		    (unsigned long) tif->tif_row);
+		    "Not enough data for scanline %"PRIu32,
+		    tif->tif_row);
 		return (0);
 	}
 	return (1);

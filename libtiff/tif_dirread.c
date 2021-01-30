@@ -809,9 +809,9 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryDataAndRealloc(
             {
                 TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
                             "Failed to allocate memory for %s "
-                            "(%ld elements of %ld bytes each)",
+                            "(%"PRId64" elements of %"PRId64" bytes each)",
                             "TIFFReadDirEntryArray",
-                             (long) 1, (long) (already_read + to_read));
+                             (tmsize_t) 1, already_read + to_read);
                 return TIFFReadDirEntryErrAlloc;
             }
             *pdest = new_dest;
@@ -3699,7 +3699,7 @@ TIFFReadDirectory(TIFF* tif)
 			if (fii == FAILED_FII)
 			{
 				TIFFWarningExt(tif->tif_clientdata, module,
-				    "Unknown field with tag %d (0x%x) encountered",
+				    "Unknown field with tag %"PRIu16" (0x%"PRIx16") encountered",
 				    dp->tdir_tag,dp->tdir_tag);
 				/* the following knowingly leaks the 
 				   anonymous field structure */
@@ -3710,7 +3710,7 @@ TIFFReadDirectory(TIFF* tif)
 					1)) {
 					TIFFWarningExt(tif->tif_clientdata,
 					    module,
-					    "Registering anonymous field with tag %d (0x%x) failed",
+					    "Registering anonymous field with tag %"PRIu16" (0x%"PRIx16") failed",
 					    dp->tdir_tag,
 					    dp->tdir_tag);
 					dp->tdir_ignore = TRUE;
@@ -3981,7 +3981,7 @@ TIFFReadDirectory(TIFF* tif)
 						{
 							fip = TIFFFieldWithTag(tif,dp->tdir_tag);
 							TIFFWarningExt(tif->tif_clientdata,module,
-								"Ignoring %s because BitsPerSample=%d>24",
+								"Ignoring %s because BitsPerSample=%"PRIu16">24",
 								fip ? fip->field_name : "unknown tagname",
 								tif->tif_dir.td_bitspersample);
 							continue;
@@ -4164,7 +4164,8 @@ TIFFReadDirectory(TIFF* tif)
                 new_sampleinfo = (uint16_t*) _TIFFcalloc(tif->tif_dir.td_extrasamples, sizeof(uint16_t));
                 if (!new_sampleinfo) {
                     TIFFErrorExt(tif->tif_clientdata, module, "Failed to allocate memory for "
-                                "temporary new sampleinfo array (%d 16 bit elements)",
+                                                              "temporary new sampleinfo array "
+                                                              "(%"PRIu16" 16 bit elements)",
                                 tif->tif_dir.td_extrasamples);
                     goto bad;
                 }
@@ -4462,14 +4463,14 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 		if (fii == FAILED_FII)
 		{
 			TIFFWarningExt(tif->tif_clientdata, module,
-			    "Unknown field with tag %d (0x%x) encountered",
+			    "Unknown field with tag %"PRIu16" (0x%"PRIx16") encountered",
 			    dp->tdir_tag, dp->tdir_tag);
 			if (!_TIFFMergeFields(tif, _TIFFCreateAnonField(tif,
 						dp->tdir_tag,
 						(TIFFDataType) dp->tdir_type),
 					     1)) {
 				TIFFWarningExt(tif->tif_clientdata, module,
-				    "Registering anonymous field with tag %d (0x%x) failed",
+				    "Registering anonymous field with tag %"PRIu16" (0x%"PRIx16") failed",
 				    dp->tdir_tag, dp->tdir_tag);
 				dp->tdir_ignore = TRUE;
 			} else {
@@ -4499,7 +4500,7 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 				if (fii==0xFFFF)
 				{
 					TIFFWarningExt(tif->tif_clientdata, module,
-					    "Wrong data type %d for \"%s\"; tag ignored",
+					    "Wrong data type %"PRIu16" for \"%s\"; tag ignored",
 					    dp->tdir_type,fip->field_name);
 					dp->tdir_ignore = TRUE;
 				}
@@ -4598,7 +4599,7 @@ EstimateStripByteCounts(TIFF* tif, TIFFDirEntry* dir, uint16_t dircount)
 			typewidth = TIFFDataWidth((TIFFDataType) dp->tdir_type);
 			if (typewidth == 0) {
 				TIFFErrorExt(tif->tif_clientdata, module,
-				    "Cannot determine size of unknown tag type %d",
+				    "Cannot determine size of unknown tag type %"PRIu16,
 				    dp->tdir_type);
 				return -1;
 			}
@@ -4736,14 +4737,14 @@ CheckDirCount(TIFF* tif, TIFFDirEntry* dir, uint32_t count)
 	if ((uint64_t)count > dir->tdir_count) {
 		const TIFFField* fip = TIFFFieldWithTag(tif, dir->tdir_tag);
 		TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
-	"incorrect count for field \"%s\" (%" PRIu64 ", expecting %u); tag ignored",
+	"incorrect count for field \"%s\" (%" PRIu64 ", expecting %"PRIu32"); tag ignored",
 		    fip ? fip->field_name : "unknown tagname",
 		    dir->tdir_count, count);
 		return (0);
 	} else if ((uint64_t)count < dir->tdir_count) {
 		const TIFFField* fip = TIFFFieldWithTag(tif, dir->tdir_tag);
 		TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
-	"incorrect count for field \"%s\" (%" PRIu64 ", expecting %u); tag trimmed",
+	"incorrect count for field \"%s\" (%" PRIu64 ", expecting %"PRIu32"); tag trimmed",
 		    fip ? fip->field_name : "unknown tagname",
 		    dir->tdir_count, count);
 		dir->tdir_count = count;
@@ -5026,7 +5027,7 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
         if( fii == FAILED_FII )
         {
             TIFFErrorExt(tif->tif_clientdata, "TIFFFetchNormalTag",
-                         "No definition found for tag %d",
+                         "No definition found for tag %"PRIu16,
                          dp->tdir_tag);
             return 0;
         }
@@ -5187,8 +5188,8 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				assert(fip->field_passcount==0);
 				if (dp->tdir_count!=2) {
 					TIFFWarningExt(tif->tif_clientdata,module,
-						       "incorrect count for field \"%s\", expected 2, got %d",
-						       fip->field_name,(int)dp->tdir_count);
+						       "incorrect count for field \"%s\", expected 2, got %"PRIu64,
+						       fip->field_name, dp->tdir_count);
 					return(0);
 				}
 				err=TIFFReadDirEntryShortArray(tif,dp,&data);
@@ -5210,8 +5211,8 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 				assert(fip->field_passcount==0);
 				if (dp->tdir_count!=(uint64_t)fip->field_readcount) {
 					TIFFWarningExt(tif->tif_clientdata,module,
-						       "incorrect count for field \"%s\", expected %d, got %d",
-						       fip->field_name,(int) fip->field_readcount, (int)dp->tdir_count);
+						       "incorrect count for field \"%s\", expected %d, got %"PRIu64,
+						       fip->field_name,(int) fip->field_readcount, dp->tdir_count);
 					return 0;
 				}
 				else

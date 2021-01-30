@@ -170,9 +170,6 @@
 
 #define	EXP_ASCII85ENCODER
 
-/*
- * NB: this code assumes uint32_t works with printf's %l[ud].
- */
 #ifndef TRUE
 #define	TRUE	1
 #define	FALSE	0
@@ -250,8 +247,8 @@ static	void usage(int);
 static void* limitMalloc(tmsize_t s)
 {
 	if (maxMalloc && (s > maxMalloc)) {
-		fprintf(stderr, "MemoryLimitError: allocation of %" PRIu64 " bytes is forbidden. Limit is %" PRIu64 ".\n",
-                (uint64_t)s, (uint64_t)maxMalloc);
+		fprintf(stderr, "MemoryLimitError: allocation of %" PRId64 " bytes is forbidden. Limit is %" PRId64 ".\n",
+                s, maxMalloc);
 		fprintf(stderr, "                  use -M option to change limit.\n");
 		return NULL;
 	}
@@ -549,7 +546,7 @@ checkImage(TIFF* tif)
 	case PHOTOMETRIC_RGB:
 		if (alpha && bitspersample != 8) {
 			TIFFError(filename,
-			    "Can not handle %d-bit/sample RGB image with alpha",
+			    "Can not handle %"PRIu16"-bit/sample RGB image with alpha",
 			    bitspersample);
 			return (0);
 		}
@@ -580,7 +577,7 @@ checkImage(TIFF* tif)
 		/* fall through... */
 	default:
 		TIFFError(filename,
-		    "Can not handle image with PhotometricInterpretation=%d",
+		    "Can not handle image with PhotometricInterpretation=%"PRIu16,
 		    photometric);
 		return (0);
 	}
@@ -590,7 +587,7 @@ checkImage(TIFF* tif)
 	case 16:
 		break;
 	default:
-		TIFFError(filename, "Can not handle %d-bit/sample image",
+		TIFFError(filename, "Can not handle %"PRIu16"-bit/sample image",
 		    bitspersample);
 		return (0);
 	}
@@ -634,8 +631,8 @@ static const char RGBcolorimage[] = "\
 static void
 PhotoshopBanner(FILE* fd, uint32_t w, uint32_t h, int bs, int nc, char* startline)
 {
-	fprintf(fd, "%%ImageData: %ld %ld %d %d 0 %d 2 \"",
-	    (long) w, (long) h, bitspersample, nc, bs);
+	fprintf(fd, "%%ImageData: %"PRIu32" %"PRIu32" %"PRIu16" %d 0 %d 2 \"",
+	    w, h, bitspersample, nc, bs);
 	fprintf(fd, startline, nc);
 	fprintf(fd, "\"\n");
 }
@@ -1127,7 +1124,7 @@ int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
                   fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
                 else
                   fprintf (fd, "%%%%PageOrientation: %s\n", (new_width > new_height) ? "Landscape" : "Portrait");
-                fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)new_width, (long)new_height);
+                fprintf (fd, "%%%%PageBoundingBox: 0 0 %"PRId32" %"PRId32"\n", (int32_t)new_width, (int32_t)new_height);
                 fprintf (fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
                        new_width, new_height);
                 }
@@ -1139,7 +1136,7 @@ int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
                     fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
                   else
                     fprintf (fd, "%%%%PageOrientation: %s\n", (pswidth > psheight) ? "Landscape" : "Portrait");
-                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)pswidth, (long)psheight);
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %"PRId32" %"PRId32"\n", (int32_t)pswidth, (int32_t)psheight);
                   fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
                           pswidth, psheight);
                   }
@@ -1149,7 +1146,7 @@ int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
                     fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
                   else
                     fprintf (fd, "%%%%PageOrientation: %s\n", (reqwidth > reqheight) ? "Landscape" : "Portrait");
-                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)reqwidth, (long)reqheight);
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %"PRId32" %"PRId32"\n", (int32_t)reqwidth, (int32_t)reqheight);
                   fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
                            reqwidth, reqheight);
                   }
@@ -1171,7 +1168,7 @@ int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
                   fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
                 else
                   fprintf (fd, "%%%%PageOrientation: %s\n", (new_width > new_height) ? "Landscape" : "Portrait");
-                fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)new_width, (long)new_height);
+                fprintf (fd, "%%%%PageBoundingBox: 0 0 %"PRId32" %"PRId32"\n", (int32_t)new_width, (int32_t)new_height);
                 fprintf (fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
                        new_width, new_height);
                 }
@@ -1183,7 +1180,7 @@ int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
                     fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
                   else
                     fprintf (fd, "%%%%PageOrientation: %s\n", (psheight > pswidth) ? "Landscape" : "Portrait");
-                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)psheight, (long)pswidth);
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %"PRId32" %"PRId32"\n", (int32_t)psheight, (int32_t)pswidth);
                   fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
                          psheight, pswidth);
                   }
@@ -1193,7 +1190,7 @@ int psPageSize (FILE * fd, int rotation, double pgwidth, double pgheight,
                     fprintf (fd, "%%%%PageOrientation: %s\n", pageOrientation);
                   else
                     fprintf (fd, "%%%%PageOrientation: %s\n", (reqwidth > reqheight) ? "Landscape" : "Portrait");
-                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %ld %ld\n", (long)reqwidth, (long)reqheight);
+                 fprintf (fd, "%%%%PageBoundingBox: 0 0 %"PRId32" %"PRId32"\n", (int32_t)reqwidth, (int32_t)reqheight);
                   fprintf(fd, "1 dict begin /PageSize [ %f %f ] def currentdict end setpagedevice\n",
                           reqwidth, reqheight);
                   }
@@ -1696,9 +1693,9 @@ PSHead(FILE *fd, double pagewidth, double pageheight, double xoff, double yoff)
 	/* NB: should use PageBoundingBox for each page instead of BoundingBox *
          * PageBoundingBox DSC added in PSPageSize function, R Nolde 09-01-2010
          */
-	fprintf(fd, "%%%%Origin: %ld %ld\n", (long) xoff, (long) yoff);
-        fprintf(fd, "%%%%BoundingBox: 0 0 %ld %ld\n",
-	       (long) ceil(pagewidth), (long) ceil(pageheight));
+	fprintf(fd, "%%%%Origin: %"PRId32" %"PRId32"\n", (int32_t) xoff, (int32_t) yoff);
+        fprintf(fd, "%%%%BoundingBox: 0 0 %"PRId32" %"PRId32"\n",
+	       (int32_t) ceil(pagewidth), (int32_t) ceil(pageheight));
 
 	fprintf(fd, "%%%%LanguageLevel: %d\n", (level3 ? 3 : (level2 ? 2 : 1)));
         if (generateEPSF == TRUE)
@@ -1808,7 +1805,7 @@ PS_Lvl2colorspace(FILE* fd, TIFF* tif)
 			Ascii85Put((unsigned char)bmap[i], fd);
 		} else {
 			fputs((i % 8) ? " " : "\n  ", fd);
-			fprintf(fd, "%02x%02x%02x",
+			fprintf(fd, "%02"PRIx16"%02"PRIx16"%02"PRIx16"",
 			    rmap[i], gmap[i], bmap[i]);
 		}
 	}
@@ -1833,8 +1830,8 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 		imageOp = "imagemask";
 
 	(void)strcpy(im_x, "0");
-	(void)snprintf(im_y, sizeof(im_y), "%lu", (long) h);
-	(void)snprintf(im_h, sizeof(im_h), "%lu", (long) h);
+	(void)snprintf(im_y, sizeof(im_y), "%"PRIu32, h);
+	(void)snprintf(im_h, sizeof(im_h), "%"PRIu32, h);
 	tile_width = w;
 	tile_height = h;
 	if (TIFFIsTiled(tif)) {
@@ -1855,7 +1852,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 		}
 		if (tile_height < h) {
 			fputs("/im_y 0 def\n", fd);
-			(void)snprintf(im_y, sizeof(im_y), "%lu im_y sub", (unsigned long) h);
+			(void)snprintf(im_y, sizeof(im_y), "%"PRIu32" im_y sub", h);
 		}
 	} else {
 		repeat_count = tf_numberstrips;
@@ -1864,10 +1861,9 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 			tile_height = h;
 		if (repeat_count > 1) {
 			fputs("/im_y 0 def\n", fd);
-			fprintf(fd, "/im_h %lu def\n",
-			    (unsigned long) tile_height);
+			fprintf(fd, "/im_h %"PRIu32" def\n", tile_height);
 			(void)strcpy(im_h, "im_h");
-			(void)snprintf(im_y, sizeof(im_y), "%lu im_y sub", (unsigned long) h);
+			(void)snprintf(im_y, sizeof(im_y), "%"PRIu32" im_y sub", h);
 		}
 	}
 
@@ -1877,7 +1873,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	fputs("{ % exec\n", fd);
 
 	if (repeat_count > 1)
-		fprintf(fd, "%u { %% repeat\n", repeat_count);
+		fprintf(fd, "%"PRIu32" { %% repeat\n", repeat_count);
 
 	/*
 	 * Output filter options and image dictionary.
@@ -1887,7 +1883,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 		    fd);
 	fputs(" <<\n", fd);
 	fputs("  /ImageType 1\n", fd);
-	fprintf(fd, "  /Width %lu\n", (unsigned long) tile_width);
+	fprintf(fd, "  /Width %"PRIu32"\n", tile_width);
 	/*
 	 * Workaround for some software that may crash when last strip
 	 * of image contains fewer number of scanlines than specified
@@ -1899,15 +1895,15 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	 * one-stripped image).
 	 */
 	if (TIFFIsTiled(tif) || tf_numberstrips == 1)
-		fprintf(fd, "  /Height %lu\n", (unsigned long) tile_height);
+		fprintf(fd, "  /Height %"PRIu32"\n", tile_height);
 	else
 		fprintf(fd, "  /Height im_h\n");
 	
 	if (planarconfiguration == PLANARCONFIG_SEPARATE && samplesperpixel > 1)
 		fputs("  /MultipleDataSources true\n", fd);
-	fprintf(fd, "  /ImageMatrix [ %lu 0 0 %ld %s %s ]\n",
-	    (unsigned long) w, - (long)h, im_x, im_y);
-	fprintf(fd, "  /BitsPerComponent %d\n", bitspersample);
+	fprintf(fd, "  /ImageMatrix [ %"PRIu32" 0 0 %"PRId32" %s %s ]\n",
+	    w, - (int32_t)h, im_x, im_y);
+	fprintf(fd, "  /BitsPerComponent %"PRIu16"\n", bitspersample);
 	fprintf(fd, "  /Interpolate %s\n", interpolate ? "true" : "false");
 
 	switch (samplesperpixel - extrasamples) {
@@ -1941,7 +1937,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 			    &minsamplevalue);
 			TIFFGetFieldDefaulted(tif, TIFFTAG_MAXSAMPLEVALUE,
 			    &maxsamplevalue);
-			fprintf(fd, "  /Decode [%u %u]\n",
+			fprintf(fd, "  /Decode [%"PRIu16" %"PRIu16"]\n",
 				    minsamplevalue, maxsamplevalue);
 			break;
 		default:
@@ -2017,8 +2013,8 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 				fputs("\t /Uncompressed true\n", fd);
 		}
 		if (!(tile_width == w && w == 1728U))
-			fprintf(fd, "\t /Columns %lu\n",
-			    (unsigned long) tile_width);
+			fprintf(fd, "\t /Columns %"PRIu32"\n",
+			    tile_width);
 		fprintf(fd, "\t /Rows %s\n", im_h);
 		if (compression == COMPRESSION_CCITTRLE ||
 		    compression == COMPRESSION_CCITTRLEW) {
@@ -2033,11 +2029,11 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 		TIFFGetFieldDefaulted(tif, TIFFTAG_PREDICTOR, &predictor);
 		if (predictor == 2) {
 			fputs("\n\t<<\n", fd);
-			fprintf(fd, "\t /Predictor %u\n", predictor);
-			fprintf(fd, "\t /Columns %lu\n",
-			    (unsigned long) tile_width);
-			fprintf(fd, "\t /Colors %u\n", samplesperpixel);
-			fprintf(fd, "\t /BitsPerComponent %u\n",
+			fprintf(fd, "\t /Predictor %"PRIu16"\n", predictor);
+			fprintf(fd, "\t /Columns %"PRIu32"\n",
+			    tile_width);
+			fprintf(fd, "\t /Colors %"PRIu16"\n", samplesperpixel);
+			fprintf(fd, "\t /BitsPerComponent %"PRIu16"\n",
 			    bitspersample);
 			fputs("\t>>", fd);
 		}
@@ -2050,11 +2046,11 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 			 if (predictor > 1) {
 				fprintf(fd, "\t %% PostScript Level 3 only.");
 				fputs("\n\t<<\n", fd);
-				fprintf(fd, "\t /Predictor %u\n", predictor);
-				fprintf(fd, "\t /Columns %lu\n",
-					(unsigned long) tile_width);
-				fprintf(fd, "\t /Colors %u\n", samplesperpixel);
-					fprintf(fd, "\t /BitsPerComponent %u\n",
+				fprintf(fd, "\t /Predictor %"PRIu16"\n", predictor);
+				fprintf(fd, "\t /Columns %"PRIu32"\n",
+					tile_width);
+				fprintf(fd, "\t /Colors %"PRIu16"\n", samplesperpixel);
+					fprintf(fd, "\t /BitsPerComponent %"PRIu16"\n",
 					bitspersample);
 				fputs("\t>>", fd);
 			 }
@@ -2113,28 +2109,28 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 		fputs(" im_stream status { im_stream flushfile } if\n", fd);
 	if (repeat_count > 1) {
 		if (tile_width < w) {
-			fprintf(fd, " /im_x im_x %lu add def\n",
-			    (unsigned long) tile_width);
+			fprintf(fd, " /im_x im_x %"PRIu32" add def\n",
+			    tile_width);
 			if (tile_height < h) {
-				fprintf(fd, " im_x %lu ge {\n",
-				    (unsigned long) w);
+				fprintf(fd, " im_x %"PRIu32" ge {\n",
+				    w);
 				fputs("  /im_x 0 def\n", fd);
-				fprintf(fd, " /im_y im_y %lu add def\n",
-				    (unsigned long) tile_height);
+				fprintf(fd, " /im_y im_y %"PRIu32" add def\n",
+				    tile_height);
 				fputs(" } if\n", fd);
 			}
 		}
 		if (tile_height < h) {
 			if (tile_width >= w) {
-				fprintf(fd, " /im_y im_y %lu add def\n",
-				    (unsigned long) tile_height);
+				fprintf(fd, " /im_y im_y %"PRIu32" add def\n",
+				    tile_height);
 				if (!TIFFIsTiled(tif)) {
-					fprintf(fd, " /im_h %lu im_y sub",
-					    (unsigned long) h);
-					fprintf(fd, " dup %lu gt { pop",
-					    (unsigned long) tile_height);
-					fprintf(fd, " %lu } if def\n",
-					    (unsigned long) tile_height);
+					fprintf(fd, " /im_h %"PRIu32" im_y sub",
+					    h);
+					fprintf(fd, " dup %"PRIu32" gt { pop",
+					    tile_height);
+					fprintf(fd, " %"PRIu32" } if def\n",
+					    tile_height);
 				}
 			}
 		}
@@ -2216,8 +2212,8 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	}
 	buf_data = (unsigned char *)limitMalloc(chunk_size);
 	if (!buf_data) {
-		TIFFError(filename, "Can't alloc %lu bytes for %s.",
-			(unsigned long) chunk_size, tiled_image ? "tiles" : "strips");
+		TIFFError(filename, "Can't alloc %"PRId64" bytes for %s.",
+			chunk_size, tiled_image ? "tiles" : "strips");
 		return(FALSE);
 	}
 
@@ -2269,7 +2265,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 						chunk_size);
 		}
 		if (byte_count < 0) {
-			TIFFError(filename, "Can't read %s %d.",
+			TIFFError(filename, "Can't read %s %"PRIu32".",
 				tiled_image ? "tile" : "strip", chunk_no);
 			if (ascii85)
 				Ascii85Put('\0', fd);
@@ -2394,12 +2390,12 @@ PSpage(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	case PHOTOMETRIC_PALETTE:
 		fprintf(fd, "%s", RGBcolorimage);
 		PhotoshopBanner(fd, w, h, 1, 3, "false 3 colorimage");
-		fprintf(fd, "/scanLine %ld string def\n",
-		    (long) ps_bytesperrow * 3L);
-		fprintf(fd, "%lu %lu 8\n",
-		    (unsigned long) w, (unsigned long) h);
-		fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
-		    (unsigned long) w, (unsigned long) h, (unsigned long) h);
+		fprintf(fd, "/scanLine %"PRId64" string def\n",
+		    ps_bytesperrow * 3L);
+		fprintf(fd, "%"PRIu32" %"PRIu32" 8\n",
+		    w, h);
+		fprintf(fd, "[%"PRIu32" 0 0 -%"PRIu32" 0 %"PRIu32"]\n",
+		    w, h, h);
 		fprintf(fd, "{currentfile scanLine readhexstring pop} bind\n");
 		fprintf(fd, "false 3 colorimage\n");
 		PSDataPalette(fd, tif, w, h);
@@ -2407,12 +2403,12 @@ PSpage(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	case PHOTOMETRIC_MINISBLACK:
 	case PHOTOMETRIC_MINISWHITE:
 		PhotoshopBanner(fd, w, h, 1, 1, imageOp);
-		fprintf(fd, "/scanLine %ld string def\n",
-		    (long) ps_bytesperrow);
-		fprintf(fd, "%lu %lu %d\n",
-		    (unsigned long) w, (unsigned long) h, bitspersample);
-		fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
-		    (unsigned long) w, (unsigned long) h, (unsigned long) h);
+		fprintf(fd, "/scanLine %"PRId64" string def\n",
+		    ps_bytesperrow);
+		fprintf(fd, "%"PRIu32" %"PRIu32" %"PRIu16"\n",
+		    w, h, bitspersample);
+		fprintf(fd, "[%"PRIu32" 0 0 -%"PRIu32" 0 %"PRIu32"]\n",
+		    w, h, h);
 		fprintf(fd,
 		    "{currentfile scanLine readhexstring pop} bind\n");
 		fprintf(fd, "%s\n", imageOp);
@@ -2427,11 +2423,11 @@ PSColorContigPreamble(FILE* fd, uint32_t w, uint32_t h, int nc)
 {
 	ps_bytesperrow = nc * (tf_bytesperrow / samplesperpixel);
 	PhotoshopBanner(fd, w, h, 1, nc, "false %d colorimage");
-	fprintf(fd, "/line %ld string def\n", (long) ps_bytesperrow);
-	fprintf(fd, "%lu %lu %d\n",
-	    (unsigned long) w, (unsigned long) h, bitspersample);
-	fprintf(fd, "[%lu 0 0 -%lu 0 %lu]\n",
-	    (unsigned long) w, (unsigned long) h, (unsigned long) h);
+	fprintf(fd, "/line %"PRId64" string def\n", ps_bytesperrow);
+	fprintf(fd, "%"PRIu32" %"PRIu32" %"PRIu16"\n",
+	    w, h, bitspersample);
+	fprintf(fd, "[%"PRIu32" 0 0 -%"PRIu32" 0 %"PRIu32"]\n",
+	    w, h, h);
 	fprintf(fd, "{currentfile line readhexstring pop} bind\n");
 	fprintf(fd, "false %d colorimage\n", nc);
 }
@@ -2443,12 +2439,12 @@ PSColorSeparatePreamble(FILE* fd, uint32_t w, uint32_t h, int nc)
 
 	PhotoshopBanner(fd, w, h, ps_bytesperrow, nc, "true %d colorimage");
 	for (i = 0; i < nc; i++)
-		fprintf(fd, "/line%d %ld string def\n",
-		    i, (long) ps_bytesperrow);
-	fprintf(fd, "%lu %lu %d\n",
-	    (unsigned long) w, (unsigned long) h, bitspersample);
-	fprintf(fd, "[%lu 0 0 -%lu 0 %lu] \n",
-	    (unsigned long) w, (unsigned long) h, (unsigned long) h);
+		fprintf(fd, "/line%d %"PRId64" string def\n",
+		    i, ps_bytesperrow);
+	fprintf(fd, "%"PRIu32" %"PRIu32" %"PRIu16"\n",
+	    w, h, bitspersample);
+	fprintf(fd, "[%"PRIu32" 0 0 -%"PRIu32" 0 %"PRIu32"] \n",
+	    w, h, h);
 	for (i = 0; i < nc; i++)
 		fprintf(fd, "{currentfile line%d readhexstring pop}bind\n", i);
 	fprintf(fd, "true %d colorimage\n", nc);
@@ -2473,7 +2469,7 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
 	(void) w;
         if( es < 0 )
         {
-            TIFFError(filename, "Inconsistent value of es: %d (samplesperpixel=%u, nc=%d)", es, samplesperpixel, nc);
+            TIFFError(filename, "Inconsistent value of es: %d (samplesperpixel=%"PRIu16", nc=%d)", es, samplesperpixel, nc);
             return;
         }
 	tf_buf = (unsigned char *) limitMalloc(tf_bytesperrow);
@@ -2587,7 +2583,7 @@ PSDataPalette(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	case 8:	case 4: case 2: case 1:
 		break;
 	default:
-		TIFFError(filename, "Depth %d not supported", bitspersample);
+		TIFFError(filename, "Depth %"PRIu16" not supported", bitspersample);
 		return;
 	}
 	nc = 3 * (8 / bitspersample);

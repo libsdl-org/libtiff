@@ -913,10 +913,10 @@ JPEGFixupTagsSubsamplingSec(struct JPEGFixupTagsSubsamplingData* data)
 					if ((ph!=data->tif->tif_dir.td_ycbcrsubsampling[0])||(pv!=data->tif->tif_dir.td_ycbcrsubsampling[1]))
 					{
 						TIFFWarningExt(data->tif->tif_clientdata,module,
-						    "Auto-corrected former TIFF subsampling values [%d,%d] to match subsampling values inside JPEG compressed data [%d,%d]",
-						    (int)data->tif->tif_dir.td_ycbcrsubsampling[0],
-						    (int)data->tif->tif_dir.td_ycbcrsubsampling[1],
-						    (int)ph,(int)pv);
+						    "Auto-corrected former TIFF subsampling values [%"PRIu16",%"PRIu16"] to match subsampling values inside JPEG compressed data [%"PRIu8",%"PRIu8"]",
+						    data->tif->tif_dir.td_ycbcrsubsampling[0],
+						    data->tif->tif_dir.td_ycbcrsubsampling[1],
+						    ph, pv);
 						data->tif->tif_dir.td_ycbcrsubsampling[0]=ph;
 						data->tif->tif_dir.td_ycbcrsubsampling[1]=pv;
 					}
@@ -1148,7 +1148,7 @@ JPEGPreDecode(TIFF* tif, uint16_t s)
 	    sp->cinfo.d.image_height < segment_height) {
 		TIFFWarningExt(tif->tif_clientdata, module,
 			       "Improper JPEG strip/tile size, "
-			       "expected %dx%d, got %dx%d",
+			       "expected %"PRIu32"x%"PRIu32", got %ux%u",
 			       segment_width, segment_height,
 			       sp->cinfo.d.image_width,
 			       sp->cinfo.d.image_height);
@@ -1163,7 +1163,7 @@ JPEGPreDecode(TIFF* tif, uint16_t s)
 		/* we can safely recover from that. */
 		TIFFWarningExt(tif->tif_clientdata, module,
 			     "JPEG strip size exceeds expected dimensions,"
-			     " expected %dx%d, got %dx%d",
+			     " expected %"PRIu32"x%"PRIu32", got %ux%u",
 			     segment_width, segment_height,
 			     sp->cinfo.d.image_width, sp->cinfo.d.image_height);
 	}
@@ -1177,7 +1177,7 @@ JPEGPreDecode(TIFF* tif, uint16_t s)
 		 */
 		TIFFErrorExt(tif->tif_clientdata, module,
 			     "JPEG strip/tile size exceeds expected dimensions,"
-			     " expected %dx%d, got %dx%d",
+			     " expected %"PRIu32"x%"PRIu32", got %ux%u",
 			     segment_width, segment_height,
 			     sp->cinfo.d.image_width, sp->cinfo.d.image_height);
 		return (0);
@@ -1231,15 +1231,15 @@ JPEGPreDecode(TIFF* tif, uint16_t s)
             {
                 TIFFErrorExt(tif->tif_clientdata, module,
                     "Reading this image would require libjpeg to allocate "
-                    "at least %u bytes. "
-                    "This is disabled since above the %u threshold. "
+                    "at least %"PRIu64" bytes. "
+                    "This is disabled since above the %ld threshold. "
                     "You may override this restriction by defining the "
                     "LIBTIFF_ALLOW_LARGE_LIBJPEG_MEM_ALLOC environment variable, "
                     "or setting the JPEGMEM environment variable to a value greater "
-                    "or equal to '%uM'",
-                    (unsigned)(nRequiredMemory),
-                    (unsigned)(sp->cinfo.d.mem->max_memory_to_use),
-                    (unsigned)((nRequiredMemory + 1000000 - 1) / 1000000));
+                    "or equal to '%"PRIu64"M'",
+                    nRequiredMemory,
+                    sp->cinfo.d.mem->max_memory_to_use,
+                    (nRequiredMemory + 1000000u - 1u) / 1000000u);
                 return 0;
             }
         }
@@ -1250,7 +1250,7 @@ JPEGPreDecode(TIFF* tif, uint16_t s)
 		    sp->cinfo.d.comp_info[0].v_samp_factor != sp->v_sampling) {
 			TIFFErrorExt(tif->tif_clientdata, module,
 				       "Improper JPEG sampling factors %d,%d\n"
-				       "Apparently should be %d,%d.",
+				       "Apparently should be %"PRIu16",%"PRIu16".",
 				       sp->cinfo.d.comp_info[0].h_samp_factor,
 				       sp->cinfo.d.comp_info[0].v_samp_factor,
 				       sp->h_sampling, sp->v_sampling);
@@ -1784,7 +1784,7 @@ JPEGSetupEncode(TIFF* tif)
                 if( td->td_bitspersample > 16 )
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
-                                 "BitsPerSample %d not allowed for JPEG",
+                                 "BitsPerSample %"PRIu16" not allowed for JPEG",
                                  td->td_bitspersample);
                     return (0);
                 }
@@ -1814,8 +1814,8 @@ JPEGSetupEncode(TIFF* tif)
 	case PHOTOMETRIC_PALETTE:		/* disallowed by Tech Note */
 	case PHOTOMETRIC_MASK:
 		TIFFErrorExt(tif->tif_clientdata, module,
-			  "PhotometricInterpretation %d not allowed for JPEG",
-			  (int) sp->photometric);
+			  "PhotometricInterpretation %"PRIu16" not allowed for JPEG",
+			  sp->photometric);
 		return (0);
 	default:
 		/* TIFF 6.0 forbids subsampling of all other color spaces */
@@ -1838,8 +1838,8 @@ JPEGSetupEncode(TIFF* tif)
 	if (td->td_bitspersample != BITS_IN_JSAMPLE )
 #endif
 	{
-		TIFFErrorExt(tif->tif_clientdata, module, "BitsPerSample %d not allowed for JPEG",
-			  (int) td->td_bitspersample);
+		TIFFErrorExt(tif->tif_clientdata, module, "BitsPerSample %"PRIu16" not allowed for JPEG",
+			  td->td_bitspersample);
 		return (0);
 	}
 	sp->cinfo.c.data_precision = td->td_bitspersample;
@@ -1849,22 +1849,22 @@ JPEGSetupEncode(TIFF* tif)
 	if (isTiled(tif)) {
 		if ((td->td_tilelength % (sp->v_sampling * DCTSIZE)) != 0) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-				  "JPEG tile height must be multiple of %d",
-				  sp->v_sampling * DCTSIZE);
+				  "JPEG tile height must be multiple of %"PRIu32,
+				  (uint32_t)(sp->v_sampling * DCTSIZE));
 			return (0);
 		}
 		if ((td->td_tilewidth % (sp->h_sampling * DCTSIZE)) != 0) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-				  "JPEG tile width must be multiple of %d",
-				  sp->h_sampling * DCTSIZE);
+				  "JPEG tile width must be multiple of %"PRIu32,
+				  (uint32_t)(sp->h_sampling * DCTSIZE));
 			return (0);
 		}
 	} else {
 		if (td->td_rowsperstrip < td->td_imagelength &&
 		    (td->td_rowsperstrip % (sp->v_sampling * DCTSIZE)) != 0) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-				  "RowsPerStrip must be multiple of %d for JPEG",
-				  sp->v_sampling * DCTSIZE);
+				  "RowsPerStrip must be multiple of %"PRIu32" for JPEG",
+				  (uint32_t)(sp->v_sampling * DCTSIZE));
 			return (0);
 		}
 	}
@@ -2377,8 +2377,8 @@ JPEGPrintDir(TIFF* tif, FILE* fd, long flags)
 
         if( sp != NULL ) {
 		if (TIFFFieldSet(tif,FIELD_JPEGTABLES))
-			fprintf(fd, "  JPEG Tables: (%lu bytes)\n",
-				(unsigned long) sp->jpegtables_length);
+			fprintf(fd, "  JPEG Tables: (%"PRIu32" bytes)\n",
+				sp->jpegtables_length);
 		if (sp->printdir)
 			(*sp->printdir)(tif, fd, flags);
 	}

@@ -107,8 +107,8 @@ static int pageInSeq = 0;
 static void* limitMalloc(tmsize_t s)
 {
 	if (maxMalloc && (s > maxMalloc)) {
-		fprintf(stderr, "MemoryLimitError: allocation of %" PRIu64 " bytes is forbidden. Limit is %" PRIu64 ".\n",
-                (uint64_t)s, (uint64_t)maxMalloc);
+		fprintf(stderr, "MemoryLimitError: allocation of %" PRId64 " bytes is forbidden. Limit is %" PRId64 ".\n",
+                s, maxMalloc);
 		fprintf(stderr, "                  use -m option to change limit.\n");
 		return NULL;
 	}
@@ -139,8 +139,8 @@ static int nextSrcImage (TIFF *tif, char **imageSpec)
 			}
 		}
 		if (TIFFSetDirectory (tif, nextImage)) return 1;
-		fprintf (stderr, "%s%c%d not found!\n",
-		    TIFFFileName(tif), comma, (int) nextImage);
+		fprintf (stderr, "%s%c%"PRIu16" not found!\n",
+		    TIFFFileName(tif), comma, nextImage);
 	}
 	return 0;
 }
@@ -604,7 +604,7 @@ cpTag(TIFF* in, TIFF* out, uint16_t tag, uint16_t count, TIFFDataType type)
 		break;
 	default:
 		TIFFError(TIFFFileName(in),
-		    "Data type %d is not supported, tag %d skipped.",
+		    "Data type %"PRIu16" is not supported, tag %d skipped.",
 		    tag, type);
 	}
 }
@@ -941,14 +941,14 @@ DECLAREcpFunc(cpContig2ContigByRow)
 	for (row = 0; row < imagelength; row++) {
 		if (TIFFReadScanline(in, buf, row, 0) < 0 && !ignore) {
 			TIFFError(TIFFFileName(in),
-				  "Error, can't read scanline %lu",
-				  (unsigned long) row);
+				  "Error, can't read scanline %"PRIu32,
+				  row);
 			goto bad;
 		}
 		if (TIFFWriteScanline(out, buf, row, 0) < 0) {
 			TIFFError(TIFFFileName(out),
-				  "Error, can't write scanline %lu",
-				  (unsigned long) row);
+				  "Error, can't write scanline %"PRIu32,
+				  row);
 			goto bad;
 		}
 	}
@@ -1013,22 +1013,22 @@ DECLAREcpFunc(cpBiasedContig2Contig)
 					if (TIFFReadScanline(in, buf, row, 0) < 0
 					    && !ignore) {
 						TIFFError(TIFFFileName(in),
-						    "Error, can't read scanline %lu",
-						    (unsigned long) row);
+						    "Error, can't read scanline %"PRIu32,
+						    row);
 						goto bad;
 					}
 					if (TIFFReadScanline(bias, biasBuf, row, 0) < 0
 					    && !ignore) {
 						TIFFError(TIFFFileName(in),
-						    "Error, can't read biased scanline %lu",
-						    (unsigned long) row);
+						    "Error, can't read biased scanline %"PRIu32,
+						    row);
 						goto bad;
 					}
 					subtractLine (buf, biasBuf, imagewidth);
 					if (TIFFWriteScanline(out, buf, row, 0) < 0) {
 						TIFFError(TIFFFileName(out),
-						    "Error, can't write scanline %lu",
-						    (unsigned long) row);
+						    "Error, can't write scanline %"PRIu32,
+						    row);
 						goto bad;
 					}
 				}
@@ -1044,19 +1044,19 @@ bad:
 				return 0;
 			} else {
 				TIFFError(TIFFFileName(in),
-				    "No support for biasing %d bit pixels\n",
+				    "No support for biasing %"PRIu16" bit pixels\n",
 				    sampleBits);
 				return 0;
 			}
 		}
 		TIFFError(TIFFFileName(in),
-		    "Bias image %s,%d\nis not the same size as %s,%d\n",
+		    "Bias image %s,%"PRIu16"\nis not the same size as %s,%"PRIu16"\n",
 		    TIFFFileName(bias), TIFFCurrentDirectory(bias),
 		    TIFFFileName(in), TIFFCurrentDirectory(in));
 		return 0;
 	} else {
 		TIFFError(TIFFFileName(in),
-		    "Can't bias %s,%d as it has >1 Sample/Pixel\n",
+		    "Can't bias %s,%"PRIu16" as it has >1 Sample/Pixel\n",
 		    TIFFFileName(in), TIFFCurrentDirectory(in));
 		return 0;
 	}
@@ -1083,14 +1083,14 @@ DECLAREcpFunc(cpDecodedStrips)
 			if (TIFFReadEncodedStrip(in, s, buf, cc) < 0
 			    && !ignore) {
 				TIFFError(TIFFFileName(in),
-				    "Error, can't read strip %lu",
-				    (unsigned long) s);
+				    "Error, can't read strip %"PRIu32,
+				    s);
 				goto bad;
 			}
 			if (TIFFWriteEncodedStrip(out, s, buf, cc) < 0) {
 				TIFFError(TIFFFileName(out),
-				    "Error, can't write strip %lu",
-				    (unsigned long) s);
+				    "Error, can't write strip %"PRIu32,
+				    s);
 				goto bad;
 			}
 			row += rowsperstrip;
@@ -1099,8 +1099,8 @@ DECLAREcpFunc(cpDecodedStrips)
 		return 1;
 	} else {
 		TIFFError(TIFFFileName(in),
-		    "Error, can't allocate memory buffer of size %lu "
-		    "to read strips", (unsigned long) stripsize);
+		    "Error, can't allocate memory buffer of size %"PRId64
+		    " to read strips", stripsize);
 		return 0;
 	}
 
@@ -1128,14 +1128,14 @@ DECLAREcpFunc(cpSeparate2SeparateByRow)
 		for (row = 0; row < imagelength; row++) {
 			if (TIFFReadScanline(in, buf, row, s) < 0 && !ignore) {
 				TIFFError(TIFFFileName(in),
-				    "Error, can't read scanline %lu",
-				    (unsigned long) row);
+				    "Error, can't read scanline %"PRIu32,
+				    row);
 				goto bad;
 			}
 			if (TIFFWriteScanline(out, buf, row, s) < 0) {
 				TIFFError(TIFFFileName(out),
-				    "Error, can't write scanline %lu",
-				    (unsigned long) row);
+				    "Error, can't write scanline %"PRIu32,
+				    row);
 				goto bad;
 			}
 		}
@@ -1183,8 +1183,8 @@ DECLAREcpFunc(cpContig2SeparateByRow)
 			if (TIFFReadScanline(in, inbuf, row, 0) < 0
 			    && !ignore) {
 				TIFFError(TIFFFileName(in),
-				    "Error, can't read scanline %lu",
-				    (unsigned long) row);
+				    "Error, can't read scanline %"PRIu32,
+				    row);
 				goto bad;
 			}
 			inp = ((uint8_t*)inbuf) + s;
@@ -1195,8 +1195,8 @@ DECLAREcpFunc(cpContig2SeparateByRow)
 			}
 			if (TIFFWriteScanline(out, outbuf, row, s) < 0) {
 				TIFFError(TIFFFileName(out),
-				    "Error, can't write scanline %lu",
-				    (unsigned long) row);
+				    "Error, can't write scanline %"PRIu32,
+				    row);
 				goto bad;
 			}
 		}
@@ -1246,8 +1246,8 @@ DECLAREcpFunc(cpSeparate2ContigByRow)
 			if (TIFFReadScanline(in, inbuf, row, s) < 0
 			    && !ignore) {
 				TIFFError(TIFFFileName(in),
-				    "Error, can't read scanline %lu",
-				    (unsigned long) row);
+				    "Error, can't read scanline %"PRIu32,
+				    row);
 				goto bad;
 			}
 			inp = (uint8_t*)inbuf;
@@ -1259,8 +1259,8 @@ DECLAREcpFunc(cpSeparate2ContigByRow)
 		}
 		if (TIFFWriteScanline(out, outbuf, row, 0) < 0) {
 			TIFFError(TIFFFileName(out),
-			    "Error, can't write scanline %lu",
-			    (unsigned long) row);
+			    "Error, can't write scanline %"PRIu32,
+			    row);
 			goto bad;
 		}
 	}
@@ -1371,8 +1371,8 @@ DECLAREreadFunc(readContigStripsIntoBuffer)
 		if (TIFFReadScanline(in, (tdata_t) bufp, row, 0) < 0
 		    && !ignore) {
 			TIFFError(TIFFFileName(in),
-			    "Error, can't read scanline %lu",
-			    (unsigned long) row);
+			    "Error, can't read scanline %"PRIu32,
+			    row);
 			return 0;
 		}
 		bufp += scanlinesize;
@@ -1408,8 +1408,8 @@ DECLAREreadFunc(readSeparateStripsIntoBuffer)
 				if (TIFFReadScanline(in, scanline, row, s) < 0
 				    && !ignore) {
 					TIFFError(TIFFFileName(in),
-					    "Error, can't read scanline %lu",
-					    (unsigned long) row);
+					    "Error, can't read scanline %"PRIu32,
+					    row);
 					    status = 0;
 					goto done;
 				}
@@ -1454,9 +1454,8 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
 			if (TIFFReadTile(in, tilebuf, col, row, 0, 0) < 0
 			    && !ignore) {
 				TIFFError(TIFFFileName(in),
-				    "Error, can't read tile at %lu %lu",
-				    (unsigned long) col,
-				    (unsigned long) row);
+				    "Error, can't read tile at %"PRIu32" %"PRIu32,
+				    col, row);
 				status = 0;
 				goto done;
 			}
@@ -1531,11 +1530,9 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
 				if (TIFFReadTile(in, tilebuf, col, row, 0, s) < 0
 				    && !ignore) {
 					TIFFError(TIFFFileName(in),
-					    "Error, can't read tile at %lu %lu, "
-					    "sample %lu",
-					    (unsigned long) col,
-					    (unsigned long) row,
-					    (unsigned long) s);
+					    "Error, can't read tile at %"PRIu32" %"PRIu32", "
+					    "sample %"PRIu16,
+					    col, row, s);
 					status = 0;
 					goto done;
 				}
@@ -1582,7 +1579,7 @@ DECLAREwriteFunc(writeBufferToContigStrips)
 		tsize_t stripsize = TIFFVStripSize(out, nrows);
 		if (TIFFWriteEncodedStrip(out, strip++, buf, stripsize) < 0) {
 			TIFFError(TIFFFileName(out),
-			    "Error, can't write strip %u", strip - 1);
+			    "Error, can't write strip %"PRIu32, strip - 1u);
 			return 0;
 		}
 		buf += stripsize;
@@ -1616,8 +1613,8 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
 			    nrows, imagewidth, 0, 0, spp, 1);
 			if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0) {
 				TIFFError(TIFFFileName(out),
-				    "Error, can't write strip %u",
-				    strip - 1);
+				    "Error, can't write strip %"PRIu32,
+				    strip - 1u);
 				_TIFFfree(obuf);
 				return 0;
 			}
@@ -1667,9 +1664,8 @@ DECLAREwriteFunc(writeBufferToContigTiles)
 				    0, iskew);
 			if (TIFFWriteTile(out, obuf, col, row, 0, 0) < 0) {
 				TIFFError(TIFFFileName(out),
-				    "Error, can't write tile at %lu %lu",
-				    (unsigned long) col,
-				    (unsigned long) row);
+				    "Error, can't write tile at %"PRIu32" %"PRIu32,
+				    col, row);
 				_TIFFfree(obuf);
 				return 0;
 			}
@@ -1744,11 +1740,9 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
 					    bytes_per_sample);
 				if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0) {
 					TIFFError(TIFFFileName(out),
-					    "Error, can't write tile at %lu %lu "
-					    "sample %lu",
-					    (unsigned long) col,
-					    (unsigned long) row,
-					    (unsigned long) s);
+					    "Error, can't write tile at %"PRIu32" %"PRIu32
+					    " sample %"PRIu16,
+					    col, row, s);
 					_TIFFfree(obuf);
 					return 0;
 				}

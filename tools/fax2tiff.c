@@ -336,9 +336,9 @@ main(int argc, char* argv[])
 		if (verbose) {
 			fprintf(stderr, "%s:\n", argv[optind]);
 			fprintf(stderr, "%d rows in input\n", rows);
-			fprintf(stderr, "%ld total bad rows\n",
-			    (long) badfaxlines);
-			fprintf(stderr, "%d max consecutive bad rows\n", badfaxrun);
+			fprintf(stderr, "%"PRIu32" total bad rows\n",
+			    badfaxlines);
+			fprintf(stderr, "%"PRIu16" max consecutive bad rows\n", badfaxrun);
 		}
 		if (compression_out == COMPRESSION_CCITTFAX3 &&
 		    mode == FAXMODE_CLASSF) {
@@ -406,15 +406,15 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 		tifin->tif_row++;
 
 		if (TIFFWriteScanline(tifout, rowbuf, row, 0) < 0) {
-			fprintf(stderr, "%s: Write error at row %ld.\n",
-			    tifout->tif_name, (long) row);
+			fprintf(stderr, "%s: Write error at row %"PRIu32".\n",
+			    tifout->tif_name, row);
 			break;
 		}
 		row++;
 		if (stretch) {
 			if (TIFFWriteScanline(tifout, rowbuf, row, 0) < 0) {
-				fprintf(stderr, "%s: Write error at row %ld.\n",
-				    tifout->tif_name, (long) row);
+				fprintf(stderr, "%s: Write error at row %"PRIu32".\n",
+				    tifout->tif_name, row);
 				break;
 			}
 			row++;

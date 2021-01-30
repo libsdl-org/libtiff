@@ -417,13 +417,13 @@ ContigCompare(int sample, uint32_t row,
 			}
 		}
 	} else {
-		  fprintf(stderr, "Sample format %d is not supported.\n",
+		  fprintf(stderr, "Sample format %"PRIu16" is not supported.\n",
 			  sampleformat);
 		  return -1;
 	}
         break;
       default:
-	fprintf(stderr, "Bit depth %d is not supported.\n", bitspersample);
+	fprintf(stderr, "Bit depth %"PRIu16" is not supported.\n", bitspersample);
 	return -1;
     }
 
@@ -450,12 +450,12 @@ PrintIntDiff(uint32_t row, int sample, uint32_t pix, uint32_t w1, uint32_t w2)
 		     mask2 >>= bitspersample, s -= bitspersample, pix++) {
 			if ((w1 & mask2) ^ (w2 & mask2)) {
 				printf(
-			"Scanline %lu, pixel %lu, sample %d: %01x %01x\n",
-					(unsigned long) row,
-					(unsigned long) pix,
+			"Scanline %"PRIu32", pixel %"PRIu32", sample %d: %01"PRIx32" %01"PRIx32"\n",
+					row,
+					pix,
 					sample,
-					(unsigned int)((w1 >> s) & mask1),
-					(unsigned int)((w2 >> s) & mask1));
+					(w1 >> s) & mask1,
+					(w2 >> s) & mask1);
 				if (--stopondiff == 0)
 					exit(1);
 			}
@@ -463,23 +463,23 @@ PrintIntDiff(uint32_t row, int sample, uint32_t pix, uint32_t w1, uint32_t w2)
 		break;
 	    }
 	case 8: 
-		printf("Scanline %lu, pixel %lu, sample %d: %02x %02x\n",
-		       (unsigned long) row, (unsigned long) pix, sample,
-		       (unsigned int) w1, (unsigned int) w2);
+		printf("Scanline %"PRIu32", pixel %"PRIu32", sample %d: %02"PRIx32" %02"PRIx32"\n",
+		       row, pix, sample,
+		       w1, w2);
 		if (--stopondiff == 0)
 			exit(1);
 		break;
 	case 16:
-		printf("Scanline %lu, pixel %lu, sample %d: %04x %04x\n",
-		    (unsigned long) row, (unsigned long) pix, sample,
-		    (unsigned int) w1, (unsigned int) w2);
+		printf("Scanline %"PRIu32", pixel %"PRIu32", sample %d: %04"PRIx32" %04"PRIx32"\n",
+		    row, pix, sample,
+		    w1, w2);
 		if (--stopondiff == 0)
 			exit(1);
 		break;
 	case 32:
-		printf("Scanline %lu, pixel %lu, sample %d: %08x %08x\n",
-		    (unsigned long) row, (unsigned long) pix, sample,
-		    (unsigned int) w1, (unsigned int) w2);
+		printf("Scanline %"PRIu32", pixel %"PRIu32", sample %d: %08"PRIx32" %08"PRIx32"\n",
+		    row, pix, sample,
+		    w1, w2);
 		if (--stopondiff == 0)
 			exit(1);
 		break;
@@ -495,8 +495,8 @@ PrintFloatDiff(uint32_t row, int sample, uint32_t pix, double w1, double w2)
 		sample = 0;
 	switch (bitspersample) {
 	case 32: 
-		printf("Scanline %lu, pixel %lu, sample %d: %g %g\n",
-		    (long) row, (long) pix, sample, w1, w2);
+		printf("Scanline %"PRIu32", pixel %"PRIu32", sample %d: %g %g\n",
+		    row, pix, sample, w1, w2);
 		if (--stopondiff == 0)
 			exit(1);
 		break;
@@ -515,8 +515,8 @@ SeparateCompare(int reversed, int sample, uint32_t row,
 	cp1 += sample;
 	for (pixel = 0; npixels-- > 0; pixel++, cp1 += samplesperpixel, p2++) {
 		if (*cp1 != *p2) {
-			printf("Scanline %lu, pixel %lu, sample %ld: ",
-			    (long) row, (long) pixel, (long) sample);
+			printf("Scanline %"PRIu32", pixel %"PRIu32", sample %d: ",
+			    row, pixel, sample);
 			if (reversed)
 				printf("%02x %02x\n", *p2, *cp1);
 			else
@@ -560,7 +560,7 @@ static int
 CheckShortTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
 	uint16_t v1, v2;
-	CHECK(v1 == v2, "%s: %u %u\n");
+	CHECK(v1 == v2, "%s: %"PRIu16" %"PRIu16"\n");
 }
 
 static int
@@ -576,7 +576,7 @@ CheckShort2Tag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 		}
 		if (v11 == v21 && v12 == v22)
 			return (1);
-		printf("%s: <%u,%u> <%u,%u>\n", name, v11, v12, v21, v22);
+		printf("%s: <%"PRIu16",%"PRIu16"> <%"PRIu16",%"PRIu16">\n", name, v11, v12, v21, v22);
 	} else if (TIFFGetField(tif2, tag, &v21, &v22))
 		printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
 	else
@@ -602,17 +602,17 @@ CheckShortArrayTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 
 			if (memcmp(a1, a2, n1 * sizeof(uint16_t)) == 0)
 				return (1);
-			printf("%s: value mismatch, <%u:", name, n1);
+			printf("%s: value mismatch, <%"PRIu16":", name, n1);
 			sep = "";
 			for (i = 0; i < n1; i++)
-				printf("%s%u", sep, a1[i]), sep = ",";
-			printf("> and <%u: ", n2);
+				printf("%s%"PRIu16, sep, a1[i]), sep = ",";
+			printf("> and <%"PRIu16": ", n2);
 			sep = "";
 			for (i = 0; i < n2; i++)
-				printf("%s%u", sep, a2[i]), sep = ",";
+				printf("%s%"PRIu16, sep, a2[i]), sep = ",";
 			printf(">\n");
 		} else
-			printf("%s: %u items in %s, %u items in %s", name,
+			printf("%s: %"PRIu16" items in %s, %"PRIu16" items in %s", name,
 			    n1, TIFFFileName(tif1),
 			    n2, TIFFFileName(tif2)
 			);
@@ -627,7 +627,7 @@ static int
 CheckLongTag(TIFF* tif1, TIFF* tif2, int tag, char* name)
 {
 	uint32_t v1, v2;
-	CHECK(v1 == v2, "%s: %u %u\n");
+	CHECK(v1 == v2, "%s: %"PRIu32" %"PRIu32"\n");
 }
 
 static int
@@ -648,7 +648,7 @@ static void
 leof(const char* name, uint32_t row, int s)
 {
 
-	printf("%s: EOF at scanline %lu", name, (unsigned long)row);
+	printf("%s: EOF at scanline %"PRIu32, name, row);
 	if (s >= 0)
 		printf(", sample %d", s);
 	printf("\n");

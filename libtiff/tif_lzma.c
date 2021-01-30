@@ -206,15 +206,15 @@ LZMADecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 		}
 		if (ret != LZMA_OK) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Decoding error at scanline %lu, %s",
-			    (unsigned long) tif->tif_row, LZMAStrerror(ret));
+			    "Decoding error at scanline %"PRIu32", %s",
+			    tif->tif_row, LZMAStrerror(ret));
 			break;
 		}
 	} while (sp->stream.avail_out > 0);
 	if (sp->stream.avail_out != 0) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Not enough data at scanline %lu (short %lu bytes)",
-		    (unsigned long) tif->tif_row, (unsigned long) sp->stream.avail_out);
+		    "Not enough data at scanline %"PRIu32" (short %zu bytes)",
+		    tif->tif_row, sp->stream.avail_out);
 		return 0;
 	}
 
@@ -294,8 +294,8 @@ LZMAEncode(TIFF* tif, uint8_t* bp, tmsize_t cc, uint16_t s)
 		lzma_ret ret = lzma_code(&sp->stream, LZMA_RUN);
 		if (ret != LZMA_OK) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-				"Encoding error at scanline %lu, %s",
-				(unsigned long) tif->tif_row, LZMAStrerror(ret));
+				"Encoding error at scanline %"PRIu32", %s",
+				tif->tif_row, LZMAStrerror(ret));
 			return 0;
 		}
 		if (sp->stream.avail_out == 0) {

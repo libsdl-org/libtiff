@@ -304,8 +304,8 @@ tiffcvt(TIFF* in, TIFF* out)
  	if (!width || !height || pixel_count / width != height) {
  		TIFFError(TIFFFileName(in),
  			  "Malformed input file; "
- 			  "can't allocate buffer for raster of %lux%lu size",
- 			  (unsigned long)width, (unsigned long)height);
+ 			  "can't allocate buffer for raster of %"PRIu32"x%"PRIu32" size",
+ 			  width, height);
  		return 0;
  	}
  
@@ -313,9 +313,9 @@ tiffcvt(TIFF* in, TIFF* out)
                                          "raster buffer");
   	if (raster == 0) {
  		TIFFError(TIFFFileName(in),
- 			  "Failed to allocate buffer (%lu elements of %lu each)",
- 			  (unsigned long)pixel_count,
- 			  (unsigned long)sizeof(uint32_t));
+ 			  "Failed to allocate buffer (%zu elements of %zu each)",
+ 			  pixel_count,
+ 			  sizeof(uint32_t));
   		return (0);
   	}
 

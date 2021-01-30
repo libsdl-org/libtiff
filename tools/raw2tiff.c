@@ -292,16 +292,14 @@ main(int argc, char* argv[])
                                           hdr_size + (length*band+row)*linebytes,
                                           SEEK_SET) == (_TIFF_off_t)-1) {
                                         fprintf(stderr,
-                                                "%s: %s: scanline %lu: seek error.\n",
-                                                argv[0], argv[optind],
-                                                (unsigned long) row);
+                                                "%s: %s: scanline %"PRIu32": seek error.\n",
+                                                argv[0], argv[optind], row);
                                         break;
                                 }
 				if (read(fd, buf, linebytes) < 0) {
 					fprintf(stderr,
-                                                "%s: %s: scanline %lu: Read error.\n",
-                                                argv[0], argv[optind],
-                                                (unsigned long) row);
+                                                "%s: %s: scanline %"PRIu32": Read error.\n",
+                                                argv[0], argv[optind], row);
                                         break;
 				}
 				if (swab)	/* Swap bytes if needed */
@@ -315,9 +313,8 @@ main(int argc, char* argv[])
 		default:
 			if (read(fd, buf1, bufsize) < 0) {
 				fprintf(stderr,
-					"%s: %s: scanline %lu: Read error.\n",
-					argv[0], argv[optind],
-					(unsigned long) row);
+					"%s: %s: scanline %"PRIu32": Read error.\n",
+					argv[0], argv[optind], row);
 				break;
 			}
 			if (swab)		/* Swap bytes if needed */
@@ -326,8 +323,8 @@ main(int argc, char* argv[])
 		}
 				
 		if (TIFFWriteScanline(out, buf1, row, 0) < 0) {
-			fprintf(stderr,	"%s: %s: scanline %lu: Write error.\n",
-				argv[0], outfilename, (unsigned long) row);
+			fprintf(stderr,	"%s: %s: scanline %"PRIu32": Write error.\n",
+				argv[0], outfilename, row);
 			break;
 		}
 	}
@@ -391,8 +388,8 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32_t nbands,
 
 		*length = imagesize / *width;
 		
-		fprintf(stderr, "Height is guessed as %lu.\n",
-			(unsigned long)*length);
+		fprintf(stderr, "Height is guessed as %"PRIu32".\n",
+			*length);
 
 		return 1;
 	} else if (*width == 0 && *length != 0) {
@@ -400,8 +397,8 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32_t nbands,
 
 		*width = imagesize / *length;
 		
-		fprintf(stderr,	"Width is guessed as %lu.\n",
-			(unsigned long)*width);
+		fprintf(stderr,	"Width is guessed as %"PRIu32".\n",
+			*width);
 
 		return 1;
 	} else if (*width == 0 && *length == 0) {
@@ -473,8 +470,8 @@ guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size, uint32_t nbands,
                 }
 
 		fprintf(stderr,
-			"Width is guessed as %lu, height is guessed as %lu.\n",
-			(unsigned long)*width, (unsigned long)*length);
+			"Width is guessed as %"PRIu32", height is guessed as %"PRIu32".\n",
+			*width, *length);
 
 		return 1;
 	} else {

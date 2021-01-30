@@ -706,7 +706,7 @@ PixarLogSetupDecode(TIFF* tif)
                 sp->tbuf = NULL;
                 sp->tbuf_size = 0;
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"PixarLog compression can't handle bits depth/data format combination (depth: %d)", 
+			"PixarLog compression can't handle bits depth/data format combination (depth: %"PRIu16")",
 			td->td_bitspersample);
 		return (0);
 	}
@@ -774,7 +774,7 @@ PixarLogDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 		break;
 	default:
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"%d bit input not supported in PixarLog",
+			"%"PRIu16" bit input not supported in PixarLog",
 			td->td_bitspersample);
 		return 0;
 	}
@@ -811,8 +811,8 @@ PixarLogDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 		}
 		if (state == Z_DATA_ERROR) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Decoding error at scanline %lu, %s",
-			    (unsigned long) tif->tif_row, sp->stream.msg ? sp->stream.msg : "(null)");
+			    "Decoding error at scanline %"PRIu32", %s",
+			    tif->tif_row, sp->stream.msg ? sp->stream.msg : "(null)");
 			return (0);
 		}
 		if (state != Z_OK) {
@@ -825,8 +825,8 @@ PixarLogDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	/* hopefully, we got all the bytes we needed */
 	if (sp->stream.avail_out != 0) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Not enough data at scanline %lu (short %" PRIu64 " bytes)",
-		    (unsigned long) tif->tif_row, (uint64_t) sp->stream.avail_out);
+		    "Not enough data at scanline %"PRIu32" (short %u bytes)",
+		    tif->tif_row, sp->stream.avail_out);
 		return (0);
 	}
 
@@ -845,8 +845,8 @@ PixarLogDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	 */
 	if (nsamples % llen) { 
 		TIFFWarningExt(tif->tif_clientdata, module,
-			"stride %lu is not a multiple of sample count, "
-			"%lu, data truncated.", (unsigned long) llen, (unsigned long) nsamples);
+			"stride %d is not a multiple of sample count, "
+            "%"PRId64", data truncated.", llen, nsamples);
 		nsamples -= nsamples % llen;
 	}
 
@@ -884,7 +884,7 @@ PixarLogDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			break;
 		default:
 			TIFFErrorExt(tif->tif_clientdata, module,
-				  "Unsupported bits/sample: %d",
+				  "Unsupported bits/sample: %"PRIu16,
 				  td->td_bitspersample);
 			return (0);
 		}
@@ -917,7 +917,7 @@ PixarLogSetupEncode(TIFF* tif)
 	if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN)
 		sp->user_datafmt = PixarLogGuessDataFmt(td);
 	if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN) {
-		TIFFErrorExt(tif->tif_clientdata, module, "PixarLog compression can't handle %d bit linear encodings", td->td_bitspersample);
+		TIFFErrorExt(tif->tif_clientdata, module, "PixarLog compression can't handle %"PRIu16" bit linear encodings", td->td_bitspersample);
 		return (0);
 	}
 
@@ -1140,7 +1140,7 @@ PixarLogEncode(TIFF* tif, uint8_t* bp, tmsize_t cc, uint16_t s)
 		break;
 	default:
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"%d bit input not supported in PixarLog",
+			"%"PRIu16" bit input not supported in PixarLog",
 			td->td_bitspersample);
 		return 0;
 	}
@@ -1173,7 +1173,7 @@ PixarLogEncode(TIFF* tif, uint8_t* bp, tmsize_t cc, uint16_t s)
 			break;
 		default:
 			TIFFErrorExt(tif->tif_clientdata, module,
-				"%d bit input not supported in PixarLog",
+				"%"PRIu16" bit input not supported in PixarLog",
 				td->td_bitspersample);
 			return 0;
 		}

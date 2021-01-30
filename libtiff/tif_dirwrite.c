@@ -755,7 +755,7 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64_t* pdiroff)
 								break;
 							default:
 								TIFFErrorExt(tif->tif_clientdata,module,
-								            "Cannot write tag %d (%s)",
+								            "Cannot write tag %"PRIu32" (%s)",
 								            TIFFFieldTag(o),
                                                                             o->field_name ? o->field_name : "unknown");
 								goto bad;
@@ -2710,16 +2710,16 @@ void DoubleToSrational_direct(double value,  long *num,  long *denom)
 * using the Euclidean algorithm to find the greatest common divisor (GCD)
 ------------------------------------------------------------------------*/
 static
-void ToRationalEuclideanGCD(double value, int blnUseSignedRange, int blnUseSmallRange, unsigned long long *ullNum, unsigned long long *ullDenom)
+void ToRationalEuclideanGCD(double value, int blnUseSignedRange, int blnUseSmallRange, uint64_t *ullNum, uint64_t *ullDenom)
 {
 	/* Internally, the integer variables can be bigger than the external ones,
 	* as long as the result will fit into the external variable size.
 	*/
-	unsigned long long val, numSum[3] = { 0, 1, 0 }, denomSum[3] = { 1, 0, 0 };
-	unsigned long long aux, bigNum, bigDenom;
-	unsigned long long returnLimit;
+	uint64_t val, numSum[3] = { 0, 1, 0 }, denomSum[3] = { 1, 0, 0 };
+	uint64_t aux, bigNum, bigDenom;
+	uint64_t returnLimit;
 	int i;
-	unsigned long long nMax;
+	uint64_t nMax;
 	double fMax;
 	unsigned long maxDenom;
 	/*-- nMax and fMax defines the initial accuracy of the starting fractional,
@@ -2729,7 +2729,7 @@ void ToRationalEuclideanGCD(double value, int blnUseSignedRange, int blnUseSmall
 	*   For long long nMax = ((9223372036854775807-1)/2); for long nMax = ((2147483647-1)/2);
 	*/
 	if (blnUseSmallRange) {
-		nMax = (unsigned long long)((2147483647 - 1) / 2); /* for ULONG range */
+		nMax = (uint64_t)((2147483647 - 1) / 2); /* for ULONG range */
 	}
 	else {
 		nMax = ((9223372036854775807 - 1) / 2);				/* for ULLONG range */
@@ -2750,7 +2750,7 @@ void ToRationalEuclideanGCD(double value, int blnUseSignedRange, int blnUseSmall
 	}
 
 	/*-- First generate a rational fraction (bigNum/bigDenom) which represents the value
-	*   as a rational number with the highest accuracy. Therefore, unsigned long long (uint64_t) is needed.
+	*   as a rational number with the highest accuracy. Therefore, uint64_t (uint64_t) is needed.
 	*   This rational fraction is then reduced using the Euclidean algorithm to find the greatest common divisor (GCD).
 	*   bigNum   = big numinator of value without fraction (or cut residual fraction)
 	*   bigDenom = big denominator of value
@@ -2762,7 +2762,7 @@ void ToRationalEuclideanGCD(double value, int blnUseSignedRange, int blnUseSmall
 		bigDenom <<= 1;
 		value *= 2;
 	}
-	bigNum = (unsigned long long)value;
+	bigNum = (uint64_t)value;
 
 	/*-- Start Euclidean algorithm to find the greatest common divisor (GCD) -- */
 #define MAX_ITERATIONS 64
@@ -2823,7 +2823,7 @@ void DoubleToRational(double value, uint32_t *num, uint32_t *denom)
 {
 	/*---- UN-SIGNED RATIONAL ---- */
 	double dblDiff, dblDiff2;
-	unsigned long long ullNum, ullDenom, ullNum2, ullDenom2;
+	uint64_t ullNum, ullDenom, ullNum2, ullDenom2;
 
 	/*-- Check for negative values. If so it is an error. */
         /* Test written that way to catch NaN */
@@ -2860,11 +2860,7 @@ void DoubleToRational(double value, uint32_t *num, uint32_t *denom)
 	ToRationalEuclideanGCD(value, FALSE, TRUE, &ullNum2, &ullDenom2);
 	/*-- Double-Check, that returned values fit into ULONG :*/
 	if (ullNum > 0xFFFFFFFFUL || ullDenom > 0xFFFFFFFFUL || ullNum2 > 0xFFFFFFFFUL || ullDenom2 > 0xFFFFFFFFUL) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-		TIFFErrorExt(0, "TIFFLib: DoubleToRational()", " Num or Denom exceeds ULONG: val=%14.6f, num=%I64u, denom=%I64u | num2=%I64u, denom2=%I64u", value, ullNum, ullDenom, ullNum2, ullDenom2);
-#else
-		TIFFErrorExt(0, "TIFFLib: DoubleToRational()", " Num or Denom exceeds ULONG: val=%14.6f, num=%12llu, denom=%12llu | num2=%12llu, denom2=%12llu", value, ullNum, ullDenom, ullNum2, ullDenom2);
-#endif
+		TIFFErrorExt(0, "TIFFLib: DoubleToRational()", " Num or Denom exceeds ULONG: val=%14.6f, num=%12"PRIu64", denom=%12"PRIu64" | num2=%12"PRIu64", denom2=%12"PRIu64"", value, ullNum, ullDenom, ullNum2, ullDenom2);
 		assert(0);
 	}
 
@@ -2892,7 +2888,7 @@ void DoubleToSrational(double value, int32_t *num, int32_t *denom)
 	/*---- SIGNED RATIONAL ----*/
 	int neg = 1;
 	double dblDiff, dblDiff2;
-	unsigned long long ullNum, ullDenom, ullNum2, ullDenom2;
+	uint64_t ullNum, ullDenom, ullNum2, ullDenom2;
 
 	/*-- Check for negative values and use then the positive one for internal calculations, but take the sign into account before returning. */
 	if (value < 0) { neg = -1; value = -value; }
@@ -2925,11 +2921,7 @@ void DoubleToSrational(double value, int32_t *num, int32_t *denom)
 	ToRationalEuclideanGCD(value, TRUE, TRUE, &ullNum2, &ullDenom2);
 	/*-- Double-Check, that returned values fit into LONG :*/
 	if (ullNum > 0x7FFFFFFFL || ullDenom > 0x7FFFFFFFL || ullNum2 > 0x7FFFFFFFL || ullDenom2 > 0x7FFFFFFFL) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
-		TIFFErrorExt(0, "TIFFLib: DoubleToSrational()", " Num or Denom exceeds LONG: val=%14.6f, num=%I64u, denom=%I64u | num2=%I64u, denom2=%I64u", neg*value, ullNum, ullDenom, ullNum2, ullDenom2);
-#else
-		TIFFErrorExt(0, "TIFFLib: DoubleToSrational()", " Num or Denom exceeds LONG: val=%14.6f, num=%12llu, denom=%12llu | num2=%12llu, denom2=%12llu", neg*value, ullNum, ullDenom, ullNum2, ullDenom2);
-#endif
+		TIFFErrorExt(0, "TIFFLib: DoubleToSrational()", " Num or Denom exceeds LONG: val=%14.6f, num=%12"PRIu64", denom=%12"PRIu64" | num2=%12"PRIu64", denom2=%12"PRIu64"", neg*value, ullNum, ullDenom, ullNum2, ullDenom2);
 		assert(0);
 	}
 
@@ -3405,7 +3397,7 @@ _TIFFRewriteField(TIFF* tif, uint16_t tag, TIFFDataType in_datatype,
     if( entry_tag != tag )
     {
         TIFFErrorExt(tif->tif_clientdata, module,
-                     "%s: Could not find tag %d.",
+                     "%s: Could not find tag %"PRIu16".",
                      tif->tif_name, tag );
         return 0;
     }

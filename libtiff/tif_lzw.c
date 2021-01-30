@@ -175,7 +175,7 @@ static void cl_hash(LZWCodecState*);
 #define	NextCode(_tif, _sp, _bp, _code, _get) {				\
 	if ((_sp)->dec_bitsleft < (uint64_t)nbits) {			\
 		TIFFWarningExt(_tif->tif_clientdata, module,		\
-		    "LZWDecode: Strip %d not terminated with EOI code", \
+		    "LZWDecode: Strip %"PRIu32" not terminated with EOI code", \
 		    _tif->tif_curstrip);				\
 		_code = CODE_EOI;					\
 	} else {							\
@@ -352,7 +352,7 @@ static void
 codeLoop(TIFF* tif, const char* module)
 {
 	TIFFErrorExt(tif->tif_clientdata, module,
-	    "Bogus encoding, loop in the code table; scanline %d",
+	    "Bogus encoding, loop in the code table; scanline %"PRIu32,
 	    tif->tif_row);
 }
 
@@ -454,7 +454,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 				break;
 			if (code > CODE_CLEAR) {
 				TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-				"LZWDecode: Corrupted LZW table at scanline %d",
+				"LZWDecode: Corrupted LZW table at scanline %"PRIu32,
 					     tif->tif_row);
 				return (0);
 			}
@@ -471,7 +471,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 		if (free_entp < &sp->dec_codetab[0] ||
 		    free_entp >= &sp->dec_codetab[CSIZE]) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Corrupted LZW table at scanline %d",
+			    "Corrupted LZW table at scanline %"PRIu32,
 			    tif->tif_row);
 			return (0);
 		}
@@ -480,7 +480,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 		if (free_entp->next < &sp->dec_codetab[0] ||
 		    free_entp->next >= &sp->dec_codetab[CSIZE]) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Corrupted LZW table at scanline %d",
+			    "Corrupted LZW table at scanline %"PRIu32,
 			    tif->tif_row);
 			return (0);
 		}
@@ -503,7 +503,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 			if(codep->length == 0) {
 				TIFFErrorExt(tif->tif_clientdata, module,
 				    "Wrong length of decoded string: "
-				    "data probably corrupted at scanline %d",
+				    "data probably corrupted at scanline %"PRIu32,
 				    tif->tif_row);
 				return (0);
 			}
@@ -566,15 +566,9 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	sp->dec_maxcodep = maxcodep;
 
 	if (occ > 0) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at scanline %d (short %I64d bytes)",
-			     tif->tif_row, (unsigned __int64) occ);
-#else
-		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at scanline %d (short %llu bytes)",
-			     tif->tif_row, (unsigned long long) occ);
-#endif
+			"Not enough data at scanline %"PRIu32" (short %ld bytes)",
+			     tif->tif_row, occ);
 		return (0);
 	}
 	return (1);
@@ -688,7 +682,7 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 				break;
 			if (code > CODE_CLEAR) {
 				TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-				"LZWDecode: Corrupted LZW table at scanline %d",
+				"LZWDecode: Corrupted LZW table at scanline %"PRIu32,
 					     tif->tif_row);
 				return (0);
 			}
@@ -705,7 +699,7 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 		if (free_entp < &sp->dec_codetab[0] ||
 		    free_entp >= &sp->dec_codetab[CSIZE]) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Corrupted LZW table at scanline %d", tif->tif_row);
+			    "Corrupted LZW table at scanline %"PRIu32, tif->tif_row);
 			return (0);
 		}
 
@@ -713,7 +707,7 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 		if (free_entp->next < &sp->dec_codetab[0] ||
 		    free_entp->next >= &sp->dec_codetab[CSIZE]) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Corrupted LZW table at scanline %d", tif->tif_row);
+			    "Corrupted LZW table at scanline %"PRIu32, tif->tif_row);
 			return (0);
 		}
 		free_entp->firstchar = free_entp->next->firstchar;
@@ -735,7 +729,7 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 			if(codep->length == 0) {
 				TIFFErrorExt(tif->tif_clientdata, module,
 				    "Wrong length of decoded "
-				    "string: data probably corrupted at scanline %d",
+				    "string: data probably corrupted at scanline %"PRIu32,
 				    tif->tif_row);
 				return (0);
 			}
@@ -790,15 +784,9 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	sp->dec_maxcodep = maxcodep;
 
 	if (occ > 0) {
-#if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at scanline %d (short %I64d bytes)",
-			     tif->tif_row, (unsigned __int64) occ);
-#else
-		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at scanline %d (short %llu bytes)",
-			     tif->tif_row, (unsigned long long) occ);
-#endif
+			"Not enough data at scanline %"PRIu32" (short %ld bytes)",
+			     tif->tif_row, occ);
 		return (0);
 	}
 	return (1);
