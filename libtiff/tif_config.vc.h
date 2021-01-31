@@ -83,14 +83,6 @@
    first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
 
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-# ifndef inline
-#  define inline __inline
-# endif
-#endif
-
 #define lfind _lfind
 
 #pragma warning(disable : 4996) /* function deprecation warnings */

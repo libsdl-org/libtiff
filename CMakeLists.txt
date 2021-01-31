@@ -215,32 +215,6 @@ check_include_file(sys/time.h  HAVE_SYS_TIME_H)
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 check_include_file(unistd.h    HAVE_UNISTD_H)
 
-# Inspired from /usr/share/autoconf/autoconf/c.m4
-foreach(inline_keyword "inline" "__inline__" "__inline")
-  if(NOT DEFINED C_INLINE)
-    set(CMAKE_REQUIRED_DEFINITIONS_SAVE ${CMAKE_REQUIRED_DEFINITIONS})
-    set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS}
-        "-Dinline=${inline_keyword}")
-    check_c_source_compiles("
-        typedef int foo_t;
-        static inline foo_t static_foo() {return 0;}
-        foo_t foo(){return 0;}
-        int main(int argc, char *argv[]) {return 0;}"
-      C_HAS_${inline_keyword})
-    set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS_SAVE})
-    if(C_HAS_${inline_keyword})
-      set(C_INLINE TRUE)
-      set(INLINE_KEYWORD "${inline_keyword}")
-    endif()
- endif()
-endforeach()
-if(NOT DEFINED C_INLINE)
-  set(INLINE_KEYWORD)
-endif()
-
-# off_t and size_t checks omitted; not clear they are used at all
-# Are off_t and size_t checks strictly necessary?
-
 # Check if sys/time.h and time.h allow use together
 check_c_source_compiles("
 #include <sys/time.h>
