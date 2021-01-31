@@ -46,12 +46,6 @@
 # define assert(x) 
 #endif
 
-#if !defined(HAVE_SNPRINTF) && !defined(HAVE__SNPRINTF)
-#undef snprintf
-#define snprintf _TIFF_snprintf_f
-extern int snprintf(char* str, size_t size, const char* format, ...);
-#endif
-
 #include "tiffio.h"
 
 #include "tif_dir.h"

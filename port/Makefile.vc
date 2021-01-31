@@ -30,7 +30,6 @@
 INCL = -I..\libtiff
 
 OBJ	= \
-	snprintf.obj \
 	getopt.obj
 
 all:	libport.lib
