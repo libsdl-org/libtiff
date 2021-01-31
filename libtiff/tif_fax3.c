@@ -821,21 +821,11 @@ static const unsigned char oneruns[256] = {
 };
 
 /*
- * On certain systems it pays to inline
- * the routines that find pixel spans.
- */
-#ifdef VAXC
-static	int32_t find0span(unsigned char*, int32_t, int32_t);
-static	int32_t find1span(unsigned char*, int32_t, int32_t);
-#pragma inline(find0span,find1span)
-#endif
-
-/*
  * Find a span of ones or zeros using the supplied
  * table.  The ``base'' of the bit string is supplied
  * along with the start+end bit indices.
  */
-inline static int32_t
+static inline int32_t
 find0span(unsigned char* bp, int32_t bs, int32_t be)
 {
 	int32_t bits = be - bs;
@@ -897,7 +887,7 @@ find0span(unsigned char* bp, int32_t bs, int32_t be)
 	return (span);
 }
 
-inline static int32_t
+static inline int32_t
 find1span(unsigned char* bp, int32_t bs, int32_t be)
 {
 	int32_t bits = be - bs;
