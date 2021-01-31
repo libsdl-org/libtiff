@@ -23,24 +23,10 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-cmake_minimum_required(VERSION 2.8.11) # b/c of use of BUILD_INTERFACE generator expression
+cmake_minimum_required(VERSION 3.9.0)
 
-# Default policy is from 2.8.9
-cmake_policy(VERSION 2.8.9)
-# Set MacOSX @rpath usage globally.
-if (POLICY CMP0020)
-  cmake_policy(SET CMP0020 NEW)
-endif(POLICY CMP0020)
-if (POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif(POLICY CMP0042)
-# Use new variable expansion policy.
-if (POLICY CMP0053)
-  cmake_policy(SET CMP0053 NEW)
-endif(POLICY CMP0053)
-if (POLICY CMP0054)
-  cmake_policy(SET CMP0054 NEW)
-endif(POLICY CMP0054)
+# Default policy is from 3.9.0
+cmake_policy(VERSION 3.9.0)
 
 # Read version information from configure.ac.
 FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/configure.ac" configure REGEX "^LIBTIFF_.*=")
@@ -65,12 +51,8 @@ set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
 set(CMAKE_C_STANDARD 99)
 
 # Project version
-project(tiff C)
-set(VERSION "${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}")
-set(tiff_VERSION "${VERSION}")
-set(tiff_VERSION_MAJOR "${LIBTIFF_MAJOR_VERSION}")
-set(tiff_VERSION_MINOR "${LIBTIFF_MINOR_VERSION}")
-set(tiff_VERSION_PATCH "${LIBTIFF_MICRO_VERSION}")
+project(tiff VERSION "${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}"
+        LANGUAGES C CXX)
 
 # the other tiff_VERSION_* variables are set automatically
 set(tiff_VERSION_ALPHA "${LIBTIFF_ALPHA_VERSION}")
@@ -102,19 +84,6 @@ endmacro()
 
 current_date(RELEASE_DATE)
 
-macro(extra_dist)
-  foreach(file ${ARGV})
-    file(RELATIVE_PATH relfile "${PROJECT_SOURCE_DIR}"
-         "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
-    list(APPEND EXTRA_DIST "${relfile}")
-  endforeach()
-  set(EXTRA_DIST "${EXTRA_DIST}" PARENT_SCOPE)
-endmacro()
-
-set(EXTRA_DIST
-  HOWTO-RELEASE
-  autogen.sh
-  libtiff-4.pc.in)
 
 # These are annoyingly verbose, produce false positives or don't work
 # nicely with all supported compiler versions, so are disabled unless
