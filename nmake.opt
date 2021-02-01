@@ -110,10 +110,6 @@ CHECK_JPEG_YCBCR_SUBSAMPLING = 1
 #
 
 
-# Indicate if the compiler provides strtoll/strtoull (default 1)
-# Users of MSVC++ 14.0 ("Visual Studio 2015") and later should set this to 1
-HAVE_STRTOLL = 1
-
 #
 # Pick debug or optimized build flags.  We default to an optimized build
 # with no debugging information.

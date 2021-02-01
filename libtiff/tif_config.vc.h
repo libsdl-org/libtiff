@@ -71,12 +71,6 @@
 #  else
 #    define HAVE_SNPRINTF 1
 #  endif
-#  define HAVE_STRTOL 1
-#  define HAVE_STRTOUL 1
-#  if _MSC_VER >= 1900 /* Visual Studio 2015 added strtoll/strtoull */
-#    define HAVE_STRTOLL 1
-#    define HAVE_STRTOULL 1
-#  endif
 #endif
 
 /* Define to 1 if your processor stores words with the most significant byte
