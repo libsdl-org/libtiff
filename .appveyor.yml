@@ -24,10 +24,12 @@ environment:
       shared: OFF
     - compiler: vc14-cmake
       configuration: Release
+      arch: x64
       generator: Visual Studio 16 2019
       shared: ON
     - compiler: vc14-cmake
       configuration: Debug
+      arch: Win32
       generator: Visual Studio 16 2019
       shared: OFF
     - compiler: vc14-nmake
@@ -74,7 +76,7 @@ before_build:
   - if NOT %compiler%==vc14-nmake echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_TIFF_CMAKE_SOURCE%
   - 'if %compiler%==cygwin-cmake bash -c "cmake -G \"%generator%\" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%"'
   - 'if %compiler%==mingw-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
-  - 'if %compiler%==vc14-cmake cmake -G "%generator%" -A x64 -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
+  - 'if %compiler%==vc14-cmake cmake -G "%generator%" -A %arch% -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
 
 build_script:
   - if NOT %compiler%==vc14-nmake cd %AV_TIFF_BUILD%
