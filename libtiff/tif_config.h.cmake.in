@@ -107,11 +107,11 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "@PACKAGE_VERSION@"
 
+/* Size of size_t */
+#define SIZEOF_SIZE_T @SIZEOF_SIZE_T@
+
 /* Default size of the strip in bytes (when strip chopping enabled) */
 #define STRIP_SIZE_DEFAULT @STRIP_SIZE_DEFAULT@
-
-/* Signed size type formatter */
-#define TIFF_SSIZE_FORMAT @TIFF_SSIZE_FORMAT@
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
@@ -139,6 +139,14 @@
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS @FILE_OFFSET_BITS@
+
+#if SIZEOF_SIZE_T == 8
+#  define TIFF_SSIZE_FORMAT PRId64
+#elif SIZEOF_SIZE_T == 8
+#  define TIFF_SSIZE_FORMAT PRId32
+#else
+#  error "Unsupported size_t size; please submit a bug report"
+#endif
 
 /* Define to `long int' if <sys/types.h> does not define. */
 #undef off_t

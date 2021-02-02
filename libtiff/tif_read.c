@@ -133,8 +133,8 @@ static int TIFFReadAndRealloc(TIFF* tif, tmsize_t size,
                 if( is_strip )
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
-                        "Read error at scanline %"PRIu32"; got %"PRId64" bytes, "
-                        "expected %"PRId64,
+                        "Read error at scanline %"PRIu32"; got %"TIFF_SSIZE_FORMAT" bytes, "
+                        "expected %"TIFF_SSIZE_FORMAT,
                                         tif->tif_row,
                                         already_read,
                                         size);
@@ -143,7 +143,7 @@ static int TIFFReadAndRealloc(TIFF* tif, tmsize_t size,
                 {
                     TIFFErrorExt(tif->tif_clientdata, module,
                         "Read error at row %"PRIu32", col %"PRIu32", tile %"PRIu32"; "
-                        "got %"PRId64" bytes, expected %"PRId64"",
+                        "got %"TIFF_SSIZE_FORMAT" bytes, expected %"TIFF_SSIZE_FORMAT"",
                                         tif->tif_row,
                                         tif->tif_col,
                                         strip_or_tile,
@@ -599,7 +599,7 @@ TIFFReadRawStrip1(TIFF* tif, uint32_t strip, void* buf, tmsize_t size,
 		cc = TIFFReadFile(tif, buf, size);
 		if (cc != size) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-		"Read error at scanline %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+		"Read error at scanline %"PRIu32"; got %"TIFF_SSIZE_FORMAT" bytes, expected %"TIFF_SSIZE_FORMAT,
 				     tif->tif_row,
 				     cc,
 				     size);
@@ -627,7 +627,7 @@ TIFFReadRawStrip1(TIFF* tif, uint32_t strip, void* buf, tmsize_t size,
                 }
 		if (n!=size) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-	"Read error at scanline %"PRIu32", strip %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+	"Read error at scanline %"PRIu32", strip %"PRIu32"; got %"TIFF_SSIZE_FORMAT" bytes, expected %"TIFF_SSIZE_FORMAT,
 				     tif->tif_row,
 				     strip,
 				     n,
@@ -1043,7 +1043,7 @@ TIFFReadRawTile1(TIFF* tif, uint32_t tile, void* buf, tmsize_t size, const char*
 		cc = TIFFReadFile(tif, buf, size);
 		if (cc != size) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-	"Read error at row %"PRIu32", col %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+	"Read error at row %"PRIu32", col %"PRIu32"; got %"TIFF_SSIZE_FORMAT" bytes, expected %"TIFF_SSIZE_FORMAT,
 				     tif->tif_row,
 				     tif->tif_col,
 				     cc,
@@ -1063,7 +1063,7 @@ TIFFReadRawTile1(TIFF* tif, uint32_t tile, void* buf, tmsize_t size, const char*
 			n=size;
 		if (n!=size) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-"Read error at row %"PRIu32", col %"PRIu32", tile %"PRIu32"; got %"PRId64" bytes, expected %"PRId64,
+"Read error at row %"PRIu32", col %"PRIu32", tile %"PRIu32"; got %"TIFF_SSIZE_FORMAT" bytes, expected %"TIFF_SSIZE_FORMAT,
 				     tif->tif_row,
 				     tif->tif_col,
 				     tile,

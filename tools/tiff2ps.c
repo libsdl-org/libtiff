@@ -247,7 +247,7 @@ static	void usage(int);
 static void* limitMalloc(tmsize_t s)
 {
 	if (maxMalloc && (s > maxMalloc)) {
-		fprintf(stderr, "MemoryLimitError: allocation of %" PRId64 " bytes is forbidden. Limit is %" PRId64 ".\n",
+		fprintf(stderr, "MemoryLimitError: allocation of %" TIFF_SSIZE_FORMAT " bytes is forbidden. Limit is %" TIFF_SSIZE_FORMAT ".\n",
                 s, maxMalloc);
 		fprintf(stderr, "                  use -M option to change limit.\n");
 		return NULL;
@@ -2212,7 +2212,7 @@ PS_Lvl2page(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	}
 	buf_data = (unsigned char *)limitMalloc(chunk_size);
 	if (!buf_data) {
-		TIFFError(filename, "Can't alloc %"PRId64" bytes for %s.",
+		TIFFError(filename, "Can't alloc %"TIFF_SSIZE_FORMAT" bytes for %s.",
 			chunk_size, tiled_image ? "tiles" : "strips");
 		return(FALSE);
 	}
@@ -2390,8 +2390,8 @@ PSpage(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	case PHOTOMETRIC_PALETTE:
 		fprintf(fd, "%s", RGBcolorimage);
 		PhotoshopBanner(fd, w, h, 1, 3, "false 3 colorimage");
-		fprintf(fd, "/scanLine %"PRId64" string def\n",
-		    ps_bytesperrow * 3L);
+		fprintf(fd, "/scanLine %"TIFF_SSIZE_FORMAT" string def\n",
+		    ps_bytesperrow * 3);
 		fprintf(fd, "%"PRIu32" %"PRIu32" 8\n",
 		    w, h);
 		fprintf(fd, "[%"PRIu32" 0 0 -%"PRIu32" 0 %"PRIu32"]\n",
@@ -2403,7 +2403,7 @@ PSpage(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	case PHOTOMETRIC_MINISBLACK:
 	case PHOTOMETRIC_MINISWHITE:
 		PhotoshopBanner(fd, w, h, 1, 1, imageOp);
-		fprintf(fd, "/scanLine %"PRId64" string def\n",
+		fprintf(fd, "/scanLine %"TIFF_SSIZE_FORMAT" string def\n",
 		    ps_bytesperrow);
 		fprintf(fd, "%"PRIu32" %"PRIu32" %"PRIu16"\n",
 		    w, h, bitspersample);
@@ -2423,7 +2423,7 @@ PSColorContigPreamble(FILE* fd, uint32_t w, uint32_t h, int nc)
 {
 	ps_bytesperrow = nc * (tf_bytesperrow / samplesperpixel);
 	PhotoshopBanner(fd, w, h, 1, nc, "false %d colorimage");
-	fprintf(fd, "/line %"PRId64" string def\n", ps_bytesperrow);
+	fprintf(fd, "/line %"TIFF_SSIZE_FORMAT" string def\n", ps_bytesperrow);
 	fprintf(fd, "%"PRIu32" %"PRIu32" %"PRIu16"\n",
 	    w, h, bitspersample);
 	fprintf(fd, "[%"PRIu32" 0 0 -%"PRIu32" 0 %"PRIu32"]\n",
@@ -2439,7 +2439,7 @@ PSColorSeparatePreamble(FILE* fd, uint32_t w, uint32_t h, int nc)
 
 	PhotoshopBanner(fd, w, h, ps_bytesperrow, nc, "true %d colorimage");
 	for (i = 0; i < nc; i++)
-		fprintf(fd, "/line%d %"PRId64" string def\n",
+		fprintf(fd, "/line%d %"TIFF_SSIZE_FORMAT" string def\n",
 		    i, ps_bytesperrow);
 	fprintf(fd, "%"PRIu32" %"PRIu32" %"PRIu16"\n",
 	    w, h, bitspersample);

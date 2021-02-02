@@ -809,7 +809,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryDataAndRealloc(
             {
                 TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
                             "Failed to allocate memory for %s "
-                            "(%"PRId64" elements of %"PRId64" bytes each)",
+                            "(%"TIFF_SSIZE_FORMAT" elements of %"TIFF_SSIZE_FORMAT" bytes each)",
                             "TIFFReadDirEntryArray",
                              (tmsize_t) 1, already_read + to_read);
                 return TIFFReadDirEntryErrAlloc;

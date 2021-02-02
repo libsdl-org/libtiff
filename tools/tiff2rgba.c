@@ -411,7 +411,7 @@ cvt_whole_image( TIFF *in, TIFF *out )
     }
     if (maxMalloc != 0 && (tmsize_t)pixel_count * (tmsize_t)sizeof(uint32_t) > maxMalloc) {
 	TIFFError(TIFFFileName(in),
-		  "Raster size %zu over memory limit (%" PRId64 "), try -b option.",
+		  "Raster size %zu over memory limit (%" TIFF_SSIZE_FORMAT "), try -b option.",
               pixel_count * sizeof(uint32_t), maxMalloc);
         return 0;
     }
@@ -543,7 +543,7 @@ tiffcvt(TIFF* in, TIFF* out)
 	if (maxMalloc != 0 && TIFFStripSize(in) > maxMalloc)
 	{
 		TIFFError(TIFFFileName(in),
-			  "Strip Size %" PRId64 " over memory limit (%" PRId64 ")",
+			  "Strip Size %" TIFF_SSIZE_FORMAT " over memory limit (%" TIFF_SSIZE_FORMAT ")",
                   TIFFStripSize(in), maxMalloc);
 		return 0;
 	}

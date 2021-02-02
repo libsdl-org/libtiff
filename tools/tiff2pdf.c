@@ -24,9 +24,6 @@
  * OF THIS SOFTWARE.
  */
 
-#include "tif_config.h"
-#include "libport.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,6 +46,8 @@
 
 #include "tiffiop.h"
 #include "tiffio.h"
+#include "tif_config.h"
+#include "libport.h"
 
 #ifndef EXIT_SUCCESS
 # define EXIT_SUCCESS	0
@@ -2262,7 +2261,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				_TIFFmalloc(t2p->tiff_datasize);
 			if (buffer == NULL) {
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory for "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for "
 					"t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -2531,7 +2530,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 		buffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 		if(buffer==NULL){
 			TIFFError(TIFF2PDF_MODULE,
-				"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+				"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 				t2p->tiff_datasize,
 				TIFFFileName(input));
 			t2p->t2p_error = T2P_ERR_ERROR;
@@ -2569,7 +2568,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 			buffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2579,7 +2578,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 			samplebuffer = (unsigned char*) _TIFFmalloc(stripsize);
 			if(samplebuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2619,7 +2618,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 		buffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 		if(buffer==NULL){
 			TIFFError(TIFF2PDF_MODULE,
-				"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+				"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 				t2p->tiff_datasize,
 				TIFFFileName(input));
 			t2p->t2p_error = T2P_ERR_ERROR;
@@ -2654,7 +2653,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->tiff_datasize * t2p->tiff_samplesperpixel);
 			if(samplebuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-	"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+	"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2685,7 +2684,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				t2p->tiff_width*t2p->tiff_length*4);
 			if(samplebuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-	"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+	"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2882,7 +2881,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
                                         "for t2p_readwrite_pdf_image_tile, %s", 
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -3044,7 +3043,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 		buffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 		if(buffer==NULL){
 			TIFFError(TIFF2PDF_MODULE, 
-				"Can't allocate %"PRId64" bytes of memory for "
+				"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for "
                                 "t2p_readwrite_pdf_image_tile, %s", 
 				t2p->tiff_datasize,
 				TIFFFileName(input));
@@ -3078,7 +3077,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
 					"for t2p_readwrite_pdf_image_tile, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -3089,7 +3088,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			samplebuffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(samplebuffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
 					"for t2p_readwrite_pdf_image_tile, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -3130,7 +3129,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer = (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
 					"for t2p_readwrite_pdf_image_tile, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -4206,7 +4205,7 @@ tsize_t t2p_write_pdf_stream_length(tsize_t len, TIFF* output){
 	char buffer[32];
 	int buflen=0;
 
-	buflen=snprintf(buffer, sizeof(buffer), "%"PRId64, len);
+	buflen=snprintf(buffer, sizeof(buffer), "%"TIFF_SSIZE_FORMAT, len);
 	check_snprintf_ret((T2P*)NULL, buflen, buffer);
 	written += t2pWriteFile(output, (tdata_t) buffer, buflen);
 	written += t2pWriteFile(output, (tdata_t) "\n", 1);

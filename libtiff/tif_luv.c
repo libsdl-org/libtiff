@@ -232,7 +232,7 @@ LogL16Decode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 		}
 		if (i != npixels) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Not enough data at row %"PRIu32" (short %"PRId64" pixels)",
+			    "Not enough data at row %"PRIu32" (short %"TIFF_SSIZE_FORMAT" pixels)",
 				     tif->tif_row,
 				     npixels - i);
 			tif->tif_rawcp = (uint8_t*) bp;
@@ -288,7 +288,7 @@ LogLuvDecode24(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	tif->tif_rawcc = cc;
 	if (i != npixels) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at row %"PRIu32" (short %"PRId64" pixels)",
+			"Not enough data at row %"PRIu32" (short %"TIFF_SSIZE_FORMAT" pixels)",
 			     tif->tif_row,
 			     npixels - i);
 		return (0);
@@ -354,7 +354,7 @@ LogLuvDecode32(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 		}
 		if (i != npixels) {
 			TIFFErrorExt(tif->tif_clientdata, module,
-			"Not enough data at row %"PRIu32" (short %"PRId64" pixels)",
+			"Not enough data at row %"PRIu32" (short %"TIFF_SSIZE_FORMAT" pixels)",
 				     tif->tif_row,
 				     npixels - i);
 			tif->tif_rawcp = (uint8_t*) bp;
