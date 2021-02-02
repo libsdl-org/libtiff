@@ -1,6 +1,8 @@
 #ifndef _TIF_CONFIG_H_
 #define _TIF_CONFIG_H_
 
+#include "tiffconf.h"
+
 /* Define to 1 if you have the <assert.h> header file. */
 #define HAVE_ASSERT_H 1
 

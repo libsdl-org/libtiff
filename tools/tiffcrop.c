@@ -114,6 +114,7 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
@@ -123,10 +124,6 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
-#endif
-
-#ifdef HAVE_STDINT_H
-# include <stdint.h>
 #endif
 
 #ifndef EXIT_SUCCESS
