@@ -33,9 +33,6 @@ set(port_USED_FILES ${port_SOURCES} ${port_HEADERS})
 if(NOT HAVE_GETOPT)
   list(APPEND port_USED_FILES getopt.c)
 endif()
-if(MSVC AND NOT HAVE_SNPRINTF)
-  list(APPEND port_USED_FILES snprintf.c)
-endif()
 
 add_library(port STATIC ${port_USED_FILES})
 
