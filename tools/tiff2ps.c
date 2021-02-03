@@ -629,7 +629,7 @@ static const char RGBcolorimage[] = "\
  * It is claimed to be part of some future revision of the EPS spec.
  */
 static void
-PhotoshopBanner(FILE* fd, uint32_t w, uint32_t h, int bs, int nc, char* startline)
+PhotoshopBanner(FILE* fd, uint32_t w, uint32_t h, int bs, int nc, const char* startline)
 {
 	fprintf(fd, "%%ImageData: %"PRIu32" %"PRIu32" %"PRIu16" %d 0 %d 2 \"",
 	    w, h, bitspersample, nc, bs);
@@ -1824,7 +1824,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 	uint16_t predictor, minsamplevalue, maxsamplevalue;
 	uint32_t repeat_count;
 	char im_h[64], im_x[64], im_y[64];
-	char * imageOp = "image";
+	const char * imageOp = "image";
 
 	if ( useImagemask && (bitspersample == 1) )
 		imageOp = "imagemask";
