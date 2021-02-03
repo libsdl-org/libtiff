@@ -58,6 +58,9 @@
 
 #endif
 
+/* Size type formatter */
+#define TIFF_SIZE_FORMAT "zu"
+
 /* Set the native cpu bit order */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
