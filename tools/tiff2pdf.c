@@ -955,7 +955,7 @@ T2P* t2p_init()
 	if(t2p==NULL){
 		TIFFError(
 			TIFF2PDF_MODULE, 
-			"Can't allocate %zu bytes of memory for t2p_init",
+			"Can't allocate %"TIFF_SIZE_FORMAT" bytes of memory for t2p_init",
 			sizeof(T2P));
 		return( (T2P*) NULL );
 	}
@@ -1079,7 +1079,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 	if(t2p->tiff_pages==NULL){
 		TIFFError(
 			TIFF2PDF_MODULE, 
-			"Can't allocate %zu bytes of memory for tiff_pages array, %s", 
+			"Can't allocate %"TIFF_SIZE_FORMAT" bytes of memory for tiff_pages array, %s", 
 			sizeof(T2P_PAGE) * directorycount,
 			TIFFFileName(input));
 		t2p->t2p_error = T2P_ERR_ERROR;
@@ -1090,7 +1090,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 	if(t2p->tiff_tiles==NULL){
 		TIFFError(
 			TIFF2PDF_MODULE, 
-			"Can't allocate %zu bytes of memory for tiff_tiles array, %s",
+			"Can't allocate %"TIFF_SIZE_FORMAT" bytes of memory for tiff_tiles array, %s",
             sizeof(T2P_TILES) * directorycount,
 			TIFFFileName(input));
 		t2p->t2p_error = T2P_ERR_ERROR;
@@ -1263,7 +1263,7 @@ void t2p_read_tiff_init(T2P* t2p, TIFF* input){
 			if( t2p->tiff_tiles[i].tiles_tiles == NULL){
 				TIFFError(
 					TIFF2PDF_MODULE, 
-					"Can't allocate %zu bytes of memory for t2p_read_tiff_init, %s",
+					"Can't allocate %"TIFF_SIZE_FORMAT" bytes of memory for t2p_read_tiff_init, %s",
                     sizeof(T2P_TILE) * t2p->tiff_tiles[i].tiles_tilecount,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -5558,7 +5558,7 @@ tsize_t t2p_write_pdf(T2P* t2p, TIFF* input, TIFF* output){
 	if(t2p->pdf_xrefoffsets==NULL){
 		TIFFError(
 			TIFF2PDF_MODULE, 
-			"Can't allocate %zu bytes of memory for t2p_write_pdf",
+			"Can't allocate %"TIFF_SIZE_FORMAT" bytes of memory for t2p_write_pdf",
 			sizeof(uint32_t) * t2p->pdf_xrefcount);
 		t2p->t2p_error = T2P_ERR_ERROR;
 		return(written);

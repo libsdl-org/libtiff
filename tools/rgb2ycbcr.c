@@ -313,7 +313,7 @@ tiffcvt(TIFF* in, TIFF* out)
                                          "raster buffer");
   	if (raster == 0) {
  		TIFFError(TIFFFileName(in),
- 			  "Failed to allocate buffer (%zu elements of %zu each)",
+ 			  "Failed to allocate buffer (%"TIFF_SIZE_FORMAT" elements of %"TIFF_SIZE_FORMAT" each)",
  			  pixel_count,
  			  sizeof(uint32_t));
   		return (0);

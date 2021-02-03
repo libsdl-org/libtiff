@@ -213,7 +213,7 @@ LZMADecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	} while (sp->stream.avail_out > 0);
 	if (sp->stream.avail_out != 0) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-		    "Not enough data at scanline %"PRIu32" (short %zu bytes)",
+		    "Not enough data at scanline %"PRIu32" (short %"TIFF_SIZE_FORMAT" bytes)",
 		    tif->tif_row, sp->stream.avail_out);
 		return 0;
 	}
