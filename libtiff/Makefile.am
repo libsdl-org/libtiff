@@ -30,7 +30,6 @@ libtiffincludedir = $(includedir)
 EXTRA_DIST = \
 	CMakeLists.txt \
 	Makefile.vc \
-	SConstruct \
 	libtiff.def \
 	libtiff.map \
 	libtiffxx.map \

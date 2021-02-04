@@ -40,7 +40,6 @@ EXTRA_DIST = \
 	CMakeLists.txt \
 	HOWTO-RELEASE \
 	Makefile.vc \
-	SConstruct \
 	autogen.sh \
 	libtiff-4.pc.in \
 	nmake.opt

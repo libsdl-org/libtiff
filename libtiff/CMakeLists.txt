@@ -31,7 +31,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                @ONLY)
 
 extra_dist(
-  SConstruct
   tif_config.vc.h
   tiffconf.vc.h
   libtiff.def

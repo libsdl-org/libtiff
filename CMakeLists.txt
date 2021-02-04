@@ -114,7 +114,6 @@ endmacro()
 set(EXTRA_DIST
   HOWTO-RELEASE
   Makefile.vc
-  SConstruct
   autogen.sh
   nmake.opt
   libtiff-4.pc.in)
