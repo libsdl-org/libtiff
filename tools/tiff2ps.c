@@ -177,6 +177,12 @@
 
 #define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
 
+#if defined(__GNUC__) || defined(__attribute__)
+#define TIFF_FALLTHROUGH __attribute((fallthrough))
+#else
+#define TIFF_FALLTHROUGH
+#endif
+
 /* malloc size limit (in bytes)
  * disabled when set to 0 */
 static tmsize_t maxMalloc = DEFAULT_MAX_MALLOC;
@@ -2455,7 +2461,13 @@ PSColorSeparatePreamble(FILE* fd, uint32_t w, uint32_t h, int nc)
 		putc('\n', fd);			\
 		(len) = MAXLINE-(howmany);	\
 	}
-#define	PUTHEX(c,fd)	putc(hex[((c)>>4)&0xf],fd); putc(hex[(c)&0xf],fd)
+
+static inline void
+puthex(unsigned int c, FILE *fd)
+{
+  putc(hex[((c)>>4)&0xf],fd);
+  putc(hex[(c)&0xf],fd);
+}
 
 void
 PSDataColorContig(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
@@ -2503,10 +2515,14 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
 				 */
 				adjust = 255 - cp[nc];
 				switch (nc) {
-				case 4: c = *cp++ + adjust; PUTHEX(c,fd);
-				case 3: c = *cp++ + adjust; PUTHEX(c,fd);
-				case 2: c = *cp++ + adjust; PUTHEX(c,fd);
-				case 1: c = *cp++ + adjust; PUTHEX(c,fd);
+				case 4: c = *cp++ + adjust; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
+				case 3: c = *cp++ + adjust; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
+				case 2: c = *cp++ + adjust; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
+				case 1: c = *cp++ + adjust; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
 				}
 				cp += es;
 			}
@@ -2517,10 +2533,14 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
 			for (cc = 0; (cc + nc) <= tf_bytesperrow; cc += samplesperpixel) {
 				DOBREAK(breaklen, nc, fd);
 				switch (nc) {
-				case 4: c = *cp++; PUTHEX(c,fd);
-				case 3: c = *cp++; PUTHEX(c,fd);
-				case 2: c = *cp++; PUTHEX(c,fd);
-				case 1: c = *cp++; PUTHEX(c,fd);
+				case 4: c = *cp++; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
+				case 3: c = *cp++; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
+				case 2: c = *cp++; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
+				case 1: c = *cp++; puthex(c,fd);
+                                      TIFF_FALLTHROUGH;
 				}
 				cp += es;
 			}
@@ -2553,7 +2573,7 @@ PSDataColorSeparate(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
 			for (cp = tf_buf, cc = 0; cc < tf_bytesperrow; cc++) {
 				DOBREAK(breaklen, 1, fd);
 				c = *cp++;
-				PUTHEX(c,fd);
+				puthex(c,fd);
 			}
 		}
 	}
@@ -2562,7 +2582,7 @@ end_loop:
 }
 
 #define	PUTRGBHEX(c,fd) \
-	PUTHEX(rmap[c],fd); PUTHEX(gmap[c],fd); PUTHEX(bmap[c],fd)
+	puthex(rmap[c],fd); puthex(gmap[c],fd); puthex(bmap[c],fd)
 
 void
 PSDataPalette(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
@@ -2739,14 +2759,14 @@ PSDataBW(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 					 * where Cback = 1.
 					 */
 					adjust = 255 - cp[1];
-					c = *cp++ + adjust; PUTHEX(c,fd);
+					c = *cp++ + adjust; puthex(c,fd);
 					cp++, cc--;
 				}
 			} else {
 				while (cc-- > 0) {
 					c = *cp++;
 					DOBREAK(breaklen, 1, fd);
-					PUTHEX(c, fd);
+					puthex(c, fd);
 				}
 			}
 		}
@@ -2840,7 +2860,7 @@ PSRawDataBW(FILE* fd, TIFF* tif, uint32_t w, uint32_t h)
 			for (cp = tf_buf; cc > 0; cc--) {
 				DOBREAK(breaklen, 1, fd);
 				c = *cp++;
-				PUTHEX(c, fd);
+				puthex(c, fd);
 			}
 			fputs(">\n", fd);
 			breaklen = MAXLINE;

@@ -128,10 +128,12 @@ main(int argc, char* argv[])
 			break;
 		case 'h':
 			usage(EXIT_SUCCESS);
-			/*NOTREACHED*/
+                        /*NOTREACHED*/
+                        break;
 		case '?':
 			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
+                        break;
 		}
 	if (optind >= argc)
 		usage(EXIT_FAILURE);
