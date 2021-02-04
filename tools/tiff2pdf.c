@@ -2296,7 +2296,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				_TIFFmalloc(t2p->tiff_datasize);
 			if(buffer == NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2328,7 +2328,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 					_TIFFmalloc(t2p->tiff_datasize);
 				if(buffer == NULL) {
 					TIFFError(TIFF2PDF_MODULE,
-						"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+						"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 						t2p->tiff_datasize,
 						TIFFFileName(input));
 					t2p->t2p_error = T2P_ERR_ERROR;
@@ -2404,7 +2404,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 					_TIFFmalloc(t2p->tiff_datasize);
 				if(buffer==NULL){
 					TIFFError(TIFF2PDF_MODULE,
-						"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+						"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 						t2p->tiff_datasize,
 						TIFFFileName(input));
 					t2p->t2p_error = T2P_ERR_ERROR;
@@ -2460,7 +2460,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 				_TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE,
-					"Can't allocate %"PRId64" bytes of memory for t2p_readwrite_pdf_image, %s",
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory for t2p_readwrite_pdf_image, %s",
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
@@ -2909,7 +2909,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
                                         "for t2p_readwrite_pdf_image_tile, %s", 
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -2946,7 +2946,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer=(unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
                                         "for t2p_readwrite_pdf_image, %s", 
 					t2p->tiff_datasize,
 					TIFFFileName(input));
@@ -2994,7 +2994,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
 			if(buffer==NULL){
 				TIFFError(TIFF2PDF_MODULE, 
-					"Can't allocate %"PRId64" bytes of memory "
+					"Can't allocate %"TIFF_SSIZE_FORMAT" bytes of memory "
                                         "for t2p_readwrite_pdf_image_tile, %s", 
                                         t2p->tiff_datasize,
 					TIFFFileName(input));
