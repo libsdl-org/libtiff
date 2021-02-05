@@ -23,8 +23,7 @@
 # OF THIS SOFTWARE.
 
 extra_dist(
-  README
-  Makefile.vc)
+  README)
 
 add_executable(addtiffo addtiffo.c tif_overview.c tif_ovrcache.c tif_ovrcache.h)
 target_link_libraries(addtiffo tiff port)

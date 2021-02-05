@@ -22,8 +22,6 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(Makefile.vc)
-
 add_executable(fax2ps fax2ps.c)
 target_link_libraries(fax2ps tiff port)
 target_include_directories(fax2ps PRIVATE)

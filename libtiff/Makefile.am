@@ -29,14 +29,11 @@ libtiffincludedir = $(includedir)
 
 EXTRA_DIST = \
 	CMakeLists.txt \
-	Makefile.vc \
 	libtiff.def \
 	libtiff.map \
 	libtiffxx.map \
 	tif_config.h.cmake.in \
-	tif_config.vc.h \
-	tiffconf.h.cmake.in \
-	tiffconf.vc.h
+	tiffconf.h.cmake.in
 
 libtiffinclude_HEADERS = \
 	tiff.h \

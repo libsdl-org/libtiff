@@ -25,7 +25,6 @@
 
 EXTRA_DIST = \
 	CMakeLists.txt \
-	Makefile.vc \
 	libport.h
 
 noinst_LTLIBRARIES	= libport.la
