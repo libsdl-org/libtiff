@@ -107,7 +107,7 @@ static int pageInSeq = 0;
 static void* limitMalloc(tmsize_t s)
 {
 	if (maxMalloc && (s > maxMalloc)) {
-		fprintf(stderr, "MemoryLimitError: allocation of %" PRId64 " bytes is forbidden. Limit is %" PRId64 ".\n",
+		fprintf(stderr, "MemoryLimitError: allocation of %" TIFF_SSIZE_FORMAT " bytes is forbidden. Limit is %" TIFF_SSIZE_FORMAT ".\n",
                 s, maxMalloc);
 		fprintf(stderr, "                  use -m option to change limit.\n");
 		return NULL;
@@ -1099,7 +1099,7 @@ DECLAREcpFunc(cpDecodedStrips)
 		return 1;
 	} else {
 		TIFFError(TIFFFileName(in),
-		    "Error, can't allocate memory buffer of size %"PRId64
+		    "Error, can't allocate memory buffer of size %"TIFF_SSIZE_FORMAT
 		    " to read strips", stripsize);
 		return 0;
 	}

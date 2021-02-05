@@ -79,7 +79,7 @@ DumpModeDecode(TIFF* tif, uint8_t* buf, tmsize_t cc, uint16_t s)
 	(void) s;
 	if (tif->tif_rawcc < cc) {
 		TIFFErrorExt(tif->tif_clientdata, module,
-"Not enough data for scanline %"PRIu32", expected a request for at most %"PRId64" bytes, got a request for %"PRId64" bytes",
+"Not enough data for scanline %"PRIu32", expected a request for at most %"TIFF_SSIZE_FORMAT" bytes, got a request for %"TIFF_SSIZE_FORMAT" bytes",
 		             tif->tif_row,
 		             tif->tif_rawcc,
 		             cc);

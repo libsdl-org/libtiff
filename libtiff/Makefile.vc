@@ -78,7 +78,7 @@ OBJ	= \
 
 all:	libtiff.lib $(DLLNAME)
 
-tif_config.h:	tif_config.vc.h
+tif_config.h:	tif_config.vc.h tiffconf.h
 	copy tif_config.vc.h tif_config.h
 
 tiffconf.h:	tiffconf.vc.h

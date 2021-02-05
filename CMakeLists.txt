@@ -214,24 +214,12 @@ check_include_file(sys/time.h  HAVE_SYS_TIME_H)
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 check_include_file(unistd.h    HAVE_UNISTD_H)
 
-# Check if sys/time.h and time.h allow use together
-check_c_source_compiles("
-#include <sys/time.h>
-#include <time.h>
-int main(void){return 0;}"
-  TIME_WITH_SYS_TIME)
-
-# Check if struct tm is in sys/time.h
-check_c_source_compiles("
-#include <sys/types.h>
-#include <time.h>
-
-int main(void){
-  struct tm tm;
-  int *p = &tm.tm_sec;
-  return !p;
-}"
-  TM_IN_SYS_TIME)
+check_symbol_exists(optarg "getopt.h" HAVE_DECL_OPTARG)
+if (HAVE_DECL_OPTARG)
+  set(HAVE_DECL_OPTARG 1)
+else()
+  set(HAVE_DECL_OPTARG 0)
+endif()
 
 # Disable deprecated features to ensure clean build
 add_definitions(-DTIFF_DISABLE_DEPRECATED)

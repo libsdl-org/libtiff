@@ -101,13 +101,13 @@ static int JBIGDecode(TIFF* tif, uint8_t* buffer, tmsize_t size, uint16_t s)
 	if( (tmsize_t)decodedSize < size )
 	{
 	    TIFFWarningExt(tif->tif_clientdata, "JBIG",
-	                   "Only decoded %lu bytes, whereas %"PRId64" requested",
+	                   "Only decoded %lu bytes, whereas %"TIFF_SSIZE_FORMAT" requested",
 	                   decodedSize, size);
 	}
 	else if( (tmsize_t)decodedSize > size )
 	{
 	    TIFFErrorExt(tif->tif_clientdata, "JBIG",
-	                 "Decoded %lu bytes, whereas %"PRId64" were requested",
+	                 "Decoded %lu bytes, whereas %"TIFF_SSIZE_FORMAT" were requested",
 	                 decodedSize, size);
 	    jbg_dec_free(&decoder);
 	    return 0;

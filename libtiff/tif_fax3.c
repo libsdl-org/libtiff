@@ -1462,7 +1462,7 @@ Fax4Decode(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		if (((lastx + 7) >> 3) > (int)occ)	/* check for buffer overrun */
 		{
 			TIFFErrorExt(tif->tif_clientdata, module,
-			             "Buffer overrun detected : %"PRId64" bytes available, %d bits needed",
+			             "Buffer overrun detected : %"TIFF_SSIZE_FORMAT" bytes available, %d bits needed",
 			             occ, lastx);
 			return -1;
 		}
@@ -1484,7 +1484,7 @@ Fax4Decode(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		if (((lastx + 7) >> 3) > (int)occ)	/* check for buffer overrun */
 		{
 			TIFFErrorExt(tif->tif_clientdata, module,
-			             "Buffer overrun detected : %"PRId64" bytes available, %d bits needed",
+			             "Buffer overrun detected : %"TIFF_SSIZE_FORMAT" bytes available, %d bits needed",
 			             occ, lastx);
 			return -1;
 		}

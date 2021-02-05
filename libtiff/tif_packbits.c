@@ -238,7 +238,7 @@ PackBitsDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			if( occ < (tmsize_t)n )
 			{
 				TIFFWarningExt(tif->tif_clientdata, module,
-				    "Discarding %"PRId64" bytes to avoid buffer overrun",
+				    "Discarding %"TIFF_SSIZE_FORMAT" bytes to avoid buffer overrun",
 				    (tmsize_t)n - occ);
 				n = (long)occ;
 			}
@@ -257,7 +257,7 @@ PackBitsDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 			if (occ < (tmsize_t)(n + 1))
 			{
 				TIFFWarningExt(tif->tif_clientdata, module,
-				    "Discarding %"PRId64" bytes to avoid buffer overrun",
+				    "Discarding %"TIFF_SSIZE_FORMAT" bytes to avoid buffer overrun",
 				    (tmsize_t)n - occ + 1);
 				n = (long)occ - 1;
 			}

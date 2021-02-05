@@ -1,6 +1,8 @@
 #ifndef _TIF_CONFIG_H_
 #define _TIF_CONFIG_H_
 
+#include "tiffconf.h"
+
 /* Define to 1 if you have the <assert.h> header file. */
 #define HAVE_ASSERT_H 1
 
@@ -55,6 +57,9 @@
 #  define TIFF_SSIZE_T int32_t
 
 #endif
+
+/* Size type formatter */
+#define TIFF_SIZE_FORMAT "zu"
 
 /* Set the native cpu bit order */
 #define HOST_FILLORDER FILLORDER_LSB2MSB

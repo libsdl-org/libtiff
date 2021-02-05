@@ -114,6 +114,7 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
@@ -123,10 +124,6 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
-#endif
-
-#ifdef HAVE_STDINT_H
-# include <stdint.h>
 #endif
 
 #ifndef EXIT_SUCCESS
@@ -865,7 +862,7 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
       if (tbytes < tilesize  && !ignore)
         {
 	TIFFError(TIFFFileName(in),
-		  "Error, can't read tile at row %"PRIu32" col %"PRIu32", Read %"PRId64" bytes of %"PRId64,
+		  "Error, can't read tile at row %"PRIu32" col %"PRIu32", Read %"TIFF_SSIZE_FORMAT" bytes of %"TIFF_SSIZE_FORMAT,
 		  col, row, tbytes, tilesize);
 		  status = 0;
                   _TIFFfree(tilebuf);

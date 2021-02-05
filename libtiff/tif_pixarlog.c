@@ -846,7 +846,7 @@ PixarLogDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 	if (nsamples % llen) { 
 		TIFFWarningExt(tif->tif_clientdata, module,
 			"stride %d is not a multiple of sample count, "
-            "%"PRId64", data truncated.", llen, nsamples);
+            "%"TIFF_SSIZE_FORMAT", data truncated.", llen, nsamples);
 		nsamples -= nsamples % llen;
 	}
 
