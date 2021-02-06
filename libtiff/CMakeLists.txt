@@ -104,7 +104,7 @@ target_include_directories(tiff
     PRIVATE
         ${TIFF_INCLUDES}
 )
-target_link_libraries(tiff PUBLIC ${TIFF_LIBRARY_DEPS})
+target_link_libraries(tiff ${TIFF_LIBRARY_DEPS})
 set_target_properties(tiff PROPERTIES SOVERSION ${SO_COMPATVERSION})
 if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
@@ -134,7 +134,7 @@ if(CXX_SUPPORT)
   target_sources(tiffxx PRIVATE
           ${tiffxx_HEADERS}
           tif_stream.cxx)
-  target_link_libraries(tiffxx PUBLIC tiff)
+  target_link_libraries(tiffxx tiff)
   set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION})
   if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
@@ -160,7 +160,7 @@ endif()
 
 add_executable(mkg3states)
 target_sources(mkg3states PRIVATE mkg3states.c tif_fax3.h)
-target_link_libraries(mkg3states PRIVATE tiff port)
+target_link_libraries(mkg3states tiff port)
 
 add_custom_target(faxtable
         DEPENDS mkg3states

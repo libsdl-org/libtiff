@@ -22,21 +22,17 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-add_executable(tiff-bi)
-target_sources(tiff-bi PRIVATE tiff-bi.c)
-target_link_libraries(tiff-bi PRIVATE tiff port)
+add_executable(tiff-bi tiff-bi.c)
+target_link_libraries(tiff-bi tiff port)
 
-add_executable(tiff-grayscale)
-target_sources(tiff-grayscale PRIVATE tiff-grayscale.c)
-target_link_libraries(tiff-grayscale PRIVATE tiff port)
+add_executable(tiff-grayscale tiff-grayscale.c)
+target_link_libraries(tiff-grayscale tiff port)
 
-add_executable(tiff-palette)
-target_sources(tiff-palette PRIVATE tiff-palette.c)
-target_link_libraries(tiff-palette PRIVATE tiff port)
+add_executable(tiff-palette tiff-palette.c)
+target_link_libraries(tiff-palette tiff port)
 
-add_executable(tiff-rgb)
-target_sources(tiff-rgb PRIVATE tiff-rgb.c)
-target_link_libraries(tiff-rgb PRIVATE tiff port)
+add_executable(tiff-rgb tiff-rgb.c)
+target_link_libraries(tiff-rgb tiff port)
 
 add_subdirectory(xtiff)
 

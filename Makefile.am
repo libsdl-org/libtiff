@@ -37,6 +37,7 @@ docfiles = \
 	VERSION
 
 EXTRA_DIST = \
+	cmake \
 	CMakeLists.txt \
 	HOWTO-RELEASE \
 	autogen.sh \
