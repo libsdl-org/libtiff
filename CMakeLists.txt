@@ -127,29 +127,7 @@ include(LargeFileSupport)
 # Documentation install directory (default to cmake project docdir)
 set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
 
-# Options to enable and disable internal codecs
-
-option(ccitt "support for CCITT Group 3 & 4 algorithms" ON)
-set(CCITT_SUPPORT ${ccitt})
-
-option(packbits "support for Macintosh PackBits algorithm" ON)
-set(PACKBITS_SUPPORT ${packbits})
-
-option(lzw "support for LZW algorithm" ON)
-set(LZW_SUPPORT ${lzw})
-
-option(thunder "support for ThunderScan 4-bit RLE algorithm" ON)
-set(THUNDER_SUPPORT ${thunder})
-
-option(next "support for NeXT 2-bit RLE algorithm" ON)
-set(NEXT_SUPPORT ${next})
-
-option(logluv "support for LogLuv high dynamic range algorithm" ON)
-set(LOGLUV_SUPPORT ${logluv})
-
-# Option for Microsoft Document Imaging
-option(mdi "support for Microsoft Document Imaging" ON)
-set(MDI_SUPPORT ${mdi})
+include(InternalCodecs)
 
 # ZLIB
 set(ZLIB_SUPPORT FALSE)
