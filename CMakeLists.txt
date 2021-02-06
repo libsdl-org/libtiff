@@ -58,6 +58,7 @@ set(PACKAGE_BUGREPORT "tiff@lists.maptools.org")
 
 include(CompilerChecks)
 include(LinkerChecks)
+include(ProcessorChecks)
 include(GNUInstallDirs)
 include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
@@ -117,25 +118,6 @@ check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
 check_symbol_exists(setmode "unistd.h" HAVE_SETMODE)
 check_symbol_exists(getopt "unistd.h;stdio.h" HAVE_GETOPT)
 
-# CPU bit order
-set(HOST_FILLORDER FILLORDER_MSB2LSB)
-if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "i.*86.*" OR
-   CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "amd64.*" OR
-   # AMD64 on Windows
-   CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "AMD64" OR
-   CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "x86_64.*")
-  set(HOST_FILLORDER FILLORDER_LSB2MSB)
-endif()
-
-# CPU endianness
-include(TestBigEndian)
-test_big_endian(HOST_BIG_ENDIAN)
-if(HOST_BIG_ENDIAN)
-  add_definitions(-DWORDS_BIGENDIAN)
-endif()
-
-# IEEE floating point
-set(HAVE_IEEEFP 1)
 
 report_values(CMAKE_HOST_SYSTEM_PROCESSOR HOST_FILLORDER
               HOST_BIG_ENDIAN HAVE_IEEEFP)
