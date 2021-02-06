@@ -22,25 +22,30 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
+# Generate headers
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
+        @ONLY)
+
 set(port_HEADERS libport.h)
-set(port_SOURCES dummy.c)
-set(port_optional_SOURCES
-  getopt.c
-)
 
-set(port_USED_FILES ${port_SOURCES} ${port_HEADERS})
-
+# Only build if any needed features are missing
 if(NOT HAVE_GETOPT)
-  list(APPEND port_USED_FILES getopt.c)
+  add_library(port STATIC)
+
+  # Add getopt if missing
+  if(NOT HAVE_GETOPT)
+    target_sources(port PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
+  endif()
+
+  target_include_directories(port PUBLIC
+          ${CMAKE_CURRENT_BINARY_DIR}
+          ${CMAKE_CURRENT_SOURCE_DIR})
+else()
+  # Dummy interface library
+  add_library(port INTERFACE)
+  target_include_directories(port INTERFACE
+          ${CMAKE_CURRENT_BINARY_DIR}
+          ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
-
-add_library(port STATIC ${port_USED_FILES})
-
-foreach(file ${port_USED_FILES})
-  list(APPEND tiff_port_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${file}")
-endforeach()
-set(tiff_port_SOURCES ${tiff_port_SOURCES} PARENT_SCOPE)
-
-target_include_directories(port
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-)
