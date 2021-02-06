@@ -73,15 +73,6 @@ endmacro()
 
 current_date(RELEASE_DATE)
 
-
-# These are annoyingly verbose, produce false positives or don't work
-# nicely with all supported compiler versions, so are disabled unless
-# explicitly enabled.
-option(extra-warnings "Enable extra compiler warnings" OFF)
-
-# This will cause the compiler to fail when an error occurs.
-option(fatal-warnings "Compiler warnings are errors" OFF)
-
 include(CompilerChecks)
 
 if(MSVC)

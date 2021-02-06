@@ -24,6 +24,17 @@
 # OF THIS SOFTWARE.
 
 
+include(CheckCCompilerFlag)
+
+
+# These are annoyingly verbose, produce false positives or don't work
+# nicely with all supported compiler versions, so are disabled unless
+# explicitly enabled.
+option(extra-warnings "Enable extra compiler warnings" OFF)
+
+# This will cause the compiler to fail when an error occurs.
+option(fatal-warnings "Compiler warnings are errors" OFF)
+
 # Check if the compiler supports each of the following additional
 # flags, and enable them if supported.  This greatly improves the
 # quality of the build by checking for a number of common problems,
