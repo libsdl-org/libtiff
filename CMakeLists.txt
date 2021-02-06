@@ -32,21 +32,7 @@ cmake_policy(VERSION 3.9.0)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 # Read version information from configure.ac.
-FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/configure.ac" configure REGEX "^LIBTIFF_.*=")
-foreach(line ${configure})
-  foreach(var LIBTIFF_MAJOR_VERSION LIBTIFF_MINOR_VERSION LIBTIFF_MICRO_VERSION LIBTIFF_ALPHA_VERSION
-          LIBTIFF_CURRENT LIBTIFF_REVISION LIBTIFF_AGE)
-    if(NOT ${var} AND line MATCHES "^${var}=(.*)")
-      set(${var} "${CMAKE_MATCH_1}")
-      break()
-    endif()
-  endforeach()
-endforeach()
-
-math(EXPR SO_MAJOR "${LIBTIFF_CURRENT} - ${LIBTIFF_AGE}")
-set(SO_MINOR "${LIBTIFF_AGE}")
-set(SO_REVISION "${LIBTIFF_REVISION}")
-
+include(AutotoolsVersion)
 message(STATUS "Building tiff version ${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}${LIBTIFF_ALPHA_VERSION}")
 message(STATUS "libtiff library version ${SO_MAJOR}.${SO_MINOR}.${SO_REVISION}")
 
