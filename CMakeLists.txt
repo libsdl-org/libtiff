@@ -28,6 +28,9 @@ cmake_minimum_required(VERSION 3.9.0)
 # Default policy is from 3.9.0
 cmake_policy(VERSION 3.9.0)
 
+# Find CMake modules in cmake/
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 # Read version information from configure.ac.
 FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/configure.ac" configure REGEX "^LIBTIFF_.*=")
 foreach(line ${configure})
@@ -93,55 +96,7 @@ option(extra-warnings "Enable extra compiler warnings" OFF)
 # This will cause the compiler to fail when an error occurs.
 option(fatal-warnings "Compiler warnings are errors" OFF)
 
-# Check if the compiler supports each of the following additional
-# flags, and enable them if supported.  This greatly improves the
-# quality of the build by checking for a number of common problems,
-# some of which are quite serious.
-if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
-   CMAKE_C_COMPILER_ID MATCHES "Clang")
-  set(test_flags
-      -Wall
-      -Winline
-      -W
-      -Wformat-security
-      -Wpointer-arith
-      -Wdisabled-optimization
-      -Wno-unknown-pragmas
-      -Wdeclaration-after-statement
-      -fstrict-aliasing)
-  if(extra-warnings)
-    list(APPEND test_flags
-        -Wfloat-equal
-        -Wmissing-prototypes
-        -Wunreachable-code)
-  endif()
-  if(fatal-warnings)
-    list(APPEND test_flags
-         -Werror)
-  endif()
-elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-  set(test_flags)
-  if(extra-warnings)
-    list(APPEND test_flags
-         /W4)
-  else()
-    list(APPEND test_flags
-         /W3)
-  endif()
-  if (fatal-warnings)
-    list(APPEND test_flags
-         /WX)
-  endif()
-endif()
-
-foreach(flag ${test_flags})
-  string(REGEX REPLACE "[^A-Za-z0-9]" "_" flag_var "${flag}")
-  set(test_c_flag "C_FLAG${flag_var}")
-  CHECK_C_COMPILER_FLAG(${flag} "${test_c_flag}")
-  if (${test_c_flag})
-     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}")
-  endif (${test_c_flag})
-endforeach(flag ${test_flags})
+include(CompilerChecks)
 
 if(MSVC)
   set(CMAKE_DEBUG_POSTFIX "d")
