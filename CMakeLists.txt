@@ -103,39 +103,13 @@ endif()
 # Disable deprecated features to ensure clean build
 add_definitions(-DTIFF_DISABLE_DEPRECATED)
 
-# Check type sizes
-set(CMAKE_EXTRA_INCLUDE_FILES_SAVE ${CMAKE_EXTRA_INCLUDE_FILES})
-set(CMAKE_EXTRA_INCLUDE_FILES ${CMAKE_EXTRA_INCLUDE_FILES} "stddef.h")
-check_type_size("size_t" SIZEOF_SIZE_T)
-set(CMAKE_EXTRA_INCLUDE_FILES ${CMAKE_EXTRA_INCLUDE_FILES_SAVE})
+include(TypeSizeChecks)
 
 macro(report_values)
   foreach(val ${ARGV})
     message(STATUS "${val} set to ${${val}}")
   endforeach()
 endmacro()
-
-# C99 fixed-size integer types
-set(TIFF_INT8_T "int8_t")
-set(TIFF_UINT8_T "uint8_t")
-
-set(TIFF_INT16_T "int16_t")
-set(TIFF_UINT16_T "uint16_t")
-
-set(TIFF_INT32_T "int32_t")
-set(TIFF_UINT32_T "uint32_t")
-
-set(TIFF_INT64_T "int64_t")
-set(TIFF_UINT64_T "uint64_t")
-
-
-if(SIZEOF_SIZE_T EQUAL 4)
-  set(TIFF_SSIZE_T "int32_t")
-elseif(SIZEOF_SIZE_T EQUAL 8)
-  set(TIFF_SSIZE_T "int64_t")
-else()
-  message(FATAL_ERROR "Unsupported size_t size ${SIZEOF_SIZE_T}; please add support")
-endif()
 
 report_values(TIFF_SSIZE_T)
 
