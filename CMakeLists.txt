@@ -315,13 +315,7 @@ check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
 check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
 check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)
 
-# Win32 IO
-set(win32_io FALSE)
-if(WIN32)
-  set(win32_io TRUE)
-endif()
-
-set(USE_WIN32_FILEIO ${win32_io})
+include(WindowsIOFeature)
 
 # Orthogonal features
 
