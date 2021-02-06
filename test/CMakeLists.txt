@@ -187,8 +187,7 @@ target_link_libraries(rewrite tiff port)
 
 if(JPEG_SUPPORT)
   add_executable(raw_decode raw_decode.c)
-  target_include_directories(raw_decode PRIVATE ${JPEG_INCLUDE_DIR})
-  target_link_libraries(raw_decode tiff port)
+  target_link_libraries(raw_decode tiff port JPEG::JPEG)
 endif()
 
 add_executable(custom_dir custom_dir.c)
