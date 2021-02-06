@@ -177,12 +177,6 @@
 
 #define DEFAULT_MAX_MALLOC (256 * 1024 * 1024)
 
-#if defined(__GNUC__) || defined(__attribute__)
-#define TIFF_FALLTHROUGH __attribute((fallthrough))
-#else
-#define TIFF_FALLTHROUGH
-#endif
-
 /* malloc size limit (in bytes)
  * disabled when set to 0 */
 static tmsize_t maxMalloc = DEFAULT_MAX_MALLOC;
@@ -2514,16 +2508,11 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
 				 * where Cback = 1.
 				 */
 				adjust = 255 - cp[nc];
-				switch (nc) {
-				case 4: c = *cp++ + adjust; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				case 3: c = *cp++ + adjust; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				case 2: c = *cp++ + adjust; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				case 1: c = *cp++ + adjust; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				}
+				for (int i = 0; i < nc; ++i)
+                {
+                    c = *cp++ + adjust;
+                    puthex(c,fd);
+                }
 				cp += es;
 			}
 		} else {
@@ -2532,16 +2521,11 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32_t w, uint32_t h, int nc)
 			 */
 			for (cc = 0; (cc + nc) <= tf_bytesperrow; cc += samplesperpixel) {
 				DOBREAK(breaklen, nc, fd);
-				switch (nc) {
-				case 4: c = *cp++; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				case 3: c = *cp++; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				case 2: c = *cp++; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				case 1: c = *cp++; puthex(c,fd);
-                                      TIFF_FALLTHROUGH;
-				}
+				for (int i = 0; i < nc; ++i)
+                {
+                    c = *cp++;
+                    puthex(c,fd);
+                }
 				cp += es;
 			}
 		}
