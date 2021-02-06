@@ -31,5 +31,3 @@ add_subdirectory(ras)
 add_subdirectory(stream)
 add_subdirectory(tags)
 add_subdirectory(win_dib)
-
-extra_dist(README)

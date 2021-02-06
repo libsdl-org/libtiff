@@ -21,10 +21,3 @@
 # WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
-
-extra_dist(
-  README
-  tif_imageiter.c
-  tif_imageiter.h
-  tif_pdsdirread.c
-  tif_pdsdirwrite.c)

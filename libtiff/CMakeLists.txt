@@ -30,13 +30,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
                @ONLY)
 
-extra_dist(
-  tif_config.vc.h
-  tiffconf.vc.h
-  libtiff.def
-  libtiff.map
-  libtiffxx.map)
-
 set(tiff_HEADERS
   tiff.h
   tiffio.h
@@ -101,10 +94,8 @@ set(tiffxx_SOURCES
   tif_stream.cxx)
 
 if(USE_WIN32_FILEIO)
-  extra_dist(tif_unix.c)
   list(APPEND tiff_SOURCES tif_win32.c)
 else()
-  extra_dist(tif_win32.c)
   list(APPEND tiff_SOURCES tif_unix.c)
 endif()
 

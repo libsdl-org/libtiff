@@ -36,8 +36,6 @@ target_link_libraries(tiff-rgb tiff port)
 
 add_subdirectory(xtiff)
 
-extra_dist(README)
-
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.

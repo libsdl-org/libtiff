@@ -163,11 +163,6 @@ set(IMAGES_EXTRA_DIST
     ${PNMIMAGES}
     ${TIFFIMAGES})
 
-extra_dist(
-    ${TESTSCRIPTS}
-    ${IMAGES_EXTRA_DIST}
-    common.sh)
-
 set(noinst_HEADERS tifftest.h)
 
 add_executable(ascii_tag ascii_tag.c)
