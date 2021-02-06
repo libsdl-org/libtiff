@@ -432,7 +432,8 @@ if (cxx)
 endif()
 
 # OpenGL and GLUT
-find_package(OpenGL)
+set(OpenGL_GL_PREFERENCE LEGACY)
+find_package(OpenGL COMPONENTS OpenGL)
 find_package(GLUT)
 set(HAVE_OPENGL FALSE)
 if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)

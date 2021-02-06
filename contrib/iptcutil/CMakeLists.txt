@@ -22,5 +22,6 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-add_executable(iptcutil iptcutil.c)
-target_link_libraries(iptcutil tiff port)
+add_executable(iptcutil)
+target_sources(iptcutil PRIVATE iptcutil.c)
+target_link_libraries(iptcutil PRIVATE tiff port)

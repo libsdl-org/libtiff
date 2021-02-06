@@ -30,77 +30,73 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
                @ONLY)
 
-set(tiff_HEADERS
-  tiff.h
-  tiffio.h
-  tiffvers.h)
+set(tiff_public_HEADERS
+        tiff.h
+        tiffio.h
+        tiffvers.h
+        ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
 
-set(tiff_noinst_HEADERS
-  t4.h
-  tif_dir.h
-  tif_predict.h
-  tiffiop.h
-  uvcode.h)
+set(tiff_private_HEADERS
+        t4.h
+        tif_dir.h
+        tif_predict.h
+        tiffiop.h
+        uvcode.h
+        ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h)
 
-set(nodist_tiff_HEADERS
-  ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
 
-set(tiff_SOURCES
-  tif_aux.c
-  tif_close.c
-  tif_codec.c
-  tif_color.c
-  tif_compress.c
-  tif_dir.c
-  tif_dirinfo.c
-  tif_dirread.c
-  tif_dirwrite.c
-  tif_dumpmode.c
-  tif_error.c
-  tif_extension.c
-  tif_fax3.c
-  tif_fax3sm.c
-  tif_flush.c
-  tif_getimage.c
-  tif_jbig.c
-  tif_jpeg.c
-  tif_jpeg_12.c
-  tif_luv.c
-  tif_lzma.c
-  tif_lzw.c
-  tif_next.c
-  tif_ojpeg.c
-  tif_open.c
-  tif_packbits.c
-  tif_pixarlog.c
-  tif_predict.c
-  tif_print.c
-  tif_read.c
-  tif_strip.c
-  tif_swab.c
-  tif_thunder.c
-  tif_tile.c
-  tif_version.c
-  tif_warning.c
-  tif_webp.c
-  tif_write.c
-  tif_zip.c
-  tif_zstd.c)
+add_library(tiff libtiff.def)
 
-set(tiffxx_HEADERS
-  tiffio.hxx)
-
-set(tiffxx_SOURCES
-  tif_stream.cxx)
+target_sources(tiff PRIVATE
+        ${tiff_public_HEADERS}
+        ${tiff_private_HEADERS}
+        tif_aux.c
+        tif_close.c
+        tif_codec.c
+        tif_color.c
+        tif_compress.c
+        tif_dir.c
+        tif_dirinfo.c
+        tif_dirread.c
+        tif_dirwrite.c
+        tif_dumpmode.c
+        tif_error.c
+        tif_extension.c
+        tif_fax3.c
+        tif_fax3sm.c
+        tif_flush.c
+        tif_getimage.c
+        tif_jbig.c
+        tif_jpeg.c
+        tif_jpeg_12.c
+        tif_luv.c
+        tif_lzma.c
+        tif_lzw.c
+        tif_next.c
+        tif_ojpeg.c
+        tif_open.c
+        tif_packbits.c
+        tif_pixarlog.c
+        tif_predict.c
+        tif_print.c
+        tif_read.c
+        tif_strip.c
+        tif_swab.c
+        tif_thunder.c
+        tif_tile.c
+        tif_version.c
+        tif_warning.c
+        tif_webp.c
+        tif_write.c
+        tif_zip.c
+        tif_zstd.c)
 
 if(USE_WIN32_FILEIO)
-  list(APPEND tiff_SOURCES tif_win32.c)
+  target_sources(tiff PRIVATE tif_win32.c)
 else()
-  list(APPEND tiff_SOURCES tif_unix.c)
+  target_sources(tiff PRIVATE tif_unix.c)
 endif()
 
-add_library(tiff ${tiff_SOURCES} ${tiff_HEADERS} ${nodist_tiff_HEADERS}
-            libtiff.def)
 target_include_directories(tiff
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -108,7 +104,7 @@ target_include_directories(tiff
     PRIVATE
         ${TIFF_INCLUDES}
 )
-target_link_libraries(tiff ${TIFF_LIBRARY_DEPS})
+target_link_libraries(tiff PUBLIC ${TIFF_LIBRARY_DEPS})
 set_target_properties(tiff PROPERTIES SOVERSION ${SO_COMPATVERSION})
 if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
@@ -127,12 +123,18 @@ install(TARGETS tiff
         LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
-install(FILES ${tiff_HEADERS} ${nodist_tiff_HEADERS}
+install(FILES ${tiff_public_HEADERS}
         DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 
 if(CXX_SUPPORT)
-  add_library(tiffxx ${tiffxx_SOURCES} ${tiffxx_HEADERS})
-  target_link_libraries(tiffxx tiff)
+  set(tiffxx_HEADERS
+          tiffio.hxx)
+
+  add_library(tiffxx)
+  target_sources(tiffxx PRIVATE
+          ${tiffxx_HEADERS}
+          tif_stream.cxx)
+  target_link_libraries(tiffxx PUBLIC tiff)
   set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION})
   if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
@@ -156,8 +158,9 @@ if(CXX_SUPPORT)
 
 endif()
 
-add_executable(mkg3states mkg3states.c tif_fax3.h)
-target_link_libraries(mkg3states tiff port)
+add_executable(mkg3states)
+target_sources(mkg3states PRIVATE mkg3states.c tif_fax3.h)
+target_link_libraries(mkg3states PRIVATE tiff port)
 
 add_custom_target(faxtable
         DEPENDS mkg3states
