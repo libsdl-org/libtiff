@@ -1095,7 +1095,8 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 					break;
 				}
 				/* Save string from temporary buffer and compare with written string. */
-				strncpy(auxCharArray, pAscii, sizeof(auxCharArray));
+				strncpy(auxCharArray, pAscii, sizeof(auxCharArray) - 1u);
+                auxCharArray[sizeof(auxCharArray) - 1u] = '\0';
 				if (tWriteCount > 0) auxLong = tWriteCount-1; else auxLong = (long)strlen(auxCharArray);
 				retCode2 = strncmp(auxCharArray, auxTextArrayW[i], auxLong);
 				if (retCode2 != 0) {
