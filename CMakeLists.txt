@@ -122,13 +122,7 @@ check_symbol_exists(getopt "unistd.h;stdio.h" HAVE_GETOPT)
 report_values(CMAKE_HOST_SYSTEM_PROCESSOR HOST_FILLORDER
               HOST_BIG_ENDIAN HAVE_IEEEFP)
 
-# Large file support
-if (UNIX OR MINGW)
-  # This might not catch every possibility catered for by
-  # AC_SYS_LARGEFILE.
-  add_definitions(-D_FILE_OFFSET_BITS=64)
-  set(FILE_OFFSET_BITS 64)
-endif()
+include(LargeFileSupport)
 
 # Documentation install directory (default to cmake project docdir)
 set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
