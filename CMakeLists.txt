@@ -103,26 +103,7 @@ include(LargeFileSupport)
 set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
 
 include(InternalCodecs)
-
-# ZLIB
-set(ZLIB_SUPPORT FALSE)
-find_package(ZLIB)
-option(zlib "use zlib (required for Deflate compression)" ${ZLIB_FOUND})
-if(zlib AND ZLIB_FOUND)
-  set(ZLIB_SUPPORT TRUE)
-endif()
-set(ZIP_SUPPORT ${ZLIB_SUPPORT})
-
-# libdeflate
-set(LIBDEFLATE_SUPPORT FALSE)
-find_package(Deflate)
-option(libdeflate "use libdeflate (optional for faster Deflate support, still requires zlib)" ${Deflate_FOUND})
-if (libdeflate AND Deflate_FOUND AND ZIP_SUPPORT)
-  set(LIBDEFLATE_SUPPORT TRUE)
-endif()
-if(Deflate_FOUND AND NOT ZIP_SUPPORT)
-  message(WARNING "libdeflate available but zlib is not. libdeflate cannot be used")
-endif()
+include(DeflateCodec)
 
 # Option for Pixar log-format algorithm
 # Pixar log format
