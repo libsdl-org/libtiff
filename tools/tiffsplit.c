@@ -61,8 +61,8 @@ main(int argc, char* argv[])
 {
 	TIFF *in, *out;
 
-        if (argc < 2 || argc > 3) {
-            fprintf(stderr, "%s\n\n", TIFFGetVersion());
+		if (argc < 2 || argc > 3) {
+			fprintf(stderr, "%s\n\n", TIFFGetVersion());
 			fprintf(stderr, "Split a multi-image TIFF into single-image TIFF files\n\n");
 			fprintf(stderr, "usage: tiffsplit input.tif [prefix]\n");
 		return (EXIT_FAILURE);
