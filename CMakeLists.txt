@@ -106,19 +106,7 @@ include(InternalCodecs)
 include(DeflateCodec)
 include(PixarLogCodec)
 include(JPEGCodec)
-
-# JBIG-KIT
-set(JBIG_SUPPORT FALSE)
-find_package(JBIG)
-option(jbig "use ISO JBIG compression (requires JBIT-KIT library)" ${JBIG_FOUND})
-if (jbig AND JBIG_FOUND)
-  set(JBIG_SUPPORT TRUE)
-endif()
-
-set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
-set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${JBIG_INCLUDE_DIR})
-check_symbol_exists(jbg_newlen "jbig.h" HAVE_JBG_NEWLEN)
-set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAVE})
+include(JBIGCodec)
 
 # liblzma2
 set(LZMA_SUPPORT FALSE)
