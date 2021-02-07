@@ -107,14 +107,7 @@ include(DeflateCodec)
 include(PixarLogCodec)
 include(JPEGCodec)
 include(JBIGCodec)
-
-# liblzma2
-set(LZMA_SUPPORT FALSE)
-find_package(LibLZMA)
-option(lzma "use liblzma (required for LZMA2 compression)" ${LZMA_FOUND})
-if (lzma AND LIBLZMA_FOUND)
-  set(LZMA_SUPPORT TRUE)
-endif()
+include(LZMACodec)
 
 # libzstd
 set(ZSTD_SUPPORT FALSE)
