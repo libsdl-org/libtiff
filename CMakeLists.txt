@@ -109,14 +109,7 @@ include(JPEGCodec)
 include(JBIGCodec)
 include(LZMACodec)
 include(ZSTDCodec)
-
-# libwebp
-set(WEBP_SUPPORT FALSE)
-find_package(WebP)
-option(webp "use libwebp (required for WEBP compression)" ${WebP_FOUND})
-if (webp AND WebP_FOUND)
-  set(WEBP_SUPPORT TRUE)
-endif()
+include(WebPCodec)
 
 # 8/12-bit jpeg mode
 set(JPEG12_INCLUDE_DIR JPEG12_INCLUDE_DIR-NOTFOUND CACHE PATH "Include directory for 12-bit libjpeg")
