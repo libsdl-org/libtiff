@@ -324,7 +324,7 @@ add_subdirectory(html)
 #message(STATUS "EXTRA_DIST: ${EXTRA_DIST}")
 
 message(STATUS "")
-message(STATUS "Libtiff is now configured for ${host}")
+message(STATUS "Libtiff is now configured for ${CMAKE_SYSTEM}")
 message(STATUS "")
 message(STATUS "  Installation directory:             ${prefix}")
 message(STATUS "  Documentation directory:            ${LIBTIFF_DOCDIR}")
