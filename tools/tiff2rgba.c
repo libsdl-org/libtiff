@@ -405,14 +405,14 @@ cvt_whole_image( TIFF *in, TIFF *out )
     /* XXX: Check the integer overflow. */
     if (!width || !height || pixel_count / width != height) {
         TIFFError(TIFFFileName(in),
-		  "Malformed input file; can't allocate buffer for raster of %lux%lu size",
-		  (unsigned long)width, (unsigned long)height);
+		  "Malformed input file; can't allocate buffer for raster of %"PRIu32"x%"PRIu32" size",
+		  width, height);
         return 0;
     }
     if (maxMalloc != 0 && (tmsize_t)pixel_count * (tmsize_t)sizeof(uint32_t) > maxMalloc) {
 	TIFFError(TIFFFileName(in),
-		  "Raster size %" PRIu64 " over memory limit (%" PRIu64 "), try -b option.",
-              (uint64_t)pixel_count * sizeof(uint32_t), (uint64_t)maxMalloc);
+		  "Raster size %"TIFF_SIZE_FORMAT" over memory limit (%" TIFF_SSIZE_FORMAT "), try -b option.",
+              pixel_count * sizeof(uint32_t), maxMalloc);
         return 0;
     }
 
@@ -421,8 +421,8 @@ cvt_whole_image( TIFF *in, TIFF *out )
 
     raster = (uint32_t*)_TIFFCheckMalloc(in, pixel_count, sizeof(uint32_t), "raster buffer");
     if (raster == 0) {
-        TIFFError(TIFFFileName(in), "Failed to allocate buffer (%lu elements of %lu each)",
-		  (unsigned long)pixel_count, (unsigned long)sizeof(uint32_t));
+        TIFFError(TIFFFileName(in), "Failed to allocate buffer (%"TIFF_SIZE_FORMAT" elements of %"TIFF_SIZE_FORMAT" each)",
+		  pixel_count, sizeof(uint32_t));
         return (0);
     }
 
@@ -543,8 +543,8 @@ tiffcvt(TIFF* in, TIFF* out)
 	if (maxMalloc != 0 && TIFFStripSize(in) > maxMalloc)
 	{
 		TIFFError(TIFFFileName(in),
-			  "Strip Size %" PRIu64 " over memory limit (%" PRIu64 ")",
-                  (uint64_t)TIFFStripSize(in), (uint64_t)maxMalloc);
+			  "Strip Size %" TIFF_SSIZE_FORMAT " over memory limit (%" TIFF_SSIZE_FORMAT ")",
+                  TIFFStripSize(in), maxMalloc);
 		return 0;
 	}
         if( process_by_block && TIFFIsTiled( in ) )

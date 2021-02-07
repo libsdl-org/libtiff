@@ -404,10 +404,6 @@ _TIFFmemcmp(const void* p1, const void* p2, tmsize_t c)
 
 #ifndef _WIN32_WCE
 
-#if (_MSC_VER < 1500)
-#  define vsnprintf _vsnprintf
-#endif
-
 static void
 Win32WarningHandler(const char* module, const char* fmt, va_list ap)
 {

@@ -1,6 +1,8 @@
 #ifndef _TIF_CONFIG_H_
 #define _TIF_CONFIG_H_
 
+#include "tiffconf.h"
+
 /* Define to 1 if you have the <assert.h> header file. */
 #define HAVE_ASSERT_H 1
 
@@ -56,40 +58,15 @@
 
 #endif
 
+/* Size type formatter */
+#define TIFF_SIZE_FORMAT "zu"
+
 /* Set the native cpu bit order */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
-
-/*
-  Please see associated settings in "nmake.opt" which configure porting
-  settings. It should not be necessary to edit the following pre-processor
-  logic.
-*/
-#if defined(_MSC_VER)
-/* Visual Studio 2015 / VC 14 / MSVC 19.00 finally has snprintf() */
-#  if _MSC_VER < 1900 /* Visual C++ 2015 */
-#    define snprintf _snprintf
-#  else
-#    define HAVE_SNPRINTF 1
-#  endif
-#  define HAVE_STRTOL 1
-#  define HAVE_STRTOUL 1
-#  if _MSC_VER >= 1900 /* Visual Studio 2015 added strtoll/strtoull */
-#    define HAVE_STRTOLL 1
-#    define HAVE_STRTOULL 1
-#  endif
-#endif
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
-
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-# ifndef inline
-#  define inline __inline
-# endif
-#endif
 
 #define lfind _lfind
 

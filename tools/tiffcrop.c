@@ -114,6 +114,7 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
@@ -123,10 +124,6 @@ static   char tiffcrop_rev_date[] = "12-13-2010";
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
-#endif
-
-#ifdef HAVE_STDINT_H
-# include <stdint.h>
 #endif
 
 #ifndef EXIT_SUCCESS
@@ -832,7 +829,7 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
     {
 #ifdef DEBUG2
     TIFFError("readContigTilesIntoBuffer",
-	      "Tilesize %lu is too small, using alternate calculation %u",
+	      "Tilesize %"PRId64" is too small, using alternate calculation %"PRIu64,
               tilesize, tl * tile_rowsize);
 #endif
     tile_buffsize = tl * tile_rowsize;
@@ -866,9 +863,8 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
       if (tbytes < tilesize  && !ignore)
         {
 	TIFFError(TIFFFileName(in),
-		  "Error, can't read tile at row %lu col %lu, Read %lu bytes of %lu",
-		  (unsigned long) col, (unsigned long) row, (unsigned long)tbytes,
-                  (unsigned long)tilesize);
+		  "Error, can't read tile at row %"PRIu32" col %"PRIu32", Read %"TIFF_SSIZE_FORMAT" bytes of %"TIFF_SSIZE_FORMAT,
+		  col, row, tbytes, tilesize);
 		  status = 0;
                   _TIFFfree(tilebuf);
 		  return status;
@@ -917,8 +913,8 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
                                                    spp, bps, count, 0, ncol))
                       {
 		      TIFFError("readContigTilesIntoBuffer",
-                                "Unable to extract row %d from tile %lu", 
-				row, (unsigned long)TIFFCurrentTile(in));
+                                "Unable to extract row %"PRIu32" from tile %"PRIu32,
+				row, TIFFCurrentTile(in));
 		      return 1;
 		      }
 		    break;
@@ -931,8 +927,8 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
                                                             prev_trailing_bits))
                         {
 		        TIFFError("readContigTilesIntoBuffer",
-                                  "Unable to extract row %d from tile %lu", 
-				  row, (unsigned long)TIFFCurrentTile(in));
+                                  "Unable to extract row %"PRIu32" from tile %"PRIu32,
+				  row, TIFFCurrentTile(in));
 		        return 1;
 		        }
 		      break;
@@ -945,8 +941,8 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
                                                              prev_trailing_bits))
                         {
 		        TIFFError("readContigTilesIntoBuffer",
-                                  "Unable to extract row %d from tile %lu", 
-			  	  row, (unsigned long)TIFFCurrentTile(in));
+                                  "Unable to extract row %"PRIu32" from tile %"PRIu32,
+			  	  row, TIFFCurrentTile(in));
 		        return 1;
 		        }
 	            break;
@@ -957,8 +953,8 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
                                                            prev_trailing_bits))
                       {
 		      TIFFError("readContigTilesIntoBuffer",
-                                "Unable to extract row %d from tile %lu", 
-		  	        row, (unsigned long)TIFFCurrentTile(in));
+                                "Unable to extract row %"PRIu32" from tile %"PRIu32,
+		  	        row, TIFFCurrentTile(in));
 		      return 1;
 		      }
 		    break;
@@ -971,12 +967,12 @@ static int readContigTilesIntoBuffer (TIFF* in, uint8_t* buf,
                                                            prev_trailing_bits))
                       {
 		      TIFFError("readContigTilesIntoBuffer",
-                                "Unable to extract row %d from tile %lu", 
-			        row, (unsigned long)TIFFCurrentTile(in));
+                                "Unable to extract row %"PRIu32" from tile %"PRIu32,
+			        row, TIFFCurrentTile(in));
 		      return 1;
 		      }
 		    break;
-            default: TIFFError("readContigTilesIntoBuffer", "Unsupported bit depth %d", bps);
+            default: TIFFError("readContigTilesIntoBuffer", "Unsupported bit depth %"PRIu16, bps);
 		     return 1;
 	    }
           }
@@ -1038,10 +1034,9 @@ static int  readSeparateTilesIntoBuffer (TIFF* in, uint8_t *obuf,
         if (tbytes < 0  && !ignore)
           {
 	  TIFFError(TIFFFileName(in),
-                 "Error, can't read tile for row %lu col %lu, "
-		 "sample %lu",
-		 (unsigned long) col, (unsigned long) row,
-		 (unsigned long) s);
+                 "Error, can't read tile for row %"PRIu32" col %"PRIu32", "
+		 "sample %"PRIu16,
+		 col, row, s);
 		 status = 0;
           for (sample = 0; (sample < spp) && (sample < MAX_SAMPLES); sample++)
             {
@@ -1120,7 +1115,7 @@ static int  readSeparateTilesIntoBuffer (TIFF* in, uint8_t *obuf,
                     break;
 		    }
 	          break;
-          default: TIFFError ("readSeparateTilesIntoBuffer", "Unsupported bit depth: %d", bps);
+          default: TIFFError ("readSeparateTilesIntoBuffer", "Unsupported bit depth: %"PRIu16, bps);
                   status = 0;
                   break;
           }
@@ -1152,7 +1147,7 @@ static int writeBufferToContigStrips(TIFF* out, uint8_t* buf, uint32_t imageleng
     stripsize = TIFFVStripSize(out, nrows);
     if (TIFFWriteEncodedStrip(out, strip++, buf, stripsize) < 0)
       {
-      TIFFError(TIFFFileName(out), "Error, can't write strip %u", strip - 1);
+      TIFFError(TIFFFileName(out), "Error, can't write strip %"PRIu32, strip - 1);
       return 1;
       }
     buf += stripsize;
@@ -1237,7 +1232,7 @@ writeBufferToSeparateStrips (TIFF* out, uint8_t* buf,
 
       if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0)
         {
-	TIFFError(TIFFFileName(out), "Error, can't write strip %u", strip - 1);
+	TIFFError(TIFFFileName(out), "Error, can't write strip %"PRIu32, strip - 1);
 	_TIFFfree(obuf);
 	return 1;
 	}
@@ -1281,7 +1276,7 @@ static int writeBufferToContigTiles (TIFF* out, uint8_t* buf, uint32_t imageleng
     {
 #ifdef DEBUG2
     TIFFError("writeBufferToContigTiles",
-	      "Tilesize %lu is too small, using alternate calculation %u",
+	      "Tilesize %"PRId64" is too small, using alternate calculation %"PRIu32,
               tilesize, tl * tile_rowsize);
 #endif
     tile_buffsize = tl * tile_rowsize;
@@ -1322,8 +1317,8 @@ static int writeBufferToContigTiles (TIFF* out, uint8_t* buf, uint32_t imageleng
 					   tw, 0, spp, spp, bps, dump) > 0)
         {
 	TIFFError("writeBufferToContigTiles", 
-                  "Unable to extract data to tile for row %lu, col %lu",
-                  (unsigned long) row, (unsigned long)col);
+                  "Unable to extract data to tile for row %"PRIu32", col %"PRIu32,
+                  row, col);
 	_TIFFfree(tilebuf);
 	return 1;
         }
@@ -1331,8 +1326,8 @@ static int writeBufferToContigTiles (TIFF* out, uint8_t* buf, uint32_t imageleng
       if (TIFFWriteTile(out, tilebuf, col, row, 0, 0) < 0)
         {
 	TIFFError("writeBufferToContigTiles",
-	          "Cannot write tile at %lu %lu",
-	          (unsigned long) col, (unsigned long) row);
+	          "Cannot write tile at %"PRIu32" %"PRIu32,
+	          col, row);
 	 _TIFFfree(tilebuf);
 	return 1;
 	}
@@ -1397,8 +1392,8 @@ static int writeBufferToSeparateTiles (TIFF* out, uint8_t* buf, uint32_t imagele
 					     tw, s, 1, spp, bps, dump) > 0)
           {
 	  TIFFError("writeBufferToSeparateTiles", 
-                    "Unable to extract data to tile for row %lu, col %lu sample %d",
-                    (unsigned long) row, (unsigned long)col, (int)s);
+                    "Unable to extract data to tile for row %"PRIu32", col %"PRIu32" sample %"PRIu16,
+                    row, col, s);
 	  _TIFFfree(obuf);
 	  return 1;
           }
@@ -1406,9 +1401,8 @@ static int writeBufferToSeparateTiles (TIFF* out, uint8_t* buf, uint32_t imagele
 	if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0)
           {
 	   TIFFError("writeBufferToseparateTiles",
-	             "Cannot write tile at %lu %lu sample %lu",
-	             (unsigned long) col, (unsigned long) row,
-	             (unsigned long) s);
+	             "Cannot write tile at %"PRIu32" %"PRIu32" sample %"PRIu16,
+	             col, row, s);
 	   _TIFFfree(obuf);
 	   return 1;
 	  }
@@ -1569,7 +1563,7 @@ cpTag(TIFF* in, TIFF* out, uint16_t tag, uint16_t count, TIFFDataType type)
 		break;
           default:
                 TIFFError(TIFFFileName(in),
-                          "Data type %d is not supported, tag %d skipped",
+                          "Data type %"PRIu16" is not supported, tag %d skipped",
                           tag, type);
 	}
 }
@@ -1746,7 +1740,7 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
 			       &crop_data->corners[i].X1, &crop_data->corners[i].Y1,
 			       &crop_data->corners[i].X2, &crop_data->corners[i].Y2) != 4)
                       {
-                      TIFFError ("Unable to parse coordinates for region", "%d %s", i, optarg);
+                      TIFFError ("Unable to parse coordinates for region", "%u %s", i, optarg);
 		      TIFFError ("For valid options type", "tiffcrop -h");
                       exit (EXIT_FAILURE);
 		      }
@@ -2302,8 +2296,8 @@ main(int argc, char* argv[])
     if (dirnum > (total_images))
       {
       TIFFError (TIFFFileName(in), 
-      "Invalid image number %d, File contains only %d images", 
-		 (int)dirnum + 1, total_images);
+      "Invalid image number %"PRIu32", File contains only %"PRIu32" images",
+		 dirnum + 1u, total_images);
       if (out != NULL)
         (void) TIFFClose(out);
       return (1);
@@ -2311,7 +2305,7 @@ main(int argc, char* argv[])
 
     if (dirnum != 0 && !TIFFSetDirectory(in, (tdir_t)dirnum))
       {
-      TIFFError(TIFFFileName(in),"Error, setting subdirectory at %d", dirnum);
+      TIFFError(TIFFFileName(in),"Error, setting subdirectory at %"PRIu32, dirnum);
       if (out != NULL)
         (void) TIFFClose(out);
       return (1);
@@ -2349,7 +2343,7 @@ main(int argc, char* argv[])
 	    TIFFError ("Unable to open dump file for writing", "%s", temp_filename);
 	    exit (EXIT_FAILURE);
             }
-          dump_info(dump.infile, dump.format, "Reading image","%d from %s", 
+          dump_info(dump.infile, dump.format, "Reading image","%u from %s",
                     dump_images, TIFFFileName(in));
           } 
         length = strlen(dump.outfilename);
@@ -2368,7 +2362,7 @@ main(int argc, char* argv[])
 	      TIFFError ("Unable to open dump file for writing", "%s", temp_filename);
 	    exit (EXIT_FAILURE);
             }
-          dump_info(dump.outfile, dump.format, "Writing image","%d from %s", 
+          dump_info(dump.outfile, dump.format, "Writing image","%u from %s",
                     dump_images, TIFFFileName(in));
           } 
         }
@@ -2728,8 +2722,8 @@ static int dump_buffer (FILE* dumpfile, int format, uint32_t rows, uint32_t widt
     dump_ptr = buff + (i * width);
     if (format == DUMP_TEXT)
       dump_info (dumpfile, format, "", 
-                 "Row %4d, %d bytes at offset %d",
-	         row + i + 1, width, row * width);
+                 "Row %4"PRIu32", %"PRIu32" bytes at offset %"PRIu32,
+	         row + i + 1u, width, row * width);
      
     for (j = 0, k = width; k >= 10; j += 10, k -= 10, dump_ptr += 10)
       dump_data (dumpfile, format, "", dump_ptr, 10);
@@ -2765,13 +2759,13 @@ extractContigSamplesBytes (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesBytes", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamplesBytes", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -2832,13 +2826,13 @@ extractContigSamples8bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples8bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamples8bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
   
@@ -2910,13 +2904,13 @@ extractContigSamples16bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples16bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamples16bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -2999,13 +2993,13 @@ extractContigSamples24bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples24bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamples24bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -3110,13 +3104,13 @@ extractContigSamples32bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples32bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamples32bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -3213,13 +3207,13 @@ extractContigSamplesShifted8bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted8bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamplesShifted8bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -3294,13 +3288,13 @@ extractContigSamplesShifted16bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted16bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamplesShifted16bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -3384,13 +3378,13 @@ extractContigSamplesShifted24bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted24bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamplesShifted24bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -3484,13 +3478,13 @@ extractContigSamplesShifted32bits (uint8_t *in, uint8_t *out, uint32_t cols,
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted32bits", 
-               "Invalid start column value %d ignored", start);
+               "Invalid start column value %"PRIu32" ignored", start);
     start = 0;
     }
   if ((end == 0) || (end > cols))
     {
     TIFFError ("extractContigSamplesShifted32bits", 
-               "Invalid end column value %d ignored", end);
+               "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
 
@@ -3595,7 +3589,7 @@ extractContigSamplesToBuffer(uint8_t *out, uint8_t *in, uint32_t rows, uint32_t 
   if ((dump->outfile != NULL) && (dump->level == 4))
     {
     dump_info  (dump->outfile, dump->format, "extractContigSamplesToBuffer", 
-                "Sample %d, %d rows", sample + 1, rows + 1);
+                "Sample %"PRIu32", %"PRIu32" rows", sample + 1u, rows + 1u);
     }
   for (row = 0; row < rows; row++)
     {
@@ -3633,7 +3627,7 @@ extractContigSamplesToBuffer(uint8_t *out, uint8_t *in, uint32_t rows, uint32_t 
                                               spp, bps,  count, first_col, cols))
 	         return (1);
 	      break;
-      default: TIFFError ("extractContigSamplesToBuffer", "Unsupported bit depth: %d", bps);
+      default: TIFFError ("extractContigSamplesToBuffer", "Unsupported bit depth: %"PRIu16, bps);
 	       return (1);
       }
     if ((dump->outfile != NULL) && (dump->level == 4))
@@ -3668,7 +3662,7 @@ extractContigSamplesToTileBuffer(uint8_t *out, uint8_t *in, uint32_t rows, uint3
   if ((dump->outfile != NULL) && (dump->level == 4))
     {
     dump_info  (dump->outfile, dump->format, "extractContigSamplesToTileBuffer", 
-                "Sample %d, %d rows", sample + 1, rows + 1);
+                "Sample %"PRIu32", %"PRIu32" rows", sample + 1u, rows + 1u);
     }
 
   src_rowsize = ((bps * spp * imagewidth) + 7) / 8;
@@ -3710,7 +3704,7 @@ extractContigSamplesToTileBuffer(uint8_t *out, uint8_t *in, uint32_t rows, uint3
                                               spp, bps,  count, 0, cols))
 	         return (1);
 	      break;
-      default: TIFFError ("extractContigSamplesToTileBuffer", "Unsupported bit depth: %d", bps);
+      default: TIFFError ("extractContigSamplesToTileBuffer", "Unsupported bit depth: %"PRIu16, bps);
 	       return (1);
       }
     if ((dump->outfile != NULL) && (dump->level == 4))
@@ -3739,13 +3733,12 @@ static int readContigStripsIntoBuffer (TIFF* in, uint8_t* buf)
                 bytes_read = TIFFReadEncodedStrip (in, strip, bufp, -1);
                 rows = bytes_read / scanline_size;
                 if ((strip < (nstrips - 1)) && (bytes_read != (int32_t)stripsize))
-                        TIFFError("", "Strip %d: read %lu bytes, strip size %lu",
-                                  (int)strip + 1, (unsigned long) bytes_read,
-                                  (unsigned long)stripsize);
+                        TIFFError("", "Strip %"PRIu32": read %"PRId32" bytes, strip size %"PRIu32,
+                                  strip + 1, bytes_read, stripsize);
 
                 if (bytes_read < 0 && !ignore) {
-                        TIFFError("", "Error reading strip %lu after %lu rows",
-                                  (unsigned long) strip, (unsigned long)rows);
+                        TIFFError("", "Error reading strip %"PRIu32" after %"PRIu32" rows",
+                                  strip, rows);
                         return 0;
                 }
                 bufp += stripsize;
@@ -3783,7 +3776,7 @@ combineSeparateSamplesBytes (unsigned char *srcbuffs[], unsigned char *out,
       {
       for (s = 0; s < spp; s++)
         {
-        dump_info (dumpfile, format, "combineSeparateSamplesBytes","Input data, Sample %d", s);
+        dump_info (dumpfile, format, "combineSeparateSamplesBytes","Input data, Sample %"PRIu16, s);
         dump_buffer(dumpfile, format, 1, cols, row, srcbuffs[s] + (row * src_rowsize));
         }
       }
@@ -3878,8 +3871,8 @@ combineSeparateSamples8bits (uint8_t *in[], uint8_t *out, uint32_t cols,
         if ((dumpfile != NULL) && (level == 3))
           {
           dump_info (dumpfile, format, "",
-                   "Row %3d, Col %3d, Samples %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		   row + 1, col + 1, s, src_byte, src_bit, dst - out);
+                   "Row %3"PRIu32", Col %3"PRIu32", Samples %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		   row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
           dump_byte (dumpfile, format, "Match bits", matchbits);
           dump_byte (dumpfile, format, "Src   bits", *src);
           dump_byte (dumpfile, format, "Buff1 bits", buff1);
@@ -3896,8 +3889,8 @@ combineSeparateSamples8bits (uint8_t *in[], uint8_t *out, uint32_t cols,
       if ((dumpfile != NULL) && (level == 3))
         {
         dump_info (dumpfile, format, "",
-	         "Row %3d, Col %3d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-	         row + 1, col + 1, src_byte, src_bit, dst - out);
+	         "Row %3"PRIu32", Col %3"PRIu32", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+	         row + 1u, col + 1u, src_byte, src_bit, dst - out);
                  dump_byte (dumpfile, format, "Final bits", buff1);
         }
       }
@@ -3985,8 +3978,8 @@ combineSeparateSamples16bits (uint8_t *in[], uint8_t *out, uint32_t cols,
 	if ((dumpfile != NULL) && (level == 3))
 	  {
 	  dump_info (dumpfile, format, "",
-		       "Row %3d, Col %3d, Samples %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		       row + 1, col + 1, s, src_byte, src_bit, dst - out);
+		       "Row %3"PRIu32", Col %3"PRIu32", Samples %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		       row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
 
 	  dump_short (dumpfile, format, "Match bits", matchbits);
 	  dump_data  (dumpfile, format, "Src   bits", src, 2);
@@ -4097,8 +4090,8 @@ combineSeparateSamples24bits (uint8_t *in[], uint8_t *out, uint32_t cols,
 	if ((dumpfile != NULL) && (level == 3))
 	  {
 	  dump_info (dumpfile, format, "",
-		       "Row %3d, Col %3d, Samples %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		       row + 1, col + 1, s, src_byte, src_bit, dst - out);
+		       "Row %3"PRIu32", Col %3"PRIu32", Samples %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		       row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
 	  dump_long (dumpfile, format, "Match bits ", matchbits);
 	  dump_data (dumpfile, format, "Src   bits ", src, 4);
 	  dump_long (dumpfile, format, "Buff1 bits ", buff1);
@@ -4234,8 +4227,8 @@ combineSeparateSamples32bits (uint8_t *in[], uint8_t *out, uint32_t cols,
 	if ((dumpfile != NULL) && (level == 3))
 	  { 
 	  dump_info (dumpfile, format, "",
-		     "Row %3d, Col %3d, Sample %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		     row + 1, col + 1, s, src_byte, src_bit, dst - out);
+		     "Row %3"PRIu32", Col %3"PRIu32", Sample %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		     row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
 	  dump_wide (dumpfile, format, "Match bits ", matchbits);
 	  dump_data (dumpfile, format, "Src   bits ", src, 8);
 	  dump_wide (dumpfile, format, "Buff1 bits ", buff1);
@@ -4306,7 +4299,7 @@ combineSeparateTileSamplesBytes (unsigned char *srcbuffs[], unsigned char *out,
       {
       for (s = 0; s < spp; s++)
         {
-        dump_info (dumpfile, format, "combineSeparateTileSamplesBytes","Input data, Sample %d", s);
+        dump_info (dumpfile, format, "combineSeparateTileSamplesBytes","Input data, Sample %"PRIu16, s);
         dump_buffer(dumpfile, format, 1, cols, row, srcbuffs[s] + (row * src_rowsize));
         }
       }
@@ -4403,8 +4396,8 @@ combineSeparateTileSamples8bits (uint8_t *in[], uint8_t *out, uint32_t cols,
         if ((dumpfile != NULL) && (level == 3))
           {
           dump_info (dumpfile, format, "",
-                   "Row %3d, Col %3d, Samples %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		   row + 1, col + 1, s, src_byte, src_bit, dst - out);
+                   "Row %3"PRIu32", Col %3"PRIu32", Samples %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		   row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
           dump_byte (dumpfile, format, "Match bits", matchbits);
           dump_byte (dumpfile, format, "Src   bits", *src);
           dump_byte (dumpfile, format, "Buff1 bits", buff1);
@@ -4509,8 +4502,8 @@ combineSeparateTileSamples16bits (uint8_t *in[], uint8_t *out, uint32_t cols,
 	if ((dumpfile != NULL) && (level == 3))
 	  {
 	  dump_info (dumpfile, format, "",
-		       "Row %3d, Col %3d, Samples %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		       row + 1, col + 1, s, src_byte, src_bit, dst - out);
+		       "Row %3"PRIu32", Col %3"PRIu32", Samples %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		       row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
 
 	  dump_short (dumpfile, format, "Match bits", matchbits);
 	  dump_data  (dumpfile, format, "Src   bits", src, 2);
@@ -4621,8 +4614,8 @@ combineSeparateTileSamples24bits (uint8_t *in[], uint8_t *out, uint32_t cols,
 	if ((dumpfile != NULL) && (level == 3))
 	  {
 	  dump_info (dumpfile, format, "",
-		       "Row %3d, Col %3d, Samples %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		       row + 1, col + 1, s, src_byte, src_bit, dst - out);
+		       "Row %3"PRIu32", Col %3"PRIu32", Samples %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		       row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
 	  dump_long (dumpfile, format, "Match bits ", matchbits);
 	  dump_data (dumpfile, format, "Src   bits ", src, 4);
 	  dump_long (dumpfile, format, "Buff1 bits ", buff1);
@@ -4759,8 +4752,8 @@ combineSeparateTileSamples32bits (uint8_t *in[], uint8_t *out, uint32_t cols,
 	if ((dumpfile != NULL) && (level == 3))
 	  { 
 	  dump_info (dumpfile, format, "",
-		     "Row %3d, Col %3d, Sample %d, Src byte offset %3d  bit offset %2d  Dst offset %3d",
-		     row + 1, col + 1, s, src_byte, src_bit, dst - out);
+		     "Row %3"PRIu32", Col %3"PRIu32", Sample %"PRIu16", Src byte offset %3"PRIu32"  bit offset %2"PRIu32"  Dst offset %3td",
+		     row + 1u, col + 1u, s, src_byte, src_bit, dst - out);
 	  dump_wide (dumpfile, format, "Match bits ", matchbits);
 	  dump_data (dumpfile, format, "Src   bits ", src, 8);
 	  dump_wide (dumpfile, format, "Buff1 bits ", buff1);
@@ -4850,10 +4843,10 @@ static int readSeparateStripsIntoBuffer (TIFF *in, uint8_t *obuf, uint32_t lengt
   if ((dump->infile != NULL) && (dump->level == 3))
     {
     dump_info  (dump->infile, dump->format, "", 
-                "Image width %d, length %d, Scanline size, %4d bytes",
+                "Image width %"PRIu32", length %"PRIu32", Scanline size, %4"PRId64" bytes",
                 width, length,  scanlinesize);
     dump_info  (dump->infile, dump->format, "", 
-                "Bits per sample %d, Samples per pixel %d, Shift width %d",
+                "Bits per sample %"PRIu16", Samples per pixel %"PRIu16", Shift width %d",
 		bps, spp, shift_width);
     }
 
@@ -4879,7 +4872,7 @@ static int readSeparateStripsIntoBuffer (TIFF *in, uint8_t *obuf, uint32_t lengt
     if (!buff)
       {
       TIFFError ("readSeparateStripsIntoBuffer", 
-                 "Unable to allocate strip read buffer for sample %d", s);
+                 "Unable to allocate strip read buffer for sample %"PRIu16, s);
       for (i = 0; i < s; i++)
         _TIFFfree (srcbuffs[i]);
       return 0;
@@ -4902,13 +4895,13 @@ static int readSeparateStripsIntoBuffer (TIFF *in, uint8_t *obuf, uint32_t lengt
       if (bytes_read < 0 && !ignore)
         {
         TIFFError(TIFFFileName(in),
-	          "Error, can't read strip %lu for sample %d",
-         	   (unsigned long) strip, s + 1);
+	          "Error, can't read strip %"PRIu32" for sample %"PRIu32,
+         	   strip, s + 1u);
         result = 0;
         break;
         }
 #ifdef DEVELMODE
-      TIFFError("", "Strip %2d, read %5d bytes for %4d scanlines, shift width %d", 
+      TIFFError("", "Strip %2"PRIu32", read %5"PRId32" bytes for %4"PRIu32" scanlines, shift width %d",
 		strip, bytes_read, rows_this_strip, shift_width);
 #endif
       }
@@ -4966,7 +4959,7 @@ static int readSeparateStripsIntoBuffer (TIFF *in, uint8_t *obuf, uint32_t lengt
                   break;
 		  }
 	        break;
-        default: TIFFError ("readSeparateStripsIntoBuffer", "Unsupported bit depth: %d", bps);
+        default: TIFFError ("readSeparateStripsIntoBuffer", "Unsupported bit depth: %"PRIu16, bps);
                   result = 0;
                   break;
         }
@@ -5465,9 +5458,9 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
 
   if (dump->outfile != NULL)
     {
-    dump_info (dump->outfile, dump->format, "", "Margins: Top: %d  Left: %d  Bottom: %d  Right: %d", 
+    dump_info (dump->outfile, dump->format, "", "Margins: Top: %"PRIu32"  Left: %"PRIu32"  Bottom: %"PRIu32"  Right: %"PRIu32,
            offsets.tmargin, offsets.lmargin, offsets.bmargin, offsets.rmargin); 
-    dump_info (dump->outfile, dump->format, "", "Crop region within margins: Adjusted Width:  %6d  Length: %6d", 
+    dump_info (dump->outfile, dump->format, "", "Crop region within margins: Adjusted Width:  %6"PRIu32"  Length: %6"PRIu32,
            offsets.crop_width, offsets.crop_length);
     }
 
@@ -5622,8 +5615,8 @@ getCropOffsets(struct image_data *image, struct crop_mask *crop, struct dump_opt
 
 
   if (dump->outfile != NULL)
-    dump_info (dump->outfile, dump->format, "", "Zone %d, width: %4d, length: %4d, x1: %4d  x2: %4d  y1: %4d  y2: %4d",
-                    i + 1, (uint32_t)zwidth, (uint32_t)zlength,
+    dump_info (dump->outfile, dump->format, "", "Zone %d, width: %4"PRIu32", length: %4"PRIu32", x1: %4"PRIu32"  x2: %4"PRIu32"  y1: %4"PRIu32"  y2: %4"PRIu32,
+                    i + 1, zwidth, zlength,
                crop->regionlist[i].x1, crop->regionlist[i].x2,
                crop->regionlist[i].y1, crop->regionlist[i].y2);
     }
@@ -5706,7 +5699,7 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
                    "Hmargin: %3.2f, Vmargin: %3.2f",
 	     page->name, page->vres, page->hres,
              page->hmargin, page->vmargin);
-    TIFFError("", "Res_unit: %d, Scale: %3.2f, Page width: %3.2f, length: %3.2f", 
+    TIFFError("", "Res_unit: %"PRIu16", Scale: %3.2f, Page width: %3.2f, length: %3.2f",
            page->res_unit, scale, pwidth, plength);
     }
 
@@ -6062,7 +6055,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
 
   if ((bps == 0) || (spp == 0))
     {
-    TIFFError("loadImage", "Invalid samples per pixel (%d) or bits per sample (%d)",
+    TIFFError("loadImage", "Invalid samples per pixel (%"PRIu16") or bits per sample (%"PRIu16")",
 	       spp, bps);
     return (-1);
     }
@@ -6099,14 +6092,14 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
       
 #ifdef DEBUG2
       TIFFError("loadImage",
-	        "Tilesize %u is too small, using ntiles * tilelength * tilerowsize %lu",
-                tlsize, (unsigned long)buffsize);
+	        "Tilesize %"PRIu32" is too small, using ntiles * tilelength * tilerowsize %"PRIu32,
+                tlsize, buffsize);
 #endif
       }
     
     if (dump->infile != NULL)
       dump_info (dump->infile, dump->format, "", 
-                 "Tilesize: %u, Number of Tiles: %u, Tile row size: %u",
+                 "Tilesize: %"PRIu32", Number of Tiles: %"PRIu32", Tile row size: %"PRIu32,
                  tlsize, ntiles, tile_rowsize);
     }
   else
@@ -6139,14 +6132,14 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
       buffsize =  ((length * width * spp * bps) + 7) / 8;
 #ifdef DEBUG2
       TIFFError("loadImage",
-	        "Stripsize %u is too small, using imagelength * width * spp * bps / 8 = %lu",
+	        "Stripsize %"PRIu32" is too small, using imagelength * width * spp * bps / 8 = %"PRIu32,
                 stsize, (unsigned long)buffsize);
 #endif
       }
     
     if (dump->infile != NULL)
       dump_info (dump->infile, dump->format, "",
-                 "Stripsize: %u, Number of Strips: %u, Rows per Strip: %u, Scanline size: %u",
+                 "Stripsize: %"PRIu32", Number of Strips: %"PRIu32", Rows per Strip: %"PRIu32", Scanline size: %"PRIu32,
 		 stsize, nstrips, rowsperstrip, scanlinesize);
     }
   
@@ -6165,7 +6158,7 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
       if (subsampling_horiz != 1 || subsampling_vert != 1)
         {
 	TIFFError("loadImage", 
-		"Can't copy/convert subsampled image with subsampling %d horiz %d vert",
+		"Can't copy/convert subsampled image with subsampling %"PRIu16" horiz %"PRIu16" vert",
                 subsampling_horiz, subsampling_vert);
         return (-1);
         }
@@ -6265,10 +6258,10 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
   if ((dump->infile != NULL) && (dump->level == 2))
     {
     dump_info  (dump->infile, dump->format, "loadImage", 
-                "Image width %d, length %d, Raw image data, %4d bytes",
+                "Image width %"PRIu32", length %"PRIu32", Raw image data, %4"PRIu32" bytes",
                 width, length,  buffsize);
     dump_info  (dump->infile, dump->format, "", 
-                "Bits per sample %d, Samples per pixel %d", bps, spp);
+                "Bits per sample %"PRIu16", Samples per pixel %"PRIu16, bps, spp);
 
     for (i = 0; i < length; i++)
       dump_buffer(dump->infile, dump->format, 1, scanlinesize, 
@@ -6312,8 +6305,8 @@ static int  correct_orientation(struct image_data *image, unsigned char **work_b
       rotation = (uint16_t) 270;
     else
       {
-      TIFFError ("correct_orientation", "Invalid rotation value: %d", 
-                  image->adjustments & ROTATE_ANY);
+      TIFFError ("correct_orientation", "Invalid rotation value: %"PRIu16,
+                 (uint16_t) (image->adjustments & ROTATE_ANY));
       return (-1);
       }
  
@@ -6418,7 +6411,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                       last_col + 1))
                          {
 		         TIFFError("extractCompositeRegions",
-                                   "Unable to extract row %d", row);
+                                   "Unable to extract row %"PRIu32, row);
 		         return (1);
 		         }
 		       break;
@@ -6430,7 +6423,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                prev_trailing_bits))
                            {
 		           TIFFError("extractCompositeRegions",
-                                     "Unable to extract row %d", row);
+                                     "Unable to extract row %"PRIu32, row);
 		           return (1);
 		           }
 		         break;
@@ -6442,7 +6435,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                 prev_trailing_bits))
                            {
 		           TIFFError("extractCompositeRegions",
-                                     "Unable to extract row %d", row);
+                                     "Unable to extract row %"PRIu32, row);
 		           return (1);
 		           }
 		        break;
@@ -6452,7 +6445,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                prev_trailing_bits))
                           {
 		          TIFFError("extractCompositeRegions",
-                                    "Unable to extract row %d", row);
+                                    "Unable to extract row %"PRIu32, row);
 		          return (1);
 		          }
 		        break;
@@ -6464,11 +6457,11 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                prev_trailing_bits))
                           {
 		          TIFFError("extractCompositeRegions",
-                                    "Unable to extract row %d", row);
+                                    "Unable to extract row %"PRIu32, row);
 		          return (1);
 		          }
 		        break;
-               default: TIFFError("extractCompositeRegions", "Unsupported bit depth %d", bps);
+               default: TIFFError("extractCompositeRegions", "Unsupported bit depth %"PRIu16, bps);
 		        return (1);
 	       }
              }
@@ -6500,7 +6493,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                       first_col, last_col + 1))
                          {
 		         TIFFError("extractCompositeRegions",
-                                   "Unable to extract row %d", row);
+                                   "Unable to extract row %"PRIu32, row);
 		         return (1);
 		         }
 		       break;
@@ -6512,7 +6505,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                prev_trailing_bits))
                            {
 		           TIFFError("extractCompositeRegions",
-                                     "Unable to extract row %d", row);
+                                     "Unable to extract row %"PRIu32, row);
 		           return (1);
 		           }
 		         break;
@@ -6524,7 +6517,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                 prev_trailing_bits))
                            {
 		           TIFFError("extractCompositeRegions",
-                                     "Unable to extract row %d", row);
+                                     "Unable to extract row %"PRIu32, row);
 		           return (1);
 		           }
 		        break;
@@ -6534,7 +6527,7 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                prev_trailing_bits))
                           {
 		          TIFFError("extractCompositeRegions",
-                                    "Unable to extract row %d", row);
+                                    "Unable to extract row %"PRIu32, row);
 		          return (1);
 		          }
 		        break;
@@ -6546,11 +6539,11 @@ extractCompositeRegions(struct image_data *image,  struct crop_mask *crop,
                                                                prev_trailing_bits))
                           {
 		          TIFFError("extractCompositeRegions",
-                                    "Unable to extract row %d", row);
+                                    "Unable to extract row %"PRIu32, row);
 		          return (1);
 		          }
 		        break;
-               default: TIFFError("extractCompositeRegions", "Unsupported bit depth %d", bps);
+               default: TIFFError("extractCompositeRegions", "Unsupported bit depth %"PRIu16, bps);
 		        return (1);
 	       }
 	     }
@@ -6643,7 +6636,7 @@ extractSeparateRegion(struct image_data *image,  struct crop_mask *crop,
                                              last_col + 1))
                 {
 	        TIFFError("extractSeparateRegion",
-                          "Unable to extract row %d", row);
+                          "Unable to extract row %"PRIu32, row);
 	        return (1);
 	        }
 	      break;
@@ -6655,7 +6648,7 @@ extractSeparateRegion(struct image_data *image,  struct crop_mask *crop,
                                                       prev_trailing_bits))
                   {
 		  TIFFError("extractSeparateRegion",
-                            "Unable to extract row %d", row);
+                            "Unable to extract row %"PRIu32, row);
 		  return (1);
 		  }
 		  break;
@@ -6667,7 +6660,7 @@ extractSeparateRegion(struct image_data *image,  struct crop_mask *crop,
                                                        prev_trailing_bits))
                   {
 		  TIFFError("extractSeparateRegion",
-                            "Unable to extract row %d", row);
+                            "Unable to extract row %"PRIu32, row);
 		  return (1);
 		  }
 	      break;
@@ -6677,7 +6670,7 @@ extractSeparateRegion(struct image_data *image,  struct crop_mask *crop,
                                                      prev_trailing_bits))
                 {
 		TIFFError("extractSeparateRegion",
-                          "Unable to extract row %d", row);
+                          "Unable to extract row %"PRIu32, row);
 		return (1);
 		}
 	      break;
@@ -6689,11 +6682,11 @@ extractSeparateRegion(struct image_data *image,  struct crop_mask *crop,
                                                      prev_trailing_bits))
                 {
 		TIFFError("extractSeparateRegion",
-                          "Unable to extract row %d", row);
+                          "Unable to extract row %"PRIu32, row);
 		return (1);
 		}
 	      break;
-      default: TIFFError("extractSeparateRegion", "Unsupported bit depth %d", bps);
+      default: TIFFError("extractSeparateRegion", "Unsupported bit depth %"PRIu16, bps);
 	       return (1);
       }
     }
@@ -6770,11 +6763,11 @@ extractImageSection(struct image_data *image, struct pageseg *section,
   trailing_bits = (sect_width * bps) % 8;
 
 #ifdef DEVELMODE
-    TIFFError ("", "First row: %d, last row: %d, First col: %d, last col: %d\n",
+    TIFFError ("", "First row: %"PRIu32", last row: %"PRIu32", First col: %"PRIu32", last col: %"PRIu32"\n",
            first_row, last_row, first_col, last_col);
-    TIFFError ("", "Image width: %d, Image length: %d, bps: %d, spp: %d\n",
+    TIFFError ("", "Image width: %"PRIu32", Image length: %"PRIu32", bps: %"PRIu16", spp: %"PRIu16"\n",
 	   img_width, img_length, bps, spp);
-    TIFFError ("", "Sect  width: %d,  Sect length: %d, full bytes: %d trailing bits %d\n", 
+    TIFFError ("", "Sect  width: %"PRIu32",  Sect length: %"PRIu32", full bytes: %"PRIu32" trailing bits %"PRIu32"\n", 
            sect_width, sect_length, full_bytes, trailing_bits);
 #endif
 
@@ -6788,7 +6781,7 @@ extractImageSection(struct image_data *image, struct pageseg *section,
       src_offset = row_offset + col_offset;
 
 #ifdef DEVELMODE
-        TIFFError ("", "Src offset: %8d, Dst offset: %8d", src_offset, dst_offset); 
+        TIFFError ("", "Src offset: %8"PRIu32", Dst offset: %8"PRIu32, src_offset, dst_offset); 
 #endif
       _TIFFmemcpy (sect_buff + dst_offset, src_buff + src_offset, full_bytes);
       dst_offset += full_bytes;
@@ -6819,7 +6812,7 @@ extractImageSection(struct image_data *image, struct pageseg *section,
         sprintf(&bitarray[j], (bitset) ? "1" : "0");
         }
       bitarray[18] = '\0';
-      TIFFError ("", "Row: %3d Offset1: %d,  Shift1: %d,    Offset2: %d,  Shift2:  %d\n", 
+      TIFFError ("", "Row: %3d Offset1: %"PRIu32",  Shift1: %"PRIu32",    Offset2: %"PRIu32",  Shift2:  %"PRIu32"\n", 
                  row, offset1, shift1, offset2, shift2); 
 #endif
 
@@ -6829,7 +6822,7 @@ extractImageSection(struct image_data *image, struct pageseg *section,
 	_TIFFmemcpy (sect_buff + dst_offset, src_buff + offset1, full_bytes);
 
 #ifdef DEVELMODE
-	TIFFError ("", "        Aligned data src offset1: %8d, Dst offset: %8d\n", offset1, dst_offset); 
+	TIFFError ("", "        Aligned data src offset1: %8"PRIu32", Dst offset: %8"PRIu32"\n", offset1, dst_offset);
 	sprintf(&bitarray[18], "\n");
 	sprintf(&bitarray[19], "\t");
         for (j = 20, k = 7; j < 28; j++, k--)
@@ -6847,7 +6840,7 @@ extractImageSection(struct image_data *image, struct pageseg *section,
 	  bytebuff2 = src_buff[offset2] & ((unsigned char)255 << (7 - shift2));
           sect_buff[dst_offset] = bytebuff2;
 #ifdef DEVELMODE
-	  TIFFError ("", "        Trailing bits src offset:  %8d, Dst offset: %8d\n", 
+	  TIFFError ("", "        Trailing bits src offset:  %8"PRIu32", Dst offset: %8"PRIu32"\n",
                               offset2, dst_offset); 
           for (j = 30, k = 7; j < 38; j++, k--)
             {
@@ -6863,7 +6856,7 @@ extractImageSection(struct image_data *image, struct pageseg *section,
       else   /* each destination byte will have to be built from two source bytes*/
         {
 #ifdef DEVELMODE
-	  TIFFError ("", "        Unalligned data src offset: %8d, Dst offset: %8d\n", offset1 , dst_offset); 
+	  TIFFError ("", "        Unalligned data src offset: %8"PRIu32", Dst offset: %8"PRIu32"\n", offset1 , dst_offset);
 #endif
         for (j = 0; j <= full_bytes; j++) 
           {
@@ -6887,7 +6880,7 @@ extractImageSection(struct image_data *image, struct pageseg *section,
         if (trailing_bits != 0)
           {
 #ifdef DEVELMODE
-	    TIFFError ("", "        Trailing bits   src offset: %8d, Dst offset: %8d\n", offset1 + full_bytes, dst_offset); 
+	    TIFFError ("", "        Trailing bits   src offset: %8"PRIu32", Dst offset: %8"PRIu32"\n", offset1 + full_bytes, dst_offset);
 #endif
 	  if (shift2 > shift1)
             {
@@ -7057,7 +7050,7 @@ writeImageSections(TIFF *in, TIFF *out, struct image_data *image,
   if ((k < 1) || (k > MAX_SECTIONS))
    {
    TIFFError("writeImageSections",
-	     "%d Rows and Columns exceed maximum sections\nIncrease resolution or reduce sections", k);
+	     "%"PRIu32" Rows and Columns exceed maximum sections\nIncrease resolution or reduce sections", k);
    return (-1);
    }
 
@@ -7519,7 +7512,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
                       &crop->combined_length, &crop_buff))
         {
         TIFFError("processCropSelections", 
-                  "Failed to rotate composite regions by %d degrees", crop->rotation);
+                  "Failed to rotate composite regions by %"PRIu32" degrees", crop->rotation);
         return (-1);
         }
       seg_buffs[0].buffer = crop_buff;
@@ -7625,7 +7618,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
 			&crop->regionlist[i].length, &crop_buff))
           {
           TIFFError("processCropSelections", 
-                    "Failed to rotate crop region by %d degrees", crop->rotation);
+                    "Failed to rotate crop region by %"PRIu16" degrees", crop->rotation);
           return (-1);
           }
         total_width  += crop->regionlist[i].width;
@@ -7753,7 +7746,7 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
                     &crop->combined_length, crop_buff_ptr))
       {
       TIFFError("createCroppedImage", 
-                "Failed to rotate image or cropped selection by %d degrees", crop->rotation);
+                "Failed to rotate image or cropped selection by %"PRIu16" degrees", crop->rotation);
       return (-1);
       }
     }
@@ -8097,7 +8090,7 @@ rotateContigSamples8bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_t
                   break;
         case 270: next = src + src_byte + (row * rowsize);
 	          break;
-	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %d", rotation);
+	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %"PRIu16, rotation);
                   return (1);
         }
       matchbits = maskbits << (8 - src_bit - bps); 
@@ -8173,7 +8166,7 @@ rotateContigSamples16bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_
                   break;
         case 270: next = src + src_byte + (row * rowsize);
 	          break;
-	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %d", rotation);
+	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %"PRIu16, rotation);
                   return (1);
         }
       matchbits = maskbits << (16 - src_bit - bps); 
@@ -8257,7 +8250,7 @@ rotateContigSamples24bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_
                   break;
         case 270: next = src + src_byte + (row * rowsize);
 	          break;
-	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %d", rotation);
+	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %"PRIu16, rotation);
                   return (1);
         }
       matchbits = maskbits << (32 - src_bit - bps); 
@@ -8357,7 +8350,7 @@ rotateContigSamples32bits(uint16_t rotation, uint16_t spp, uint16_t bps, uint32_
                   break;
         case 270: next = src + src_byte + (row * rowsize);
 	          break;
-	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %d", rotation);
+	default:  TIFFError("rotateContigSamples8bits", "Invalid rotation %"PRIu16, rotation);
                   return (1);
         }
       matchbits = maskbits << (64 - src_bit - bps); 
@@ -8453,7 +8446,7 @@ rotateImage(uint16_t rotation, struct image_data *image, uint32_t *img_width,
     case 90:
     case 180:
     case 270: break;
-    default:  TIFFError("rotateImage", "Invalid rotation angle %d", rotation);
+    default:  TIFFError("rotateImage", "Invalid rotation angle %"PRIu16, rotation);
               return (-1);
     }
 
@@ -8523,7 +8516,7 @@ rotateImage(uint16_t rotation, struct image_data *image, uint32_t *img_width,
                               return (-1);
                               }
                              break;
-                    default: TIFFError("rotateImage","Unsupported bit depth %d", bps);
+                    default: TIFFError("rotateImage","Unsupported bit depth %"PRIu16, bps);
 		             _TIFFfree(rbuff);
                              return (-1);      
                     }
@@ -8592,7 +8585,7 @@ rotateImage(uint16_t rotation, struct image_data *image, uint32_t *img_width,
                               return (-1);
                               }
                              break;
-                    default: TIFFError("rotateImage","Unsupported bit depth %d", bps);
+                    default: TIFFError("rotateImage","Unsupported bit depth %"PRIu16, bps);
 		             _TIFFfree(rbuff);
                              return (-1);      
 		    }
@@ -8669,7 +8662,7 @@ rotateImage(uint16_t rotation, struct image_data *image, uint32_t *img_width,
                               return (-1);
                               }
                              break;
-                    default: TIFFError("rotateImage","Unsupported bit depth %d", bps);
+                    default: TIFFError("rotateImage","Unsupported bit depth %"PRIu16, bps);
 		             _TIFFfree(rbuff);
                              return (-1);      
 		    }
@@ -9063,7 +9056,7 @@ reverseSamplesBytes (uint16_t spp, uint16_t bps, uint32_t width,
 		dst -= spp;
                 }
 	     break;
-     default: TIFFError("reverseSamplesBytes","Unsupported bit depth %d", bps);
+     default: TIFFError("reverseSamplesBytes","Unsupported bit depth %"PRIu16, bps);
        return (1);
      }
   return (0);
@@ -9166,7 +9159,7 @@ mirrorImage(uint16_t spp, uint16_t bps, uint16_t mirror, uint32_t width, uint32_
                               }
                              _TIFFmemcpy (src, line_buff, rowsize);
                              break;
-                    default: TIFFError("mirrorImage","Unsupported bit depth %d", bps);
+                    default: TIFFError("mirrorImage","Unsupported bit depth %"PRIu16, bps);
 		             _TIFFfree(line_buff);
                              return (-1);      
                     }
@@ -9176,7 +9169,7 @@ mirrorImage(uint16_t spp, uint16_t bps, uint16_t mirror, uint32_t width, uint32_
 		}
              break;
 
-    default: TIFFError ("mirrorImage", "Invalid mirror axis %d", mirror);
+    default: TIFFError ("mirrorImage", "Invalid mirror axis %"PRIu16, mirror);
              return (-1);
              break;
     }
@@ -9240,7 +9233,7 @@ invertImage(uint16_t photometric, uint16_t spp, uint16_t bps, uint32_t width, ui
                 src++;
                 }
             break;
-    default: TIFFError("invertImage", "Unsupported bit depth %d", bps);
+    default: TIFFError("invertImage", "Unsupported bit depth %"PRIu16, bps);
       return (-1);
     }
 

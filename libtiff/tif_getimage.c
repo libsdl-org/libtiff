@@ -90,7 +90,7 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 		case 16:
 			break;
 		default:
-			sprintf(emsg, "Sorry, can not handle images with %d-bit samples",
+			sprintf(emsg, "Sorry, can not handle images with %"PRIu16"-bit samples",
 			    td->td_bitspersample);
 			return (0);
 	}
@@ -120,8 +120,8 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 			    && td->td_samplesperpixel != 1
 			    && td->td_bitspersample < 8 ) {
 				sprintf(emsg,
-				    "Sorry, can not handle contiguous data with %s=%d, "
-				    "and %s=%d and Bits/Sample=%d",
+				    "Sorry, can not handle contiguous data with %s=%"PRIu16", "
+				    "and %s=%"PRIu16" and Bits/Sample=%"PRIu16"",
 				    photoTag, photometric,
 				    "Samples/pixel", td->td_samplesperpixel,
 				    td->td_bitspersample);
@@ -160,7 +160,7 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 				}
 				if (td->td_samplesperpixel < 4) {
 					sprintf(emsg,
-					    "Sorry, can not handle separated image with %s=%d",
+					    "Sorry, can not handle separated image with %s=%"PRIu16,
 					    "Samples/pixel", td->td_samplesperpixel);
 					return 0;
 				}
@@ -181,13 +181,13 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 				return (0);
 			}
 			if (td->td_planarconfig != PLANARCONFIG_CONTIG) {
-				sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
+				sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%"PRIu16,
 				    "Planarconfiguration", td->td_planarconfig);
 				return (0);
 			}
 			if ( td->td_samplesperpixel != 3 || colorchannels != 3 ) {
                                 sprintf(emsg,
-                                        "Sorry, can not handle image with %s=%d, %s=%d",
+                                        "Sorry, can not handle image with %s=%"PRIu16", %s=%d",
                                         "Samples/pixel", td->td_samplesperpixel,
                                         "colorchannels", colorchannels);
                                 return 0;
@@ -196,7 +196,7 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
 		case PHOTOMETRIC_CIELAB:
                         if ( td->td_samplesperpixel != 3 || colorchannels != 3 || td->td_bitspersample != 8 ) {
                                 sprintf(emsg,
-                                        "Sorry, can not handle image with %s=%d, %s=%d and %s=%d",
+                                        "Sorry, can not handle image with %s=%"PRIu16", %s=%d and %s=%"PRIu16,
                                         "Samples/pixel", td->td_samplesperpixel,
                                         "colorchannels", colorchannels,
                                         "Bits/sample", td->td_bitspersample);
@@ -204,7 +204,7 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
                         }
 			break;
                 default:
-			sprintf(emsg, "Sorry, can not handle image with %s=%d",
+			sprintf(emsg, "Sorry, can not handle image with %s=%"PRIu16,
 			    photoTag, photometric);
 			return (0);
 	}
@@ -302,7 +302,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 		case 16:
 			break;
 		default:
-			sprintf(emsg, "Sorry, can not handle images with %d-bit samples",
+			sprintf(emsg, "Sorry, can not handle images with %"PRIu16"-bit samples",
 			    img->bitspersample);
 			goto fail_return;
 	}
@@ -385,8 +385,8 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 			    && img->samplesperpixel != 1
 			    && img->bitspersample < 8 ) {
 				sprintf(emsg,
-				    "Sorry, can not handle contiguous data with %s=%d, "
-				    "and %s=%d and Bits/Sample=%d",
+				    "Sorry, can not handle contiguous data with %s=%"PRIu16", "
+				    "and %s=%"PRIu16" and Bits/Sample=%"PRIu16,
 				    photoTag, img->photometric,
 				    "Samples/pixel", img->samplesperpixel,
 				    img->bitspersample);
@@ -431,12 +431,12 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 				uint16_t inkset;
 				TIFFGetFieldDefaulted(tif, TIFFTAG_INKSET, &inkset);
 				if (inkset != INKSET_CMYK) {
-					sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
+					sprintf(emsg, "Sorry, can not handle separated image with %s=%"PRIu16,
 					    "InkSet", inkset);
                                         goto fail_return;
 				}
 				if (img->samplesperpixel < 4) {
-					sprintf(emsg, "Sorry, can not handle separated image with %s=%d",
+					sprintf(emsg, "Sorry, can not handle separated image with %s=%"PRIu16,
 					    "Samples/pixel", img->samplesperpixel);
                                         goto fail_return;
 				}
@@ -459,7 +459,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
                                 goto fail_return;
 			}
 			if (planarconfig != PLANARCONFIG_CONTIG) {
-				sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%d",
+				sprintf(emsg, "Sorry, can not handle LogLuv images with %s=%"PRIu16,
 				    "Planarconfiguration", planarconfig);
 				return (0);
 			}
@@ -470,7 +470,7 @@ TIFFRGBAImageBegin(TIFFRGBAImage* img, TIFF* tif, int stop, char emsg[1024])
 		case PHOTOMETRIC_CIELAB:
 			break;
 		default:
-			sprintf(emsg, "Sorry, can not handle image with %s=%d",
+			sprintf(emsg, "Sorry, can not handle image with %s=%"PRIu16,
 			    photoTag, img->photometric);
                         goto fail_return;
 	}

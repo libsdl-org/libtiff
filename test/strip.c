@@ -57,8 +57,8 @@ write_strips(TIFF *tif, const tdata_t array, const tsize_t size)
 
 		if (TIFFWriteEncodedStrip(tif, strip, (char *)array + offset,
 					  bufsize) != bufsize) {
-			fprintf (stderr, "Can't write strip %lu.\n",
-				 (unsigned long)strip);
+			fprintf (stderr, "Can't write strip %"PRIu32".\n",
+				 strip);
 			return -1;
 		}
         }
@@ -97,13 +97,13 @@ read_strips(TIFF *tif, const tdata_t array, const tsize_t size)
 			bufsize = stripsize;
 
 		if (TIFFReadEncodedStrip(tif, strip, buf, -1) != bufsize) {
-			fprintf (stderr, "Can't read strip %lu.\n",
-				 (unsigned long)strip);
+			fprintf (stderr, "Can't read strip %"PRIu32".\n",
+				 strip);
 			return -1;
 		}
 		if (memcmp(buf, (char *)array + offset, bufsize) != 0) {
-			fprintf (stderr, "Wrong data read for strip %lu.\n",
-				 (unsigned long)strip);
+			fprintf (stderr, "Wrong data read for strip %"PRIu32".\n",
+				 strip);
 			_TIFFfree(buf);
 			return -1;
 		}
@@ -169,10 +169,10 @@ failure:
 	TIFFClose(tif);
 openfailure:
 	fprintf (stderr, "Can't create test TIFF file %s:\n"
-"    ImageWidth=%ld, ImageLength=%ld, RowsPerStrip=%ld, Compression=%d,\n"
-"    BitsPerSample=%d, SamplesPerPixel=%d, SampleFormat=%d,\n"
-"    PlanarConfiguration=%d, PhotometricInterpretation=%d.\n",
-		 name, (long) width, (long) length, (long) rowsperstrip,
+"    ImageWidth=%"PRIu32", ImageLength=%"PRIu32", RowsPerStrip=%"PRIu32", Compression=%"PRIu16",\n"
+"    BitsPerSample=%"PRIu16", SamplesPerPixel=%"PRIu16", SampleFormat=%"PRIu16",\n"
+"    PlanarConfiguration=%"PRIu16", PhotometricInterpretation=%"PRIu16".\n",
+		 name, width, length, rowsperstrip,
                  compression, bps, spp, sampleformat, planarconfig,
 		 photometric);
 	return -1;
@@ -247,10 +247,10 @@ failure:
 	TIFFClose(tif);
 openfailure:
 	fprintf (stderr, "Can't read test TIFF file %s:\n"
-"    ImageWidth=%ld, ImageLength=%ld, RowsPerStrip=%ld, Compression=%d,\n"
-"    BitsPerSample=%d, SamplesPerPixel=%d, SampleFormat=%d,\n"
-"    PlanarConfiguration=%d, PhotometricInterpretation=%d.\n",
-		 name, (long) width, (long) length, (long) rowsperstrip,
+"    ImageWidth=%"PRIu32", ImageLength=%"PRIu32", RowsPerStrip=%"PRIu32", Compression=%"PRIu16",\n"
+"    BitsPerSample=%"PRIu16", SamplesPerPixel=%"PRIu16", SampleFormat=%"PRIu16",\n"
+"    PlanarConfiguration=%"PRIu16", PhotometricInterpretation=%"PRIu16".\n",
+		 name, width, length, rowsperstrip,
                  compression, bps, spp, sampleformat, planarconfig,
 		 photometric);
 	return -1;
@@ -277,7 +277,7 @@ write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 	for (offset = 0, row = 0; row < length; offset+=scanlinesize, row++) {
 		if (TIFFWriteScanline(tif, (char *)array + offset, row, 0) == -1) {
 			fprintf (stderr,
-				 "Can't write image data at row %lu.\n", (long) row);
+				 "Can't write image data at row %"PRIu32".\n", row);
 			return -1;
 		}
         }

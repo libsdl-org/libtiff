@@ -38,26 +38,4 @@ extern   int optopt;
 #  define HAVE_GETOPT 1
 #endif
 
-#if !defined(HAVE_STRTOL)
-long strtol(const char *nptr, char **endptr, int base);
-#endif
-#if !defined(HAVE_STRTOLL)
-long long strtoll(const char *nptr, char **endptr, int base);
-#endif
-#if !defined(HAVE_STRTOUL)
-unsigned long strtoul(const char *nptr, char **endptr, int base);
-#endif
-#if !defined(HAVE_STRTOULL)
-unsigned long long strtoull(const char *nptr, char **endptr, int base);
-#endif
-
-#if !defined(HAVE_SNPRINTF)
-#undef vsnprintf
-#define vsnprintf _TIFF_vsnprintf_f
-
-#undef snprintf
-#define snprintf _TIFF_snprintf_f
-int snprintf(char* str, size_t size, const char* format, ...);
-#endif
-
 #endif /* ndef _LIBPORT_ */

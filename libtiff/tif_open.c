@@ -373,11 +373,11 @@ TIFFClientOpen(
 	    #endif
 	    ) {
 		TIFFErrorExt(tif->tif_clientdata, name,
-		    "Not a TIFF or MDI file, bad magic number %d (0x%x)",
+		    "Not a TIFF or MDI file, bad magic number %"PRIu16" (0x%"PRIx16")",
 	    #else
 	    ) {
 		TIFFErrorExt(tif->tif_clientdata, name,
-		    "Not a TIFF file, bad magic number %d (0x%x)",
+		    "Not a TIFF file, bad magic number %"PRIu16" (0x%"PRIx16")",
 	    #endif
 		    tif->tif_header.common.tiff_magic,
 		    tif->tif_header.common.tiff_magic);
@@ -397,7 +397,7 @@ TIFFClientOpen(
 	if ((tif->tif_header.common.tiff_version != TIFF_VERSION_CLASSIC)&&
 	    (tif->tif_header.common.tiff_version != TIFF_VERSION_BIG)) {
 		TIFFErrorExt(tif->tif_clientdata, name,
-		    "Not a TIFF file, bad version number %d (0x%x)",
+		    "Not a TIFF file, bad version number %"PRIu16" (0x%"PRIx16")",
 		    tif->tif_header.common.tiff_version,
 		    tif->tif_header.common.tiff_version);
 		goto bad;
@@ -424,7 +424,7 @@ TIFFClientOpen(
 		if (tif->tif_header.big.tiff_offsetsize != 8)
 		{
 			TIFFErrorExt(tif->tif_clientdata, name,
-			    "Not a TIFF file, bad BigTIFF offsetsize %d (0x%x)",
+			    "Not a TIFF file, bad BigTIFF offsetsize %"PRIu16" (0x%"PRIx16")",
 			    tif->tif_header.big.tiff_offsetsize,
 			    tif->tif_header.big.tiff_offsetsize);
 			goto bad;
@@ -432,7 +432,7 @@ TIFFClientOpen(
 		if (tif->tif_header.big.tiff_unused != 0)
 		{
 			TIFFErrorExt(tif->tif_clientdata, name,
-			    "Not a TIFF file, bad BigTIFF unused %d (0x%x)",
+			    "Not a TIFF file, bad BigTIFF unused %"PRIu16" (0x%"PRIx16")",
 			    tif->tif_header.big.tiff_unused,
 			    tif->tif_header.big.tiff_unused);
 			goto bad;

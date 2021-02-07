@@ -121,8 +121,8 @@ main()
 	for (i = 0; i < NSINGLETAGS; i++) {
 		if (!TIFFSetField(tif, short_single_tags[i].tag,
 				  short_single_tags[i].value)) {
-			fprintf(stderr, "Can't set tag %lu.\n",
-				(unsigned long)short_single_tags[i].tag);
+			fprintf(stderr, "Can't set tag %"PRIu32".\n",
+				short_single_tags[i].tag);
 			goto failure;
 		}
 	}
@@ -131,8 +131,8 @@ main()
 		if (!TIFFSetField(tif, short_paired_tags[i].tag,
 				  short_paired_tags[i].values[0],
 				  short_paired_tags[i].values[1])) {
-			fprintf(stderr, "Can't set tag %lu.\n",
-				(unsigned long)short_paired_tags[i].tag);
+			fprintf(stderr, "Can't set tag %"PRIu32".\n",
+				short_paired_tags[i].tag);
 			goto failure;
 		}
 	}

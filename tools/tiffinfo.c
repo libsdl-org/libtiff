@@ -203,7 +203,7 @@ ShowStrip(tstrip_t strip, unsigned char* pp, uint32_t nrow, tsize_t scanline)
 {
 	register tsize_t cc;
 
-	printf("Strip %lu:\n", (unsigned long) strip);
+	printf("Strip %"PRIu32":\n", strip);
 	while (nrow-- > 0) {
 		for (cc = 0; cc < scanline; cc++) {
 			printf(" %02x", *pp++);
@@ -278,9 +278,9 @@ ShowTile(uint32_t row, uint32_t col, tsample_t sample,
 {
 	uint32_t cc;
 
-	printf("Tile (%lu,%lu", (unsigned long) row, (unsigned long) col);
+	printf("Tile (%" PRIu32 ",%" PRIu32 "", row, col);
 	if (sample != (tsample_t) -1)
-		printf(",%u", sample);
+		printf(",%" PRIu16, sample);
 	printf("):\n");
 	while (nrow-- > 0) {
 	  for (cc = 0; cc < (uint32_t) rowsize; cc++) {
@@ -404,7 +404,7 @@ ShowRawWords(uint16_t* pp, uint32_t n)
 	uint32_t i;
 
 	for (i = 0; i < n; i++) {
-		printf(" %04x", *pp++);
+		printf(" %04" PRIx16, *pp++);
 		if (((i+1) % 15) == 0)
 			printf("\n ");
 	}
@@ -431,23 +431,23 @@ TIFFReadRawDataStriped(TIFF* tif, int bitrev)
 			}
 			if (buf == NULL) {
 				fprintf(stderr,
-				   "Cannot allocate buffer to read strip %lu\n",
-				    (unsigned long) s);
+				   "Cannot allocate buffer to read strip %"PRIu32"\n",
+				    s);
 				break;
 			}
 			if (TIFFReadRawStrip(tif, s, buf, (tmsize_t) stripbc[s]) < 0) {
-				fprintf(stderr, "Error reading strip %lu\n",
-				    (unsigned long) s);
+				fprintf(stderr, "Error reading strip %"PRIu32"\n",
+				    s);
 				if (stoponerr)
 					break;
 			} else if (showdata) {
 				if (bitrev) {
 					TIFFReverseBits(buf, (tmsize_t)stripbc[s]);
-					printf("%s %lu: (bit reversed)\n ",
-					    what, (unsigned long) s);
+					printf("%s %"PRIu32": (bit reversed)\n ",
+					    what, s);
 				} else
-					printf("%s %lu:\n ", what,
-					    (unsigned long) s);
+					printf("%s %"PRIu32":\n ", what,
+					    s);
 				if (showwords)
 					ShowRawWords((uint16_t*) buf, (uint32_t) stripbc[s] >> 1);
 				else
@@ -479,23 +479,23 @@ TIFFReadRawDataTiled(TIFF* tif, int bitrev)
 			}
 			if (buf == NULL) {
 				fprintf(stderr,
-				   "Cannot allocate buffer to read tile %lu\n",
-				    (unsigned long) t);
+				   "Cannot allocate buffer to read tile %"PRIu32"\n",
+				    t);
 				break;
 			}
 			if (TIFFReadRawTile(tif, t, buf, (tmsize_t)tilebc[t]) < 0) {
-				fprintf(stderr, "Error reading tile %lu\n",
-				    (unsigned long) t);
+				fprintf(stderr, "Error reading tile %"PRIu32"\n",
+				    t);
 				if (stoponerr)
 					break;
 			} else if (showdata) {
 				if (bitrev) {
 					TIFFReverseBits(buf, (tmsize_t)tilebc[t]);
-					printf("%s %lu: (bit reversed)\n ",
-					    what, (unsigned long) t);
+					printf("%s %"PRIu32": (bit reversed)\n ",
+					    what, t);
 				} else {
-					printf("%s %lu:\n ", what,
-					    (unsigned long) t);
+					printf("%s %"PRIu32":\n ", what,
+					    t);
 				}
 				if (showwords) {
 					ShowRawWords((uint16_t*) buf, (uint32_t)(tilebc[t] >> 1));

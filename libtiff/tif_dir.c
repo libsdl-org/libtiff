@@ -160,10 +160,10 @@ checkInkNamesString(TIFF* tif, uint32_t slen, const char* s)
 	}
 bad:
 	TIFFErrorExt(tif->tif_clientdata, "TIFFSetField",
-	    "%s: Invalid InkNames value; expecting %d names, found %d",
+	    "%s: Invalid InkNames value; expecting %"PRIu16" names, found %"PRIu16,
 	    tif->tif_name,
 	    td->td_samplesperpixel,
-	    td->td_samplesperpixel-i);
+	    (uint16_t)(td->td_samplesperpixel-i));
 	return (0);
 }
 
@@ -394,7 +394,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 			if (tif->tif_mode != O_RDONLY)
 				goto badvalue32;
 			TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
-				"Nonstandard tile width %u, convert file", v32);
+				"Nonstandard tile width %"PRIu32", convert file", v32);
 		}
 		td->td_tilewidth = v32;
 		tif->tif_flags |= TIFF_ISTILED;
@@ -405,7 +405,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 			if (tif->tif_mode != O_RDONLY)
 				goto badvalue32;
 			TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
-			    "Nonstandard tile length %u, convert file", v32);
+			    "Nonstandard tile length %"PRIu32", convert file", v32);
 		}
 		td->td_tilelength = v32;
 		tif->tif_flags |= TIFF_ISTILED;
@@ -755,7 +755,7 @@ badvalue:
         {
 		const TIFFField* fip2=TIFFFieldWithTag(tif,tag);
 		TIFFErrorExt(tif->tif_clientdata, module,
-		     "%s: Bad value %u for \"%s\" tag",
+		     "%s: Bad value %"PRIu32" for \"%s\" tag",
 		     tif->tif_name, v,
 		     fip2 ? fip2->field_name : "Unknown");
 		va_end(ap);
@@ -765,7 +765,7 @@ badvalue32:
         {
 		const TIFFField* fip2=TIFFFieldWithTag(tif,tag);
 		TIFFErrorExt(tif->tif_clientdata, module,
-		     "%s: Bad value %u for \"%s\" tag",
+		     "%s: Bad value %"PRIu32" for \"%s\" tag",
 		     tif->tif_name, v32,
 		     fip2 ? fip2->field_name : "Unknown");
 		va_end(ap);
@@ -797,7 +797,7 @@ OkToChangeTag(TIFF* tif, uint32_t tag)
 {
 	const TIFFField* fip = TIFFFindField(tif, tag, TIFF_ANY);
 	if (!fip) {			/* unknown tag */
-		TIFFErrorExt(tif->tif_clientdata, "TIFFSetField", "%s: Unknown %stag %u",
+		TIFFErrorExt(tif->tif_clientdata, "TIFFSetField", "%s: Unknown %stag %"PRIu32,
 		    tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "", tag);
 		return (0);
 	}
@@ -928,7 +928,7 @@ _TIFFVGetField(TIFF* tif, uint32_t tag, va_list ap)
                 if( val > td->td_samplesperpixel )
                 {
                     TIFFWarningExt(tif->tif_clientdata,"_TIFFVGetField",
-                                   "Truncating NumberOfInks from %u to %u",
+                                   "Truncating NumberOfInks from %u to %"PRIu16,
                                    val, td->td_samplesperpixel);
                     val = td->td_samplesperpixel;
                 }
@@ -1760,7 +1760,7 @@ TIFFUnlinkDirectory(TIFF* tif, uint16_t dirn)
 	}
 	for (n = dirn-1; n > 0; n--) {
 		if (nextdir == 0) {
-			TIFFErrorExt(tif->tif_clientdata, module, "Directory %d does not exist", dirn);
+			TIFFErrorExt(tif->tif_clientdata, module, "Directory %"PRIu16" does not exist", dirn);
 			return (0);
 		}
 		if (!TIFFAdvanceDirectory(tif, &nextdir, &off))

@@ -403,8 +403,8 @@ main(int argc, char* argv[])
 	}
 	for (row = 0; row < h; row++) {
 		if (fread(buf, linebytes, 1, in) != 1) {
-			fprintf(stderr, "%s: scanline %lu: Read error.\n",
-			    infile, (unsigned long) row);
+			fprintf(stderr, "%s: scanline %u: Read error.\n",
+			    infile, row);
 			break;
 		}
 		pack_func (buf, w * spp, bpp);

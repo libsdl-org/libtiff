@@ -180,7 +180,7 @@ Fax3PreDecode(TIFF* tif, uint16_t s)
 static void
 Fax3Unexpected(const char* module, TIFF* tif, uint32_t line, uint32_t a0)
 {
-	TIFFErrorExt(tif->tif_clientdata, module, "Bad code word at line %u of %s %u (x %u)",
+	TIFFErrorExt(tif->tif_clientdata, module, "Bad code word at line %"PRIu32" of %s %"PRIu32" (x %"PRIu32")",
 	    line, isTiled(tif) ? "tile" : "strip",
 	    (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip),
 	    a0);
@@ -191,7 +191,7 @@ static void
 Fax3Extension(const char* module, TIFF* tif, uint32_t line, uint32_t a0)
 {
 	TIFFErrorExt(tif->tif_clientdata, module,
-	    "Uncompressed data (not supported) at line %u of %s %u (x %u)",
+	    "Uncompressed data (not supported) at line %"PRIu32" of %s %"PRIu32" (x %"PRIu32")",
 	    line, isTiled(tif) ? "tile" : "strip",
 	    (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip),
 	    a0);
@@ -201,7 +201,7 @@ Fax3Extension(const char* module, TIFF* tif, uint32_t line, uint32_t a0)
 static void
 Fax3BadLength(const char* module, TIFF* tif, uint32_t line, uint32_t a0, uint32_t lastx)
 {
-	TIFFWarningExt(tif->tif_clientdata, module, "%s at line %u of %s %u (got %u, expected %u)",
+	TIFFWarningExt(tif->tif_clientdata, module, "%s at line %"PRIu32" of %s %"PRIu32" (got %"PRIu32", expected %"PRIu32")",
 	    a0 < lastx ? "Premature EOL" : "Line length mismatch",
 	    line, isTiled(tif) ? "tile" : "strip",
 	    (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip),
@@ -212,7 +212,7 @@ Fax3BadLength(const char* module, TIFF* tif, uint32_t line, uint32_t a0, uint32_
 static void
 Fax3PrematureEOF(const char* module, TIFF* tif, uint32_t line, uint32_t a0)
 {
-	TIFFWarningExt(tif->tif_clientdata, module, "Premature EOF at line %u of %s %u (x %u)",
+	TIFFWarningExt(tif->tif_clientdata, module, "Premature EOF at line %"PRIu32" of %s %"PRIu32" (x %"PRIu32")",
 	    line, isTiled(tif) ? "tile" : "strip",
 	    (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip),
 	    a0);
@@ -245,8 +245,8 @@ Fax3Decode1D(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		RunLength = 0;
 		pa = thisrun;
 #ifdef FAX3_DEBUG
-		printf("\nBitAcc=%08X, BitsAvail = %d\n", BitAcc, BitsAvail);
-		printf("-------------------- %d\n", tif->tif_row);
+		printf("\nBitAcc=%08"PRIX32", BitsAvail = %d\n", BitAcc, BitsAvail);
+		printf("-------------------- %"PRIu32"\n", tif->tif_row);
 		fflush(stdout);
 #endif
 		SYNC_EOL(EOF1D);
@@ -288,7 +288,7 @@ Fax3Decode2D(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		RunLength = 0;
 		pa = thisrun = sp->curruns;
 #ifdef FAX3_DEBUG
-		printf("\nBitAcc=%08X, BitsAvail = %d EOLcnt = %d",
+		printf("\nBitAcc=%08"PRIX32", BitsAvail = %d EOLcnt = %d",
 		    BitAcc, BitsAvail, EOLcnt);
 #endif
 		SYNC_EOL(EOF2D);
@@ -296,7 +296,7 @@ Fax3Decode2D(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		is1D = GetBits(1);	/* 1D/2D-encoding tag bit */
 		ClrBits(1);
 #ifdef FAX3_DEBUG
-		printf(" %s\n-------------------- %d\n",
+		printf(" %s\n-------------------- %"PRIu32"\n",
 		    is1D ? "1D" : "2D", tif->tif_row);
 		fflush(stdout);
 #endif
@@ -533,7 +533,7 @@ Fax3SetupState(TIFF* tif)
 	}
 	if ((dsp->nruns == 0) || (TIFFSafeMultiply(uint32_t, dsp->nruns, 2) == 0)) {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-			     "Row pixels integer overflow (rowpixels %u)",
+			     "Row pixels integer overflow (rowpixels %"PRIu32")",
 			     rowpixels);
 		return (0);
 	}
@@ -642,7 +642,7 @@ Fax3PutBits(TIFF* tif, unsigned int bits, unsigned int length)
 #define	DEBUG_COLOR(w) (tab == TIFFFaxWhiteCodes ? w "W" : w "B")
 #define	DEBUG_PRINT(what,len) {						\
     int t;								\
-    printf("%08X/%-2d: %s%5d\t", data, bit, DEBUG_COLOR(what), len);	\
+    printf("%08"PRIX32"/%-2d: %s%5d\t", data, bit, DEBUG_COLOR(what), len);	\
     for (t = length-1; t >= 0; t--)					\
 	putchar(code & (1<<t) ? '1' : '0');				\
     putchar('\n');							\
@@ -821,21 +821,11 @@ static const unsigned char oneruns[256] = {
 };
 
 /*
- * On certain systems it pays to inline
- * the routines that find pixel spans.
- */
-#ifdef VAXC
-static	int32_t find0span(unsigned char*, int32_t, int32_t);
-static	int32_t find1span(unsigned char*, int32_t, int32_t);
-#pragma inline(find0span,find1span)
-#endif
-
-/*
  * Find a span of ones or zeros using the supplied
  * table.  The ``base'' of the bit string is supplied
  * along with the start+end bit indices.
  */
-inline static int32_t
+static inline int32_t
 find0span(unsigned char* bp, int32_t bs, int32_t be)
 {
 	int32_t bits = be - bs;
@@ -897,7 +887,7 @@ find0span(unsigned char* bp, int32_t bs, int32_t be)
 	return (span);
 }
 
-inline static int32_t
+static inline int32_t
 find1span(unsigned char* bp, int32_t bs, int32_t be)
 {
 	int32_t bits = be - bs;
@@ -1330,7 +1320,7 @@ Fax3PrintDir(TIFF* tif, FILE* fd, long flags)
 			fprintf(fd, " uncorrected errors");
 			break;
 		}
-		fprintf(fd, " (%u = 0x%x)\n",
+		fprintf(fd, " (%"PRIu16" = 0x%"PRIx16")\n",
 		    sp->cleanfaxdata, sp->cleanfaxdata);
 	}
 	if (TIFFFieldSet(tif,FIELD_BADFAXLINES))
@@ -1462,7 +1452,7 @@ Fax4Decode(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		pb = sp->refruns;
 		b1 = *pb++;
 #ifdef FAX3_DEBUG
-		printf("\nBitAcc=%08X, BitsAvail = %d\n", BitAcc, BitsAvail);
+		printf("\nBitAcc=%08"PRIX32", BitsAvail = %d\n", BitAcc, BitsAvail);
 		printf("-------------------- %d\n", tif->tif_row);
 		fflush(stdout);
 #endif
@@ -1472,8 +1462,8 @@ Fax4Decode(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		if (((lastx + 7) >> 3) > (int)occ)	/* check for buffer overrun */
 		{
 			TIFFErrorExt(tif->tif_clientdata, module,
-			             "Buffer overrun detected : %d bytes available, %d bits needed",
-			             (int)occ, lastx);
+			             "Buffer overrun detected : %"TIFF_SSIZE_FORMAT" bytes available, %d bits needed",
+			             occ, lastx);
 			return -1;
 		}
 		(*sp->fill)(buf, thisrun, pa, lastx);
@@ -1494,8 +1484,8 @@ Fax4Decode(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		if (((lastx + 7) >> 3) > (int)occ)	/* check for buffer overrun */
 		{
 			TIFFErrorExt(tif->tif_clientdata, module,
-			             "Buffer overrun detected : %d bytes available, %d bits needed",
-			             (int)occ, lastx);
+			             "Buffer overrun detected : %"TIFF_SSIZE_FORMAT" bytes available, %d bits needed",
+			             occ, lastx);
 			return -1;
 		}
 		(*sp->fill)(buf, thisrun, pa, lastx);
@@ -1600,8 +1590,8 @@ Fax3DecodeRLE(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 		RunLength = 0;
 		pa = thisrun;
 #ifdef FAX3_DEBUG
-		printf("\nBitAcc=%08X, BitsAvail = %d\n", BitAcc, BitsAvail);
-		printf("-------------------- %d\n", tif->tif_row);
+		printf("\nBitAcc=%08"PRIX32", BitsAvail = %d\n", BitAcc, BitsAvail);
+		printf("-------------------- %"PRIu32"\n", tif->tif_row);
 		fflush(stdout);
 #endif
 		EXPAND1D(EOFRLE);

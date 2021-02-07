@@ -40,7 +40,7 @@ TIFFNoEncode(TIFF* tif, const char* method)
 			     c->name, method);
 	} else {
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-			"Compression scheme %u %s encoding is not implemented",
+			"Compression scheme %"PRIu16" %s encoding is not implemented",
 			     tif->tif_dir.td_compression, method);
 	}
 	return (-1);
@@ -78,7 +78,7 @@ TIFFNoDecode(TIFF* tif, const char* method)
 			     c->name, method);
 	else
 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-			     "Compression scheme %u %s decoding is not implemented",
+			     "Compression scheme %"PRIu16" %s decoding is not implemented",
 			     tif->tif_dir.td_compression, method);
 	return (0);
 }
