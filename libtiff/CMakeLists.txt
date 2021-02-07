@@ -104,7 +104,14 @@ target_include_directories(tiff
     PRIVATE
         ${TIFF_INCLUDES}
 )
-target_link_libraries(tiff ${TIFF_LIBRARY_DEPS})
+
+if(ZIP_SUPPORT)
+  target_link_libraries(tiff PRIVATE ZLIB::ZLIB)
+endif()
+if(ZIP_SUPPORT AND LIBDEFLATE_SUPPORT)
+  target_link_libraries(tiff PRIVATE Deflate::Deflate)
+endif()
+target_link_libraries(tiff PRIVATE ${TIFF_LIBRARY_DEPS})
 set_target_properties(tiff PROPERTIES SOVERSION ${SO_COMPATVERSION})
 if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
