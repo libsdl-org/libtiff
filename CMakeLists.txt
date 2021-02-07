@@ -104,15 +104,7 @@ set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
 
 include(InternalCodecs)
 include(DeflateCodec)
-
-# Option for Pixar log-format algorithm
-# Pixar log format
-set(PIXARLOG_SUPPORT FALSE)
-option(pixarlog "support for Pixar log-format algorithm (requires Zlib)" ${ZLIB_SUPPORT})
-if(pixarlog AND ZLIB_SUPPORT)
-  set(PIXARLOG_SUPPORT TRUE)
-endif()
-
+include(PixarLogCodec)
 include(JPEGCodec)
 
 # JBIG-KIT
