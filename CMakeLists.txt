@@ -82,21 +82,6 @@ endif()
 add_definitions(-DTIFF_DISABLE_DEPRECATED)
 
 include(TypeSizeChecks)
-
-macro(report_values)
-  foreach(val ${ARGV})
-    message(STATUS "${val} set to ${${val}}")
-  endforeach()
-endmacro()
-
-report_values(TIFF_SSIZE_T)
-
-
-
-
-report_values(CMAKE_HOST_SYSTEM_PROCESSOR HOST_FILLORDER
-              HOST_BIG_ENDIAN HAVE_IEEEFP)
-
 include(LargeFileSupport)
 
 # Documentation install directory (default to cmake project docdir)
