@@ -35,8 +35,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(AutotoolsVersion)
 message(STATUS "Building tiff version ${LIBTIFF_VERSION_FULL}")
 message(STATUS "libtiff library version ${SO_VERSION}")
-string(TIMESTAMP RELEASE_DATE "%Y%m%d")
-message(STATUS "libtiff release date: ${RELEASE_DATE}")
+string(TIMESTAMP BUILD_DATE "%Y%m%d")
+message(STATUS "libtiff build date: ${BUILD_DATE}")
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
 
