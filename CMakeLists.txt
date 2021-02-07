@@ -111,22 +111,6 @@ include(LZMACodec)
 include(ZSTDCodec)
 include(WebPCodec)
 
-# 8/12-bit jpeg mode
-set(JPEG12_INCLUDE_DIR JPEG12_INCLUDE_DIR-NOTFOUND CACHE PATH "Include directory for 12-bit libjpeg")
-set(JPEG12_LIBRARY JPEG12_LIBRARY-NOTFOUND CACHE FILEPATH "12-bit libjpeg library")
-set(JPEG_DUAL_MODE_8_12 FALSE)
-if (JPEG12_INCLUDE_DIR AND JPEG12_LIBRARY)
-  set(JPEG12_LIBRARIES ${JPEG12_LIBRARY})
-  set(JPEG12_FOUND TRUE)
-else()
-  set(JPEG12_FOUND FALSE)
-endif()
-option(jpeg12 "enable libjpeg 8/12-bit dual mode (requires separate 12-bit libjpeg build)" ${JPEG12_FOUND})
-if (jpeg12 AND JPEG12_FOUND)
-  set(JPEG_DUAL_MODE_8_12 TRUE)
-  set(LIBJPEG_12_PATH "${JPEG12_INCLUDE_DIR}/jpeglib.h")
-endif()
-
 # C++ support
 option(cxx "Enable C++ stream API building (requires C++ compiler)" ON)
 set(CXX_SUPPORT FALSE)
@@ -187,21 +171,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff-4.pc.in
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc
         DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
 
-# Includes used by libtiff (and tests)
-if(JPEG12_INCLUDE_DIR)
-  list(APPEND TIFF_INCLUDES ${JPEG12_INCLUDE_DIR})
-endif()
-
 # Libraries required by libtiff
 set(TIFF_LIBRARY_DEPS)
 if(NOT MINGW AND M_LIBRARY)
   list(APPEND TIFF_LIBRARY_DEPS "m")
 endif()
-if(JPEG12_LIBRARIES)
-  list(APPEND TIFF_LIBRARY_DEPS ${JPEG12_LIBRARIES})
-endif()
-
-report_values(TIFF_INCLUDES TIFF_LIBRARY_DEPS)
 
 # Process subdirectories
 add_subdirectory(port)
