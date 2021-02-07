@@ -49,13 +49,13 @@ include(CompilerChecks)
 include(LinkerChecks)
 include(ProcessorChecks)
 include(IncludeChecks)
+include(SymbolChecks)
 include(GNUInstallDirs)
 include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckIncludeFile)
 include(CheckLibraryExists)
 include(CheckTypeSize)
-include(CheckSymbolExists)
 enable_testing()
 
 macro(current_date var)
@@ -76,12 +76,7 @@ if(NOT MINGW)
   find_library(M_LIBRARY m)
 endif()
 
-check_symbol_exists(optarg "getopt.h" HAVE_DECL_OPTARG)
-if (HAVE_DECL_OPTARG)
-  set(HAVE_DECL_OPTARG 1)
-else()
-  set(HAVE_DECL_OPTARG 0)
-endif()
+
 
 # Disable deprecated features to ensure clean build
 add_definitions(-DTIFF_DISABLE_DEPRECATED)
@@ -96,9 +91,7 @@ endmacro()
 
 report_values(TIFF_SSIZE_T)
 
-check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
-check_symbol_exists(setmode "unistd.h" HAVE_SETMODE)
-check_symbol_exists(getopt "unistd.h;stdio.h" HAVE_GETOPT)
+
 
 
 report_values(CMAKE_HOST_SYSTEM_PROCESSOR HOST_FILLORDER
