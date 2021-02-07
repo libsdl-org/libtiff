@@ -113,20 +113,7 @@ if(pixarlog AND ZLIB_SUPPORT)
   set(PIXARLOG_SUPPORT TRUE)
 endif()
 
-# JPEG
-set(JPEG_SUPPORT FALSE)
-find_package(JPEG)
-option(jpeg "use libjpeg (required for JPEG compression)" ${JPEG_FOUND})
-if (jpeg AND JPEG_FOUND)
-   set(JPEG_SUPPORT TRUE)
-endif()
-
-# Old-jpeg
-set(OJPEG_SUPPORT FALSE)
-option(old-jpeg "support for Old JPEG compression (read-only)" ${JPEG_SUPPORT})
-if (old-jpeg AND JPEG_SUPPORT)
-  set(OJPEG_SUPPORT TRUE)
-endif()
+include(JPEGCodec)
 
 # JBIG-KIT
 set(JBIG_SUPPORT FALSE)
