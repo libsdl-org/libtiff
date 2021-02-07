@@ -135,22 +135,8 @@ if (cxx)
   set(CXX_SUPPORT TRUE)
 endif()
 
-# OpenGL and GLUT
-set(OpenGL_GL_PREFERENCE LEGACY)
-find_package(OpenGL COMPONENTS OpenGL)
-find_package(GLUT)
-set(HAVE_OPENGL FALSE)
-if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)
-  set(HAVE_OPENGL TRUE)
-endif()
-# Purely to satisfy the generated headers:
-check_include_file(GL/gl.h HAVE_GL_GL_H)
-check_include_file(GL/glu.h HAVE_GL_GLU_H)
-check_include_file(GL/glut.h HAVE_GL_GLUT_H)
-check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
-check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
-check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)
 
+include(OpenGLChecks)
 include(WindowsIOFeature)
 
 # Orthogonal features
