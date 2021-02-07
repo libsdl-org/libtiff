@@ -108,32 +108,7 @@ include(PixarLogCodec)
 include(JPEGCodec)
 include(JBIGCodec)
 include(LZMACodec)
-
-# libzstd
-set(ZSTD_SUPPORT FALSE)
-set(ZSTD_USABLE_FALSE)
-find_package(ZSTD)
-
-if(ZSTD_FOUND)
-    set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
-    set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${ZSTD_INCLUDE_DIRS})
-    set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
-    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${ZSTD_LIBRARIES})
-    check_symbol_exists(ZSTD_decompressStream "zstd.h" ZSTD_RECENT_ENOUGH)
-    set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
-    set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
-
-    if (ZSTD_RECENT_ENOUGH)
-      set(ZSTD_USABLE TRUE)
-    else()
-      message(WARNING "Found ZSTD library, but not recent enough. Use zstd >= 1.0")
-    endif()
-endif()
-
-option(zstd "use libzstd (required for ZSTD compression)" ${ZSTD_USABLE})
-if (zstd AND ZSTD_USABLE)
-  set(ZSTD_SUPPORT TRUE)
-endif()
+include(ZSTDCodec)
 
 # libwebp
 set(WEBP_SUPPORT FALSE)
