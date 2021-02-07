@@ -33,29 +33,18 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 # Read version information from configure.ac.
 include(AutotoolsVersion)
-message(STATUS "Building tiff version ${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}${LIBTIFF_ALPHA_VERSION}")
-message(STATUS "libtiff library version ${SO_MAJOR}.${SO_MINOR}.${SO_REVISION}")
+message(STATUS "Building tiff version ${LIBTIFF_VERSION_FULL}")
+message(STATUS "libtiff library version ${SO_VERSION}")
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-set(CMAKE_C_STANDARD 99)
 
-# Project version
-project(tiff VERSION "${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}"
+# Project definition
+set(CMAKE_C_STANDARD 99)
+project(tiff
+        VERSION "${LIBTIFF_VERSION}"
         LANGUAGES C CXX)
 
-# the other tiff_VERSION_* variables are set automatically
-set(tiff_VERSION_ALPHA "${LIBTIFF_ALPHA_VERSION}")
-# Library version (unlike libtool's baroque scheme, WYSIWYG here)
-set(SO_COMPATVERSION "${SO_MAJOR}")
-set(SO_VERSION "${SO_MAJOR}.${SO_MINOR}.${SO_REVISION}")
-
-# For autotools header compatibility
-set(PACKAGE_NAME "LibTIFF Software")
-set(PACKAGE_TARNAME "${PROJECT_NAME}")
-set(PACKAGE_VERSION "${PROJECT_VERSION}${tiff_VERSION_ALPHA}")
-set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
-set(PACKAGE_BUGREPORT "tiff@lists.maptools.org")
-
+include(AutotoolsCompat)
 include(CompilerChecks)
 include(LinkerChecks)
 include(ProcessorChecks)

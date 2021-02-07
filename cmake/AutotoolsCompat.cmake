@@ -1,4 +1,4 @@
-# Read version information from configure.ac.
+# Autotools compatibility
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
 # Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
@@ -24,27 +24,9 @@
 # OF THIS SOFTWARE.
 
 
-# Get version from configure.ac
-FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/configure.ac" configure REGEX "^LIBTIFF_.*=")
-foreach(line ${configure})
-    foreach(var LIBTIFF_MAJOR_VERSION LIBTIFF_MINOR_VERSION LIBTIFF_MICRO_VERSION LIBTIFF_ALPHA_VERSION
-            LIBTIFF_CURRENT LIBTIFF_REVISION LIBTIFF_AGE)
-        if(NOT ${var} AND line MATCHES "^${var}=(.*)")
-            set(${var} "${CMAKE_MATCH_1}")
-            break()
-        endif()
-    endforeach()
-endforeach()
-
-# Package version
-set(LIBTIFF_VERSION "${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}")
-set(LIBTIFF_VERSION_FULL "${LIBTIFF_VERSION}${LIBTIFF_ALPHA_VERSION}")
-
-# Convert the libtool version variables to proper major and minor versions
-math(EXPR SO_MAJOR "${LIBTIFF_CURRENT} - ${LIBTIFF_AGE}")
-set(SO_MINOR "${LIBTIFF_AGE}")
-set(SO_REVISION "${LIBTIFF_REVISION}")
-
-# Library version (unlike libtool's baroque scheme, WYSIWYG here)
-set(SO_COMPATVERSION "${SO_MAJOR}")
-set(SO_VERSION "${SO_MAJOR}.${SO_MINOR}.${SO_REVISION}")
+# For autotools header compatibility
+set(PACKAGE_NAME "LibTIFF Software")
+set(PACKAGE_TARNAME "${PROJECT_NAME}")
+set(PACKAGE_VERSION "${PROJECT_VERSION}${LIBTIFF_ALPHA_VERSION}")
+set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
+set(PACKAGE_BUGREPORT "tiff@lists.maptools.org")
