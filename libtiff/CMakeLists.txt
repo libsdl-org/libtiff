@@ -130,7 +130,8 @@ endif()
 if(WEBP_SUPPORT)
   target_link_libraries(tiff PRIVATE WebP::WebP)
 endif()
-target_link_libraries(tiff PRIVATE ${TIFF_LIBRARY_DEPS})
+target_link_libraries(tiff PRIVATE CMath::CMath)
+
 set_target_properties(tiff PROPERTIES SOVERSION ${SO_COMPATVERSION})
 if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version

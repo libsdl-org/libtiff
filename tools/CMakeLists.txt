@@ -40,7 +40,7 @@ target_link_libraries(ppm2tiff PRIVATE tiff port)
 
 add_executable(raw2tiff)
 target_sources(raw2tiff PRIVATE raw2tiff.c)
-target_link_libraries(raw2tiff PRIVATE tiff port)
+target_link_libraries(raw2tiff PRIVATE tiff port CMath::CMath)
 
 add_executable(rgb2ycbcr)
 target_sources(rgb2ycbcr PRIVATE rgb2ycbcr.c)
@@ -48,7 +48,7 @@ target_link_libraries(rgb2ycbcr PRIVATE tiff port)
 
 add_executable(thumbnail)
 target_sources(thumbnail PRIVATE thumbnail.c)
-target_link_libraries(thumbnail PRIVATE tiff port)
+target_link_libraries(thumbnail PRIVATE tiff port CMath::CMath)
 
 add_executable(tiff2bw)
 target_sources(tiff2bw PRIVATE tiff2bw.c)
@@ -60,7 +60,7 @@ target_link_libraries(tiff2pdf PRIVATE tiff port)
 
 add_executable(tiff2ps)
 target_sources(tiff2ps PRIVATE tiff2ps.c)
-target_link_libraries(tiff2ps PRIVATE tiff port)
+target_link_libraries(tiff2ps PRIVATE tiff port CMath::CMath)
 
 add_executable(tiff2rgba)
 target_sources(tiff2rgba PRIVATE tiff2rgba.c)
@@ -76,7 +76,7 @@ target_link_libraries(tiffcp PRIVATE tiff port)
 
 add_executable(tiffcrop)
 target_sources(tiffcrop PRIVATE tiffcrop.c)
-target_link_libraries(tiffcrop PRIVATE tiff port)
+target_link_libraries(tiffcrop PRIVATE tiff port CMath::CMath)
 
 add_executable(tiffdither)
 target_sources(tiffdither PRIVATE tiffdither.c)

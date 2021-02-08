@@ -65,14 +65,6 @@ if(MSVC)
   set(CMAKE_DEBUG_POSTFIX "d")
 endif()
 
-
-# Find libm, if available
-if(NOT MINGW)
-  find_library(M_LIBRARY m)
-endif()
-
-
-
 # Disable deprecated features to ensure clean build
 add_definitions(-DTIFF_DISABLE_DEPRECATED)
 
@@ -147,11 +139,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff-4.pc.in
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc
         DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
 
-# Libraries required by libtiff
-set(TIFF_LIBRARY_DEPS)
-if(NOT MINGW AND M_LIBRARY)
-  list(APPEND TIFF_LIBRARY_DEPS "m")
-endif()
+find_package(CMath REQUIRED)
 
 # Process subdirectories
 add_subdirectory(port)
