@@ -52,12 +52,13 @@ include(LinkerChecks)
 include(ProcessorChecks)
 include(IncludeChecks)
 include(SymbolChecks)
+
+# Standard installation paths
 include(GNUInstallDirs)
-include(CheckCCompilerFlag)
-include(CheckCSourceCompiles)
-include(CheckIncludeFile)
-include(CheckLibraryExists)
-include(CheckTypeSize)
+# Documentation install directory (default to cmake project docdir)
+set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
+
+# CTest testing
 enable_testing()
 
 if(MSVC)
@@ -77,10 +78,6 @@ add_definitions(-DTIFF_DISABLE_DEPRECATED)
 
 include(TypeSizeChecks)
 include(LargeFileSupport)
-
-# Documentation install directory (default to cmake project docdir)
-set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
-
 include(InternalCodecs)
 include(DeflateCodec)
 include(PixarLogCodec)
