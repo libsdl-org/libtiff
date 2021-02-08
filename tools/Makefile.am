@@ -27,8 +27,7 @@ LIBPORT = $(top_builddir)/port/libport.la
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 
 EXTRA_DIST = \
-	CMakeLists.txt \
-	Makefile.vc
+	CMakeLists.txt
 
 bin_PROGRAMS = \
 	fax2ps \

@@ -32,8 +32,6 @@ environment:
       arch: Win32
       generator: Visual Studio 16 2019
       shared: OFF
-    - compiler: vc14-nmake
-      configuration: Release
 
 
 cache:
@@ -71,33 +69,19 @@ before_build:
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_CYG_SOURCE%'
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_CYG_INSTALL%'
   - 'if %compiler%==mingw-cmake set "PATH=C:\MinGW\bin;%PATH%"'
-  - 'if %compiler%==vc14-nmake call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" %platform%'
   - mkdir %AV_TIFF_BUILD%
   - cd %AV_TIFF_BUILD%
-  - if NOT %compiler%==vc14-nmake echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%
+  - echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_TIFF_CMAKE_SOURCE%
   - 'if %compiler%==cygwin-cmake bash -c "cmake -G \"%generator%\" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%"'
   - 'if %compiler%==mingw-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
   - 'if %compiler%==vc14-cmake cmake -G "%generator%" -A %arch% -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
 
 build_script:
-  - if NOT %compiler%==vc14-nmake cd %AV_TIFF_BUILD%
-  - if %compiler%==vc14-nmake cd %AV_TIFF_SOURCE%
+  - cd %AV_TIFF_BUILD%
   - 'if %compiler%==cygwin-cmake bash -c "cmake --build . --config %configuration% --target install"'
   - 'if %compiler%==mingw-cmake cmake --build . --config %configuration% --target install'
   - 'if %compiler%==vc14-cmake cmake --build . --config %configuration% --target install'
   - 'if %compiler%==vc9-cmake cmake --build . --config %configuration% --target install'
-  - 'if %compiler%==vc14-nmake nmake /f Makefile.vc'
-  - 'if %compiler%==vc14-nmake mkdir %AV_TIFF_INSTALL%'
-  - 'if %compiler%==vc14-nmake mkdir %AV_TIFF_INSTALL%\bin'
-  - 'if %compiler%==vc14-nmake mkdir %AV_TIFF_INSTALL%\lib'
-  - 'if %compiler%==vc14-nmake mkdir %AV_TIFF_INSTALL%\include'
-  - 'if %compiler%==vc14-nmake copy tools\*.exe %AV_TIFF_INSTALL%\bin'
-  - 'if %compiler%==vc14-nmake copy port\*.lib %AV_TIFF_INSTALL%\lib'
-  - 'if %compiler%==vc14-nmake copy libtiff\tiff.h %AV_TIFF_INSTALL%\include'
-  - 'if %compiler%==vc14-nmake copy libtiff\tiffio.h %AV_TIFF_INSTALL%\include'
-  - 'if %compiler%==vc14-nmake copy libtiff\tiffvers.h %AV_TIFF_INSTALL%\include'
-  - 'if %compiler%==vc14-nmake copy libtiff\tiffconf.h %AV_TIFF_INSTALL%\include'
-  - 'if %compiler%==vc14-nmake copy libtiff\tiffio.hxx %AV_TIFF_INSTALL%\include'
 
 # scripts to run after build
 after_build:
@@ -112,7 +96,6 @@ before_test:
   - 'if %compiler%==mingw-cmake ctest -V -C %configuration%'
   - 'if %compiler%==vc14-cmake ctest -V -C %configuration%'
   - 'if %compiler%==vc9-cmake ctest -V -C %configuration%'
-# vc14-nmake does not support unit tests
 
 # AppVeyor don't yet have a configurable retention policy, so this will
 # eventually use up all the storage allowance.

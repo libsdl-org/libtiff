@@ -14,7 +14,6 @@ Building the Software Distribution</h1>
 <ul>
 <li><a href="#CMAKE">Building on all systems with CMake</a>.</li>
 <li><a href="#UNIX">Building on a UNIX system with Autoconf</a>.</li>
-<li><a href="#PC">Building on an MS-DOS or Windows system with nmake</a>.</li>
 <li><a href="#Other">Building the Software on Other
 Systems.</a></li>
 </ul>
@@ -423,62 +422,6 @@ configured.</dd>
 </dl>
 <hr width="65%" align="right">
 <a name="PC" id="PC"></a>
-<h2>Building the Software under Windows 2000/XP/7/8/10 with nmake</h2>
-With Microsoft Visual C++ installed, and properly configured for
-commandline use (you will likely need to source VCVARS32.BAT in
-AUTOEXEC.bAT or somewhere similar) you should be able to use the
-provided <tt>makefile.vc</tt>.
-<p>The source package is delivered using Unix line termination
-conventions, which work with MSVC but do not work with Windows
-'notepad'. If you use unzip from the <a href=
-"http://www.info-zip.org/pub/infozip/">Info-Zip</a> package, you
-can extract the files using Windows normal line termination
-conventions with a command similar to:</p>
-<pre>
-  unzip -aa -a tiff-4.0.5.zip
-</pre>
-<p>By default the nmake-based libtiff build does not depend on any
-additional libraries.  Normally libtiff should be built with at least
-JPEG and ZIP support so that it can open JPEG and ZIP-compressed TIFF
-files.  In order to add additional libraries (e.g. libjpeg, zlib,
-jbigkit), build those libraries according to their own particular
-build instructions, and then edit 'nmake.opt' (using a capable
-plain-text editor) to enable use of the libraries, including
-specifying where the libraries are installed.  It is also necessary to
-edit libtiff/tiffconf.vc.h to enable the related configuration defines
-(<em>JPEG_SUPPORT</em>, <em>OJPEG_SUPPORT</em>, <em>PIXARLOG_SUPPORT</em>,
-<em>ZIP_SUPPORT</em>), or to disable features which are normally
-included by default.  Ignore the comment at the top of the
-libtiff/tiffconf.vc.h file which says that it has no influence on the
-build, because the statement is not true for Windows. Please note that
-the nmake build copies tiffconf.vc.h to tiffconf.h, and copies
-tif_config.vc.h to tif_config.h, overwriting any files which may be
-present.  Likewise, the 'nmake clean' step removes those files.</p>
-<p>To build using the provided makefile.vc you may use:</p>
-<pre>
-  C:\tiff-4.0.5&gt; nmake /f makefile.vc clean
-  C:\tiff-4.0.5&gt; nmake /f makefile.vc
-
-    or (the hard way)
-
-  C:\tiff-4.0.5&gt; cd port
-  C:\tiff-4.0.5\port&gt; nmake /f makefile.vc clean
-  C:\tiff-4.0.5\port&gt; nmake /f makefile.vc
-  C:\tiff-4.0.5&gt; cd ../libtiff
-  C:\tiff-4.0.5\libtiff&gt; nmake /f makefile.vc clean
-  C:\tiff-4.0.5\libtiff&gt; nmake /f makefile.vc
-  C:\tiff-4.0.5\libtiff&gt; cd ..\tools
-  C:\tiff-4.0.5\tools&gt; nmake /f makefile.vc clean
-  C:\tiff-4.0.5\tools&gt; nmake /f makefile.vc
-</pre>
-<p>This will build the library
-file <tt>libtiff\libtiff\libtiff.lib</tt>.</p>
-<p>The makefile also builds a DLL (libtiff.dll) with an associated
-import library (libtiff_i.lib). Any builds using libtiff will need to
-include the LIBTIFF\LIBTIFF directory in the include path.</p>
-<p>The <tt>libtiff\tools\makefile.vc</tt> should build .exe's for
-all the standard TIFF tool programs.</p>
-<hr>
 <a name="Other" id="Other"></a>
 <h2>Building the Software on Other Systems</h2>
 This section contains information that might be useful if you are

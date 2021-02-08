@@ -113,9 +113,7 @@ endmacro()
 
 set(EXTRA_DIST
   HOWTO-RELEASE
-  Makefile.vc
   autogen.sh
-  nmake.opt
   libtiff-4.pc.in)
 
 # These are annoyingly verbose, produce false positives or don't work
