@@ -29,8 +29,9 @@ cmake_build()
     fi
     mkdir cmake-build
     cd cmake-build
-    echo "Running cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../autoconf-install ${opts} .."
-    cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../autoconf-install ${opts} ..
+    opts="-Dfatal-warnings=ON"
+    echo "Running cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} .."
+    cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ..
     cmake --build .
     cmake --build . --target install
     ctest -V

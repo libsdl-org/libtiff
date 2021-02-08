@@ -375,6 +375,7 @@ TIFFInitZSTD(TIFF* tif, int scheme)
         static const char module[] = "TIFFInitZSTD";
         ZSTDState* sp;
 
+        (void) scheme;
         assert( scheme == COMPRESSION_ZSTD );
 
         /*

@@ -90,9 +90,11 @@ main(int argc, char* argv[])
 			break;
 		case 'h':
 			usage(EXIT_SUCCESS);
+			break;
 		case '?':
 			usage(2);
 			/*NOTREACHED*/
+			break;
 		}
 	if (argc - optind < 2)
 		usage(2);

@@ -327,47 +327,19 @@ Fax3Decode2D(TIFF* tif, uint8_t* buf, tmsize_t occ, uint16_t s)
 }
 #undef SWAP
 
-/*
- * The ZERO & FILL macros must handle spans < 2*sizeof(int64_t) bytes.
- */
-# define FILL(n, cp)						    \
-    switch (n) {							    \
-    case 15:(cp)[14] = 0xff; /*-fallthrough*/ \
-    case 14:(cp)[13] = 0xff; /*-fallthrough*/ \
-    case 13:(cp)[12] = 0xff; /*-fallthrough*/ \
-    case 12:(cp)[11] = 0xff; /*-fallthrough*/ \
-    case 11:(cp)[10] = 0xff; /*-fallthrough*/ \
-    case 10: (cp)[9] = 0xff; /*-fallthrough*/ \
-    case  9: (cp)[8] = 0xff; /*-fallthrough*/ \
-    case  8: (cp)[7] = 0xff; /*-fallthrough*/ \
-    case  7: (cp)[6] = 0xff; /*-fallthrough*/ \
-    case  6: (cp)[5] = 0xff; /*-fallthrough*/ \
-    case  5: (cp)[4] = 0xff; /*-fallthrough*/ \
-    case  4: (cp)[3] = 0xff; /*-fallthrough*/ \
-    case  3: (cp)[2] = 0xff; /*-fallthrough*/ \
-    case  2: (cp)[1] = 0xff; /*-fallthrough*/ \
-    case  1: (cp)[0] = 0xff; (cp) += (n); /*-fallthrough*/ \
-    case 0:  ;			      \
-    }
-# define ZERO(n, cp)							\
-    switch (n) {							\
-    case 15:(cp)[14] = 0; /*-fallthrough*/ \
-    case 14:(cp)[13] = 0; /*-fallthrough*/ \
-    case 13:(cp)[12] = 0; /*-fallthrough*/ \
-    case 12:(cp)[11] = 0; /*-fallthrough*/ \
-    case 11:(cp)[10] = 0; /*-fallthrough*/ \
-    case 10: (cp)[9] = 0; /*-fallthrough*/ \
-    case  9: (cp)[8] = 0; /*-fallthrough*/ \
-    case  8: (cp)[7] = 0; /*-fallthrough*/ \
-    case  7: (cp)[6] = 0; /*-fallthrough*/ \
-    case  6: (cp)[5] = 0; /*-fallthrough*/ \
-    case  5: (cp)[4] = 0; /*-fallthrough*/ \
-    case  4: (cp)[3] = 0; /*-fallthrough*/ \
-    case  3: (cp)[2] = 0; /*-fallthrough*/ \
-    case  2: (cp)[1] = 0; /*-fallthrough*/ \
-    case  1: (cp)[0] = 0; (cp) += (n); /*-fallthrough*/ \
-    case 0:  ;			\
-    }
+# define FILL(n, cp)                              \
+    for (int32_t ifill = 0; ifill < (n); ++ifill) \
+    {                                             \
+        (cp)[ifill] = 0xff;                       \
+    }                                             \
+    (cp) += (n);
+
+# define ZERO(n, cp)                              \
+    for (int32_t izero = 0; izero < (n); ++izero) \
+    {                                             \
+        (cp)[izero] = 0;                          \
+    }                                             \
+    (cp) += (n);
 
 /*
  * Bit-fill a row according to the white/black

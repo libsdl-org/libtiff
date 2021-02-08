@@ -66,6 +66,7 @@
 
 #include "tif_config.h"
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 #include <errno.h>
@@ -596,6 +597,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	nTags = tFieldArray->count;
 
 	for (i=0; i<nTags; i++) {
+		bool deferredSetField = false;
 		tTag = tFieldArray->fields[i].field_tag;
 		tType = tFieldArray->fields[i].field_type;				/* e.g. TIFF_RATIONAL */
 		tWriteCount = tFieldArray->fields[i].field_writecount;
@@ -689,46 +691,55 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 			case TIFF_SETGET_C32_SINT8:
 					/* For arrays, distinguishing between float or double is essential, even for writing */
 					pVoid = &auxCharArrayW[i];
+					deferredSetField = true;
+					break;
 			case TIFF_SETGET_C0_UINT16: 
 			case TIFF_SETGET_C0_SINT16: 
 			case TIFF_SETGET_C16_UINT16:
 			case TIFF_SETGET_C16_SINT16:
 			case TIFF_SETGET_C32_UINT16:
 			case TIFF_SETGET_C32_SINT16:
-					if (pVoid == NULL) pVoid = &auxShortArrayW[i];
+					pVoid = &auxShortArrayW[i];
+					deferredSetField = true;
+					break;
 			case TIFF_SETGET_C0_UINT32:
 			case TIFF_SETGET_C0_SINT32:
 			case TIFF_SETGET_C16_UINT32:
 			case TIFF_SETGET_C16_SINT32:
 			case TIFF_SETGET_C32_UINT32:
 			case TIFF_SETGET_C32_SINT32:
-					if (pVoid == NULL) pVoid = &auxLongArrayW[i];
-				/* _Cxx_ just defines the size of the count parameter for the array as C0=char, C16=short or C32=long */
-				/*-- Check, if it is a single parameter, a fixed array or a variable array */
-				if (tWriteCount == 1) {
-					fprintf (stderr, "WriteCount for .set_field_type %d should be -1 or greater than 1!  %s\n", tSetFieldType, tFieldArray->fields[i].field_name);
+					pVoid = &auxLongArrayW[i];
+					deferredSetField = true;
+					break;
+            default:
+                fprintf (stderr, "SetFieldType %d not defined within writing switch for %s.\n", tSetFieldType, tFieldName);
+        };  /*-- switch() --*/
+
+		if (deferredSetField) {
+			/* _Cxx_ just defines the size of the count parameter for the array as C0=char, C16=short or C32=long */
+			/*-- Check, if it is a single parameter, a fixed array or a variable array */
+			if (tWriteCount == 1) {
+				fprintf(stderr, "WriteCount for .set_field_type %d should be -1 or greater than 1!  %s\n",
+						tSetFieldType, tFieldArray->fields[i].field_name);
+			} else {
+				/*-- Either fix or variable array --*/
+				/* Now decide between fixed or variable array */
+				if (tWriteCount > 1) {
+					/* fixed array with needed arraysize defined in .field_writecount */
+					if (!TIFFSetField(tif, tTag, pVoid)) {
+						fprintf(stderr, "Can't write %s\n", tFieldArray->fields[i].field_name);
+						goto failure;
+					}
 				} else {
-					/*-- Either fix or variable array --*/
-					/* Now decide between fixed or variable array */
-					if (tWriteCount > 1) {
-						/* fixed array with needed arraysize defined in .field_writecount */
-						if (!TIFFSetField( tif, tTag, pVoid)) {
-							fprintf (stderr, "Can't write %s\n", tFieldArray->fields[i].field_name);
-							goto failure;
-						}	
-					} else  {
-						/* special treatment of variable array */
-						/* for test, use always arraysize of VARIABLE_ARRAY_SIZE */
-						if (!TIFFSetField( tif, tTag, VARIABLE_ARRAY_SIZE, pVoid)) {
-							fprintf (stderr, "Can't write %s\n", tFieldArray->fields[i].field_name);
-							goto failure;
-						}	
+					/* special treatment of variable array */
+					/* for test, use always arraysize of VARIABLE_ARRAY_SIZE */
+					if (!TIFFSetField(tif, tTag, VARIABLE_ARRAY_SIZE, pVoid)) {
+						fprintf(stderr, "Can't write %s\n", tFieldArray->fields[i].field_name);
+						goto failure;
 					}
 				}
-				break;
-			default:
-				fprintf (stderr, "SetFieldType %d not defined within writing switch for %s.\n", tSetFieldType, tFieldName);
-		};  /*-- switch() --*/
+			}
+		}
 	} /*-- for() --*/
 	/*================= EXIF: END Writing arbitrary data to the EXIF fields END END END ==============*/
 #endif  /*-- WRITE_ALL_EXIF_TAGS --*/
@@ -1077,6 +1088,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	}
 
 	for (i=0; i<nTags; i++) {
+        bool deferredSetField = false;
 		tTag = tFieldArray->fields[i].field_tag;
 		tType = tFieldArray->fields[i].field_type;				/* e.g. TIFF_RATIONAL */
 		tWriteCount = tFieldArray->fields[i].field_writecount;
@@ -1095,7 +1107,8 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 					break;
 				}
 				/* Save string from temporary buffer and compare with written string. */
-				strncpy(auxCharArray, pAscii, sizeof(auxCharArray));
+				strncpy(auxCharArray, pAscii, sizeof(auxCharArray) - 1u);
+                auxCharArray[sizeof(auxCharArray) - 1u] = '\0';
 				if (tWriteCount > 0) auxLong = tWriteCount-1; else auxLong = (long)strlen(auxCharArray);
 				retCode2 = strncmp(auxCharArray, auxTextArrayW[i], auxLong);
 				if (retCode2 != 0) {
@@ -1276,99 +1289,113 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 			case TIFF_SETGET_C32_SINT8:
 					/* For arrays, distinguishing between float or double is essential, even for writing */
 					pVoid = &auxCharArrayW[i];
-			case TIFF_SETGET_C0_UINT16: 
+					deferredSetField = true;
+					break;
+			case TIFF_SETGET_C0_UINT16:
 			case TIFF_SETGET_C0_SINT16: 
 			case TIFF_SETGET_C16_UINT16:
 			case TIFF_SETGET_C16_SINT16:
 			case TIFF_SETGET_C32_UINT16:
 			case TIFF_SETGET_C32_SINT16:
-					if (pVoid == NULL) pVoid = &auxShortArrayW[i];
+					pVoid = &auxShortArrayW[i];
+					deferredSetField = true;
+break;
 			case TIFF_SETGET_C0_UINT32:
 			case TIFF_SETGET_C0_SINT32:
 			case TIFF_SETGET_C16_UINT32:
 			case TIFF_SETGET_C16_SINT32:
 			case TIFF_SETGET_C32_UINT32:
 			case TIFF_SETGET_C32_SINT32:
-					if (pVoid == NULL) pVoid = &auxLongArrayW[i];
-				/* _Cxx_ just defines the size of the count parameter for the array as C0=char, C16=short or C32=long */
-				/*-- Check, if it is a single parameter, a fixed array or a variable array */
-				if (tWriteCount == 1) {
-					fprintf (stderr, "WriteCount for .set_field_type %d should be -1 or greater than 1!  %s\n", tSetFieldType, tFieldArray->fields[i].field_name);
-				} else {
-					/*-- Either fix or variable array --*/
-					/* Now decide between fixed or variable array */
-					if (tWriteCount > 1) {
-						/* fixed array with needed arraysize defined in .field_writecount */
-						if (!TIFFGetField( tif, tTag, &pVoidArray)) {
-							fprintf (stderr, "Can't read %s\n", tFieldArray->fields[i].field_name);
-							GOTOFAILURE_ALL_EXIF
-							break;
-						}	
-						/* set tWriteCount to number of read samples for next steps */
-						auxLong = tWriteCount;
-					} else  {
-						/* special treatment of variable array */
-						/* for test, use always arraysize of VARIABLE_ARRAY_SIZE */
-						if (!TIFFGetField( tif, tTag, &unionLong, &pVoidArray)) {
-							fprintf (stderr, "Can't read %s\n", tFieldArray->fields[i].field_name);
-							GOTOFAILURE_ALL_EXIF
-							break;
-						}	
-						/* set tWriteCount to number of read samples for next steps */
-						auxLong = unionLong.Short1;
-					}
-					/* Save values from temporary array */
-					if (tSetFieldType == TIFF_SETGET_C0_UINT8 || tSetFieldType == TIFF_SETGET_C0_SINT8 || 
-						tSetFieldType == TIFF_SETGET_C16_UINT8 || tSetFieldType == TIFF_SETGET_C16_SINT8 ||
-						tSetFieldType == TIFF_SETGET_C32_UINT8 || tSetFieldType == TIFF_SETGET_C32_SINT8 ) {
-						memcpy(&auxCharArray, pVoidArray,(auxLong * sizeof(auxCharArray[0])));
-						/* Compare and check values  */
-						for (j=0; j<auxLong; j++) {
-							if (tTag == EXIFTAG_EXIFVERSION) {
-								/*-- Use exifVersion[] instead of auxCharArrayW[] for differently set EXIFVERSION tag */
-								if (auxCharArray[j] != exifVersion[j]) {
-									fprintf(stderr, "Read value %d of %s #%d %d differs from set value %d\n", i, tFieldName, j, auxCharArray[j], auxCharArrayW[i + j]);
-									GOTOFAILURE_ALL_EXIF
-								}
-							} else {
-								if (auxCharArray[j] != auxCharArrayW[i + j]) {
-									fprintf(stderr, "Read value %d of %s #%d %d differs from set value %d\n", i, tFieldName, j, auxCharArray[j], auxCharArrayW[i + j]);
-									GOTOFAILURE_ALL_EXIF
-								}
-							}
-						}
-					} else if (tSetFieldType == TIFF_SETGET_C0_UINT16 || tSetFieldType == TIFF_SETGET_C0_SINT16 || 
-						tSetFieldType == TIFF_SETGET_C16_UINT16 || tSetFieldType == TIFF_SETGET_C16_SINT16 ||
-						tSetFieldType == TIFF_SETGET_C32_UINT16 || tSetFieldType == TIFF_SETGET_C32_SINT16 ) {
-						memcpy(&auxShortArray, pVoidArray,(auxLong * sizeof(auxShortArray[0])));
-						/* Compare and check values  */
-						for (j=0; j<auxLong; j++) {
-							if (auxShortArray[j] != auxShortArrayW[i+j]) {
-								fprintf (stderr, "Read value %d of %s #%d %d differs from set value %d\n", i, tFieldName, j, auxShortArray[j], auxShortArrayW[i+j]);
-								GOTOFAILURE_ALL_EXIF
-							}
-						}
-					} else if (tSetFieldType == TIFF_SETGET_C0_UINT32 || tSetFieldType == TIFF_SETGET_C0_SINT32 || 
-						tSetFieldType == TIFF_SETGET_C16_UINT32 || tSetFieldType == TIFF_SETGET_C16_SINT32 ||
-						tSetFieldType == TIFF_SETGET_C32_UINT32 || tSetFieldType == TIFF_SETGET_C32_SINT32 ) {
-						memcpy(&auxLongArray, pVoidArray,(auxLong * sizeof(auxLongArray[0])));
-						/* Compare and check values  */
-						for (j=0; j<auxLong; j++) {
-							if (auxLongArray[j] != auxLongArrayW[i+j]) {
-								fprintf (stderr, "Read value %d of %s #%d %ld differs from set value %ld\n", i, tFieldName, j, auxLongArray[j], auxLongArrayW[i+j]);
-								GOTOFAILURE_ALL_EXIF
-							}
-						}
-					} else {
-						fprintf (stderr, "SetFieldType %d not defined within switch case reading for UINT for %s.\n", tSetFieldType, tFieldName);
-						GOTOFAILURE
-					}
-				}
-				break;
+					pVoid = &auxLongArrayW[i];
+					deferredSetField = true;
+					break;
 			default:
 				fprintf (stderr, "SetFieldType %d not defined within writing switch for %s.\n", tSetFieldType, tFieldName);
 				GOTOFAILURE
 		};  /*-- switch() --*/
+
+		if(deferredSetField) {
+			/* _Cxx_ just defines the size of the count parameter for the array as C0=char, C16=short or C32=long */
+			/*-- Check, if it is a single parameter, a fixed array or a variable array */
+			if (tWriteCount == 1) {
+				fprintf(stderr, "WriteCount for .set_field_type %d should be -1 or greater than 1!  %s\n",
+						tSetFieldType, tFieldArray->fields[i].field_name);
+			} else {
+				/*-- Either fix or variable array --*/
+				/* Now decide between fixed or variable array */
+				if (tWriteCount > 1) {
+					/* fixed array with needed arraysize defined in .field_writecount */
+					if (!TIFFGetField(tif, tTag, &pVoidArray)) {
+						fprintf(stderr, "Can't read %s\n", tFieldArray->fields[i].field_name);
+						GOTOFAILURE_ALL_EXIF
+						break;
+					}
+					/* set tWriteCount to number of read samples for next steps */
+					auxLong = tWriteCount;
+				} else {
+					/* special treatment of variable array */
+					/* for test, use always arraysize of VARIABLE_ARRAY_SIZE */
+					if (!TIFFGetField(tif, tTag, &unionLong, &pVoidArray)) {
+						fprintf(stderr, "Can't read %s\n", tFieldArray->fields[i].field_name);
+						GOTOFAILURE_ALL_EXIF
+						break;
+					}
+					/* set tWriteCount to number of read samples for next steps */
+					auxLong = unionLong.Short1;
+				}
+				/* Save values from temporary array */
+				if (tSetFieldType == TIFF_SETGET_C0_UINT8 || tSetFieldType == TIFF_SETGET_C0_SINT8 ||
+					tSetFieldType == TIFF_SETGET_C16_UINT8 || tSetFieldType == TIFF_SETGET_C16_SINT8 ||
+					tSetFieldType == TIFF_SETGET_C32_UINT8 || tSetFieldType == TIFF_SETGET_C32_SINT8) {
+					memcpy(&auxCharArray, pVoidArray, (auxLong * sizeof(auxCharArray[0])));
+					/* Compare and check values  */
+					for (j = 0; j < auxLong; j++) {
+						if (tTag == EXIFTAG_EXIFVERSION) {
+							/*-- Use exifVersion[] instead of auxCharArrayW[] for differently set EXIFVERSION tag */
+							if (auxCharArray[j] != exifVersion[j]) {
+								fprintf(stderr, "Read value %d of %s #%d %d differs from set value %d\n", i, tFieldName,
+										j, auxCharArray[j], auxCharArrayW[i + j]);
+								GOTOFAILURE_ALL_EXIF
+							}
+						} else {
+							if (auxCharArray[j] != auxCharArrayW[i + j]) {
+								fprintf(stderr, "Read value %d of %s #%d %d differs from set value %d\n", i, tFieldName,
+										j, auxCharArray[j], auxCharArrayW[i + j]);
+								GOTOFAILURE_ALL_EXIF
+							}
+						}
+					}
+				} else if (tSetFieldType == TIFF_SETGET_C0_UINT16 || tSetFieldType == TIFF_SETGET_C0_SINT16 ||
+						   tSetFieldType == TIFF_SETGET_C16_UINT16 || tSetFieldType == TIFF_SETGET_C16_SINT16 ||
+						   tSetFieldType == TIFF_SETGET_C32_UINT16 || tSetFieldType == TIFF_SETGET_C32_SINT16) {
+					memcpy(&auxShortArray, pVoidArray, (auxLong * sizeof(auxShortArray[0])));
+					/* Compare and check values  */
+					for (j = 0; j < auxLong; j++) {
+						if (auxShortArray[j] != auxShortArrayW[i + j]) {
+							fprintf(stderr, "Read value %d of %s #%d %d differs from set value %d\n", i, tFieldName, j,
+									auxShortArray[j], auxShortArrayW[i + j]);
+							GOTOFAILURE_ALL_EXIF
+						}
+					}
+				} else if (tSetFieldType == TIFF_SETGET_C0_UINT32 || tSetFieldType == TIFF_SETGET_C0_SINT32 ||
+						   tSetFieldType == TIFF_SETGET_C16_UINT32 || tSetFieldType == TIFF_SETGET_C16_SINT32 ||
+						   tSetFieldType == TIFF_SETGET_C32_UINT32 || tSetFieldType == TIFF_SETGET_C32_SINT32) {
+					memcpy(&auxLongArray, pVoidArray, (auxLong * sizeof(auxLongArray[0])));
+					/* Compare and check values  */
+					for (j = 0; j < auxLong; j++) {
+						if (auxLongArray[j] != auxLongArrayW[i + j]) {
+							fprintf(stderr, "Read value %d of %s #%d %ld differs from set value %ld\n", i, tFieldName,
+									j, auxLongArray[j], auxLongArrayW[i + j]);
+							GOTOFAILURE_ALL_EXIF
+						}
+					}
+				} else {
+					fprintf(stderr, "SetFieldType %d not defined within switch case reading for UINT for %s.\n",
+							tSetFieldType, tFieldName);
+					GOTOFAILURE
+				}
+			}
+		}
 	} /*-- for() --*/
 	/*================= EXIF: END Reading arbitrary data to the EXIF fields END END END ==============*/
 #endif /*-- READ_ALL_EXIF_TAGS --*/

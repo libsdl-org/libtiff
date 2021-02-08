@@ -64,7 +64,8 @@ before_build:
   - 'if %compiler%==cygwin-cmake cygpath --version || echo cygpath not found'
   - 'if %compiler%==cygwin-cmake cmake --version || echo CMake not found'
   - set "AV_CMAKE_ARGS=-DBUILD_SHARED_LIBS:BOOL=%shared%"
-  - set "AV_CMAKE_ARGS=-DBUILD_SHARED_LIBS:BOOL=%shared%"
+  - 'if %compiler%==cygwin-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS% -Dfatal-warnings=ON"'
+  - 'if %compiler%==mingw32-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS% -Dfatal-warnings=ON"'
   - set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_SOURCE%"
   - set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_INSTALL%"
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_CYG_SOURCE%'
@@ -73,7 +74,7 @@ before_build:
   - 'if %compiler%==vc14-nmake call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" %platform%'
   - mkdir %AV_TIFF_BUILD%
   - cd %AV_TIFF_BUILD%
-  - if NOT %compiler%==vc14-nmake echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_TIFF_CMAKE_SOURCE%
+  - if NOT %compiler%==vc14-nmake echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%
   - 'if %compiler%==cygwin-cmake bash -c "cmake -G \"%generator%\" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%"'
   - 'if %compiler%==mingw-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
   - 'if %compiler%==vc14-cmake cmake -G "%generator%" -A %arch% -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'

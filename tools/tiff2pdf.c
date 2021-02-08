@@ -1015,6 +1015,7 @@ void t2p_free(T2P* t2p)
 */
 
 void t2p_validate(T2P* t2p){
+	(void) t2p;
 
 #ifdef JPEG_SUPPORT
 	if(t2p->pdf_defaultcompression==T2P_COMPRESS_JPEG){
@@ -1043,7 +1044,6 @@ void t2p_validate(T2P* t2p){
 		if(t2p->pdf_minorversion<2){t2p->pdf_minorversion=2;}
 	}
 #endif
-	(void)0;
 
 	return;
 }

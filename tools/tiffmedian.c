@@ -155,9 +155,11 @@ main(int argc, char* argv[])
 		case 'h':
 			usage(EXIT_SUCCESS);
 			/*NOTREACHED*/
+                        break;
 		case '?':
 			usage(EXIT_FAILURE);
 			/*NOTREACHED*/
+                        break;
 		}
 	if (argc - optind != 2)
 		usage(EXIT_FAILURE);
