@@ -1,4 +1,4 @@
-# Windows Win32 IO
+# Windows support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
 # Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
@@ -23,6 +23,12 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
+# Debug postfix
+if(MSVC)
+    set(CMAKE_DEBUG_POSTFIX "d")
+endif()
+
+# Win32 file I/O
 set(win32_io_default OFF)
 if(WIN32)
     set(win32_io_default ON)

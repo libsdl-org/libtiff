@@ -2,6 +2,7 @@
 # Run "cmake" to generate the build files for your platform
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -38,7 +39,13 @@ message(STATUS "libtiff library version ${SO_VERSION}")
 string(TIMESTAMP BUILD_DATE "%Y%m%d")
 message(STATUS "libtiff build date: ${BUILD_DATE}")
 
+
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+
+
+# Disable deprecated features to ensure clean build
+add_definitions(-DTIFF_DISABLE_DEPRECATED)
+
 
 # Project definition
 set(CMAKE_C_STANDARD 99)
@@ -46,11 +53,22 @@ project(tiff
         VERSION "${LIBTIFF_VERSION}"
         LANGUAGES C CXX)
 
+# Autotools compatibility
 include(AutotoolsCompat)
+
+# Compiler checks (warning flags, etc.)
 include(CompilerChecks)
+
+# Linker checks (version script, etc.)
 include(LinkerChecks)
+
+# Processor checks (endianness, fill order, floating point, etc.)
 include(ProcessorChecks)
+
+# Checks for headers
 include(IncludeChecks)
+
+# Checks for functions and other symbols
 include(SymbolChecks)
 
 # Standard installation paths
@@ -61,33 +79,54 @@ set(LIBTIFF_DOCDIR "${CMAKE_INSTALL_FULL_DOCDIR}")
 # CTest testing
 enable_testing()
 
-if(MSVC)
-  set(CMAKE_DEBUG_POSTFIX "d")
-endif()
-
-# Disable deprecated features to ensure clean build
-add_definitions(-DTIFF_DISABLE_DEPRECATED)
-
+# Checks for type presence and size
 include(TypeSizeChecks)
+
+# Check for POSIX Large File Support (LFS)
 include(LargeFileSupport)
+
+# Options for internal codec support
 include(InternalCodecs)
+
+# Check for Deflate codec
 include(DeflateCodec)
+
+# Check for PixarLog codec
 include(PixarLogCodec)
+
+# Check for JPEG codec
 include(JPEGCodec)
+
+# Check for JBIG codec
 include(JBIGCodec)
+
+# Check for LZMA codec
 include(LZMACodec)
+
+# Check for ZSTD codec
 include(ZSTDCodec)
+
+# Check for WebP codec
 include(WebPCodec)
+
+# Option for C++ libtiffxx library
 include(CXXLibrary)
+
+# Checks for OpenGL support
 include(OpenGLChecks)
-include(WindowsIOFeature)
+
+# Windows support
+include(WindowsSupport)
 
 # Orthogonal features
 include(LibraryFeatures)
 
+# pkg-config support
 include(PkgConfig)
 
+# math.h/libm portability
 find_package(CMath REQUIRED)
+
 
 # Process subdirectories
 add_subdirectory(port)
@@ -99,7 +138,6 @@ add_subdirectory(build)
 add_subdirectory(man)
 add_subdirectory(html)
 
-#message(STATUS "EXTRA_DIST: ${EXTRA_DIST}")
 
 message(STATUS "")
 message(STATUS "Libtiff is now configured for ${CMAKE_SYSTEM}")
