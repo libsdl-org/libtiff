@@ -34,8 +34,6 @@ target_link_libraries(tiff-palette tiff port)
 add_executable(tiff-rgb tiff-rgb.c)
 target_link_libraries(tiff-rgb tiff port CMath::CMath)
 
-add_subdirectory(xtiff)
-
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.
