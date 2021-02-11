@@ -78,16 +78,7 @@ include(JBIGCodec)
 include(LZMACodec)
 include(ZSTDCodec)
 include(WebPCodec)
-
-# C++ support
-option(cxx "Enable C++ stream API building (requires C++ compiler)" ON)
-set(CXX_SUPPORT FALSE)
-if (cxx)
-  enable_language(CXX)
-  set(CXX_SUPPORT TRUE)
-endif()
-
-
+include(CXXLibrary)
 include(OpenGLChecks)
 include(WindowsIOFeature)
 
