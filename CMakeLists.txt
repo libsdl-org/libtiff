@@ -127,6 +127,9 @@ include(PkgConfig)
 # math.h/libm portability
 find_package(CMath REQUIRED)
 
+# Release support
+include(Release)
+
 
 # Process subdirectories
 add_subdirectory(port)
