@@ -2,6 +2,7 @@ image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04:latest
 
 stages:
   - build
+  - static-analysis
   - pages
 
 autoconf:
@@ -20,6 +21,15 @@ cmake-ninja:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
+
+coverity:
+  stage: static-analysis
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04-coverity:latest
+  script:
+    - sh build/gitlab-ci coverity "Ninja" Debug
+  only:
+    refs:
+      - master
 
 pages:
   stage: pages
