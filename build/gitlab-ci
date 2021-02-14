@@ -1,6 +1,6 @@
 #!/bin/sh
 # This script is used for testing the build, primarily for use
-# with travis, but may be used by hand as well.
+# with GitLab CI, but may be used by hand as well.
 
 set -e
 set -x
