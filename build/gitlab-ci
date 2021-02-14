@@ -32,10 +32,29 @@ cmake_build()
     opts="-Dfatal-warnings=ON"
     echo "Running cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} .."
     cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ..
-    cmake --build .
+    $COVERITY_BUILD cmake --build .
     cmake --build . --target install
     ctest -V
 }
+
+# Static-analysis with coverity
+coverity_build()
+{
+    curl -o /tmp/cov-analysis-linux64.tgz \
+        https://scan.coverity.com/download/linux64 \
+        --form project=$COVERITY_SCAN_PROJECT_NAME \
+        --form token=$COVERITY_SCAN_TOKEN
+    tar xfz /tmp/cov-analysis-linux64.tgz
+    COVERITY_BUILD="$(pwd)/cov-analysis-linux64-*/bin/cov-build --dir cov-int" cmake_build "$@"
+    tar cfz cov-int.tar.gz cov-int
+    curl https://scan.coverity.com/builds?project=$COVERITY_SCAN_PROJECT_NAME \
+        --form token=$COVERITY_SCAN_TOKEN \
+        --form email=$GITLAB_USER_EMAIL \
+        --form file=@cov-int.tar.gz \
+        --form version="`git describe --tags`" \
+        --form description="`git describe --tags` / $CI_COMMIT_TITLE / $CI_COMMIT_REF_NAME:$CI_PIPELINE_ID"
+}
+
 
 build=$1
 shift
@@ -48,6 +67,10 @@ case $build in
     cmake)
         echo "Testing CMake build"
         cmake_build "$@"
+        ;;
+    coverity)
+        echo "Static analysis with Coverity"
+        coverity_build "$@"
         ;;
     *)
         echo "Invalid argument: \"$arg\"" >&2

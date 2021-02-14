@@ -1,10 +1,8 @@
-image: ubuntu:20.04
-
-before_script:
-  - apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq autoconf automake build-essential cmake libtool libjpeg8-dev libjbig-dev liblzma-dev ninja-build zlib1g-dev libdeflate-dev libzstd-dev libwebp-dev zip wget
+image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04:latest
 
 stages:
   - build
+  - static-analysis
   - pages
 
 autoconf:
@@ -23,6 +21,15 @@ cmake-ninja:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
+
+coverity:
+  stage: static-analysis
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04-coverity:latest
+  script:
+    - sh build/gitlab-ci coverity "Ninja" Debug
+  only:
+    refs:
+      - master
 
 pages:
   stage: pages
