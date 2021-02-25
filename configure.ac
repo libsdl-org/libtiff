@@ -642,6 +642,65 @@ fi
 AM_CONDITIONAL(HAVE_JBIG, test "$HAVE_JBIG" = 'yes')
 
 dnl ---------------------------------------------------------------------------
+dnl Check for liblerc.
+dnl ---------------------------------------------------------------------------
+
+HAVE_LERC=no
+
+AC_ARG_ENABLE(lerc,
+      AS_HELP_STRING([--disable-lerc],
+         [disable liblerc usage (required for lerc compression, enabled by default)]),,)
+AC_ARG_WITH(lerc-include-dir,
+      AS_HELP_STRING([--with-lerc-include-dir=DIR],
+         [location of liblerc headers]),,)
+AC_ARG_WITH(lerc-lib-dir,
+	    AS_HELP_STRING([--with-lerc-lib-dir=DIR],
+			   [location of liblerc library binary]),,)
+
+if test "x$enable_lerc" != "xno" ; then
+
+  if test "x$with_lerc_lib_dir" != "x" ; then
+    LDFLAGS="-L$with_lerc_lib_dir $LDFLAGS"
+  fi
+
+  lerc_lib_name="LercLib"
+  AC_CHECK_LIB("$lerc_lib_name", lerc_decode, [lerc_lib=yes], [lerc_lib=no],)
+  if test "$lerc_lib" = "no" ; then
+    lerc_lib_name="Lerc"
+    AC_CHECK_LIB("$lerc_lib_name", lerc_decode, [lerc_lib=yes], [lerc_lib=no],)
+  fi
+  if test "$lerc_lib" = "no" -a "x$with_lerc_lib_dir" != "x"; then
+    AC_MSG_ERROR([lerc library not found at $with_lerc_lib_dir])
+  fi
+
+  if test "x$with_lerc_include_dir" != "x" ; then
+    CPPFLAGS="-I$with_lerc_include_dir $CPPFLAGS"
+  fi
+  AC_CHECK_HEADER(Lerc_c_api.h, [lerc_c_api_h=yes], [lerc_c_api_h=no])
+  if test "$lerc_c_api_h" = "no" -a "x$with_lerc_include_dir" != "x" ; then
+    AC_MSG_ERROR([Liblerc headers not found at $with_lerc_include_dir])
+  fi
+
+  if test "$lerc_lib" = "yes" -a "$lerc_c_api_h" = "yes" ; then
+    HAVE_LERC=yes
+  fi
+
+fi
+
+if test "$HAVE_LERC" = "yes" ; then
+  AC_DEFINE(LERC_SUPPORT,1,[Support lerc compression])
+  LIBS="-l${lerc_lib_name} $LIBS"
+  tiff_libs_private="-l${lerc_lib_name} ${tiff_libs_private}"
+
+  if test "$HAVE_RPATH" = "yes" -a "x$with_lerc_lib_dir" != "x" ; then
+    LIBDIR="-R $with_lerc_lib_dir $LIBDIR"
+  fi
+
+fi
+
+AM_CONDITIONAL(HAVE_LERC, test "$HAVE_LERC" = 'yes')
+
+dnl ---------------------------------------------------------------------------
 dnl Check for liblzma2.
 dnl ---------------------------------------------------------------------------
 
@@ -1079,6 +1138,7 @@ LOC_MSG([  JPEG support:                       ${HAVE_JPEG}])
 LOC_MSG([  Old JPEG support:                   ${HAVE_OJPEG}])
 LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEG12}])
 LOC_MSG([  ISO JBIG support:                   ${HAVE_JBIG}])
+LOC_MSG([  LERC support:                       ${HAVE_LERC}])
 LOC_MSG([  LZMA2 support:                      ${HAVE_LZMA}])
 LOC_MSG([  ZSTD support:                       ${HAVE_ZSTD}])
 LOC_MSG([  WEBP support:                       ${HAVE_WEBP}])
