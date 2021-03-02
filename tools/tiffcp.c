@@ -469,7 +469,6 @@ static const char usage_info[] =
 " -c lzw[:opts]   compress output with Lempel-Ziv & Welch encoding\n"
 /* "    LZW options:" */
 "    #            set predictor value\n"
-"    p#           set compression level (preset)\n"
 "    For example, -c lzw:2 for LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
