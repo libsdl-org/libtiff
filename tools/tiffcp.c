@@ -77,6 +77,7 @@ static uint32_t tilelength;
 
 static uint16_t config;
 static uint16_t compression;
+static double max_z_error = 0.0;
 static uint16_t predictor;
 static int preset;
 static uint16_t fillorder;
@@ -366,6 +367,24 @@ processZIPOptions(char* cp)
 }
 
 static void
+processLERCOptions(char* cp)
+{
+	if ( (cp = strchr(cp, ':')) ) {
+		do {
+			cp++;
+			if (isdigit((int)*cp))
+				max_z_error = atof(cp);
+			else if (*cp == 's')
+				subcodec = atoi(++cp);
+			else if (*cp == 'p')
+				defpreset = atoi(++cp);
+			else
+				usage(EXIT_FAILURE);
+		} while( (cp = strchr(cp, ':')) );
+	}
+}
+
+static void
 processG3Options(char* cp)
 {
 	if( (cp = strchr(cp, ':')) ) {
@@ -420,6 +439,9 @@ processCompressOptions(char* opt)
 	} else if (strneq(opt, "zip", 3)) {
 		processZIPOptions(opt);
 		defcompression = COMPRESSION_ADOBE_DEFLATE;
+	} else if (strneq(opt, "lerc", 4)) {
+		processLERCOptions(opt);
+		defcompression = COMPRESSION_LERC;
 	} else if (strneq(opt, "lzma", 4)) {
 		processZIPOptions(opt);
 		defcompression = COMPRESSION_LZMA;
@@ -485,6 +507,15 @@ static const char usage_info[] =
 "    s#           set subcodec: 0=zlib, 1=libdeflate (default 1)\n"
 /* "                 (only for Deflate/ZIP)", */
 #endif
+#ifdef LERC_SUPPORT
+" -c lerc[:opts]  compress output with LERC encoding\n"
+/* "    LERC options:", */
+"    #            set max_z_error value\n"
+"    s#           set subcodec: 0=none, 1=deflate, 2=zstd (default 0)\n"
+"    p#           set compression level (preset)\n"
+"    For example, -c lerc:0.5:s2:p22 for max_z_error 0.5,\n"
+"    zstd additional copression with maximum compression level.\n"
+#endif
 #ifdef LZMA_SUPPORT
 " -c lzma[:opts]  compress output with LZMA2 encoding\n"
 /* "    LZMA options:", */
@@ -528,7 +559,7 @@ static const char usage_info[] =
 #ifdef LOGLUV_SUPPORT
 " -c sgilog       compress output with SGILOG encoding\n"
 #endif
-#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(LZMA_SUPPORT) || defined(ZSTD_SUPPORT) || defined(WEBP_SUPPORT) || defined(JPEG_SUPPORT) || defined(JBIG_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT) || defined(LOGLUV_SUPPORT)
+#if defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(LZMA_SUPPORT) || defined(ZSTD_SUPPORT) || defined(WEBP_SUPPORT) || defined(JPEG_SUPPORT) || defined(JBIG_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT) || defined(LOGLUV_SUPPORT) || defined(LERC_SUPPORT)
 " -c none         use no compression algorithm on output\n"
 #endif
 "\n"
@@ -801,6 +832,39 @@ tiffcp(TIFF* in, TIFF* out)
 			CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
 			CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
 			CopyTag(TIFFTAG_FAXDCS, 1, TIFF_ASCII);
+			break;
+		case COMPRESSION_LERC:
+			if( max_z_error > 0 )
+			{
+				if( TIFFSetField(out, TIFFTAG_LERC_MAXZERROR, max_z_error) != 1 )
+				{
+					return FALSE;
+				}
+			}
+			if( subcodec != -1 )
+			{
+				if( TIFFSetField(out, TIFFTAG_LERC_ADD_COMPRESSION, subcodec) != 1 )
+				{
+					return FALSE;
+				}
+			}
+			if( preset != -1 )
+			{
+				switch (subcodec) {
+					case LERC_ADD_COMPRESSION_DEFLATE:
+						if( TIFFSetField(out, TIFFTAG_ZIPQUALITY, preset) != 1 )
+						{
+							return FALSE;
+						}
+						break;
+					case LERC_ADD_COMPRESSION_ZSTD:
+						if( TIFFSetField( out, TIFFTAG_ZSTD_LEVEL, preset ) != 1 )
+						{
+							return FALSE;
+						}
+						break;		
+				}
+			}
 			break;
 		case COMPRESSION_LZW:
 		case COMPRESSION_ADOBE_DEFLATE:
