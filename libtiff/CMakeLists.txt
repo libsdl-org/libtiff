@@ -69,6 +69,7 @@ target_sources(tiff PRIVATE
         tif_jbig.c
         tif_jpeg.c
         tif_jpeg_12.c
+        tif_lerc.c
         tif_luv.c
         tif_lzma.c
         tif_lzw.c
@@ -120,6 +121,9 @@ if(JPEG_SUPPORT)
 endif()
 if(JBIG_SUPPORT)
   target_link_libraries(tiff PRIVATE JBIG::JBIG)
+endif()
+if(LERC_SUPPORT)
+    target_link_libraries(tiff PRIVATE LERC::LERC)
 endif()
 if(LZMA_SUPPORT)
     target_link_libraries(tiff PRIVATE LibLZMA::LibLZMA)
