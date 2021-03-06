@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for symbols
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,7 +23,21 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(
-  README
-  ras2tif.c
-  tif2ras.c)
+
+include(CheckSymbolExists)
+
+
+# Check for getopt
+check_symbol_exists(getopt "unistd.h;stdio.h" HAVE_GETOPT)
+check_symbol_exists(optarg "getopt.h" HAVE_DECL_OPTARG)
+if (HAVE_DECL_OPTARG)
+    set(HAVE_DECL_OPTARG 1)
+else()
+    set(HAVE_DECL_OPTARG 0)
+endif()
+
+# Check for mmap
+check_symbol_exists(mmap "sys/mman.h" HAVE_MMAP)
+
+# Check for setmode
+check_symbol_exists(setmode "unistd.h" HAVE_SETMODE)

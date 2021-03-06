@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for headers
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,6 +23,14 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(
-  README
-  mfs_file.c)
+
+include(CheckIncludeFile)
+
+
+check_include_file(assert.h    HAVE_ASSERT_H)
+check_include_file(fcntl.h     HAVE_FCNTL_H)
+check_include_file(io.h        HAVE_IO_H)
+check_include_file(strings.h   HAVE_STRINGS_H)
+check_include_file(sys/time.h  HAVE_SYS_TIME_H)
+check_include_file(sys/types.h HAVE_SYS_TYPES_H)
+check_include_file(unistd.h    HAVE_UNISTD_H)

@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for OpenGL and GLUT support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,30 +23,21 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# Generate headers
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
-        @ONLY)
+# OpenGL and GLUT
+set(OpenGL_GL_PREFERENCE LEGACY)
 
-set(port_HEADERS libport.h)
+find_package(OpenGL COMPONENTS OpenGL)
+find_package(GLUT)
 
-# Only build if any needed features are missing
-if(NOT HAVE_GETOPT)
-  add_library(port STATIC)
-
-  # Add getopt if missing
-  if(NOT HAVE_GETOPT)
-    target_sources(port PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
-  endif()
-
-  target_include_directories(port PUBLIC
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-else()
-  # Dummy interface library
-  add_library(port INTERFACE)
-  target_include_directories(port INTERFACE
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
+set(HAVE_OPENGL FALSE)
+if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND GLUT_FOUND)
+    set(HAVE_OPENGL TRUE)
 endif()
+
+# Purely to satisfy the generated headers:
+check_include_file(GL/gl.h HAVE_GL_GL_H)
+check_include_file(GL/glu.h HAVE_GL_GLU_H)
+check_include_file(GL/glut.h HAVE_GL_GLUT_H)
+check_include_file(GLUT/glut.h HAVE_GLUT_GLUT_H)
+check_include_file(OpenGL/gl.h HAVE_OPENGL_GL_H)
+check_include_file(OpenGL/glu.h HAVE_OPENGL_GLU_H)

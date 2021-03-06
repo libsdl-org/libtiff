@@ -1,6 +1,6 @@
-# CMake build for libtiff
+# Release support
 #
-# Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,8 +22,11 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(
-  README
-  patchlevel.h
-  xtiff.c
-  xtifficon.h)
+string(TIMESTAMP LIBTIFF_RELEASE_DATE "%Y%m%d")
+
+message(STATUS "Setting release version to ${LIBTIFF_VERSION}")
+message(STATUS "Setting release date to ${LIBTIFF_RELEASE_DATE}")
+
+configure_file("${SOURCE_DIR}/libtiff/tiffvers.h.cmake.in"
+        "${SOURCE_DIR}/libtiff/tiffvers.h"
+        @ONLY)

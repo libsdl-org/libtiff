@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for deflate codec support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,30 +23,23 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# Generate headers
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
-        @ONLY)
 
-set(port_HEADERS libport.h)
+# ZLIB
+set(ZLIB_SUPPORT FALSE)
+find_package(ZLIB)
+option(zlib "use zlib (required for Deflate compression)" ${ZLIB_FOUND})
+if(zlib AND ZLIB_FOUND)
+    set(ZLIB_SUPPORT TRUE)
+endif()
+set(ZIP_SUPPORT ${ZLIB_SUPPORT})
 
-# Only build if any needed features are missing
-if(NOT HAVE_GETOPT)
-  add_library(port STATIC)
-
-  # Add getopt if missing
-  if(NOT HAVE_GETOPT)
-    target_sources(port PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
-  endif()
-
-  target_include_directories(port PUBLIC
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-else()
-  # Dummy interface library
-  add_library(port INTERFACE)
-  target_include_directories(port INTERFACE
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
+# libdeflate
+set(LIBDEFLATE_SUPPORT FALSE)
+find_package(Deflate)
+option(libdeflate "use libdeflate (optional for faster Deflate support, still requires zlib)" ${Deflate_FOUND})
+if (libdeflate AND Deflate_FOUND AND ZIP_SUPPORT)
+    set(LIBDEFLATE_SUPPORT TRUE)
+endif()
+if(Deflate_FOUND AND NOT ZIP_SUPPORT)
+    message(WARNING "libdeflate available but zlib is not. libdeflate cannot be used")
 endif()

@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Processor capability checks
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,30 +23,25 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# Generate headers
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
-        @ONLY)
 
-set(port_HEADERS libport.h)
+include(TestBigEndian)
 
-# Only build if any needed features are missing
-if(NOT HAVE_GETOPT)
-  add_library(port STATIC)
 
-  # Add getopt if missing
-  if(NOT HAVE_GETOPT)
-    target_sources(port PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
-  endif()
-
-  target_include_directories(port PUBLIC
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-else()
-  # Dummy interface library
-  add_library(port INTERFACE)
-  target_include_directories(port INTERFACE
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
+# CPU bit order
+set(HOST_FILLORDER FILLORDER_MSB2LSB)
+if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "i.*86.*" OR
+        CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "amd64.*" OR
+        # AMD64 on Windows
+        CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "AMD64" OR
+        CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "x86_64.*")
+    set(HOST_FILLORDER FILLORDER_LSB2MSB)
 endif()
+
+# CPU endianness
+test_big_endian(HOST_BIG_ENDIAN)
+if(HOST_BIG_ENDIAN)
+    add_definitions(-DWORDS_BIGENDIAN)
+endif()
+
+# IEEE floating point
+set(HAVE_IEEEFP 1)

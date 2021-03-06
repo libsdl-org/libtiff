@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for LZMA codec support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,9 +23,11 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(
-  Makefile.w95
-  README.Tiffile
-  README.tiff2dib
-  Tiffile.cpp
-  tiff2dib.c)
+
+# liblzma2
+set(LZMA_SUPPORT FALSE)
+find_package(LibLZMA)
+option(lzma "use liblzma (required for LZMA2 compression)" ${LZMA_FOUND})
+if (lzma AND LIBLZMA_FOUND)
+    set(LZMA_SUPPORT TRUE)
+endif()

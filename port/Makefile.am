@@ -25,7 +25,8 @@
 
 EXTRA_DIST = \
 	CMakeLists.txt \
-	libport.h
+	libport.h \
+	libport_config.h.cmake.in
 
 noinst_LTLIBRARIES	= libport.la
 libport_la_SOURCES	= dummy.c libport.h

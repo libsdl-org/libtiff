@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for JPEG codec support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,30 +23,34 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# Generate headers
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
-        @ONLY)
 
-set(port_HEADERS libport.h)
+# JPEG
+set(JPEG_SUPPORT FALSE)
+find_package(JPEG)
+option(jpeg "use libjpeg (required for JPEG compression)" ${JPEG_FOUND})
+if (jpeg AND JPEG_FOUND)
+    set(JPEG_SUPPORT TRUE)
+endif()
 
-# Only build if any needed features are missing
-if(NOT HAVE_GETOPT)
-  add_library(port STATIC)
+# Old-jpeg
+set(OJPEG_SUPPORT FALSE)
+option(old-jpeg "support for Old JPEG compression (read-only)" ${JPEG_SUPPORT})
+if (old-jpeg AND JPEG_SUPPORT)
+    set(OJPEG_SUPPORT TRUE)
+endif()
 
-  # Add getopt if missing
-  if(NOT HAVE_GETOPT)
-    target_sources(port PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
-  endif()
-
-  target_include_directories(port PUBLIC
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
+# 8/12-bit jpeg mode
+set(JPEG12_INCLUDE_DIR JPEG12_INCLUDE_DIR-NOTFOUND CACHE PATH "Include directory for 12-bit libjpeg")
+set(JPEG12_LIBRARY JPEG12_LIBRARY-NOTFOUND CACHE FILEPATH "12-bit libjpeg library")
+set(JPEG_DUAL_MODE_8_12 FALSE)
+if (JPEG12_INCLUDE_DIR AND JPEG12_LIBRARY)
+    set(JPEG12_LIBRARIES ${JPEG12_LIBRARY})
+    set(JPEG12_FOUND TRUE)
 else()
-  # Dummy interface library
-  add_library(port INTERFACE)
-  target_include_directories(port INTERFACE
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
+    set(JPEG12_FOUND FALSE)
+endif()
+option(jpeg12 "enable libjpeg 8/12-bit dual mode (requires separate 12-bit libjpeg build)" ${JPEG12_FOUND})
+if (jpeg12 AND JPEG12_FOUND)
+    set(JPEG_DUAL_MODE_8_12 TRUE)
+    set(LIBJPEG_12_PATH "${JPEG12_INCLUDE_DIR}/jpeglib.h")
 endif()

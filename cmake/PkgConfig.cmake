@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# pkg-config support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,30 +23,14 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# Generate headers
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
-        @ONLY)
+# Generate pkg-config file
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
+set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
+set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff-4.pc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc)
 
-set(port_HEADERS libport.h)
-
-# Only build if any needed features are missing
-if(NOT HAVE_GETOPT)
-  add_library(port STATIC)
-
-  # Add getopt if missing
-  if(NOT HAVE_GETOPT)
-    target_sources(port PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
-  endif()
-
-  target_include_directories(port PUBLIC
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-else()
-  # Dummy interface library
-  add_library(port INTERFACE)
-  target_include_directories(port INTERFACE
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-endif()
+# Install pkg-config file
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc
+        DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")

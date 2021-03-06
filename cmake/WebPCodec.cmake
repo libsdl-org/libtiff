@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Checks for WebP codec support
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,11 +23,13 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(
-  README
-  listtif.c
-  maketif.c
-  xtif_dir.c
-  xtiffio.h
-  xtiffiop.h)
+# libwebp
+set(WEBP_SUPPORT FALSE)
 
+find_package(WebP)
+
+option(webp "use libwebp (required for WEBP compression)" ${WebP_FOUND})
+
+if (webp AND WebP_FOUND)
+    set(WEBP_SUPPORT TRUE)
+endif()

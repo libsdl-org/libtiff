@@ -121,7 +121,6 @@ endif
 if HAVE_LD_VERSION_SCRIPT
 libtiff_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libtiff.map
 endif
-libtiff_la_LIBADD = $(LIBPORT)
 
 libtiffxx_la_LDFLAGS = \
 	-no-undefined \
@@ -132,7 +131,7 @@ endif
 if HAVE_LD_VERSION_SCRIPT
 libtiffxx_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libtiffxx.map
 endif
-libtiffxx_la_LIBADD = $(LIBTIFF) $(LIBPORT)
+libtiffxx_la_LIBADD = $(LIBTIFF)
 libtiffxx_la_DEPENDENCIES = libtiff.la
 
 #

@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Read version information from configure.ac.
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,9 +23,28 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-extra_dist(
-  README
-  tif_imageiter.c
-  tif_imageiter.h
-  tif_pdsdirread.c
-  tif_pdsdirwrite.c)
+
+# Get version from configure.ac
+FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/configure.ac" configure REGEX "^LIBTIFF_.*=")
+foreach(line ${configure})
+    foreach(var LIBTIFF_MAJOR_VERSION LIBTIFF_MINOR_VERSION LIBTIFF_MICRO_VERSION LIBTIFF_ALPHA_VERSION
+            LIBTIFF_CURRENT LIBTIFF_REVISION LIBTIFF_AGE)
+        if(NOT ${var} AND line MATCHES "^${var}=(.*)")
+            set(${var} "${CMAKE_MATCH_1}")
+            break()
+        endif()
+    endforeach()
+endforeach()
+
+# Package version
+set(LIBTIFF_VERSION "${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF_MICRO_VERSION}")
+set(LIBTIFF_VERSION_FULL "${LIBTIFF_VERSION}${LIBTIFF_ALPHA_VERSION}")
+
+# Convert the libtool version variables to proper major and minor versions
+math(EXPR SO_MAJOR "${LIBTIFF_CURRENT} - ${LIBTIFF_AGE}")
+set(SO_MINOR "${LIBTIFF_AGE}")
+set(SO_REVISION "${LIBTIFF_REVISION}")
+
+# Library version (unlike libtool's baroque scheme, WYSIWYG here)
+set(SO_COMPATVERSION "${SO_MAJOR}")
+set(SO_VERSION "${SO_MAJOR}.${SO_MINOR}.${SO_REVISION}")

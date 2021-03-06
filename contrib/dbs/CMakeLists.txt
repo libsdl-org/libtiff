@@ -26,17 +26,13 @@ add_executable(tiff-bi tiff-bi.c)
 target_link_libraries(tiff-bi tiff port)
 
 add_executable(tiff-grayscale tiff-grayscale.c)
-target_link_libraries(tiff-grayscale tiff port)
+target_link_libraries(tiff-grayscale tiff port CMath::CMath)
 
 add_executable(tiff-palette tiff-palette.c)
 target_link_libraries(tiff-palette tiff port)
 
 add_executable(tiff-rgb tiff-rgb.c)
-target_link_libraries(tiff-rgb tiff port)
-
-add_subdirectory(xtiff)
-
-extra_dist(README)
+target_link_libraries(tiff-rgb tiff port CMath::CMath)
 
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.

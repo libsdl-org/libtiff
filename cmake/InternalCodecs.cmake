@@ -1,6 +1,7 @@
-# CMake build for libtiff
+# Options to enable and disable internal codecs
 #
 # Copyright © 2015 Open Microscopy Environment / University of Dundee
+# Copyright © 2021 Roger Leigh <rleigh@codelibre.net>
 # Written by Roger Leigh <rleigh@codelibre.net>
 #
 # Permission to use, copy, modify, distribute, and sell this software and
@@ -22,30 +23,24 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# Generate headers
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libport_config.h.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libport_config.h
-        @ONLY)
 
-set(port_HEADERS libport.h)
+option(ccitt "support for CCITT Group 3 & 4 algorithms" ON)
+set(CCITT_SUPPORT ${ccitt})
 
-# Only build if any needed features are missing
-if(NOT HAVE_GETOPT)
-  add_library(port STATIC)
+option(packbits "support for Macintosh PackBits algorithm" ON)
+set(PACKBITS_SUPPORT ${packbits})
 
-  # Add getopt if missing
-  if(NOT HAVE_GETOPT)
-    target_sources(port PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
-  endif()
+option(lzw "support for LZW algorithm" ON)
+set(LZW_SUPPORT ${lzw})
 
-  target_include_directories(port PUBLIC
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-else()
-  # Dummy interface library
-  add_library(port INTERFACE)
-  target_include_directories(port INTERFACE
-          ${CMAKE_CURRENT_BINARY_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR})
-endif()
+option(thunder "support for ThunderScan 4-bit RLE algorithm" ON)
+set(THUNDER_SUPPORT ${thunder})
+
+option(next "support for NeXT 2-bit RLE algorithm" ON)
+set(NEXT_SUPPORT ${next})
+
+option(logluv "support for LogLuv high dynamic range algorithm" ON)
+set(LOGLUV_SUPPORT ${logluv})
+
+option(mdi "support for Microsoft Document Imaging" ON)
+set(MDI_SUPPORT ${mdi})
