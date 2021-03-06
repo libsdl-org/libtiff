@@ -561,6 +561,7 @@ static const char usage_info[] =
 /* Help information format modified for the sake of consistency with the other tiff tools */
 /*    "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] [-M size] input... output" */
 /*     "where comp is one of the following compression algorithms:" */
+"Convert a TIFF image to RGBA color space\n\n"
 "usage: tiff2rgba [options] input output\n"
 "where options are:\n"
 #ifdef JPEG_SUPPORT

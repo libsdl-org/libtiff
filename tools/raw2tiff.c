@@ -615,7 +615,7 @@ processCompressOptions(char* opt)
 }
 
 static const char usage_info[] =
-"raw2tiff --- tool for converting raw byte sequences in TIFF images\n"
+"Create a TIFF file from raw data\n\n"
 "usage: raw2tiff [options] input.raw output.tif\n"
 "where options are:\n"
 " -L		input data has LSB2MSB bit order (default)\n"

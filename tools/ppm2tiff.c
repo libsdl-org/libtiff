@@ -481,37 +481,38 @@ processCompressOptions(char* opt)
 }
 
 static const char usage_info[] =
+"Create a TIFF file from PPM, PGM and PBM image files\n\n"
 "usage: ppm2tiff [options] input.ppm output.tif\n"
 "where options are:\n"
 " -r #		make each strip have no more than # rows\n"
 " -R #		set x&y resolution (dpi)\n"
 "\n"
 #ifdef JPEG_SUPPORT
-" -c jpeg[:opts]  compress output with JPEG encoding\n"
+" -c jpeg[:opts] compress output with JPEG encoding\n"
 /*     "JPEG options:\n" */
 "    #  set compression quality level (0-100, default 75)\n"
 "    r  output color image as RGB rather than YCbCr\n"
 #endif
 #ifdef LZW_SUPPORT
-" -c lzw[:opts]	compress output with Lempel-Ziv & Welch encoding\n"
+" -c lzw[:opts]  compress output with Lempel-Ziv & Welch encoding\n"
 /* "    LZW options:\n" */
 "    #  set predictor value\n"
 "    For example, -c lzw:2 for LZW-encoded data with horizontal differencing\n"
 #endif
 #ifdef ZIP_SUPPORT
-" -c zip[:opts]	compress output with deflate encoding\n"
+" -c zip[:opts]  compress output with deflate encoding\n"
 /* "    Deflate (ZIP) options:\n" */
 "    #  set predictor value\n"
 #endif
 #ifdef PACKBITS_SUPPORT
-" -c packbits   compress output with packbits encoding (the default)\n"
+" -c packbits    compress output with packbits encoding (the default)\n"
 #endif
 #ifdef CCITT_SUPPORT
-" -c g3[:opts]  compress output with CCITT Group 3 encoding\n"
-" -c g4         compress output with CCITT Group 4 encoding\n"
+" -c g3[:opts]   compress output with CCITT Group 3 encoding\n"
+" -c g4          compress output with CCITT Group 4 encoding\n"
 #endif
 #if defined(JPEG_SUPPORT) || defined(LZW_SUPPORT) || defined(ZIP_SUPPORT) || defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
-" -c none       use no compression algorithm on output\n"
+" -c none        use no compression algorithm on output\n"
 #endif
 ;
 

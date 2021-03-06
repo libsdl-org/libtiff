@@ -439,6 +439,7 @@ processCompressOptions(char* opt)
 }
 
 static const char usage_info[] =
+"Copy, convert, or combine TIFF files\n\n"
 "usage: tiffcp [options] input... output\n"
 "where options are:\n"
 " -a              append to output instead of overwriting\n"

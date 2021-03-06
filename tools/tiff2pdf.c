@@ -843,6 +843,7 @@ success:
 
 static void usage_info(int code) {
 	static const char lines[]=
+	"Convert a TIFF image to a PDF document\n\n"
 	"usage:  tiff2pdf [options] input.tiff\n"
 	"where options are:\n"
 	" -o: output to file name\n"

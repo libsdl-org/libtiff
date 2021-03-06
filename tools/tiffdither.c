@@ -306,6 +306,7 @@ main(int argc, char* argv[])
 }
 
 static const char usage_info[] =
+"Convert a greyscale image to bilevel using dithering\n\n"
 "usage: tiffdither [options] input.tif output.tif\n"
 "where options are:\n"
 " -r #      make each strip have no more than # rows\n"
@@ -328,8 +329,8 @@ static const char usage_info[] =
 #ifdef CCITT_SUPPORT
 " -c g3[:opts]  compress output with CCITT Group 3 encoding\n"
 "    Group 3 options:\n"
-"    1d	        use default CCITT Group 3 1D-encoding\n"
-"    2d	        use optional CCITT Group 3 2D-encoding\n"
+"    1d         use default CCITT Group 3 1D-encoding\n"
+"    2d         use optional CCITT Group 3 2D-encoding\n"
 "    fill       byte-align EOL codes\n"
 "    For example, -c g3:2d:fill for G3-2D-encoded data with byte-aligned EOLs\n"
 " -c g4         compress output with CCITT Group 4 encoding\n"

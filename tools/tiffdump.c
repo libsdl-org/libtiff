@@ -104,6 +104,7 @@ extern char* optarg;
 void
 usage()
 {
+	fprintf(stderr, "\nDisplay directory information from TIFF files\n\n");
 	fprintf(stderr, "usage: %s [-h] [-o offset] [-m maxitems] file.tif ...\n", appname);
 	exit(EXIT_FAILURE);
 }

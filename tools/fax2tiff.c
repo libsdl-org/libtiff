@@ -427,6 +427,7 @@ copyFaxFile(TIFF* tifin, TIFF* tifout)
 }
 
 static const char usage_info[] =
+"Create a TIFF Class F fax file from raw fax data\n\n"
 "usage: fax2tiff [options] input.raw...\n"
 "where options are:\n"
 " -3		input data is G3-encoded		[default]\n"

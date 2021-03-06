@@ -47,11 +47,12 @@
 #endif
 
 static const char usageMsg[] =
+"Set the value of a TIFF header to a specified value\n\n"
 "usage: tiffset [options] filename\n"
 "where options are:\n"
-" -s <tagname> [count] <value>...   set the tag value\n"
-" -u <tagname> to unset the tag\n"
-" -d <dirno> set the directory\n"
+" -s  <tagname> [count] <value>...   set the tag value\n"
+" -u  <tagname> to unset the tag\n"
+" -d  <dirno> set the directory\n"
 " -sd <diroff> set the subdirectory\n"
 " -sf <tagname> <filename>  read the tag value from file (for ASCII tags only)\n"
 " -h  this help screen\n"

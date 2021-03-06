@@ -435,6 +435,7 @@ cpTags(TIFF* in, TIFF* out)
 #undef NTAGS
 
 static const char usage_info[] =
+"Convert a palette color TIFF image to a full color image\n\n"
 "usage: pal2rgb [options] input.tif output.tif\n"
 "where options are:\n"
 " -p contig	pack samples contiguously (e.g. RGBRGB...)\n"

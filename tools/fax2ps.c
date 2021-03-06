@@ -432,6 +432,7 @@ main(int argc, char** argv)
 }
 
 static const char usage_info[] =
+"Convert a TIFF facsimile to compressed PostScript\n\n"
 "usage: fax2ps [options] [input.tif ...]\n"
 "where options are:\n"
 " -w            suppress warning messages\n"

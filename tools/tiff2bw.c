@@ -502,6 +502,7 @@ cpTags(TIFF* in, TIFF* out)
 #undef NTAGS
 
 static const char usage_info[] =
+"Convert a color TIFF image to greyscale\n\n"
 "usage: tiff2bw [options] input.tif output.tif\n"
 "where options are:\n"
 " -R %		use #% from red channel\n"
