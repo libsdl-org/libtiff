@@ -1,3 +1,899 @@
+2021-04-16  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff v4.3.0 released
+
+2021-04-15  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'libjpeg12_cmake' into 'master'
+	libtiff/tif_config.h.cmake.in: surround LIBJPEG_12_PATH by double quotes
+
+	See merge request libtiff/libtiff!237
+
+2021-04-15  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff/tif_config.h.cmake.in: surround LIBJPEG_12_PATH by double quotes
+
+2021-04-14  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'lerc_api_change' into 'master'
+	tif_lerc.c: cope with API breakage in liblerc master
+
+	See merge request libtiff/libtiff!236
+
+2021-04-14  Even Rouault  <even.rouault@spatialys.com>
+
+	tif_lerc.c: cope with API breakage in liblerc master.
+
+2021-04-08  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff: remove remaining #ifdef WIN32 and use PRI formatting.
+
+2021-03-10  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'kmilos-master-patch-73187' into 'master'
+	tiffcp: Remove LZW help text, preset not supported
+
+	See merge request libtiff/libtiff!229
+
+2021-03-10  Miloš Komarčević  <miloskomarcevic@aim.com>
+
+	tiffcp: Remove LZW help text, preset not supported.
+
+2021-03-10  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'feature/lerc' into 'master'
+	Add LERC Compression Plugin (closes: #213)
+
+	Closes #213
+
+	See merge request libtiff/libtiff!228
+
+2021-03-10  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'cmake-fixes' into 'master'
+	CMake fixes
+
+	Closes #246 et #245
+
+	See merge request libtiff/libtiff!232
+
+2021-03-09  Roger Leigh  <rleigh@codelibre.net>
+
+	cmake: Correct FindCMath.
+
+	cmake: Correct ZSTD_USABLE typo.
+
+2021-03-07  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'cmake-find-lib-prefixes' into 'master'
+	cmake: Correct find lib prefixes for Deflate and JBIG
+
+	See merge request libtiff/libtiff!231
+
+2021-03-07  Roger Leigh  <rleigh@codelibre.net>
+
+	cmake: FindJBIG uses lib prefix on Windows.
+
+	cmake: FindDeflate uses lib prefix on Windows.
+
+2021-03-07  Even Rouault  <even.rouault@spatialys.com>
+
+	TWebPDecode(): avoid potential overflow on multiplication (CID 1472928)
+
+	TIFFReadDirEntryArrayWithLimit(): avoid false positive from Coverity Scan regarding out-of-bounds access (CID 1472927)
+
+	tif_dirwrite.c: avoid setting a variable that is not read afterwards.
+
+2021-03-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'coverity-fixes' into 'master'
+	Coverity fixes (high impact)
+
+	See merge request libtiff/libtiff!227
+
+2021-03-07  Roger Leigh  <rleigh@codelibre.net>
+
+	Fix high-impact Coverity issues (resource leaks).
+	The issues are in the tests and tiffcrop, not the core library. Real issues, but not high risk.
+
+	Use to test if Coverity integration is performing properly on merge.
+
+2021-03-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_tif_fax3_encoder_regression' into 'master'
+	tif_fax3.c: fix master regression in encoder
+
+	See merge request libtiff/libtiff!230
+
+2021-03-07  Even Rouault  <even.rouault@spatialys.com>
+
+	tif_fax3.c: fix master regression in encoder.
+	Fix issue introduced in 39a74eede0455ec8ee334dcddf71f5354d508d8b
+
+	Spotted by gdal's tiff_write_76 test
+
+2021-03-07  Antonio Valentino  <antonio.valentino@tiscali.it>
+
+	Add LERC support in CMake.
+
+2021-03-07  Antonio Valentino  <Antonio.Valentino@esa.int>
+
+	Add LERC support in configure.ac and Makefile.am.
+
+2021-03-07  Antonio Valentino  <antonio.valentino@tiscali.it>
+
+	Add LERC support to tiffcp.
+
+2021-03-07  Antonio Valentino  <Antonio.Valentino@esa.int>
+
+	Add LERC plugin.
+	The lerc plugin code has been copyed form GDAL.
+
+2021-03-06  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'display_tool_purpose' into 'master'
+	TIFF tools: insert a line of text summarizing each tool's purpose
+
+	See merge request libtiff/libtiff!214
+
+2021-03-06  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'cmake-update' into 'master'
+	CMake updates
+
+	See merge request libtiff/libtiff!224
+
+2021-03-06  Even Rouault  <even.rouault@spatialys.com>
+
+	tiff.h: typo fix in comment.
+
+2021-02-15  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'remove-travis' into 'master'
+	ci: Remove unused Travis-CI support
+
+	See merge request libtiff/libtiff!226
+
+2021-02-14  Roger Leigh  <rleigh@codelibre.net>
+
+	ci: Remove unused Travis-CI support.
+
+2021-02-14  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'ci-coverity' into 'master'
+	Enable Coverity static analysis with CI pipeline
+
+	See merge request libtiff/libtiff!225
+
+2021-02-14  Roger Leigh  <rleigh@codelibre.net>
+
+	ci: Add Coverity static analysis job.
+
+	ci: Use custom libtiff CI image.
+
+2021-02-13  Roger Leigh  <rleigh@codelibre.net>
+
+	cmake: Add release target.
+
+	cmake: Remove empty contrib files.
+
+	cmake: Tidy toplevel.
+
+	cmake: Move pkg-config support to PkgConfig.cmake.
+
+	cmake: Move library feature options to CXXLibraryFeatures.cmake.
+
+	cmake: Move C++ support to CXXLibrary.cmake.
+
+	cmake: Add FindCMath to handle libm linking portably.
+
+	cmake: Tidy unused includes.
+
+	cmake: Rename release date to build date.
+
+	cmake: Compute timestamp portably.
+
+	cmake: Remove remaining uses of report_values()
+
+	cmake: Move JPEG12 checks to JPEGCodec.cmake.
+
+	cmake: Move OpenGL checks to OpenGLChecks.cmake.
+
+	cmake: Move OpenGL checks to OpenGLChecks.cmake.
+
+	cmake: Move WebP codec support to WebPCodec.cmake.
+
+	cmake: Use imported targets for WebP.
+
+	cmake: Add FindWebP.
+
+	cmake: Move ZSTD codec support to ZSTDCodec.cmake.
+
+	cmake: Use imported targets for ZSTD.
+
+	cmake: Add FindZSTD.
+
+	cmake: Move LZMA codec support to LZMACodec.cmake.
+
+	cmake: Use imported targets for LibLZMA.
+
+	cmake: Move JBIG codec support to JBIGCodec.cmake.
+
+	cmake: Use imported targets for JBIG.
+
+	cmake: Add FindJBIG.
+
+	cmake: Move PixarLog codec support to PixarLogCodec.cmake.
+
+	cmake: Report system name in configuration report.
+
+	cmake: Move JPEG codec support to JPEGCodec.cmake.
+
+	cmake: Use imported targets for JPEG.
+
+	cmake: Move Deflate codec support to DeflateCodec.cmake.
+
+	cmake: Use imported targets for ZLIB and Deflate.
+
+	cmake: Add FindDeflate.
+
+	cmake: Move symbol checks to SymbolChecks.cmake.
+
+	cmake: Move include checks to IncludeChecks.cmake.
+
+	cmake: Move all autotools logic to separate files.
+
+	cmake: Move internal codec options to InternalCodecs.cmake.
+
+	cmake: Move LFS check to LargeFileSupport.cmake.
+
+	cmake: Move Win32 IO feature to WindowsIOFeature.cmake.
+
+	cmake: Move processor capability checks to ProcessorChecks.cmake.
+
+	cmake: Move type size checks to TypeSizeChecks.cmake.
+
+	cmake: Move linker checks to LinkerChecks.cmake.
+
+	cmake: Move warning options to CompilerChecks.
+
+	cmake: Move version introspection to AutotoolsVersion.cmake.
+
+	cmake: Move compiler checks to CompilerChecks.cmake.
+
+	cmake: Split into helper scripts.
+
+2021-02-08  Roger Leigh  <rleigh@codelibre.net>
+
+	cmake: Use target_sources.
+
+	libport: Adjust header and library to only define and link if required.
+	* Make libport an OBJECT library when in use, otherwise a dummy
+	  INTERFACE library
+	* libport.h will work if getopt is present or not present.  If
+	  present, will fall back to <unistd.h>, else will define
+	  symbols
+	* Add generated libport_config.h to define HAVE_GETOPT and HAVE_UNISTD_H
+	* dummy.c no longer needed with CMake
+	* libtiff/libtiffxx no longer link with libport
+
+	cmake: Remove unnecessary extra_dist usage.
+	Only makes sense in the context of Automake.  Was carried over
+	for reference while porting, but is not needed.
+
+	cmake: Update minimum version and policy version to 3.9.
+
+2021-02-08  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'remove-nmake' into 'master'
+	Remove NMake build support
+
+	See merge request libtiff/libtiff!223
+
+2021-02-08  Roger Leigh  <rleigh@codelibre.net>
+
+	Remove NMake build support.
+	The functionality provided by the NMake build is now completely
+	superseded by the CMake build.
+
+2021-02-08  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'warning-fixes' into 'master'
+	Warning fixes
+
+	See merge request libtiff/libtiff!222
+
+2021-02-07  Miguel Medalha  <medalist@sapo.pt>
+
+	Update tiffsplit.c.
+
+	Reinsert summary line lost after conflicting merge.
+
+	Merge branch 'master' into 'display_tool_purpose'
+	# Conflicts:
+	#   tools/tiffsplit.c
+
+2021-02-06  Roger Leigh  <rleigh@codelibre.net>
+
+	ci: Enable fatal warnings with -Werror for AppVeyor/GCC.
+
+	ci: Enable fatal warnings with -Werror for GitLab CI.
+
+	tif_zstd.c: Remove unused variable warning.
+
+	custom_dir_EXIF_231: Remove case statement fallthrough.
+
+	custom_dir_EXIF_231: Correct use of strncpy.
+
+	Correct include order.
+
+	Eliminate implict fallthrough usage.
+	Use simple loops in place of manual loop unrolling.  Rely on
+	the compiler optimiser to unroll loops when appropriate.
+
+	Suppress potential unused variable warning.
+
+	Suppress warnings or avoid case statement fallthrough.
+
+2021-02-05  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'c99-ssize_t-fixes' into 'master'
+	C99 ssize_t fixes
+
+	Closes #239
+
+	See merge request libtiff/libtiff!219
+
+2021-02-05  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'tiffsplit-too-many-args' into 'master'
+	tiffsplit.c: exit with EXIT_FAILURE if there are extra args on the command line
+
+	See merge request libtiff/libtiff!209
+
+2021-02-05  Roger Leigh  <rleigh@codelibre.net>
+
+	Add additional TIFF_SSIZE_FORMAT uses.
+
+2021-02-04  Roger Leigh  <rleigh@codelibre.net>
+
+	NMake fixes for size type formatting.
+
+	Add TIFF_SIZE_FORMAT for portable use of %z.
+	MinGW64 does support %z, but it issues a compiler warning.
+
+	Align Autoconf tif_config.h and CMake tif_config.cmake.in.
+
+	Use TIFF_SSIZE_FORMAT for formatting tmsize_t.
+
+2021-02-04  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'remove-lcc' into 'master'
+	Remove Makefile.lcc
+
+	See merge request libtiff/libtiff!221
+
+2021-02-04  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'remove-scons' into 'master'
+	Remove SCons build
+
+	See merge request libtiff/libtiff!220
+
+2021-02-03  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'c99-snprintf' into 'master'
+	Use C99 snprintf
+
+	See merge request libtiff/libtiff!217
+
+2021-02-03  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'tiff2ps-const' into 'master'
+	tiff2ps.c: string literals must be const char *, not char *
+
+	See merge request libtiff/libtiff!202
+
+2021-02-03  Roger Leigh  <rleigh@codelibre.net>
+
+	Remove SCons build.
+	Unmaintained for 16 years.
+
+2021-02-03  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'codec_summary' into 'master'
+	Modify 'CMakeLists.txt' to produce a meaningful summary of external codecs
+
+	See merge request libtiff/libtiff!192
+
+2021-02-03  Roger Leigh  <rleigh@codelibre.net>
+
+	Remove Makefile.lcc.
+	Unmaintained for 22 years.
+
+2021-02-02  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'ci-32-bit' into 'master'
+	ci: Build 32- and 64-bit MSVC variants
+
+	See merge request libtiff/libtiff!218
+
+2021-02-01  Roger Leigh  <rleigh@codelibre.net>
+
+	ci: Build 32- and 64-bit MSVC variants.
+
+	Use C99 snprintf.
+
+2021-02-01  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'c99-strtol' into 'master'
+	Use C99 strtol, strtoul, strtoll and strtoull
+
+	See merge request libtiff/libtiff!216
+
+2021-01-31  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'c99-inline' into 'master'
+	Use C99 inline
+
+	See merge request libtiff/libtiff!215
+
+2021-01-31  Roger Leigh  <rleigh@codelibre.net>
+
+	Use C99 strtol, strtoul, strtoll and strtoull.
+
+	tif_fax3: Use C99 inline.
+
+	Remove inline feature tests and defines.
+	Available as a standard feature with C99.
+
+2021-01-30  Miguel Medalha  <medalist@sapo.pt>
+
+	Update raw2tiff.c (remove duplicate description of tool)
+
+2021-01-30  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'c99-format-strings' into 'master'
+	C99 format strings
+
+	See merge request libtiff/libtiff!211
+
+2021-01-29  Miguel Medalha  <medalist@sapo.pt>
+
+	Update tiffdither.c (2 tabs caused slight misalignment of lines in usage info output)
+
+2021-01-28  Miguel Medalha  <medalist@sapo.pt>
+
+	Update ppm2tiff.c (slight misalignment of lines in usage info output)
+
+	Update tiffset.c (small misalignment of lines in usage info output)
+
+2021-01-28  Medalha  <medalist@sapo.pt>
+
+	Display tool purpose.
+
+2021-01-28  Thomas Bernard  <miniupnp@free.fr>
+
+	tiff2ps.c: string literals must be const char *, not char *
+
+2021-01-28  Roger Leigh  <rleigh@codelibre.net>
+
+	libtiff: Use PRI format flags and remove unnecessary casts.
+
+2021-01-27  Roger Leigh  <rleigh@codelibre.net>
+
+	ascii_tag: Use PRI format flags and remove unnecessary casts.
+
+	check_tag: Use PRI format flags and remove unnecessary casts.
+
+	custom_dir_EXIF_231: Use PRI format flags and remove unnecessary casts.
+
+	short_tag: Use PRI format flags and remove unnecessary casts.
+
+	strip_rw: Use PRI format flags and remove unnecessary casts.
+
+	fax2tiff: Use PRI format flags and remove unnecessary casts.
+
+	ppm2tiff: Correct format strings.
+
+	raw2tiff: Use PRI format flags and remove unnecessary casts.
+
+	rgb2ycbcr: Use PRI format flags and remove unnecessary casts.
+
+	tiff2pdf: Use PRI format flags and remove unnecessary casts.
+
+	tiff2ps: Use PRI format flags and remove unnecessary casts.
+
+	tiff2rgba: Use PRI format flags and remove unnecessary casts.
+
+	tiffcmp: Use PRI format flags and remove unnecessary casts.
+
+	tiffcp: Use PRI format flags and remove unnecessary casts.
+
+	tiffcrop: Use PRI format flags and remove unnecessary casts.
+
+	tiffinfo: Use PRI format flags and remove unnecessary casts.
+
+	tiffdump: Use PRI format flags and remove unnecessary casts.
+
+2021-01-27  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'c99-require-stdtypes' into 'master'
+	Use standard C99 integer types
+
+	See merge request libtiff/libtiff!205
+
+2021-01-26  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'reserve_COMPRESSION_JXL' into 'master'
+	tiff.h: reserve COMPRESSION_JXL=50002 for JPEGXL
+
+	See merge request libtiff/libtiff!210
+
+2021-01-22  Even Rouault  <even.rouault@spatialys.com>
+
+	tiff.h: reserve COMPRESSION_JXL=50002 for JPEGXL.
+
+2021-01-22  Kurt Schwehr  <schwehr@google.com>
+
+	tiffsplit.c: exit with EXIT_FAILURE if there are extra args on the command line
+	e.g. tiffsplit in.tif a_prefix_ junk
+
+2021-01-22  Roger Leigh  <rleigh@codelibre.net>
+
+	Add and enable TIFF_DISABLE_DEPRECATED for internal use.
+
+	Add typedef deprecations for GCC/Clang and MSVC.
+
+	Use standard C99 integer types.
+
+2021-01-20  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'ubuntu-zstd-wepb' into 'master'
+	gitlab-ci : use libzstd-dev and libwebp-dev ubuntu packages
+
+	See merge request libtiff/libtiff!208
+
+2021-01-20  Thomas Bernard  <miniupnp@free.fr>
+
+	gitlab-ci : use libzstd-dev and libwebp-dev ubuntu packages.
+	should replace !206
+
+2021-01-20  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'issue-232' into 'master'
+	tiff2ps: exit the loop in case of error
+
+	Closes #232
+
+	See merge request libtiff/libtiff!201
+
+2021-01-20  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'tiffsplit-exit-status' into 'master'
+	tiffsplit: Exit with EXIT_FAILURE if unable to open the input file.
+
+	See merge request libtiff/libtiff!207
+
+2021-01-20  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'config-cleanup' into 'master'
+	Remove HAVE_INTTYPES_H, HAVE_LFIND & lfind, HAVE_SEARCH_H & include <search.h>
+
+	See merge request libtiff/libtiff!203
+
+2021-01-19  Kurt Schwehr  <schwehr@google.com>
+
+	tiffsplit: Exit with EXIT_FAILURE if unable to open the input file.
+
+2021-01-18  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'tiffcmp' into 'master'
+	tiffcmp: fix comparaison with pixels that are fractional number of bytes
+
+	Closes #53
+
+	See merge request libtiff/libtiff!141
+
+2021-01-15  Kurt Schwehr  <schwehr@google.com>
+
+	CMakeLists.txt: Remove search for lfind.
+
+	Remove HAVE_INTTYPES_H, HAVE_LFIND & lfind, HAVE_SEARCH_H & include <search.h>
+	- HAVE_INTTYPES_H is replaced with TIFF_HAVE_INTTYPES_H
+	- tif_dirinfo.c has a static td_lfind
+
+2021-01-15  Thomas Bernard  <miniupnp@free.fr>
+
+	tiffcmp: fix comparaison with pixels that are fractional number of bytes
+	For exemple : 4bits per sample + 3 samples per pixel => 1.5 bytes per pixel
+
+	tiff2ps: exit the loop in case of error.
+	fixes #232
+
+2021-01-15  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'rm-strcasecmp' into 'master'
+	Remove port/strcasecmp.c as strcasecmp is not currently used in libtiff.
+
+	Closes #235
+
+	See merge request libtiff/libtiff!199
+
+2021-01-15  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'std-int-types' into 'master'
+	Use standard C99 integer types
+
+	See merge request libtiff/libtiff!185
+
+2021-01-13  Kurt Schwehr  <schwehr@google.com>
+
+	Remove port/strcasecmp.c as strcasecmp is not currently used in libtiff.
+	Fixes #235
+
+2021-01-10  Miguel Medalha  <medalist@sapo.pt>
+
+	Update CMakeLists.txt. Delete unnecessary line from libdeflate codec support section
+
+2021-01-10  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'include_libport' into 'master'
+	tiff tools and libtiff/mkg3states: include 'libport.h', remove local definition of 'getopt()'
+
+	See merge request libtiff/libtiff!198
+
+2021-01-09  Miguel Medalha  <medalist@sapo.pt>
+
+	Update CMakeLists.txt. Cleanup of indentation space. Removal of leading '/' from webp include dir.
+
+2021-01-09  miguel  <medalist@sapo.pt>
+
+	cmake: Use target_include_directories correctly.
+
+2021-01-09  Roger Leigh  <rleigh@codelibre.net>
+
+	cmake: Use target_include_directories correctly.
+
+	cmake: Drop unnecessary TOOL_INCLUDES.
+
+2021-01-07  Roger Leigh  <rleigh@codelibre.net>
+
+	cmake: Use target_include_directories correctly.
+
+2021-01-07  miguel  <medalist@sapo.pt>
+
+	tiff tools and libtiff/mkg3states: include 'libport.h', remove local definition of 'getopt()'
+
+2021-01-07  Miguel Medalha  <medalist@sapo.pt>
+
+	Update CMakeLists.txt.
+
+2021-01-07  miguel  <medalist@sapo.pt>
+
+	tiff tools: include 'libport.h', remove local definition of 'getopt()'
+
+2021-01-06  Roger Leigh  <rleigh@codelibre.net>
+
+	Remove conditional use of <string.h>
+
+	cmake: Drop dlfcn.h check.
+
+	cmake: Remove duplicate line.
+
+	Use stdint.h types when available.
+
+2021-01-05  Olivier Paquet  <olivier.paquet@gmail.com>
+
+	Merge branch 'iptcutil' into 'master'
+	contrib/iptcutil.c: set '#ifdef _WIN32' (was '#ifdef WIN32', which failed at build time)
+
+	See merge request libtiff/libtiff!197
+
+2021-01-05  miguel  <medalist@sapo.pt>
+
+	tiff tools: include 'libport.h', remove local definition of 'getopt()'
+
+	contrib/iptcutil.c - set '#ifdef _WIN32' (was '#ifdef WIN32', which failed at build time)
+
+2021-01-04  Even Rouault  <even.rouault@spatialys.com>
+
+	tools/CMakeLists.txt: add comment about rgb2ycbcr and thumbnail not to be installed
+
+2021-01-04  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'revert-5331ed49' into 'master'
+	Revert "Merge branch 'install_targets' into 'master'"
+
+	See merge request libtiff/libtiff!196
+
+2021-01-04  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'drop-wince' into 'master'
+	Remove non-functional WinCE support
+
+	See merge request libtiff/libtiff!188
+
+2021-01-04  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'drop-vms' into 'master'
+	Remove non-functional VMS support
+
+	See merge request libtiff/libtiff!187
+
+2021-01-03  Even Rouault  <even.rouault@spatialys.com>
+
+	Revert "Merge branch 'install_targets' into 'master'"
+	This reverts merge request !193
+
+2021-01-03  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'tiffcp_b_parameter' into 'master'
+	tiffcp: Remove unnecessary reference to compression from usage info for -b parameter
+
+	See merge request libtiff/libtiff!189
+
+2021-01-03  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'cmake-faxtable' into 'master'
+	cmake: Add faxtable target
+
+	See merge request libtiff/libtiff!186
+
+2021-01-03  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'install_targets' into 'master'
+	Update 'CMakeLists.txt' from 'tools'.
+
+	See merge request libtiff/libtiff!193
+
+2021-01-03  Miguel Medalha  <medalist@sapo.pt>
+
+	Update 'CMakeLists.txt' from 'tools'.
+
+	Update CMakeLists.txt.
+
+2021-01-03  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'usage_info' into 'master'
+	thumbnail: Rename constant variable 'stuff' to 'usage_info'
+
+	See merge request libtiff/libtiff!190
+
+2021-01-03  Miguel Medalha  <medalist@sapo.pt>
+
+	Modified 'CMakeLists.txt' to produce a meaningful summary of external codecs support.
+
+	Removed unnecessary reference to compression from usage info for -b parameter
+
+	Constant variable 'stuff' renamed to 'usage_info' for consistency with the other tools
+
+2021-01-02  Roger Leigh  <rleigh@codelibre.net>
+
+	Remove non-functional VMS support.
+
+	Remove non-functional WinCE support.
+
+2021-01-02  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'codespell' into 'master'
+	Fix spelling mistakes.
+
+	See merge request libtiff/libtiff!183
+
+2021-01-02  Kurt Schwehr  <schwehr@google.com>
+
+	ChangeLog: Remove extraneous character from prior commit - 00fe7828.
+
+2021-01-02  Roger Leigh  <rleigh@codelibre.net>
+
+	Merge branch 'codespell-custom_dir_EXIF_231' into 'master'
+	custom_dir_EXIF_231.c: dos2unix and codespell
+
+	See merge request libtiff/libtiff!184
+
+2021-01-01  Roger Leigh  <rleigh@codelibre.net>
+
+	mkg3states: Sync generator with current generated file content.
+
+	cmake: Add faxtable and mkg3states targets.
+
+2020-12-31  Kurt Schwehr  <schwehr@google.com>
+
+	custom_dir_EXIF_231.c: dos2unix and codespell.
+	additonal, Varable, greather, alwasy
+
+2020-12-31  Kurt Schwehr  <schwehr@google.com>
+
+	Fix spelling mistakes.
+	Found with:
+
+	codespell --version
+	1.17.1
+
+2020-12-29  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'remove-some-vms-ifdef' into 'master'
+	Remove "ifdef VMS" that are no longer necessary.
+
+	See merge request libtiff/libtiff!181
+
+2020-12-29  Kurt Schwehr  <schwehr@google.com>
+
+	Remove "ifdef VMS" that are no longer necessary.
+	Both sides of the if are now the same.
+
+2020-12-29  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	_TIFFBuiltinCODECS should be const.
+
+2020-12-28  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'issue-202' into 'master'
+	tiff2pdf.c: check that tiff_datasize fits in a signed tsize_t
+
+	Closes #202
+
+	See merge request libtiff/libtiff!166
+
+2020-12-28  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'w_report-when-libdeflate-is-found' into 'master'
+	CMakeLists.txt: Report when libdeflate is found
+
+	See merge request libtiff/libtiff!175
+
+2020-12-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	Declare gpsFields as static const.
+
+2020-12-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	Merge branch 'tools-reduce-initialized-data' into 'master'
+	Reduce initialized data by making more data const and simplifying usage() implementation.
+
+	See merge request libtiff/libtiff!180
+
+2020-12-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	Reduce initialized data by making more data const and simplifying usage() implementation.
+
+2020-12-27  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	Merge branch 'master' into 'master'
+	tiff tools: display of compression methods is now conditional instead of hard-coded
+
+	See merge request libtiff/libtiff!176
+
+2020-12-27  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	Merge branch 'build' into 'master'
+	Fix wrong URL for fetching config.guess and config.sub
+
+	See merge request libtiff/libtiff!177
+
+2020-12-26  Chocobo1  <Chocobo1@users.noreply.github.com>
+
+	Fix wrong URL for fetching config.guess and config.sub.
+
+2020-12-25  miguel  <medalist@sapo.pt>
+
+	tiff tools: made display of compression methods and their parameters conditional on their actual availability
+
+2020-12-20  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	autogen.sh now updates config.guess and config.sub from master gnulib version.
+
+2020-12-19  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	Add a https://libtiff.gitlab.io/libtiff/ link.
+
+	Remove stray character in URL area.
+
+	Changes for 4.2.0 release.
+
+	Changes for 4.2.0 release.
+
 2020-12-19  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
 
 	* libtiff 4.2.0 released.
