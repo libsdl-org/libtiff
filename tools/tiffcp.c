@@ -510,10 +510,16 @@ static const char usage_info[] =
 " -c lerc[:opts]  compress output with LERC encoding\n"
 /* "    LERC options:", */
 "    #            set max_z_error value\n"
-"    s#           set subcodec: 0=none, 1=deflate, 2=zstd (default 0)\n"
 "    p#           set compression level (preset)\n"
-"    For example, -c lerc:0.5:s2:p22 for max_z_error 0.5,\n"
-"    zstd additional copression with maximum compression level.\n"
+  #ifdef ZSTD_SUPPORT
+    "    s#           set subcodec: 0=none, 1=deflate, 2=zstd (default 0)\n"
+    "    For example, -c lerc:0.5:s2:p22 for max_z_error 0.5,\n"
+    "    zstd additional compression with maximum compression level.\n"
+  #else
+    "    s#           set subcodec: 0=none, 1=deflate (default 0)\n"
+    "    For example, -c lerc:0.5:s1:p12 for max_z_error 0.5,\n"
+    "    deflate additional compression with maximum compression level.\n"
+  #endif
 #endif
 #ifdef LZMA_SUPPORT
 " -c lzma[:opts]  compress output with LZMA2 encoding\n"
