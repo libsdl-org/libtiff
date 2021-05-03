@@ -4,6 +4,8 @@ configure
 Makefile.in
 config/compile
 config/config.guess
+config/config.h
+config/config.h.in
 config/config.sub
 config/depcomp
 config/install-sh
