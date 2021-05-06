@@ -619,6 +619,8 @@ static const struct tagname {
     { TIFFTAG_ICCPROFILE,	"ICC Profile" },
     { TIFFTAG_JBIGOPTIONS,	"JBIG Options" },
     { TIFFTAG_STONITS,		"StoNits" },
+    { TIFFTAG_GDAL_METADATA,   "GDALMetadata" },
+    { TIFFTAG_GDAL_NODATA,     "GDALNoDataValue" },
 };
 #define	NTAGS	(sizeof (tagnames) / sizeof (tagnames[0]))
 
