@@ -95,7 +95,7 @@ main(int argc, char* argv[])
 				else if (streq(optarg, "jpeg"))
 					compression = COMPRESSION_JPEG;
 				else if (streq(optarg, "zip"))
-					compression = COMPRESSION_DEFLATE;
+					compression = COMPRESSION_ADOBE_DEFLATE;
 				else
 					usage(EXIT_FAILURE);
 				break;

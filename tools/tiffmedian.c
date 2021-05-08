@@ -263,6 +263,7 @@ main(int argc, char* argv[])
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 		switch (compression) {
 		case COMPRESSION_LZW:
+		case COMPRESSION_ADOBE_DEFLATE:
 		case COMPRESSION_DEFLATE:
 			if (predictor != 0)
 				TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
@@ -318,7 +319,7 @@ processCompressOptions(char* opt)
 		char* cp = strchr(opt, ':');
 		if (cp)
 			predictor = atoi(cp+1);
-		compression = COMPRESSION_DEFLATE;
+		compression = COMPRESSION_ADOBE_DEFLATE;
 	} else
 		return (0);
 	return (1);
