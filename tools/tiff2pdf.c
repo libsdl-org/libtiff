@@ -2789,7 +2789,7 @@ dataready:
 #endif /* ifdef JPEG_SUPPORT */
 #ifdef ZIP_SUPPORT
 	case T2P_COMPRESS_ZIP:
-		TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+		TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
 		if(t2p->pdf_defaultcompressionquality%100 != 0){
 			TIFFSetField(output, 
 				TIFFTAG_PREDICTOR, 
@@ -3286,7 +3286,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
 #endif
 #ifdef ZIP_SUPPORT
 	case T2P_COMPRESS_ZIP:
-		TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+		TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
 		if(t2p->pdf_defaultcompressionquality%100 != 0){
 			TIFFSetField(output, 
 				TIFFTAG_PREDICTOR, 
