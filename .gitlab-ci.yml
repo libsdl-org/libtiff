@@ -22,6 +22,14 @@ cmake-ninja:
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
 
+cmake-ninja-arm64:
+  tags: [arm64,freebsd]
+  stage: build
+  script:
+    - sh build/gitlab-ci cmake "Ninja" Release
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+
 coverity:
   stage: static-analysis
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04-coverity:latest
