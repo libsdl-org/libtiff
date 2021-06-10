@@ -2583,7 +2583,7 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 					t2p->tiff_datasize,
 					TIFFFileName(input));
 				t2p->t2p_error = T2P_ERR_ERROR;
-                                _TIFFfree(buffer);
+				_TIFFfree(buffer);
 				return(0);
 			}
 			for(i=0;i<stripcount;i++){
@@ -2599,8 +2599,9 @@ tsize_t t2p_readwrite_pdf_image(T2P* t2p, TIFF* input, TIFF* output){
 							"Error on decoding strip %"PRIu32" of %s",
 							i + j*stripcount,
 							TIFFFileName(input));
-							_TIFFfree(buffer);
 						t2p->t2p_error=T2P_ERR_ERROR;
+						_TIFFfree(samplebuffer);
+						_TIFFfree(buffer);
 						return(0);
 					}
 					samplebufferoffset+=read;
