@@ -1784,6 +1784,17 @@ JPEGSetupEncode(TIFF* tif)
 
     /* mozjpeg by default enables progressive JPEG, which is illegal in JPEG-in-TIFF */
     /* So explicitly disable it. */
+    if( sp->cinfo.c.num_scans != 0 &&
+        (sp->jpegtablesmode & JPEGTABLESMODE_HUFF) != 0 )
+    {
+        /* it has been found that mozjpeg could create corrupt strips/tiles */
+        /* in non optimize_coding mode. */
+        TIFFWarningExt(tif->tif_clientdata, module,
+                       "mozjpeg library likely detected. Disable emission of "
+                       "Huffman tables in JpegTables tag, and use optimize_coding "
+                       "to avoid potential issues");
+        sp->jpegtablesmode &= ~JPEGTABLESMODE_HUFF;
+    }
     sp->cinfo.c.num_scans = 0;
     sp->cinfo.c.scan_info = NULL;
 
