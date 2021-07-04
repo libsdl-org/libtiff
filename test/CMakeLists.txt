@@ -165,38 +165,38 @@ set(IMAGES_EXTRA_DIST
 
 set(noinst_HEADERS tifftest.h)
 
-add_executable(ascii_tag)
+add_executable(ascii_tag ../placeholder.h)
 target_sources(ascii_tag PRIVATE ascii_tag.c)
 target_link_libraries(ascii_tag PRIVATE tiff port)
 
-add_executable(long_tag)
+add_executable(long_tag ../placeholder.h)
 target_sources(long_tag PRIVATE long_tag.c check_tag.c)
 target_link_libraries(long_tag PRIVATE tiff port)
 
-add_executable(short_tag)
+add_executable(short_tag ../placeholder.h)
 target_sources(short_tag PRIVATE short_tag.c check_tag.c)
 target_link_libraries(short_tag PRIVATE tiff port)
 
-add_executable(strip_rw)
+add_executable(strip_rw ../placeholder.h)
 target_sources(strip_rw PRIVATE strip_rw.c strip.c test_arrays.c test_arrays.h)
 target_link_libraries(strip_rw PRIVATE tiff port)
 
-add_executable(rewrite)
+add_executable(rewrite ../placeholder.h)
 target_sources(rewrite PRIVATE rewrite_tag.c)
 target_link_libraries(rewrite PRIVATE tiff port)
 
 if(JPEG_SUPPORT)
-  add_executable(raw_decode)
+  add_executable(raw_decode ../placeholder.h)
   target_sources(raw_decode PRIVATE raw_decode.c)
   target_link_libraries(raw_decode PRIVATE tiff port JPEG::JPEG)
 endif()
 
-add_executable(custom_dir)
+add_executable(custom_dir ../placeholder.h)
 target_sources(custom_dir PRIVATE custom_dir.c)
 target_link_libraries(custom_dir PRIVATE tiff port)
 
 if(NOT BUILD_SHARED_LIBS)
-add_executable(rational_precision2double)
+add_executable(rational_precision2double ../placeholder.h)
 target_sources(rational_precision2double PRIVATE rational_precision2double.c)
 target_link_libraries(rational_precision2double PRIVATE tiff port)
 add_test(NAME "rational_precision2double"
@@ -204,22 +204,22 @@ add_test(NAME "rational_precision2double"
 endif()
 
 if(NOT BUILD_SHARED_LIBS)
-add_executable(custom_dir_EXIF_231)
+add_executable(custom_dir_EXIF_231 ../placeholder.h)
 target_sources(custom_dir_EXIF_231 PRIVATE custom_dir_EXIF_231.c)
 target_link_libraries(custom_dir_EXIF_231 PRIVATE tiff port)
 add_test(NAME "custom_dir_EXIF_231"
          COMMAND "custom_dir_EXIF_231")
 endif()
 
-add_executable(defer_strile_loading)
+add_executable(defer_strile_loading ../placeholder.h)
 target_sources(defer_strile_loading PRIVATE defer_strile_loading.c)
 target_link_libraries(defer_strile_loading PRIVATE tiff port)
 
-add_executable(defer_strile_writing)
+add_executable(defer_strile_writing ../placeholder.h)
 target_sources(defer_strile_writing PRIVATE defer_strile_writing.c)
 target_link_libraries(defer_strile_writing PRIVATE tiff port)
 
-add_executable(testtypes)
+add_executable(testtypes ../placeholder.h)
 target_sources(testtypes PRIVATE testtypes.c)
 target_link_libraries(testtypes PRIVATE tiff port)
 
