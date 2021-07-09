@@ -161,7 +161,7 @@ if(CXX_SUPPORT)
   set(tiffxx_HEADERS
           tiffio.hxx)
 
-  add_library(tiffxx)
+  add_library(tiffxx ../placeholder.h)
   target_sources(tiffxx PRIVATE
           ${tiffxx_HEADERS}
           tif_stream.cxx)
@@ -189,7 +189,7 @@ if(CXX_SUPPORT)
 
 endif()
 
-add_executable(mkg3states)
+add_executable(mkg3states ../placeholder.h)
 target_sources(mkg3states PRIVATE mkg3states.c tif_fax3.h)
 target_link_libraries(mkg3states tiff port)
 
