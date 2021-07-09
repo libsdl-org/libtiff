@@ -124,8 +124,6 @@ include(WindowsSupport)
 # Orthogonal features
 include(LibraryFeatures)
 
-# pkg-config support
-include(PkgConfig)
 
 # math.h/libm portability
 find_package(CMath REQUIRED)
@@ -144,6 +142,8 @@ add_subdirectory(build)
 add_subdirectory(man)
 add_subdirectory(html)
 
+# pkg-config support
+include(PkgConfig)
 
 message(STATUS "")
 message(STATUS "Libtiff is now configured for ${CMAKE_SYSTEM}")

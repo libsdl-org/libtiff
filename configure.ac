@@ -160,6 +160,9 @@ AM_SILENT_RULES
 tiff_libs_private=
 AC_SUBST(tiff_libs_private)
 
+tiff_requires_private=
+AC_SUBST(tiff_requires_private)
+
 dnl We don't need to add math library to all targets
 case "${host_os}" in
     cygwin* | mingw32* | beos* | darwin*)
