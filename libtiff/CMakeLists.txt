@@ -166,13 +166,21 @@ if(HAVE_LD_VERSION_SCRIPT)
                         "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiff.map")
 endif()
 
-install(TARGETS tiff
+export(TARGETS tiff NAMESPACE TIFF:: FILE "${CMAKE_CURRENT_BINARY_DIR}/libtiffTargets.cmake")
+install(TARGETS tiff EXPORT TiffTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
 install(FILES ${tiff_public_HEADERS}
         DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+
+set(TIFF_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/tiff)
+install(EXPORT TiffTargets
+        FILE TiffTargets.cmake
+        NAMESPACE TIFF::
+        DESTINATION ${TIFF_CONFIGDIR}
+)
 
 if(CXX_SUPPORT)
   set(tiffxx_HEADERS
