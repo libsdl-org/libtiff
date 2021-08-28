@@ -68,8 +68,8 @@ endif
 # Executable programs which need to be built in order to support tests
 check_PROGRAMS = \
 	ascii_tag long_tag short_tag strip_rw rewrite custom_dir custom_dir_EXIF_231 \
-	rational_precision2double defer_strile_loading defer_strile_writing testtypes \
-	$(JPEG_DEPENDENT_CHECK_PROG)
+	rational_precision2double defer_strile_loading defer_strile_writing test_directory \
+	testtypes $(JPEG_DEPENDENT_CHECK_PROG)
 
 # Test scripts to execute
 TESTSCRIPTS = \
@@ -225,6 +225,8 @@ defer_strile_loading_SOURCES = defer_strile_loading.c
 defer_strile_loading_LDADD = $(LIBTIFF)
 defer_strile_writing_SOURCES = defer_strile_writing.c
 defer_strile_writing_LDADD = $(LIBTIFF)
+test_directory_SOURCES = test_directory.c
+test_directory_LDADD = $(LIBTIFF)
 
 AM_CPPFLAGS = -I$(top_srcdir)/libtiff
 

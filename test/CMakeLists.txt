@@ -211,6 +211,14 @@ add_test(NAME "custom_dir_EXIF_231"
          COMMAND "custom_dir_EXIF_231")
 endif()
 
+if(NOT BUILD_SHARED_LIBS)
+  add_executable(test_directory ../placeholder.h)
+  target_sources(test_directory PRIVATE test_directory.c)
+  target_link_libraries(test_directory PRIVATE tiff port)
+  add_test(NAME "test_directory"
+           COMMAND "test_directory")
+endif()
+
 add_executable(defer_strile_loading ../placeholder.h)
 target_sources(defer_strile_loading PRIVATE defer_strile_loading.c)
 target_link_libraries(defer_strile_loading PRIVATE tiff port)
