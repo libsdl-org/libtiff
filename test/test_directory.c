@@ -19,10 +19,16 @@
  *
  */
 
+#include "tif_config.h"
+
 #include <stdio.h>
 #include <stdbool.h>
 
 #include "tiffio.h"
+
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #define    SPP              3        /* Samples per pixel */
 #define    N_DIRECTORIES    10       /* Number of directories to write */
@@ -200,7 +206,8 @@ int test_lastdir_offset(bool is_big_tiff) {
     }
     for (i = 0; i < N_DIRECTORIES; i++) {
         if (offsets_optimized[i] != offsets_non_optimized[i]) {
-            fprintf(stderr, "Unexpected directory offset for directory %i, expected offset %lli but got %lli.\n", i,
+            fprintf(stderr, "Unexpected directory offset for directory %i, expected offset %"PRIu64" but got %"PRIu64".\n",
+                    i,
                     offsets_non_optimized[i], offsets_optimized[i]);
             goto failure;
         }
