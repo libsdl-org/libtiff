@@ -872,9 +872,10 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 						dblDiff = auxDouble - auxDoubleArrayW[i];
 						if (fabs(dblDiff) > fabs(dblDiffLimit)) {
 							/*--: EXIFTAG_SUBJECTDISTANCE: LibTiff returns value of "-1.0" if numerator equals 4294967295 (0xFFFFFFFF) to indicate infinite distance! */
-							if (!(tTag == EXIFTAG_SUBJECTDISTANCE && auxDouble == -1.0))
+							if (!(tTag == EXIFTAG_SUBJECTDISTANCE && auxDouble == -1.0)) {
 								fprintf(stderr, "%d:Read value of %s %f differs from set value %f\n", i, tFieldName, auxDouble, auxDoubleArrayW[i]);
 								GOTOFAILURE
+							}
 						}
 						break;
 
