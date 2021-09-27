@@ -1177,7 +1177,6 @@ writeBufferToSeparateStrips (TIFF* out, uint8_t* buf,
   tstrip_t strip = 0;
   tsize_t  stripsize = TIFFStripSize(out);
   tsize_t  rowstripsize,  scanlinesize = TIFFScanlineSize(out);
-  tsize_t  total_bytes = 0;
   tdata_t  obuf;
 
   (void) TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
@@ -1215,7 +1214,6 @@ writeBufferToSeparateStrips (TIFF* out, uint8_t* buf,
 
       stripsize = TIFFVStripSize(out, nrows);
       src = buf + (row * rowsize);
-      total_bytes += stripsize;
       memset (obuf, '\0', rowstripsize);
       if (extractContigSamplesToBuffer(obuf, src, nrows, width, s, spp, bps, dump))
         {
@@ -2710,7 +2708,7 @@ static void dump_info(FILE *dumpfile, int format, char *prefix, char *msg, ...)
 static int dump_buffer (FILE* dumpfile, int format, uint32_t rows, uint32_t width,
                         uint32_t row, unsigned char *buff)
   {
-  int j, k;
+  int k;
   uint32_t i;
   unsigned char * dump_ptr;
 
@@ -2728,7 +2726,7 @@ static int dump_buffer (FILE* dumpfile, int format, uint32_t rows, uint32_t widt
                  "Row %4"PRIu32", %"PRIu32" bytes at offset %"PRIu32,
 	         row + i + 1u, width, row * width);
      
-    for (j = 0, k = width; k >= 10; j += 10, k -= 10, dump_ptr += 10)
+    for (k = width; k >= 10; k -= 10, dump_ptr += 10)
       dump_data (dumpfile, format, "", dump_ptr, 10);
     if (k > 0)
       dump_data (dumpfile, format, "", dump_ptr, k);
