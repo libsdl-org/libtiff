@@ -166,7 +166,7 @@ TWebPDecode(TIFF* tif, uint8_t* op, tmsize_t occ, uint16_t s)
 
       tif->tif_rawcp += tif->tif_rawcc;
       tif->tif_rawcc = 0;
-      sp->last_y += occ / sp->sDecBuffer.u.RGBA.stride;
+      sp->last_y += (int)(occ / sp->sDecBuffer.u.RGBA.stride);
       return 1;
     } else {
       TIFFErrorExt(tif->tif_clientdata, module, "Unable to decode WebP data.");
