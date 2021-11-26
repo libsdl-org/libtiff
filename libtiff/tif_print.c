@@ -124,8 +124,6 @@ _TIFFPrintField(FILE* fd, const TIFFField *fip,
 			fprintf(fd, "%"PRId64, ((int64_t *) raw_data)[j]);
 		else if(fip->field_type == TIFF_IFD8)
 			fprintf(fd, "0x%"PRIx64, ((uint64_t *) raw_data)[j]);
-		else if(fip->field_type == TIFF_FLOAT)
-			fprintf(fd, "%f", ((float *)raw_data)[j]);
 		else if(fip->field_type == TIFF_DOUBLE)
 			fprintf(fd, "%lf", ((double *) raw_data)[j]);
 		else if(fip->field_type == TIFF_ASCII) {
