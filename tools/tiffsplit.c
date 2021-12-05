@@ -91,10 +91,16 @@ main(int argc, char* argv[])
                 out = TIFFOpen(path, TIFFIsBigEndian(in)?"wb":"wl");
                 _TIFFfree(path);
 
-                if (out == NULL)
+                if (out == NULL) {
+                        TIFFClose(in);
                         return (EXIT_FAILURE);
-                if (!tiffcp(in, out))
+                }
+                if (!tiffcp(in, out)) {
+                        TIFFClose(in);
+                        TIFFClose(out);
                         return (EXIT_FAILURE);
+
+                }
                 TIFFClose(out);
         } while (TIFFReadDirectory(in));
 
