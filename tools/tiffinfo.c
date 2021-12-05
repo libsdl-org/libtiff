@@ -476,7 +476,7 @@ TIFFReadRawDataTiled(TIFF* tif, int bitrev)
 {
 	const char* what = "Tile";
 	uint32_t ntiles = TIFFNumberOfTiles(tif);
-	uint64_t *tilebc;
+	uint64_t *tilebc = NULL;
 
 	TIFFGetField(tif, TIFFTAG_TILEBYTECOUNTS, &tilebc);
 	if (tilebc != NULL && ntiles > 0) {
