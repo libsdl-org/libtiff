@@ -163,11 +163,15 @@ main(int argc, char* argv[])
 		buf = (unsigned char *)_TIFFmalloc(h.ras_maplength);
 		if (buf == NULL) {
 			fprintf(stderr, "No space to read in colormap.\n");
+			fclose(in);
+			(void) TIFFClose(out);
 			return (-5);
 		}
 		if (fread(buf, h.ras_maplength, 1, in) != 1) {
 			fprintf(stderr, "%s: Read error on colormap.\n",
 			    argv[optind]);
+			fclose(in);
+			(void) TIFFClose(out);
 			return (-6);
 		}
 		mapsize = 1<<h.ras_depth; 
@@ -175,11 +179,15 @@ main(int argc, char* argv[])
 			fprintf(stderr,
 			    "%s: Huh, %d colormap entries, should be %d?\n",
 			    argv[optind], h.ras_maplength, mapsize*3);
+			fclose(in);
+			(void) TIFFClose(out);
 			return (-7);
 		}
 		red = (uint16_t*)_TIFFmalloc(mapsize * 3 * sizeof (uint16_t));
 		if (red == NULL) {
 			fprintf(stderr, "No space for colormap.\n");
+			fclose(in);
+			(void) TIFFClose(out);
 			return (-8);
 		}
 		map = red;
