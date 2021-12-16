@@ -209,6 +209,11 @@ main(int argc, char* argv[])
 		return (EXIT_FAILURE);
 	}
 
+	if (nbands == 0) {
+		fprintf(stderr, "The number of bands is illegal.\n");
+		return (-1);
+	}
+
 	if (guessSize(fd, dtype, hdr_size, nbands, swab, &width, &length) < 0)
 		return EXIT_FAILURE;
 
