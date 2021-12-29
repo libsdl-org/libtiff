@@ -649,6 +649,14 @@ dnl Check for liblerc.
 dnl ---------------------------------------------------------------------------
 
 HAVE_LERC=no
+STATIC_LERC=no
+
+if test "$enable_static" = "no"; then
+    static_lerc=no
+else
+    static_lerc=yes
+fi
+AM_CONDITIONAL([STATIC_LERC], [ test "$static_lerc" = yes ])
 
 AC_ARG_ENABLE(lerc,
       AS_HELP_STRING([--disable-lerc],
