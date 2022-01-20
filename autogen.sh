@@ -1,7 +1,13 @@
 #!/bin/sh
 set -x
-case `uname` in Darwin*) glibtoolize --force --copy ;;
-  *) libtoolize --force --copy ;; esac
+case `uname` in
+  Darwin*)
+    glibtoolize --force --copy
+    ;;
+  *)
+    libtoolize --force --copy
+    ;;
+esac
 aclocal -I ./m4
 autoheader
 automake --foreign --add-missing --copy
