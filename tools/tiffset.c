@@ -146,9 +146,19 @@ main(int argc, char* argv[])
 
             arg_index++;
             if (TIFFFieldDataType(fip) == TIFF_ASCII) {
-                if (TIFFSetField(tiff, TIFFFieldTag(fip), argv[arg_index]) != 1)
-                    fprintf( stderr, "Failed to set %s=%s\n",
-                             TIFFFieldName(fip), argv[arg_index] );
+                if(TIFFFieldPassCount( fip )) {
+                    size_t len;
+                    len = strlen(argv[arg_index]) + 1;
+                    if (len > UINT16_MAX || TIFFSetField(tiff, TIFFFieldTag(fip),
+                            (uint16_t)len, argv[arg_index]) != 1)
+                        fprintf( stderr, "Failed to set %s=%s\n",
+                            TIFFFieldName(fip), argv[arg_index] );
+                } else {
+                    if (TIFFSetField(tiff, TIFFFieldTag(fip),
+                            argv[arg_index]) != 1)
+                        fprintf( stderr, "Failed to set %s=%s\n",
+                            TIFFFieldName(fip), argv[arg_index] );
+                }
             } else if (TIFFFieldWriteCount(fip) > 0
 		       || TIFFFieldWriteCount(fip) == TIFF_VARIABLE) {
                 int     ret = 1;
