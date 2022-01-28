@@ -122,7 +122,7 @@ install(TARGETS fax2ps
                 tiffmedian
                 tiffset
                 tiffsplit
-        RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}")
+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
 if(HAVE_OPENGL)
   add_executable(tiffgt ../placeholder.h)
@@ -131,7 +131,7 @@ if(HAVE_OPENGL)
   target_link_libraries(tiffgt PRIVATE OpenGL::GL GLUT::GLUT)
 
   install(TARGETS tiffgt
-          RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}")
+          RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 endif()
 
 if(WEBP_SUPPORT AND EMSCRIPTEN)

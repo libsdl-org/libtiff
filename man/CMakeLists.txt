@@ -90,6 +90,6 @@ set(man3_MANS
   TIFFWriteTile.3tiff)
 
 install(FILES ${man1_MANS}
-        DESTINATION "${CMAKE_INSTALL_FULL_MANDIR}/man1")
+        DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
 install(FILES ${man3_MANS}
-        DESTINATION "${CMAKE_INSTALL_FULL_MANDIR}/man3")
+        DESTINATION "${CMAKE_INSTALL_MANDIR}/man3")
