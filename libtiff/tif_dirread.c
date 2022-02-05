@@ -4177,7 +4177,8 @@ TIFFReadDirectory(TIFF* tif)
                     goto bad;
                 }
 
-                memcpy(new_sampleinfo, tif->tif_dir.td_sampleinfo, old_extrasamples * sizeof(uint16_t));
+                if (old_extrasamples > 0)
+                    memcpy(new_sampleinfo, tif->tif_dir.td_sampleinfo, old_extrasamples * sizeof(uint16_t));
                 _TIFFsetShortArray(&tif->tif_dir.td_sampleinfo, new_sampleinfo, tif->tif_dir.td_extrasamples);
                 _TIFFfree(new_sampleinfo);
         }
