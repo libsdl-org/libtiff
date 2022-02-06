@@ -5765,7 +5765,8 @@ TIFFFetchStripThing(TIFF* tif, TIFFDirEntry* dir, uint32 nstrips, uint64** lpp)
 			_TIFFfree(data);
 			return(0);
 		}
-                _TIFFmemcpy(resizeddata,data,(uint32)dir->tdir_count*sizeof(uint64));
+                if (dir->tdir_count)
+                    _TIFFmemcpy(resizeddata,data,(uint32)dir->tdir_count*sizeof(uint64));
                 _TIFFmemset(resizeddata+(uint32)dir->tdir_count,0,(nstrips-(uint32)dir->tdir_count)*sizeof(uint64));
 		_TIFFfree(data);
 		data=resizeddata;
