@@ -139,7 +139,11 @@ int get_dir_offsets(const char *filename, uint64_t *offsets) {
 
     for (i = 0; i < N_DIRECTORIES; i++) {
         offsets[i] = TIFFCurrentDirOffset(tif);
-        TIFFReadDirectory(tif);
+        if (!TIFFReadDirectory(tif) && i < (N_DIRECTORIES-1)) {
+            fprintf(stderr, "Can't read %d.th directory from %s\n", i, filename);
+            TIFFClose(tif);
+            return 2;
+        }
     }
 
     TIFFClose(tif);

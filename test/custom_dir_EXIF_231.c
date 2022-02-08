@@ -64,7 +64,8 @@
 #pragma warning( disable : 4101)
 #endif
 
-#include "tif_config.h"
+#include "tif_config.h"		//necessary for linux compiler
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -77,8 +78,6 @@
 
 #include "tiffio.h"
 #include "tiffiop.h"
-#include "tif_dir.h"
-#include "tifftest.h"
 
 
 
@@ -198,6 +197,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	double			auxDoubleGPSDirection    =  63.7;
 	float			auxFloatArrayN1[3] = { 1.0f / 7.0f, 61.23456789012345f, 62.3f };
 	float			auxFloatArrayN2[3] = { -1.0f / 7.0f, -61.23456789012345f, -62.3f };
+	float			auxFloatArrayResolutions[4] = {5.456789f, 6.666666f, 0.0033f, 5.0f / 213.0f};
 
 	/* -- Variables for reading -- */
 	uint16_t      count16 = 0;
@@ -269,6 +269,23 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	}
 	if (!TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric)) {
 		fprintf (stderr, "Can't set PhotometricInterpretation tag.\n");
+		goto failure;
+	}
+
+	if (!TIFFSetField(tif, TIFFTAG_XRESOLUTION, auxFloatArrayResolutions[0])) {
+		fprintf(stderr, "Can't set TIFFTAG_XRESOLUTION tag.\n");
+		goto failure;
+	}
+	if (!TIFFSetField(tif, TIFFTAG_YRESOLUTION, auxFloatArrayResolutions[1])) {
+		fprintf(stderr, "Can't set TIFFTAG_YRESOLUTION tag.\n");
+		goto failure;
+	}
+	if (!TIFFSetField(tif, TIFFTAG_XPOSITION, auxFloatArrayResolutions[2])) {
+		fprintf(stderr, "Can't set TIFFTAG_XPOSITION tag.\n");
+		goto failure;
+	}
+	if (!TIFFSetField(tif, TIFFTAG_YPOSITION, auxFloatArrayResolutions[3])) {
+		fprintf(stderr, "Can't set TIFFTAG_YPOSITION tag.\n");
 		goto failure;
 	}
 
@@ -376,7 +393,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	/*------- And also do the same for the EXIF IFD tag here, because we have to save the main directory next ------*/
 	/*-- Set dummy EXIF/GPS tag in original tiff-structure in order to reserve space for final dir_offset value,
 	 *   which is properly written at the end.
-     */
+	 */
 #define WRITE_EXIF_TAGS
 #ifdef WRITE_EXIF_TAGS
 	if (!TIFFSetField(tif, TIFFTAG_EXIFIFD, dir_offset )) {
@@ -460,7 +477,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 		} else {
 			/* Rational2Double interface for GPSTAG */
 			if (!TIFFSetField(tif, GPSTAG_LONGITUDE, auxDoubleArrayGPS2)) {
-				fprintf(stderr, "Can't write GPSTAG_LATITUDE\n");
+				fprintf(stderr, "Can't write GPSTAG_LONGITUDE\n");
 				goto failure;
 			}
 		}
@@ -711,9 +728,9 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 					pVoid = &auxLongArrayW[i];
 					deferredSetField = true;
 					break;
-            default:
-                fprintf (stderr, "SetFieldType %d not defined within writing switch for %s.\n", tSetFieldType, tFieldName);
-        };  /*-- switch() --*/
+			default:
+				fprintf(stderr, "SetFieldType %d not defined within writing switch for %s.\n", tSetFieldType, tFieldName);
+		};  /*-- switch() --*/
 
 		if (deferredSetField) {
 			/* _Cxx_ just defines the size of the count parameter for the array as C0=char, C16=short or C32=long */
@@ -1088,13 +1105,12 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 	}
 
 	for (i=0; i<nTags; i++) {
-        bool deferredSetField = false;
+		bool deferredSetField = false;
 		tTag = tFieldArray->fields[i].field_tag;
 		tType = tFieldArray->fields[i].field_type;				/* e.g. TIFF_RATIONAL */
 		tWriteCount = tFieldArray->fields[i].field_writecount;
 		tSetFieldType = tFieldArray->fields[i].set_field_type;	/* e.g. TIFF_SETGET_C0_FLOAT */
 		tFieldName = tFieldArray->fields[i].field_name;		
-		pVoid = NULL;
 
 		/*-- dependent on set_field_type read value --*/
 		switch (tSetFieldType)
@@ -1108,7 +1124,7 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 				}
 				/* Save string from temporary buffer and compare with written string. */
 				strncpy(auxCharArray, pAscii, sizeof(auxCharArray) - 1u);
-                auxCharArray[sizeof(auxCharArray) - 1u] = '\0';
+				auxCharArray[sizeof(auxCharArray) - 1u] = '\0';
 				if (tWriteCount > 0) auxLong = tWriteCount-1; else auxLong = (long)strlen(auxCharArray);
 				retCode2 = strncmp(auxCharArray, auxTextArrayW[i], auxLong);
 				if (retCode2 != 0) {
@@ -1288,7 +1304,6 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 			case TIFF_SETGET_C32_UINT8:
 			case TIFF_SETGET_C32_SINT8:
 					/* For arrays, distinguishing between float or double is essential, even for writing */
-					pVoid = &auxCharArrayW[i];
 					deferredSetField = true;
 					break;
 			case TIFF_SETGET_C0_UINT16:
@@ -1297,16 +1312,14 @@ write_test_tiff(TIFF *tif, const char *filenameRead)
 			case TIFF_SETGET_C16_SINT16:
 			case TIFF_SETGET_C32_UINT16:
 			case TIFF_SETGET_C32_SINT16:
-					pVoid = &auxShortArrayW[i];
 					deferredSetField = true;
-break;
+					break;
 			case TIFF_SETGET_C0_UINT32:
 			case TIFF_SETGET_C0_SINT32:
 			case TIFF_SETGET_C16_UINT32:
 			case TIFF_SETGET_C16_SINT32:
 			case TIFF_SETGET_C32_UINT32:
 			case TIFF_SETGET_C32_SINT32:
-					pVoid = &auxLongArrayW[i];
 					deferredSetField = true;
 					break;
 			default:
