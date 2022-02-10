@@ -1822,8 +1822,11 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 				uint16_t predictor;
 				t2p->pdf_transcode = T2P_TRANSCODE_RAW;
 				t2p->pdf_compression=T2P_COMPRESS_ZIP;
-				TIFFGetField(input, TIFFTAG_PREDICTOR, &predictor);
-				t2p->pdf_compressionquality = predictor;
+				if (TIFFGetField(input, TIFFTAG_PREDICTOR, &predictor)) {
+					t2p->pdf_compressionquality = predictor;
+				} else {
+					t2p->pdf_compressionquality = PREDICTOR_NONE;
+				}
 				/* TIFFTAG_ZIPQUALITY is always Z_DEFAULT_COMPRESSION on reading */
 			}
 		}
