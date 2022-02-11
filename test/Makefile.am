@@ -199,6 +199,8 @@ PNMIMAGES = \
 IMAGES_EXTRA_DIST = \
 	images/README.txt \
 	images/miniswhite-1c-1b.g3 \
+	images/test_float64_predictor2_le_lzw.tif \
+	images/test_float64_predictor2_be_lzw.tif \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 
