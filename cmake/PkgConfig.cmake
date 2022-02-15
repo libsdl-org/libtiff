@@ -48,12 +48,12 @@ endfunction()
 # Generate pkg-config file
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
-set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
-set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+set(libdir "${CMAKE_INSTALL_LIBDIR}")
+set(includedir "${CMAKE_INSTALL_INCLUDEDIR}")
 set_libs_private(tiff_libs_private ${tiff_libs_private_list})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff-4.pc.in
         ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc)
 
 # Install pkg-config file
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtiff-4.pc
-        DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
