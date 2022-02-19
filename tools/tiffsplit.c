@@ -149,13 +149,14 @@ main(int argc, char* argv[])
 		path[path_len - 1] = '\0';
 		strncat(path, TIFF_SUFFIX, path_len - strlen(path) - 1);
 		out = TIFFOpen(path, TIFFIsBigEndian(in) ? "wb" : "wl");
-		_TIFFfree(path);
 
 		if (out == NULL) {
 			TIFFClose(in);
 			fprintf(stderr, "tiffsplit: Error: Could not open output file %s \n", path);
+			_TIFFfree(path);
 			return (EXIT_FAILURE);
 		}
+		_TIFFfree(path);
 		if (!tiffcp(in, out)) {
 			TIFFClose(in);
 			TIFFClose(out);
