@@ -246,7 +246,8 @@ static	void usage(int);
  */
 static void* limitMalloc(tmsize_t s)
 {
-	if (maxMalloc && (s > maxMalloc)) {
+	/* tmsize_t is signed and _TIFFmalloc() converts s to size_t. Therefore check for negative s. */
+	if (maxMalloc && ((s > maxMalloc) || (s < 0))) {
 		fprintf(stderr, "MemoryLimitError: allocation of %" TIFF_SSIZE_FORMAT " bytes is forbidden. Limit is %" TIFF_SSIZE_FORMAT ".\n",
                 s, maxMalloc);
 		fprintf(stderr, "                  use -M option to change limit.\n");
