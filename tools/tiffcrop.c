@@ -6153,9 +6153,15 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
 	TIFFError("loadImage", "Integer overflow detected.");
 	exit(EXIT_FAILURE);
     }
-    if (buffsize < (uint32_t) (((length * width * spp * bps) + 7) / 8))
+    /* The buffsize_check and the possible adaptation of buffsize 
+     * has to account also for padding of each line to a byte boundary. 
+     * This is assumed by mirrorImage() and rotateImage().
+     * Otherwise buffer-overflow might occur there.
+     */
+    buffsize_check = length * (uint32_t)(((width * spp * bps) + 7) / 8);
+    if (buffsize < buffsize_check)
       {
-      buffsize =  ((length * width * spp * bps) + 7) / 8;
+      buffsize = buffsize_check;
 #ifdef DEBUG2
       TIFFError("loadImage",
 	        "Stripsize %"PRIu32" is too small, using imagelength * width * spp * bps / 8 = %"PRIu32,
