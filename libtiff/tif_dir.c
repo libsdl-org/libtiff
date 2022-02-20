@@ -228,7 +228,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 	case TIFFTAG_COMPRESSION:
 		v = (uint16_t) va_arg(ap, uint16_vap);
 		/*
-		 * If we're changing the compression scheme, the notify the
+		 * If we're changing the compression scheme, notify the
 		 * previous module so that it can cleanup any state it's
 		 * setup.
 		 */
