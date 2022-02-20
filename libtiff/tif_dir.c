@@ -586,7 +586,18 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 			else
 			{
 				mb=(char*)va_arg(ap,char*);
-				ma=(uint32_t)(strlen(mb) + 1);
+				size_t len = strlen(mb) + 1;
+				if( len >= 0x80000000U )
+				{
+					status = 0;
+					TIFFErrorExt(tif->tif_clientdata, module,
+					    "%s: Too long string value for \"%s\". "
+					    "Maximum supported is 2147483647 bytes",
+					    tif->tif_name,
+					    fip->field_name);
+					goto end;
+				}
+				ma=(uint32_t)len;
 			}
 			tv->count=ma;
 			setByteArray(&tv->value,mb,ma,1);
