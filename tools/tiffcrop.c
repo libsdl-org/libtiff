@@ -7385,7 +7385,11 @@ createImageSection(uint32 sectsize, unsigned char **sect_buff_ptr)
   if (!sect_buff)
     {
     sect_buff = (unsigned char *)limitMalloc(sectsize);
-    *sect_buff_ptr = sect_buff;
+    if (!sect_buff)
+    {
+        TIFFError("createImageSection", "Unable to allocate/reallocate section buffer");
+        return (-1);
+    }
     _TIFFmemset(sect_buff, 0, sectsize);
     }
   else
@@ -7401,15 +7405,15 @@ createImageSection(uint32 sectsize, unsigned char **sect_buff_ptr)
       else
         sect_buff = new_buff;
 
+      if (!sect_buff)
+      {
+          TIFFError("createImageSection", "Unable to allocate/reallocate section buffer");
+          return (-1);
+      }
       _TIFFmemset(sect_buff, 0, sectsize);
       }
     }
 
-  if (!sect_buff)
-    {
-    TIFFError("createImageSection", "Unable to allocate/reallocate section buffer");
-    return (-1);
-    }
   prev_sectsize = sectsize;
   *sect_buff_ptr = sect_buff;
 
@@ -7676,7 +7680,11 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
   if (!crop_buff)
     {
     crop_buff = (unsigned char *)limitMalloc(cropsize);
-    *crop_buff_ptr = crop_buff;
+    if (!crop_buff)
+    {
+        TIFFError("createCroppedImage", "Unable to allocate/reallocate crop buffer");
+        return (-1);
+    }
     _TIFFmemset(crop_buff, 0, cropsize);
     prev_cropsize = cropsize;
     }
@@ -7692,15 +7700,15 @@ createCroppedImage(struct image_data *image, struct crop_mask *crop,
         }
       else
         crop_buff = new_buff;
+      if (!crop_buff)
+      {
+          TIFFError("createCroppedImage", "Unable to allocate/reallocate crop buffer");
+          return (-1);
+      }
       _TIFFmemset(crop_buff, 0, cropsize);
       }
     }
 
-  if (!crop_buff)
-    {
-    TIFFError("createCroppedImage", "Unable to allocate/reallocate crop buffer");
-    return (-1);
-    }
   *crop_buff_ptr = crop_buff;
 
   if (crop->crop_mode & CROP_INVERT)
@@ -9259,3 +9267,4 @@ invertImage(uint16 photometric, uint16 spp, uint16 bps, uint32 width, uint32 len
  * fill-column: 78
  * End:
  */
+
