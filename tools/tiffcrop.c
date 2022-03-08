@@ -5841,15 +5841,25 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
   if (orows < 1)
     orows = 1;
 
-  /* If user did not specify rows and cols, set them from calcuation */
-  if (page->rows < 1)
-    page->rows = orows;
-  if (page->cols < 1)
-    page->cols = ocols;
+  /* Always return rows and cols from calcuation above.
+   * (correct values needed external to this function)
+   * Warn, if user input settings has been changed.
+   */
 
-  line_bytes = TIFFhowmany8(owidth * image->bps) * image->spp;
+  if ((page->rows > 0) && (page->rows != orows)) {
+    TIFFError("computeOutputPixelOffsets",
+          "Number of user input section rows down (%"PRIu32") was changed to (%"PRIu32")", page->rows, orows);
+  }
+  page->rows = orows;
+  if ((page->cols > 0) && (page->cols != ocols)) {
+    TIFFError("computeOutputPixelOffsets",
+        "Number of user input section cols across (%"PRIu32") was changed to (%"PRIu32")", page->cols, ocols);
+  }
+  page->cols = ocols;
 
-  if ((page->rows * page->cols) > MAX_SECTIONS)
+  line_bytes = TIFFhowmany8(owidth * image->spp * image->bps);
+
+  if ((orows * ocols) > MAX_SECTIONS)
    {
    TIFFError("computeOutputPixelOffsets",
 	     "Rows and Columns exceed maximum sections\nIncrease resolution or reduce sections");
@@ -5857,13 +5867,13 @@ computeOutputPixelOffsets (struct crop_mask *crop, struct image_data *image,
    }
 
   /* build the list of offsets for each output section */
-  for (k = 0, i = 0 && k <= MAX_SECTIONS; i < orows; i++)
+  for (k = 0, i = 0; i < orows; i++)
     {
     y1 = (uint32_t)(olength * i);
     y2 = (uint32_t)(olength * (i + 1) - 1);
     if (y2 >= ilength)
       y2 = ilength - 1;
-    for (j = 0; j < ocols; j++, k++)
+    for (j = 0; (j < ocols) && (k < MAX_SECTIONS); j++, k++)
       {
       x1 = (uint32_t)(owidth * j);
       x2 = (uint32_t)(owidth * (j + 1) - 1);
