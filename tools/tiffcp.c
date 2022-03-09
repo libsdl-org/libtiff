@@ -585,13 +585,13 @@ usage(int code)
 }
 
 #define	CopyField(tag, v) \
-    if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v)
+    do { if (TIFFGetField(in, tag, &v)) TIFFSetField(out, tag, v); } while(0)
 #define	CopyField2(tag, v1, v2) \
-    if (TIFFGetField(in, tag, &v1, &v2)) TIFFSetField(out, tag, v1, v2)
+    do { if (TIFFGetField(in, tag, &v1, &v2)) TIFFSetField(out, tag, v1, v2); } while(0)
 #define	CopyField3(tag, v1, v2, v3) \
-    if (TIFFGetField(in, tag, &v1, &v2, &v3)) TIFFSetField(out, tag, v1, v2, v3)
+    do { if (TIFFGetField(in, tag, &v1, &v2, &v3)) TIFFSetField(out, tag, v1, v2, v3); } while(0)
 #define	CopyField4(tag, v1, v2, v3, v4) \
-    if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4)) TIFFSetField(out, tag, v1, v2, v3, v4)
+    do { if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4)) TIFFSetField(out, tag, v1, v2, v3, v4); } while(0)
 
 static void
 cpTag(TIFF* in, TIFF* out, uint16_t tag, uint16_t count, TIFFDataType type)
@@ -714,6 +714,8 @@ tiffcp(TIFF* in, TIFF* out)
 		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
 	else
 		CopyField(TIFFTAG_COMPRESSION, compression);
+	if( !TIFFIsCODECConfigured(compression) )
+		return FALSE;
 	TIFFGetFieldDefaulted(in, TIFFTAG_COMPRESSION, &input_compression);
 	TIFFGetFieldDefaulted(in, TIFFTAG_PHOTOMETRIC, &input_photometric);
 	if (input_compression == COMPRESSION_JPEG) {
@@ -874,12 +876,17 @@ tiffcp(TIFF* in, TIFF* out)
 		case COMPRESSION_LZW:
 		case COMPRESSION_ADOBE_DEFLATE:
 		case COMPRESSION_DEFLATE:
-                case COMPRESSION_LZMA:
-                case COMPRESSION_ZSTD:
+		case COMPRESSION_LZMA:
+		case COMPRESSION_ZSTD:
 			if (predictor != (uint16_t)-1)
 				TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
-			else
+			else if( input_compression == COMPRESSION_LZW ||
+				     input_compression == COMPRESSION_ADOBE_DEFLATE ||
+				     input_compression == COMPRESSION_DEFLATE ||
+				     input_compression == COMPRESSION_LZMA ||
+				     input_compression == COMPRESSION_ZSTD ) {
 				CopyField(TIFFTAG_PREDICTOR, predictor);
+            }
                         if( compression == COMPRESSION_ADOBE_DEFLATE ||
                             compression == COMPRESSION_DEFLATE )
                         {
@@ -894,21 +901,12 @@ tiffcp(TIFF* in, TIFF* out)
 			/*fallthrough*/
 		case COMPRESSION_WEBP:
 			if (preset != -1) {
-                                if (compression == COMPRESSION_ADOBE_DEFLATE
-                                         || compression == COMPRESSION_DEFLATE)
-                                        TIFFSetField(out, TIFFTAG_ZIPQUALITY, preset);
-				else if (compression == COMPRESSION_LZMA)
-					TIFFSetField(out, TIFFTAG_LZMAPRESET, preset);
-				else if (compression == COMPRESSION_ZSTD)
-					TIFFSetField(out, TIFFTAG_ZSTD_LEVEL, preset);
-				else if (compression == COMPRESSION_WEBP) {
-					if (preset == 100) {
-						TIFFSetField(out, TIFFTAG_WEBP_LOSSLESS, TRUE);
-					} else {
-						TIFFSetField(out, TIFFTAG_WEBP_LEVEL, preset);						
-					}
+				if (preset == 100) {
+					TIFFSetField(out, TIFFTAG_WEBP_LOSSLESS, TRUE);
+				} else {
+					TIFFSetField(out, TIFFTAG_WEBP_LEVEL, preset);
 				}
-                        }
+			}
 			break;
 		case COMPRESSION_CCITTFAX3:
 		case COMPRESSION_CCITTFAX4:
@@ -916,13 +914,15 @@ tiffcp(TIFF* in, TIFF* out)
 				if (g3opts != (uint32_t) -1)
 					TIFFSetField(out, TIFFTAG_GROUP3OPTIONS,
 					    g3opts);
-				else
+				else if( input_compression == COMPRESSION_CCITTFAX3 )
 					CopyField(TIFFTAG_GROUP3OPTIONS, g3opts);
-			} else
+			} else if(  input_compression == COMPRESSION_CCITTFAX4 )
 				CopyTag(TIFFTAG_GROUP4OPTIONS, 1, TIFF_LONG);
-			CopyTag(TIFFTAG_BADFAXLINES, 1, TIFF_LONG);
-			CopyTag(TIFFTAG_CLEANFAXDATA, 1, TIFF_LONG);
-			CopyTag(TIFFTAG_CONSECUTIVEBADFAXLINES, 1, TIFF_LONG);
+			if( input_compression == COMPRESSION_CCITTFAX3 || input_compression == COMPRESSION_CCITTFAX4 ) {
+				CopyTag(TIFFTAG_BADFAXLINES, 1, TIFF_LONG);
+				CopyTag(TIFFTAG_CLEANFAXDATA, 1, TIFF_LONG);
+				CopyTag(TIFFTAG_CONSECUTIVEBADFAXLINES, 1, TIFF_LONG);
+			}
 			CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
 			CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
 			CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
