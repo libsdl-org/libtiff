@@ -52,13 +52,6 @@
  * Future revisions to the TIFF spec are expected to "clarify this issue".
  */
 #define LZW_COMPAT              /* include backwards compatibility code */
-/*
- * Each strip of data is supposed to be terminated by a CODE_EOI.
- * If the following #define is included, the decoder will also
- * check for end-of-strip w/o seeing this code.  This makes the
- * library more robust, but also slower.
- */
-#define LZW_CHECKEOS            /* include checks for strips w/o EOI code */
 
 #define MAXCODE(n)	((1L<<(n))-1)
 /*
@@ -131,10 +124,8 @@ typedef struct {
 	/* Decoding specific data */
 	long    dec_nbitsmask;		/* lzw_nbits 1 bits, right adjusted */
 	tmsize_t dec_restart;		/* restart count */
-#ifdef LZW_CHECKEOS
 	uint64_t  dec_bitsleft;		/* available bits in raw data */
 	tmsize_t old_tif_rawcc;         /* value of tif_rawcc at the end of the previous TIFLZWDecode() call */
-#endif
 	decodeFunc dec_decode;		/* regular or backwards compatible */
 	code_t* dec_codep;		/* current recognized code */
 	code_t* dec_oldcodep;		/* previously recognized code */
@@ -167,25 +158,21 @@ static void cl_hash(LZWCodecState*);
  * LZW Decoder.
  */
 
-#ifdef LZW_CHECKEOS
 /*
  * This check shouldn't be necessary because each
  * strip is suppose to be terminated with CODE_EOI.
  */
-#define	NextCode(_tif, _sp, _bp, _code, _get) {				\
-	if ((_sp)->dec_bitsleft < (uint64_t)nbits) {			\
+#define	NextCode(_tif, _sp, _bp, _code, _get, dec_bitsleft) {				\
+	if (dec_bitsleft < (uint64_t)nbits) {			\
 		TIFFWarningExt(_tif->tif_clientdata, module,		\
 		    "LZWDecode: Strip %"PRIu32" not terminated with EOI code", \
 		    _tif->tif_curstrip);				\
 		_code = CODE_EOI;					\
 	} else {							\
 		_get(_sp,_bp,_code);					\
-		(_sp)->dec_bitsleft -= nbits;				\
+		dec_bitsleft -= nbits;				\
 	}								\
 }
-#else
-#define	NextCode(tif, sp, bp, code, get) get(sp, bp, code)
-#endif
 
 static int
 LZWFixupTags(TIFF* tif)
@@ -316,10 +303,8 @@ LZWPreDecode(TIFF* tif, uint16_t s)
 
 	sp->dec_restart = 0;
 	sp->dec_nbitsmask = MAXCODE(BITS_MIN);
-#ifdef LZW_CHECKEOS
 	sp->dec_bitsleft = 0;
         sp->old_tif_rawcc = 0;
-#endif
 	sp->dec_free_entp = sp->dec_codetab + CODE_FIRST;
 	/*
 	 * Zero entries that are not yet filled in.  We do
@@ -417,9 +402,8 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	}
 
 	bp = (uint8_t*)tif->tif_rawcp;
-#ifdef LZW_CHECKEOS
 	sp->dec_bitsleft += (((uint64_t)tif->tif_rawcc - sp->old_tif_rawcc) << 3);
-#endif
+	uint64_t dec_bitsleft = sp->dec_bitsleft;
 	nbits = sp->lzw_nbits;
 	nextdata = sp->lzw_nextdata;
 	nextbits = sp->lzw_nextbits;
@@ -429,7 +413,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	maxcodep = sp->dec_maxcodep;
 
 	while (occ > 0) {
-		NextCode(tif, sp, bp, code, GetNextCode);
+		NextCode(tif, sp, bp, code, GetNextCode, dec_bitsleft);
 		if (code == CODE_EOI)
 			break;
 		if (code == CODE_CLEAR) {
@@ -440,7 +424,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 				nbits = BITS_MIN;
 				nbitsmask = MAXCODE(BITS_MIN);
 				maxcodep = sp->dec_codetab + nbitsmask-1;
-				NextCode(tif, sp, bp, code, GetNextCode);
+				NextCode(tif, sp, bp, code, GetNextCode, dec_bitsleft);
 			} while (code == CODE_CLEAR);	/* consecutive CODE_CLEAR codes */
 			if (code == CODE_EOI)
 				break;
@@ -543,9 +527,8 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 
 	tif->tif_rawcc -= (tmsize_t)((uint8_t*) bp - tif->tif_rawcp );
 	tif->tif_rawcp = (uint8_t*) bp;
-#ifdef LZW_CHECKEOS
 	sp->old_tif_rawcc = tif->tif_rawcc;
-#endif
+	sp->dec_bitsleft = dec_bitsleft;
 	sp->lzw_nbits = (unsigned short) nbits;
 	sp->lzw_nextdata = nextdata;
 	sp->lzw_nextbits = nextbits;
@@ -636,9 +619,10 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	}
 
 	bp = (uint8_t*)tif->tif_rawcp;
-#ifdef LZW_CHECKEOS
+
 	sp->dec_bitsleft += (((uint64_t)tif->tif_rawcc - sp->old_tif_rawcc) << 3);
-#endif
+	uint64_t dec_bitsleft = sp->dec_bitsleft;
+
 	nbits = sp->lzw_nbits;
 	nextdata = sp->lzw_nextdata;
 	nextbits = sp->lzw_nextbits;
@@ -648,7 +632,7 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	maxcodep = sp->dec_maxcodep;
 
 	while (occ > 0) {
-		NextCode(tif, sp, bp, code, GetNextCodeCompat);
+		NextCode(tif, sp, bp, code, GetNextCodeCompat, dec_bitsleft);
 		if (code == CODE_EOI)
 			break;
 		if (code == CODE_CLEAR) {
@@ -659,7 +643,7 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 				nbits = BITS_MIN;
 				nbitsmask = MAXCODE(BITS_MIN);
 				maxcodep = sp->dec_codetab + nbitsmask;
-				NextCode(tif, sp, bp, code, GetNextCodeCompat);
+				NextCode(tif, sp, bp, code, GetNextCodeCompat, dec_bitsleft);
 			} while (code == CODE_CLEAR);	/* consecutive CODE_CLEAR codes */
 			if (code == CODE_EOI)
 				break;
@@ -752,9 +736,10 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 
 	tif->tif_rawcc -= (tmsize_t)((uint8_t*) bp - tif->tif_rawcp );
 	tif->tif_rawcp = (uint8_t*) bp;
-#ifdef LZW_CHECKEOS
+
 	sp->old_tif_rawcc = tif->tif_rawcc;
-#endif
+	sp->dec_bitsleft = dec_bitsleft;
+
 	sp->lzw_nbits = (unsigned short)nbits;
 	sp->lzw_nextdata = nextdata;
 	sp->lzw_nextbits = nextbits;
