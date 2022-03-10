@@ -38,6 +38,10 @@
 
 #include <stdio.h>
 
+/* Select the plausible largest natural integer type for the architecture */
+#define SIZEOF_WORDTYPE SIZEOF_SIZE_T
+typedef size_t WordType;
+
 /*
  * NB: The 5.0 spec describes a different algorithm than Aldus
  *     implements.  Specifically, Aldus does code length transitions
@@ -85,7 +89,7 @@ typedef struct {
 	unsigned short  nbits;          /* # of bits/code */
 	unsigned short  maxcode;        /* maximum code for lzw_nbits */
 	unsigned short  free_ent;       /* next free entry in hash table */
-	unsigned long   nextdata;       /* next bits of i/o */
+	WordType        nextdata;       /* next bits of i/o */
 	long            nextbits;       /* # of valid bits in lzw_nextdata */
 
 	int             rw_mode;        /* preserve rw_mode from init */
@@ -157,22 +161,6 @@ static void cl_hash(LZWCodecState*);
 /*
  * LZW Decoder.
  */
-
-/*
- * This check shouldn't be necessary because each
- * strip is suppose to be terminated with CODE_EOI.
- */
-#define	NextCode(_tif, _sp, _bp, _code, _get, dec_bitsleft) {				\
-	if (dec_bitsleft < (uint64_t)nbits) {			\
-		TIFFWarningExt(_tif->tif_clientdata, module,		\
-		    "LZWDecode: Strip %"PRIu32" not terminated with EOI code", \
-		    _tif->tif_curstrip);				\
-		_code = CODE_EOI;					\
-	} else {							\
-		_get(_sp,_bp,_code);					\
-		dec_bitsleft -= nbits;				\
-	}								\
-}
 
 static int
 LZWFixupTags(TIFF* tif)
@@ -322,16 +310,77 @@ LZWPreDecode(TIFF* tif, uint16_t s)
 /*
  * Decode a "hunk of data".
  */
-#define	GetNextCode(sp, bp, code) {				\
-	nextdata = (nextdata<<8) | *(bp)++;			\
-	nextbits += 8;						\
-	if (nextbits < nbits) {					\
-		nextdata = (nextdata<<8) | *(bp)++;		\
-		nextbits += 8;					\
-	}							\
-	code = (hcode_t)((nextdata >> (nextbits-nbits)) & nbitsmask);	\
-	nextbits -= nbits;					\
-}
+
+/* Get the next 32 or 64-bit from the input data */
+#ifdef WORDS_BIGENDIAN
+#  define GetNextData(nextdata, bp)   memcpy(&nextdata, bp, sizeof(nextdata))
+#elif SIZEOF_WORDTYPE == 8
+#  if defined(__GNUC__) && defined(__x86_64__)
+#    define GetNextData(nextdata, bp) nextdata = __builtin_bswap64(*(uint64_t*)(bp))
+#  elif defined(_M_X64)
+#    define GetNextData(nextdata, bp) nextdata = _byteswap_uint64(*(uint64_t*)(bp))
+#  elif defined(__GNUC__)
+#    define GetNextData(nextdata, bp) memcpy(&nextdata, bp, sizeof(nextdata)); \
+                                      nextdata = __builtin_bswap64(nextdata)
+#  else
+#    define GetNextData(nextdata, bp) nextdata = (((uint64_t)bp[0]) << 56) | \
+                                                 (((uint64_t)bp[1]) << 48) | \
+                                                 (((uint64_t)bp[2]) << 40) | \
+                                                 (((uint64_t)bp[3]) << 32) | \
+                                                 (((uint64_t)bp[4]) << 24) | \
+                                                 (((uint64_t)bp[5]) << 16) | \
+                                                 (((uint64_t)bp[6]) << 8) | \
+                                                 (((uint64_t)bp[7]))
+#  endif
+#elif SIZEOF_WORDTYPE == 4
+#  if defined(__GNUC__) && defined(__i386__)
+#    define GetNextData(nextdata, bp) nextdata = __builtin_bswap32(*(uint32_t*)(bp))
+#  elif defined(_M_X86)
+#    define GetNextData(nextdata, bp) nextdata = _byteswap_ulong(*(unsigned long*)(bp))
+#  elif defined(__GNUC__)
+#    define GetNextData(nextdata, bp) memcpy(&nextdata, bp, sizeof(nextdata)); \
+                                      nextdata = __builtin_bswap32(nextdata)
+#  else
+#    define GetNextData(nextdata, bp) nextdata = (((uint32_t)bp[0]) << 24) | \
+                                                 (((uint32_t)bp[1]) << 16) | \
+                                                 (((uint32_t)bp[2]) << 8) | \
+                                                 (((uint32_t)bp[3]))
+#  endif
+#else
+#  error "Unhandled SIZEOF_WORDTYPE"
+#endif
+
+#define	GetNextCodeLZW() do { \
+    nextbits -= nbits; \
+    if (nextbits < 0) { \
+        if (dec_bitsleft >= 8 * SIZEOF_WORDTYPE) { \
+            unsigned codetmp = (unsigned)(nextdata << (-nextbits)); \
+            GetNextData(nextdata, bp); \
+            bp += SIZEOF_WORDTYPE; \
+            nextbits += 8 * SIZEOF_WORDTYPE; \
+            dec_bitsleft -= 8 * SIZEOF_WORDTYPE; \
+            code = (WordType)((codetmp | (nextdata >> nextbits)) & nbitsmask); \
+            break; \
+        } \
+        else {\
+            if( dec_bitsleft < 8) { \
+                goto no_eoi; \
+            }\
+            nextdata = (nextdata<<8) | *(bp)++; \
+            nextbits += 8; \
+            dec_bitsleft -= 8; \
+            if( nextbits < 0 ) { \
+                if( dec_bitsleft < 8) { \
+                    goto no_eoi; \
+                }\
+                nextdata = (nextdata<<8) | *(bp)++; \
+                nextbits += 8; \
+                dec_bitsleft -= 8; \
+            } \
+        } \
+    } \
+    code = (WordType)((nextdata >> nextbits) & nbitsmask); \
+} while(0)
 
 static void
 codeLoop(TIFF* tif, const char* module)
@@ -350,10 +399,10 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	tmsize_t occ = occ0;
 	uint8_t *tp;
 	uint8_t *bp;
-	hcode_t code;
+	WordType code;
 	int len;
 	long nbits, nextbits, nbitsmask;
-        unsigned long nextdata;
+        WordType nextdata;
 	code_t *codep, *free_entp, *maxcodep, *oldcodep;
 
 	(void) s;
@@ -413,7 +462,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	maxcodep = sp->dec_maxcodep;
 
 	while (occ > 0) {
-		NextCode(tif, sp, bp, code, GetNextCode, dec_bitsleft);
+		GetNextCodeLZW();
 		if (code == CODE_EOI)
 			break;
 		if (code == CODE_CLEAR) {
@@ -424,7 +473,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 				nbits = BITS_MIN;
 				nbitsmask = MAXCODE(BITS_MIN);
 				maxcodep = sp->dec_codetab + nbitsmask-1;
-				NextCode(tif, sp, bp, code, GetNextCode, dec_bitsleft);
+				GetNextCodeLZW();
 			} while (code == CODE_CLEAR);	/* consecutive CODE_CLEAR codes */
 			if (code == CODE_EOI)
 				break;
@@ -544,9 +593,32 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 		return (0);
 	}
 	return (1);
+
+no_eoi:
+    TIFFErrorExt(tif->tif_clientdata, module,
+                    "LZWDecode: Strip %"PRIu32" not terminated with EOI code",
+                    tif->tif_curstrip);
+    return 0;
 }
 
 #ifdef LZW_COMPAT
+
+/*
+ * This check shouldn't be necessary because each
+ * strip is suppose to be terminated with CODE_EOI.
+ */
+#define	NextCode(_tif, _sp, _bp, _code, _get, dec_bitsleft) {				\
+	if (dec_bitsleft < (uint64_t)nbits) {			\
+		TIFFWarningExt(_tif->tif_clientdata, module,		\
+		    "LZWDecode: Strip %"PRIu32" not terminated with EOI code", \
+		    _tif->tif_curstrip);				\
+		_code = CODE_EOI;					\
+	} else {							\
+		_get(_sp,_bp,_code);					\
+		dec_bitsleft -= nbits;				\
+	}								\
+}
+
 /*
  * Decode a "hunk of data" for old images.
  */
@@ -573,7 +645,8 @@ LZWDecodeCompat(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	uint8_t *bp;
 	int code, nbits;
 	int len;
-	long nextbits, nextdata, nbitsmask;
+	long nextbits, nbitsmask;
+	WordType nextdata;
 	code_t *codep, *free_entp, *maxcodep, *oldcodep;
 
 	(void) s;
@@ -858,7 +931,7 @@ LZWEncode(TIFF* tif, uint8_t* bp, tmsize_t cc, uint16_t s)
 	hcode_t ent;
 	long disp;
 	tmsize_t incount, outcount, checkpoint;
-	unsigned long nextdata;
+	WordType nextdata;
         long nextbits;
 	int free_ent, maxcode, nbits;
 	uint8_t* op;
@@ -1022,7 +1095,7 @@ LZWPostEncode(TIFF* tif)
 	register LZWCodecState *sp = EncoderState(tif);
 	uint8_t* op = tif->tif_rawcp;
 	long nextbits = sp->lzw_nextbits;
-	unsigned long nextdata = sp->lzw_nextdata;
+	WordType nextdata = sp->lzw_nextdata;
 	tmsize_t outcount = sp->enc_outcount;
 	int nbits = sp->lzw_nbits;
 
