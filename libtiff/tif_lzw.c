@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
+ * Copyright (c) 2022 Even Rouault
  *
  * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
@@ -36,6 +37,7 @@
  */
 #include "tif_predict.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 
 /* Select the plausible largest natural integer type for the architecture */
@@ -116,8 +118,10 @@ typedef struct {
 typedef struct code_ent {
 	struct code_ent *next;
 	unsigned short	length;		/* string len, including this token */
-	unsigned char	value;		/* data value */
+	/* firstchar should be placed immediately before value in this structure */
 	unsigned char	firstchar;	/* first token of string */
+	unsigned char	value;		/* data value */
+	bool            repeated;
 } code_t;
 
 typedef int (*decodeFunc)(TIFF*, uint8_t*, tmsize_t, uint16_t);
@@ -211,17 +215,17 @@ LZWSetupDecode(TIFF* tif)
 		 */
 		code = 255;
 		do {
-			sp->dec_codetab[code].value = (unsigned char)code;
 			sp->dec_codetab[code].firstchar = (unsigned char)code;
+			sp->dec_codetab[code].value = (unsigned char)code;
+			sp->dec_codetab[code].repeated = true;
 			sp->dec_codetab[code].length = 1;
 			sp->dec_codetab[code].next = NULL;
 		} while (code--);
 		/*
-		 * Zero-out the unused entries
-                 */
-                /* Silence false positive */
-                /* coverity[overrun-buffer-arg] */
-                 _TIFFmemset(&sp->dec_codetab[CODE_CLEAR], 0,
+		 * Zero-out the unused entries  */
+		/* Silence false positive */
+		/* coverity[overrun-buffer-arg] */
+		memset(&sp->dec_codetab[CODE_CLEAR], 0,
 			     (CODE_FIRST - CODE_CLEAR) * sizeof (code_t));
 	}
 	return (1);
@@ -292,8 +296,8 @@ LZWPreDecode(TIFF* tif, uint16_t s)
 	sp->dec_restart = 0;
 	sp->dec_nbitsmask = MAXCODE(BITS_MIN);
 	sp->dec_bitsleft = 0;
-        sp->old_tif_rawcc = 0;
-	sp->dec_free_entp = sp->dec_codetab + CODE_FIRST;
+	sp->old_tif_rawcc = 0;
+	sp->dec_free_entp = sp->dec_codetab  - 1 ; // + CODE_FIRST;
 	/*
 	 * Zero entries that are not yet filled in.  We do
 	 * this to guard against bogus input data that causes
@@ -301,8 +305,7 @@ LZWPreDecode(TIFF* tif, uint16_t s)
 	 * come up with a way to safely bounds-check input codes
 	 * while decoding then you can remove this operation.
 	 */
-	_TIFFmemset(sp->dec_free_entp, 0, (CSIZE-CODE_FIRST)*sizeof (code_t));
-	sp->dec_oldcodep = &sp->dec_codetab[-1];
+	sp->dec_oldcodep = &sp->dec_codetab[0];
 	sp->dec_maxcodep = &sp->dec_codetab[sp->dec_nbitsmask-1];
 	return (1);
 }
@@ -382,14 +385,6 @@ LZWPreDecode(TIFF* tif, uint16_t s)
     code = (WordType)((nextdata >> nextbits) & nbitsmask); \
 } while(0)
 
-static void
-codeLoop(TIFF* tif, const char* module)
-{
-	TIFFErrorExt(tif->tif_clientdata, module,
-	    "Bogus encoding, loop in the code table; scanline %"PRIu32,
-	    tif->tif_row);
-}
-
 static int
 LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 {
@@ -397,13 +392,10 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	LZWCodecState *sp = DecoderState(tif);
 	uint8_t *op = (uint8_t*) op0;
 	tmsize_t occ = occ0;
-	uint8_t *tp;
 	uint8_t *bp;
-	WordType code;
-	int len;
 	long nbits, nextbits, nbitsmask;
-        WordType nextdata;
-	code_t *codep, *free_entp, *maxcodep, *oldcodep;
+	WordType nextdata;
+	code_t *free_entp, *maxcodep, *oldcodep;
 
 	(void) s;
 	assert(sp != NULL);
@@ -415,7 +407,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	if (sp->dec_restart) {
 		tmsize_t residue;
 
-		codep = sp->dec_codep;
+		code_t* codep = sp->dec_codep;
 		residue = codep->length - sp->dec_restart;
 		if (residue > occ) {
 			/*
@@ -429,7 +421,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 				codep = codep->next;
 			} while (--residue > occ && codep);
 			if (codep) {
-				tp = op + occ;
+				uint8_t* tp = op + occ;
 				do {
 					*--tp = codep->value;
 					codep = codep->next;
@@ -442,7 +434,7 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 		 */
 		op += residue;
 		occ -= residue;
-		tp = op;
+		uint8_t* tp = op;
 		do {
 			*--tp = codep->value;
 			codep = codep->next;
@@ -460,120 +452,232 @@ LZWDecode(TIFF* tif, uint8_t* op0, tmsize_t occ0, uint16_t s)
 	oldcodep = sp->dec_oldcodep;
 	free_entp = sp->dec_free_entp;
 	maxcodep = sp->dec_maxcodep;
+	code_t* const dec_codetab = sp->dec_codetab;
+	code_t* codep;
 
-	while (occ > 0) {
-		GetNextCodeLZW();
-		if (code == CODE_EOI)
-			break;
-		if (code == CODE_CLEAR) {
-			do {
-				free_entp = sp->dec_codetab + CODE_FIRST;
-				_TIFFmemset(free_entp, 0,
-					    (CSIZE - CODE_FIRST) * sizeof (code_t));
-				nbits = BITS_MIN;
-				nbitsmask = MAXCODE(BITS_MIN);
-				maxcodep = sp->dec_codetab + nbitsmask-1;
-				GetNextCodeLZW();
-			} while (code == CODE_CLEAR);	/* consecutive CODE_CLEAR codes */
-			if (code == CODE_EOI)
-				break;
-			if (code > CODE_CLEAR) {
-				TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
-				"LZWDecode: Corrupted LZW table at scanline %"PRIu32,
-					     tif->tif_row);
-				return (0);
-			}
-			*op++ = (uint8_t)code;
-			occ--;
-			oldcodep = sp->dec_codetab + code;
-			continue;
-		}
-		codep = sp->dec_codetab + code;
+    if (occ == 0) {
+        goto after_loop;
+    }
 
-		/*
-		 * Add the new entry to the code table.
-		 */
-		if (free_entp < &sp->dec_codetab[0] ||
-		    free_entp >= &sp->dec_codetab[CSIZE]) {
-			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Corrupted LZW table at scanline %"PRIu32,
-			    tif->tif_row);
-			return (0);
-		}
+begin:
+    {
+        WordType code;
+        GetNextCodeLZW();
+        codep = dec_codetab + code;
+        if (code >= CODE_FIRST)
+            goto code_above_or_equal_to_258;
+        if (code < 256)
+            goto code_below_256;
+        if (code == CODE_EOI)
+            goto after_loop;
+        goto code_clear;
 
-		free_entp->next = oldcodep;
-		if (free_entp->next < &sp->dec_codetab[0] ||
-		    free_entp->next >= &sp->dec_codetab[CSIZE]) {
-			TIFFErrorExt(tif->tif_clientdata, module,
-			    "Corrupted LZW table at scanline %"PRIu32,
-			    tif->tif_row);
-			return (0);
-		}
-		free_entp->firstchar = free_entp->next->firstchar;
-		free_entp->length = free_entp->next->length+1;
-		free_entp->value = (codep < free_entp) ?
-		    codep->firstchar : free_entp->firstchar;
-		if (++free_entp > maxcodep) {
-			if (++nbits > BITS_MAX)		/* should not happen */
-				nbits = BITS_MAX;
-			nbitsmask = MAXCODE(nbits);
-			maxcodep = sp->dec_codetab + nbitsmask-1;
-		}
-		oldcodep = codep;
-		if (code >= 256) {
-			/*
-			 * Code maps to a string, copy string
-			 * value to output (written in reverse).
-			 */
-			if(codep->length == 0) {
-				TIFFErrorExt(tif->tif_clientdata, module,
-				    "Wrong length of decoded string: "
-				    "data probably corrupted at scanline %"PRIu32,
-				    tif->tif_row);
-				return (0);
-			}
-			if (codep->length > occ) {
-				/*
-				 * String is too long for decode buffer,
-				 * locate portion that will fit, copy to
-				 * the decode buffer, and setup restart
-				 * logic for the next decoding call.
-				 */
-				sp->dec_codep = codep;
-				do {
-					codep = codep->next;
-				} while (codep && codep->length > occ);
-				if (codep) {
-					sp->dec_restart = occ;
-					tp = op + occ;
-					do  {
-						*--tp = codep->value;
-						codep = codep->next;
-					}  while (--occ && codep);
-					if (codep)
-						codeLoop(tif, module);
-				}
-				break;
-			}
-			len = codep->length;
-			tp = op + len;
-			do {
-				*--tp = codep->value;
-				codep = codep->next;
-			} while (codep && tp > op);
-			if (codep) {
-			    codeLoop(tif, module);
-			    break;
-			}
-			assert(occ >= len);
-			op += len;
-			occ -= len;
-		} else {
-			*op++ = (uint8_t)code;
-			occ--;
-		}
-	}
+code_below_256:
+        {
+            if (codep > free_entp)
+                goto error_code;
+            free_entp->next = oldcodep;
+            free_entp->firstchar = oldcodep->firstchar;
+            free_entp->length = oldcodep->length+1;
+            free_entp->value = (uint8_t)code;
+            free_entp->repeated = (bool)(oldcodep->repeated & !(oldcodep->value - code));
+            if (++free_entp > maxcodep) {
+                if (++nbits > BITS_MAX)		/* should not happen for a conformant encoder */
+                    nbits = BITS_MAX;
+                nbitsmask = MAXCODE(nbits);
+                maxcodep = dec_codetab + nbitsmask-1;
+                if( free_entp >= &dec_codetab[CSIZE] )
+                {
+                    /* At that point, the next valid states are either EOI or a */
+                    /* CODE_CLEAR. If a regular code is read, at the next */
+                    /* attempt at registering a new entry, we will error out */
+                    /* due to setting free_entp before any valid code */
+                    free_entp = dec_codetab - 1;
+                }
+            }
+            oldcodep = codep;
+            *op++ = (uint8_t)code;
+            occ--;
+            if (occ == 0)
+                goto after_loop;
+            goto begin;
+        }
 
+code_above_or_equal_to_258:
+        {
+            /*
+             * Add the new entry to the code table.
+             */
+
+            if (codep >= free_entp)
+            {
+                if (codep != free_entp)
+                    goto error_code;
+                free_entp->value = oldcodep->firstchar;
+            }
+            else
+            {
+                free_entp->value = codep->firstchar;
+            }
+            free_entp->repeated = (bool)(oldcodep->repeated & !(oldcodep->value - free_entp->value));
+            free_entp->next = oldcodep;
+
+            free_entp->firstchar = oldcodep->firstchar;
+            free_entp->length = oldcodep->length+1;
+            if (++free_entp > maxcodep) {
+                if (++nbits > BITS_MAX)		/* should not happen for a conformant encoder */
+                    nbits = BITS_MAX;
+                nbitsmask = MAXCODE(nbits);
+                maxcodep = dec_codetab + nbitsmask-1;
+                if (free_entp >= &dec_codetab[CSIZE])
+                {
+                    /* At that point, the next valid states are either EOI or a */
+                    /* CODE_CLEAR. If a regular code is read, at the next */
+                    /* attempt at registering a new entry, we will error out */
+                    /* due to setting free_entp before any valid code */
+                    free_entp = dec_codetab - 1;
+                }
+            }
+            oldcodep = codep;
+
+            /*
+             * Code maps to a string, copy string
+             * value to output (written in reverse).
+             */
+            /* tiny bit faster on x86_64 to store in unsigned short than int */
+            unsigned short len = codep->length;
+
+            if (len < 3) /* equivalent to len == 2 given all other conditions */
+            {
+                if (occ <= 2)
+                {
+                    if (occ == 2)
+                    {
+                        memcpy(op, &(codep->firstchar), 2);
+                        op += 2;
+                        occ -= 2;
+                        goto after_loop;
+                    }
+                    goto too_short_buffer;
+                }
+
+                memcpy(op, &(codep->firstchar), 2);
+                op += 2;
+                occ -= 2;
+                goto begin; /* we can save the comparison occ > 0 */
+            }
+
+            if (len == 3)
+            {
+                if (occ <= 3)
+                {
+                    if (occ == 3)
+                    {
+                        op[0] = codep->firstchar;
+                        op[1] = codep->next->value;
+                        op[2] = codep->value;
+                        op += 3;
+                        occ -= 3;
+                        goto after_loop;
+                    }
+                    goto too_short_buffer;
+                }
+
+                op[0] = codep->firstchar;
+                op[1] = codep->next->value;
+                op[2] = codep->value;
+                op += 3;
+                occ -= 3;
+                goto begin; /* we can save the comparison occ > 0 */
+            }
+
+            if (len > occ)
+            {
+                goto too_short_buffer;
+            }
+
+            if (codep->repeated)
+            {
+                memset(op, codep->value, len);
+                op += len;
+                occ -= len;
+                if (occ == 0)
+                    goto after_loop;
+                goto begin;
+            }
+
+            uint8_t* tp = op + len;
+
+            assert(len >= 4);
+
+            *--tp = codep->value;
+            codep = codep->next;
+            *--tp = codep->value;
+            codep = codep->next;
+            *--tp = codep->value;
+            codep = codep->next;
+            *--tp = codep->value;
+            if (tp > op)
+            {
+                 do {
+                    codep = codep->next;
+                    *--tp = codep->value;
+                } while (tp > op);
+            }
+
+            assert(occ >= len);
+            op += len;
+            occ -= len;
+            if (occ == 0)
+                goto after_loop;
+            goto begin;
+        }
+
+code_clear:
+        {
+            free_entp = dec_codetab + CODE_FIRST;
+            nbits = BITS_MIN;
+            nbitsmask = MAXCODE(BITS_MIN);
+            maxcodep = dec_codetab + nbitsmask-1;
+            do {
+                GetNextCodeLZW();
+            } while (code == CODE_CLEAR);	/* consecutive CODE_CLEAR codes */
+            if (code == CODE_EOI)
+                goto after_loop;
+            if (code > CODE_EOI) {
+                goto error_code;
+            }
+            *op++ = (uint8_t)code;
+            occ--;
+            oldcodep = dec_codetab + code;
+            if (occ == 0)
+                goto after_loop;
+            goto begin;
+        }
+    }
+
+too_short_buffer:
+    {
+        /*
+         * String is too long for decode buffer,
+         * locate portion that will fit, copy to
+         * the decode buffer, and setup restart
+         * logic for the next decoding call.
+         */
+        sp->dec_codep = codep;
+        do {
+            codep = codep->next;
+        } while (codep->length > occ);
+
+        sp->dec_restart = occ;
+        uint8_t* tp = op + occ;
+        do  {
+            *--tp = codep->value;
+            codep = codep->next;
+        }  while (--occ);
+    }
+
+after_loop:
 	tif->tif_rawcc -= (tmsize_t)((uint8_t*) bp - tif->tif_rawcp );
 	tif->tif_rawcp = (uint8_t*) bp;
 	sp->old_tif_rawcc = tif->tif_rawcc;
@@ -598,6 +702,9 @@ no_eoi:
     TIFFErrorExt(tif->tif_clientdata, module,
                     "LZWDecode: Strip %"PRIu32" not terminated with EOI code",
                     tif->tif_curstrip);
+    return 0;
+error_code:
+    TIFFErrorExt(tif->tif_clientdata, tif->tif_name, "Using code not yet in table");
     return 0;
 }
 
