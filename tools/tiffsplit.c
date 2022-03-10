@@ -324,7 +324,7 @@ cpStrips(TIFF* in, TIFF* out)
 			if (bytecounts[s] > (uint64_t)bufsize) {
 				buf = (unsigned char*)limitRealloc(buf, (tmsize_t)bytecounts[s]);
 				if (!buf) {
-					fprintf(stderr, "tiffsplit: Error: Can't re-allocate %"TIFF_SSIZE_FORMAT" bytes for strip-size.\n", bytecounts[s]);
+					fprintf(stderr, "tiffsplit: Error: Can't re-allocate %"TIFF_SSIZE_FORMAT" bytes for strip-size.\n", (tmsize_t)bytecounts[s]);
 					return (0);
 				}
 				bufsize = (tmsize_t)bytecounts[s];
@@ -362,7 +362,7 @@ cpTiles(TIFF* in, TIFF* out)
 			if (bytecounts[t] > (uint64_t) bufsize) {
 				buf = (unsigned char*)limitRealloc(buf, (tmsize_t)bytecounts[t]);
 				if (!buf) {
-					fprintf(stderr, "tiffsplit: Error: Can't re-allocate %"TIFF_SSIZE_FORMAT" bytes for tile-size.\n", bytecounts[t]);
+					fprintf(stderr, "tiffsplit: Error: Can't re-allocate %"TIFF_SSIZE_FORMAT" bytes for tile-size.\n", (tmsize_t)bytecounts[t]);
 					return (0);
 				}
 				bufsize = (tmsize_t)bytecounts[t];
