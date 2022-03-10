@@ -1667,12 +1667,27 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
 	tdata_t obuf;
 	tstrip_t strip = 0;
 	tsample_t s;
+	uint16_t bps = 0, bytes_per_sample;
 
 	obuf = limitMalloc(stripsize);
 	if (obuf == NULL)
 		return (0);
 	_TIFFmemset(obuf, 0, stripsize);
 	(void) TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
+	(void) TIFFGetField(out, TIFFTAG_BITSPERSAMPLE, &bps);
+	if( bps == 0 )
+        {
+            TIFFError(TIFFFileName(out), "Error, cannot read BitsPerSample");
+            _TIFFfree(obuf);
+            return 0;
+        }
+        if( (bps % 8) != 0 )
+        {
+            TIFFError(TIFFFileName(out), "Error, cannot handle BitsPerSample that is not a multiple of 8");
+            _TIFFfree(obuf);
+            return 0;
+        }
+	bytes_per_sample = bps/8;
 	for (s = 0; s < spp; s++) {
 		uint32_t row;
 		for (row = 0; row < imagelength; row += rowsperstrip) {
@@ -1682,7 +1697,7 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
 
 			cpContigBufToSeparateBuf(
 			    obuf, (uint8_t*) buf + row * rowsize + s,
-			    nrows, imagewidth, 0, 0, spp, 1);
+			    nrows, imagewidth, 0, 0, spp, bytes_per_sample);
 			if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0) {
 				TIFFError(TIFFFileName(out),
 				    "Error, can't write strip %"PRIu32,
