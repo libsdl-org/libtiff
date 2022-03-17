@@ -356,8 +356,8 @@ add_convert_test_multi(tiffcp thumbnail "" thumbnail "-c g3:1d" "" ""
                        "images/miniswhite-1c-1b.tiff"    FALSE)
 add_convert_test(tiffcp   none       "-c none"       "images/quad-lzw-compat.tiff" FALSE)
 add_convert_test(tiffcp   noner1     "-c none -r 1"  "images/lzw-single-strip.tiff" FALSE)
-add_convert_test(tiffcp   float64_lzw_2_le "-c lzw:2       "images/test_float64_predictor2_le_lzw.tif" FALSE)
-add_convert_test(tiffcp   float64_lzw_2_be "-c lzw:2       "images/test_float64_predictor2_be_lzw.tif" FALSE)
+add_convert_test(tiffcp   float64_lzw_2_le "-c lzw:2"       "images/test_float64_predictor2_le_lzw.tif" FALSE)
+add_convert_test(tiffcp   float64_lzw_2_be "-c lzw:2"       "images/test_float64_predictor2_be_lzw.tif" FALSE)
 
 # tiffdump
 add_reader_test(tiffdump "" "images/miniswhite-1c-1b.tiff")
