@@ -274,19 +274,34 @@ main(int argc, char* argv[])
 			deftilewidth = atoi(optarg);
 			break;
 		case 'B':
-			*mp++ = 'b'; *mp = '\0';
+			if (strlen(mode) < (sizeof(mode) - 1))
+			{
+				*mp++ = 'b'; *mp = '\0';
+			}
 			break;
 		case 'L':
-			*mp++ = 'l'; *mp = '\0';
+			if (strlen(mode) < (sizeof(mode) - 1))
+			{
+				*mp++ = 'l'; *mp = '\0';
+			}
 			break;
 		case 'M':
-			*mp++ = 'm'; *mp = '\0';
+			if (strlen(mode) < (sizeof(mode) - 1))
+			{
+				*mp++ = 'm'; *mp = '\0';
+			}
 			break;
 		case 'C':
-			*mp++ = 'c'; *mp = '\0';
+			if (strlen(mode) < (sizeof(mode) - 1))
+			{
+				*mp++ = 'c'; *mp = '\0';
+			}
 			break;
 		case '8':
-			*mp++ = '8'; *mp = '\0';
+			if (strlen(mode) < (sizeof(mode)-1))
+			{
+				*mp++ = '8'; *mp = '\0';
+			}
 			break;
 		case 'x':
 			pageInSeq = 1;
