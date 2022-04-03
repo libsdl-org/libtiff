@@ -150,7 +150,7 @@ _TIFFPrettyPrintField(TIFF* tif, const TIFFField *fip, FILE* fd, uint32 tag,
         (void) tif;
 
 	/* do not try to pretty print auto-defined fields */
-	if (fip->field_name != NULL && strncmp(fip->field_name,"Tag ", 4) == 0) {
+	if ( TIFFFieldIsAnonymous(fip) ) {
 		return 0;
 	}
         
