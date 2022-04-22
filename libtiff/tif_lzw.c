@@ -141,6 +141,7 @@ typedef struct {
 	code_t* dec_free_entp;		/* next free entry */
 	code_t* dec_maxcodep;		/* max available entry */
 	code_t* dec_codetab;		/* kept separate for small machines */
+	int     read_error;         /* whether a read error has occured, and which should cause further reads in the same strip/tile to be aborted */
 
 	/* Encoding specific data */
 	int     enc_oldcode;		/* last code encountered */
@@ -277,6 +278,7 @@ LZWPreDecode(TIFF* tif, uint16 s)
 	    tif->tif_rawdata[0] == 0 && (tif->tif_rawdata[1] & 0x1)) {
 #ifdef LZW_COMPAT
 		if (!sp->dec_decode) {
+			sp->read_error = 1;
 			TIFFWarningExt(tif->tif_clientdata, module,
 			    "Old-style LZW codes, convert file");
 			/*
@@ -300,6 +302,7 @@ LZWPreDecode(TIFF* tif, uint16 s)
 		sp->lzw_maxcode = MAXCODE(BITS_MIN);
 #else /* !LZW_COMPAT */
 		if (!sp->dec_decode) {
+			sp->read_error = 1;
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "Old-style LZW codes not supported");
 			sp->dec_decode = LZWDecode;
@@ -331,6 +334,7 @@ LZWPreDecode(TIFF* tif, uint16 s)
 	_TIFFmemset(sp->dec_free_entp, 0, (CSIZE-CODE_FIRST)*sizeof (code_t));
 	sp->dec_oldcodep = &sp->dec_codetab[-1];
 	sp->dec_maxcodep = &sp->dec_codetab[sp->dec_nbitsmask-1];
+	sp->read_error = 0;
 	return (1);
 }
 
@@ -373,7 +377,11 @@ LZWDecode(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 
 	(void) s;
 	assert(sp != NULL);
-        assert(sp->dec_codetab != NULL);
+	assert(sp->dec_codetab != NULL);
+
+	if (sp->read_error) {
+		return 0;
+	}
 
 	/*
 	  Fail if value does not fit in long.
@@ -453,6 +461,7 @@ LZWDecode(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 			if (code == CODE_EOI)
 				break;
 			if (code > CODE_CLEAR) {
+				sp->read_error = 1;
 				TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 				"LZWDecode: Corrupted LZW table at scanline %d",
 					     tif->tif_row);
@@ -470,6 +479,7 @@ LZWDecode(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 		 */
 		if (free_entp < &sp->dec_codetab[0] ||
 		    free_entp >= &sp->dec_codetab[CSIZE]) {
+			sp->read_error = 1;
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "Corrupted LZW table at scanline %d",
 			    tif->tif_row);
@@ -479,6 +489,7 @@ LZWDecode(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 		free_entp->next = oldcodep;
 		if (free_entp->next < &sp->dec_codetab[0] ||
 		    free_entp->next >= &sp->dec_codetab[CSIZE]) {
+			sp->read_error = 1;
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "Corrupted LZW table at scanline %d",
 			    tif->tif_row);
@@ -687,6 +698,7 @@ LZWDecodeCompat(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 			if (code == CODE_EOI)
 				break;
 			if (code > CODE_CLEAR) {
+				sp->read_error = 1;
 				TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
 				"LZWDecode: Corrupted LZW table at scanline %d",
 					     tif->tif_row);
@@ -704,6 +716,7 @@ LZWDecodeCompat(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 		 */
 		if (free_entp < &sp->dec_codetab[0] ||
 		    free_entp >= &sp->dec_codetab[CSIZE]) {
+			sp->read_error = 1;
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "Corrupted LZW table at scanline %d", tif->tif_row);
 			return (0);
@@ -712,6 +725,7 @@ LZWDecodeCompat(TIFF* tif, uint8* op0, tmsize_t occ0, uint16 s)
 		free_entp->next = oldcodep;
 		if (free_entp->next < &sp->dec_codetab[0] ||
 		    free_entp->next >= &sp->dec_codetab[CSIZE]) {
+			sp->read_error = 1;
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "Corrupted LZW table at scanline %d", tif->tif_row);
 			return (0);
