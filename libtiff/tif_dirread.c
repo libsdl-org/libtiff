@@ -4537,7 +4537,7 @@ TIFFReadCustomDirectory(TIFF* tif, toff_t diroff,
 				switch (dp->tdir_tag) 
 				{
 					case EXIFTAG_SUBJECTDISTANCE:
-                        if(fip->field_name != NULL && strncmp(fip->field_name, "Tag ", 4) != 0 ) {
+                        if(!TIFFFieldIsAnonymous(fip)) {
                             /* should only be called on a Exif directory */
                             /* when exifFields[] is active */
                             (void)TIFFFetchSubjectDistance(tif, dp);
