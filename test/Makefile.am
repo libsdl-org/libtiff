@@ -69,7 +69,7 @@ endif
 check_PROGRAMS = \
 	ascii_tag long_tag short_tag strip_rw rewrite custom_dir custom_dir_EXIF_231 \
 	rational_precision2double defer_strile_loading defer_strile_writing test_directory \
-	testtypes $(JPEG_DEPENDENT_CHECK_PROG)
+	testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG)
 
 # Test scripts to execute
 TESTSCRIPTS = \
@@ -206,6 +206,8 @@ IMAGES_EXTRA_DIST = \
 
 noinst_HEADERS = tifftest.h
 
+test_signed_tags_SOURCES = test_signed_tags.c
+test_signed_tags_LDADD = $(LIBTIFF)
 ascii_tag_SOURCES = ascii_tag.c
 ascii_tag_LDADD = $(LIBTIFF)
 long_tag_SOURCES = long_tag.c check_tag.c

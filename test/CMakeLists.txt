@@ -100,6 +100,11 @@ set(noinst_HEADERS tifftest.h)
 
 set(simple_tests)
 
+add_executable(test_signed_tags ../placeholder.h)
+target_sources(test_signed_tags PRIVATE test_signed_tags.c)
+target_link_libraries(test_signed_tags PRIVATE tiff port)
+list(APPEND simple_tests test_signed_tags)
+
 add_executable(ascii_tag ../placeholder.h)
 target_sources(ascii_tag PRIVATE ascii_tag.c)
 target_link_libraries(ascii_tag PRIVATE tiff port)
