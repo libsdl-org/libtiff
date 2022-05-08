@@ -82,7 +82,7 @@ TIFFCleanup(TIFF* tif)
 			TIFFField *fld = tif->tif_fields[i];
 			if (fld->field_name != NULL) {
 				if (fld->field_bit == FIELD_CUSTOM &&
-					/* catuion: tif_fields[i] must not be the beginning of a fields-array.
+					/* caution: tif_fields[i] must not be the beginning of a fields-array.
 					 *          Otherwise the following tags are also freed with the first free().
 					 */
 					TIFFFieldIsAnonymous(fld)) {

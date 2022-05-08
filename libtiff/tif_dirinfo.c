@@ -424,7 +424,7 @@ _TIFFSetupFields(TIFF* tif, const TIFFFieldArray* fieldarray)
 				if (fld->field_bit == FIELD_CUSTOM &&
 					TIFFFieldIsAnonymous(fld)) {
 					_TIFFfree(fld->field_name);
-					/* catuion: tif_fields[i] must not be the beginning of a fields-array. 
+					/* caution: tif_fields[i] must not be the beginning of a fields-array. 
 					 *          Otherwise the following tags are also freed with the first free().
 					 */
 					_TIFFfree(fld);
