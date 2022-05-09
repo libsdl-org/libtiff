@@ -1314,6 +1314,8 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 	uint16_t xuint16;
 	uint16_t* xuint16p;
 	float* xfloatp;
+	int palette_16bit = 0;
+	int palette_shift = 8;
 
 	t2p->pdf_transcode = T2P_TRANSCODE_ENCODE;
 	t2p->pdf_sample = T2P_SAMPLE_NOTHING;
@@ -1565,10 +1567,22 @@ void t2p_read_tiff_data(T2P* t2p, TIFF* input){
 				t2p->t2p_error = T2P_ERR_ERROR;
 				return;
 			}
+			/* Some older tiffs may have colors in the palette
+			 * ranging from 0 to 255 rather than 0 to 65535. */
 			for(i=0;i<t2p->pdf_palettesize;i++){
-				t2p->pdf_palette[(i*3)]  = (unsigned char) (r[i]>>8);
-				t2p->pdf_palette[(i*3)+1]= (unsigned char) (g[i]>>8);
-				t2p->pdf_palette[(i*3)+2]= (unsigned char) (b[i]>>8);
+				if ((r[i]>255)||(g[i]>255)||(b[i]>255)){
+					palette_16bit = 1;
+					break;
+				}
+			}
+			if (palette_16bit == 0){
+				TIFFWarning(TIFFFileName(input), "Assuming 8-bit colormap");
+				palette_shift = 0;
+			}
+			for(i=0;i<t2p->pdf_palettesize;i++){
+				t2p->pdf_palette[(i*3)]  = (unsigned char) (r[i]>>palette_shift);
+				t2p->pdf_palette[(i*3)+1]= (unsigned char) (g[i]>>palette_shift);
+				t2p->pdf_palette[(i*3)+2]= (unsigned char) (b[i]>>palette_shift);
 			}
 			t2p->pdf_palettesize *= 3;
 			break;
