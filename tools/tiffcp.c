@@ -776,25 +776,6 @@ tiffcp(TIFF* in, TIFF* out)
 	 * Will copy `Orientation' tag from input image
 	 */
 	TIFFGetFieldDefaulted(in, TIFFTAG_ORIENTATION, &orientation);
-	switch (orientation) {
-		case ORIENTATION_BOTRIGHT:
-		case ORIENTATION_RIGHTBOT:	/* XXX */
-			TIFFWarning(TIFFFileName(in), "using bottom-left orientation");
-			orientation = ORIENTATION_BOTLEFT;
-		/* fall through... */
-		case ORIENTATION_LEFTBOT:	/* XXX */
-		case ORIENTATION_BOTLEFT:
-			break;
-		case ORIENTATION_TOPRIGHT:
-		case ORIENTATION_RIGHTTOP:	/* XXX */
-		default:
-			TIFFWarning(TIFFFileName(in), "using top-left orientation");
-			orientation = ORIENTATION_TOPLEFT;
-		/* fall through... */
-		case ORIENTATION_LEFTTOP:	/* XXX */
-		case ORIENTATION_TOPLEFT:
-			break;
-	}
 	TIFFSetField(out, TIFFTAG_ORIENTATION, orientation);
 	/*
 	 * Choose tiles/strip for the output image according to
