@@ -101,13 +101,12 @@ static int writeTestTiff(const char *szFileName, int isBigTiff)
 	TIFF *tif;
 	int retcode = FAULT_RETURN;
 
+	unlink(szFileName);
 	if (isBigTiff) {
 		fprintf(stdout, "\n-- Writing signed values to BigTIFF...\n");
-		ret = unlink(szFileName);
 		tif = TIFFOpen(szFileName, "w8");
 	} else {
 		fprintf(stdout, "\n-- Writing signed values to ClassicTIFF...\n");
-		unlink(szFileName);
 		tif = TIFFOpen(szFileName, "w");
 	}
 	if (!tif) {
