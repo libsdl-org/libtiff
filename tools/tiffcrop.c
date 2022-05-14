@@ -2779,7 +2779,7 @@ extractContigSamplesBytes (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesBytes", 
@@ -2792,7 +2792,7 @@ extractContigSamplesBytes (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -2853,7 +2853,7 @@ extractContigSamples8bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples8bits", 
@@ -2866,7 +2866,7 @@ extractContigSamples8bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -2938,7 +2938,7 @@ extractContigSamples16bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples16bits", 
@@ -2951,7 +2951,7 @@ extractContigSamples16bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -3034,7 +3034,7 @@ extractContigSamples24bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples24bits", 
@@ -3047,7 +3047,7 @@ extractContigSamples24bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -3152,7 +3152,7 @@ extractContigSamples32bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamples32bits", 
@@ -3165,7 +3165,7 @@ extractContigSamples32bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -3262,7 +3262,7 @@ extractContigSamplesShifted8bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted8bits", 
@@ -3275,7 +3275,7 @@ extractContigSamplesShifted8bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -3350,7 +3350,7 @@ extractContigSamplesShifted16bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted16bits", 
@@ -3363,7 +3363,7 @@ extractContigSamplesShifted16bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -3453,7 +3453,7 @@ extractContigSamplesShifted24bits (uint8_t *in, uint8_t *out, uint32_t cols,
   *  If then, a worng parameter (e.g. cols = 10) is provided, the mitigated settings would be start=0; end=1. 
   *  Therefore, an error message and no copy action might be the better reaction to wrong parameter configurations.
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted24bits", 
@@ -3466,7 +3466,7 @@ extractContigSamplesShifted24bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
@@ -3560,7 +3560,7 @@ extractContigSamplesShifted32bits (uint8_t *in, uint8_t *out, uint32_t cols,
   /* Number of extracted columns shall be kept as (end-start + 1). Otherwise buffer-overflow might occur.
    * 'start' and 'col' count from 0 to (cols-1)  but 'end' is to be set one after the index of the last column to be copied!
    */
-  numcols = abs(end - start);
+  if (end >= start) numcols = end - start; else numcols = start - end;
   if ((start > end) || (start > cols))
     {
     TIFFError ("extractContigSamplesShifted32bits", 
@@ -3573,7 +3573,7 @@ extractContigSamplesShifted32bits (uint8_t *in, uint8_t *out, uint32_t cols,
                "Invalid end column value %"PRIu32" ignored", end);
     end = cols;
     }
-  if (abs(end - start) > numcols) {
+  if ((end - start) > numcols) {
       end = start + numcols;
   }
 
