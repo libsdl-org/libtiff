@@ -242,7 +242,9 @@ function(tiff_test_stdout_noargs name command)
           "-DSTDOUT_COMMAND=$<TARGET_FILE:${command}>"
           ${tiff_test_extra_args}
           -P "${CMAKE_CURRENT_SOURCE_DIR}/TiffTest.cmake"
-          WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+          WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+  set_tests_properties("${name}" PROPERTIES ENVIRONMENT
+          "srcdir=${CMAKE_CURRENT_SOURCE_DIR}")
 endfunction()
 
 function(tiff_test_reader name command infile)
