@@ -134,18 +134,18 @@ Notes on releasing.
 16. Sign the release files in the build tree using your private key
 
       export GPG_TTY=$(tty)
-      for file in tiff-*.tar.gz tiff-*.zip ; do \
+      for file in tiff-*.tar.gz tiff-*.tar.xz tiff-*.zip ; do \
         gpg2 --output ${file}.sig --detach-sig $file ; \
       done
 
-      for file in tiff-*.tar.gz tiff-*.zip ; do \
+      for file in tiff-*.tar.gz tiff-*.tar.xz tiff-*.zip ; do \
         gpg2 --verify ${file}.sig $file ; \
       done
 
 17. Copy release packages from the build tree to the
     ftp.remotesensing.org ftp site.
 
-      scp tiff-*.tar.gz tiff-*.tar.gz.sig tiff-*.zip tiff-*.zip.sig \
+      scp tiff-*.tar.gz tiff-*.tar.gz.sig tiff-*.tar.xz tiff-*.tar.xz.sig tiff-*.zip tiff-*.zip.sig \
          bfriesen@upload.osgeo.org:/osgeo/download/libtiff
 
 18. Announce to list: tiff@lists.osgeo.org
