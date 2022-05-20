@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>
+        Changes in TIFF v4.4.0
+</TITLE>
+<STYLE TYPE="text/css">
+body {
+    font-family: Helvetica, Arial, Sans;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 8pt;
+    text-align: center;
+}
+th {
+    text-align: center;
+}
+td {
+    text-align: center;
+}
+
+ul li {
+    padding: 3pt;
+}
+
+ul.a {
+    list-style-type: circle;
+}
+
+ul.b {
+    list-style-type: square;
+}
+
+ol.c {
+    list-style-type: upper-roman;
+}
+
+ol.d {
+    list-style-type: lower-alpha;
+}
+
+hr {
+    width: 65%;
+}
+
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR=white>
+
+<BASEFONT SIZE=4>
+<B><FONT SIZE="+3">T</FONT>IFF <FONT SIZE="+2">C</FONT>HANGE <FONT SIZE="+2">I</FONT>NFORMATION</B>
+<BASEFONT SIZE=3>
+
+<div style="margin-left: 3em">
+<HR SIZE=4 ALIGN=left>
+<B>Current Version</B>: v4.4.0<BR>
+<B>Previous Version</B>: <A HREF="v4.3.0.html">v4.3.0</A><BR>
+<B>Master Download Site</B>: <A HREF="https://download.osgeo.org/libtiff">
+download.osgeo.org</a>, directory pub/libtiff<BR>
+<B>Master HTTP Site #1</B>: <A HREF="http://www.simplesystems.org/libtiff/">
+  http://www.simplesystems.org/libtiff/</A><BR>
+<B>Master HTTP Site #2</B>: <A HREF="https://libtiff.gitlab.io/libtiff/">
+  https://libtiff.gitlab.io/libtiff/</A><BR>
+<B>Master HTTP Site #3</B>: <A HREF="http://libtiff.maptools.org/">
+http://libtiff.maptools.org/</a>
+<HR SIZE=4 ALIGN=left>
+</div>
+
+<P>
+This document provides a summary of significant changes made to the
+software between the <I>previous</I> and <I>current</I> versions (see
+above). A fully-detailed change summary is provided by the ChangeLog file
+included in the release package and by the Git commit history:
+<UL>
+<LI><A HREF="#highlights">Major Changes</A>
+<LI><A HREF="#configure">Changes in the software configuration</A>
+<LI><A HREF="#libtiff">Changes in libtiff</A>
+<LI><A HREF="#tools">Changes in the tools</A>
+<LI><A HREF="#contrib">Changes in the contrib area</A>
+</UL>
+<p>
+<P><HR ALIGN=left>
+
+<!-- ============================================================= -->
+
+<A NAME="highlights"><B><FONT SIZE="+3">M</FONT>AJOR CHANGES:</B></A>
+
+<P>
+None
+</P>
+
+<P><HR ALIGN=left>
+<!-- ============================================================= -->
+
+<A NAME="configure"><B><FONT SIZE="+3">C</FONT>HANGES IN THE SOFTWARE CONFIGURATION:</B></A>
+
+<UL>
+
+  <LI>Handle absolute paths in pkg-config file (#333)</LI>
+  <LI>Correct fix for the pkgconf file relative paths.</LI>
+  <LI>cmake: allow running the tests with a read-only source directory.</LI>
+  <LI>cmake: Fix STRIPCHOP_DEFAULT value in CMake builds.</LI>
+  <LI>build: Fix static library imports in mingw related to LERC</LI>
+  <LI>Fix version in libtiff-4.pc.in, and CMake build: Add requirements to pc file</LI>
+  <LI>cmake: Fix build with CMake 3.10.</LI>
+  <LI>cmake: Export tiff targets.</LI>
+  <LI>Make LERC_SUPPORT conditional on ZLIB_SUPPORT</LI>
+
+</UL>
+
+<P><HR ALIGN=left>
+
+<!-- ============================================================= -->
+
+<A NAME="libtiff"><B><FONT SIZE="+3">C</FONT>HANGES IN LIBTIFF:</B></A>
+
+<P>
+New/improved functionalities:
+</P>
+<UL>
+
+  <LI>TIFFIsBigTiff() function added.</LI>
+  <LI>Functions TIFFFieldSetGetSize() and TIFFieldSetGetCountSize() added.</LI>
+  <LI>LZWDecode(): major speed improvements (~30% faster)</LI>
+  <LI>Predictor 2 (horizontal differenciation): support 64-bit</LI>
+  <LI>Support libjpeg 9d</LI>
+</UL>
+
+<P>
+Bug fixes:
+</P>
+<UL>
+  <LI>Remove incorrect assert (#329)</LI>
+  <LI>avoid hang in TIFFRewriteDirectory() if a classic file > 4 GB is attempted to be created</LI>
+  <LI>tif_jbig.c: fix crash when reading a file with multiple IFD in memory-mapped mode and when bit reversal is needed (fixes #385)</LI>
+  <LI>TIFFFetchNormalTag(): avoid calling memcpy() with a null source pointer and size of zero (fixes #383)</LI>
+  <LI>TIFFWriteDirectoryTagData(): turn assertion on data length into a runtime check</LI>
+  <LI>TIFFFetchStripThing(): avoid calling memcpy() with a null source pointer and size of zero (fixes #362)</LI>
+  <LI>TIFFReadDirectory(): avoid calling memcpy() with a null source pointer and size of zero (fixes #362)</LI>
+  <LI>TIFFYCbCrToRGBInit(): avoid Integer-overflow</LI>
+  <LI>TIFFGetField(TIFFTAG_STRIPBYTECOUNTS/TIFFTAG_STRIPOFFSETS): return error if returned pointer is NULL (fixes #342)</LI>
+  <LI>OJPEG: avoid assertion when using TIFFReadScanline() (fixes #337)</LI>
+  <LI>TIFFReadDirectory: fix OJPEG hack (fixes #319)</LI>
+  <LI>LZW codec: fix support for strips/tiles > 2 GB on Windows</LI>
+  <LI>TIFFAppendToStrip(): fix rewrite-in-place logic (fixes #309)</LI>
+  <LI>Fix TIFFRewriteDirectory discarding directories.</LI>
+  <LI>TIFFReadCustomDirectory(): avoid crash when reading SubjectDistance tag on a non EXIF directory (#316)</LI>
+  <LI>Fix Segmentation fault printing GPS directory if Altitude tag is present</LI>
+  <LI>tif_jpeg.c: do not emit progressive scans with mozjpeg. (#266)</LI>
+  <LI>_TIFFRewriteField(): fix when writing a IFD with a single tile that is a sparse one, on big endian hosts</LI>
+  <LI>Fix all remaining uses of legacy Deflate compression id and warn on use.</LI>
+</UL>
+
+<P><HR ALIGN=left>
+
+<!-- ============================================================= -->
+
+<A NAME="tools"><B><FONT SIZE="+3">C</FONT>HANGES IN THE TOOLS:</B></A>
+
+<P>
+Bug fixes:
+</P>
+<UL>
+  <LI>tiffcrop: Fix issue #330 and some more from 320 to 349.</LI>
+  <LI>tiffcrop: fix issue #395: generation of strange section images.</LI>
+  <LI>tiffcrop: fix issue #380 and #382 heap buffer overflow in extractImageSection</LI>
+  <LI>tiffcrop: fix FPE (#393)</LI>
+  <LI>tiffcrop: buffsize check  formula in loadImage() amended  (fixes #273,#275)</LI>
+  <LI>tiffcrop.c: Fix issue #352 heap-buffer-overflow by correcting uint32_t underflow.</LI>
+  <LI>tiff2pdf: handle 8-bit palette colormap.</LI>
+  <LI>tiffcp: avoid buffer overflow in "mode" string (fixes #400)</LI>
+  <LI>tiffcp: Fix incomprehensible setting of orientation tag (fixes #29)</LI>
+  <LI>tiffcp: do not try to fetch compressor-specific tags when not appropriate (fixes #396)</LI>
+  <LI>tiffcp: fix heap buffer overflow (#278)</LI>
+  <LI>tiff2ps: In limitMalloc() check for negative size (fixes #284)</LI>
+  <LI>tiffinfo: add a -M switch to define the maximum heap allocation, and default it to 256 MiB (fixes #287, #290)</LI>
+  <LI>tiffinfo: limit more memory allocations using -M switch (fixes #288)</LI>
+  <LI>tiffset: fix global-buffer-overflow for ASCII tags where count is required (fixes #355)</LI>
+  <LI>raw2tiff: check that band number if not zero to avoid floating point exception(fixes #338)</LI>
+  <LI>tiffinfo/tiffdump: improve output for GDAL tags.</LI>
+
+</UL>
+
+<P><HR ALIGN=left>
+
+<!-- ============================================================= -->
+
+<A NAME="contrib"><B><FONT SIZE="+3">C</FONT>HANGES IN THE CONTRIB AREA:</B></A>
+
+<P>
+None
+</P>
+
+</BODY>
+</HTML>
