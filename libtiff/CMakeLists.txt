@@ -189,7 +189,13 @@ if(CXX_SUPPORT)
   set(tiffxx_HEADERS
           tiffio.hxx)
 
-  add_library(tiffxx ../placeholder.h)
+  # No .def file for this library.
+  if (WIN32)
+      add_library(tiffxx STATIC ../placeholder.h)
+  else()
+      add_library(tiffxx ../placeholder.h)
+  endif()
+
   target_sources(tiffxx PRIVATE
           ${tiffxx_HEADERS}
           tif_stream.cxx)
