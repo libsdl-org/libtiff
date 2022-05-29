@@ -131,6 +131,11 @@ find_package(CMath REQUIRED)
 # Release support
 include(Release)
 
+add_library(tiff-options INTERFACE)
+if(MSVC)
+    target_compile_definitions(tiff-options INTERFACE -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+    target_compile_options(tiff-options INTERFACE /wd4996)
+endif()
 
 # Process subdirectories
 add_subdirectory(port)
