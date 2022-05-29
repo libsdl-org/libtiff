@@ -109,8 +109,6 @@ target_include_directories(tiff
 set(tiff_libs_private_list "") # cmake list
 set(tiff_requires_private "") # cmake string
 
-target_link_libraries(tiff PRIVATE tiff-options)
-
 if(ZIP_SUPPORT)
   target_link_libraries(tiff PRIVATE ZLIB::ZLIB)
   string(APPEND tiff_requires_private " zlib")
@@ -195,7 +193,7 @@ if(CXX_SUPPORT)
   target_sources(tiffxx PRIVATE
           ${tiffxx_HEADERS}
           tif_stream.cxx)
-  target_link_libraries(tiffxx PUBLIC tiff PRIVATE tiff-options)
+  target_link_libraries(tiffxx tiff)
   set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION})
   if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
