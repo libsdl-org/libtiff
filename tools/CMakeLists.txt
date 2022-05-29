@@ -124,7 +124,7 @@ install(TARGETS fax2ps
                 tiffsplit
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
-if(HAVE_OPENGL)
+if(OPENGL_SUPPORT)
   add_executable(tiffgt ../placeholder.h)
   target_sources(tiffgt PRIVATE tiffgt.c)
   target_link_libraries(tiffgt PRIVATE tiff port)
