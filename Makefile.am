@@ -44,7 +44,9 @@ EXTRA_DIST = \
 	autogen.sh \
 	libtiff-4.pc.in
 
+if TIFF_DOCS
 dist_doc_DATA = $(docfiles)
+endif
 
 distcheck-hook:
 	if [ -x "$(CMAKE)" ]; then \

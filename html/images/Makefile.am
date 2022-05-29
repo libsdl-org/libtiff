@@ -43,7 +43,10 @@ docfiles = \
 	strike.gif \
 	warning.gif
 
-dist_doc_DATA = $(docfiles)
+if TIFF_DOCS
+doc_DATA = $(docfiles)
+endif
 
 EXTRA_DIST = \
+	$(docfiles) \
 	CMakeLists.txt

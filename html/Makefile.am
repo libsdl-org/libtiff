@@ -93,9 +93,12 @@ docfiles = \
 	v4.3.0.html \
 	v4.4.0.html
 
-dist_doc_DATA = $(docfiles)
+if TIFF_DOCS
+doc_DATA = $(docfiles)
+endif
 
 SUBDIRS = images man
 
 EXTRA_DIST = \
+	$(docfiles) \
 	CMakeLists.txt

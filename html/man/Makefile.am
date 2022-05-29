@@ -96,7 +96,9 @@ docfiles = \
 	tiffset.1.html \
 	tiffsplit.1.html
 
-dist_doc_DATA = $(indexfile) $(docfiles)
+if TIFF_DOCS
+doc_DATA = $(indexfile) $(docfiles)
+endif
 
 INDEXSTART = '<HTML><HEAD><TITLE>Libtiff HTML manpage index</TITLE></HEAD><BODY BGCOLOR=white><ul><H2>Man Pages</h2><p>'
 INDEXEND = '</ul></BODY></HTML>'
@@ -118,5 +120,7 @@ htmldoc:
 	done
 
 EXTRA_DIST = \
+	$(indexfile) \
+	$(docfiles) \
 	CMakeLists.txt \
 	HtmlDoc.cmake
