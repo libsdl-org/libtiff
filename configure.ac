@@ -1093,7 +1093,22 @@ if test "$CHECK_JPEG_YCBCR_SUBSAMPLING" = "yes" ; then
 	    [Pick up YCbCr subsampling info from the JPEG data stream to support files lacking the tag (default enabled).])
 fi
 
+
+AC_ARG_ENABLE(sphinx,
+              AS_HELP_STRING([--disable-sphinx],
+                             [disable building of the sphinx documentation]),
+              [BUILD_SPHINX=$enableval],
+              [BUILD_SPHINX=yes])
+
+
+
+AC_PATH_PROG(SPHINX_BUILD, [sphinx-build], [no])
+
+AM_CONDITIONAL([SPHINX], [test "$BUILD_SPHINX" = yes -a "$SPHINX_BUILD" != no])
+
+
 dnl ---------------------------------------------------------------------------
+
 
 AC_SUBST(LIBDIR)
 
@@ -1112,9 +1127,7 @@ AC_CONFIG_FILES([Makefile \
 		 contrib/stream/Makefile \
 		 contrib/tags/Makefile \
 		 contrib/win_dib/Makefile \
-		 html/Makefile \
-		 html/images/Makefile \
-		 html/man/Makefile \
+		 doc/Makefile \
 		 libtiff-4.pc \
 		 libtiff/Makefile \
 		 man/Makefile \

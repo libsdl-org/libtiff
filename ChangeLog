@@ -6077,7 +6077,7 @@
 2016-12-03 Even Rouault <even.rouault at spatialys.com>
 
 	* libtiff/tif_dirread.c: modify ChopUpSingleUncompressedStrip() to
-	instantiate compute ntrips as TIFFhowmany_32(td->td_imagelength, rowsperstrip),
+	instantiate compute nstrips as TIFFhowmany_32(td->td_imagelength, rowsperstrip),
 	instead of a logic based on the total size of data. Which is faulty is
 	the total size of data is not sufficient to fill the whole image, and thus
 	results in reading outside of the StripByCounts/StripOffsets arrays when
