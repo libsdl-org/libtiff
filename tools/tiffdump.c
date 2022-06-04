@@ -192,7 +192,7 @@ dump(int fd, uint64_t diroff)
 		TIFFSwabShort(&hdr.common.tiff_version);
 	if (hdr.common.tiff_version==42)
 	{
-		if (read(fd, (char*) &hdr.classic.tiff_diroff, 4) != 4)
+		if (read(fd, ((char*) &hdr.classic) + offsetof(TIFFHeaderClassic, tiff_diroff), 4) != 4)
 			ReadError("TIFF header");
 		if (swabflag)
 			TIFFSwabLong(&hdr.classic.tiff_diroff);
@@ -205,7 +205,7 @@ dump(int fd, uint64_t diroff)
 	}
 	else if (hdr.common.tiff_version==43)
 	{
-		if (read(fd, (char*) &hdr.big.tiff_offsetsize, 12) != 12)
+		if (read(fd, ((char*) &hdr.big) + offsetof(TIFFHeaderBig, tiff_offsetsize), 12) != 12)
 			ReadError("TIFF header");
 		if (swabflag)
 		{
