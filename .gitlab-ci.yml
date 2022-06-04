@@ -35,7 +35,7 @@ pages:
   stage: pages
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
-    - cp -r cmake-install/share/doc/tiff/manual public
+    - cp -r cmake-install/share/doc/tiff/manual/html public
   artifacts:
     name: $CI_PROJECT_NAME-$CI_JOB_NAME
     paths:
