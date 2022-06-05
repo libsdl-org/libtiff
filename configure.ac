@@ -198,8 +198,15 @@ dnl ---------------------------------------------------------------------------
 dnl Deprecated features and backward compatibilty
 dnl ---------------------------------------------------------------------------
 
-# Disable deprecated features to ensure clean build
-CPPFLAGS="-DTIFF_DISABLE_DEPRECATED $CPPFLAGS"
+AC_ARG_ENABLE([deprecated],
+  AS_HELP_STRING([--enable-deprecated],
+      [enable deprecated features (default is disabled)]),
+      [enable_deprecated=$enableval], [enable_deprecated=no])
+
+if test "$enable_deprecated" = "yes"; then
+  # Disable deprecated features to ensure clean build
+  CPPFLAGS="-DTIFF_DISABLE_DEPRECATED $CPPFLAGS"
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Compute sized types for current CPU and compiler options
@@ -315,6 +322,34 @@ fi
  
 AC_SUBST(LIBTIFF_DOCDIR)
 
+
+dnl ---------------------------------------------------------------------------
+dnl Enable or disable parts of the build
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(tools,
+              AS_HELP_STRING([--disable-tools],
+                             [Disable building of tools]),
+                             [TIFF_TOOLS=$enableval], [TIFF_TOOLS=yes])
+AM_CONDITIONAL(TIFF_TOOLS, test "$TIFF_TOOLS" = "yes")
+
+AC_ARG_ENABLE(tests,
+              AS_HELP_STRING([--disable-tests],
+                             [Disable building of tests]),
+                             [TIFF_TESTS=$enableval], [TIFF_TESTS=yes])
+AM_CONDITIONAL(TIFF_TESTS, test "$TIFF_TESTS" = "yes")
+
+AC_ARG_ENABLE(contrib,
+              AS_HELP_STRING([--disable-contrib],
+                             [Disable building of contrib]),
+                             [TIFF_CONTRIB=$enableval], [TIFF_CONTRIB=yes])
+AM_CONDITIONAL(TIFF_CONTRIB, test "$TIFF_CONTRIB" = "yes")
+
+AC_ARG_ENABLE(docs,
+              AS_HELP_STRING([--disable-docs],
+                             [Disable building of docs]),
+                             [TIFF_DOCS=$enableval], [TIFF_DOCS=yes])
+AM_CONDITIONAL(TIFF_DOCS, test "$TIFF_DOCS" = "yes")
 
 
 dnl ---------------------------------------------------------------------------
@@ -1134,6 +1169,11 @@ LOC_MSG([  Installation directory:             ${prefix}])
 LOC_MSG([  Documentation directory:            ${LIBTIFF_DOCDIR}])
 LOC_MSG([  C compiler:                         ${CC} ${CFLAGS}])
 LOC_MSG([  C++ compiler:                       ${CXX} ${CXXFLAGS}])
+LOC_MSG([  Build tools:                        ${TIFF_TOOLS}])
+LOC_MSG([  Build tests:                        ${TIFF_TESTS}])
+LOC_MSG([  Build contrib:                      ${TIFF_CONTRIB}])
+LOC_MSG([  Build docs:                         ${TIFF_DOCS}])
+LOC_MSG([  Build deprecated features:          ${enable_deprecated}])
 LOC_MSG([  Enable runtime linker paths:        ${HAVE_RPATH}])
 LOC_MSG([  Enable linker symbol versioning:    ${have_ld_version_script}])
 LOC_MSG([  Support Microsoft Document Imaging: ${HAVE_MDI}])
