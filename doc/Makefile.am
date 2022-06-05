@@ -45,30 +45,98 @@ clean-local:
 	rm -r cache
 
 install-data-local:
-	echo " $(MKDIR_P) '$(DESTDIR)$(docdir)'"; \
-	$(MKDIR_P) '$(DESTDIR)$(docdir)' || exit 1; \
-	echo "$(MKDIR_P) '$(DESTDIR)$(docdir)/_images'"; \
-	$(MKDIR_P) '$(DESTDIR)$(docdir)/_images' || exit 1; \
-	echo "$(MKDIR_P) '$(DESTDIR)$(docdir)/_static'"; \
-	$(MKDIR_P) '$(DESTDIR)$(docdir)/_static' || exit 1; \
-	echo "$(MKDIR_P) '$(DESTDIR)$(docdir)/_sources'"; \
-	$(MKDIR_P) '$(DESTDIR)$(docdir)/_sources' || exit 1; \
-	echo "$(MKDIR_P) '$(DESTDIR)$(docdir)/man'"; \
-	$(MKDIR_P) '$(DESTDIR)$(docdir)/man' || exit 1; \
-	echo "$(INSTALL_DATA) html/*.html html/objects.inv html/searchindex.js '$(DESTDIR)$(docdir)'"; \
-	$(INSTALL_DATA) html/*.html html/objects.inv html/searchindex.js '$(DESTDIR)$(docdir)'; \
-	echo "$(INSTALL_DATA) html/man/*.html '$(DESTDIR)$(docdir)/man'"; \
-	$(INSTALL_DATA) html/man/*.html '$(DESTDIR)$(docdir)/man'; \
-	echo "$(INSTALL_DATA) html/_images/* '$(DESTDIR)$(docdir)/_images'"; \
-	$(INSTALL_DATA) html/_images/* '$(DESTDIR)$(docdir)/_images'; \
-	echo "$(INSTALL_DATA) html/_static/* '$(DESTDIR)$(docdir)/_static'"; \
-	$(INSTALL_DATA) html/_static/* '$(DESTDIR)$(docdir)/_static'; \
-	echo "$(INSTALL_DATA) html/_sources/* '$(DESTDIR)$(docdir)/_sources'"; \
-	$(INSTALL_DATA) html/_sources/* '$(DESTDIR)$(docdir)/_sources'
+	find html -type d | sed -e 's;^html;;' | while read dir; do \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(docdir)$$dir'"; \
+	  $(MKDIR_P) '$(DESTDIR)$(docdir)$$dir' || exit 1; \
+	done
+	find html -type f | sed -e 's;^html;;' | while read docfile; do \
+	  docsubdir=$$(dirname $$docfile); \
+	  echo "$(INSTALL_DATA) 'html$$docfile' '$(DESTDIR)$(docdir)$$docsubdir'"; \
+	  $(INSTALL_DATA) "html$$docfile" "$(DESTDIR)$(docdir)$$docsubdir"; \
+	done
 
 uninstall-local:
 	echo "rm -r $(DESTDIR)$(docdir)"
 	rm -r $(DESTDIR)$(docdir)
+
+rst_sources = \
+	./index.rst \
+	./build.rst \
+	./internals.rst \
+	./manpages.rst \
+	./project/license.rst \
+	./project/index.rst \
+	./project/acknowledgements.rst \
+	./project/bugs.rst \
+	./project/mailinglist.rst \
+	./addingtags.rst \
+	./specification/index.rst \
+	./specification/bigtiff.rst \
+	./specification/coverage.rst \
+	./specification/technote2.rst \
+	./specification/coverage-bigtiff.rst \
+	./releases/v3.4beta028.rst \
+	./releases/v4.0.9.rst \
+	./releases/v3.9.0.rst \
+	./releases/v4.0.7.rst \
+	./releases/v3.5.7.rst \
+	./releases/v4.0.0.rst \
+	./releases/v3.7.0beta2.rst \
+	./releases/v3.7.1.rst \
+	./releases/index.rst \
+	./releases/v3.8.0.rst \
+	./releases/v4.1.0.rst \
+	./releases/historical.rst \
+	./releases/v3.5.6beta.rst \
+	./releases/v3.6.1.rst \
+	./releases/v4.2.0.rst \
+	./releases/v3.7.0.rst \
+	./releases/v4.0.1.rst \
+	./releases/v3.5.1.rst \
+	./releases/v4.0.10.rst \
+	./releases/v4.0.6.rst \
+	./releases/v4.0.8.rst \
+	./releases/v3.9.1.rst \
+	./releases/v3.4beta029.rst \
+	./releases/v4.3.0.rst \
+	./releases/v3.4beta031.rst \
+	./releases/v3.7.0alpha.rst \
+	./releases/v3.6.0.rst \
+	./releases/v3.4beta036.rst \
+	./releases/v4.0.4beta.rst \
+	./releases/v3.8.1.rst \
+	./releases/v4.4.0.rst \
+	./releases/v3.4beta035.rst \
+	./releases/v3.4beta032.rst \
+	./releases/v3.4beta007.rst \
+	./releases/v3.9.0beta.rst \
+	./releases/v3.8.2.rst \
+	./releases/v3.4beta018.rst \
+	./releases/v3.7.3.rst \
+	./releases/v3.4beta016.rst \
+	./releases/v3.7.4.rst \
+	./releases/v3.5.2.rst \
+	./releases/v4.0.5.rst \
+	./releases/v3.4beta024.rst \
+	./releases/v3.5.5.rst \
+	./releases/v4.0.2.rst \
+	./releases/v3.9.5.rst \
+	./releases/v3.9.2.rst \
+	./releases/v3.4beta033.rst \
+	./releases/v3.4beta034.rst \
+	./releases/v3.9.3.rst \
+	./releases/v3.9.4.rst \
+	./releases/v3.7.0beta.rst \
+	./releases/v3.5.4.rst \
+	./releases/v4.0.3.rst \
+	./releases/v3.5.3.rst \
+	./releases/v4.0.4.rst \
+	./releases/v3.7.2.rst \
+	./tools.rst \
+	./terms.rst \
+	./contrib.rst \
+	./libtiff.rst \
+	./images.rst
 
 EXTRA_DIST = \
 	CMakeLists.txt \
@@ -77,79 +145,6 @@ EXTRA_DIST = \
 	bigtiffpr_images \
 	images \
 	static \
-	addingtags.rst \
-	bigtiffdesign.rst \
-	bigtiffpr.rst \
-	BigTIFFProposal.rst \
-	bugs.rst \
-	build.rst \
-	contrib.rst \
-	document.rst \
-	images.rst \
-	index.rst \
-	internals.rst \
-	intro.rst \
-	libtiff.rst \
-	manpages.rst \
-	misc.rst \
-	releases.rst \
-	support.rst \
-	TIFFTechNote2.rst \
-	tools.rst \
-	v3.4beta007.rst \
-	v3.4beta016.rst \
-	v3.4beta018.rst \
-	v3.4beta024.rst \
-	v3.4beta028.rst \
-	v3.4beta029.rst \
-	v3.4beta031.rst \
-	v3.4beta032.rst \
-	v3.4beta033.rst \
-	v3.4beta034.rst \
-	v3.4beta035.rst \
-	v3.4beta036.rst \
-	v3.5.1.rst \
-	v3.5.2.rst \
-	v3.5.3.rst \
-	v3.5.4.rst \
-	v3.5.5.rst \
-	v3.5.6beta.rst \
-	v3.5.7.rst \
-	v3.6.0.rst \
-	v3.6.1.rst \
-	v3.7.0.rst \
-	v3.7.0alpha.rst \
-	v3.7.0beta.rst \
-	v3.7.0beta2.rst \
-	v3.7.1.rst \
-	v3.7.2.rst \
-	v3.7.3.rst \
-	v3.7.4.rst \
-	v3.8.0.rst \
-	v3.8.1.rst \
-	v3.8.2.rst \
-	v3.9.0.rst \
-	v3.9.0beta.rst \
-	v3.9.1.rst \
-	v3.9.2.rst \
-	v3.9.3.rst \
-	v3.9.4.rst \
-	v3.9.5.rst \
-	v4.0.0.rst \
-	v4.0.1.rst \
-	v4.0.10.rst \
-	v4.0.2.rst \
-	v4.0.3.rst \
-	v4.0.4.rst \
-	v4.0.4beta.rst \
-	v4.0.5.rst \
-	v4.0.6.rst \
-	v4.0.7.rst \
-	v4.0.8.rst \
-	v4.0.9.rst \
-	v4.1.0.rst \
-	v4.2.0.rst \
-	v4.3.0.rst \
-	v4.4.0.rst
+	$(rst_sources)
 
 .PHONY: doc-html
