@@ -75,7 +75,7 @@ The following sections are included in this documentation:
     images
     misc
     manpages
-    releases
+    releases/index
     BigTIFFProposal
     bigtiffdesign
     bigtiffpr
