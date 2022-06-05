@@ -71,6 +71,6 @@ The following sections are included in this documentation:
     build
     bugs
     images
-    misc
+    project/index
     manpages
     releases/index
