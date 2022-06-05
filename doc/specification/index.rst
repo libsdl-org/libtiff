@@ -35,3 +35,4 @@ The LibTIFF coverage of the TIFF 6.0 specification is detailed in :doc:`coverage
     technote2
     bigtiff
     coverage
+    coverage-bigtiff

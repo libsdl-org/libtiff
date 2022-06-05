@@ -74,5 +74,3 @@ The following sections are included in this documentation:
     misc
     manpages
     releases/index
-    BigTIFFProposal
-    bigtiffpr

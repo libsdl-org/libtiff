@@ -1,29 +1,24 @@
-Extending LibTiff library with support for the new BigTIFF format
-=================================================================
+LibTIFF Coverage of the BigTIFF Specification
+=============================================
 
-LibTiff maintainers have started work on LibTiff 4.0,
-the next major upgrade of the time-proven `TIFF <http://www.awaresystems.be/imaging/tiff.html>`_
-codec. This upgrade will include support for the new BigTIFF file format. It is planned a preliminary
-version (LibTiff 4.0alpha1) will be operational by June 15, 2007. Testing and final release improvements
-for LibTiff 4.0 will be completed by July 30, 2007.
+Since LibTIFF version 4.0.0, the BigTIFF format specification has been implemented within LibTIFF.
+BigTIFF is a backward-compatible extension to the `TIFF <http://www.awaresystems.be/imaging/tiff.html>`_
+file format.
 
-BigTIFF logically extends the original TIFF file format (referred to as 'ClassicTIFF' from now on),
-BigTIFF specification is the result of work by a variety of parties on the LibTiff mailing list, including
-the current LibTiff maintainers, Joris Van Damme and Adobe staff. The BigTIFF specification has not yet
-been officially approved by the TIFF specification owner (Adobe), but implementation within LibTiff
-could accelerate that process. For more information on the BigTIFF file format, we recommend AWare Systems'
+BigTIFF logically extends the original TIFF file format (referred to as 'ClassicTIFF' from now on).
+The BigTIFF specification is the result of work by a variety of parties on the LibTIFF mailing list, including
+the then current LibTIFF maintainers, Joris Van Damme and Adobe staff. The BigTIFF specification has not yet
+been officially approved by the TIFF specification owner (Adobe), but implementation within LibTIFF
+could accelerate that process.  For more information on the BigTIFF file format, we recommend AWare Systems'
 `BigTIFF page <http://www.awaresystems.be/imaging/tiff/bigtiff.html>`_.
 
-BigTIFF will be especially useful for people and vendors that are confronted with very large images, and
+BigTIFF is especially useful for people and vendors that are confronted with very large images, and
 still seek to use an open, simple, and extendable format. This requirement is frequently encountered in the
 geospatial field, but also concerns large format scanners, medical imaging and other fields.
 
-The LibTiff BigTIFF upgrade is made possible by four sponsors funding the project. The programming work will
-primarily be done by `Joris Van Damme (AWare Systems) <http://www.awaresystems.be/index.html>`_.
-LibTiff's licensing agreement will remain unchanged. More details on the project itself, are available from
-the :ref:`BigTIFFProposal` page.
-
-The sponsors are, in alphabetical order:
+The LibTiff BigTIFF support was made possible by four sponsors funding the project. The programming work was
+primarily done by `Joris Van Damme (AWare Systems) <http://www.awaresystems.be/index.html>`_.
+The sponsors for the BigTIFF support work in LibTIFF, in alphabetical order:
 
 .. list-table:: Sponsors
     :widths: 5 20
