@@ -1,5 +1,5 @@
-TIFF 6.0 Specification Coverage
-===============================
+LibTIFF Coverage of the TIFF 6.0 Specification
+==============================================
 
 The library is capable of dealing with images that are written to
 follow the 5.0 or 6.0 TIFF spec.  There is also considerable support
@@ -567,9 +567,9 @@ tag (also non-standard, but registered) can be used to specified a
 subvolume "tiling" of a volume of data.
 
 The Colorimetry, and CMYK tags are additions that appear in TIFF 6.0.
-Consult the TIFF 6.0 specification and :ref:`document`.
+Consult the TIFF 6.0 specification and :doc:`index`.
 
 The JPEG-related tag is specified in
-:ref:`TIFFTechNote2`, which defines
+:doc:`technote2`, which defines
 a revised JPEG-in-TIFF scheme (revised over the appendix that was
 part of the TIFF 6.0 specification).

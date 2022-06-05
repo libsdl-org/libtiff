@@ -21,7 +21,7 @@ LibTIFF - TIFF Library and Utilities
 
 This software provides support for the *Tag Image File Format* (TIFF),
 a widely used format for storing image data.  The latest version of
-the TIFF specification is :doc:`document`
+the TIFF specification is :doc:`specification/index`
 available on-line in several different formats.
 
 Included in this software distribution is a library, libtiff, for
@@ -62,14 +62,12 @@ The following sections are included in this documentation:
     :titlesonly:
 
     intro
-    support
     libtiff
     internals
     addingtags
     tools
     contrib
-    document
-    TIFFTechNote2
+    specification/index
     build
     bugs
     images
@@ -77,5 +75,4 @@ The following sections are included in this documentation:
     manpages
     releases/index
     BigTIFFProposal
-    bigtiffdesign
     bigtiffpr
