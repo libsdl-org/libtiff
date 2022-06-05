@@ -131,6 +131,10 @@ find_package(CMath REQUIRED)
 # Release support
 include(Release)
 
+if(MSVC)
+    add_compile_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+    add_compile_options(/wd4996)
+endif()
 
 # Process subdirectories
 add_subdirectory(port)
