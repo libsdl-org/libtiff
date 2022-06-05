@@ -58,7 +58,7 @@ Joris Van Damme, and Lee Howard.
 The following sections are included in this documentation:
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :titlesonly:
 
     intro
