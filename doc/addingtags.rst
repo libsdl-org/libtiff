@@ -1,8 +1,5 @@
-Modifying The TIFF Library
-==========================
-
 Defining New TIFF Tags
-----------------------
+======================
 
 Libtiff has built-in knowledge of all the standard TIFF tags, as
 well as extensions.  The following describes how to add knowledge of
@@ -10,7 +7,7 @@ new tags as builtins to libtiff, or how to application specific tags can
 be used by applications without modifying libtiff. 
 
 TIFFFieldInfo
-^^^^^^^^^^^^^
+-------------
 
 How libtiff manages specific tags is primarily controlled by the
 definition for that tag value stored internally as a TIFFFieldInfo structure.
@@ -107,7 +104,7 @@ definitions, including :c:func:`_TIFFFindFieldInfo`, and
 list, though I don't see it off hand.
 
 Default Tag Auto-registration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 In libtiff 3.6.0 a new mechanism was introduced allowing libtiff to 
 read unrecognised tags automatically.  When an unknown tags is encountered, 
@@ -132,7 +129,7 @@ Thus, to read anonymous auto-registered tags use the following:
     TIFFGetField(tif, TIFFTAG_UNKNOWN_TO_LIBTIFF, &count, &value);
 
 Defining Application Tags
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 For various reasons, it is common for applications to want to define
 their own tags to store information outside the core TIFF specification. 
@@ -225,7 +222,7 @@ call :c:func:`TIFFMergeFieldInfo` before setting new tags.  The whole extender
 architecture can then be avoided.
 
 Adding New Builtin Tags
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 A similar approach is taken to the above.  However, the :c:struct:`TIFFFieldInfo`
 should be added to the :c:var:`tiffFieldInfo[]` list in :file:`tif_dirinfo.c`.
@@ -265,7 +262,7 @@ data on disk and :c:type:`t*_t` when stuff is in memory) and be careful about
 passing items through printf or similar vararg interfaces.
 
 Adding New Codec-private Tags
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 To add tags that are meaningful *only when a particular compression
 algorithm is used* follow these steps:

@@ -25,11 +25,11 @@ the TIFF specification is :doc:`specification/index`.
 
 Included in this software distribution are:
 
-* a library, libtiff, for reading and writing TIFF images
+* a library, :file:`libtiff`, for reading and writing TIFF images
 * a small collection of tools for performing simple manipulations of TIFF images
 * documentation for the library and tools.
 
-The libtiff library, along with associated tool programs, should handle most of
+The :file:`libtiff` library, along with associated tool programs, should handle most of
 your needs for reading and writing TIFF images.
 
 LibTIFF is portable software, supported on various operating systems including
@@ -41,15 +41,15 @@ The following sections are included in this documentation:
     :maxdepth: 2
     :titlesonly:
 
-    intro
+    specification/index
+    images
+    build
+    terms
     libtiff
     internals
     addingtags
     tools
     contrib
-    specification/index
-    build
-    images
-    project/index
     manpages
+    project/index
     releases/index

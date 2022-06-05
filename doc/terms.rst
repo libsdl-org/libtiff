@@ -1,5 +1,5 @@
-Introduction to the TIFF Documentation
-======================================
+Terminology
+===========
 
 .. image:: images/strike.gif
     :width: 128
