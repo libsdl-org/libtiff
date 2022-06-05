@@ -29,8 +29,8 @@ AUTOMAKE_OPTIONS = 1.12 dist-zip foreign
 ACLOCAL_AMFLAGS = -I m4
 
 docfiles = \
-	COPYRIGHT \
 	ChangeLog \
+	LICENSE.md \
 	README.md \
 	RELEASE-DATE \
 	TODO \
