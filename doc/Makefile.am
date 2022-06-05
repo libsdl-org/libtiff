@@ -31,8 +31,6 @@ doc-html:
 	$(SPHINX_BUILD) \
 	-D "release=$(LIBTIFF_VERSION)" \
 	-D "version=$(LIBTIFF_MAJOR_VERSION).$(LIBTIFF_MINOR_VERSION)" \
-	-D "srcdir=$(srcdir)" \
-	-D "builddir=$(builddir)" \
 	-d "$(builddir)/cache" \
 	-b html \
 	"$(srcdir)" "$(builddir)/html"

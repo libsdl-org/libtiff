@@ -52,8 +52,6 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
                        COMMAND ${SPHINX_BUILD}
                                -D "release=${LIBTIFF_VERSION_FULL}"
                                -D "version=${tiff_VERSION_MAJOR}.${tiff_VERSION_MINOR}"
-                               -D "srcdir=${sphinx_srcdir}"
-                               -D "builddir=${sphinx_builddir}"
                                -c "${sphinx_builddir}"
                                -d "${sphinx_builddir}/cache"
                                -b man
@@ -85,8 +83,6 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
                      COMMAND ${SPHINX_BUILD}
                              -D "release=${tiff_VERSION}"
                              -D "version=${tiff_VERSION_MAJOR}.${tiff_VERSION_MINOR}"
-                             -D "srcdir=${sphinx_srcdir}"
-                             -D "builddir=${sphinx_builddir}"
                              -d "${sphinx_builddir}/cache"
                              -b html
                              "${sphinx_srcdir}" "${sphinx_builddir}/html"
