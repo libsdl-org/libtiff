@@ -47,7 +47,7 @@ clean-local:
 install-data-local:
 	find html -type d | sed -e 's;^html;;' | while read dir; do \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(docdir)$$dir'"; \
-	  $(MKDIR_P) '$(DESTDIR)$(docdir)$$dir' || exit 1; \
+	  $(MKDIR_P) "$(DESTDIR)$(docdir)$$dir" || exit 1; \
 	done
 	find html -type f | sed -e 's;^html;;' | while read docfile; do \
 	  docsubdir=$$(dirname $$docfile); \
@@ -142,7 +142,7 @@ EXTRA_DIST = \
 	CMakeLists.txt \
 	HtmlDoc.cmake \
 	conf.py \
-	bigtiffpr_images \
+	specification/bigtiffpr_images \
 	images \
 	static \
 	$(rst_sources)
