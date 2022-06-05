@@ -5,6 +5,9 @@ Acknowledgments
     :width: 124
     :alt: ring
 
+Maintainers
+-----------
+
 The LibTIFF software was written by Sam Leffler while working for
 Silicon Graphics.
 
@@ -13,6 +16,24 @@ is free.  There is no support or guarantee of any sort as to its
 operations, correctness, or whatever.  If you do anything useful with
 all or parts of it you need to honor the copyright notices.  It would
 also be nice to be acknowledged.
+
+LibTIFF as been maintained by cast of others since 1999.
+
+The persons currently actively maintaining and releasing libtiff are:
+
+* Even Rouault
+* `Bob Friesenhahn <bfriesen@GraphicsMagick.org>`_
+
+Significant maintainers in the past (since the 3.5.1 release) were:
+
+* `Frank Warmerdam <http://pobox.com/~warmerdam>`_
+* `Andrey Kiselev <dron@ak4719.spb.edu>`_
+* Joris Van Damme
+* Lee Howard
+
+
+Contributors
+------------
 
 The LZW algorithm is derived from the compress program (the proper attribution
 is included in the source code).

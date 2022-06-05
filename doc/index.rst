@@ -19,41 +19,21 @@ LibTIFF - TIFF Library and Utilities
     Source repository      https://gitlab.com/libtiff/libtiff
     =====================  =====================================
 
-This software provides support for the *Tag Image File Format* (TIFF),
+The LibTIFF software provides support for the *Tag Image File Format* (TIFF),
 a widely used format for storing image data.  The latest version of
-the TIFF specification is :doc:`specification/index`
-available on-line in several different formats.
+the TIFF specification is :doc:`specification/index`.
 
-Included in this software distribution is a library, libtiff, for
-reading and writing TIFF, a small collection of tools for doing
-simple manipulations of TIFF images, and documentation on the
-library and tools.  Libtiff is a portable software, it was built
-and tested on various systems: UNIX flavors (Linux, BSD, Solaris,
-MacOS X), Windows, and OpenVMS.  It should be possible to port
-libtiff and additional tools on other OSes.
+Included in this software distribution are:
 
-The library, along with associated tool programs, should handle most of
-your needs for reading and writing TIFF images on 32- and 64-bit
-machines.
+* a library, libtiff, for reading and writing TIFF images
+* a small collection of tools for performing simple manipulations of TIFF images
+* documentation for the library and tools.
 
-The software was originally authored and maintained by Sam Leffler
-but has been maintained by a cast of others since 1999.
+The libtiff library, along with associated tool programs, should handle most of
+your needs for reading and writing TIFF images.
 
-Questions should be sent to the TIFF mailing list:
-`tiff@lists.osgeo.org`_, with
-a subscription interface at
-http://lists.osgeo.org/mailman/listinfo/tiff.
-The persons currently actively maintaining and releasing libtiff
-are Even Rouault and
-`Bob Friesenhahn <bfriesen@GraphicsMagick.org>`_.
-Note from Even Rouault: do not email me personally, especially when asking
-"when is the next release ?", unless you are willing to
-pay a LOT of money for my services, and I may even not be interested.
-
-Significant maintainers in the past (since the 3.5.1 release) are
-`Frank Warmerdam <http://pobox.com/~warmerdam>`_,
-`Andrey Kiselev <dron@ak4719.spb.edu>`_,
-Joris Van Damme, and Lee Howard.
+LibTIFF is portable software, supported on various operating systems including
+UNIX (Linux, BSD, MacOS X) and Windows.
 
 The following sections are included in this documentation:
 
