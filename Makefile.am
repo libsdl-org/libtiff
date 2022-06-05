@@ -29,8 +29,8 @@ AUTOMAKE_OPTIONS = 1.12 dist-zip foreign
 ACLOCAL_AMFLAGS = -I m4
 
 docfiles = \
-	COPYRIGHT \
 	ChangeLog \
+	LICENSE.md \
 	README.md \
 	RELEASE-DATE \
 	TODO \
@@ -44,7 +44,9 @@ EXTRA_DIST = \
 	autogen.sh \
 	libtiff-4.pc.in
 
+if TIFF_DOCS
 dist_doc_DATA = $(docfiles)
+endif
 
 distcheck-hook:
 	if [ -x "$(CMAKE)" ]; then \

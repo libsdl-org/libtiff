@@ -44,7 +44,9 @@ EXTRA_DIST = \
 	TiffTest.cmake
 
 # All of the tests to execute via 'make check'
+if TIFF_TESTS
 TESTS = $(check_PROGRAMS) $(TESTSCRIPTS)
+endif
 
 # Tests which are expected to fail
 XFAIL_TESTS =
@@ -66,10 +68,12 @@ JPEG_DEPENDENT_TESTSCRIPTS=
 endif
 
 # Executable programs which need to be built in order to support tests
+if TIFF_TESTS
 check_PROGRAMS = \
 	ascii_tag long_tag short_tag strip_rw rewrite custom_dir custom_dir_EXIF_231 \
 	rational_precision2double defer_strile_loading defer_strile_writing test_directory \
 	testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG)
+endif
 
 # Test scripts to execute
 TESTSCRIPTS = \

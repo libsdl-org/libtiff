@@ -23,7 +23,7 @@
 
 # Process this file with automake to produce Makefile.in.
 
-dist_man1_MANS = \
+man1_pages = \
 	fax2ps.1 \
 	fax2tiff.1 \
 	pal2rgb.1 \
@@ -44,7 +44,7 @@ dist_man1_MANS = \
 	tiffset.1 \
 	tiffsplit.1
 
-dist_man3_MANS = \
+man3_pages = \
 	libtiff.3tiff \
 	TIFFbuffer.3tiff \
 	TIFFClose.3tiff \
@@ -90,5 +90,13 @@ dist_man3_MANS = \
 	TIFFWriteScanline.3tiff \
 	TIFFWriteTile.3tiff
 
+if TIFF_DOCS
+man1_MANS = $(man1_pages)
+man3_MANS = $(man3_pages)
+endif
+
+
 EXTRA_DIST = \
+	$(man1_pages) \
+	$(man3_pages) \
 	CMakeLists.txt
