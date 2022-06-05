@@ -1,6 +1,7 @@
-<pre>
-DRAFT TIFF Technical Note #2				17-Mar-95
-============================
+DRAFT TIFF Technical Note #2
+############################
+
+17-Mar-95
 
 This Technical Note describes serious problems that have been found in
 TIFF 6.0's design for embedding JPEG-compressed data in TIFF (Section 22
@@ -37,51 +38,51 @@ without sufficient thought for future extension and without regard to
 well-established TIFF conventions.  Here are some of the significant
 problems:
 
-* The JPEGxxTable fields do not store the table data directly in the
-IFD/field structure; rather, the fields hold pointers to information
-elsewhere in the file.  This requires special-purpose code to be added to
-*every* TIFF-manipulating application, whether it needs to decode JPEG
-image data or not.  Even a trivial TIFF editor, for example a program to
-add an ImageDescription field to a TIFF file, must be explicitly aware of
-the internal structure of the JPEG-related tables, or else it will probably
-break the file.  Every other auxiliary field in the TIFF spec contains
-data, not pointers, and can be copied or relocated by standard code that
-doesn't know anything about the particular field.  This is a crucial
-property of the TIFF format that must not be given up.
+* The ``JPEGxxTable`` fields do not store the table data directly in the
+  IFD/field structure; rather, the fields hold pointers to information
+  elsewhere in the file.  This requires special-purpose code to be added to
+  *every* TIFF-manipulating application, whether it needs to decode JPEG
+  image data or not.  Even a trivial TIFF editor, for example a program to
+  add an ``ImageDescription`` field to a TIFF file, must be explicitly aware of
+  the internal structure of the JPEG-related tables, or else it will probably
+  break the file.  Every other auxiliary field in the TIFF spec contains
+  data, not pointers, and can be copied or relocated by standard code that
+  doesn't know anything about the particular field.  This is a crucial
+  property of the TIFF format that must not be given up.
 
 * To manipulate these fields, the TIFF control logic is required to know a
-great deal about JPEG details, for example such arcana as how to compute
-the length of a Huffman code table --- the length is not supplied in the
-field structure and can only be found by inspecting the table contents.
-This is again a violation of good software practice.  Moreover, it will
-prevent easy adoption of future JPEG extensions that might change these
-low-level details.
-
+  great deal about JPEG details, for example such arcana as how to compute
+  the length of a Huffman code table --- the length is not supplied in the
+  field structure and can only be found by inspecting the table contents.
+  This is again a violation of good software practice.  Moreover, it will
+  prevent easy adoption of future JPEG extensions that might change these
+  low-level details.
+  
 * The design neglects the fact that baseline JPEG codecs support only two
-sets of Huffman tables: it specifies a separate table for each color
-component.  This implies that encoders must waste space (by storing
-duplicate Huffman tables) or else violate the well-founded TIFF convention
-that prohibits duplicate pointers.  Furthermore, baseline decoders must
-test to find out which tables are identical, a waste of time and code
-space.
+  sets of Huffman tables: it specifies a separate table for each color
+  component.  This implies that encoders must waste space (by storing
+  duplicate Huffman tables) or else violate the well-founded TIFF convention
+  that prohibits duplicate pointers.  Furthermore, baseline decoders must
+  test to find out which tables are identical, a waste of time and code
+  space.
 
-* The JPEGInterchangeFormat field also violates TIFF's proscription against
-duplicate pointers: the normal strip/tile pointers are expected to point
-into the larger data area pointed to by JPEGInterchangeFormat.  All TIFF
-editing applications must be specifically aware of this relationship, since
-they must maintain it or else delete the JPEGInterchangeFormat field.  The
-JPEGxxTables fields are also likely to point into the JPEGInterchangeFormat
-area, creating additional pointer relationships that must be maintained.
+* The ``JPEGInterchangeFormat`` field also violates TIFF's proscription against
+  duplicate pointers: the normal strip/tile pointers are expected to point
+  into the larger data area pointed to by ``JPEGInterchangeFormat``.  All TIFF
+  editing applications must be specifically aware of this relationship, since
+  they must maintain it or else delete the ``JPEGInterchangeFormat field``.  The
+  ``JPEGxxTables`` fields are also likely to point into the ``JPEGInterchangeFormat``
+  area, creating additional pointer relationships that must be maintained.
 
-* The JPEGQTables field is fixed at a byte per table entry; there is no
-way to support 16-bit quantization values.  This is a serious impediment
-to extending TIFF to use 12-bit JPEG.
+* The ``JPEGQTables`` field is fixed at a byte per table entry; there is no
+  way to support 16-bit quantization values.  This is a serious impediment
+  to extending TIFF to use 12-bit JPEG.
 
 * The 6.0 design cannot support using different quantization tables in
-different strips/tiles of an image (so as to encode some areas at higher
-quality than others).  Furthermore, since quantization tables are tied
-one-for-one to color components, the design cannot support table switching
-options that are likely to be added in future JPEG revisions.
+  different strips/tiles of an image (so as to encode some areas at higher
+  quality than others).  Furthermore, since quantization tables are tied
+  one-for-one to color components, the design cannot support table switching
+  options that are likely to be added in future JPEG revisions.
 
 
 Ambiguities
@@ -90,17 +91,17 @@ Ambiguities
 Several incompatible interpretations are possible for 6.0's treatment of
 JPEG restart markers:
 
-  * It is unclear whether restart markers must be omitted at TIFF segment
-    (strip/tile) boundaries, or whether they are optional.
+* It is unclear whether restart markers must be omitted at TIFF segment
+  (strip/tile) boundaries, or whether they are optional.
 
-  * It is unclear whether the segment size is required to be chosen as
-    a multiple of the specified restart interval (if any); perhaps the
-    JPEG codec is supposed to be reset at each segment boundary as if
-    there were a restart marker there, even if the boundary does not fall
-    at a multiple of the nominal restart interval.
+* It is unclear whether the segment size is required to be chosen as
+  a multiple of the specified restart interval (if any); perhaps the
+  JPEG codec is supposed to be reset at each segment boundary as if
+  there were a restart marker there, even if the boundary does not fall
+  at a multiple of the nominal restart interval.
 
-  * The spec fails to address the question of restart marker numbering:
-    do the numbers begin again within each segment, or not?
+* The spec fails to address the question of restart marker numbering:
+  do the numbers begin again within each segment, or not?
 
 That last point is particularly nasty.  If we make numbering begin again
 within each segment, we give up the ability to impose a TIFF strip/tile
@@ -161,15 +162,15 @@ extensions to the ISO standard.  It should also be far easier to implement
 using unmodified JPEG codecs.
 
 To reduce overhead in multi-segment TIFF files, we allow JPEG overhead
-tables to be stored just once in a JPEGTables auxiliary field.  This
+tables to be stored just once in a ``JPEGTables`` auxiliary field.  This
 feature does not violate the integrity of the JPEG datastreams, because it
 uses the notions of "tables-only datastreams" and "abbreviated image
 datastreams" as defined by the ISO standard.
 
 To prevent confusion with the old design, the new design is given a new
-Compression tag value, Compression=7.  Readers that need to handle
+``Compression`` tag value, ``Compression=7``.  Readers that need to handle
 existing 6.0 JPEG files may read both old and new files, using whatever
-interpretation of the 6.0 spec they did before.  Compression tag value 6
+interpretation of the 6.0 spec they did before.  ``Compression`` tag value 6
 and the field tag numbers defined by 6.0 section 22 will remain reserved
 indefinitely, even though detailed descriptions of them will be dropped
 from future editions of the TIFF specification.
@@ -249,13 +250,13 @@ ISO JPEG compression standard only.  The ISO standard is applied to the
 same data that would be stored in the TIFF file if no compression were
 used.  Therefore, if color conversion or downsampling are used, they must
 be reflected in the regular TIFF fields; these steps are not considered to
-be implicit in the JPEG compression tag value.  PhotometricInterpretation
+be implicit in the JPEG compression tag value.  ``PhotometricInterpretation``
 and related fields shall describe the color space actually stored in the
 file.  With the TIFF 6.0 field definitions, downsampling is permissible
-only for YCbCr data, and it must correspond to the YCbCrSubSampling field.
+only for YCbCr data, and it must correspond to the ``YCbCrSubSampling`` field.
 (Note that the default value for this field is not 1,1; so the default for
 YCbCr is to apply downsampling!)  It is likely that future versions of TIFF
-will provide additional PhotometricInterpretation values and a more general
+will provide additional ``PhotometricInterpretation`` values and a more general
 way of defining subsampling, so as to allow more flexibility in
 JPEG-compressed files.  But that issue is not addressed in this Tech Note.
 
@@ -265,11 +266,11 @@ downsampling, so that the application may supply full-size RGB data which
 is nonetheless converted to downsampled YCbCr.  This is an implementation
 convenience which does not excuse the TIFF control layer from its
 responsibility to know what is really going on.  The
-PhotometricInterpretation and subsampling fields written to the file must
+``PhotometricInterpretation`` and subsampling fields written to the file must
 describe what is actually in the file.
 
-A JPEG-compressed TIFF file will typically have PhotometricInterpretation =
-YCbCr and YCbCrSubSampling = [2,1] or [2,2], unless the source data was
+A JPEG-compressed TIFF file will typically have ``PhotometricInterpretation =
+YCbCr`` and ``YCbCrSubSampling = [2,1]`` or ``[2,2]``, unless the source data was
 grayscale or CMYK.
 
 
@@ -280,7 +281,7 @@ JPEG compression works in either strip-based or tile-based TIFF files.
 Rather than repeating "strip or tile" constantly, we will use the term
 "segment" to mean either a strip or a tile.
 
-When the Compression field has the value 7, each image segment contains
+When the ``Compression`` field has the value 7, each image segment contains
 a complete JPEG datastream which is valid according to the ISO JPEG
 standard (ISO/IEC 10918-1).  Any sequential JPEG process can be used,
 including lossless JPEG, but progressive and hierarchical processes are not
@@ -294,97 +295,101 @@ JPEG datastream according to the ISO JPEG standard's rules for
 interchange-format or abbreviated-image-format data.  The datastream shall
 contain a single JPEG frame storing that segment of the image.  The
 required JPEG markers within a segment are:
-	SOI	(must appear at very beginning of segment)
-	SOFn
-	SOS	(one for each scan, if there is more than one scan)
-	EOI	(must appear at very end of segment)
-The actual compressed data follows SOS; it may contain RSTn markers if DRI
+
+* ``SOI`` (must appear at very beginning of segment)
+* ``SOFn``
+* ``SOS`` (one for each scan, if there is more than one scan)
+* ``EOI`` (must appear at very end of segment)
+
+The actual compressed data follows ``SOS``; it may contain ``RSTn`` markers if ``DRI``
 is used.
 
-Additional JPEG "tables and miscellaneous" markers may appear between SOI
-and SOFn, between SOFn and SOS, and before each subsequent SOS if there is
+Additional JPEG "tables and miscellaneous" markers may appear between ``SOI``
+and ``SOFn``, between ``SOFn`` and ``SOS``, and before each subsequent ``SOS`` if there is
 more than one scan.  These markers include:
-	DQT
-	DHT
-	DAC	(not to appear unless arithmetic coding is used)
-	DRI
-	APPn	(shall be ignored by TIFF readers)
-	COM	(shall be ignored by TIFF readers)
-DNL markers shall not be used in TIFF files.  Readers should abort if any
+
+* ``DQT``
+* ``DHT``
+* ``DAC`` (not to appear unless arithmetic coding is used)
+* ``DRI``
+* ``APPn`` (shall be ignored by TIFF readers)
+* ``COM`` (shall be ignored by TIFF readers)
+
+``DNL`` markers shall not be used in TIFF files.  Readers should abort if any
 other marker type is found, especially the JPEG reserved markers;
 occurrence of such a marker is likely to indicate a JPEG extension.
 
 The tables/miscellaneous markers may appear in any order.  Readers are
-cautioned that although the SOFn marker refers to DQT tables, JPEG does not
-require those tables to precede the SOFn, only the SOS.  Missing-table
+cautioned that although the ``SOFn`` marker refers to ``DQT`` tables, JPEG does not
+require those tables to precede the ``SOFn``, only the ``SOS``.  Missing-table
 checks should be made when SOS is reached.
 
-If no JPEGTables field is used, then each image segment shall be a complete
+If no ``JPEGTables`` field is used, then each image segment shall be a complete
 JPEG interchange datastream.  Each segment must define all the tables it
 references.  To allow readers to decode segments in any order, no segment
 may rely on tables being carried over from a previous segment.
 
-When a JPEGTables field is used, image segments may omit tables that have
-been specified in the JPEGTables field.  Further details appear below.
+When a ``JPEGTables`` field is used, image segments may omit tables that have
+been specified in the ``JPEGTables`` field.  Further details appear below.
 
-The SOFn marker shall be of type SOF0 for strict baseline JPEG data, of
-type SOF1 for non-baseline lossy JPEG data, or of type SOF3 for lossless
-JPEG data.  (SOF9 or SOF11 would be used for arithmetic coding.)  All
+The ``SOFn`` marker shall be of type ``SOF0`` for strict baseline JPEG data, of
+type ``SOF1`` for non-baseline lossy JPEG data, or of type ``SOF3`` for lossless
+JPEG data.  (``SOF9`` or ``SOF11`` would be used for arithmetic coding.)  All
 segments of a JPEG-compressed TIFF image shall use the same JPEG
-compression process, in particular the same SOFn type.
+compression process, in particular the same ``SOFn`` type.
 
-The data precision field of the SOFn marker shall agree with the TIFF
-BitsPerSample field.  (Note that when PlanarConfiguration=1, this implies
-that all components must have the same BitsPerSample value; when
-PlanarConfiguration=2, different components could have different bit
-depths.)  For SOF0 only precision 8 is permitted; for SOF1, precision 8 or
-12 is permitted; for SOF3, precisions 2 to 16 are permitted.
+The data precision field of the ``SOFn`` marker shall agree with the TIFF
+``BitsPerSample`` field.  (Note that when ``PlanarConfiguration=1``, this implies
+that all components must have the same ``BitsPerSample`` value; when
+``PlanarConfiguration=2``, different components could have different bit
+depths.)  For ``SOF0`` only precision 8 is permitted; for ``SOF1``, precision 8 or
+12 is permitted; for ``SOF3``, precisions 2 to 16 are permitted.
 
-The image dimensions given in the SOFn marker shall agree with the logical
-dimensions of that particular strip or tile.  For strip images, the SOFn
-image width shall equal ImageWidth and the height shall equal RowsPerStrip,
-except in the last strip; its SOFn height shall equal the number of rows
-remaining in the ImageLength.  (In other words, no padding data is counted
-in the SOFn dimensions.)  For tile images, each SOFn shall have width
-TileWidth and height TileHeight; adding and removing any padding needed in
+The image dimensions given in the ``SOFn`` marker shall agree with the logical
+dimensions of that particular strip or tile.  For strip images, the ``SOFn``
+image width shall equal ``ImageWidth`` and the height shall equal ``RowsPerStrip``,
+except in the last strip; its ``SOFn`` height shall equal the number of rows
+remaining in the ``ImageLength``.  (In other words, no padding data is counted
+in the ``SOFn`` dimensions.)  For tile images, each ``SOFn`` shall have width
+``TileWidth`` and height ``TileHeight``; adding and removing any padding needed in
 the edge tiles is the concern of some higher level of the TIFF software.
-(The dimensional rules are slightly different when PlanarConfiguration=2,
+(The dimensional rules are slightly different when ``PlanarConfiguration=2``,
 as described below.)
 
 The ISO JPEG standard only permits images up to 65535 pixels in width or
-height, due to 2-byte fields in the SOFn markers.  In TIFF, this limits
+height, due to 2-byte fields in the ``SOFn`` markers.  In TIFF, this limits
 the size of an individual JPEG-compressed strip or tile, but the total
 image size can be greater.
 
-The number of components in the JPEG datastream shall equal SamplesPerPixel
-for PlanarConfiguration=1, and shall be 1 for PlanarConfiguration=2.  The
+The number of components in the JPEG datastream shall equal ``SamplesPerPixel``
+for ``PlanarConfiguration=1``, and shall be 1 for ``PlanarConfiguration=2``.  The
 components shall be stored in the same order as they are described at the
-TIFF field level.  (This applies both to their order in the SOFn marker,
+TIFF field level.  (This applies both to their order in the ``SOFn`` marker,
 and to the order in which they are scanned if multiple JPEG scans are
 used.)  The component ID bytes are arbitrary so long as each component
 within an image segment is given a distinct ID.  To avoid any possible
 confusion, we require that all segments of a TIFF image use the same ID
 code for a given component.
 
-In PlanarConfiguration 1, the sampling factors given in SOFn markers shall
+In ``PlanarConfiguration 1``, the sampling factors given in ``SOFn`` markers shall
 agree with the sampling factors defined by the related TIFF fields (or with
 the default values that are specified in the absence of those fields).
 
-When DCT-based JPEG is used in a strip TIFF file, RowsPerStrip is required
+When DCT-based JPEG is used in a strip TIFF file, ``RowsPerStrip`` is required
 to be a multiple of 8 times the largest vertical sampling factor, i.e., a
 multiple of the height of an interleaved MCU.  (For simplicity of
 specification, we require this even if the data is not actually
-interleaved.)  For example, if YCbCrSubSampling = [2,2] then RowsPerStrip
+interleaved.)  For example, if ``YCbCrSubSampling = [2,2]`` then ``RowsPerStrip``
 must be a multiple of 16.  An exception to this rule is made for
-single-strip images (RowsPerStrip >= ImageLength): the exact value of
-RowsPerStrip is unimportant in that case.  This rule ensures that no data
+single-strip images (``RowsPerStrip >= ImageLength``): the exact value of
+``RowsPerStrip`` is unimportant in that case.  This rule ensures that no data
 padding is needed at the bottom of a strip, except perhaps the last strip.
 Any padding required at the right edge of the image, or at the bottom of
 the last strip, is expected to occur internally to the JPEG codec.
 
-When DCT-based JPEG is used in a tiled TIFF file, TileLength is required
+When DCT-based JPEG is used in a tiled TIFF file, ``TileLength`` is required
 to be a multiple of 8 times the largest vertical sampling factor, i.e.,
-a multiple of the height of an interleaved MCU; and TileWidth is required
+a multiple of the height of an interleaved MCU; and ``TileWidth`` is required
 to be a multiple of 8 times the largest horizontal sampling factor, i.e.,
 a multiple of the width of an interleaved MCU.  (For simplicity of
 specification, we require this even if the data is not actually
@@ -402,18 +407,20 @@ the surrounding TIFF file.
 JPEGTables field
 ----------------
 
-The only auxiliary TIFF field added for Compression=7 is the optional
-JPEGTables field.  The purpose of JPEGTables is to predefine JPEG
+The only auxiliary TIFF field added for ``Compression=7`` is the optional
+``JPEGTables`` field.  The purpose of ``JPEGTables`` is to predefine JPEG
 quantization and/or Huffman tables for subsequent use by JPEG image
 segments.  When this is done, these rather bulky tables need not be
 duplicated in each segment, thus saving space and processing time.
-JPEGTables may be used even in a single-segment file, although there is no
+``JPEGTables`` may be used even in a single-segment file, although there is no
 space savings in that case.
 
-JPEGTables:
-	Tag = 347 (15B.H)
-	Type = UNDEFINED
-	N = number of bytes in tables datastream, typically a few hundred
+``JPEGTables``:
+
+  * Tag = 347 (15B.H)
+  * Type = UNDEFINED
+  * N = number of bytes in tables datastream, typically a few hundred
+
 JPEGTables provides default JPEG quantization and/or Huffman tables which
 are used whenever a segment datastream does not contain its own tables, as
 specified below.
@@ -430,31 +437,33 @@ file.
 
 When the JPEGTables field is present, it shall contain a valid JPEG
 "abbreviated table specification" datastream.  This datastream shall begin
-with SOI and end with EOI.  It may contain zero or more JPEG "tables and
+with ``SOI`` and end with ``EOI``.  It may contain zero or more JPEG "tables and
 miscellaneous" markers, namely:
-	DQT
-	DHT
-	DAC	(not to appear unless arithmetic coding is used)
-	DRI
-	APPn	(shall be ignored by TIFF readers)
-	COM	(shall be ignored by TIFF readers)
-Since JPEG defines the SOI marker to reset the DAC and DRI state, these two
+
+* ``DQT``
+* ``DHT``
+* ``DAC`` (not to appear unless arithmetic coding is used)
+* ``DRI``
+* ``APPn*`` (shall be ignored by TIFF readers)
+* ``COM`` (shall be ignored by TIFF readers)
+
+Since JPEG defines the ``SOI`` marker to reset the ``DAC`` and ``DRI`` state, these two
 markers' values cannot be carried over into any image datastream, and thus
-they are effectively no-ops in the JPEGTables field.  To avoid confusion,
-it is recommended that writers not place DAC or DRI markers in JPEGTables.
+they are effectively no-ops in the ``JPEGTables`` field.  To avoid confusion,
+it is recommended that writers not place ``DAC`` or ``DRI`` markers in ``JPEGTables``.
 However readers must properly skip over them if they appear.
 
-When JPEGTables is present, readers shall load the table specifications
-contained in JPEGTables before processing image segment datastreams.
+When ``JPEGTables`` is present, readers shall load the table specifications
+contained in ``JPEGTables`` before processing image segment datastreams.
 Image segments may simply refer to these preloaded tables without defining
 them.  An image segment can still define and use its own tables, subject to
 the restrictions below.
 
-An image segment may not redefine any table defined in JPEGTables.  (This
+An image segment may not redefine any table defined in ``JPEGTables``.  (This
 restriction is imposed to allow readers to process image segments in random
-order without having to reload JPEGTables between segments.)  Therefore, use
-of JPEGTables divides the available table slots into two groups: "global"
-slots are defined in JPEGTables and may be used but not redefined by
+order without having to reload ``JPEGTables`` between segments.)  Therefore, use
+of ``JPEGTables`` divides the available table slots into two groups: "global"
+slots are defined in ``JPEGTables`` and may be used but not redefined by
 segments; "local" slots are available for local definition and use in each
 segment.  To permit random access, a segment may not reference any local
 tables that it does not itself define.
@@ -463,27 +472,27 @@ tables that it does not itself define.
 Special considerations for PlanarConfiguration 2
 ------------------------------------------------
 
-In PlanarConfiguration 2, each image segment contains data for only one
+In ``PlanarConfiguration`` 2, each image segment contains data for only one
 color component.  To avoid confusing the JPEG codec, we wish the segments
 to look like valid single-channel (i.e., grayscale) JPEG datastreams.  This
-means that different rules must be used for the SOFn parameters.
+means that different rules must be used for the ``SOFn`` parameters.
 
-In PlanarConfiguration 2, the dimensions given in the SOFn of a subsampled
-component shall be scaled down by the sampling factors compared to the SOFn
-dimensions that would be used in PlanarConfiguration 1.  This is necessary
+In ``PlanarConfiguration`` 2, the dimensions given in the ``SOFn`` of a subsampled
+component shall be scaled down by the sampling factors compared to the ``SOFn``
+dimensions that would be used in ``PlanarConfiguration`` 1.  This is necessary
 to match the actual number of samples stored in that segment, so that the
 JPEG codec doesn't complain about too much or too little data.  In strip
 TIFF files the computed dimensions may need to be rounded up to the next
 integer; in tiled files, the restrictions on tile size make this case
 impossible.
 
-Furthermore, all SOFn sampling factors shall be given as 1.  (This is
+Furthermore, all ``SOFn`` sampling factors shall be given as 1.  (This is
 merely to avoid confusion, since the sampling factors in a single-channel
 JPEG datastream have no real effect.)
 
 Any downsampling will need to happen externally to the JPEG codec, since
 JPEG sampling factors are defined with reference to the full-precision
-component.  In PlanarConfiguration 2, the JPEG codec will be working on
+component.  In ``PlanarConfiguration`` 2, the JPEG codec will be working on
 only one component at a time and thus will have no reference component to
 downsample against.
 
@@ -499,45 +508,50 @@ themselves to this subset unless there is very good reason to do otherwise.
 
 Use the ISO baseline JPEG process: 8-bit data precision, Huffman coding,
 with no more than 2 DC and 2 AC Huffman tables.  Note that this implies
-BitsPerSample = 8 for each component.  We recommend deviating from baseline
+``BitsPerSample`` = 8 for each component.  We recommend deviating from baseline
 JPEG only if 12-bit data precision or lossless coding is required.
 
 Use no subsampling (all JPEG sampling factors = 1) for color spaces other
 than YCbCr.  (This is, in fact, required with the TIFF 6.0 field
 definitions, but may not be so in future revisions.)  For YCbCr, use one of
 the following choices:
-	YCbCrSubSampling field		JPEG sampling factors
-	1,1				1h1v, 1h1v, 1h1v
-	2,1				2h1v, 1h1v, 1h1v
-	2,2  (default value)		2h2v, 1h1v, 1h1v
+
+======================  =====================
+YCbCrSubSampling field  JPEG sampling factors
+======================  =====================
+1,1                     1h1v, 1h1v, 1h1v
+2,1                     2h1v, 1h1v, 1h1v
+2,2 (default value)     2h2v, 1h1v, 1h1v
+======================  =====================
+
 We recommend that RGB source data be converted to YCbCr for best compression
 results.  Other source data colorspaces should probably be left alone.
 Minimal readers need not support JPEG images with colorspaces other than
-YCbCr and grayscale (PhotometricInterpretation = 6 or 1).
+YCbCr and grayscale (`PhotometricInterpretation` = 6 or 1).
 
 A minimal reader also need not support JPEG YCbCr images with nondefault
-values of YCbCrCoefficients or YCbCrPositioning, nor with values of
-ReferenceBlackWhite other than [0,255,128,255,128,255].  (These values
+values of ``YCbCrCoefficients`` or ``YCbCrPositioning``, nor with values of
+``ReferenceBlackWhite`` other than [0,255,128,255,128,255].  (These values
 correspond to the RGB<=>YCbCr conversion specified by JFIF, which is widely
 implemented in JPEG codecs.)
 
-Writers are reminded that a ReferenceBlackWhite field *must* be included
-when PhotometricInterpretation is YCbCr, because the default
-ReferenceBlackWhite values are inappropriate for YCbCr.
+Writers are reminded that a ``ReferenceBlackWhite`` field *must* be included
+when ``PhotometricInterpretation`` is YCbCr, because the default
+``ReferenceBlackWhite`` values are inappropriate for YCbCr.
 
-If any subsampling is used, PlanarConfiguration=1 is preferred to avoid the
-possibly-confusing requirements of PlanarConfiguration=2.  In any case,
-readers are not required to support PlanarConfiguration=2.
+If any subsampling is used, ``PlanarConfiguration=1`` is preferred to avoid the
+possibly-confusing requirements of ``PlanarConfiguration=2``.  In any case,
+readers are not required to support ``PlanarConfiguration=2``.
 
 If possible, use a single interleaved scan in each image segment.  This is
-not legal JPEG if there are more than 4 SamplesPerPixel or if the sampling
+not legal JPEG if there are more than 4 ``SamplesPerPixel`` or if the sampling
 factors are such that more than 10 blocks would be needed per MCU; in that
 case, use a separate scan for each component.  (The recommended color
 spaces and sampling factors will not run into that restriction, so a
 minimal reader need not support more than one scan per segment.)
 
 To claim TIFF/JPEG compatibility, readers shall support multiple-strip TIFF
-files and the optional JPEGTables field; it is not acceptable to read only
+files and the optional ``JPEGTables`` field; it is not acceptable to read only
 single-datastream files.  Support for tiled TIFF files is strongly
 recommended but not required.
 
@@ -545,7 +559,7 @@ recommended but not required.
 Other recommendations for implementors
 --------------------------------------
 
-The TIFF tag Compression=7 guarantees only that the compressed data is
+The TIFF tag ``Compression=7`` guarantees only that the compressed data is
 represented as ISO JPEG datastreams.  Since JPEG is a large and evolving
 standard, readers should apply careful error checking to the JPEG markers
 to ensure that the compression process is within their capabilities.  In
@@ -560,12 +574,12 @@ software implementation.  It is desirable to check only one image segment
 to find out whether the fast hardware can be used.  Thus, writers should
 try to ensure that all segments of an image look as much "alike" as
 possible: there should be no variation in scan layout, use of options such
-as DRI, etc.  Ideally, segments will be processed identically except
+as ``DRI``, etc.  Ideally, segments will be processed identically except
 perhaps for using different local quantization or entropy-coding tables.
 
-Writers should avoid including "noise" JPEG markers (COM and APPn markers).
+Writers should avoid including "noise" JPEG markers (``COM`` and ``APPn`` markers).
 Standard TIFF fields provide a better way to transport any non-image data.
-Some JPEG codecs may change behavior if they see an APPn marker they
+Some JPEG codecs may change behavior if they see an ``APPn`` marker they
 think they understand; since the TIFF spec requires these markers to be
 ignored, this behavior is undesirable.
 
@@ -575,18 +589,18 @@ TIFF simply by dropping the interchange datastream into a single strip.
 strips; splitting the image is somewhat more work but may give better
 results.)  Conversion from TIFF to interchange JPEG is more complex.  A
 strip-based TIFF/JPEG file can be converted fairly easily if all strips use
-identical JPEG tables and no RSTn markers: just delete the overhead markers
-and insert RSTn markers between strips.  Converting tiled images is harder,
+identical JPEG tables and no ``RSTn`` markers: just delete the overhead markers
+and insert ``RSTn`` markers between strips.  Converting tiled images is harder,
 since the data will usually not be in the right order (unless the tiles are
 only one MCU high).  This can still be done losslessly, but it will require
 undoing and redoing the entropy coding so that the DC coefficient
 differences can be updated.
 
-There is no default value for JPEGTables: standard TIFF files must define all
+There is no default value for ``JPEGTables``: standard TIFF files must define all
 tables that they reference.  For some closed systems in which many files will
-have identical tables, it might make sense to define a default JPEGTables
+have identical tables, it might make sense to define a default ``JPEGTables``
 value to avoid actually storing the tables.  Or even better, invent a
-private field selecting one of N default JPEGTables settings, so as to allow
+private field selecting one of N default ``JPEGTables`` settings, so as to allow
 for future expansion.  Either of these must be regarded as a private
 extension that will render the files unreadable by other applications.
 
@@ -631,77 +645,76 @@ of JPEG compression on odd-size images.]
 Add the following paragraphs to the Section 21 introduction (p. 89),
 just after the paragraph beginning "When a Class Y image is subsampled":
 
-	In a subsampled image, it is understood that all TIFF image
-	dimensions are measured in terms of the highest-resolution
-	(luminance) component.  In particular, ImageWidth, ImageLength,
-	RowsPerStrip, TileWidth, TileLength, XResolution, and YResolution
-	are measured in luminance samples.
+    In a subsampled image, it is understood that all TIFF image
+    dimensions are measured in terms of the highest-resolution
+    (luminance) component.  In particular, ``ImageWidth``, ``ImageLength``,
+    ``RowsPerStrip``, ``TileWidth``, ``TileLength``, ``XResolution``, and ``YResolution``
+    are measured in luminance samples.
 
-	RowsPerStrip, TileWidth, and TileLength are constrained so that
-	there are an integral number of samples of each component in a
-	complete strip or tile.  However, ImageWidth/ImageLength are not
-	constrained.  If an odd-size image is to be converted to subsampled
-	format, the writer should pad the source data to a multiple of the
-	sampling factors by replication of the last column and/or row, then
-	downsample.  The number of luminance samples actually stored in the
-	file will be a multiple of the sampling factors.  Conversely,
-	readers must ignore any extra data (outside the specified image
-	dimensions) after upsampling.
+    ``RowsPerStrip``, ``TileWidth``, and ``TileLength`` are constrained so that
+    there are an integral number of samples of each component in a
+    complete strip or tile.  However, ``ImageWidth``/``ImageLength`` are not
+    constrained.  If an odd-size image is to be converted to subsampled
+    format, the writer should pad the source data to a multiple of the
+    sampling factors by replication of the last column and/or row, then
+    downsample.  The number of luminance samples actually stored in the
+    file will be a multiple of the sampling factors.  Conversely,
+    readers must ignore any extra data (outside the specified image
+    dimensions) after upsampling.
 
-	When PlanarConfiguration=2, each strip or tile covers the same
-	image area despite subsampling; that is, the total number of strips
-	or tiles in the image is the same for each component.  Therefore
-	strips or tiles of the subsampled components contain fewer samples
-	than strips or tiles of the luminance component.
+    When ``PlanarConfiguration=2``, each strip or tile covers the same
+    image area despite subsampling; that is, the total number of strips
+    or tiles in the image is the same for each component.  Therefore
+    strips or tiles of the subsampled components contain fewer samples
+    than strips or tiles of the luminance component.
 
-	If there are extra samples per pixel (see field ExtraSamples),
-	these data channels have the same number of samples as the
-	luminance component.
+    If there are extra samples per pixel (see field ``ExtraSamples``),
+    these data channels have the same number of samples as the
+    luminance component.
 
-Rewrite the YCbCrSubSampling field description (pp 91-92) as follows
+Rewrite the ``YCbCrSubSampling`` field description (pp 91-92) as follows
 (largely to eliminate possibly-misleading references to
-ImageWidth/ImageLength of the subsampled components):
+``ImageWidth``/``ImageLength`` of the subsampled components):
 
-	(first paragraph unchanged)
+    (first paragraph unchanged)
 
-	The two elements of this field are defined as follows:
+    The two elements of this field are defined as follows:
 
-	Short 0: ChromaSubsampleHoriz:
+    Short 0: ``ChromaSubsampleHoriz``:
 
-	1 = there are equal numbers of luma and chroma samples horizontally.
+        1 = there are equal numbers of luma and chroma samples horizontally.
 
-	2 = there are twice as many luma samples as chroma samples
-	horizontally.
+        2 = there are twice as many luma samples as chroma samples
+        horizontally.
 
-	4 = there are four times as many luma samples as chroma samples
-	horizontally.
+        4 = there are four times as many luma samples as chroma samples
+        horizontally.
 
-	Short 1: ChromaSubsampleVert:
+    Short 1: ``ChromaSubsampleVert``:
 
-	1 = there are equal numbers of luma and chroma samples vertically.
+        1 = there are equal numbers of luma and chroma samples vertically.
 
-	2 = there are twice as many luma samples as chroma samples
-	vertically.
+        2 = there are twice as many luma samples as chroma samples
+        vertically.
 
-	4 = there are four times as many luma samples as chroma samples
-	vertically.
+        4 = there are four times as many luma samples as chroma samples
+        vertically.
 
-	ChromaSubsampleVert shall always be less than or equal to
-	ChromaSubsampleHoriz.  Note that Cb and Cr have the same sampling
-	ratios.
+    ``ChromaSubsampleVert`` shall always be less than or equal to
+    ``ChromaSubsampleHoriz``.  Note that Cb and Cr have the same sampling
+    ratios.
 
-	In a strip TIFF file, RowsPerStrip is required to be an integer
-	multiple of ChromaSubSampleVert (unless RowsPerStrip >=
-	ImageLength, in which case its exact value is unimportant).
-	If ImageWidth and ImageLength are not multiples of
-	ChromaSubsampleHoriz and ChromaSubsampleVert respectively, then the
-	source data shall be padded to the next integer multiple of these
-	values before downsampling.
+    In a strip TIFF file, ``RowsPerStrip`` is required to be an integer
+    multiple of ``ChromaSubSampleVert`` (unless ``RowsPerStrip >=
+    ImageLength``, in which case its exact value is unimportant).
+    If ``ImageWidth`` and ``ImageLength`` are not multiples of
+    ``ChromaSubsampleHoriz`` and ``ChromaSubsampleVert`` respectively, then the
+    source data shall be padded to the next integer multiple of these
+    values before downsampling.
 
-	In a tiled TIFF file, TileWidth must be an integer multiple of
-	ChromaSubsampleHoriz and TileLength must be an integer multiple of
-	ChromaSubsampleVert.  Padding will occur to tile boundaries.
+    In a tiled TIFF file, ``TileWidth`` must be an integer multiple of
+    ``ChromaSubsampleHoriz`` and ``TileLength`` must be an integer multiple of
+    ``ChromaSubsampleVert``.  Padding will occur to tile boundaries.
 
-	The default values of this field are [ 2,2 ].  Thus, YCbCr data is
-	downsampled by default!
-</pre>
+    The default values of this field are [ 2,2 ].  Thus, YCbCr data is
+    downsampled by default!
