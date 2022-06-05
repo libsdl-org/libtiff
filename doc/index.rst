@@ -69,7 +69,6 @@ The following sections are included in this documentation:
     contrib
     specification/index
     build
-    bugs
     images
     project/index
     manpages

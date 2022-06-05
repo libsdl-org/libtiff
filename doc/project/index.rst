@@ -9,4 +9,6 @@ The following sections are included:
     :titlesonly:
 
     license
+    mailinglist
+    bugs
     acknowledgements
