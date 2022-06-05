@@ -115,7 +115,7 @@ for some of the more esoteric portions of the 6.0 TIFF spec.
         ``DotRange``,
         ``TargetPrinter``
 
-    * - Class Y for YCbCr images</th>
+    * - Class Y for YCbCr images
       - ``SamplesPerPixel`` = 3
 
         ``BitsPerSample`` = <8,8,8>

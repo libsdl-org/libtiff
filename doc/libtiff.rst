@@ -27,8 +27,7 @@ The material presented in this chapter is a basic introduction
 to the capabilities of the library; it is not an attempt to describe
 everything a developer needs to know about the library or about TIFF.
 Detailed information on the interfaces to the library are given in
-the <a href="man/index.html">UNIX manual pages</a> that accompany
-this software.
+the :doc:`manpages` that accompany this software.
 
 Michael Still has also written a useful introduction to libtiff for the
 IBM DeveloperWorks site available at
@@ -513,7 +512,7 @@ read data in the case ``PLANARCONFIG_SEPARATE``,...
 
             for (row = 0; row &lt; imagelength; row++)
                 for (s = 0; s &lt; nsamples; s++)
-                    TIFFReadScanline(tif, buf, row, s);</tt>
+                    TIFFReadScanline(tif, buf, row, s);
 
 ...then problems would arise if ``RowsPerStrip`` was not one
 because the order in which scanlines are requested would require
