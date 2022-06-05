@@ -41,7 +41,7 @@ Library changes
   module so that it can be shared by multiple codecs
 * experimental compression support was added for the Deflate algorithm
   (using the freely available zlib package)
-* a new routine, :c:func:`TIFFWriteBufferSetup` was added á la the
+* a new routine, :c:func:`TIFFWriteBufferSetup` was added à la the
   routine :c:func:`TIFFReadBufferSetup`
 * the DSO version of the library is now statically linked with the
   JPEG and Deflate libraries; this means applications that link against

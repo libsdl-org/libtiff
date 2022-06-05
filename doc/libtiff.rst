@@ -648,7 +648,7 @@ code of the following sort might be used:
 (once again, we assume samples are packed contiguously.)
 
 Alternatively a direct interface to the low-level data is provided
-á la strips.  Tiles can be read with
+à la strips.  Tiles can be read with
 :c:func:`TIFFReadEncodedTile` or :c:func:`TIFFReadRawTile`,
 and written with :c:func:`TIFFWriteEncodedTile` or
 :c:func:`TIFFWriteRawTile`. For example, to read all the tiles in an image:
