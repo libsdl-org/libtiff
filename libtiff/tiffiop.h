@@ -365,6 +365,7 @@ extern double _TIFFUInt64ToDouble(uint64_t);
 extern float _TIFFUInt64ToFloat(uint64_t);
 
 extern float _TIFFClampDoubleToFloat(double);
+extern uint32_t _TIFFClampDoubleToUInt32(double);
 
 extern tmsize_t
 _TIFFReadEncodedStripAndAllocBuffer(TIFF* tif, uint32_t strip,
