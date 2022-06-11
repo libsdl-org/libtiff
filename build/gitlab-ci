@@ -18,6 +18,8 @@ autoconf_build()
     make install
     make check
     make distcheck
+    mkdir ../distribution
+    cp tiff-*.tar.* tiff*.zip ../distribution
 }
 
 # Test cmake build

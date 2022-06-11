@@ -11,6 +11,10 @@ autoconf:
     - sh build/gitlab-ci autoconf
   after_script:
     - 'cat autoconf-build/test/test-suite.log'
+  artifacts:
+    name: distribution
+    paths:
+    - distribution
 
 cmake-makefiles:
   stage: build
