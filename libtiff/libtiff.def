@@ -170,6 +170,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFYCbCrtoRGB
 	_TIFFCheckMalloc
 	_TIFFCheckRealloc
+	_TIFFClampDoubleToUInt32
 	_TIFFRewriteField
 	_TIFFfree
 	_TIFFmalloc
@@ -181,4 +182,3 @@ EXPORTS	TIFFAccessTagMethods
 	_TIFFMultiply64
 	_TIFFGetExifFields
 	_TIFFGetGpsFields
-
