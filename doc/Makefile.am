@@ -34,7 +34,6 @@ doc-html:
 	-d "$(builddir)/cache" \
 	-b html \
 	"$(srcdir)" "$(builddir)/html"
-endif
 
 html/index.html: doc-html
 
@@ -44,15 +43,21 @@ clean-local:
 	rm -r html
 	rm -r cache
 
-install-data-local:
-	find html -type d | sed -e 's;^html;;' | while read dir; do \
+html_installdir = html
+else
+html_installdir = $(srcdir)/html-prebuilt
+endif
+
+
+install-data-local: all-local
+	find $(html_installdir) -type d | sed -e 's;^$(html_installdir);;' | while read dir; do \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(docdir)$$dir'"; \
 	  $(MKDIR_P) "$(DESTDIR)$(docdir)$$dir" || exit 1; \
 	done
-	find html -type f | sed -e 's;^html;;' | while read docfile; do \
+	find $(html_installdir) -type f | sed -e 's;^$(html_installdir);;' | while read docfile; do \
 	  docsubdir=$$(dirname $$docfile); \
-	  echo "$(INSTALL_DATA) 'html$$docfile' '$(DESTDIR)$(docdir)$$docsubdir'"; \
-	  $(INSTALL_DATA) "html$$docfile" "$(DESTDIR)$(docdir)$$docsubdir"; \
+	  echo "$(INSTALL_DATA) '$(html_installdir)$$docfile' '$(DESTDIR)$(docdir)$$docsubdir'"; \
+	  $(INSTALL_DATA) "$(html_installdir)$$docfile" "$(DESTDIR)$(docdir)$$docsubdir"; \
 	done
 
 uninstall-local:
@@ -146,5 +151,8 @@ EXTRA_DIST = \
 	images \
 	static \
 	$(rst_sources)
+
+dist-hook: doc-html
+	cp -r html $(distdir)/html-prebuilt
 
 .PHONY: doc-html
