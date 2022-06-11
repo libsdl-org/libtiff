@@ -156,7 +156,6 @@ if(tiff-contrib)
 endif()
 add_subdirectory(build)
 if(tiff-docs)
-  add_subdirectory(man)
   add_subdirectory(doc)
 endif()
 

@@ -1135,6 +1135,13 @@ if test "$CHECK_JPEG_YCBCR_SUBSAMPLING" = "yes" ; then
 fi
 
 
+for python in python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3 python3.2 python3.1 python3.0 python3 python; do
+  AC_CHECK_PROGS(PYTHON_BIN, [$python])
+  if test "x$PYTHON_BIN" != "x"; then
+    break
+  fi
+done
+
 AC_ARG_ENABLE(sphinx,
               AS_HELP_STRING([--disable-sphinx],
                              [disable building of the sphinx documentation]),
@@ -1145,8 +1152,28 @@ AC_ARG_ENABLE(sphinx,
 
 AC_PATH_PROG(SPHINX_BUILD, [sphinx-build], [no])
 
-AM_CONDITIONAL([SPHINX], [test "$BUILD_SPHINX" = yes -a "$SPHINX_BUILD" != no])
+AM_CONDITIONAL([SPHINX], [test "$BUILD_SPHINX" = yes -a "$SPHINX_BUILD" != no -a "x$PYTHON_BIN" != "x"])
 
+if test "x$PYTHON_BIN" != "x"; then
+  AC_MSG_CHECKING([generated manual pages])
+  TIFF_MAN1_GEN=$(echo $("$PYTHON_BIN" "${srcdir}/cmake/list-manpages.py" "${srcdir}/doc" man | grep "\.1$"))
+  TIFF_MAN3_GEN=$(echo $("$PYTHON_BIN" "${srcdir}/cmake/list-manpages.py" "${srcdir}/doc" man | grep "\.3tiff$"))
+  TIFF_MAN_RULES=$("$PYTHON_BIN" "${srcdir}/cmake/list-manpages.py" "${srcdir}/doc" man | sed -e 's;$;: all-local;')
+  AC_SUBST([TIFF_MAN1_GEN])
+  AC_SUBST([TIFF_MAN3_GEN])
+  AC_SUBST([TIFF_MAN_RULES])
+  AM_SUBST_NOTMAKE([TIFF_MAN_RULES])
+  AC_MSG_RESULT([done])
+fi
+
+if test -d "${srcdir}/doc/man-prebuilt"; then
+  AC_MSG_CHECKING([prebuilt manual pages])
+  TIFF_MAN1_PREBUILT=$(echo $(cd "${srcdir}/doc" && ls -1 man-prebuilt/*.1))
+  TIFF_MAN3_PREBUILT=$(echo $(cd "${srcdir}/doc" && ls -1 man-prebuilt/*.3tiff))
+  AC_SUBST([TIFF_MAN1_PREBUILT])
+  AC_SUBST([TIFF_MAN3_PREBUILT])
+  AC_MSG_RESULT([done])
+fi
 
 dnl ---------------------------------------------------------------------------
 
@@ -1171,7 +1198,6 @@ AC_CONFIG_FILES([Makefile \
 		 doc/Makefile \
 		 libtiff-4.pc \
 		 libtiff/Makefile \
-		 man/Makefile \
 		 port/Makefile \
 		 test/Makefile \
 		 tools/Makefile])

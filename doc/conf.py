@@ -84,3 +84,80 @@ html_theme = 'sphinxdoc'
 html_static_path = ['_static']
 
 html_extra_path = ['static']
+
+# -- Options for manual page output --------------------------------------------
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    ('functions/libtiff', 'libtiff', 'introduction to libtiff, a library for reading and writing TIFF files', author, '3tiff'),
+
+    ('tools/fax2ps', 'fax2ps', 'convert a TIFF facsimile to compressed PostScript™', author, 1),
+    ('tools/fax2tiff', 'fax2tiff', 'create a TIFF Class F fax file from raw fax data', author, 1),
+    ('tools/pal2rgb', 'pal2rgb', 'convert a palette color TIFF image to a full color image', author, 1),
+    ('tools/ppm2tiff', 'ppm2tiff', 'create a TIFF file from PPM, PGM and PBM image files', author, 1),
+    ('tools/raw2tiff', 'raw2tiff', 'create a TIFF file from a raw data file', author, 1),
+    ('tools/rgb2ycbcr', 'rgb2ycbcr', 'convert non-YCbCr TIFF images to a YCbCr TIFF image', author, 1),
+    ('tools/thumbnail', 'thumbnail', 'create a TIFF file with thumbnail images', author, 1),
+    ('tools/tiff2bw', 'tiff2bw', 'convert a color TIFF image to greyscale', author, 1),
+    ('tools/tiff2pdf', 'tiff2pdf', 'convert a TIFF image to a PDF document', author, 1),
+    ('tools/tiff2ps', 'tiff2ps', 'convert TIFF image to PostScript™', author, 1),
+    ('tools/tiff2rgba', 'tiff2rgba', 'convert a TIFF image to RGBA color space', author, 1),
+    ('tools/tiffcmp', 'tiffcmp', 'compare two TIFF files', author, 1),
+    ('tools/tiffcp', 'tiffcp', 'copy (and possibly convert) a TIFF file', author, 1),
+    ('tools/tiffcrop', 'tiffcrop', 'select, copy, crop, convert, extract, and/or process one or more TIFF files', author, 1),
+    ('tools/tiffdither', 'tiffdither', 'convert a greyscale TIFF image to bilevel using dithering', author, 1),
+    ('tools/tiffdump', 'tiffdump', 'print verbatim information about TIFF files', author, 1),
+    ('tools/tiffgt', 'tiffgt', 'display an image stored in a TIFF file (Silicon Graphics version)', author, 1),
+    ('tools/tiffinfo', 'tiffinfo', 'print information about TIFF files', author, 1),
+    ('tools/tiffmedian', 'tiffmedian', 'apply the median cut algorithm to data in a TIFF file', author, 1),
+    ('tools/tiffset', 'tiffset', 'set or unset a field in a TIFF header', author, 1),
+    ('tools/tiffsplit', 'tiffsplit', 'split a multi-image TIFF into single-image TIFF files', author, 1),
+
+    ('functions/TIFFbuffer', 'TIFFbuffer', 'I/O buffering control routines', author, '3tiff'),
+    ('functions/TIFFClose', 'TIFFClose', 'close a previously opened TIFF file', author, '3tiff'),
+    ('functions/TIFFcodec', 'TIFFcodec', 'codec-related utility routines', author, '3tiff'),
+    ('functions/TIFFcolor', 'TIFFcolor', 'color conversion routines', author, '3tiff'),
+    ('functions/TIFFDataWidth', 'TIFFDataWidth', 'get the size of TIFF data types', author, '3tiff'),
+    ('functions/TIFFError', 'TIFFError', 'library error handling interface', author, '3tiff'),
+    ('functions/TIFFFieldDataType', 'TIFFFieldDataType', 'get TIFF data type from field information', author, '3tiff'),
+    ('functions/TIFFFieldName', 'TIFFFieldName', 'get TIFF field name from field information', author, '3tiff'),
+    ('functions/TIFFFieldPassCount', 'TIFFFieldPassCount', 'get whether to pass a count to TIFFGetField/TIFFSetField', author, '3tiff'),
+    ('functions/TIFFFieldReadCount', 'TIFFFieldReadCount', 'get number of values to be read from field', author, '3tiff'),
+    ('functions/TIFFFieldTag', 'TIFFFieldTag', 'get TIFF field tag value from field information', author, '3tiff'),
+    ('functions/TIFFFieldWriteCount', 'TIFFFieldWriteCount', 'get number of values to be written to field', author, '3tiff'),
+    ('functions/TIFFFlush', 'TIFFFlush', 'flush pending writes to an open TIFF file', author, '3tiff'),
+    ('functions/TIFFGetField', 'TIFFGetField', 'get the value(s) of a tag in an open TIFF file', author, '3tiff'),
+    ('functions/TIFFmemory', 'TIFFmemory', 'memory management-related functions for use with TIFF files', author, '3tiff'),
+    ('functions/TIFFOpen', 'TIFFOpen', 'open a TIFF file for reading or writing', author, '3tiff'),
+    ('functions/TIFFPrintDirectory', 'TIFFPrintDirectory', 'print a description of a TIFF directory', author, '3tiff'),
+    ('functions/TIFFquery', 'TIFFquery', 'query routines', author, '3tiff'),
+    ('functions/TIFFReadDirectory', 'TIFFReadDirectory', 'get the contents of the next directory in an open TIFF file', author, '3tiff'),
+    ('functions/TIFFReadEncodedStrip', 'TIFFReadEncodedStrip', 'read and decode a strip of data from an open TIFF file', author, '3tiff'),
+    ('functions/TIFFReadEncodedTile', 'TIFFReadEncodedTile', 'read and decode a tile of data from an open TIFF file', author, '3tiff'),
+    ('functions/TIFFReadRawStrip', 'TIFFReadRawStrip', 'return the undecoded contents of a strip of data from an open TIFF file', author, '3tiff'),
+    ('functions/TIFFReadRawTile', 'TIFFReadRawTile', 'return an undecoded tile of data from an open TIFF file', author, '3tiff'),
+    ('functions/TIFFReadRGBAImage', 'TIFFReadRGBAImage', 'read and decode an image into a fixed-format raster', author, '3tiff'),
+    ('functions/TIFFReadRGBAStrip', 'TIFFReadRGBAStrip', 'read and decode an image strip into a fixed-format raster', author, '3tiff'),
+    ('functions/TIFFReadRGBATile', 'TIFFReadRGBATile', 'read and decode an image tile into a fixed-format raster', author, '3tiff'),
+    ('functions/TIFFReadScanline', 'TIFFReadScanline', 'read and decode a scanline of data from an open TIFF file', author, '3tiff'),
+    ('functions/TIFFReadTile', 'TIFFReadTile', 'read and decode a tile of data from an open TIFF file', author, '3tiff'),
+    ('functions/TIFFRGBAImage', 'TIFFRGBAImage', 'read and decode an image into a raster', author, '3tiff'),
+    ('functions/TIFFSetDirectory', 'TIFFSetDirectory', 'set the current directory for an open TIFF file', author, '3tiff'),
+    ('functions/TIFFSetField', 'TIFFSetField', 'set the value(s) of a tag in a TIFF file open for writing', author, '3tiff'),
+    ('functions/TIFFsize', 'TIFFsize', 'return the size of various items associated with an open TIFF file', author, '3tiff'),
+    ('functions/TIFFstrip', 'TIFFstrip', 'strip-related utility routines', author, '3tiff'),
+    ('functions/TIFFswab', 'TIFFswab', 'byte- and bit-swapping routines', author, '3tiff'),
+    ('functions/TIFFtile', 'TIFFtile', 'tile-related utility routines', author, '3tiff'),
+    ('functions/TIFFWarning', 'TIFFWarning', 'library warning interface', author, '3tiff'),
+    ('functions/TIFFWriteDirectory', 'TIFFWriteDirectory', 'write the current directory in an open TIFF file', author, '3tiff'),
+    ('functions/TIFFWriteEncodedStrip', 'TIFFWriteEncodedStrip', 'compress and write a strip of data to an open TIFF file', author, '3tiff'),
+    ('functions/TIFFWriteEncodedTile', 'TIFFWriteEncodedTile', 'compress and write a tile of data to an open TIFF file', author, '3tiff'),
+    ('functions/TIFFWriteRawStrip', 'TIFFWriteRawStrip', 'write a strip of raw data to an open TIFF file', author, '3tiff'),
+    ('functions/TIFFWriteRawTile', 'TIFFWriteRawTile', 'write a tile of raw data to an open TIFF file', author, '3tiff'),
+    ('functions/TIFFWriteScanline', 'TIFFWriteScanline', 'write a scanline to an open TIFF file', author, '3tiff'),
+    ('functions/TIFFWriteTile', 'TIFFWriteTile', 'encode and write a tile of data to an open TIFF file', author, '3tiff'),
+]
+
+# If true, show URL addresses after external links.
+man_show_urls = True

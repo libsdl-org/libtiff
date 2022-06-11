@@ -52,12 +52,11 @@ option(sphinx "Enable sphinx manual page and HTML documentation" ${SPHINX_DEFAUL
 option(sphinx-linkcheck "Check sphinx documentation links by default" OFF)
 
 set(BUILD_SPHINX ${sphinx})
+set(SPHINX_LIST_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-set(_ome_sphinx_list_dir "${CMAKE_CURRENT_LIST_DIR}")
-
-function(sphinx_manpages srcdir confdir mandir manvar)
-  execute_process(COMMAND "${Python3_EXECUTABLE}" -B ${_ome_sphinx_list_dir}/list-manpages.py
-                          "${confdir}" "${srcdir}" "${mandir}"
+function(sphinx_manpages srcdir builddir manvar)
+  execute_process(COMMAND "${Python3_EXECUTABLE}" -B ${SPHINX_LIST_DIR}/list-manpages.py
+                          "${srcdir}" "${builddir}"
                   RESULT_VARIABLE sphinx_man_fail
                   OUTPUT_VARIABLE MAN_PAGES)
   if (sphinx_man_fail)
@@ -65,11 +64,12 @@ function(sphinx_manpages srcdir confdir mandir manvar)
   endif()
   string(REPLACE "\n" ";" MAN_PAGES "${MAN_PAGES}")
   set(${manvar} "${MAN_PAGES}" PARENT_SCOPE)
+
+    message(STATUS "Sphinx manual pages: ${MAN_PAGES}")
 endfunction(sphinx_manpages)
 
-function(sphinx_manpage_dependencies srcdir confdir depvar)
-  execute_process(COMMAND "${Python3_EXECUTABLE}" -B ${_ome_sphinx_list_dir}/list-manpage-dependencies.py
-                          "${confdir}"
+function(sphinx_manpage_dependencies srcdir depvar)
+  execute_process(COMMAND "${Python3_EXECUTABLE}" -B ${SPHINX_LIST_DIR}/list-manpage-dependencies.py
                           "${srcdir}"
                   RESULT_VARIABLE sphinx_dep_fail
                   OUTPUT_VARIABLE SPHINX_MAN_DEPENDENCIES)
@@ -77,6 +77,7 @@ function(sphinx_manpage_dependencies srcdir confdir depvar)
     message(WARNING "Failed to get Sphinx dependencies from ${confdir}")
   endif()
   string(REPLACE "\n" ";" SPHINX_MAN_DEPENDENCIES "${SPHINX_MAN_DEPENDENCIES}")
+
   set(${depvar} "${SPHINX_MAN_DEPENDENCIES}" PARENT_SCOPE)
 endfunction(sphinx_manpage_dependencies)
 
