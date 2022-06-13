@@ -470,6 +470,7 @@ if test "$HAVE_ZLIB" = "yes" ; then
   AC_DEFINE(ZIP_SUPPORT,1,[Support Deflate compression])
   LIBS="-lz $LIBS"
   tiff_libs_private="-lz ${tiff_libs_private}"
+  tiff_requires_private="zlib ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_zlib_lib_dir" != "x" ; then
     LIBDIR="-R $with_zlib_lib_dir $LIBDIR"
@@ -527,6 +528,7 @@ if test "$HAVE_LIBDEFLATE" = "yes" ; then
   AC_DEFINE(LIBDEFLATE_SUPPORT,1,[Support libdeflate enhanced compression])
   LIBS="-ldeflate $LIBS"
   tiff_libs_private="-ldeflate ${tiff_libs_private}"
+  tiff_requires_private="libdeflate ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_libdeflate_lib_dir" != "x" ; then
     LIBDIR="-R $with_libdeflate_lib_dir $LIBDIR"
@@ -596,6 +598,7 @@ if test "$HAVE_JPEG" = "yes" ; then
   AC_DEFINE(JPEG_SUPPORT,1,[Support JPEG compression (requires IJG JPEG library)])
   LIBS="-ljpeg $LIBS"
   tiff_libs_private="-ljpeg ${tiff_libs_private}"
+  tiff_requires_private="libjpeg ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_jpeg_lib_dir" != "x" ; then
     LIBDIR="-R $with_jpeg_lib_dir $LIBDIR"
@@ -791,6 +794,7 @@ if test "$HAVE_LZMA" = "yes" ; then
   AC_DEFINE(LZMA_SUPPORT,1,[Support LZMA2 compression])
   LIBS="-llzma $LIBS"
   tiff_libs_private="-llzma ${tiff_libs_private}"
+  tiff_requires_private="liblzma ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_lzma_lib_dir" != "x" ; then
     LIBDIR="-R $with_lzma_lib_dir $LIBDIR"
@@ -845,6 +849,7 @@ if test "$HAVE_ZSTD" = "yes" ; then
   AC_DEFINE(ZSTD_SUPPORT,1,[Support zstd compression])
   LIBS="-lzstd $LIBS"
   tiff_libs_private="-lzstd ${tiff_libs_private}"
+  tiff_requires_private="libzstd ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_zstd_lib_dir" != "x" ; then
     LIBDIR="-R $with_zstd_lib_dir $LIBDIR"
@@ -899,6 +904,7 @@ if test "$HAVE_WEBP" = "yes" ; then
   AC_DEFINE(WEBP_SUPPORT,1,[Support webp compression])
   LIBS="-lwebp $LIBS"
   tiff_libs_private="-lwebp ${tiff_libs_private}"
+  tiff_requires_private="libwebp ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_webp_lib_dir" != "x" ; then
     LIBDIR="-R $with_webp_lib_dir $LIBDIR"
