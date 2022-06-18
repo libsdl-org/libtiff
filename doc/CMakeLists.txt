@@ -137,6 +137,10 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
                      WORKING_DIRECTORY "${sphinx_srcdir}"
                      DEPENDS doc-linkcheck)
   add_dependencies(doc-locallinkcheck ${PROJECT_NAME}-doc-locallinkcheck)
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/html-prebuilt/")
+  install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/html-prebuilt/"
+          DESTINATION "${CMAKE_INSTALL_DOCDIR}/manual/html"
+          COMPONENT "runtime")
 else()
   message(WARNING "Manual pages and HTML manual will not be generated or installed")
 endif()
