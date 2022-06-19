@@ -5,7 +5,8 @@ stages:
   - static-analysis
   - pages
 
-autoconf:
+
+autoconf-current:
   stage: build
   script:
     - sh build/gitlab-ci autoconf
@@ -16,15 +17,29 @@ autoconf:
     paths:
     - distribution
 
-cmake-makefiles:
+autoconf-old:
+  stage: build
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04:latest
+  script:
+    - sh build/gitlab-ci autoconf-minimal
+  after_script:
+    - 'cat autoconf-build/test/test-suite.log'
+
+cmake-makefiles-current:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
-cmake-ninja:
+cmake-ninja-current:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
+
+cmake-makefiles-old:
+  stage: build
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04:latest
+  script:
+    - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
 coverity:
   stage: static-analysis

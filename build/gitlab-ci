@@ -22,6 +22,20 @@ autoconf_build()
     cp tiff-*.tar.* tiff*.zip ../distribution
 }
 
+# Test autoconf build (minimal; no distcheck)
+autoconf_build_minimal()
+{
+    autoreconf -ivf
+
+    mkdir autoconf-build
+    cd autoconf-build
+    echo "Running ../configure --prefix=$(pwd)/../autoconf-install) ${opts}"
+    ../configure --prefix=$(pwd)/../autoconf-install ${opts}
+    make
+    make install
+    make check
+}
+
 # Test cmake build
 cmake_build()
 {
@@ -65,6 +79,10 @@ case $build in
     autoconf)
         echo "Testing Autoconf build"
         autoconf_build "$@"
+        ;;
+    autoconf-minimal)
+        echo "Testing Autoconf build (minimal)"
+        autoconf_build_minimal "$@"
         ;;
     cmake)
         echo "Testing CMake build"
