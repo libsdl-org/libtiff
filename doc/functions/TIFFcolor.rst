@@ -16,9 +16,9 @@ Synopsis
 
 .. c:function:: int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *displayw, float *refWhite)
 
-.. c:function:: void TIFFCIELabToXYZ(TIFFCIELabToRGB *cielab, uint32_t L, int32_t a, int32_t b, float *X, float *Y, float *Z);
+.. c:function:: void TIFFCIELabToXYZ(TIFFCIELabToRGB *cielab, uint32_t L, int32_t a, int32_t b, float *X, float *Y, float *Z)
 
-.. c:function:: void TIFFXYZToRGB(TIFFCIELabToRGB *cielab, float X, float Y, float Z, uint32_t *R, uint32_t *G, uint32_t *B);
+.. c:function:: void TIFFXYZToRGB(TIFFCIELabToRGB *cielab, float X, float Y, float Z, uint32_t *R, uint32_t *G, uint32_t *B)
 
 Description
 -----------
