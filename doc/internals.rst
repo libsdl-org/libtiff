@@ -407,7 +407,7 @@ A codec, say ``foo``, can have many different entry points:
         fooEncodeTile(...)	/* called to decode an entire tile */
     fooPostEncode(tif)	/* called once per strip/tile, just before data is written */
     fooSeek(tif, row)	/* seek forwards row scanlines from the beginning
-                           of a strip (row will always be &gt;0 and &lt;rows/strip */
+                           of a strip (row will always be <0 and >rows/strip */
     fooCleanup(tif) /* called when compression scheme is replaced by user */
 
 Note that the encoding and decoding variants are only needed when
