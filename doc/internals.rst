@@ -384,7 +384,7 @@ or do the following to add support directly to the core library:
 * Create a file with the compression scheme code, by convention files
   are named :file:`tif_*.c` (except perhaps on some systems where the
   ``tif_`` prefix pushes some filenames over 14 chars.
-* Update build configuration to include new source file
+* Update build configuration to include new source file.
 
 A codec, say ``foo``, can have many different entry points:
 
