@@ -46,10 +46,10 @@ The following sections are included in this documentation:
     build
     terms
     libtiff
+    functions
     internals
     addingtags
     tools
     contrib
-    manpages
     project/index
     releases/index

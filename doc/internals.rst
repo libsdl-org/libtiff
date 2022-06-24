@@ -384,7 +384,7 @@ or do the following to add support directly to the core library:
 * Create a file with the compression scheme code, by convention files
   are named :file:`tif_*.c` (except perhaps on some systems where the
   ``tif_`` prefix pushes some filenames over 14 chars.
-* Update build configuration to include new source file
+* Update build configuration to include new source file.
 
 A codec, say ``foo``, can have many different entry points:
 
@@ -407,7 +407,7 @@ A codec, say ``foo``, can have many different entry points:
         fooEncodeTile(...)	/* called to decode an entire tile */
     fooPostEncode(tif)	/* called once per strip/tile, just before data is written */
     fooSeek(tif, row)	/* seek forwards row scanlines from the beginning
-                           of a strip (row will always be &gt;0 and &lt;rows/strip */
+                           of a strip (row will always be <0 and >rows/strip */
     fooCleanup(tif) /* called when compression scheme is replaced by user */
 
 Note that the encoding and decoding variants are only needed when

@@ -52,7 +52,7 @@ distcheck-hook:
 	if [ -x "$(CMAKE)" ]; then \
 	  mkdir $(distdir)/_build/cmake \
 	  && cd $(distdir)/_build/cmake \
-	  && cmake ../.. \
+	  && cmake -Dsphinx=OFF ../.. \
 	  && $(MAKE) \
 	  && ctest -V \
 	  && $(MAKE) DESTDIR=../../_inst/cmake install ; \
@@ -60,7 +60,7 @@ distcheck-hook:
 	rm -rf $(distdir)/_build/cmake
 	rm -rf $(distdir)/_inst/cmake
 
-SUBDIRS = port libtiff tools build contrib test doc man
+SUBDIRS = port libtiff tools build contrib test doc
 
 release:
 	(rm -f $(top_srcdir)/RELEASE-DATE && echo $(LIBTIFF_RELEASE_DATE) > $(top_srcdir)/RELEASE-DATE)

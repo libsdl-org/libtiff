@@ -19,14 +19,14 @@ generate build files for most common build systems and IDEs, and
 supports all UNIX-like systems as well as Windows. See
 the `CMake website <http://www.cmake.org/>`_ for further
 details. To build the software on you need to first run
-:program:`cmake` to configure the build and generate the system-specific
+:command:`cmake` to configure the build and generate the system-specific
 build files. This reads the top-level :file:`CMakeLists.txt` file,
 which probes the target system for necessary tools and functions,
 checks any options you specified to configure the build, and then
 outputs build files configured for your system.  If using ``Unix
 Makefiles``, once configuration is done, you simply
-run :program:`make` (or :program:`gmake`) to build the software and
-then ``make install`` to do the installation.  For other build
+run :command:`make` (or :command:`gmake`) to build the software and
+then :command:`make install` to do the installation.  For other build
 systems, you do the equivalent steps with the tool for that system.
 For example, on any UNIX system:
 
@@ -90,21 +90,20 @@ the build procedure.
 This second scheme is useful for:
 
 * building multiple targets from a single source tree
-* building from a read-only source tree (e.g. if you receive the
-distribution on CD-ROM)
+* building from a read-only source tree
 * sharing the source files via a network, but building on
-multiple systems
+  multiple systems
 * keeping the source tree clean
-(unlike :program:`autoconf`, :program:`cmake` does not provide
-a ``distclean`` target, so out of source builds are
-recommended)
+  (unlike :program:`autoconf`, :program:`cmake` does not provide
+  a ``distclean`` target, so out of source builds are
+  recommended)
 
 Generators
 ^^^^^^^^^^
 
 The default generator for UNIX is ``Unix Makefiles``, and on Windows is
 ``NMake Makefiles`` or ``MSBuild`` depending upon the setup.
-Run ``cmake --help`` to list all the
+Run :command:`cmake --help` to list all the
 generators available for your platform.  For example, to use the Ninja
 `build system <https://martine.github.io/ninja/>`_ on UNIX or
 Windows:
@@ -116,7 +115,7 @@ Windows:
     ctest -V
     cmake --build . --target install
 
-Note that ``cmake --build .`` is a build-system-independent way
+Note that :command:`cmake --build .` is a build-system-independent way
 of building a target; you can always use the build system directly.
 
 Alternatively, using the MSBuild system on Windows (64-bit Release
@@ -141,7 +140,7 @@ installation, and operation of the
 software. The :file:`CMakeLists.txt` script runs a series of tests to
 decide whether or not the target system supports required
 functionality and, if it does not, whether it can emulate or
-workaround the missing functions.  After running :program:`cmake`, check
+workaround the missing functions.  After running :command:`cmake`, check
 the :file:`CMakeCache.txt` file; this contains all the results of the
 checks performed and the options set by the user.  If :program:`cmake`
 failed to run, check :file:`CMakeFiles/CMakeOutput.log`
@@ -153,32 +152,50 @@ configuration parameters for the software. Of particular note are the
 directories where the software is to be installed. By default the
 software is installed in the :file:`/usr/local` hierarchy. To change
 this behaviour the appropriate parameters can be specified on the
-command line. Run ``cmake --help`` to get a full list of possible
-options, and ``cmake -LH`` to list all the configurable options for
-this software package, or ``cmake -LAH`` to show all advanced
+command line. Run :command:`cmake --help` to get a full list of possible
+options, and :command:`cmake -LH` to list all the configurable options for
+this software package, or :command:`cmake -LAH` to show all advanced
 options in addition. Standard installation related options are shown
 below.
 
-::
+  .. list-table:: Installation options
+    :widths: 10 15
+    :header-rows: 1
 
-    Installation directories:
-      CMAKE_INSTALL_PREFIX
+    * - Option
+      - Description
 
-    Fine tuning of the installation directories:
-      CMAKE_INSTALL_BINDIR            user executables [PREFIX/bin]
-      CMAKE_INSTALL_SBINDIR           system admin executables [PREFIX/sbin]
-      CMAKE_INSTALL_LIBEXECDIR        program executables [PREFIX/libexec]
-      CMAKE_INSTALL_SYSCONFDIR        read-only single-machine data [PREFIX/etc]
-      CMAKE_INSTALL_SHAREDSTATEDIR    modifiable architecture-independent data [PREFIX/com]
-      CMAKE_INSTALL_LOCALSTATEDIR     modifiable single-machine data [PREFIX/var]
-      CMAKE_INSTALL_LIBDIR            object code libraries [PREFIX/lib]
-      CMAKE_INSTALL_INCLUDEDIR        C header files [PREFIX/include]
-      CMAKE_INSTALL_OLDINCLUDEDIR     C header files for non-gcc [/usr/include]
-      CMAKE_INSTALL_DATAROOTDIR       read-only arch.-independent data root [PREFIX/share]
-      CMAKE_INSTALL_DATADIR           read-only architecture-independent data [DATAROOTDIR]
-      CMAKE_INSTALL_LOCALEDIR         locale-dependent data [DATAROOTDIR/locale]
-      CMAKE_INSTALL_MANDIR            man documentation [DATAROOTDIR/man]
-      CMAKE_INSTALL_DOCDIR            documentation root [DATAROOTDIR/doc/tiff]
+    * - ``CMAKE_INSTALL_PREFIX``
+      - Installation root directory.  The options below may be used to override
+        individual installation locations.
+    * - ``CMAKE_INSTALL_BINDIR``
+      - user executables [:file:`PREFIX/bin`]
+    * - ``CMAKE_INSTALL_SBINDIR``
+      - system admin executables [:file:`PREFIX/sbin`]
+    * - ``CMAKE_INSTALL_LIBEXECDIR``
+      - program executables [:file:`PREFIX/libexec`]
+    * - ``CMAKE_INSTALL_SYSCONFDIR``
+      - read-only single-machine data [:file:`PREFIX/etc`]
+    * - ``CMAKE_INSTALL_SHAREDSTATEDIR``
+      - modifiable architecture-independent data [:file:`PREFIX/com`]
+    * - ``CMAKE_INSTALL_LOCALSTATEDIR``
+      - modifiable single-machine data [:file:`PREFIX/var`]
+    * - ``CMAKE_INSTALL_LIBDIR``
+      - object code libraries [:file:`PREFIX/lib`]
+    * - ``CMAKE_INSTALL_INCLUDEDIR``
+      - C header files [:file:`PREFIX/include`]
+    * - ``CMAKE_INSTALL_OLDINCLUDEDIR``
+      - C header files for non-gcc [:file:`/usr/include`]
+    * - ``CMAKE_INSTALL_DATAROOTDIR``
+      - read-only architecture-independent data root [:file:`PREFIX/share`]
+    * - ``CMAKE_INSTALL_DATADIR``
+      - read-only architecture-independent data [:file:`DATAROOTDIR`]
+    * - ``CMAKE_INSTALL_LOCALEDIR``
+      - locale-dependent data [:file:`DATAROOTDIR/locale`]
+    * - ``CMAKE_INSTALL_MANDIR``
+      - man documentation [:file:`DATAROOTDIR/man`]
+    * - ``CMAKE_INSTALL_DOCDIR``
+      - documentation root [:file:`DATAROOTDIR/doc/tiff`]
     
 Also see the
 CMake `documentation <http://www.cmake.org/cmake/help/latest/>`_
@@ -252,13 +269,15 @@ Mark Adler; this software is available at `<http://www.zlib.org/>`_.
 Building on a UNIX System with Autoconf
 ---------------------------------------
 
+.. program:: configure
+
 To build the software on a UNIX system you need to first run the
 :program:`configure` shell script that is located in the top level of the
 source directory. This script probes the target system for
 necessary tools and functions and constructs a build environment in
 which the software may be compiled. Once configuration is done, you
-simply run :program:`make` (or :program:`gmake`) to build the software
-and then ``make install`` to do the installation; for example:
+simply run :command:`make` (or :command:`gmake`) to build the software
+and then :command:`make install` to do the installation; for example:
 
 .. code-block:: shell
 
@@ -277,15 +296,24 @@ Supplied Makefiles are dependent on a :program:`make` utility and a C
 In general, the software is designed such that the following
 should be "make-able" in each directory:
 
-::
+  .. list-table:: Make targets
+    :widths: 10 15
+    :header-rows: 1
 
-    make [all]      build stuff
-    make check      run the test suite
-    make install    build and install stuff
-    make clean      remove object files, executables and cruft
-    make distclean  remove everything, that can be recreated
+    * - Target
+      - Description
+    * - :command:`make [all]`
+      - build everything
+    * - :command:`make check`
+      - run the test suite
+    * - :command:`make install`
+      - build and install everything
+    * - :command:`make clean`
+      - remove object files, executables and cruft
+    * - :command:`make distclean`
+      - remove everything that can be recreated
 
-Note that after running ``make distclean`` the
+Note that after running :command:`make distclean` the
 :program:`configure` script must be run again to create the :file:`Makefile`
 and other make-related files.
 
@@ -324,8 +352,7 @@ the build procedure.
 This second scheme is useful for:
 
 * building multiple targets from a single source tree
-* building from a read-only source tree (e.g. if you receive the
-  distribution on CD-ROM)
+* building from a read-only source tree
 * sharing the source files via a network, but building on
   multiple systems
 
@@ -348,52 +375,101 @@ configuration parameters for the software. Of particular note are
 the directories where the software is to be installed. By default
 the software is installed in the :file:`/usr/local` hierarchy. To
 change this behaviour the appropriate parameters can be specified
-on the command line to configure. Run ``./configure --help`` to
+on the command line to configure. Run :command:`./configure --help` to
 get a full list of possible options. Standard installation related
 options are shown below.
 
-::
+Installation directories:
 
-    Installation directories:
-      --prefix=PREFIX         install architecture-independent files in PREFIX
-                              [/usr/local]
-      --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-                              [PREFIX]
+.. option:: --prefix=PREFIX
 
-By default, `make install' will install all the files in
+  install architecture-independent files in *PREFIX* [:file:`/usr/local`]
+
+.. option:: --exec-prefix=EPREFIX
+
+  install architecture-dependent files in *EPREFIX* [:file:`PREFIX`]
+
+By default, :command:`make install` will install all the files in
 :file:`/usr/local/bin`, :file:`/usr/local/lib` etc.  You can specify
-an installation prefix other than :file:`/usr/local` using ``--prefix``,
-for instance ``--prefix=$HOME``.
-
-For better control, use the options below.
+an installation prefix other than :file:`/usr/local` using :option:`--prefix`,
+for instance ``--prefix=$HOME``.  For better control, use the options below.
 
 Fine tuning of the installation directories:
 
-::
+.. option:: --bindir=DIR
 
-    --bindir=DIR            user executables [EPREFIX/bin]
-    --sbindir=DIR           system admin executables [EPREFIX/sbin]
-    --libexecdir=DIR        program executables [EPREFIX/libexec]
-    --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
-    --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
-    --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-    --libdir=DIR            object code libraries [EPREFIX/lib]
-    --includedir=DIR        C header files [PREFIX/include]
-    --oldincludedir=DIR     C header files for non-gcc [/usr/include]
-    --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
-    --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
-    --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
-    --mandir=DIR            man documentation [DATAROOTDIR/man]
-    --docdir=DIR            documentation root [DATAROOTDIR/doc/tiff]
-    --htmldir=DIR           html documentation [DOCDIR]
+  user executables [:file:`EPREFIX/bin`]
+
+.. option:: --sbindir=DIR
+
+  system admin executables [:file:`EPREFIX/sbin`]
+
+.. option:: --libexecdir=DIR
+
+  program executables [:file:`EPREFIX/libexec`]
+
+.. option:: --sysconfdir=DIR
+
+  read-only single-machine data [:file:`PREFIX/etc`]
+
+.. option:: --sharedstatedir=DIR
+
+  modifiable architecture-independent data [:file:`PREFIX/com`]
+
+.. option:: --localstatedir=DIR
+
+  modifiable single-machine data [:file:`PREFIX/var`]
+
+.. option:: --libdir=DIR
+
+  object code libraries [:file:`EPREFIX/lib`]
+
+.. option:: --includedir=DIR
+
+  C header files [:file:`PREFIX/include`]
+
+.. option:: --oldincludedir=DIR
+
+  C header files for non-gcc [:file:`/usr/include`]
+
+.. option:: --datarootdir=DIR
+
+  read-only architecture-independent data root [:file:`PREFIX/share`]
+
+.. option:: --datadir=DIR
+
+  read-only architecture-independent data [:file:`DATAROOTDIR`]
+
+.. option:: --localedir=DIR
+
+  locale-dependent data [:file:`DATAROOTDIR/locale`]
+
+.. option:: --mandir=DIR
+
+  man documentation [:file:`DATAROOTDIR/man`]
+
+.. option:: --docdir=DIR
+
+  documentation root [:file:`DATAROOTDIR/doc/tiff`]
+
+.. option:: --htmldir=DIR
+
+  html documentation [:file:`DOCDIR`]
+
 
 Program names:
 
-::
+.. option:: --program-prefix=PREFIX
 
-    --program-prefix=PREFIX            prepend PREFIX to installed program names
-    --program-suffix=SUFFIX            append SUFFIX to installed program names
-    --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+  prepend *PREFIX* to installed program names
+
+.. option:: --program-suffix=SUFFIX
+
+append *SUFFIX* to installed program names
+
+.. option:: --program-transform-name=PROGRAM
+
+  run :command:`sed` *PROGRAM* on installed program names
 
 Configuring Optional Packages/Support
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -406,13 +482,13 @@ configure script is run. Packages can be configured via the
 Static/Shared Objects Support
 .............................
 
-``--enable-shared[=PKGS]``:
+.. option:: --enable-shared[=PKGS]
 
-    Build shared libraries [default=yes]
+    Build shared libraries [enabled]
 
-``--enable-static[=PKGS]``:
+.. option:: --enable-static[=PKGS]
 
-    Build static libraries [default=yes]
+    Build static libraries [enabled]
 
     These options control whether or not to configure the software
     to build a shared and static binaries for the TIFF library. Use of
@@ -421,16 +497,16 @@ Static/Shared Objects Support
     the code is statically linked into each application that uses it.
     By default both types of binaries are configured.
 
-``--enable-rpath``:
+.. option:: --enable-rpath
 
-    Enable runtime linker paths (-R libtool option)
+    Enable runtime linker paths (``-R`` libtool option)
 
     Add library directories (see other options below) to the TIFF
     library run-time linker path.
 
-``--enable-ld-version-script``:
+.. option:: --enable-ld-version-script
 
-    Enable linker version script (default is disabled)
+    Enable linker version script [no]
 
     Add shared library symbol versioning on ELF-based systems (e.g.
     Linux and FreeBSD) which use the GNU linker. This is needed if
@@ -440,15 +516,15 @@ Static/Shared Objects Support
 JPEG Support
 ............
 
-``--disable-jpeg``:
+.. option:: --disable-jpeg
 
     Disable IJG JPEG library usage (required for JPEG compression, enabled by default)
 
-``--with-jpeg-include-dir=DIR``:&nbsp;
+.. option:: --with-jpeg-include-dir=DIR
 
     Location of IJG JPEG library headers
 
-``--with-jpeg-lib-dir=DIR``:
+.. option:: --with-jpeg-lib-dir=DIR
 
     Location of IJG JPEG library binary)
 
@@ -469,10 +545,8 @@ The ``ZIP`` support enables support for the handling of
 TIFF images with deflate-encoded data. Support for deflate-encoded
 data requires the freely available ``zlib`` distribution
 written by Jean-loup Gailly and Mark Adler; this software is
-available at `<http://www.zlib.org/>`_.   If ZIP support is
-enabled the ``DIRS_LIBINC`` and ``DIR_GZLIB`` parameters
-should also be set (see below). By default this package is not
-configured.
+available at `<http://www.zlib.org/>`_.  Support will be
+enabled automatically if ``zlib`` is found.
 
 
 Building the Software on Other Systems
@@ -497,17 +571,17 @@ example:
     ./mkg3states -c const tif_fax3sm.c
 
 The ``-c`` option can be used to control whether or not the
-resutling tables are generated with a ``const`` declaration.
+resulting tables are generated with a ``const`` declaration.
 The ``-s`` option can be used to specify a C storage class for
 the table declarations. The ``-b`` option can be used to force
-data values to be explicitly bracketed with ``{}'' (apparently
+data values to be explicitly bracketed with ``{}`` (apparently
 needed for some MS-Windows compilers); otherwise the structures are
 emitted in as compact a format as possible. Consult the source code
 for this program if you have questions.
 
 The second file required to build the library, :file:`version.h`,
 contains the version information returned by the
-``TIFFGetVersion`` routine. This file is built on most systems
+:c:func:`TIFFGetVersion` routine. This file is built on most systems
 using the :file:`mkversion` program and the contents of the
 :file:`VERSION` and :file:`tiff.alpha` files; for example,
 
@@ -528,7 +602,7 @@ building the software.
 Systems without a 32-bit compiler may not be able to handle some
 of the codecs in the library; especially the Group 3 and 4 decoder.
 If you encounter problems try disabling support for a particular
-codec; consult the :ref:`internals`.
+codec; consult the :doc:`internals`.
 
 Programs in the tools directory are written to assume an ANSI C
 compilation environment. There may be a few POSIX'isms as well. The
@@ -540,15 +614,15 @@ emulation routines from the :file:`port` directory. It may be
 necessary to manually do this work on a non-UNIX system.
 
 
-Checking out the Software
--------------------------
+Testing the software
+--------------------
 
-Assuming you have working versions of :program:`tiffgt` and
-:program:`tiffsv`, you can just use them to view any of the sample
-images available for testing (see the :ref:`images` section
-on obtaining the test images). Otherwise, you can do a cursory
-check of the library with the :program:`tiffcp` and :program:`tiffcmp`
-programs. For example,
+Assuming you have working versions of :doc:`/tools/tiffgt`, you can now use
+it to view any of the sample images available for testing, or try
+:doc:`/tools/tiffinfo` to display the file metadata.  See the
+:doc:`images` section on obtaining the test images.  Otherwise, you can
+do a cursory check of the library with the :doc:`/tools/tiffcp` and
+:doc:`/tools.tiffcmp` programs. For example,
 
 .. code-block:: shell
 
@@ -559,65 +633,122 @@ programs. For example,
 correctly).
 
 
-Table of Contents
------------------
+LibTIFF source files
+--------------------
 
 The following files make up the core library:
 
-==============================  ================================================
-File                            Description
-==============================  ================================================
-libtiff/tiff.h                  TIFF spec definitions
-libtiff/tiffcomp.h              non-UNIX OS-compatibility definitions
-libtiff/tiffconf.h              non-UNIX configuration definitions
-libtiff/tiffio.h                public TIFF library definitions
-libtiff/tiffiop.h               private TIFF library definitions
-libtiff/t4.h                    CCITT Group 3/4 code tables+definitions
-libtiff/tif_dir.h               private defs for TIFF directory handling
-libtiff/tif_fax3.h              CCITT Group 3/4-related definitions
-libtiff/tif_predict.h           private defs for Predictor tag support
-libtiff/uvcode.h                LogL/LogLuv codec-specific definitions
-libtiff/version.h               version string (generated by Makefile)
-libtiff/tif_apple.c             Apple-related OS support
-libtiff/tif_atari.c             Atari-related OS support
-libtiff/tif_aux.c               auxiliary directory-related functions
-libtiff/tif_close.c             close an open TIFF file
-libtiff/tif_codec.c             configuration table of builtin codecs
-libtiff/tif_compress.c          compression scheme support
-libtiff/tif_dir.c               directory tag interface code
-libtiff/tif_dirinfo.c           directory known tag support code
-libtiff/tif_dirread.c           directory reading code
-libtiff/tif_dirwrite.c          directory writing code
-libtiff/tif_dumpmode.c          "no" compression codec
-libtiff/tif_error.c             library error handler
-libtiff/tif_fax3.c              CCITT Group 3 and 4 codec
-libtiff/tif_fax3sm.c            G3/G4 state tables (generated by mkg3states)
-libtiff/tif_flush.c             i/o and directory state flushing
-libtiff/tif_getimage.c          TIFFRGBAImage support
-libtiff/tif_jpeg.c              JPEG codec (interface to the IJG distribution)
-libtiff/tif_luv.c               SGI LogL/LogLuv codec
-libtiff/tif_lzw.c               LZW codec
-libtiff/tif_msdos.c             MSDOS-related OS support
-libtiff/tif_next.c              NeXT 2-bit scheme codec (decoding only)
-libtiff/tif_open.c              open and simply query code
-libtiff/tif_packbits.c          Packbits codec
-libtiff/tif_pixarlog.c          Pixar codec
-libtiff/tif_predict.c           Predictor tag support
-libtiff/tif_print.c             directory printing support
-libtiff/tif_read.c              image data reading support
-libtiff/tif_strip.c             some strip-related code
-libtiff/tif_swab.c              byte and bit swapping support
-libtiff/tif_thunder.c           Thunderscan codec (decoding only)
-libtiff/tif_tile.c              some tile-related code
-libtiff/tif_unix.c              UNIX-related OS support
-libtiff/tif_version.c           library version support
-libtiff/tif_warning.c           library warning handler
-libtiff/tif_win3.c              Windows-3.1-related OS support
-libtiff/tif_win32.c             Win32 (95/98/NT) related OS support
-libtiff/tif_write.c             image data writing support
-libtiff/tif_zip.c               Deflate codec
+  .. list-table:: Core library source files
+    :widths: 5 15
+    :header-rows: 1
 
-libtiff/mkg3states.c            program to generate G3/G4 decoder state tables
-libtiff/mkspans.c               program to generate black-white span tables
-libtiff/mkversion.c             program to generate libtiff/version.h.
-==============================  ================================================
+    * - File
+      - Description
+
+    * - :file:`libtiff/tiff.h`
+      - TIFF spec definitions
+    * - :file:`libtiff/tiffconf.h`
+      - non-UNIX configuration definitions
+    * - :file:`libtiff/tiffio.h`
+      - public TIFF library definitions
+    * - :file:`libtiff/tiffiop.h`
+      - private TIFF library definitions
+    * - :file:`libtiff/t4.h`
+      - CCITT Group 3/4 code tables+definitions
+    * - :file:`libtiff/tif_dir.h`
+      - private defs for TIFF directory handling
+    * - :file:`libtiff/tif_fax3.h`
+      - CCITT Group 3/4-related definitions
+    * - :file:`libtiff/tif_predict.h`
+      - private defs for Predictor tag support
+    * - :file:`libtiff/tiffvers.h`
+      - version string
+    * - :file:`libtiff/uvcode.h`
+      - LogL/LogLuv codec-specific definitions
+    * - :file:`libtiff/tif_aux.c`
+      - auxiliary directory-related functions
+    * - :file:`libtiff/tif_close.c`
+      - close an open TIFF file
+    * - :file:`libtiff/tif_codec.c`
+      - configuration table of builtin codecs
+    * - :file:`libtiff/tif_color.c`
+      - colorspace transforms
+    * - :file:`libtiff/tif_compress.c`
+      - compression scheme support
+    * - :file:`libtiff/tif_dir.c`
+      - directory tag interface code
+    * - :file:`libtiff/tif_dirinfo.c`
+      - directory known tag support code
+    * - :file:`libtiff/tif_dirread.c`
+      - directory reading code
+    * - :file:`libtiff/tif_dirwrite.c`
+      - directory writing code
+    * - :file:`libtiff/tif_dumpmode.c`
+      - "no" compression codec
+    * - :file:`libtiff/tif_error.c`
+      - library error handler
+    * - :file:`libtiff/tif_fax3.c`
+      - CCITT Group 3 and 4 codec
+    * - :file:`libtiff/tif_fax3sm.c`
+      - G3/G4 state tables (generated by mkg3states)
+    * - :file:`libtiff/tif_flush.c`
+      - i/o and directory state flushing
+    * - :file:`libtiff/tif_getimage.c`
+      - :doc:`/functions/TIFFRGBAImage` support
+    * - :file:`libtiff/tif_jbig.c`
+      - JBIG codec
+    * - :file:`libtiff/tif_jpeg.c`
+      - JPEG codec (interface to the IJG distribution)
+    * - :file:`libtiff/tif_jpeg_12.c`
+      - 12-bit JPEG codec (interface to the IJG distribution)
+    * - :file:`libtiff/tif_lerc.c`
+      - LERC codec
+    * - :file:`libtiff/tif_luv.c`
+      - SGI LogL/LogLuv codec
+    * - :file:`libtiff/tif_lzma.c`
+      - LZMA codec
+    * - :file:`libtiff/tif_lzw.c`
+      - LZW codec
+    * - :file:`libtiff/tif_next.c`
+      - NeXT 2-bit scheme codec (decoding only)
+    * - :file:`libtiff/tif_ojpeg.c`
+      - Old JPEG codec (obsolete, decoding only)
+    * - :file:`libtiff/tif_open.c`
+      - open and simply query code
+    * - :file:`libtiff/tif_packbits.c`
+      - Packbits codec
+    * - :file:`libtiff/tif_pixarlog.c`
+      - Pixar codec
+    * - :file:`libtiff/tif_predict.c`
+      - Predictor tag support
+    * - :file:`libtiff/tif_print.c`
+      - directory printing support
+    * - :file:`libtiff/tif_read.c`
+      - image data reading support
+    * - :file:`libtiff/tif_strip.c`
+      - some strip-related code
+    * - :file:`libtiff/tif_swab.c`
+      - byte and bit swapping support
+    * - :file:`libtiff/tif_thunder.c`
+      - Thunderscan codec (decoding only)
+    * - :file:`libtiff/tif_tile.c`
+      - some tile-related code
+    * - :file:`libtiff/tif_unix.c`
+      - UNIX-related OS support
+    * - :file:`libtiff/tif_version.c`
+      - library version support
+    * - :file:`libtiff/tif_warning.c`
+      - library warning handler
+    * - :file:`libtiff/tif_win32.c`
+      - Win32 (Windows)-related OS support
+    * - :file:`libtiff/tif_write.c`
+      - image data writing support
+    * - :file:`libtiff/tif_zip.c`
+      - Deflate codec
+    * - :file:`libtiff/tif_zstd.c`
+      - ZSTD codec
+
+    * - :file:`libtiff/mkg3states.c`
+      - program to generate G3/G4 decoder state tables
+    * - :file:`libtiff/mkspans.c`
+      - program to generate black-white span tables
