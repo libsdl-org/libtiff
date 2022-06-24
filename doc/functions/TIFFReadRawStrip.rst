@@ -39,5 +39,5 @@ See also
 :doc:`TIFFOpen` (3tiff),
 :doc:`TIFFReadEncodedStrip` (3tiff),
 :doc:`TIFFReadScanline` (3tiff),
-:doc:`TIFFStripSize` (3tiff),
+:doc:`TIFFstrip` (3tiff),
 :doc:`libtiff` (3tiff)

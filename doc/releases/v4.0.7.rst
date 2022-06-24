@@ -164,7 +164,7 @@ Library changes
   fix regression, introduced on 2014-12-23, when reading a
   one-strip file without a ``StripByteCounts`` tag. GDAL #6490
 
-* libtiff/*: upstream typo fixes (mostly contributed by Kurt
+* :file:`libtiff/*`: upstream typo fixes (mostly contributed by Kurt
   Schwehr) coming from GDAL internal libtiff
 
 * :file:`libtiff/tif_fax3.h`: make :c:member:`Param` member of :c:struct:`TIFFFaxTabEnt`

@@ -193,7 +193,7 @@ Library changes
   
 * :file:`libtiff/tif_dirwrite.c`, :file:`libtiff/tif_write.c`, :file:`libtiff/tiffio.h`:
   :c:func:`TIFFCheckpointDirectory` routine added as per bug :bugzilla-rs:`124`.
-  The :doc:`TIFFWriteDirectory` man page discusses this new function as well as the related
+  The :doc:`/functions/TIFFWriteDirectory` man page discusses this new function as well as the related
   :c:func:`TIFFRewriteDirectory`.
 
 * :file:`libtiff/tif_codec.c`, :file:`libtiff/tif_compress.c`,

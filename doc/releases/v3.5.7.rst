@@ -108,7 +108,7 @@ Library changes
 
 * :file:`libtiff/tif_dirinfo.c`: Modified the :c:enumerator:`TIFF_BYTE` definition for
   :c:macro:`TIFFTAG_PHOTOSHOP` to use a writecount of :c:enumerator:`TIFF_VARIABLE2` (-3) to
-  force use of :c:type:`uint32` counts instead of :c:type:`short` counts.
+  force use of :c:type:`uint32` counts instead of :c:expr:`short` counts.
 
 * :file:`libtiff/tif_dirinfo.c`: moved pixar and copyright flags to ensure everything is in order.
 

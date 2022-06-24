@@ -42,8 +42,7 @@ All error messages are directed to the :c:func:`TIFFError` routine.
 See also
 --------
 
-:doc:`TIFFCheckTile` (3tiff),
-:doc:`TIFFComputeTile` (3tiff),
+:doc:`TIFFtile` (3tiff),
 :doc:`TIFFOpen` (3tiff),
 :doc:`TIFFReadTile` (3tiff),
 :doc:`TIFFWriteScanline` (3tiff),

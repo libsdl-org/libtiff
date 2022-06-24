@@ -171,7 +171,7 @@ desired TIFF handle with the list of :c:struct:`TIFFFieldInfo`.
 
 The tags need to be defined for each TIFF file opened - and when reading
 they should be defined before the tags of the file are read, yet a valid
-:c:type:`TIFF *` is needed to merge the tags against.  In order to get them
+:c:expr:`TIFF *` is needed to merge the tags against.  In order to get them
 registered at the appropriate part of the setup process, it is necessary
 to register our merge function as an extender callback with libtiff. 
 This is done with :c:func:`TIFFSetTagExtender`.  We also keep track of the
@@ -225,7 +225,7 @@ Adding New Builtin Tags
 -----------------------
 
 A similar approach is taken to the above.  However, the :c:struct:`TIFFFieldInfo`
-should be added to the :c:var:`tiffFieldInfo[]` list in :file:`tif_dirinfo.c`.
+should be added to the :c:expr:`tiffFieldInfo[]` list in :file:`tif_dirinfo.c`.
 Ensure that new tags are added in sorted order by the tag number.
 
 Normally new built-in tags should be defined with :c:macro:`FIELD_CUSTOM`; however, if
@@ -235,7 +235,7 @@ add appropriate handling as follows:
 
 #. Define the tag in :file:`tiff.h`.
 #. Add a field to the directory structure in :file:`tif_dir.h`
-   and define a :c:macro:`FIELD_*` bit (also update the definition of
+   and define a ``FIELD_*`` bit (also update the definition of
    :c:macro:`FIELD_CODEC` to reflect your addition).
 #. Add an entry in the :c:struct:`TIFFFieldInfo` array defined at the top of
    :file:`tif_dirinfo.c`.
@@ -258,7 +258,7 @@ add appropriate handling as follows:
 
 If you want to maintain portability, beware of making assumptions
 about data types.  Use the typedefs (:c:type:`uint16_t`, etc. when dealing with
-data on disk and :c:type:`t*_t` when stuff is in memory) and be careful about
+data on disk and ``t*_t`` when stuff is in memory) and be careful about
 passing items through printf or similar vararg interfaces.
 
 Adding New Codec-private Tags
@@ -297,15 +297,15 @@ algorithm is used* follow these steps:
 
 #. Fill in the get and set routines.  Be sure to call the parent method
    for tags that you are not handled directly.  Also be sure to set the
-   :c:macro:`FIELD_*` bits for tags that are to be written to the file.  Note that
+   ``FIELD_*`` bits for tags that are to be written to the file.  Note that
    you can create "pseudo-tags" by defining tags that are processed
    exclusively in the get/set routines and never written to file (see
    the handling of :c:macro:`TIFFTAG_FAXMODE` in :file:`tif_fax3.c`
    for an example of this).
 #. Fill in the print routine, if appropriate.
 
-Note that space has been allocated in the :c:macro:`FIELD_*` bit space for
-codec-private tags.  Define your bits as :c:macro:`FIELD_CODEC+<offset>` to
+Note that space has been allocated in the ``FIELD_*`` bit space for
+codec-private tags.  Define your bits as ``FIELD_CODEC+<offset>`` to
 keep them away from the core tags.  If you need more tags than there
 is room for, just increase :c:macro:`FIELD_SETLONGS` at the top of
 :file:`tiffiop.h`.

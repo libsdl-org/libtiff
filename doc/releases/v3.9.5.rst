@@ -110,7 +110,7 @@ Library changes
   `Even Rouault <even.rouault@mines-paris.org>`_
 
 * :file:`libtiff/tif_dirwrite.c`: Avoid undefined behaviour when casting from
-  :c:type:`float` to :c:type:`unsigned integer` in :c:func:`TIFFWriteRationalArray` as reported by
+  :c:expr:`float` to :c:expr:`unsigned int` in :c:func:`TIFFWriteRationalArray` as reported by
   Kareem Shehata.
 
 * :file:`libtiff/tif_fax3.h`: Protect against a fax ``VL(n)`` codeword commanding

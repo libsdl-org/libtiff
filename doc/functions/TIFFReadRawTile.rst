@@ -41,5 +41,5 @@ See also
 :doc:`TIFFOpen` (3tiff),
 :doc:`TIFFReadEncodedTile` (3tiff),
 :doc:`TIFFReadTile` (3tiff),
-:doc:`TIFFTileSize` (3tiff),
+:doc:`TIFFtile` (3tiff),
 :doc:`libtiff` (3tiff),

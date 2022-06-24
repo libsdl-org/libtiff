@@ -229,7 +229,6 @@ See also
 
 :doc:`TIFFOpen` (3tiff),
 :doc:`TIFFReadRGBAImage` (3tiff),
-:doc:`TIFFReadRGBAImageOriented` (3tiff),
 :doc:`TIFFReadRGBAStrip` (3tiff),
 :doc:`TIFFReadRGBATile` (3tiff),
 :doc:`libtiff` (3tiff)

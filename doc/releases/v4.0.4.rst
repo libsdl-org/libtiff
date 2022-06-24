@@ -127,7 +127,7 @@ Tools changes
 * :program:`tiff2pdf`
 
   * :bugzilla:`2078`: Suppress initial output of the header.
-  * :buzilla:`2150`: Change ColorTransform from "0" to "1".
+  * :bugzilla:`2150`: Change ColorTransform from "0" to "1".
   * Take care in using the return value from :c:func:`snprintf`.
   * Coverity 1024181 "Structurally dead code".
   * Coverity 1024181 "Structurally dead code".

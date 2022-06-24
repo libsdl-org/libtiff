@@ -62,377 +62,377 @@ information on the meaning of each tag and their possible values.
 
     * - :c:macro:`TIFFTAG_ARTIST`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_BADFAXLINES`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_BITSPERSAMPLE`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_CLEANFAXDATA`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_COLORMAP`
       - 3
-      - :c:type:`const uint16_t**`
+      - :c:expr:`const uint16_t**`
       - :c:expr:`1<<BitsPerSample` arrays
 
     * - :c:macro:`TIFFTAG_COMPRESSION`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_CONSECUTIVEBADFAXLINES`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_COPYRIGHT`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_DATATYPE`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_DATETIME`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_DOCUMENTNAME`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_DOTRANGE`
       - 2
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_EXTRASAMPLES`
       - 2
-      - :c:type:`uint16_t*`, :c:type:`const uint16_t**`
+      - :c:expr:`uint16_t*`, :c:expr:`const uint16_t**`
       - count, types array
 
     * - :c:macro:`TIFFTAG_FAXFILLFUNC`
       - 1
-      - :c:type:`TIFFFaxFillFunc*`
+      - :c:expr:`TIFFFaxFillFunc*`
       - G3/G4 compression pseudo-tag
 
     * - :c:macro:`TIFFTAG_FAXMODE`
       - 1
-      - :c:type:`int*`
+      - :c:expr:`int*`
       - G3/G4 compression pseudo-tag
 
     * - :c:macro:`TIFFTAG_FILLORDER`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_GROUP3OPTIONS`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_GROUP4OPTIONS`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_HALFTONEHINTS`
       - 2
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_HOSTCOMPUTER`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_ICCPROFILE`
       - 2
-      - :c:type:`const uint32_t*`, :c:type:`const void**`
+      - :c:expr:`const uint32_t*`, :c:expr:`const void**`
       - count, profile data‡
 
     * - :c:macro:`TIFFTAG_IMAGEDEPTH`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_IMAGEDESCRIPTION`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_IMAGELENGTH`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_IMAGEWIDTH`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_INKNAMES`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_INKSET`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_JPEGCOLORMODE`
       - 1
-      - :c:type:`int*`
+      - :c:expr:`int*`
       - JPEG pseudo-tag
 
     * - :c:macro:`TIFFTAG_JPEGQUALITY`
       - 1
-      - :c:type:`int*`
+      - :c:expr:`int*`
       - JPEG pseudo-tag
 
     * - :c:macro:`TIFFTAG_JPEGTABLES`
       - 2
-      - :c:type:`uint32_t*`, :c:type:`const void**`
+      - :c:expr:`uint32_t*`, :c:expr:`const void**`
       - count, tables
 
     * - :c:macro:`TIFFTAG_JPEGTABLESMODE`
       - 1
-      - :c:type:`int*`
+      - :c:expr:`int*`
       - JPEG pseudo-tag
 
     * - :c:macro:`TIFFTAG_MAKE`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_MATTEING`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_MAXSAMPLEVALUE`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_MINSAMPLEVALUE`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_MODEL`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_ORIENTATION`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_PAGENAME`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_PAGENUMBER`
       - 2
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_PHOTOMETRIC`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_PHOTOSHOP`
       - 2
-      - :c:type:`uint32_t*`, :c:type:`const void**`
+      - :c:expr:`uint32_t*`, :c:expr:`const void**`
       - count, data
 
     * - :c:macro:`TIFFTAG_PLANARCONFIG`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_PREDICTOR`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_PRIMARYCHROMATICITIES`
       - 1
-      - :c:type:`const float**`
+      - :c:expr:`const float**`
       - 6-entry array
 
     * - :c:macro:`TIFFTAG_REFERENCEBLACKWHITE`
       - 1
-      - :c:type:`const float**`
+      - :c:expr:`const float**`
       - 6-entry array
 
     * - :c:macro:`TIFFTAG_RESOLUTIONUNIT`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_RICHTIFFIPTC`
       - 2
-      - :c:type:`uint32_t*`, :c:type:`const void**`
+      - :c:expr:`uint32_t*`, :c:expr:`const void**`
       - count, data
 
     * - :c:macro:`TIFFTAG_ROWSPERSTRIP`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_SAMPLEFORMAT`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_SAMPLESPERPIXEL`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_SMAXSAMPLEVALUE`
       - 1
-      - :c:type:`double*`
+      - :c:expr:`double*`
       -
 
     * - :c:macro:`TIFFTAG_SMINSAMPLEVALUE`
       - 1
-      - :c:type:`double*`
+      - :c:expr:`double*`
       -
 
     * - :c:macro:`TIFFTAG_SOFTWARE`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_STONITS`
       - 1
-      - :c:type:`const double**`
+      - :c:expr:`const double**`
       -
 
     * - :c:macro:`TIFFTAG_STRIPBYTECOUNTS`
       - 1
-      - :c:type:`const uint64_t**`
+      - :c:expr:`const uint64_t**`
       -
 
     * - :c:macro:`TIFFTAG_STRIPOFFSETS`
       - 1
-      - :c:type:`const uint64_t**`
+      - :c:expr:`const uint64_t**`
       -
 
     * - :c:macro:`TIFFTAG_SUBFILETYPE`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_SUBIFD`
       - 2
-      - :c:type:`uint16_t*`, :c:type:`const uint64_t**`
+      - :c:expr:`uint16_t*`, :c:expr:`const uint64_t**`
       - count, offsets array
 
     * - :c:macro:`TIFFTAG_TARGETPRINTER`
       - 1
-      - :c:type:`const char**`
+      - :c:expr:`const char**`
       -
 
     * - :c:macro:`TIFFTAG_THRESHHOLDING`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_TILEBYTECOUNTS`
       - 1
-      - :c:type:`const uint64_t**`
+      - :c:expr:`const uint64_t**`
       -
 
     * - :c:macro:`TIFFTAG_TILEDEPTH`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_TILELENGTH`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_TILEOFFSETS`
       - 1
-      - :c:type:`const uint64_t**`
+      - :c:expr:`const uint64_t**`
       -
 
     * - :c:macro:`TIFFTAG_TILEWIDTH`
       - 1
-      - :c:type:`uint32_t*`
+      - :c:expr:`uint32_t*`
       -
 
     * - :c:macro:`TIFFTAG_TRANSFERFUNCTION`
       - 1 or 3†
-      - :c:type:`const uint16_t**`
+      - :c:expr:`const uint16_t**`
       - :c:expr:`1<<BitsPerSample` entry arrays
 
     * - :c:macro:`TIFFTAG_WHITEPOINT`
       - 1
-      - :c:type:`const float**`
+      - :c:expr:`const float**`
       - 2-entry array
 
     * - :c:macro:`TIFFTAG_XMLPACKET`
       - 2
-      - :c:type:`uint32_t*,const void**`
+      - :c:expr:`uint32_t*`, :c:expr:`const void**`
       - count, data
 
     * - :c:macro:`TIFFTAG_XPOSITION`
       - 1
-      - :c:type:`float*`
+      - :c:expr:`float*`
       -
 
     * - :c:macro:`TIFFTAG_XRESOLUTION`
       - 1
-      - :c:type:`float*`
+      - :c:expr:`float*`
       -
 
     * - :c:macro:`TIFFTAG_YCBCRCOEFFICIENTS`
       - 1
-      - :c:type:`const float**`
+      - :c:expr:`const float**`
       - 3-entry array
 
     * - :c:macro:`TIFFTAG_YCBCRPOSITIONING`
       - 1
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_YCBCRSUBSAMPLING`
       - 2
-      - :c:type:`uint16_t*`
+      - :c:expr:`uint16_t*`
       -
 
     * - :c:macro:`TIFFTAG_YPOSITION`
       - 1
-      - :c:type:`float*`
+      - :c:expr:`float*`
       -
 
     * - :c:macro:`TIFFTAG_YRESOLUTION`
       - 1
-      - :c:type:`float*`
+      - :c:expr:`float*`
       -
 
 †:

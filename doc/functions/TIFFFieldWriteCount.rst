@@ -25,8 +25,8 @@ but there are some special values:
   :c:type:`uint16_t` *count* argument and a pointer *data* argument must be supplied to
   :c:func:`TIFFSetField`.
 * :c:macro:`TIFF_VARIABLE2` is the same as :c:macro:`TIFF_VARIABLE` except that the
-  *count* argument must have type :c:type:`uint32_t`. (On most modern machines, this makes
-  no practical difference, and the *count* argument can simply be an :c:type:`int` in
+  *count* argument must have type :c:expr:`uint32_t`. (On most modern machines, this makes
+  no practical difference, and the *count* argument can simply be an :c:expr:`int` in
   either case.)
 * :c:type:`TIFF_SPP` indicates that the number of arguments must be equal to the image's
   number of samples per pixel.

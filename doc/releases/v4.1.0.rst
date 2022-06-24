@@ -38,8 +38,10 @@ Major changes
   whole array. This is enabled with the new ``O`` (Ondemand) flag of
   :c:func:`TIFFOpen` (which implies ``D``).
 
-  The public :c:func:`TIFFGetStrileOffset[WithErr]` and
-  :c:func:`TIFFGetStrileByteCount[WithErr]` functions have been added to
+  The public :c:func:`TIFFGetStrileOffset`,
+  :c:func:`TIFFGetStrileOffsetWithErr`,
+  :c:func:`TIFFGetStrileByteCount` and
+  :c:func:`TIFFGetStrileByteCountWithErr` functions have been added to
   API. They are of particular interest when using sparse files (with
   ``offset == bytecount == 0``) and you want to detect if a strile is
   present or not without decompressing the data, or updating an

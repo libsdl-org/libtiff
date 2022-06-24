@@ -13,7 +13,7 @@ The following sections are found in this chapter:
 Library Configuration
 ---------------------
 
-Information on compiling the library is given :ref:`build`
+Information on compiling the library is given :doc:`build`
 elsewhere in this documentation.
 This section describes the low-level mechanisms used to control
 the optional parts of the library that are configured at build
@@ -298,7 +298,7 @@ structure:
 
 
     * - :c:type:`ttag_t`
-      - :c:type:`unsigned int`
+      - :c:expr:`unsigned int`
       - directory tag
 
     * - :c:type:`tdir_t`
@@ -322,11 +322,11 @@ structure:
       - i/o size in bytes
 
     * - :c:type:`tdata_t`
-      - :c:type:`void *`
+      - :c:expr:`void *`
       - image data ref
 
     * - :c:type:`thandle_t`
-      - :c:type:`void *`
+      - :c:expr:`void *`
       - client data handle
 
     * - :c:type:`toff_t`
@@ -334,7 +334,7 @@ structure:
       - file offset (should be off_t)
 
     * - :c:type:`tidata_t`
-      - :c:type:`unsigned char *`
+      - :c:expr:`unsigned char *`
       - internal image data
 
 Note that :c:type:`tstrip_t`, :c:type:`ttile_t`, and :c:type:`tsize_t`
@@ -345,7 +345,7 @@ field used to store the ``SamplesPerPixel`` tag.  :c:type:`tdir_t`
 constrains
 the maximum number of IFDs that may appear in an image and may
 be an arbitrary size (without penalty).  :c:type:`ttag_t` must be either
-:c:type:`int`, :c:type:`unsigned int`, pointer, or :c:type:`double`
+:c:expr:`int`, :c:expr:`unsigned int`, pointer, or :c:expr:`double`
 because the library uses a varargs
 interface and ANSI C restricts the type of the parameter before an
 ellipsis to be a promoted type.  :c:type:`toff_t` is defined as
@@ -373,7 +373,7 @@ Adding New Builtin Codecs
 
 To add builtin support for a new compression algorithm, you can either
 use the "tag-extension" trick to override the handling of the
-TIFF Compression tag (see :ref:`addingtags`),
+TIFF Compression tag (see :doc:`addingtags`),
 or do the following to add support directly to the core library:
 
 * Define the tag value in :file:`tiff.h`.
@@ -449,7 +449,7 @@ for the library to automatically flush data.  The variable
 variable :c:member:`tif_tilesize` is the size of a tile for tiled images.  This
 should not normally be used by compression routines, except where it
 relates to the compression algorithm.  That is, the ``cc`` parameter to the
-:c:member:`tif_decode*` and :c:member:`tif_encode*`
+:c:expr:`tif_decode*` and :c:expr:`tif_encode*`
 routines should be used in terminating
 decompression/compression.  This ensures these routines can be used,
 for example, to decode/encode entire strips of data.
