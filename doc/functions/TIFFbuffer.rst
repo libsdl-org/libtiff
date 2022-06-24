@@ -54,4 +54,4 @@ Diagnostics
 See also
 --------
 
-:doc:`/man/libtiff` (3tiff)
+:doc:`/functions/libtiff` (3tiff)

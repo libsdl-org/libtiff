@@ -57,4 +57,4 @@ See also
 :doc:`tiffinfo` (1),
 :doc:`tiffcp` (1),
 :doc:`tiffmedian` (1),
-:doc:`/man/libtiff` (3tiff),
+:doc:`/functions/libtiff` (3tiff),

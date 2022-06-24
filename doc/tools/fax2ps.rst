@@ -126,4 +126,4 @@ PostScript to image the bitmap raster instead.
 See also
 --------
 
-:doc`tiff2ps` (1), :doc:`/man/libtiff` (3tiff)
+:doc`tiff2ps` (1), :doc:`/functions/libtiff` (3tiff)
