@@ -123,7 +123,7 @@ AC_PATH_PROG(CMAKE, cmake)
 AC_ARG_ENABLE([ld-version-script],
   AS_HELP_STRING([--disable-ld-version-script],
     [disable linker version script (default is enabled if supported)]),
-    [have_ld_version_script=$enableval], [have_ld_version_script=no])
+    [have_ld_version_script=$enableval], [have_ld_version_script=yes])
 if test "$have_ld_version_script" != no; then
   AC_MSG_CHECKING([if LD -Wl,--version-script works])
   save_LDFLAGS="$LDFLAGS"
