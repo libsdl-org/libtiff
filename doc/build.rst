@@ -506,7 +506,7 @@ Static/Shared Objects Support
 
 .. option:: --enable-ld-version-script
 
-    Enable linker version script [no]
+    Enable linker version script [yes]
 
     Add shared library symbol versioning on ELF-based systems (e.g.
     Linux and FreeBSD) which use the GNU linker. This is needed if
