@@ -622,7 +622,7 @@ it to view any of the sample images available for testing, or try
 :doc:`/tools/tiffinfo` to display the file metadata.  See the
 :doc:`images` section on obtaining the test images.  Otherwise, you can
 do a cursory check of the library with the :doc:`/tools/tiffcp` and
-:doc:`/tools.tiffcmp` programs. For example,
+:doc:`/tools/tiffcmp` programs. For example,
 
 .. code-block:: shell
 

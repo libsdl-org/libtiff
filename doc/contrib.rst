@@ -64,7 +64,7 @@ aren't directly TIFF related).
 
     * - :file:`contrib/pds`
       - various routines from Conrad Poelman; a TIFF image iterator and
-        code to support ``private sub-directories''
+        code to support "private sub-directories"
 
     * - :file:`contrib/iptcutil`
       - A utility by `Bill Radcliffe <billr@corbis.com>`_ to

@@ -536,4 +536,4 @@ See also
 :doc:`tiffcp` (1),
 :doc:`tiffmedian` (1),
 :doc:`tiffsplit` (1),
-:doc:`/man/libtiff` (3tiff)
+:doc:`/functions/libtiff` (3tiff)

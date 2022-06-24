@@ -132,7 +132,7 @@ Library changes
 * :file:`tif_write.c`: :c:type:`tmsize_t` related casting warning fixed for
   64bit linux.
 
-* :c:file:`tif_read.c`: :c:type:`uint64`/:c:type:`tmsize_t` change for MSVC warnings.
+* :file:`tif_read.c`: :c:type:`uint64`/:c:type:`tmsize_t` change for MSVC warnings.
   (:bugzilla:`2427`)
 
 * Fix :c:func:`TIFFPrintDirectory` handling of

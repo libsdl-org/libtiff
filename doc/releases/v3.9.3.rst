@@ -74,7 +74,7 @@ Library changes
 * Restore ``ReferenceBlackWhite`` as a non-custom field.  This
   avoids a multi-thread reentrancy problem as well as fixing
   output of wrong tag value due to redundant definitions for the
-  same tag in the :c:var:`tiffFieldInfo[]` array.  Resolves
+  same tag in the :c:expr:`tiffFieldInfo[]` array.  Resolves
   :bugzilla:`2185`
 
 Tools changes

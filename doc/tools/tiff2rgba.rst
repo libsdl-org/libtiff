@@ -68,5 +68,5 @@ See also
 --------
 
 :doc:`tiff2bw` (1),
-:doc:`/man/TIFFReadRGBAImage` (3tiff),
-:doc:`/man/libtiff` (3tiff),
+:doc:`/functions/TIFFReadRGBAImage` (3tiff),
+:doc:`/functions/libtiff` (3tiff),

@@ -27,7 +27,7 @@ The material presented in this chapter is a basic introduction
 to the capabilities of the library; it is not an attempt to describe
 everything a developer needs to know about the library or about TIFF.
 Detailed information on the interfaces to the library are given in
-the :doc:`manpages` that accompany this software.
+the :doc:`functions` that accompany this software.
 
 Michael Still has also written a useful introduction to libtiff for the
 IBM DeveloperWorks site available at
@@ -56,7 +56,7 @@ Within an application that uses ``libtiff`` the :c:func:`TIFFGetVersion`
 routine will return a pointer to a string that contains software version
 information.
 The library include file :file:`<tiffio.h>` contains a C pre-processor
-define :c:define:`TIFFLIB_VERSION` that can be used to check library
+define :c:macro:`TIFFLIB_VERSION` that can be used to check library
 version compatibility at compile time.
 
 Library Datatypes
@@ -233,7 +233,7 @@ a limited set of tags.
 Any unknown tags that are encountered in a file are ignored.
 There is a mechanism to extend the set of tags the library handles
 without modifying the library itself;
-this is described in :ref:`addingtags`.
+this is described in :doc:`addingtags`.
 
 ``libtiff`` provides two interfaces for getting and setting tag
 values: :c:func:`TIFFGetField` and :c:func:`TIFFSetField`.

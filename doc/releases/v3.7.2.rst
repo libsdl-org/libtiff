@@ -58,7 +58,7 @@ Library changes
 * :file:`tif_open.c`: Remove unnecessary :c:func:`TIFFSeekFile` call as per
   bug :bugzilla-rs:`756`
 
-* :file:`tiff.h`: Changed the :c:type:`int8` definition to be always :c:type:`signed char`
+* :file:`tiff.h`: Changed the :c:type:`int8` definition to be always :c:expr:`signed char`
   as per bug
   :bugzilla-rs:`727`
 

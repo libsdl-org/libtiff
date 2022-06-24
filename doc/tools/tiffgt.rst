@@ -183,4 +183,4 @@ See also
 :doc:`tiffdump` (1),
 :doc:`tiffinfo` (1),
 :doc:`tiffcp` (1),
-:doc:`/man/libtiff` (3tiff)
+:doc:`/functions/libtiff` (3tiff)

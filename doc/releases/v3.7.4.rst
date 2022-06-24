@@ -49,8 +49,8 @@ Library changes
   values (128 bits as 2 64 bits doubles).  GDAL gcore tests now
   pass on bigendian (macosx) system.
 
-* :file:`libtiff/tif_dirread.c`, :file:`libtiff/tif_dirinfo.c`: Do not upcast ``BYTE``s to
-  ``SHORT``s in the :c:func:`TIFFFetchByteArray`. Remove :c:func:`TIFFFetchExtraSamples`
+* :file:`libtiff/tif_dirread.c`, :file:`libtiff/tif_dirinfo.c`: Do not upcast ``BYTE`` to
+  ``SHORT`` in the :c:func:`TIFFFetchByteArray`. Remove :c:func:`TIFFFetchExtraSamples`
   function, use :c:func:`TIFFFetchNormalTag` instead as per bug
   :bugzilla-rs:`831`
 

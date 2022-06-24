@@ -55,7 +55,7 @@ Library changes
   the first IFD when needed. As per bug
   :bugzilla-rs:`875`
 
-* :file:`tiff.h`: Use correct :c:type:`int` size on Sparc 64bit/Sun compiler
+* :file:`tiff.h`: Use correct :c:expr:`int` size on Sparc 64bit/Sun compiler
   platform. As per bug
   :bugzilla-rs:`855`
 
@@ -76,7 +76,7 @@ Library changes
 
 * :file:`tif_dirinfo.c`, :file:`tif_print.c`: :c:func:`TIFFFetchByteArray` returns
   :c:type:`uint16` array when fetching the ``BYTE`` and ``SBYTE`` fields, so we should
-  consider result as pointer to :c:type:`uint16` array and not as array of :c:type:`char`.
+  consider result as pointer to :c:type:`uint16` array and not as array of :c:expr:`char`.
   As per bug
   :bugzilla-rs:`831`
 
@@ -95,7 +95,7 @@ Library changes
   ``stripbytecount[0]`` if it appears bogus to ignore if ``stripoffset[0]`` is
   zero. This is a common case with GDAL indicating a "null" tile/strip.
 
-* :file:`tif_jpeg.c`: added ``LIB_JPEG_MK1`` support in :c:func:`JPEGDecodeRaw``.
+* :file:`tif_jpeg.c`: added ``LIB_JPEG_MK1`` support in :c:func:`JPEGDecodeRaw`.
 
 * :file:`tif_dirread.c`: Ensure that broken files with too many
   values in :c:func:`TIFFFetchPerSampleShorts`, :c:func:`TIFFFetchPerSampleLongs` and

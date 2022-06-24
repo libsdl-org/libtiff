@@ -177,7 +177,7 @@ Library changes
   ``-Wimplicit-fallthrough`` warnings.
 
 * :file:`libtiff/tif_dirread.c`: fix memory leak in non
-  :c::macro:`DEFER_STRILE_LOAD` mode (ie default) when there is both a
+  :c:macro:`DEFER_STRILE_LOAD` mode (ie default) when there is both a
   ``StripOffsets`` and ``TileOffsets`` tag, or a ``StripByteCounts`` and
   ``TileByteCounts``. Fixes
   :bugzilla:`2689`
@@ -250,19 +250,19 @@ Library changes
 
 * :file:`libtiff/tif_pixarlog.c`: :c:func:`PixarLogDecode`: resync :c:member:`tif_rawcp`
   with :c:member:`next_in` and :c:member:`tif_rawcc` with :c:member:`avail_in` at beginning and end
-  of function, similarly to what is done in :c:func:`LZWDecode. Likely
+  of function, similarly to what is done in :c:func:`LZWDecode`. Likely
   needed so that it works properly with latest chnges in
   :file:`tif_read.c` in :c:macro:`CHUNKY_STRIP_READ_SUPPORT` mode. But untested...
 
 * :file:`libtiff/tif_getimage.c`: :c:func:`initYCbCrConversion`: add basic
   validation of :c:var:`luma` and :c:var:`refBlackWhite` coefficients (just check
-  they are not NaN for now), to avoid potential :c:type:`float` to :c:type:`int`
+  they are not NaN for now), to avoid potential :c:expr:`float` to :c:expr:`int`
   overflows.  Fixes
   https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1663
   Credit to OSS Fuzz
 
 * :file:`libtiff/tif_read.c`: :c:func:`_TIFFVSetField`: fix outside range cast
-  of :c:type:`double` to :c:type:`float`.  Credit to Google Autofuzz project
+  of :c:expr:`double` to :c:expr:`float`.  Credit to Google Autofuzz project
 
 * :file:`libtiff/tif_getimage.c`: :c:func:`initYCbCrConversion`: check ``luma[1]``
   is not zero to avoid division by zero.  Fixes
@@ -270,7 +270,7 @@ Library changes
   Credit to OSS Fuzz
 
 * :file:`libtiff/tif_read.c`: :c:func:`_TIFFVSetField`: fix outside range cast
-  of :c:type:`double` to :c:type:`float`.  Credit to Google Autofuzz project
+  of :c:expr:`double` to :c:expr:`float`.  Credit to Google Autofuzz project
 
 * :file:`libtiff/tif_getimage.c`: :c:func:`initYCbCrConversion`: check ``luma[1]``
   is not zero to avoid division by zero.  Fixes
@@ -279,7 +279,7 @@ Library changes
 
 * :file:`libtiff/tif_getimage.c`: :c:func:`initYCbCrConversion`: stricter
   validation for :c:var:`refBlackWhite` coefficients values. To avoid
-  invalid :c:var:`float` to :c:var:`int32` conversion.  Fixes
+  invalid :c:expr:`float` to :c:expr:`int32` conversion.  Fixes
   https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=1718
   Credit to OSS Fuzz
 
@@ -297,7 +297,7 @@ Tools changes
   library.  Reported by Agostino Sarubbo.  Fixes
   :bugzilla:`2598`
 
-    * :file:`tools/tiffcrop.c`: fix :c:func:`readContigStripsIntoBuffer` in ``-i``
+* :file:`tools/tiffcrop.c`: fix :c:func:`readContigStripsIntoBuffer` in ``-i``
   (ignore) mode so that the output buffer is correctly
   incremented to avoid write outside bounds.  Reported by
   Agostino Sarubbo.  Fixes

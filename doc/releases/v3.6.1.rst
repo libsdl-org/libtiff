@@ -23,7 +23,7 @@ Major changes
 
 * New utility :program:`tiff2pdf`
   for converting TIFF images directly into PDF.
-* New :doc:`TIFFColor` color conversion module.
+* New :doc:`/functions/TIFFcolor` color conversion module.
 * Full support for ``Orientation`` tag in ``TIFFRGBAImage`` interface.
 * Many bugs fixed.
 
@@ -84,7 +84,7 @@ Library changes
 * :file:`libtiff/tif_color.c`, :file:`libtiff/tif_getimage.c`, :file:`libtiff/tiffio.h`: New color space
   conversion code: CIE L*a*b* 1976 images now supported by the ``TIFFRGBAImage``
   interface. YCbCr to RGB conversion code also moved there and now has
-  :doc:`TIFFcolor` publicly available interface. These
+  :doc:`/functions/TIFFcolor` publicly available interface. These
   routines currently used in ``TIFFRGBAImage`` interface only and not supported in
   other libtiff tools yet. So if you want, for example, to convert CIE Lab image
   into PostScript file you should do it in two steps: change colorspace to RGB

@@ -92,4 +92,3 @@ See also
 
 :doc:`libtiff` (3tiff),
 :doc:`TIFFOpen` (3tiff),
-:doc:`TIFFFdOpen` (3tiff)

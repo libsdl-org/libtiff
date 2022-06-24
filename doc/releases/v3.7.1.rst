@@ -64,7 +64,7 @@ Library changes
   :bugzilla-rs:`703` and
   :bugzilla-rs:`704`.
 
-* :file:`tif_win32.c`: Use :c:type:`char*` strings instead of :c:type:`TCHAR` in windowed
+* :file:`tif_win32.c`: Use :c:expr:`char*` strings instead of :c:type:`TCHAR` in windowed
   mode as per bug
   :bugzilla-rs:`697`
 

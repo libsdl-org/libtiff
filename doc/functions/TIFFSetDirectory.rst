@@ -12,7 +12,7 @@ Synopsis
 
 .. c:function:: int TIFFSetDirectory(TIFF* tif, tdir_t dirnum)
 
-.. c:fucntion:: int TIFFSetSubDirectory(TIFF* tif, uint64_t diroff)
+.. c:function:: int TIFFSetSubDirectory(TIFF* tif, uint64_t diroff)
 
 Description
 -----------
@@ -51,7 +51,7 @@ All error messages are directed to the :c:func:`TIFFError` routine.
 See also
 --------
 
-:doc:`TIFFCurrentDirectory` (3tiff),
+:doc:`TIFFquery` (3tiff),
 :doc:`TIFFOpen` (3tiff),
 :doc:`TIFFReadDirectory` (3tiff),
 :doc:`TIFFWriteDirectory` (3tiff),

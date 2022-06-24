@@ -62,7 +62,7 @@ Library changes
 * Fix bug in :file:`tif_write.c` when switching between reading one directory
   and writing to another. 
 * Made :c:func:`TIFFWriteCheck` public, and added :c:func:`TIFFCreateDirectory`
-* Added :doc:`TIFFmemory` functions to :file:`libtiff.def`.
+* Added :doc:`/functions/TIFFmemory` functions to :file:`libtiff.def`.
 * Added :file:`libtiff/libtiff.def` to ``TIFFILES`` distribution list.
 
 

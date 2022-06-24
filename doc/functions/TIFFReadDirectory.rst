@@ -139,5 +139,4 @@ See also
 :doc:`TIFFOpen` (3tiff),
 :doc:`TIFFWriteDirectory` (3tiff),
 :doc:`TIFFSetDirectory` (3tiff),
-:doc:`TIFFSetSubDirectory` (3tiff),
 :doc:`libtiff` (3tiff),

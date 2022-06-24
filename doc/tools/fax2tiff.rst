@@ -243,4 +243,4 @@ an appendix to the TIFF 5.0 specification prepared by Cygnet Technologies.
 :doc:`tiffinfo` (1),
 :doc:`tiffdither` (1),
 :doc:`tiffgt` (1),
-:doc:`/man/libtiff` (3tiff)
+:doc:`/functions/libtiff` (3tiff)

@@ -73,7 +73,7 @@ Library changes
   Fixes :oss-fuzz:`1907`.
   Credit to OSS Fuzz
 
-* :file:`libtiff/tif_dirinfo.c`, :file:`tif_dirread.c`: add :c:func:`_TIFFCheckFieldIsValidForCodec`()`,
+* :file:`libtiff/tif_dirinfo.c`, :file:`tif_dirread.c`: add :c:func:`_TIFFCheckFieldIsValidForCodec`,
   and use it in :c:func:`TIFFReadDirectory` so as to ignore fields whose tag is a
   codec-specified tag but this codec is not enabled. This avoids :c:func:`TIFFGetField`
   to behave differently depending on whether the codec is enabled or not, and
@@ -107,15 +107,15 @@ Library changes
   excessive memory allocation.
   Fixes :oss-fuzz:`2215`.
   Credit to OSS Fuzz
-* :file:`libtiff/tif_getimage.c`: avoid many (harmless) :c:type:`unsigned int` overflows.
-* :file:`libtiff/tif_fax3.c`: avoid :c:type:`unsigned int` overflow in :c:func:`Fax3Encode2DRow`. Could
+* :file:`libtiff/tif_getimage.c`: avoid many (harmless) :c:expr:`unsigned int` overflows.
+* :file:`libtiff/tif_fax3.c`: avoid :c:expr:`unsigned int` overflow in :c:func:`Fax3Encode2DRow`. Could
   potentially be a bug with huge rows.
-* :file:`libtiff/tif_jpeg.c`: avoid (harmless) :c:type:`unsigned int` overflow on tiled images.
-* :file:`libtiff/tif_dirread.c`: avoid :c:type:`unsigned int` overflow in :c:func:`EstimateStripByteCounts`
+* :file:`libtiff/tif_jpeg.c`: avoid (harmless) :c:expr:`unsigned int` overflow on tiled images.
+* :file:`libtiff/tif_dirread.c`: avoid :c:expr:`unsigned int` overflow in :c:func:`EstimateStripByteCounts`
   and ``BYTECOUNTLOOKSBAD`` when file is too short.
-* :file:`libtiff/tif_predict.c`: decorate legitimate functions where :c:type:`unsigned int`
+* :file:`libtiff/tif_predict.c`: decorate legitimate functions where :c:expr:`unsigned int`
   overflow occur with :c:macro:`TIFF_NOSANITIZE_UNSIGNED_INT_OVERFLOW`
-* :file:`libtiff/tif_dirread.c`: avoid :c:type:`unsigned int` overflow in :c:func:`EstimateStripByteCounts`
+* :file:`libtiff/tif_dirread.c`: avoid :c:expr:`unsigned int` overflow in :c:func:`EstimateStripByteCounts`
 * :file:`libtiff/tiffiop.h`: add :c:macro:`TIFF_NOSANITIZE_UNSIGNED_INT_OVERFLOW` macro to
   disable CLang warnings raised by ``-fsanitize=undefined,unsigned-integer-overflow``
 * :file:`libtiff/tif_jpeg.c`: add anti-denial of service measure to avoid excessive
@@ -196,8 +196,8 @@ Library changes
 * :file:`libtiff/tif_dir.c`: avoid potential null pointer dereference in
   :c:func:`_TIFFVGetField` on corrupted TIFFTAG_NUMBEROFINKS tag instance.
   Fixes :bugzilla:`2713`
-    <LI> tools/tiff2pdf.c: prevent heap buffer overflow write in "Raw"
-  mode on PlanarConfig=Contig input images.
+* :file:`tools/tiff2pdf.c`: prevent heap buffer overflow write in "Raw"
+  mode on ``PlanarConfig=Contig`` input images.
   Fixes :bugzilla:`2715`
   Reported by team OWL337
 * :file:`libtiff/tif_read.c`: :c:func:`TIFFFillStrip` / :c:func:`TIFFFillTile`.

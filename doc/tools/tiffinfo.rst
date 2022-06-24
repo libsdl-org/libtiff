@@ -62,4 +62,4 @@ See also
 :doc:`tiffcp`,
 :doc:`tiffcmp`,
 :doc:`tiffmedian`,
-:doc:`/man/libtiff`
+:doc:`/functions/libtiff`

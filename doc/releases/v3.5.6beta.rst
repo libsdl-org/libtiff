@@ -97,10 +97,10 @@ Library changes
   caught by BoundsChecker.  From `Arvan Pritchard <arvan.pritchard@infomatix.co.uk>`_ (untested).
   
 * :file:`tif_getimage.c`: Applied patch to silence VC6 warnings.  From
-  `Arvan Pritchard <arvan.pritchard@informatix.co.uk>`_.
+  `Arvan Pritchard <arvan.pritchard@informatix.co.uk>`__.
   
 * :file:`tif_lzw.c`: Applied patch to silence VC6 warnings.  From
-  `Arvan Pritchard <arvan.pritchard@informatix.co.uk>`_.
+  `Arvan Pritchard <arvan.pritchard@informatix.co.uk>`__.
 
 * :file:`libtiff/tif_apple.c`: Applied "Carbon" support patches supplied by
   `Leonard Rosenthol <leonardr@lazerware.com>`_.  May interfere

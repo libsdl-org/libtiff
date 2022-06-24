@@ -63,7 +63,7 @@ Library changes
   size to all the other blocks in the same directory.  This is
   dangerous in many situations and can easily corrupt a file.
   (observed in esoteric GDAL situation that's hard to document).
-  This change involves leaving the :c:var:`stripbytecount[]` values
+  This change involves leaving the :c:expr:`stripbytecount[]` values
   unaltered till :c:func:`TIFFAppendToStrip`.  Now we only write a block
   back to the same location it used to be at if the new data is
   the same size or smaller - otherwise we move it to the end of

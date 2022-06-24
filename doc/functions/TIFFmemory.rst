@@ -14,7 +14,7 @@ Synopsis
 
 .. c:function:: tdata_t _TIFFrealloc(tdata_t buffer, tsize_t size)
 
-.. c:function:: void _TIFFfree(tdata_t " buffer ")
+.. c:function:: void _TIFFfree(tdata_t buffer)
 
 .. c:function:: void _TIFFmemset(tdata_t s, int c, tsize_t n)
 

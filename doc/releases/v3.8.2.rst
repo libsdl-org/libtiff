@@ -48,7 +48,7 @@ Library changes
 * :file:`tif_jpeg.c`: Do not cleanup codec state in :c:func:`TIFFInitJPEG`. As
   per bug :bugzilla-rs:`1119`
 
-* :file:`tif_dir.c`: Use :c:type:`double` type instead of :c:type:`dblparam_t`.
+* :file:`tif_dir.c`: Use :c:expr:`double` type instead of :c:type:`dblparam_t`.
 
 * :file:`tif_dirread.c`: Do not check the ``PlanarConfig`` tag presence
   in :c:func:`TIFFReadDirectory`, because it is always set at the start of
