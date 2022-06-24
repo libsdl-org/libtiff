@@ -145,14 +145,12 @@ LIBTIFF_4.0 {
     TIFFXYZToRGB;
     TIFFYCbCrToRGBInit;
     TIFFYCbCrtoRGB;
-    _TIFFClampDoubleToUInt32;
     _TIFFfree;
     _TIFFmalloc;
     _TIFFmemcmp;
     _TIFFmemcpy;
     _TIFFmemset;
     _TIFFrealloc;
-
 
   local:
     *;
@@ -201,3 +199,7 @@ LIBTIFF_4.4 {
     TIFFFieldSetGetCountSize;
     TIFFIsBigTIFF;
 } LIBTIFF_4.3;
+
+LIBTIFF_4.5 {
+    _TIFFClampDoubleToUInt32;
+} LIBTIFF_4.4;
