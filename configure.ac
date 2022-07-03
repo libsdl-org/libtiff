@@ -25,7 +25,7 @@ dnl OF THIS SOFTWARE.
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.64)
-AC_INIT([LibTIFF Software],[4.4.0],[tiff@lists.maptools.org],[tiff])
+AC_INIT([LibTIFF Software],[4.5.0],[tiff@lists.maptools.org],[tiff])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(m4)
 AC_LANG(C)
@@ -40,7 +40,7 @@ AM_MAINTAINER_MODE
 dnl Versioning.
 dnl Don't fill the ALPHA_VERSION field, if not applicable.
 LIBTIFF_MAJOR_VERSION=4
-LIBTIFF_MINOR_VERSION=4
+LIBTIFF_MINOR_VERSION=5
 LIBTIFF_MICRO_VERSION=0
 LIBTIFF_ALPHA_VERSION=
 LIBTIFF_VERSION=$LIBTIFF_MAJOR_VERSION.$LIBTIFF_MINOR_VERSION.$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION
@@ -76,9 +76,9 @@ dnl  5. If any interfaces have been added since the last public release, then
 dnl     increment age.
 dnl  6. If any interfaces have been removed since the last public release,
 dnl     then set age to 0.                                
-LIBTIFF_CURRENT=13
+LIBTIFF_CURRENT=6
 LIBTIFF_REVISION=0
-LIBTIFF_AGE=8
+LIBTIFF_AGE=0
 LIBTIFF_VERSION_INFO=$LIBTIFF_CURRENT:$LIBTIFF_REVISION:$LIBTIFF_AGE
 
 # This is a special hack for OpenBSD and MirOS systems. The dynamic linker
@@ -121,9 +121,9 @@ AC_PATH_PROG(CMAKE, cmake)
 # constrained to compilers using GNU ld on ELF systems or systems
 # which provide an adequate emulation thereof.
 AC_ARG_ENABLE([ld-version-script],
-  AS_HELP_STRING([--enable-ld-version-script],
-    [enable linker version script (default is disabled)]),
-    [have_ld_version_script=$enableval], [have_ld_version_script=no])
+  AS_HELP_STRING([--disable-ld-version-script],
+    [disable linker version script (default is enabled if supported)]),
+    [have_ld_version_script=$enableval], [have_ld_version_script=yes])
 if test "$have_ld_version_script" != no; then
   AC_MSG_CHECKING([if LD -Wl,--version-script works])
   save_LDFLAGS="$LDFLAGS"
@@ -162,6 +162,8 @@ AC_SUBST(tiff_libs_private)
 
 tiff_requires_private=
 AC_SUBST(tiff_requires_private)
+
+AM_CONDITIONAL(BUILD_STATIC, test "$enable_static" = "yes")
 
 dnl We don't need to add math library to all targets
 case "${host_os}" in
