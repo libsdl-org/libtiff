@@ -22,6 +22,10 @@ Synopsis
 
 .. c:function:: int _TIFFmemcmp(const tdata_t s1, const tdata_ts2, tsize_t n)
 
+.. c:function:: void* _TIFFCheckMalloc(TIFF* tif, tmsize_t nmemb, tmsize_t elem_size, const char* what)
+
+.. c:function:: void* _TIFFCheckRealloc(TIFF* tif, void* buffer, tmsize_t nmemb, tmsize_t elem_size, const char* what)
+
 Description
 -----------
 
@@ -39,6 +43,10 @@ value using :c:func:`_TIFFmemset`, copied to another memory location using
 :c:func:`_TIFFmemcpy`, or compared for equality using :c:func:`_TIFFmemcmp`.
 These routines conform to the equivalent C routines:
 :c:func:`memset`, :c:func:`memcpy`, :c:func:`memcmp`, respectively.
+
+:c:func:`_TIFFCheckMalloc` and :c:func:`_TIFFCheckRealloc` are checking for
+integer overflow before calling :c:func:`_TIFFmalloc` and :c:func:`_TIFFrealloc`,
+respectively.
 
 Diagnostics
 -----------

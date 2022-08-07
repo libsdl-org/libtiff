@@ -20,7 +20,8 @@ This can be compared to various constants exported by the :program:`libtiff`
 header files, such as :c:macro:`TIFFTAG_IMAGEWIDTH`.
 
 *fip* is a field information pointer previously returned by
-:c:func:`TIFFFindField`, :c:func:`TIFFFieldWithTag`, or :c:func:`TIFFFieldWithName`.
+:c:func:`TIFFFindField`, :c:func:`TIFFFieldWithTag`, or
+:c:func:`TIFFFieldWithName`.
 
 Return values
 -------------

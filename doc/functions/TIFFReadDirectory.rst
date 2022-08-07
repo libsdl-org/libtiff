@@ -77,8 +77,8 @@ All warning messages are directed to the :c:func:`TIFFWarning` routine.
 
 ``Count mismatch for field "%s"; expecting %d, got %d``:
 
-  The count field in a tag does not agree with the number expected by the library.
-  This should never happen, so if it does, the library refuses to
+  The count field in a tag does not agree with the number expected by the
+  library. This should never happen, so if it does, the library refuses to
   read the directory.
 
 ``Invalid TIFF directory; tags are not sorted in ascending order``:
@@ -137,6 +137,9 @@ See also
 --------
 
 :doc:`TIFFOpen` (3tiff),
+:doc:`TIFFCreateDirectory` (3tiff),
+:doc:`TIFFCustomDirectory` (3tiff),
+:doc:`TIFFquery` (3tiff),
 :doc:`TIFFWriteDirectory` (3tiff),
 :doc:`TIFFSetDirectory` (3tiff),
-:doc:`libtiff` (3tiff),
+:doc:`libtiff` (3tiff)

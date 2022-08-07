@@ -98,6 +98,8 @@ Return values
 Otherwise, 0 is returned if an error was encountered and
 *stopOnError* is zero.
 
+.. TODO: Specify, what the return value is if an error occurs and stopOnError was non-zero.
+
 Diagnostics
 -----------
 

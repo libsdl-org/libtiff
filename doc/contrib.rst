@@ -85,4 +85,4 @@ aren't directly TIFF related).
 
 
 Questions regarding these packages are usually best directed toward
-their authors. 
+their authors.

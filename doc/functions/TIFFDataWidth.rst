@@ -15,7 +15,7 @@ Synopsis
 Description
 -----------
 
-:c:func:`TIFFDataWidth` returns the size of *type* in bytes.
+:c:func:`TIFFDataWidth` returns the size of *type* within TIFF file in bytes.
 Currently following data types are supported:
 
 * :c:macro:`TIFF_BYTE`
@@ -31,12 +31,15 @@ Currently following data types are supported:
 * :c:macro:`TIFF_RATIONAL`
 * :c:macro:`TIFF_SRATIONAL`
 * :c:macro:`TIFF_DOUBLE`
+* :c:macro:`TIFF_LONG8`
+* :c:macro:`TIFF_SLONG8`
+* :c:macro:`TIFF_IFD8`
 
 Return values
 -------------
 
 :c:func:`TIFFDataWidth` returns a number of bytes occupied by the item
-of given type. 0 returned when unknown data type supplied.
+of given type within the TIFF file. 0 returned when unknown data type supplied.
 
 See also
 --------

@@ -110,7 +110,7 @@ All error messages are directed to the :c:func:`TIFFError` routine.
 Bugs
 ----
 
-Writing subsampled YCbCR data does not work correctly because, for 
+Writing subsampled YCbCR data does not work correctly because, for
 ``PlanarConfiguration`` = 2 the size of a scanline is not calculated on
 a per-sample basis, and for ``PlanarConfiguration`` = 1 the library
 does not pack the block-interleaved samples.

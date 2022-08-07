@@ -27,6 +27,13 @@ except the directory is specified as a file offset instead of an index;
 this is required for accessing subdirectories linked through a
 ``SubIFD`` tag.
 
+Directory query functions :c:func:`TIFFCurrentDirectory`,
+:c:func:`TIFFCurrentDirOffset`, :c:func:`TIFFLastDirectory` and
+:c:func:`TIFFNumberOfDirectories` retrieve information about directories
+in an open TIFF file. Be aware that until a directory is
+not written to file AND read back, the query functions won't retrieve
+the correct information!
+
 Return values
 -------------
 
@@ -53,6 +60,8 @@ See also
 
 :doc:`TIFFquery` (3tiff),
 :doc:`TIFFOpen` (3tiff),
-:doc:`TIFFReadDirectory` (3tiff),
+:doc:`TIFFCreateDirectory` (3tiff),
+:doc:`TIFFCustomDirectory` (3tiff),
 :doc:`TIFFWriteDirectory` (3tiff),
-:doc:`libtiff` (3tiff),
+:doc:`TIFFReadDirectory` (3tiff),
+:doc:`libtiff` (3tiff)

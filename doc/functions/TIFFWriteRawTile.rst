@@ -20,7 +20,8 @@ Append *size* bytes of raw data to the specified tile.
 Return values
 -------------
 
--1 is returned if an error occurred. Otherwise, the value of *size* is returned.
+-1 is returned if an error occurred. Otherwise, the value of *size* is
+returned.
 
 Diagnostics
 -----------
