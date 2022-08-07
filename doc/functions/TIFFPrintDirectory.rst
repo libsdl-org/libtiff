@@ -15,8 +15,8 @@ Synopsis
 Description
 -----------
 
-:c:func:`TIFFPrintDirectory` prints a description of the current directory in the specified
-TIFF file to the standard I/O output stream *fd*.
+:c:func:`TIFFPrintDirectory` prints a description of the current directory
+in the specified TIFF file to the standard I/O output stream *fd*.
 The *flags* parameter is used to control the "level of detail"
 of the printed information; it is a bitwise-or of the flags defined in
 :file:`tiffio.h`:

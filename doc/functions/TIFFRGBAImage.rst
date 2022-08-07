@@ -40,8 +40,8 @@ The default usage for these routines is:
 
 * check if an image can be processed using :c:func:`TIFFRGBAImageOK`
 * construct a decoder state block using :c:func:`TIFFRGBAImageBegin`
-* read and decode an image into a target raster using :c:func:`TIFFRGBAImageGet`,
-  and then
+* read and decode an image into a target raster using
+  :c:func:`TIFFRGBAImageGet`, and then
 * release resources using :c:func:`TIFFRGBAImageEnd`
 
 :c:func:`TIFFRGBAImageGet` can be called multiple times to decode an
@@ -92,8 +92,8 @@ structure and initially setup by :c:func:`TIFFRGBAImageBegin`
 to point to routines that pack raster data in the default
 ABGR pixel format.
 Two different routines are used according to the physical organization
-of the image data in the file: 
-``PlanarConfiguration`` = 1 (packed samples), and 
+of the image data in the file:
+``PlanarConfiguration`` = 1 (packed samples), and
 ``PlanarConfiguration`` = 2 (separated samples).
 Note that this mechanism can be used to transform the data before
 storing it in the raster.

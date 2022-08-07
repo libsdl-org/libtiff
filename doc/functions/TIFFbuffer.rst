@@ -17,11 +17,11 @@ Synopsis
 Description
 -----------
 
-The following routines are provided for client-control of the I/O buffers used
-by the library. Applications need never use these routines; they are provided
-only for "intelligent clients" that wish to optimize memory usage and/or
-eliminate potential copy operations that can occur when working with images
-that have data stored without compression.
+The following routines are provided for client-control of the I/O buffers
+used by the library. Applications need never use these routines; they are
+provided only for "intelligent clients" that wish to optimize memory usage
+and/or eliminate potential copy operations that can occur when working with
+images that have data stored without compression.
 
 :c:func:`TIFFReadBufferSetup` sets up the data buffer used to read raw (encoded)
 data from a file. If the specified pointer is :c:macro:`NULL` (zero), then a
@@ -43,15 +43,15 @@ Diagnostics
 
 ``%s: No space for data buffer at scanline %ld``:
 
-  :c:func:`TIFFReadBufferSetup` was unable to dynamically allocate space for a
-  data buffer.
+  :c:func:`TIFFReadBufferSetup` was unable to dynamically allocate space
+  for a data buffer.
 
 ``%s: No space for output buffer``:
 
-  :c:func:`TIFFWriteBufferSetup` was unable to dynamically allocate space for a
-  data buffer.
+  :c:func:`TIFFWriteBufferSetup` was unable to dynamically allocate space
+  for a data buffer.
 
 See also
 --------
 
-:doc:`/functions/libtiff` (3tiff)
+:doc:`libtiff` (3tiff)

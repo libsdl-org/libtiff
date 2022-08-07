@@ -6,27 +6,37 @@ TIFF Functions Overview
     :titlesonly:
 
     functions/libtiff
+    functions/TIFFAccessTagMethods
     functions/TIFFbuffer
+    functions/TIFFClientInfo
     functions/TIFFClose
     functions/TIFFcodec
     functions/TIFFcolor
+    functions/TIFFCreateDirectory
+    functions/TIFFCustomDirectory
+    functions/TIFFCustomTagList
     functions/TIFFDataWidth
+    functions/TIFFDeferStrileArrayWriting
     functions/TIFFError
     functions/TIFFFieldDataType
     functions/TIFFFieldName
     functions/TIFFFieldPassCount
+    functions/TIFFFieldQuery
     functions/TIFFFieldReadCount
     functions/TIFFFieldTag
     functions/TIFFFieldWriteCount
     functions/TIFFFlush
     functions/TIFFGetField
     functions/TIFFmemory
+    functions/TIFFMergeFieldInfo
     functions/TIFFOpen
     functions/TIFFPrintDirectory
+    functions/TIFFProcFunctions
     functions/TIFFquery
     functions/TIFFReadDirectory
     functions/TIFFReadEncodedStrip
     functions/TIFFReadEncodedTile
+    functions/TIFFReadFromUserBuffer
     functions/TIFFReadRawStrip
     functions/TIFFReadRawTile
     functions/TIFFReadRGBAImage
@@ -37,7 +47,9 @@ TIFF Functions Overview
     functions/TIFFRGBAImage
     functions/TIFFSetDirectory
     functions/TIFFSetField
+    functions/TIFFSetTagExtender
     functions/TIFFsize
+    functions/TIFFStrileQuery
     functions/TIFFstrip
     functions/TIFFswab
     functions/TIFFtile
@@ -49,3 +61,5 @@ TIFF Functions Overview
     functions/TIFFWriteRawTile
     functions/TIFFWriteScanline
     functions/TIFFWriteTile
+    functions/_TIFFauxiliary
+    functions/_TIFFRewriteField

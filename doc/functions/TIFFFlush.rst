@@ -47,4 +47,4 @@ See also
 :doc:`TIFFWriteRawTile` (3tiff),
 :doc:`TIFFWriteScanline` (3tiff),
 :doc:`TIFFWriteTile` (3tiff),
-:doc:`libtiff` (3tiff),
+:doc:`libtiff` (3tiff)

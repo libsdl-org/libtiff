@@ -18,6 +18,11 @@ Synopsis
 
 .. c:function:: int TIFFIsCODECConfigured(uint16_t scheme)
 
+.. c:function:: TIFFCodec* TIFFGetConfiguredCODECs(uint16_t scheme)
+
+.. c:function:: int TIFFSetCompressionScheme(TIFF* tif, int scheme)
+
+
 Description
 -----------
 
@@ -28,6 +33,12 @@ other methods for initialization, setup, cleanup, and the control of
 default strip and tile sizes.  Codecs are identified by the associated
 value of the TIFF ``Compression`` tag; e.g. 5 for LZW compression.
 
+.. ToDo: Describe functionality of next functions
+
+:c:func:`TIFFFindCODEC`  ??????
+
+:c:func:`TIFFUnRegisterCODEC` ?????
+
 The :c:func:`TIFFRegisterCODEC` routine can be used to augment or
 override the set of codecs available to an application.  If the
 specified *scheme* already has a registered codec then it is
@@ -36,6 +47,14 @@ scheme will be decoded using the supplied codec.
 
 :c:func:`TIFFIsCODECConfigured` returns 1 if the codec is configured
 and working. Otherwise 0 will be returned.
+
+:c:func:`TIFFGetConfiguredCODECs` gets list of configured codecs,
+both built-in and registered by user. Function returns array of
+:c:type:`TIFFCodec` records (the last record should be NULL) or NULL
+if function failed. Caller is responsible to free this structure.
+
+:c:func:`TIFFSetCompressionScheme`  ????
+
 
 Diagnostics
 -----------

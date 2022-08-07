@@ -19,10 +19,10 @@ Read the contents of the specified tile into the (user supplied) data buffer.
 Note that the value of *tile* is a "raw tile number". That is, the caller
 must take into account whether or not the data is organized in separate planes
 (``PlanarConfiguration`` = 2).
-:c:func:`TIFFComputeTile` automatically does this when converting an (x,y,z,sample)
-coordinate quadruple to a tile number. To read a full tile of data the data buffer
-should typically be at least as large as the value returned by
-:c:func:`TIFFTileSize`.
+:c:func:`TIFFComputeTile` automatically does this when converting an
+(x,y,z,sample) coordinate quadruple to a tile number. To read a full tile
+of data the data buffer should typically be at least as large as the value
+returned by :c:func:`TIFFTileSize`.
 
 Return values
 -------------
@@ -42,4 +42,4 @@ See also
 :doc:`TIFFReadEncodedTile` (3tiff),
 :doc:`TIFFReadTile` (3tiff),
 :doc:`TIFFtile` (3tiff),
-:doc:`libtiff` (3tiff),
+:doc:`libtiff` (3tiff)

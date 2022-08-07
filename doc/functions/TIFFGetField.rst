@@ -486,5 +486,5 @@ See also
 :doc:`TIFFSetField` (3tiff),
 :doc:`TIFFSetDirectory` (3tiff),
 :doc:`TIFFReadDirectory` (3tiff),
-:doc:`TIFFWriteDirectory` (3tiff)
+:doc:`TIFFWriteDirectory` (3tiff),
 :doc:`libtiff` (3tiff)

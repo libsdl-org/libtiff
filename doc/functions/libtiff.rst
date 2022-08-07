@@ -20,8 +20,8 @@ Description
 -----------
 
 :program:`libtiff` is a library for reading and writing data files encoded with the
-*"Tag Image File"* format, Revision 6.0 (or revision 5.0 or revision 4.0). This file format is
-suitable for archiving multi-color and monochromatic image data.
+*"Tag Image File"* format, Revision 6.0 (or revision 5.0 or revision 4.0). This file
+format is suitable for archiving multi-color and monochromatic image data.
 
 The library supports several compression algorithms, as indicated by the
 ``Compression`` field, including:
@@ -78,7 +78,7 @@ definitions or through parameters passed through the varargs interfaces.
     typedef tmsize_t tsize_t;   // i/o size in bytes
     typedef void* tdata_t;      // image data ref
     typedef void* thandle_t;    // client data handle
-    typedef uint64_t toff_t;	// file offset
+    typedef uint64_t toff_t;    // file offset
 
 Note that
 :c:type:`tstrip_t`,
@@ -97,7 +97,7 @@ tag.
 :c:type:`tdir_t`
 constrains the maximum number of
 IFDs
-that may appear in an image and may be an arbitrary size (w/o penalty). 
+that may appear in an image and may be an arbitrary size (w/o penalty).
 :c:type:`ttag_t`
 must be either int, unsigned int, pointer, or double because the library uses
 a varargs interface and
@@ -111,6 +111,7 @@ handles and only cast at the lowest layers where their type is presumed.
 
 .. TODO: Check why this toff_t was switched to unsigned and update description.
 
+.. _List_of_routines:
 
 List of routines
 ----------------
@@ -119,12 +120,15 @@ The following routines are part of the library. Consult specific manual pages
 for details on their operation; on most systems doing :command:`man function-name`
 will work.
 
-.. list-table:: libtiff functions
+.. list-table:: *Libtiff functions*
     :widths: 5 20
     :header-rows: 1
 
     * - Name
       - Description
+    * - :c:func:`TIFFAccessTagMethods`
+      -  provides read/write access to the TIFFTagMethods within the TIFF structure
+         to application code without giving access to the private TIFF structure
     * - :c:func:`TIFFCheckpointDirectory`
       - writes the current state of the directory
     * - :c:func:`TIFFCheckTile`
@@ -133,16 +137,30 @@ will work.
       - initialize CIE L*a*b* 1976 to RGB conversion state
     * - :c:func:`TIFFCIELabToXYZ`
       - perform CIE L*a*b* 1976 to CIE XYZ conversion
+    * - :c:func:`TIFFCleanup`
+      - auxiliary function to free the TIFF structure
+    * - :c:func:`TIFFClientdata`
+      - return open file's clientdata handle
     * - :c:func:`TIFFClientOpen`
       - open a file for reading or writing
     * - :c:func:`TIFFClose`
-      - close an open file
+      - close a previously opened TIFF file
     * - :c:func:`TIFFComputeStrip`
       - return strip containing y,sample
     * - :c:func:`TIFFComputeTile`
       - return tile containing x,y,z,sample
+    * - :c:func:`TIFFCreateCustomDirectory`
+      - setup for a *custom* directory in a open TIFF file
+    * - :c:func:`TIFFCreateDirectory`
+      - setup for a directory in a open TIFF file
+    * - :c:func:`TIFFCreateEXIFDirectory`
+      - setup for a *EXIF* custom directory in a open TIFF file within a TIFF tag
+    * - :c:func:`TIFFCreateGPSDirectory`
+      - setup for a *GPS* custom directory in a open TIFF file within a TIFF tag
     * - :c:func:`TIFFCurrentDirectory`
       - return index of current directory
+    * - :c:func:`TIFFCurrentDirOffset`
+      - return file offset of the current directory (instead of an index)
     * - :c:func:`TIFFCurrentRow`
       - return index of current scanline
     * - :c:func:`TIFFCurrentStrip`
@@ -151,18 +169,40 @@ will work.
       - return index of current tile
     * - :c:func:`TIFFDataWidth`
       - return the size of TIFF data types
+    * - :c:func:`TIFFDefaultStripSize`
+      - return number of rows for a reasonable-sized strip according to the
+        current settings of the ImageWidth, BitsPerSample and SamplesPerPixel,
+        tags and any compression-specific requirements
+    * - :c:func:`TIFFDefaultTileSize`
+      - return pixel width and height of a reasonable-sized tile;
+        suitable for setting up the TileWidth and TileLength tags
+    * - :c:func:`TIFFDeferStrileArrayWriting`
+      - is an advanced writing function to control when/where the
+        [Strip/Tile][Offsets/ByteCounts] arrays are written into the file,
+        and must be used in a particular sequence together with
+        TIFFForceStrileArrayWriting() (see description)
     * - :c:func:`TIFFError`
-      - library error handler
+      - library error handler printing to ``stderr``
+    * - :c:func:`TIFFErrorExt`
+      - library error handler printing to ``stderr`` and/or a file
     * - :c:func:`TIFFFdOpen`
       - open a file for reading or writing
     * - :c:func:`TIFFFieldDataType`
       - get data type from field information
+    * - :c:func:`TIFFFieldIsAnonymous`
+      - returns if field was unknown to ``libtiff`` and has been auto-registered
     * - :c:func:`TIFFFieldName`
       - get field name from field information
     * - :c:func:`TIFFFieldPassCount`
       - get whether to pass a value count to Get/SetField
     * - :c:func:`TIFFFieldReadCount`
       - get number of values to be read from field
+    * - :c:func:`TIFFFieldSetGetCountSize`
+      - returns size of ``count`` parameter of :c:func:`TIFFSetField` and
+        :c:func:`TIFFGetField`
+    * - :c:func:`TIFFFieldSetGetSize`
+      - return data size in bytes of the field data type used for ``libtiff``
+        internal storage.
     * - :c:func:`TIFFFieldTag`
       - get tag value from field information
     * - :c:func:`TIFFFieldWithName`
@@ -183,48 +223,133 @@ will work.
       - flush all pending writes
     * - :c:func:`TIFFFlushData`
       - flush pending data writes
+    * - :c:func:`TIFFForceStrileArrayWriting`
+      - is an advanced writing function that writes the
+        [Strip/Tile][Offsets/ByteCounts] arrays at the end of the file (see description)
+    * - :c:func:`TIFFFreeDirectory`
+      - release storage associated with a directory
     * - :c:func:`TIFFGetBitRevTable`
       - return bit reversal table
+    * - :c:func:`TIFFGetClientInfo`
+      - returns a pointer to the data of the named entry in the clientinfo-list
+    * - :c:func:`TIFFGetCloseProc`
+      - returns a pointer to file close method
+    * - :c:func:`TIFFGetConfiguredCODECs`
+      - gets list of configured codecs, both built-in and registered by user
     * - :c:func:`TIFFGetField`
       - return tag value in current directory
     * - :c:func:`TIFFGetFieldDefaulted`
-      - return tag value in current directory
+      - return tag value in current directory with default value set if the
+        value is not already set and a default is defined
+    * - :c:func:`TIFFGetMapFileProc`
+      - returns a pointer to memory mapping method
     * - :c:func:`TIFFGetMode`
       - return open file mode
+    * - :c:func:`TIFFGetReadProc`
+      - returns a pointer to file read method
+    * - :c:func:`TIFFGetSeekProc`
+      - returns a pointer to file seek method
+    * - :c:func:`TIFFGetSizeProc`
+      - returns a pointer to file size requesting method
+    * - :c:func:`TIFFGetStrileByteCount`
+      - return value of the TileByteCounts/StripByteCounts array for the
+        specified tile/strile
+    * - :c:func:`TIFFGetStrileByteCountWithErr`
+      - same as `TIFFGetStrileByteCount()` and additionally provides an error return
+    * - :c:func:`TIFFGetStrileOffset`
+      - return value of the TileOffsets/StripOffsets array for the specified tile/strile
+    * - :c:func:`TIFFGetStrileOffsetWithErr`
+      - same as `TIFFGetStrileOffset()` and additionally provides an error return
+    * - :c:func:`TIFFGetTagListCount`
+      - return number of entries in the custom tag list
+    * - :c:func:`TIFFGetTagListEntry`
+      - return tag number of the (n.th - 1) entry within the custom tag list
+    * - :c:func:`TIFFGetUnmapFileProc`
+      - returns a pointer to memory unmapping method
     * - :c:func:`TIFFGetVersion`
       - return library version string
+    * - :c:func:`TIFFGetWriteProc`
+      - returns a pointer to file write method
+    * - :c:func:`TIFFIsBigEndian`
+      - returns a non-zero value if the file is BigEndian and zero if the file is
+        LittleEndian
+    * - :c:func:`TIFFIsBigTIFF`
+      - returns a non-zero value if the file is in BigTIFF style
+    * - :c:func:`TIFFIsByteSwapped`
+      - return true if image data is byte-swapped
     * - :c:func:`TIFFIsCODECConfigured`
       - check, whether we have working codec
     * - :c:func:`TIFFIsMSB2LSB`
-      - return true if image data is being returned
-    * - :c:func:``
-      - with bit 0 as the most significant bit 
+      - return true if image data is being returned with bit 0 as the most significant bit
     * - :c:func:`TIFFIsTiled`
       - return true if image data is tiled
-    * - :c:func:`TIFFIsByteSwapped`
-      - return true if image data is byte-swapped
+    * - :c:func:`TIFFIsUpSampled`
+      - returns a non-zero value if image data returned through the read interface
+        Routines is being up-sampled
+    * - :c:func:`TIFFLastDirectory`
+      - returns a non-zero value if the current directory is the last directory
+        in the file; otherwise zero is returned
+    * - :c:func:`TIFFMergeFieldInfo`
+      - adds application defined TIFF tags to the list of known ``libtiff`` tags
+    * - :c:func:`TIFFNumberOfDirectories`
+      - return number of directories in a file
     * - :c:func:`TIFFNumberOfStrips`
       - return number of strips in an image
     * - :c:func:`TIFFNumberOfTiles`
       - return number of tiles in an image
     * - :c:func:`TIFFOpen`
       - open a file for reading or writing
+    * - :c:func:`TIFFOpenW`
+      - opens a TIFF file with a Unicode filename, for read/writing
     * - :c:func:`TIFFPrintDirectory`
       - print description of the current directory
+    * - :c:func:`TIFFRasterScanlineSize`
+      - eturns the size in bytes of a complete decoded and packed raster scanline
+    * - :c:func:`TIFFRasterScanlineSize64`
+      - return size as :c:type:`uint64_t`
+    * - :c:func:`TIFFRawStripSize`
+      - return number of bytes in a raw strip
+    * - :c:func:`TIFFRawStripSize64`
+      - return number of bytes in a raw strip as :c:type:`uint64_t`
     * - :c:func:`TIFFReadBufferSetup`
       - specify i/o buffer for reading
+    * - :c:func:`TIFFReadCustomDirectory`
+      - read the custom directory from the given offset
+        and set the context of the TIFF-handle tif to that custom directory
     * - :c:func:`TIFFReadDirectory`
       - read the next directory
     * - :c:func:`TIFFReadEncodedStrip`
       - read and decode a strip of data
     * - :c:func:`TIFFReadEncodedTile`
       - read and decode a tile of data
+    * - :c:func:`TIFFReadEXIFDirectory`
+      - read the EXIF directory from the given offset
+        and set the context of the TIFF-handle tif to that EXIF directory
+    * - :c:func:`TIFFReadFromUserBuffer`
+      - replaces the use of :c:func:`TIFFReadEncodedStrip` / :c:func:`TIFFReadEncodedTile`
+        when the user can provide the buffer for the input data
+    * - :c:func:`TIFFReadGPSDirectory`
+      - read the GPS directory from the given offset
+        and set the context of the TIFF-handle tif to that GPS directory
     * - :c:func:`TIFFReadRawStrip`
       - read a raw strip of data
     * - :c:func:`TIFFReadRawTile`
       - read a raw tile of data
     * - :c:func:`TIFFReadRGBAImage`
       - read an image into a fixed format raster
+    * - :c:func:`TIFFReadRGBAImageOriented`
+      - works like :c:func:`TIFFReadRGBAImage` except that the user can specify
+          the raster origin position
+    * - :c:func:`TIFFReadRGBAStrip`
+      - reads a single strip of a strip-based image into memory, storing the
+        result in the user supplied RGBA raster
+    * - :c:func:`TIFFReadRGBAStripExt`
+      - same as :c:func:`TIFFReadRGBAStrip` but providing the paramater `stop_on_error`
+    * - :c:func:`TIFFReadRGBATile`
+      - reads a single tile of a tile-based image into memory, storing the
+        result in the user supplied RGBA raster
+    * - :c:func:`TIFFReadRGBATileExt`
+      - same as :c:func:`TIFFReadRGBATile` but providing the paramater `stop_on_error`
     * - :c:func:`TIFFReadScanline`
       - read and decode a row of data
     * - :c:func:`TIFFReadTile`
@@ -233,6 +358,10 @@ will work.
       - override standard codec for the specific scheme
     * - :c:func:`TIFFReverseBits`
       - reverse bits in an array of bytes
+    * - :c:func:`TIFFRewriteDirectory`
+      - operates similarly to :c:func:`TIFFWriteDirectory`, but can be called
+        with directories previously read or written that already have an established
+        location in the file and places it at the end of the file
     * - :c:func:`TIFFRGBAImageBegin`
       - setup decoder state for TIFFRGBAImageGet
     * - :c:func:`TIFFRGBAImageEnd`
@@ -243,34 +372,81 @@ will work.
       - is image readable by TIFFRGBAImageGet
     * - :c:func:`TIFFScanlineSize`
       - return size of a scanline
+    * - :c:func:`TIFFScanlineSize64`
+      - return size of a scanline as :c:type:`uint64_t`
+    * - :c:func:`TIFFSetClientdata`
+      - set open file's clientdata, and return previous value
+    * - :c:func:`TIFFSetClientInfo`
+      - adds or replaces an entry in the clientinfo-list
+    * - :c:func:`TIFFSetCompressionScheme`
+      - set compression scheme
     * - :c:func:`TIFFSetDirectory`
-      - set the current directory
-    * - :c:func:`TIFFSetSubDirectory`
       - set the current directory
     * - :c:func:`TIFFSetErrorHandler`
       - set error handler function
+    * - :c:func:`TIFFSetErrorHandlerExt`
+      - set error handler function with a file handle as parameter
     * - :c:func:`TIFFSetField`
       - set a tag's value in the current directory
+    * - :c:func:`TIFFSetFileName`
+      - sets the file name in the tif-structure and returns the old file name
+    * - :c:func:`TIFFSetFileno`
+      - sets open file's I/O descriptor, and return previous value
+    * - :c:func:`TIFFSetMode`
+      - sets the `libtiff` open mode in the tif-structure and returns the old mode
+    * - :c:func:`TIFFSetSubDirectory`
+      - set the current directory
+    * - :c:func:`TIFFSetTagExtender`
+      - is used to register the merge function for user defined tags as an
+        extender callback with libtiff
+    * - :c:func:`TIFFSetupStrips`
+      -
     * - :c:func:`TIFFSetWarningHandler`
       - set warning handler function
+    * - :c:func:`TIFFSetWarningHandlerExt`
+      - set warning handler function with a file handle as parameter
+    * - :c:func:`TIFFSetWriteOffset`
+      - set current write offset
     * - :c:func:`TIFFStripSize`
-      - returns size of a strip
-    * - :c:func:`TIFFRawStripSize`
-      - returns the number of bytes in a raw strip
-    * - :c:func:`TIFFSwabShort`
-      - swap bytes of short
-    * - :c:func:`TIFFSwabLong`
-      - swap bytes of long
-    * - :c:func:`TIFFSwabArrayOfShort`
-      - swap bytes of an array of shorts
+      - return size of a strip
+    * - :c:func:`TIFFStripSize64`
+      - return equivalent size for a strip of data as :c:type:`uint64_t`
+    * - :c:func:`TIFFSwabArrayOfDouble`
+      - swap bytes of an array of doubles
+    * - :c:func:`TIFFSwabArrayOfFloat`
+      - swap bytes of an array of floats
     * - :c:func:`TIFFSwabArrayOfLong`
       - swap bytes of an array of longs
+    * - :c:func:`TIFFSwabArrayOfLong8`
+      - swap bytes of an array of uint64_t
+    * - :c:func:`TIFFSwabArrayOfShort`
+      - swap bytes of an array of shorts
+    * - :c:func:`TIFFSwabArrayOfTriples`
+      - swap the first and third byte of each triple within an array of bytes
+    * - :c:func:`TIFFSwabDouble`
+      - swap bytes of double
+    * - :c:func:`TIFFSwabFloat`
+      - swap bytes of float
+    * - :c:func:`TIFFSwabLong`
+      - swap bytes of long
+    * - :c:func:`TIFFSwabLong8`
+      - swap bytes of long long (uint64_t)
+    * - :c:func:`TIFFSwabShort`
+      - swap bytes of short
     * - :c:func:`TIFFTileRowSize`
       - return size of a row in a tile
+    * - :c:func:`TIFFTileRowSize64`
+      - return size of a row in a tile as :c:type:`uint64_t`
     * - :c:func:`TIFFTileSize`
       - return size of a tile
+    * - :c:func:`TIFFTileSize64`
+      - return size of a tile as :c:type:`uint64_t`
+    * - :c:func:`TIFFUnlinkDirectory`
+      - unlink the specified directory from the directory chain
     * - :c:func:`TIFFUnRegisterCODEC`
       - unregisters the codec
+    * - :c:func:`TIFFUnsetField`
+      - clear the contents of the field in the internal structure
     * - :c:func:`TIFFVGetField`
       - return tag value in current directory
     * - :c:func:`TIFFVGetFieldDefaulted`
@@ -278,9 +454,24 @@ will work.
     * - :c:func:`TIFFVSetField`
       - set a tag's value in the current directory
     * - :c:func:`TIFFVStripSize`
-      - returns the number of bytes in a strip
+      - return number of bytes in a strip
+    * - :c:func:`TIFFVStripSize64`
+      - return number of bytes in a strip with *nrows* rows of data as :c:type:`uint64_t`
+    * - :c:func:`TIFFVTileSize`
+      - returns the number of bytes in a row-aligned tile with *nrows* of data
+    * - :c:func:`TIFFVTileSize64`
+      - returns the number of bytes in a row-alignedtile with *nrows* of data
+        a :c:type:`uint64_t` number
     * - :c:func:`TIFFWarning`
       - library warning handler
+    * - :c:func:`TIFFWarningExt`
+      - library warning handler printing to ``stderr`` and a file
+    * - :c:func:`TIFFWriteBufferSetup`
+      - sets up the data buffer used to write raw (encoded) data to a file
+    * - :c:func:`TIFFWriteCheck`
+      - verify file is writable and that the directory information is setup properly
+    * - :c:func:`TIFFWriteCustomDirectory`
+      - write the current custom directory (also EXIF or GPS) to file
     * - :c:func:`TIFFWriteDirectory`
       - write the current directory
     * - :c:func:`TIFFWriteEncodedStrip`
@@ -297,19 +488,29 @@ will work.
       - compress and write a tile of data
     * - :c:func:`TIFFXYZToRGB`
       - perform CIE XYZ to RGB conversion
-    * - :c:func:`TIFFYCbCrToRGBInit`
-      - initialize YCbCr to RGB conversion state
     * - :c:func:`TIFFYCbCrtoRGB`
       - perform YCbCr to RGB conversion
+    * - :c:func:`TIFFYCbCrToRGBInit`
+      - initialize YCbCr to RGB conversion state
 
-.. list-table:: libtiff auxillary functions
+.. list-table:: *Libtiff auxillary functions*
     :widths: 5 20
     :header-rows: 1
 
     * - Name
       - Description
+    * - :c:func:`_TIFFCheckMalloc`
+      - checking for integer overflow before dynamically allocate memory buffer
+    * - :c:func:`_TIFFCheckRealloc`
+      - checking for integer overflow before dynamically reallocate memory buffer
+    * - :c:func:`_TIFFClampDoubleToUInt32`
+      - clamps double values into the range of :c:type:`uint32_t` (i.e. 0 .. 0xFFFFFFFF)
     * - :c:func:`_TIFFfree`
       - free memory buffer
+    * - :c:func:`_TIFFGetExifFields`
+      - return a pointer to the libtiff internal definition list of the EXIF tags
+    * - :c:func:`_TIFFGetGpsFields`
+      - return a pointer to the libtiff internal definition list of the GPS tags
     * - :c:func:`_TIFFmalloc`
       - dynamically allocate memory buffer
     * - :c:func:`_TIFFmemcmp`
@@ -318,8 +519,18 @@ will work.
       - copy contents of the one buffer to another
     * - :c:func:`_TIFFmemset`
       - fill memory buffer with a constant byte
+    * - :c:func:`_TIFFMultiply32`
+      - checks for an integer overflow of the multiplication result of `uint32_t` and
+        return the multiplication result or `0` if an overflow would happen
+    * - :c:func:`_TIFFMultiply64`
+      - checks for an integer overflow of the multiplication result of `uint64_t` and
+        return the multiplication result or `0` if an overflow would happen
     * - :c:func:`_TIFFrealloc`
       - dynamically reallocate memory buffer
+    * - :c:func:`_TIFFRewriteField`
+      - Rewrite a field in the directory on disk without regard
+        to updating the TIFF directory structure in memory
+
 
 Tag usage
 ---------
@@ -426,19 +637,19 @@ tag has been previously set to the relevant compression scheme.
       - R/W
       - control bit order
     * - ``FreeByteCounts``
-      - 289	
+      - 289
       -
       - parsed but ignored
     * - ``FreeOffsets``
-      - 288	
+      - 288
       -
       - parsed but ignored
     * - ``GrayResponseCurve``
-      - 291	
+      - 291
       -
       - parsed but ignored
     * - ``GrayResponseUnit``
-      - 290	
+      - 290
       -
       - parsed but ignored
     * - ``Group3Options``
@@ -592,7 +803,7 @@ tag has been previously set to the relevant compression scheme.
     * - ``Thresholding``
       - 263
       - R/W
-      - 
+      -
     * - ``TileByteCounts``
       - 324
       - R/W
@@ -654,7 +865,7 @@ tag has been previously set to the relevant compression scheme.
 -------------
 
 In addition to the normal TIFF
-tags the library supports a collection of 
+tags the library supports a collection of
 tags whose values lie in a range outside the valid range of TIFF
 tags. These tags are termed *pseudo-tags*
 and are used to control various codec-specific functions within the library.

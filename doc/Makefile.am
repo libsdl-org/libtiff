@@ -240,6 +240,20 @@ rst_sources = \
 	functions/TIFFReadRGBAStrip.rst \
 	functions/TIFFquery.rst \
 	functions/TIFFWriteEncodedTile.rst \
+	functions/_TIFFauxiliary.rst \
+	functions/_TIFFRewriteField.rst \
+	functions/TIFFAccessTagMethods.rst \
+	functions/TIFFClientInfo.rst \
+	functions/TIFFCreateDirectory.rst \
+	functions/TIFFCustomDirectory.rst \
+	functions/TIFFCustomTagList.rst \
+	functions/TIFFDeferStrileArrayWriting.rst \
+	functions/TIFFFieldQuery.rst \
+	functions/TIFFMergeFieldInfo.rst \
+	functions/TIFFProcFunctions.rst \
+	functions/TIFFReadFromUserBuffer.rst \
+	functions/TIFFSetTagExtender.rst \
+	functions/TIFFStrileQuery.rst \
 	libtiff.rst \
 	images.rst
 

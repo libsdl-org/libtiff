@@ -14,9 +14,15 @@ Synopsis
 
 .. c:function:: tsize_t TIFFTileSize(TIFF* tif)
 
+.. c:function:: uint64_t TIFFTileSize64(TIFF* tif)
+
 .. c:function:: tsize_t TIFFTileRowSize(TIFF* tif)
 
+.. c:function:: uint64_t TIFFTileRowSize64(TIFF* tif)
+
 .. c:function:: tsize_t TIFFVTileSize(TIFF* tif, uint32_t nrows)
+
+.. c:function:: uint64_t TIFFVTileSize64(TIFF* tif, uint32_t nrows)
 
 .. c:function:: ttile_t TIFFComputeTile(TIFF* tif, uint32_t x, uint32_t y, uint32_t z, tsample_t sample)
 
@@ -37,12 +43,18 @@ multiple of 16 pixels to conform with the TIFF specification.
 :c:func:`TIFFTileSize` returns the equivalent size for a tile of data
 as it would be returned in a call to :c:func:`TIFFReadTile` or as it
 would be expected in a call to :c:func:`TIFFWriteTile`.
+:c:func:`TIFFTileSize64` returns a :c:type:`uint64_t` number.
+If an error occurs, 0 is returned.
 
 :c:func:`TIFFVTileSize` returns the number of bytes in a row-aligned
 tile with *nrows* of data.
+:c:func:`TIFFVTileSize64` returns a :c:type:`uint64_t` number.
+If an error occurs, 0 is returned.
 
 :c:func:`TIFFTileRowSize` returns the number of bytes of a row of data
 in a tile.
+:c:func:`TIFFTileRowSize64` returns a :c:type:`uint64_t` number.
+If an error occurs, 0 is returned.
 
 :c:func:`TIFFComputeTile` returns the tile that contains the specified
 coordinates. A valid tile is always returned; out-of-range coordinate

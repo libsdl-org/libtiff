@@ -4,7 +4,9 @@ Defining New TIFF Tags
 Libtiff has built-in knowledge of all the standard TIFF tags, as
 well as extensions.  The following describes how to add knowledge of
 new tags as builtins to libtiff, or how to application specific tags can
-be used by applications without modifying libtiff. 
+be used by applications without modifying libtiff.
+
+.. _TIFFFieldInfo_Definition:
 
 TIFFFieldInfo
 -------------
@@ -103,15 +105,17 @@ definitions, including :c:func:`_TIFFFindFieldInfo`, and
 :file:`tif_dirinfo.c` for details.  There must be some mechanism to get the whole
 list, though I don't see it off hand.
 
+.. _Tag_Auto_registration:
+
 Default Tag Auto-registration
 -----------------------------
 
-In libtiff 3.6.0 a new mechanism was introduced allowing libtiff to 
-read unrecognised tags automatically.  When an unknown tags is encountered, 
-it is automatically internally defined with a default name and a type 
+In libtiff 3.6.0 a new mechanism was introduced allowing libtiff to
+read unrecognised tags automatically.  When an unknown tags is encountered,
+it is automatically internally defined with a default name and a type
 derived from the tag value in the file.  Applications only need to predefine
 application specific tags if they need to be able to set them in a file, or
-if particular calling conventions are desired for :c:func:`TIFFSetField` and 
+if particular calling conventions are desired for :c:func:`TIFFSetField` and
 :c:func:`TIFFGetField`.
 
 When tags are autodefined like this the :c:member:`field_readcount` and
@@ -128,11 +132,14 @@ Thus, to read anonymous auto-registered tags use the following:
     void* value;  //has to be a pointer to the expected value type.
     TIFFGetField(tif, TIFFTAG_UNKNOWN_TO_LIBTIFF, &count, &value);
 
+
+.. _Define_Application_Tags:
+
 Defining Application Tags
 -------------------------
 
 For various reasons, it is common for applications to want to define
-their own tags to store information outside the core TIFF specification. 
+their own tags to store information outside the core TIFF specification.
 This is done by calling :c:func:`TIFFMergeFieldInfo` with one or more
 :c:struct:`TIFFFieldInfo`.
 
@@ -143,7 +150,7 @@ information on the new tags:
 ::
 
     static const TIFFFieldInfo xtiffFieldInfo[] = {
-  
+
         /* XXX Insert Your tags here */
         { TIFFTAG_GEOPIXELSCALE,	-1,-1, TIFF_DOUBLE,	FIELD_CUSTOM,
           TRUE,	TRUE,	"GeoPixelScale" },
@@ -173,7 +180,7 @@ The tags need to be defined for each TIFF file opened - and when reading
 they should be defined before the tags of the file are read, yet a valid
 :c:expr:`TIFF *` is needed to merge the tags against.  In order to get them
 registered at the appropriate part of the setup process, it is necessary
-to register our merge function as an extender callback with libtiff. 
+to register our merge function as an extender callback with libtiff.
 This is done with :c:func:`TIFFSetTagExtender`.  We also keep track of the
 previous tag extender (if any) so that we can call it from our extender
 allowing a chain of customizations to take effect.
@@ -215,7 +222,7 @@ and then calls the next extender if there is one in effect.
     }
 
 The above approach ensures that our new definitions are used when reading
-or writing any TIFF file.  However, since on reading we already have 
+or writing any TIFF file.  However, since on reading we already have
 default definitions for tags, it is usually not critical to pre-define them.
 If tag definitions are only required for writing custom tags, you can just
 call :c:func:`TIFFMergeFieldInfo` before setting new tags.  The whole extender

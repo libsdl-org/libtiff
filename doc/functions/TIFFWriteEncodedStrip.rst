@@ -46,7 +46,7 @@ Diagnostics
 All error messages are directed to the :c:func:`TIFFError` routine.
 
 ``%s: File not open for writing``:
-  
+
   The file was opened for reading, not writing.
 
 ``Can not write scanlines to a tiled image``:

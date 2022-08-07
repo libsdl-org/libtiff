@@ -28,10 +28,14 @@ to the capabilities of the library; it is not an attempt to describe
 everything a developer needs to know about the library or about TIFF.
 Detailed information on the interfaces to the library are given in
 the :doc:`functions` that accompany this software.
+An alphabetic list of all the public functions with a brief description can be found at :ref:`list_of_routines`
 
-Michael Still has also written a useful introduction to libtiff for the
-IBM DeveloperWorks site available at
-`<http://www.ibm.com/developerworks/linux/library/l-libtiff>`_.
+.. warning::
+    The following hyperlink does no more work, at least no libtiff introduction:
+
+    Michael Still has also written a useful introduction to libtiff for the
+    IBM DeveloperWorks site available at
+    `<http://www.ibm.com/developerworks/linux/library/l-libtiff>`_.
 
 
 How to tell which version you have
