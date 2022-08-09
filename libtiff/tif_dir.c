@@ -652,6 +652,30 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 			  /*--: Rational2Double: For Rationals tv_size is set above to 4 or 8 according to fip->set_field_type! */
 				_TIFFmemcpy(tv->value, va_arg(ap, void *),
 				    tv->count * tv_size);
+				/* Test here for too big values for LONG8, SLONG8 in ClassicTIFF and delete custom field from custom list */
+				if (!(tif->tif_flags & TIFF_BIGTIFF)) {
+					if (tv->info->field_type == TIFF_LONG8) {
+						uint64_t *pui64 = (uint64_t *)tv->value;
+						for (int i = 0; i < tv->count; i++) {
+							if (pui64[i] > 0xffffffffu) {
+								TIFFErrorExt(tif->tif_clientdata, module,
+									"%s: Bad LONG8 value %"PRIu64" at %d. array position for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
+									tif->tif_name, pui64[i], i, fip ? fip->field_name : "Unknown", tag);
+								goto badvalueifd8long8;
+							}
+						}
+					} else if (tv->info->field_type == TIFF_SLONG8) {
+						int64_t *pi64 = (int64_t *)tv->value;
+						for (int i = 0; i < tv->count; i++) {
+							if (pi64[i] > 2147483647 || pi64[i] < (-2147483647 - 1)) {
+								TIFFErrorExt(tif->tif_clientdata, module,
+									"%s: Bad SLONG8 value %"PRIi64" at %d. array position for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
+									tif->tif_name, pi64[i], i, fip ? fip->field_name : "Unknown", tag);
+								goto badvalueifd8long8;
+							}
+						}
+					}
+				}
 			} else {
 				char *val = (char *)tv->value;
 				assert( tv->count == 1 );
@@ -700,12 +724,26 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 					{
 						uint64_t v2 = va_arg(ap, uint64_t);
 						_TIFFmemcpy(val, &v2, tv_size);
+						/* Test here for too big values for ClassicTIFF and delete custom field from custom list */
+						if (!(tif->tif_flags & TIFF_BIGTIFF) && (v2 > 0xffffffffu)) {
+							TIFFErrorExt(tif->tif_clientdata, module,
+								"%s: Bad LONG8 or IFD8 value %"PRIu64" for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
+								tif->tif_name, v2, fip ? fip->field_name : "Unknown", tag);
+							goto badvalueifd8long8;
+						}
 					}
 					break;
 				case TIFF_SLONG8:
 					{
 						int64_t v2 = va_arg(ap, int64_t);
 						_TIFFmemcpy(val, &v2, tv_size);
+						/* Test here for too big values for ClassicTIFF and delete custom field from custom list */
+						if (!(tif->tif_flags & TIFF_BIGTIFF) && ((v2 > 2147483647) || (v2 < (-2147483647 - 1)))) {
+							TIFFErrorExt(tif->tif_clientdata, module,
+								"%s: Bad SLONG8 value %"PRIi64" for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
+								tif->tif_name, v2, fip ? fip->field_name : "Unknown", tag);
+								goto badvalueifd8long8;
+						}
 					}
 					break;
 				case TIFF_RATIONAL:
@@ -787,7 +825,37 @@ badvaluedouble:
         va_end(ap);
         }
     return (0);
-}
+badvalueifd8long8:
+		{
+			/* Error message issued already above. */
+			TIFFTagValue *tv2 = NULL;
+			int iCustom2, iC2;
+			/* Find the existing entry for this custom value. */
+			for (iCustom2 = 0; iCustom2 < td->td_customValueCount; iCustom2++) {
+				if (td->td_customValues[iCustom2].info->field_tag == tag) {
+					tv2 = td->td_customValues + (iCustom2);
+					break;
+				}
+			}
+			if (tv2 != NULL) {
+				/* Remove custom field from custom list */
+				if (tv2->value != NULL) {
+					_TIFFfree(tv2->value);
+					tv2->value = NULL;
+				}
+				/* Shorten list and close gap in customValues list.
+				 * Re-allocation of td_customValues not necessary here. */
+				td->td_customValueCount--;
+				for (iC2 = iCustom2; iC2 < td->td_customValueCount; iC2++) {
+					td->td_customValues[iC2] = td->td_customValues[iC2+1];
+				}
+			} else {
+				assert(0);
+			}
+			va_end(ap);
+		}
+	return (0);
+} /*-- _TIFFVSetField() --*/
 
 /*
  * Return 1/0 according to whether or not
