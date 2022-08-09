@@ -172,7 +172,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 
 	TIFFDirectory* td = &tif->tif_dir;
 	int status = 1;
-	uint32_t v32, i, v;
+	uint32_t v32, v;
     double dblval;
 	char* s;
 	const TIFFField *fip = TIFFFindField(tif, tag, TIFF_ANY);
@@ -465,11 +465,14 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 		td->td_ycbcrsubsampling[1] = (uint16_t) va_arg(ap, uint16_vap);
 		break;
 	case TIFFTAG_TRANSFERFUNCTION:
+	{
+		uint32_t i;
 		v = (td->td_samplesperpixel - td->td_extrasamples) > 1 ? 3 : 1;
 		for (i = 0; i < v; i++)
 			_TIFFsetShortArray(&td->td_transferfunction[i],
                                va_arg(ap, uint16_t*), 1U << td->td_bitspersample);
 		break;
+	}
 	case TIFFTAG_REFERENCEBLACKWHITE:
 		/* XXX should check for null range */
 		_TIFFsetFloatArray(&td->td_refblackwhite, va_arg(ap, float*), 6);
