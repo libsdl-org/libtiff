@@ -660,7 +660,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 							if (pui64[i] > 0xffffffffu) {
 								TIFFErrorExt(tif->tif_clientdata, module,
 									"%s: Bad LONG8 value %"PRIu64" at %d. array position for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
-									tif->tif_name, pui64[i], i, fip ? fip->field_name : "Unknown", tag);
+									tif->tif_name, pui64[i], i, fip->field_name, tag);
 								goto badvalueifd8long8;
 							}
 						}
@@ -670,7 +670,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 							if (pi64[i] > 2147483647 || pi64[i] < (-2147483647 - 1)) {
 								TIFFErrorExt(tif->tif_clientdata, module,
 									"%s: Bad SLONG8 value %"PRIi64" at %d. array position for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
-									tif->tif_name, pi64[i], i, fip ? fip->field_name : "Unknown", tag);
+									tif->tif_name, pi64[i], i, fip->field_name, tag);
 								goto badvalueifd8long8;
 							}
 						}
@@ -728,7 +728,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 						if (!(tif->tif_flags & TIFF_BIGTIFF) && (v2 > 0xffffffffu)) {
 							TIFFErrorExt(tif->tif_clientdata, module,
 								"%s: Bad LONG8 or IFD8 value %"PRIu64" for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
-								tif->tif_name, v2, fip ? fip->field_name : "Unknown", tag);
+								tif->tif_name, v2, fip->field_name, tag);
 							goto badvalueifd8long8;
 						}
 					}
@@ -741,7 +741,7 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 						if (!(tif->tif_flags & TIFF_BIGTIFF) && ((v2 > 2147483647) || (v2 < (-2147483647 - 1)))) {
 							TIFFErrorExt(tif->tif_clientdata, module,
 								"%s: Bad SLONG8 value %"PRIi64" for \"%s\" tag %d in ClassicTIFF. Tag won't be written to file",
-								tif->tif_name, v2, fip ? fip->field_name : "Unknown", tag);
+								tif->tif_name, v2, fip->field_name, tag);
 								goto badvalueifd8long8;
 						}
 					}
