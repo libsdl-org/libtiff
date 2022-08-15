@@ -108,12 +108,12 @@
  *                lower level, scanline level routines. Debug reports a limited set
  *                of messages to monitor progress without enabling dump logs.
  * 
- * Note:    The (-X|-Y), -Z and -z options are mutually exclusive.
+ * Note:    The (-X|-Y), -Z, -z and -S options are mutually exclusive.
  *          In no case should the options be applied to a given selection successively.
  */
 
-static   char tiffcrop_version_id[] = "2.5";
-static   char tiffcrop_rev_date[] = "02-09-2022";
+static   char tiffcrop_version_id[] = "2.5.1";
+static   char tiffcrop_rev_date[] = "15-08-2022";
 
 #include "tif_config.h"
 #include "libport.h"
@@ -173,12 +173,12 @@ static   char tiffcrop_rev_date[] = "02-09-2022";
 #define ROTATECW_270 32
 #define ROTATE_ANY (ROTATECW_90 | ROTATECW_180 | ROTATECW_270)
 
-#define CROP_NONE     0
-#define CROP_MARGINS  1
-#define CROP_WIDTH    2
-#define CROP_LENGTH   4
-#define CROP_ZONES    8
-#define CROP_REGIONS 16
+#define CROP_NONE     0     /* "-S" -> Page_MODE_ROWSCOLS and page->rows/->cols != 0 */
+#define CROP_MARGINS  1     /* "-m" */
+#define CROP_WIDTH    2     /* "-X" */
+#define CROP_LENGTH   4     /* "-Y" */
+#define CROP_ZONES    8     /* "-Z" */
+#define CROP_REGIONS 16     /* "-z" */
 #define CROP_ROTATE  32
 #define CROP_MIRROR  64
 #define CROP_INVERT 128
@@ -316,7 +316,7 @@ struct crop_mask {
 #define PAGE_MODE_RESOLUTION   1
 #define PAGE_MODE_PAPERSIZE    2
 #define PAGE_MODE_MARGINS      4
-#define PAGE_MODE_ROWSCOLS     8
+#define PAGE_MODE_ROWSCOLS     8    /* for -S option */
 
 #define INVERT_DATA_ONLY      10
 #define INVERT_DATA_AND_TAG   11
@@ -781,7 +781,7 @@ static const char usage_info[] =
 "             The four debug/dump options are independent, though it makes little sense to\n"
 "             specify a dump file without specifying a detail level.\n"
 "\n"
-"Note:        The (-X|-Y), -Z and -z options are mutually exclusive.\n"
+"Note:        The (-X|-Y), -Z, -z and -S options are mutually exclusive.\n"
 "             In no case should the options be applied to a given selection successively.\n"
 "\n"
 ;
@@ -2131,13 +2131,14 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
 		/*NOTREACHED*/
       }
     }
-    /*-- Check for not allowed combinations (e.g. -X, -Y and -Z and -z are mutually exclusive) --*/
-    char XY, Z, R;
+    /*-- Check for not allowed combinations (e.g. -X, -Y and -Z, -z and -S are mutually exclusive) --*/
+    char XY, Z, R, S;
     XY = ((crop_data->crop_mode & CROP_WIDTH) || (crop_data->crop_mode & CROP_LENGTH));
     Z = (crop_data->crop_mode & CROP_ZONES);
     R = (crop_data->crop_mode & CROP_REGIONS);
-    if ((XY && Z) || (XY && R) || (Z && R)) {
-        TIFFError("tiffcrop input error", "The crop options(-X|-Y), -Z and -z are mutually exclusive.->Exit");
+    S = (page->mode & PAGE_MODE_ROWSCOLS);
+    if ((XY && Z) || (XY && R) || (XY && S) || (Z && R) || (Z && S) || (R && S)) {
+        TIFFError("tiffcrop input error", "The crop options(-X|-Y), -Z, -z and -S are mutually exclusive.->Exit");
         exit(EXIT_FAILURE);
     }
   }  /* end process_command_opts */
