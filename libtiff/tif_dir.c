@@ -1531,6 +1531,17 @@ TIFFDefaultDirectory(TIFF* tif)
 	tif->tif_tagmethods.vsetfield = _TIFFVSetField;  
 	tif->tif_tagmethods.vgetfield = _TIFFVGetField;
 	tif->tif_tagmethods.printdir = NULL;
+	/* additional default values */
+	td->td_planarconfig = PLANARCONFIG_CONTIG;
+	td->td_compression = COMPRESSION_NONE;
+	td->td_subfiletype = 0;
+	td->td_minsamplevalue = 0;
+	/* td_bitspersample=1 is always set in TIFFDefaultDirectory(). 
+	 * Therefore, td_maxsamplevalue has to be re-calculated in TIFFGetFieldDefaulted(). */
+	td->td_maxsamplevalue = 1;  /* Default for td_bitspersample=1 */
+	td->td_extrasamples = 0;
+	td->td_sampleinfo = NULL;
+
 	/*
 	 *  Give client code a chance to install their own
 	 *  tag extensions & methods, prior to compression overloads,

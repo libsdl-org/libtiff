@@ -3969,6 +3969,8 @@ TIFFReadDirectory(TIFF* tif)
 	 * without a PlanarConfiguration directory entry.
 	 * Thus we setup a default value here, even though
 	 * the TIFF spec says there is no default value.
+	 * After PlanarConfiguration is preset in TIFFDefaultDirectory()
+	 * the following setting is not needed, but does not harm either.
 	 */
 	TIFFSetField(tif,TIFFTAG_PLANARCONFIG,PLANARCONFIG_CONTIG);
 	/*
