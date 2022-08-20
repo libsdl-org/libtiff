@@ -87,9 +87,6 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryDoubleArray(TIFF* tif, TIFFDirEn
 static enum TIFFReadDirEntryErr TIFFReadDirEntryIfd8Array(TIFF* tif, TIFFDirEntry* direntry, uint64_t** value);
 
 static enum TIFFReadDirEntryErr TIFFReadDirEntryPersampleShort(TIFF* tif, TIFFDirEntry* direntry, uint16_t* value);
-#if 0
-static enum TIFFReadDirEntryErr TIFFReadDirEntryPersampleDouble(TIFF* tif, TIFFDirEntry* direntry, double* value);
-#endif
 
 static void TIFFReadDirEntryCheckedByte(TIFF* tif, TIFFDirEntry* direntry, uint8_t* value);
 static void TIFFReadDirEntryCheckedSbyte(TIFF* tif, TIFFDirEntry* direntry, int8_t* value);
@@ -3190,36 +3187,6 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryPersampleShort(TIFF* tif, TIFFDi
 	_TIFFfree(m);
 	return(err);
 }
-
-#if 0
-static enum TIFFReadDirEntryErr TIFFReadDirEntryPersampleDouble(TIFF* tif, TIFFDirEntry* direntry, double* value)
-{
-	enum TIFFReadDirEntryErr err;
-	double* m;
-	double* na;
-	uint16_t nb;
-	if (direntry->tdir_count<(uint64_t)tif->tif_dir.td_samplesperpixel)
-		return(TIFFReadDirEntryErrCount);
-	err=TIFFReadDirEntryDoubleArray(tif,direntry,&m);
-	if (err!=TIFFReadDirEntryErrOk)
-		return(err);
-	na=m;
-	nb=tif->tif_dir.td_samplesperpixel;
-	*value=*na++;
-	nb--;
-	while (nb>0)
-	{
-		if (*na++!=*value)
-		{
-			err=TIFFReadDirEntryErrPsdif;
-			break;
-		}
-		nb--;
-	}
-	_TIFFfree(m);
-	return(err);
-}
-#endif
 
 static void TIFFReadDirEntryCheckedByte(TIFF* tif, TIFFDirEntry* direntry, uint8_t* value)
 {
