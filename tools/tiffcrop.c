@@ -2133,11 +2133,11 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
     }
     /*-- Check for not allowed combinations (e.g. -X, -Y and -Z, -z and -S are mutually exclusive) --*/
     char XY, Z, R, S;
-    XY = ((crop_data->crop_mode & CROP_WIDTH) || (crop_data->crop_mode & CROP_LENGTH));
-    Z = (crop_data->crop_mode & CROP_ZONES);
-    R = (crop_data->crop_mode & CROP_REGIONS);
-    S = (page->mode & PAGE_MODE_ROWSCOLS);
-    if ((XY && Z) || (XY && R) || (XY && S) || (Z && R) || (Z && S) || (R && S)) {
+    XY = ((crop_data->crop_mode & CROP_WIDTH) || (crop_data->crop_mode & CROP_LENGTH)) ? 1 : 0;
+    Z = (crop_data->crop_mode & CROP_ZONES) ? 1 : 0;
+    R = (crop_data->crop_mode & CROP_REGIONS) ? 1 : 0;
+    S = (page->mode & PAGE_MODE_ROWSCOLS) ? 1 : 0;
+    if (XY + Z + R + S > 1) {
         TIFFError("tiffcrop input error", "The crop options(-X|-Y), -Z, -z and -S are mutually exclusive.->Exit");
         exit(EXIT_FAILURE);
     }
