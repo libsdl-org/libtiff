@@ -415,6 +415,14 @@ Options
   Note: :program:`tiffcrop` may be compiled with :command:`-DDEVELMODE` to enable
   additional very low level debug reporting.
 
+However, not all option combinations are permitted.
+
+  Note 1: The (-X|-Y), -Z, -z and -S options are mutually exclusive.
+  In no case should the options be applied to a given selection successively.
+
+  Note 2: Any of the -X, -Y, -Z and -z options together with other PAGE_MODE_x options
+  such as -H, -V, -P, -J or -K are not supported and may cause buffer overflows.
+  
 Examples
 --------
 
