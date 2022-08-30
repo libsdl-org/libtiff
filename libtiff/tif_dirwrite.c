@@ -626,6 +626,11 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64_t* pdiroff)
 				if (!TIFFWriteDirectoryTagAscii(tif,&ndir,dir,TIFFTAG_INKNAMES,tif->tif_dir.td_inknameslen,tif->tif_dir.td_inknames))
 					goto bad;
 			}
+			if (TIFFFieldSet(tif, FIELD_NUMBEROFINKS))
+			{
+				if (!TIFFWriteDirectoryTagShort(tif, &ndir, dir, TIFFTAG_NUMBEROFINKS, tif->tif_dir.td_numberofinks))
+					goto bad;
+			}
 			if (TIFFFieldSet(tif,FIELD_SUBIFD))
 			{
 				if (!TIFFWriteDirectoryTagSubifd(tif,&ndir,dir))
