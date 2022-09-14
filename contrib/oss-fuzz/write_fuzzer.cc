@@ -15,13 +15,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
 #include <tiffio.h>
 #include <tiffio.hxx>
-
-#include <stdio.h>
 
 #include <fuzzer/FuzzedDataProvider.h>
 
@@ -30,79 +29,76 @@
 
 const uint64_t MAX_SIZE = 500000000;
 
-extern "C" void handle_error(const char *unused, const char *unused2, va_list unused3) {
+extern "C" void handle_error(const char *, const char *, va_list) {
     return;
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  if(Size<5) {
+  if (Size < 5) {
     return 0;
   }
   FuzzedDataProvider fdp(Data, Size);
-  TIFF      *tif1;
   uint32_t width = 10;
   const uint32_t  length = 40;
   const uint32_t  rows_per_strip = 1;
-  tsize_t stripsize;
-  tstrip_t stripcount;
 
   const char *filename = "test_packbits.tif";
-  tif1 = TIFFOpen(filename, "w");
+  Tiff *tif1 = TIFFOpen(filename, "w");
   if (!tif1) {
-      fprintf (stderr, "Can't create test TIFF file %s.\n", filename);
+      fprintf(stderr, "Can't create test TIFF file %s.\n", filename);
       return 1;
   }
 
   switch (fdp.ConsumeIntegralInRange(0, 2)) {
     case 0:
       if (!TIFFSetField(tif1, TIFFTAG_COMPRESSION, COMPRESSION_PACKBITS)) {
-          fprintf (stderr, "Can't set Compression tag.\n");
+          fprintf(stderr, "Can't set Compression tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_IMAGEWIDTH, width)) {
-          fprintf (stderr, "Can't set ImageWidth tag.\n");
+          fprintf(stderr, "Can't set ImageWidth tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_IMAGELENGTH, length)) {
-          fprintf (stderr, "Can't set ImageLength tag.\n");
+          fprintf(stderr, "Can't set ImageLength tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_BITSPERSAMPLE, 8)) {
-          fprintf (stderr, "Can't set BitsPerSample tag.\n");
+          fprintf(stderr, "Can't set BitsPerSample tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_SAMPLESPERPIXEL, 1)) {
-          fprintf (stderr, "Can't set SamplesPerPixel tag.\n");
+          fprintf(stderr, "Can't set SamplesPerPixel tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_ROWSPERSTRIP, rows_per_strip)) {
-          fprintf (stderr, "Can't set SamplesPerPixel tag.\n");
+          fprintf(stderr, "Can't set SamplesPerPixel tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG)) {
-          fprintf (stderr, "Can't set PlanarConfiguration tag.\n");
+          fprintf(stderr, "Can't set PlanarConfiguration tag.\n");
           TIFFClose(tif1);
           return 0;
       }
     case 1:
       if (!TIFFSetField(tif1, TIFFTAG_COMPRESSION, COMPRESSION_NONE)) {
-          fprintf (stderr, "Can't set Compression tag.\n");
+          fprintf(stderr, "Can't set Compression tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_IMAGEWIDTH, width)) {
-          fprintf (stderr, "Can't set ImageWidth tag.\n");
+          fprintf(stderr, "Can't set ImageWidth tag.\n");
           TIFFClose(tif1);
           return 0;
       }
       if (!TIFFSetField(tif1, TIFFTAG_IMAGELENGTH, length)) {
-          fprintf (stderr, "Can't set ImageWidth tag.\n");
+          fprintf(stderr, "Can't set ImageWidth tag.\n");
           TIFFClose(tif1);
           return 0;
       }
@@ -112,11 +108,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
       TIFFSetField(tif1, TIFFTAG_ROWSPERSTRIP, 1);
   }
 
-  stripsize=TIFFStripSize(tif1);
-  stripcount=TIFFNumberOfStrips(tif1);
+  tsize_t stripsize = TIFFStripSize(tif1);
+  tstrip_t stripcount = TIFFNumberOfStrips(tif1);
   std::vector<uint8_t> rBytes = fdp.ConsumeRemainingBytes<uint8_t>();
 
-  TIFFWriteEncodedStrip( tif1, (tstrip_t)0, (void *)rBytes.data(), (int)rBytes.size() );
+  TIFFWriteEncodedStrip(tif1, (tstrip_t)0, (void *)rBytes.data(), (int)rBytes.size() );
   TIFFClose(tif1);
 
   return 0;
