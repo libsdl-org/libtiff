@@ -58,8 +58,8 @@ cmake . -DCMAKE_INSTALL_PREFIX=$WORK -DBUILD_SHARED_LIBS=off
 make -j$(nproc)
 make install
 
-for fuzzer in $(ls *fuzzer.cc); do
-    name=$(echo $fuzzer | cut -f1 -d'.')
+for fuzzer in $(ls $SRC/libtiff/contrib/oss-fuzz/*fuzzer.cc); do
+    name=$(basename $fuzzer | cut -f1 -d'.')
 
     if [ "$ARCHITECTURE" = "i386" ]; then
         $CXX $CXXFLAGS -std=c++11 -I$WORK/include \

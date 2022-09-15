@@ -39,11 +39,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   }
   FuzzedDataProvider fdp(Data, Size);
   uint32_t width = 10;
-  const uint32_t  length = 40;
-  const uint32_t  rows_per_strip = 1;
+  const uint32_t length = 40;
+  const uint32_t rows_per_strip = 1;
 
   const char *filename = "test_packbits.tif";
-  Tiff *tif1 = TIFFOpen(filename, "w");
+  TIFF *tif1 = TIFFOpen(filename, "w");
   if (!tif1) {
       fprintf(stderr, "Can't create test TIFF file %s.\n", filename);
       return 1;
@@ -112,7 +112,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   tstrip_t stripcount = TIFFNumberOfStrips(tif1);
   std::vector<uint8_t> rBytes = fdp.ConsumeRemainingBytes<uint8_t>();
 
-  TIFFWriteEncodedStrip(tif1, (tstrip_t)0, (void *)rBytes.data(), (int)rBytes.size() );
+  TIFFWriteEncodedStrip(tif1, tstrip_t(0), static_cast<void *>(rBytes.data()), static_cast<int>(rBytes.size()));
   TIFFClose(tif1);
 
   return 0;
