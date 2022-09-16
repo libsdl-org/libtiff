@@ -111,7 +111,7 @@ TIFFImageIterBegin(TIFFImageIter* img, TIFF* tif, int stop, char emsg[1024])
     case PHOTOMETRIC_PALETTE:
 	if (!TIFFGetField(tif, TIFFTAG_COLORMAP,
 	    &img->redcmap, &img->greencmap, &img->bluecmap)) {
-		TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "Missing required \"Colormap\" tag");
+		TIFFErrorExtR(tif, TIFFFileName(tif), "Missing required \"Colormap\" tag");
 	    return (0);
 	}
 	/* fall through... */
@@ -209,11 +209,11 @@ int
 TIFFImageIterGet(TIFFImageIter* img, void *udata, uint32_t w, uint32_t h)
 {
     if (img->get == NULL) {
-	TIFFErrorExt(img->tif->tif_clientdata, TIFFFileName(img->tif), "No \"get\" routine setup");
+	TIFFErrorExtR(img->tif, TIFFFileName(img->tif), "No \"get\" routine setup");
 	return (0);
     }
     if (img->callback.any == NULL) {
-	TIFFErrorExt(img->tif->tif_clientdata, TIFFFileName(img->tif),
+	TIFFErrorExtR(img->tif, TIFFFileName(img->tif),
 		"No \"put\" routine setupl; probably can not handle image format");
 	return (0);
     }
@@ -241,7 +241,7 @@ TIFFReadImageIter(TIFF* tif,
 	ok = TIFFImageIterGet(&img, raster, rwidth, img.height);
 	TIFFImageIterEnd(&img);
     } else {
-	TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), emsg);
+	TIFFErrorExtR(tif, TIFFFileName(tif), emsg);
 	ok = 0;
     }
     return (ok);
@@ -268,7 +268,7 @@ gtTileContig(TIFFImageIter* img, void *udata, uint32_t w, uint32_t h)
 
     buf = (u_char*) _TIFFmalloc(TIFFTileSize(tif));
     if (buf == 0) {
-	TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "No space for tile buffer");
+	TIFFErrorExtR(tif, TIFFFileName(tif), "No space for tile buffer");
 	return (0);
     }
     TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw);
@@ -323,7 +323,7 @@ gtTileSeparate(TIFFImageIter* img, void *udata, uint32_t w, uint32_t h)
     tilesize = TIFFTileSize(tif);
     buf = (u_char*) _TIFFmalloc(4*tilesize);
     if (buf == 0) {
-	TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "No space for tile buffer");
+	TIFFErrorExtR(tif, TIFFFileName(tif), "No space for tile buffer");
 	return (0);
     }
     r = buf;
@@ -384,7 +384,7 @@ gtStripContig(TIFFImageIter* img, void *udata, uint32_t w, uint32_t h)
 
     buf = (u_char*) _TIFFmalloc(TIFFStripSize(tif));
     if (buf == 0) {
-	TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "No space for strip buffer");
+	TIFFErrorExtR(tif, TIFFFileName(tif), "No space for strip buffer");
 	return (0);
     }
     orientation = img->orientation;
@@ -427,7 +427,7 @@ gtStripSeparate(TIFFImageIter* img, void *udata, uint32_t w, uint32_t h)
     stripsize = TIFFStripSize(tif);
     r = buf = (u_char *)_TIFFmalloc(4*stripsize);
     if (buf == 0) {
-	TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "No space for tile buffer");
+	TIFFErrorExtR(tif, TIFFFileName(tif), "No space for tile buffer");
 	return (0);
     }
     g = r + stripsize;
@@ -508,7 +508,7 @@ main(int argc, char **argv)
 	    ok = TIFFImageIterGet(&img, NULL, img.width, img.height);
 	    TIFFImageIterEnd(&img);
 	} else {
-	    TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), emsg);
+	    TIFFErrorExtR(tif, TIFFFileName(tif), emsg);
 	}
     }
     

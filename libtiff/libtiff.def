@@ -5,6 +5,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFCheckpointDirectory
 	TIFFCleanup
 	TIFFClientOpen
+	TIFFClientOpenEx
 	TIFFClientdata
 	TIFFClose
 	TIFFComputeStrip

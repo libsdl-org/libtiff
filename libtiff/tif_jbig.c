@@ -39,7 +39,7 @@ static int JBIGSetupDecode(TIFF* tif)
 {
 	if (TIFFNumberOfStrips(tif) != 1)
 	{
-		TIFFErrorExt(tif->tif_clientdata, "JBIG", "Multistrip images not supported in decoder");
+		TIFFErrorExtR(tif, "JBIG", "Multistrip images not supported in decoder");
 		return 0;
 	}
 
@@ -84,7 +84,7 @@ static int JBIGDecode(TIFF* tif, uint8_t* buffer, tmsize_t size, uint16_t s)
 		 * JBIG-KIT. Since the 2.0 the error reporting functions were
 		 * changed. We will handle both cases here.
 		 */
-		TIFFErrorExt(tif->tif_clientdata,
+		TIFFErrorExtR(tif,
 			     "JBIG", "Error (%d) decoding: %s",
 			     decodeStatus,
 #if defined(JBG_EN)
@@ -100,13 +100,13 @@ static int JBIGDecode(TIFF* tif, uint8_t* buffer, tmsize_t size, uint16_t s)
 	decodedSize = jbg_dec_getsize(&decoder);
 	if( (tmsize_t)decodedSize < size )
 	{
-	    TIFFWarningExt(tif->tif_clientdata, "JBIG",
+	    TIFFWarningExtR(tif, "JBIG",
 	                   "Only decoded %lu bytes, whereas %"TIFF_SSIZE_FORMAT" requested",
 	                   decodedSize, size);
 	}
 	else if( (tmsize_t)decodedSize > size )
 	{
-	    TIFFErrorExt(tif->tif_clientdata, "JBIG",
+	    TIFFErrorExtR(tif, "JBIG",
 	                 "Decoded %lu bytes, whereas %"TIFF_SSIZE_FORMAT" were requested",
 	                 decodedSize, size);
 	    jbg_dec_free(&decoder);
@@ -126,7 +126,7 @@ static int JBIGSetupEncode(TIFF* tif)
 {
 	if (TIFFNumberOfStrips(tif) != 1)
 	{
-		TIFFErrorExt(tif->tif_clientdata, "JBIG", "Multistrip images not supported in encoder");
+		TIFFErrorExtR(tif, "JBIG", "Multistrip images not supported in encoder");
 		return 0;
 	}
 

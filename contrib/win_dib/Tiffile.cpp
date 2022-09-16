@@ -410,7 +410,7 @@ getStripContig1Bit(TIFFRGBAImage* img, uint32_t* raster, uint32_t w, uint32_t h)
 
     buf = (u_char*) _TIFFmalloc(TIFFStripSize(tif));
     if (buf == 0) {
-        TIFFErrorExt(tif->tif_clientdata, TIFFFileName(tif), "No space for strip buffer");
+        TIFFErrorExtR(tif, TIFFFileName(tif), "No space for strip buffer");
         return (0);
     }
     y = setorientation(img, h);
