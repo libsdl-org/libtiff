@@ -157,11 +157,18 @@ set(tiff_libs_private_list "${tiff_libs_private_list}" PARENT_SCOPE)
 set(tiff_requires_private "${tiff_requires_private}" PARENT_SCOPE)
 
 set_target_properties(tiff PROPERTIES SOVERSION ${SO_COMPATVERSION})
+if(MINGW)
+  # This causes "-${SOVERSION}" to be added to shared libraries, so it matches
+  # Autotools output as well.  This setting is already enabled on Cygwin/MSYS
+  # by default.  We don't enable it for other Windows builds, as there is no
+  # Autotools output to match there.
+  set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
+endif()
 if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
     # encoded into their final filename.  We disable this on Cygwin because
-    # it causes cygz-${TIFF_FULL_VERSION}.dll to be created when cygz.dll
-    # seems to be the default.
+    # it causes cygtiff-${TIFF_FULL_VERSION}.dll to be created when
+    # cygtiff-${SOVERSION}.dll seems to be the default.
     set_target_properties(tiff PROPERTIES VERSION ${SO_VERSION})
 endif()
 if(HAVE_LD_VERSION_SCRIPT)
@@ -204,8 +211,8 @@ if(CXX_SUPPORT)
   if(NOT CYGWIN)
     # This property causes shared libraries on Linux to have the full version
     # encoded into their final filename.  We disable this on Cygwin because
-    # it causes cygz-${TIFF_FULL_VERSION}.dll to be created when cygz.dll
-    # seems to be the default.
+    # it causes cygtiffxx-${TIFF_FULL_VERSION}.dll to be created when
+    # cygtiffxx-${SOVERSION}.dll seems to be the default.
     set_target_properties(tiffxx PROPERTIES VERSION ${SO_VERSION})
   endif()
   if(HAVE_LD_VERSION_SCRIPT)
