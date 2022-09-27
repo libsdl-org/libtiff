@@ -697,7 +697,8 @@ gtTileContig(TIFFRGBAImage* img, uint32_t* raster, uint32_t w, uint32_t h)
 		this_tw = tw - fromskew;
 		this_toskew = toskew + fromskew;
 	    }
-	    (*put)(img, raster+y*w+tocol, tocol, y, this_tw, nrow, fromskew, this_toskew, buf + pos);
+	    tmsize_t roffset = (tmsize_t) y * w + tocol;
+	    (*put)(img, raster + roffset, tocol, y, this_tw, nrow, fromskew, this_toskew, buf + pos);
 	    tocol += this_tw;
 	    col += this_tw;
 	    /*
@@ -885,7 +886,8 @@ gtTileSeparate(TIFFRGBAImage* img, uint32_t* raster, uint32_t w, uint32_t h)
 				this_tw = tw - fromskew;
 				this_toskew = toskew + fromskew;
 			}
-			(*put)(img, raster+y*w+tocol, tocol, y, this_tw, nrow, fromskew, this_toskew, \
+			tmsize_t roffset = (tmsize_t) y * w + tocol;
+			(*put)(img, raster + roffset, tocol, y, this_tw, nrow, fromskew, this_toskew, \
 				p0 + pos, p1 + pos, p2 + pos, (alpha?(pa+pos):NULL));
 			tocol += this_tw;
 			col += this_tw;
@@ -995,7 +997,8 @@ gtStripContig(TIFFRGBAImage* img, uint32_t* raster, uint32_t w, uint32_t h)
 
 		pos = ((row + img->row_offset) % rowsperstrip) * scanline + \
 			((tmsize_t) img->col_offset * img->samplesperpixel);
-		(*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, buf + pos);
+		tmsize_t roffset = (tmsize_t) y * w;
+		(*put)(img, raster + roffset, 0, y, w, nrow, fromskew, toskew, buf + pos);
 		y += ((flip & FLIP_VERTICALLY) ? -(int32_t) nrow : (int32_t) nrow);
 	}
 
@@ -1153,7 +1156,8 @@ gtStripSeparate(TIFFRGBAImage* img, uint32_t* raster, uint32_t w, uint32_t h)
 
 		pos = ((row + img->row_offset) % rowsperstrip) * scanline + \
 			((tmsize_t) img->col_offset * img->samplesperpixel);
-		(*put)(img, raster+y*w, 0, y, w, nrow, fromskew, toskew, p0 + pos, p1 + pos,
+		tmsize_t roffset = (tmsize_t) y * w;
+		(*put)(img, raster + roffset, 0, y, w, nrow, fromskew, toskew, p0 + pos, p1 + pos,
 		    p2 + pos, (alpha?(pa+pos):NULL));
 		y += ((flip & FLIP_VERTICALLY) ? -(int32_t) nrow : (int32_t) nrow);
 	}
