@@ -39,25 +39,32 @@ message(STATUS "libtiff library version ${SO_VERSION}")
 string(TIMESTAMP BUILD_DATE "%Y%m%d")
 message(STATUS "libtiff build date: ${BUILD_DATE}")
 
+# Project definition
+set(CMAKE_C_STANDARD 99)
+project(tiff
+        VERSION "${LIBTIFF_VERSION}"
+        LANGUAGES C CXX)
 
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+if(NOT CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+  # libtiff is being included as a subproject of some other project.
+  set(TIFF_INSTALL_DEFAULT OFF)
+  option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+else()
+  set(TIFF_INSTALL_DEFAULT ON)
+  set(tiff-install ON)
+endif()
 
 option(tiff-tools "build TIFF tools" ON)
 option(tiff-tests "build TIFF tests" ON)
 option(tiff-contrib "build TIFF contrib" ON)
 option(tiff-docs "build TIFF documentation" ON)
 option(tiff-deprecated "build TIFF deprecated features" OFF)
+option(tiff-install "install TIFF targets" ${TIFF_INSTALL_DEFAULT})
 
 # Disable deprecated features to ensure clean build
 if (tiff-deprecated)
   add_definitions(-DTIFF_DISABLE_DEPRECATED)
 endif()
-
-# Project definition
-set(CMAKE_C_STANDARD 99)
-project(tiff
-        VERSION "${LIBTIFF_VERSION}"
-        LANGUAGES C CXX)
 
 # Autotools compatibility
 include(AutotoolsCompat)
