@@ -528,7 +528,7 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 			tFieldName = tFieldArray->fields[i].field_name;
 			pVoid = NULL;
 
-			if (tType == TIFF_RATIONAL && tFieldBit == FIELD_CUSTOM) {
+			if ((tType == TIFF_RATIONAL || tType == TIFF_SRATIONAL) && tFieldBit == FIELD_CUSTOM) {
 				/*-- dependent on set_field_type write value --*/
 				switch (tSetFieldType) {
 					case TIFF_SETGET_FLOAT:
@@ -818,7 +818,7 @@ write_test_tiff(TIFF* tif, const char* filenameRead, int blnAllCustomTags) {
 			pVoid = NULL;
 			auxDblUnion.dbl = 0;
 
-			if (tType == TIFF_RATIONAL && tFieldBit == FIELD_CUSTOM) {
+			if ((tType == TIFF_RATIONAL || tType == TIFF_SRATIONAL) && tFieldBit == FIELD_CUSTOM) {
 				/*-- dependent on set_field_type read value --*/
 				switch (tSetFieldType) {
 					case TIFF_SETGET_FLOAT:
