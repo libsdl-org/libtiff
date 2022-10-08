@@ -209,6 +209,7 @@ IMAGES_EXTRA_DIST = \
 	images/miniswhite-1c-1b.g3 \
 	images/test_float64_predictor2_le_lzw.tif \
 	images/test_float64_predictor2_be_lzw.tif \
+	images/tiff_with_subifd_chain.tif \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 
