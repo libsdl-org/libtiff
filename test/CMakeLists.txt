@@ -372,6 +372,7 @@ add_reader_test(tiffdump "" "images/miniswhite-1c-1b.tiff")
 # tiffinfo
 add_reader_test(tiffinfo "-c -D -d -j -s" "images/custom_dir_EXIF_GPS.tiff")
 add_reader_test(tiffinfo "-c -D -d -j -s" "images/minisblack-1c-16b.tiff")
+add_reader_test(tiffinfo " " "images/tiff_with_subifd_chain.tif")
 
 # tiffcp split/join
 foreach(image ${UNCOMPRESSEDIMAGES})

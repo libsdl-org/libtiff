@@ -151,7 +151,7 @@ main(int argc, char* argv[])
 	multiplefiles = (argc - optind > 1);
 	for (; optind < argc; optind++) {
 		if (multiplefiles)
-			printf("%s:\n", argv[optind]);
+			printf("File %s:\n", argv[optind]);
 		tif = TIFFOpen(argv[optind], chopstrips ? "rC" : "rc");
 		if (tif != NULL) {
 			if (dirnum != -1) {
@@ -168,6 +168,7 @@ main(int argc, char* argv[])
 					tiffinfo(tif, order, flags, 1);
 					if (TIFFGetField(tif, TIFFTAG_EXIFIFD,
 						&offset)) {
+						printf("--- EXIF directory within directory %d \n", curdir);
 						if (TIFFReadEXIFDirectory(tif, offset)) {
 							tiffinfo(tif, order, flags, 0);
 							/*-- Go back to previous directory, (directory is reloaded from file!) */
@@ -176,11 +177,43 @@ main(int argc, char* argv[])
 					}
 					if (TIFFGetField(tif, TIFFTAG_GPSIFD,
 						&offset)) {
+						printf("--- GPS directory within directory %d \n", curdir);
 						if (TIFFReadGPSDirectory(tif, offset)) {
 							tiffinfo(tif, order, flags, 0);
 							TIFFSetDirectory(tif, curdir);
 						}
 					}
+					/*-- Check for SubIFDs --*/
+					uint16_t nCount;
+					void *vPtr;
+					uint64_t *subIFDoffsets = NULL;
+					if (TIFFGetField(tif, TIFFTAG_SUBIFD, &nCount, &vPtr)) {
+						if (nCount > 0) {
+							subIFDoffsets = malloc(nCount * sizeof(uint64_t));
+							if (subIFDoffsets != NULL) {
+								memcpy(subIFDoffsets, vPtr, nCount * sizeof(subIFDoffsets[0]));
+								printf("--- SubIFD image descriptor tag within TIFF directory %d with array of %d SubIFD chains ---\n", curdir, nCount);
+								for (int i = 0; i < nCount; i++) {
+									offset = subIFDoffsets[i];
+									int s = 0;
+									if (TIFFSetSubDirectory(tif, offset)) {
+										/* print info and check for SubIFD chain */
+										do {
+											printf("--- SubIFD %d of chain %d at offset 0x%"PRIx64" (%"PRIu64"):\n", s, i, offset, offset);
+											tiffinfo(tif, order, flags, 0);
+											s++;
+										} while (TIFFReadDirectory(tif));
+									}
+								}
+								TIFFSetDirectory(tif, curdir);
+								free(subIFDoffsets);
+								subIFDoffsets = NULL;
+							} else {
+								fprintf(stderr, "Error: Could not allocate memory for SubIFDs list. SubIFDs not parsed.\n");
+							}
+						}
+					}
+					printf("\n");
 				} while (TIFFReadDirectory(tif));
 			}
 			TIFFClose(tif);
