@@ -1633,9 +1633,14 @@ TIFFAdvanceDirectory(TIFF* tif, uint64_t* nextdiroff, uint64_t* off, uint16_t* n
 			tmsize_t poffa,poffb,poffc,poffd;
 			uint64_t dircount64;
 			uint16_t dircount16;
+			if( poff > (uint64_t)TIFF_TMSIZE_T_MAX - sizeof(uint64_t) )
+			{
+				TIFFErrorExt(tif->tif_clientdata,module,"Error fetching directory count");
+				return(0);
+			}
 			poffa=(tmsize_t)poff;
 			poffb=poffa+sizeof(uint64_t);
-			if (((uint64_t)poffa != poff) || (poffb < poffa) || (poffb < (tmsize_t)sizeof(uint64_t)) || (poffb > tif->tif_size))
+			if (poffb > tif->tif_size)
 			{
 				TIFFErrorExt(tif->tif_clientdata,module,"Error fetching directory count");
 				return(0);
@@ -1649,9 +1654,14 @@ TIFFAdvanceDirectory(TIFF* tif, uint64_t* nextdiroff, uint64_t* off, uint16_t* n
 				return(0);
 			}
 			dircount16=(uint16_t)dircount64;
+			if( poffb > TIFF_TMSIZE_T_MAX - (tmsize_t)(dircount16*20) - (tmsize_t)sizeof(uint64_t) )
+			{
+				TIFFErrorExt(tif->tif_clientdata,module,"Error fetching directory link");
+				return(0);
+			}
 			poffc=poffb+dircount16*20;
 			poffd=poffc+sizeof(uint64_t);
-			if ((poffc<poffb) || (poffc<dircount16*20) || (poffd<poffc) || (poffd<(tmsize_t)sizeof(uint64_t)) || (poffd > tif->tif_size))
+			if (poffd > tif->tif_size)
 			{
 				TIFFErrorExt(tif->tif_clientdata,module,"Error fetching directory link");
 				return(0);
