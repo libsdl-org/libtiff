@@ -5440,6 +5440,9 @@ TIFFFetchNormalTag(TIFF* tif, TIFFDirEntry* dp, int recover)
 	switch (fip->set_field_type)
 	{
 		case TIFF_SETGET_UNDEFINED:
+				TIFFErrorExt(tif->tif_clientdata, "TIFFFetchNormalTag",
+					"Defined set_field_type of custom tag %"PRIu16" (%s) is TIFF_SETGET_UNDEFINED and thus tag is not read from file",
+					fip->field_tag, fip->field_name);
 			break;
 		case TIFF_SETGET_ASCII:
 			{
