@@ -503,7 +503,17 @@ _TIFFVSetField(TIFF* tif, uint32_t tag, va_list ap)
 		 * for the image's codec then we'll arrive here.  This
 		 * happens, for example, when tiffcp is used to convert between
 		 * compression schemes and codec-specific tags are blindly copied.
+		 * 
+		 * This also happens when a FIELD_IGNORE tag is written.
 		 */
+		if (fip->field_bit == FIELD_IGNORE) {
+			TIFFErrorExt(tif->tif_clientdata, module,
+				"%s: Ignored %stag \"%s\" (not supported by libtiff)",
+				tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
+				fip->field_name);
+			status = 0;
+			break;
+		}
 		if(fip->field_bit != FIELD_CUSTOM) {
 			TIFFErrorExt(tif->tif_clientdata, module,
 			    "%s: Invalid %stag \"%s\" (not supported by codec)",
