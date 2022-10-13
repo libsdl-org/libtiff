@@ -212,6 +212,10 @@ static   char tiffcrop_rev_date[] = "27-08-2022";
 
 #define TIFF_DIR_MAX  65534
 
+
+/* To avoid mode buffer overflow */
+#define MAX_MODESTRING_LEN  9
+
 /* Some conversion subroutines require image buffers, which are at least 3 bytes
  * larger than the necessary size for the image itself. */
 #define NUM_BUFF_OVERSIZE_BYTES   3
@@ -650,13 +654,18 @@ static const char usage_info[] =
 " -v       Print tiffcrop version identifier and last revision date\n"
 " \n"
 " -a       Append to output instead of overwriting\n"
-" -d       offset Set initial directory offset, counting first image as one, not zero\n"
-" -p       contig Pack samples contiguously (e.g. RGBRGB...)\n"
-" -p       separate  Store samples separately (e.g. RRR...GGG...BBB...)\n"
+" -B       Force output to be written with Big - Endian byte order.\n"
+" -L       Force output to be written with Little-Endian byte order.\n"
+" -M       Suppress the use of memory-mapped files when reading images.\n"
+" -C       Suppress the use of \"strip chopping\" when reading images that have a single strip/tile of uncompressed data.\n"
+" \n"
+" -d offset     Set initial directory offset, counting first image as one, not zero\n"
+" -p contig     Pack samples contiguously (e.g. RGBRGB...)\n"
+" -p separate   Store samples separately (e.g. RRR...GGG...BBB...)\n"
 " -s       Write output in strips\n"
 " -t       Write output in tiles\n"
 " -i       Ignore read errors\n"
-" -k size  set the memory allocation limit in MiB. 0 to disable limit\n"
+" -k size  Set the memory allocation limit in MiB. 0 to disable limit\n"
 " \n"
 " -r #     Make each strip have no more than # rows\n"
 " -w #     Set output tile width (pixels)\n"
@@ -1780,18 +1789,58 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
                   {
 		  TIFFError ("Region list exceeds limit of", "%d regions %s", MAX_REGIONS, optarg);
 		  TIFFError ("For valid options type", "tiffcrop -h");
-                  exit (EXIT_FAILURE);;
+                    exit(EXIT_FAILURE);
                   }
 		break;
       /* options for file open modes */
-      case 'B': *mp++ = 'b'; *mp = '\0';
-		break;
-      case 'L': *mp++ = 'l'; *mp = '\0';
-		break;
-      case 'M': *mp++ = 'm'; *mp = '\0';
-		break;
-      case 'C': *mp++ = 'c'; *mp = '\0';
-		break;
+            case 'B': 
+                {
+                    if (mp < mode + MAX_MODESTRING_LEN)
+                    {
+                        *mp++ = 'b'; *mp = '\0';
+                    } else {
+                        TIFFError("To many options for output file open modes. Maximum allowed ", "%d", MAX_MODESTRING_LEN);
+                        TIFFError("For valid options type", "tiffcrop -h");
+                        exit(EXIT_FAILURE);
+                    }
+                }
+                break;
+            case 'L':
+                {
+                    if (mp < mode + MAX_MODESTRING_LEN)
+                    {
+                        *mp++ = 'l'; *mp = '\0';
+                    } else {
+                        TIFFError("To many options for output file open modes. Maximum allowed ", "%d", MAX_MODESTRING_LEN);
+                        TIFFError("For valid options type", "tiffcrop -h");
+                        exit(EXIT_FAILURE);
+                    }
+                }
+            break;
+            case 'M':
+                {
+                    if (mp < mode + MAX_MODESTRING_LEN)
+                    {
+                        *mp++ = 'm'; *mp = '\0';
+                    } else {
+                        TIFFError("To many options for output file open modes. Maximum allowed ", "%d", MAX_MODESTRING_LEN);
+                        TIFFError("For valid options type", "tiffcrop -h");
+                        exit(EXIT_FAILURE);
+                    }
+                }
+            break;
+            case 'C':
+                {
+                    if (mp < mode + MAX_MODESTRING_LEN)
+                    {
+                        *mp++ = 'c'; *mp = '\0';
+                    } else {
+                        TIFFError("To many options for output file open modes. Maximum allowed ", "%d", MAX_MODESTRING_LEN);
+                        TIFFError("For valid options type", "tiffcrop -h");
+                        exit(EXIT_FAILURE);
+                    }
+                }
+            break;
       /* options for Debugging / data dump */
       case 'D': for (i = 0, opt_ptr = strtok (optarg, ",");
                     (opt_ptr != NULL);
