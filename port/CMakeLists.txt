@@ -35,7 +35,7 @@ if(NOT HAVE_GETOPT)
 
   # Add getopt if missing
   if(NOT HAVE_GETOPT)
-    target_sources(tiff_port PUBLIC
+    target_sources(tiff_port PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/getopt.c)
   endif()
 
