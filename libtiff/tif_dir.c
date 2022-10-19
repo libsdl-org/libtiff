@@ -1771,8 +1771,8 @@ TIFFAdvanceDirectory(TIFF* tif, uint64_t* nextdiroff, uint64_t* off, uint16_t* n
 		(*nextdirnum)++;
 		/* Check next directory for IFD looping and if so, set it as last directory. */
 		if (!_TIFFCheckDirNumberAndOffset(tif, *nextdirnum, *nextdiroff)) {
-			TIFFWarningExt(tif->tif_clientdata, module, "the next directory %"PRIu16" at offset 0x%"PRIx64" (%"PRIu64") might be an IFD loop. Treating directory %"PRIu16" as last directory",
-				*nextdirnum, *nextdiroff, *nextdiroff, *nextdirnum-1);
+			TIFFWarningExt(tif->tif_clientdata, module, "the next directory %"PRIu16" at offset 0x%"PRIx64" (%"PRIu64") might be an IFD loop. Treating directory %d as last directory",
+				*nextdirnum, *nextdiroff, *nextdiroff, (int)(*nextdirnum) - 1);
 			*nextdiroff = 0;
 			(*nextdirnum)--;
 		}
