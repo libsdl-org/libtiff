@@ -3907,11 +3907,11 @@ static int readContigStripsIntoBuffer (TIFF* in, uint8_t* buf)
                 rows = bytes_read / scanline_size;
                 if ((strip < (nstrips - 1)) && (bytes_read != (int32_t)stripsize))
                         TIFFError("", "Strip %"PRIu32": read %"PRId64" bytes, strip size %"PRIu64,
-                                  strip + 1, bytes_read, stripsize);
+                                  strip + 1, (uint64_t)bytes_read, (uint64_t)stripsize);
 
                 if (bytes_read < 0 && !ignore) {
                         TIFFError("", "Error reading strip %"PRIu32" after %"PRIu64" rows",
-                                  strip, rows);
+                                  strip, (uint64_t)rows);
                         return 0;
                 }
                 bufp += stripsize;
