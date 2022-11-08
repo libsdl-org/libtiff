@@ -97,7 +97,7 @@ void TIFFErrorExtR(TIFF* tif, const char* module, const char* fmt, ...)
 	}
 	if (_TIFFerrorHandlerExt) {
 		va_start(ap, fmt);
-		(*_TIFFerrorHandlerExt)(tif->tif_clientdata, module, fmt, ap);
+		(*_TIFFerrorHandlerExt)(tif ? tif->tif_clientdata : NULL, module, fmt, ap);
 		va_end(ap);
 	}
 }
