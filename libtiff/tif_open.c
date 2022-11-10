@@ -79,28 +79,51 @@ TIFFClientOpen(
 	TIFFMapFileProc mapproc,
 	TIFFUnmapFileProc unmapproc
 ) {
-  return TIFFClientOpenEx(name, mode, clientdata, readproc, writeproc, seekproc, closeproc,
-                          sizeproc, mapproc, unmapproc, NULL, NULL);
+  TIFFClientOpenExtStruct arguments = {
+      .version = 1,
+      .readproc = readproc,
+      .writeproc = writeproc,
+      .seekproc = seekproc,
+      .closeproc = closeproc,
+      .sizeproc = sizeproc,
+      .mapproc = mapproc,
+      .unmapproc = unmapproc,
+      .errorhandler = NULL,
+      .errorhandler_user_data = NULL,
+      .warnhandler = NULL,
+      .warnhandler_user_data = NULL
+  };
+  return TIFFClientOpenExt(name, mode, clientdata, &arguments);
 }
 
 TIFF*
-TIFFClientOpenEx(
+TIFFClientOpenExt(
 	const char* name, const char* mode,
 	thandle_t clientdata,
-	TIFFReadWriteProc readproc,
-	TIFFReadWriteProc writeproc,
-	TIFFSeekProc seekproc,
-	TIFFCloseProc closeproc,
-	TIFFSizeProc sizeproc,
-	TIFFMapFileProc mapproc,
-	TIFFUnmapFileProc unmapproc,
-	TIFFErrorHandlerExtR errorhandler,
-	TIFFErrorHandlerExtR warnhandler)
+    TIFFClientOpenExtStruct* arguments)
 {
-	static const char module[] = "TIFFClientOpenEx";
+	static const char module[] = "TIFFClientOpenExt";
 	TIFF *tif;
 	int m;
 	const char* cp;
+
+    if (arguments == NULL)
+    {
+        TIFFErrorExt(clientdata, module, "arguments should NOT be NULL");
+        return NULL;
+    }
+    if (arguments->version < 1)
+    {
+        TIFFErrorExt(clientdata, module, "arguments->version should be >= 1");
+        return NULL;
+    }
+    TIFFReadWriteProc readproc = arguments->readproc;
+    TIFFReadWriteProc writeproc = arguments->writeproc;
+    TIFFSeekProc seekproc = arguments->seekproc;
+    TIFFCloseProc closeproc = arguments->closeproc;
+    TIFFSizeProc sizeproc = arguments->sizeproc;
+    TIFFMapFileProc mapproc = arguments->mapproc;
+    TIFFUnmapFileProc unmapproc = arguments->unmapproc;
 
 	/* The following are configuration checks. They should be redundant, but should not
 	 * compile to any actual code in an optimised release build anyway. If any of them
@@ -152,8 +175,10 @@ TIFFClientOpenEx(
 	tif->tif_sizeproc = sizeproc;
 	tif->tif_mapproc = mapproc ? mapproc : _tiffDummyMapProc;
 	tif->tif_unmapproc = unmapproc ? unmapproc : _tiffDummyUnmapProc;
-    tif->tif_errorhandler = errorhandler;
-    tif->tif_warnhandler = warnhandler;
+    tif->tif_errorhandler = arguments->errorhandler;
+    tif->tif_errorhandler_user_data = arguments->errorhandler_user_data;
+    tif->tif_warnhandler = arguments->warnhandler;
+    tif->tif_warnhandler_user_data = arguments->warnhandler_user_data;
 
 	if (!readproc || !writeproc || !seekproc || !closeproc || !sizeproc) {
 		TIFFErrorExtR(tif, module,

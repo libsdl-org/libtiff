@@ -274,7 +274,7 @@ extern "C" {
 #endif
 typedef void (*TIFFErrorHandler)(const char*, const char*, va_list);
 typedef void (*TIFFErrorHandlerExt)(thandle_t, const char*, const char*, va_list);
-typedef int (*TIFFErrorHandlerExtR)(thandle_t, const char*, const char*, va_list);
+typedef int (*TIFFErrorHandlerExtR)(TIFF*, void* user_data, const char*, const char*, va_list);
 typedef tmsize_t (*TIFFReadWriteProc)(thandle_t, void*, tmsize_t);
 typedef toff_t (*TIFFSeekProc)(thandle_t, toff_t, int);
 typedef int (*TIFFCloseProc)(thandle_t);
@@ -460,28 +460,58 @@ extern TIFFErrorHandlerExt TIFFSetErrorHandlerExt(TIFFErrorHandlerExt);
 extern TIFFErrorHandler TIFFSetWarningHandler(TIFFErrorHandler);
 extern TIFFErrorHandlerExt TIFFSetWarningHandlerExt(TIFFErrorHandlerExt);
 
-extern void TIFFSetErrorHandlerExtR(TIFF*, TIFFErrorHandlerExtR);
-extern void TIFFSetWarningHandlerExtR(TIFF*, TIFFErrorHandlerExtR);
+extern void TIFFSetErrorHandlerExtR(TIFF*, TIFFErrorHandlerExtR, void* errorhandler_user_data);
+extern void TIFFSetWarningHandlerExtR(TIFF*, TIFFErrorHandlerExtR, void* warnhandler_user_data);
+extern void TIFFWarningExtR(TIFF*, const char*, const char*, ...) TIFF_ATTRIBUTE((__format__ (__printf__,3,4)));
+extern void TIFFErrorExtR(TIFF*, const char*, const char*, ...) TIFF_ATTRIBUTE((__format__ (__printf__,3,4)));
+
+typedef struct TIFFOpenExtStruct
+{
+    int                  version; /* should be set to 1 for now. */
+
+    TIFFErrorHandlerExtR errorhandler; /* may be NULL */
+    void*                errorhandler_user_data; /* may be NULL */
+    TIFFErrorHandlerExtR warnhandler; /* may be NULL */
+    void*                warnhandler_user_data; /* may be NULL */
+    /* If new fields are added, they should be handled by nVersion == 2 */
+} TIFFOpenExtStruct;
 
 extern TIFF* TIFFOpen(const char*, const char*);
+extern TIFF* TIFFOpenExt(const char*, const char*, TIFFOpenExtStruct* arguments);
 # ifdef __WIN32__
 extern TIFF* TIFFOpenW(const wchar_t*, const char*);
+extern TIFF* TIFFOpenWExt(const wchar_t*, const char*, TIFFOpenExtStruct* arguments);
 # endif /* __WIN32__ */
 extern TIFF* TIFFFdOpen(int, const char*, const char*);
+extern TIFF* TIFFFdOpenExt(int, const char*, const char*, TIFFOpenExtStruct* arguments);
 extern TIFF* TIFFClientOpen(const char*, const char*,
 	    thandle_t,
 	    TIFFReadWriteProc, TIFFReadWriteProc,
 	    TIFFSeekProc, TIFFCloseProc,
 	    TIFFSizeProc,
 	    TIFFMapFileProc, TIFFUnmapFileProc);
-extern TIFF* TIFFClientOpenEx(const char*, const char*,
-	    thandle_t,
-	    TIFFReadWriteProc, TIFFReadWriteProc,
-	    TIFFSeekProc, TIFFCloseProc,
-	    TIFFSizeProc,
-	    TIFFMapFileProc, TIFFUnmapFileProc,
-            TIFFErrorHandlerExtR, TIFFErrorHandlerExtR);
 
+typedef struct TIFFClientOpenExtStruct
+{
+    int                  version; /* should be set to 1 for now. */
+
+    TIFFReadWriteProc    readproc; /* must *NOT* be NULL */
+    TIFFReadWriteProc    writeproc; /* must *NOT* be NULL */
+    TIFFSeekProc         seekproc; /* must *NOT* be NULL */
+    TIFFCloseProc        closeproc; /* must *NOT* be NULL */
+    TIFFSizeProc         sizeproc; /* must *NOT* be NULL */
+    TIFFMapFileProc      mapproc; /* may be NULL */
+    TIFFUnmapFileProc    unmapproc; /* may be NULL */
+    TIFFErrorHandlerExtR errorhandler; /* may be NULL */
+    void*                errorhandler_user_data; /* may be NULL */
+    TIFFErrorHandlerExtR warnhandler; /* may be NULL */
+    void*                warnhandler_user_data; /* may be NULL */
+    /* If new fields are added, they should be handled by nVersion == 2 */
+} TIFFClientOpenExtStruct;
+
+extern TIFF* TIFFClientOpenExt(const char*, const char*,
+                               thandle_t,
+                               TIFFClientOpenExtStruct* arguments);
 extern TIFFExtendProc TIFFSetTagExtender(TIFFExtendProc);
 extern uint32_t TIFFComputeTile(TIFF* tif, uint32_t x, uint32_t y, uint32_t z, uint16_t s);
 extern int TIFFCheckTile(TIFF* tif, uint32_t x, uint32_t y, uint32_t z, uint16_t s);

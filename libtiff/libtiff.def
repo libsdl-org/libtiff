@@ -5,7 +5,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFCheckpointDirectory
 	TIFFCleanup
 	TIFFClientOpen
-	TIFFClientOpenEx
+	TIFFClientOpenExt
 	TIFFClientdata
 	TIFFClose
 	TIFFComputeStrip
@@ -25,7 +25,9 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFDeferStrileArrayWriting
 	TIFFError
 	TIFFErrorExt
+	TIFFErrorExtR
 	TIFFFdOpen
+	TIFFFdOpenExt
 	TIFFFieldDataType
 	TIFFFieldName
 	TIFFFieldPassCount
@@ -78,7 +80,9 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFNumberOfStrips
 	TIFFNumberOfTiles
 	TIFFOpen
+	TIFFOpenExt
 	TIFFOpenW
+	TIFFOpenWExt
 	TIFFPrintDirectory
 	TIFFRGBAImageBegin
 	TIFFRGBAImageEnd
@@ -117,6 +121,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFSetDirectory
 	TIFFSetErrorHandler
 	TIFFSetErrorHandlerExt
+	TIFFSetErrorHandlerExtR
 	TIFFSetField
 	TIFFSetFileName
 	TIFFSetFileno
@@ -125,6 +130,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFSetTagExtender
 	TIFFSetWarningHandler
 	TIFFSetWarningHandlerExt
+	TIFFSetWarningHandlerExtR
 	TIFFSetWriteOffset
 	TIFFSetupStrips
 	TIFFStripSize
@@ -156,6 +162,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFVTileSize64
 	TIFFWarning
 	TIFFWarningExt
+	TIFFWarningExtR
 	TIFFWriteBufferSetup
 	TIFFWriteCheck
 	TIFFWriteCustomDirectory

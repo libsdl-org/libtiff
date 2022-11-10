@@ -175,6 +175,11 @@ target_sources(testtypes PRIVATE testtypes.c)
 target_link_libraries(testtypes PRIVATE tiff tiff_port)
 list(APPEND simple_tests testtypes)
 
+add_executable(test_error_handlers ../placeholder.h)
+target_sources(test_error_handlers PRIVATE test_error_handlers.c)
+target_link_libraries(test_error_handlers PRIVATE tiff tiff_port)
+list(APPEND simple_tests test_error_handlers)
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.

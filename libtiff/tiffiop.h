@@ -199,7 +199,9 @@ struct tiff {
 	size_t               tif_nfieldscompat;
 	/* Error handler support */
     TIFFErrorHandlerExtR  tif_errorhandler;
+    void*                 tif_errorhandler_user_data;
     TIFFErrorHandlerExtR  tif_warnhandler;
+    void*                 tif_warnhandler_user_data;
 };
 
 #define isPseudoTag(t) (t > 0xffff)            /* is tag value normal or pseudo */
@@ -321,9 +323,6 @@ typedef size_t TIFFIOSize_t;
 #if defined(__cplusplus)
 extern "C" {
 #endif
-extern void TIFFWarningExtR(TIFF*, const char*, const char*, ...) TIFF_ATTRIBUTE((__format__ (__printf__,3,4)));
-extern void TIFFErrorExtR(TIFF*, const char*, const char*, ...) TIFF_ATTRIBUTE((__format__ (__printf__,3,4)));
-
 extern int _TIFFgetMode(const char* mode, const char* module);
 extern int _TIFFNoRowEncode(TIFF* tif, uint8_t* pp, tmsize_t cc, uint16_t s);
 extern int _TIFFNoStripEncode(TIFF* tif, uint8_t* pp, tmsize_t cc, uint16_t s);

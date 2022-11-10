@@ -77,8 +77,11 @@ TIFFWarningExt(thandle_t fd, const char* module, const char* fmt, ...)
 	}
 }
 
-void TIFFSetWarningHandlerExtR(TIFF* tif, TIFFErrorHandlerExtR handler) {
-  if (tif) tif->tif_warnhandler = handler;
+void TIFFSetWarningHandlerExtR(TIFF* tif, TIFFErrorHandlerExtR handler, void* warnhandler_user_data) {
+  if (tif) {
+      tif->tif_warnhandler_user_data = warnhandler_user_data;
+      tif->tif_warnhandler = handler;
+  }
 }
 
 void TIFFWarningExtR(TIFF* tif, const char* module, const char* fmt, ...)
@@ -86,7 +89,7 @@ void TIFFWarningExtR(TIFF* tif, const char* module, const char* fmt, ...)
 	va_list ap;
 	if (tif && tif->tif_warnhandler) {
 		va_start(ap, fmt);
-		int stop = (*tif->tif_warnhandler)(tif->tif_clientdata, module, fmt, ap);
+		int stop = (*tif->tif_warnhandler)(tif, tif->tif_warnhandler_user_data, module, fmt, ap);
 		va_end(ap);
 		if (stop) return;
 	}

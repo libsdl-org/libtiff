@@ -77,8 +77,11 @@ TIFFErrorExt(thandle_t fd, const char* module, const char* fmt, ...)
 	}
 }
 
-void TIFFSetErrorHandlerExtR(TIFF* tif, TIFFErrorHandlerExtR handler) {
-  if (tif) tif->tif_errorhandler = handler;
+void TIFFSetErrorHandlerExtR(TIFF* tif, TIFFErrorHandlerExtR handler, void* errorhandler_user_data) {
+  if (tif) {
+      tif->tif_errorhandler_user_data = errorhandler_user_data;
+      tif->tif_errorhandler = handler;
+  }
 }
 
 void TIFFErrorExtR(TIFF* tif, const char* module, const char* fmt, ...)
@@ -86,7 +89,7 @@ void TIFFErrorExtR(TIFF* tif, const char* module, const char* fmt, ...)
 	va_list ap;
 	if (tif && tif->tif_errorhandler) {
 		va_start(ap, fmt);
-		int stop = (*tif->tif_errorhandler)(tif->tif_clientdata, module, fmt, ap);
+		int stop = (*tif->tif_errorhandler)(tif, tif->tif_errorhandler_user_data, module, fmt, ap);
 		va_end(ap);
 		if (stop) return;
 	}
