@@ -23,6 +23,10 @@ Synopsis
 
 .. c:function:: TIFFErrorHandlerExt TIFFSetErrorHandlerExt(TIFFErrorHandlerExt handler)
 
+.. c:type:: int (*TIFFErrorHandlerExtR)(TIFF* tif, void* errorhandler_user_data, const char * module, const char* fmt, va_list ap)
+
+.. c:function:: void TIFFSetErrorHandlerExtR(TIFF* tif, TIFFErrorHandlerExtR handler, void* errorhandler_user_data)
+
 Description
 -----------
 
@@ -43,7 +47,10 @@ as *fd*, which represents the TIFF file handle (file descriptor).
 
 .. TODO: Check description, how to setup a TIFFErrorExt handler and its file handle.
 
-With :c:func:`TIFFSetErrorHandlerExt` an extra error handler can be setup.
+With :c:func:`TIFFSetErrorHandlerExt` an extra error handler can be setup
+in order to write to a file. The file handle needs to be stored in
+``tif->tif_clientdata`` if the ``libtiff`` internal errors shall also
+be written to that file.
 
 Note
 ----

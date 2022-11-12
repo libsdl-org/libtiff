@@ -35,6 +35,52 @@ Synopsis
 
 .. c:function:: thandle_t TIFFSetClientdata(TIFF* tif, thandle_t newvalue)
 
+.. c:struct:: TIFFOpenExtStruct
+
+      .. c:var:: int version
+
+      .. c:var:: TIFFErrorHandlerExtR errorhandler
+
+      .. c:var:: void* errorhandler_user_data
+
+      .. c:var:: TIFFErrorHandlerExtR warnhandler
+
+      .. c:var:: void* warnhandler_user_data
+
+.. c:function:: TIFF* TIFFOpenExt(const char* filename, const char* mode, TIFFOpenExtStruct* arguments)
+
+.. c:function:: TIFF* TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenExtStruct* arguments)
+
+.. c:function:: TIFF* TIFFFdOpenExt(const int fd, const char* filename, const char*mode, TIFFOpenExtStruct* arguments)
+
+.. c:struct:: TIFFClientOpenExtStruct
+
+      .. c:var:: int version
+
+      .. c:var:: TIFFReadWriteProc readproc
+
+      .. c:var:: TIFFReadWriteProc writeproc
+
+      .. c:var:: TIFFSeekProc seekproc
+
+      .. c:var:: TIFFCloseProc closeproc
+
+      .. c:var:: TIFFSizeProc sizeproc
+
+      .. c:var:: TIFFMapFileProc mapproc
+
+      .. c:var:: TIFFUnmapFileProc unmapproc
+
+      .. c:var:: TIFFErrorHandlerExtR errorhandler
+
+      .. c:var:: void* errorhandler_user_data
+
+      .. c:var:: TIFFErrorHandlerExtR warnhandler
+
+      .. c:var:: void* warnhandler_user_data
+
+.. c:function:: TIFF* TIFFClientOpenExt(const char* filename, const char* mode, thandle_t clientdata, TIFFOpenExtStruct* arguments)
+
 Description
 -----------
 
@@ -86,6 +132,18 @@ first :c:func:`TIFFCleanup` should be called to free the internal
 TIFF structure without closing the file handle and afterwards the
 file should be closed using its file descriptor *fd*.
 
+:c:func:`TIFFOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFOpen`, but re-entrant
+error and warning handlers may be passed. The version member of the arguments
+structure should be set to 1 for now.
+
+:c:func:`TIFFOpenWExt` (added in libtiff 4.5) is like :c:func:`TIFFOpenW`, but re-entrant
+error and warning handlers may be passed. The version member of the arguments
+structure should be set to 1 for now.
+
+:c:func:`TIFFFdOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFFdOpen`, but re-entrant
+error and warning handlers may be passed. The version member of the arguments
+structure should be set to 1 for now.
+
 :c:func:`TIFFSetFileName` sets the file name in the tif-structure
 and returns the old file name.
 
@@ -123,6 +181,11 @@ The clientdata is used as open file's I/O descriptor within ``libtiff``.
   When updating the file's clientdata with :c:func:`TIFFSetClientdata`,
   the *fd* value is **not** updated.
 
+:c:func:`TIFFClientOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFClientOpen`, but re-entrant
+error and warning handlers may be passed, as well as their respective user_data.
+The version member of the arguments structure should be set to 1 for now.
+
+:c:func:`TIFFClientdata` returns open file's clientdata handle.
 
 Options
 -------
