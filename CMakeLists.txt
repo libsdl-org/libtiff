@@ -51,7 +51,6 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
   option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 else()
   set(TIFF_INSTALL_DEFAULT ON)
-  set(tiff-install ON)
 endif()
 
 option(tiff-tools "build TIFF tools" ON)
