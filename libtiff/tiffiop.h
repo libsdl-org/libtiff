@@ -204,6 +204,14 @@ struct tiff {
     void*                 tif_warnhandler_user_data;
 };
 
+struct TIFFOpenOptions
+{
+    TIFFErrorHandlerExtR errorhandler; /* may be NULL */
+    void*                errorhandler_user_data; /* may be NULL */
+    TIFFErrorHandlerExtR warnhandler; /* may be NULL */
+    void*                warnhandler_user_data; /* may be NULL */
+};
+
 #define isPseudoTag(t) (t > 0xffff)            /* is tag value normal or pseudo */
 
 #define isTiled(tif) (((tif)->tif_flags & TIFF_ISTILED) != 0)

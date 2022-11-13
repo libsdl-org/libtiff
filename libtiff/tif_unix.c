@@ -202,54 +202,29 @@ _tiffUnmapProc(thandle_t fd, void* base, toff_t size)
 TIFF*
 TIFFFdOpen(int fd, const char* name, const char* mode)
 {
-    TIFFOpenExtStruct arguments = {
-      .version = 1,
-      .errorhandler = NULL,
-      .errorhandler_user_data = NULL,
-      .warnhandler = NULL,
-      .warnhandler_user_data = NULL
-    };
-    return TIFFFdOpenExt(fd, name, mode, &arguments);
+    return TIFFFdOpenExt(fd, name, mode, NULL);
 }
 
 TIFF*
-TIFFFdOpenExt(int fd, const char* name, const char* mode, TIFFOpenExtStruct* arguments)
+TIFFFdOpenExt(int fd, const char* name, const char* mode, TIFFOpenOptions* opts)
 {
-    static const char module[] = "TIFFFdOpenExt";
 	TIFF* tif;
 
-    if (arguments == NULL)
-    {
-        TIFFErrorExt(0, module, "arguments should NOT be NULL");
-        return NULL;
-    }
-    if (arguments->version < 1)
-    {
-        TIFFErrorExt(0, module, "arguments->version should be >= 1");
-        return NULL;
-    }
-    TIFFClientOpenExtStruct client_arguments = {
-        .version = 1,
-        .readproc = _tiffReadProc,
-        .writeproc = _tiffWriteProc,
-        .seekproc = _tiffSeekProc,
-        .closeproc = _tiffCloseProc,
-        .sizeproc = _tiffSizeProc,
-        .mapproc = _tiffMapProc,
-        .unmapproc = _tiffUnmapProc,
-        .errorhandler = arguments->errorhandler,
-        .errorhandler_user_data = arguments->errorhandler_user_data,
-        .warnhandler = arguments->warnhandler,
-        .warnhandler_user_data = arguments->warnhandler_user_data
-    };
-
-	fd_as_handle_union_t fdh;
-	fdh.fd = fd;
-	tif = TIFFClientOpenExt(name, mode,
-	    fdh.h, &client_arguments);
-	if (tif)
-		tif->tif_fd = fd;
-	return (tif);
+    fd_as_handle_union_t fdh;
+    fdh.fd = fd;
+    tif = TIFFClientOpenExt(name, mode,
+                            fdh.h,
+                            _tiffReadProc,
+                            _tiffWriteProc,
+                            _tiffSeekProc,
+                            _tiffCloseProc,
+                            _tiffSizeProc,
+                            _tiffMapProc,
+                            _tiffUnmapProc,
+                            opts);
+    if (tif)
+        tif->tif_fd = fd;
+    return (tif);
 }
 
 /*
@@ -258,33 +233,15 @@ TIFFFdOpenExt(int fd, const char* name, const char* mode, TIFFOpenExtStruct* arg
 TIFF*
 TIFFOpen(const char* name, const char* mode)
 {
-    TIFFOpenExtStruct arguments = {
-        .version = 1,
-        .errorhandler = NULL,
-        .errorhandler_user_data = NULL,
-        .warnhandler = NULL,
-        .warnhandler_user_data = NULL
-    };
-    return TIFFOpenExt(name, mode, &arguments);
+    return TIFFOpenExt(name, mode, NULL);
 }
 
 TIFF*
-TIFFOpenExt(const char* name, const char* mode, TIFFOpenExtStruct* arguments)
+TIFFOpenExt(const char* name, const char* mode, TIFFOpenOptions* opts)
 {
 	static const char module[] = "TIFFOpen";
 	int m, fd;
 	TIFF* tif;
-
-    if (arguments == NULL)
-    {
-        TIFFErrorExt(0, module, "arguments should NOT be NULL");
-        return NULL;
-    }
-    if (arguments->version < 1)
-    {
-        TIFFErrorExt(0, module, "arguments->version should be >= 1");
-        return NULL;
-    }
 
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
@@ -305,7 +262,7 @@ TIFFOpenExt(const char* name, const char* mode, TIFFOpenExtStruct* arguments)
 		return ((TIFF *)0);
 	}
 
-	tif = TIFFFdOpenExt((int)fd, name, mode, arguments);
+	tif = TIFFFdOpenExt((int)fd, name, mode, opts);
 	if(!tif)
 		close(fd);
 	return tif;
@@ -319,34 +276,16 @@ TIFFOpenExt(const char* name, const char* mode, TIFFOpenExtStruct* arguments)
 TIFF*
 TIFFOpenW(const wchar_t* name, const char* mode)
 {
-    TIFFOpenExtStruct arguments = {
-        .version = 1,
-        .errorhandler = NULL,
-        .errorhandler_user_data = NULL,
-        .warnhandler = NULL,
-        .warnhandler_user_data = NULL
-    };
-    return TIFFOpenWEx(name, mode, &arguments);
+    return TIFFOpenWEx(name, mode, NULL);
 }
 TIFF*
-TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenExtStruct* arguments)
+TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
 {
 	static const char module[] = "TIFFOpenW";
 	int m, fd;
 	int mbsize;
 	char *mbname;
 	TIFF* tif;
-
-    if (arguments == NULL)
-    {
-        TIFFErrorExt(0, module, "arguments should NOT be NULL");
-        return NULL;
-    }
-    if (arguments->version < 1)
-    {
-        TIFFErrorExt(0, module, "arguments->version should be >= 1");
-        return NULL;
-    }
 
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
@@ -378,7 +317,7 @@ TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenExtStruct* arguments
 	}
 
 	tif = TIFFFdOpenExt((int)fd, (mbname != NULL) ? mbname : "<unknown>",
-			 mode, arguments);
+			 mode, opts);
 	
 	_TIFFfree(mbname);
 	

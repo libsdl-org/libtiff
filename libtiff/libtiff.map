@@ -210,4 +210,8 @@ LIBTIFF_4.5 {
     TIFFWarningExtR;
     TIFFSetErrorHandlerExtR;
     TIFFSetWarningHandlerExtR;
+    TIFFOpenOptionsAlloc;
+    TIFFOpenOptionsFree;
+    TIFFOpenOptionsSetErrorHandlerExtR;
+    TIFFOpenOptionsSetWarningHandlerExtR;
 } LIBTIFF_4.4;

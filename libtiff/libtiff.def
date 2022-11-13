@@ -83,6 +83,10 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFOpenExt
 	TIFFOpenW
 	TIFFOpenWExt
+	TIFFOpenOptionsAlloc
+	TIFFOpenOptionsFree
+	TIFFOpenOptionsSetErrorHandlerExtR
+	TIFFOpenOptionsSetWarningHandlerExtR
 	TIFFPrintDirectory
 	TIFFRGBAImageBegin
 	TIFFRGBAImageEnd

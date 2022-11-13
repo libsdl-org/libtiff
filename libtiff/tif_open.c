@@ -67,6 +67,29 @@ _TIFFgetMode(const char* mode, const char* module)
 	return (m);
 }
 
+TIFFOpenOptions* TIFFOpenOptionsAlloc()
+{
+    TIFFOpenOptions* opts = (TIFFOpenOptions*)_TIFFcalloc(1, sizeof(TIFFOpenOptions));
+    return opts;
+}
+
+void TIFFOpenOptionsFree(TIFFOpenOptions* opts)
+{
+    _TIFFfree(opts);
+}
+
+void TIFFOpenOptionsSetErrorHandlerExtR(TIFFOpenOptions* opts, TIFFErrorHandlerExtR handler, void* errorhandler_user_data)
+{
+    opts->errorhandler = handler;
+    opts->errorhandler_user_data = errorhandler_user_data;
+}
+
+void TIFFOpenOptionsSetWarningHandlerExtR(TIFFOpenOptions* opts, TIFFErrorHandlerExtR handler, void* warnhandler_user_data)
+{
+    opts->warnhandler = handler;
+    opts->warnhandler_user_data = warnhandler_user_data;
+}
+
 TIFF*
 TIFFClientOpen(
 	const char* name, const char* mode,
@@ -79,51 +102,34 @@ TIFFClientOpen(
 	TIFFMapFileProc mapproc,
 	TIFFUnmapFileProc unmapproc
 ) {
-  TIFFClientOpenExtStruct arguments = {
-      .version = 1,
-      .readproc = readproc,
-      .writeproc = writeproc,
-      .seekproc = seekproc,
-      .closeproc = closeproc,
-      .sizeproc = sizeproc,
-      .mapproc = mapproc,
-      .unmapproc = unmapproc,
-      .errorhandler = NULL,
-      .errorhandler_user_data = NULL,
-      .warnhandler = NULL,
-      .warnhandler_user_data = NULL
-  };
-  return TIFFClientOpenExt(name, mode, clientdata, &arguments);
+  return TIFFClientOpenExt(name, mode, clientdata,
+                           readproc,
+                           writeproc,
+                           seekproc,
+                           closeproc,
+                           sizeproc,
+                           mapproc,
+                           unmapproc,
+                           NULL);
 }
 
 TIFF*
 TIFFClientOpenExt(
 	const char* name, const char* mode,
 	thandle_t clientdata,
-    TIFFClientOpenExtStruct* arguments)
+	TIFFReadWriteProc readproc,
+	TIFFReadWriteProc writeproc,
+	TIFFSeekProc seekproc,
+	TIFFCloseProc closeproc,
+	TIFFSizeProc sizeproc,
+	TIFFMapFileProc mapproc,
+	TIFFUnmapFileProc unmapproc,
+    TIFFOpenOptions* opts)
 {
 	static const char module[] = "TIFFClientOpenExt";
 	TIFF *tif;
 	int m;
 	const char* cp;
-
-    if (arguments == NULL)
-    {
-        TIFFErrorExt(clientdata, module, "arguments should NOT be NULL");
-        return NULL;
-    }
-    if (arguments->version < 1)
-    {
-        TIFFErrorExt(clientdata, module, "arguments->version should be >= 1");
-        return NULL;
-    }
-    TIFFReadWriteProc readproc = arguments->readproc;
-    TIFFReadWriteProc writeproc = arguments->writeproc;
-    TIFFSeekProc seekproc = arguments->seekproc;
-    TIFFCloseProc closeproc = arguments->closeproc;
-    TIFFSizeProc sizeproc = arguments->sizeproc;
-    TIFFMapFileProc mapproc = arguments->mapproc;
-    TIFFUnmapFileProc unmapproc = arguments->unmapproc;
 
 	/* The following are configuration checks. They should be redundant, but should not
 	 * compile to any actual code in an optimised release build anyway. If any of them
@@ -175,10 +181,13 @@ TIFFClientOpenExt(
 	tif->tif_sizeproc = sizeproc;
 	tif->tif_mapproc = mapproc ? mapproc : _tiffDummyMapProc;
 	tif->tif_unmapproc = unmapproc ? unmapproc : _tiffDummyUnmapProc;
-    tif->tif_errorhandler = arguments->errorhandler;
-    tif->tif_errorhandler_user_data = arguments->errorhandler_user_data;
-    tif->tif_warnhandler = arguments->warnhandler;
-    tif->tif_warnhandler_user_data = arguments->warnhandler_user_data;
+    if( opts )
+    {
+        tif->tif_errorhandler = opts->errorhandler;
+        tif->tif_errorhandler_user_data = opts->errorhandler_user_data;
+        tif->tif_warnhandler = opts->warnhandler;
+        tif->tif_warnhandler_user_data = opts->warnhandler_user_data;
+    }
 
 	if (!readproc || !writeproc || !seekproc || !closeproc || !sizeproc) {
 		TIFFErrorExtR(tif, module,

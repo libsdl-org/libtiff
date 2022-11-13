@@ -80,14 +80,12 @@ int test_open_ext(int handlers_set_in_open)
     TIFF* tif;
     if( handlers_set_in_open )
     {
-        TIFFOpenExtStruct arguments = {
-            .version = 1,
-            .errorhandler = myErrorHandler,
-            .errorhandler_user_data = &errorhandler_user_data,
-            .warnhandler = myErrorHandler,
-            .warnhandler_user_data = &warnhandler_user_data
-        };
-        tif = TIFFOpenExt("test_error_handler.tif", "w", &arguments);
+        TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+        assert(opts);
+        TIFFOpenOptionsSetErrorHandlerExtR(opts, myErrorHandler, &errorhandler_user_data);
+        TIFFOpenOptionsSetWarningHandlerExtR(opts, myErrorHandler, &warnhandler_user_data);
+        tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
+        TIFFOpenOptionsFree(opts);
     }
     else
     {
