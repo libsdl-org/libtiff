@@ -104,14 +104,20 @@ file should be closed using its file descriptor *fd*.
 
 :c:func:`TIFFOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFOpen`, but options,
 such as re-entrant error and warning handlers may be passed. The opts argument
+may be NULL. Note that in the early stages of the execution of the function,
+the TIFF* argument passed to the re-entrant error handler (specified in opts)
 may be NULL.
 
 :c:func:`TIFFOpenWExt` (added in libtiff 4.5) is like :c:func:`TIFFOpenW`, but options,
 such as re-entrant error and warning handlers may be passed. The opts argument
+may be NULL. Note that in the early stages of the execution of the function,
+the TIFF* argument passed to the re-entrant error handler (specified in opts)
 may be NULL.
 
 :c:func:`TIFFFdOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFFdOpen`, but options,
 such as re-entrant error and warning handlers may be passed. The opts argument
+may be NULL. Note that in the early stages of the execution of the function,
+the TIFF* argument passed to the re-entrant error handler (specified in opts)
 may be NULL.
 
 :c:func:`TIFFSetFileName` sets the file name in the tif-structure
@@ -153,6 +159,8 @@ The clientdata is used as open file's I/O descriptor within ``libtiff``.
 
 :c:func:`TIFFClientOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFClientOpen`, but options,
 such as re-entrant error and warning handlers may be passed. The opts argument
+may be NULL. Note that in the early stages of the execution of the function,
+the TIFF* argument passed to the re-entrant error handler (specified in opts)
 may be NULL.
 
 Options

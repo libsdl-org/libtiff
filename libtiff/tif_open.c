@@ -44,7 +44,7 @@ _tiffDummyUnmapProc(thandle_t fd, void* base, toff_t size)
 }
 
 int
-_TIFFgetMode(const char* mode, const char* module)
+_TIFFgetMode(TIFFOpenOptions* opts, thandle_t clientdata, const char* mode, const char* module)
 {
 	int m = -1;
 
@@ -61,7 +61,7 @@ _TIFFgetMode(const char* mode, const char* module)
 			m |= O_TRUNC;
 		break;
 	default:
-		TIFFErrorExt(0, module, "\"%s\": Bad mode", mode);
+		_TIFFErrorEarly(opts, clientdata, module, "\"%s\": Bad mode", mode);
 		break;
 	}
 	return (m);
@@ -157,12 +157,12 @@ TIFFClientOpenExt(
 		#endif
 	}
 
-	m = _TIFFgetMode(mode, module);
+	m = _TIFFgetMode(opts, clientdata, mode, module);
 	if (m == -1)
 		goto bad2;
 	tif = (TIFF *)_TIFFmalloc((tmsize_t)(sizeof (TIFF) + strlen(name) + 1));
 	if (tif == NULL) {
-		TIFFErrorExt(clientdata, module, "%s: Out of memory (TIFF structure)", name);
+		_TIFFErrorEarly(opts, clientdata, module, "%s: Out of memory (TIFF structure)", name);
 		goto bad2;
 	}
 	_TIFFmemset(tif, 0, sizeof (*tif));

@@ -243,7 +243,7 @@ TIFFOpenExt(const char* name, const char* mode, TIFFOpenOptions* opts)
 	int m, fd;
 	TIFF* tif;
 
-	m = _TIFFgetMode(mode, module);
+	m = _TIFFgetMode(opts, NULL, mode, module);
 	if (m == -1)
 		return ((TIFF*)0);
 
@@ -255,9 +255,9 @@ TIFFOpenExt(const char* name, const char* mode, TIFFOpenOptions* opts)
 	fd = open(name, m, 0666);
 	if (fd < 0) {
 		if (errno > 0 && strerror(errno) != NULL ) {
-			TIFFErrorExt(0, module, "%s: %s", name, strerror(errno) );
+			_TIFFErrorEarly(opts, NULL, module, "%s: %s", name, strerror(errno) );
 		} else {
-			TIFFErrorExt(0, module, "%s: Cannot open", name);
+			_TIFFErrorEarly(opts, NULL, module, "%s: Cannot open", name);
 		}
 		return ((TIFF *)0);
 	}
@@ -298,7 +298,7 @@ TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
 
 	fd = _wopen(name, m, 0666);
 	if (fd < 0) {
-		TIFFErrorExt(0, module, "%ls: Cannot open", name);
+		_TIFFErrorEarly(opts, NULL, module, "%ls: Cannot open", name);
 		return ((TIFF *)0);
 	}
 
@@ -307,7 +307,7 @@ TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
 	if (mbsize > 0) {
 		mbname = _TIFFmalloc(mbsize);
 		if (!mbname) {
-			TIFFErrorExt(0, module,
+			_TIFFErrorEarly(opts, NULL, module,
 			"Can't allocate space for filename conversion buffer");
 			return ((TIFF*)0);
 		}
