@@ -36,6 +36,10 @@ the directory part of the `tif` structure.
 
 :c:func:`TIFFUnlinkDirectory` unlink the specified directory from the
 directory chain.
+The parameter *dirn* specifies the subfile/directory
+as an integer number, with the first directory numbered one (1).
+This is different to :c:func:`TIFFSetDirectory` or :c:func:`TIFFCurrentDirectory` where the first
+directory starts with zero (0).
 
 Directory query functions :c:func:`TIFFCurrentDirectory`,
 :c:func:`TIFFCurrentDirOffset`, :c:func:`TIFFLastDirectory` and

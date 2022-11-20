@@ -82,6 +82,10 @@ Be aware
   create a new directory, free the ``*tif`` structure and set up a new one.
 - that unlike :c:func:`TIFFWriteDirectory`, :c:func:`TIFFCheckpointDirectory`
   does not free up the directory data structures in memory.
+- that LibTiff does not support custom directory chains
+  (NextIFD pointing to another IFD).
+  NextIFD of custom directories is always set to zero
+  and should be zero when reading.
 
 Unfortunately to create or read custom directories with predefined fields
 it is necessary to include the private tif_dir.h. However, for EXIF and

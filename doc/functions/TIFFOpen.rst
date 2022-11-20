@@ -52,7 +52,7 @@ overwritten.
 
 If a file is opened for reading, the first TIFF directory in the file
 is automatically read (also see :c:func:`TIFFSetDirectory` for reading
-directories other than the first).
+directories other than the first). 
 If a file is opened for writing or appending, a default directory
 is automatically created for writing subsequent data.
 This directory has all the default values specified in TIFF Revision 6.0:
@@ -70,12 +70,21 @@ This directory has all the default values specified in TIFF Revision 6.0:
 To alter these values, or to define values for additional fields,
 :c:func:`TIFFSetField` must be used.
 
+A file can also be opened for reading and writing with *mode* (``r+``).
+In this case, the first TIFF directory in the file is automatically read,
+but calls to :c:func:`TIFFSetField` are put into a fresh directory, which
+will be appended when the file is closed.
+
 :c:func:`TIFFOpenW` opens a TIFF file with a Unicode filename, for read/writing.
 
 :c:func:`TIFFFdOpen` is like :c:func:`TIFFOpen` except that it opens a
 TIFF file given an open file descriptor *fd*.
 The file's name and mode must reflect that of the open descriptor.
 The object associated with the file descriptor **must support random access**.
+In order to close a TIFF file opened with :c:func:`TIFFFdOpen`
+first :c:func:`TIFFCleanup` should be called to free the internal
+TIFF structure without closing the file handle and afterwards the
+file should be closed using its file descriptor *fd*.
 
 :c:func:`TIFFSetFileName` sets the file name in the tif-structure
 and returns the old file name.

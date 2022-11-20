@@ -27,6 +27,22 @@ except the directory is specified as a file offset instead of an index;
 this is required for accessing subdirectories linked through a
 ``SubIFD`` tag.
 
+In the case of several SubIFDs of a main image, there are two possibilities
+that are not even mutually exclusive.
+
+a. The ``SubIFD`` tag contains an array with all offsets of the SubIFDs.
+b. The ``SubIFDs`` are concatenated with their ``NextIFD`` parameters
+   to a SubIFD chain.
+
+LibTiff does support SubIFD chains partially. When a ``SubIFD`` tag is
+activated with :c:func:`TIFFSetSubDirectory()`, :c:func:`TIFFReadDirectory()`
+is able to parse through the SubIFD chain. The *tif_curdir* is just
+incremented from its current value and thus gets arbitrary values
+when parsing through SubIFD chains.
+:c:func:`TIFFSetDirectory()` only works with main-IFD chains because
+allways starts with the first main-IFD and thus is able to reset
+the SubIFD reading chain to the main-IFD chain.
+
 Directory query functions :c:func:`TIFFCurrentDirectory`,
 :c:func:`TIFFCurrentDirOffset`, :c:func:`TIFFLastDirectory` and
 :c:func:`TIFFNumberOfDirectories` retrieve information about directories

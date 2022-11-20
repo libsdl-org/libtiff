@@ -20,7 +20,8 @@ Description
 :c:func:`TIFFClose` closes a file that was previously opened with
 :c:func:`TIFFOpen`.  Any buffered data are flushed to the file, including
 the contents of the current directory (if modified); and all resources
-are reclaimed.
+are reclaimed. :c:func:`TIFFClose` calls :c:func:`TIFFCleanup` and then
+the associated function to close the file handle.
 
 :c:func:`TIFFCleanup` is an auxiliary function to free the TIFF structure.
 The given structure will be completely freed, so you should save opened file
