@@ -51,8 +51,10 @@ The following query routines return status information about the directory
 structure of an open TIFF file.
 
 :c:func:`TIFFCurrentDirectory` returns the index of the current directory
-(directories are numbered starting at 0). This number is suitable for use
-with the :c:func:`TIFFSetDirectory` routine.
+(directories are numbered starting at 0). This number is suitable for
+use with the :c:func:`TIFFSetDirectory` routine.
+A value of 65535 (non-existing directory) is returned if the directory
+has not yet been written to the file after opening it. 
 
 :c:func:`TIFFCurrentDirOffset` returns the file offset of the current
 directory (instead of an index).

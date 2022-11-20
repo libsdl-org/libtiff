@@ -422,7 +422,7 @@ However, not all option combinations are permitted.
 
   Note 2: Any of the -X, -Y, -Z and -z options together with other PAGE_MODE_x options
   such as -H, -V, -P, -J or -K are not supported and may cause buffer overflows.
-  
+
 Examples
 --------
 

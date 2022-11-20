@@ -327,7 +327,7 @@ information on the meaning of each tag and their possible values.
 
     * - :c:macro:`TIFFTAG_STONITS`
       - 1
-      - :c:expr:`const double**`
+      - :c:expr:`double*`
       -
 
     * - :c:macro:`TIFFTAG_STRIPBYTECOUNTS`
