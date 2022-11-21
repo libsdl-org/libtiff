@@ -23,7 +23,7 @@ Description
 
 Make defer strile offset/bytecount loading available at runtime
 and add per-strile offset/bytecount loading capabilities. Part of
-this commit makes the behaviour that was previously met when libtiff
+this commit makes the behaviour that was previously met when ``libtiff``
 was compiled with ``-DDEFER_STRILE_LOAD`` available for default builds.
 
 When specifying the new ``D`` (Deferred) :c:func:`TIFFOpen` flag,
