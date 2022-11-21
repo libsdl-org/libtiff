@@ -62,7 +62,7 @@ static int myErrorHandler(TIFF* tiff, void* user_data, const char* module, const
     return 1;
 }
 
-int test_open_ext(int handlers_set_in_open)
+int test_open_ext()
 {
     int ret = 0;
     char error_buffer[ERROR_STRING_SIZE] = {0};
@@ -77,22 +77,14 @@ int test_open_ext(int handlers_set_in_open)
         .buffer = warn_buffer,
         .buffer_size = ERROR_STRING_SIZE
     };
-    TIFF* tif;
-    if( handlers_set_in_open )
-    {
-        TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
-        assert(opts);
-        TIFFOpenOptionsSetErrorHandlerExtR(opts, myErrorHandler, &errorhandler_user_data);
-        TIFFOpenOptionsSetWarningHandlerExtR(opts, myErrorHandler, &warnhandler_user_data);
-        tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
-        TIFFOpenOptionsFree(opts);
-    }
-    else
-    {
-        tif = TIFFOpen("test_error_handler.tif", "w");
-        TIFFSetErrorHandlerExtR(tif, myErrorHandler, &errorhandler_user_data);
-        TIFFSetWarningHandlerExtR(tif, myErrorHandler, &warnhandler_user_data);
-    }
+
+    TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+    assert(opts);
+    TIFFOpenOptionsSetErrorHandlerExtR(opts, myErrorHandler, &errorhandler_user_data);
+    TIFFOpenOptionsSetWarningHandlerExtR(opts, myErrorHandler, &warnhandler_user_data);
+    TIFF* tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
+    TIFFOpenOptionsFree(opts);
+
     if( tif == NULL )
     {
         fprintf(stderr, "Cannot create test_error_handler.tif");
@@ -144,6 +136,5 @@ int main()
 {
     int ret = 0;
     ret += test_open_ext(1);
-    ret += test_open_ext(0);
     return ret;
 }

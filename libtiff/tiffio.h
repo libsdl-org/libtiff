@@ -460,8 +460,6 @@ extern TIFFErrorHandlerExt TIFFSetErrorHandlerExt(TIFFErrorHandlerExt);
 extern TIFFErrorHandler TIFFSetWarningHandler(TIFFErrorHandler);
 extern TIFFErrorHandlerExt TIFFSetWarningHandlerExt(TIFFErrorHandlerExt);
 
-extern void TIFFSetErrorHandlerExtR(TIFF*, TIFFErrorHandlerExtR, void* errorhandler_user_data);
-extern void TIFFSetWarningHandlerExtR(TIFF*, TIFFErrorHandlerExtR, void* warnhandler_user_data);
 extern void TIFFWarningExtR(TIFF*, const char*, const char*, ...) TIFF_ATTRIBUTE((__format__ (__printf__,3,4)));
 extern void TIFFErrorExtR(TIFF*, const char*, const char*, ...) TIFF_ATTRIBUTE((__format__ (__printf__,3,4)));
 

@@ -125,7 +125,6 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFSetDirectory
 	TIFFSetErrorHandler
 	TIFFSetErrorHandlerExt
-	TIFFSetErrorHandlerExtR
 	TIFFSetField
 	TIFFSetFileName
 	TIFFSetFileno
@@ -134,7 +133,6 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFSetTagExtender
 	TIFFSetWarningHandler
 	TIFFSetWarningHandlerExt
-	TIFFSetWarningHandlerExtR
 	TIFFSetWriteOffset
 	TIFFSetupStrips
 	TIFFStripSize

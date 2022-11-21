@@ -23,11 +23,6 @@ Synopsis
 
 .. c:function:: TIFFWarningHandlerExt TIFFSetWarningHandlerExt(TIFFWarningHandlerExt handler)
 
-.. c:type:: int (*TIFFWarningHandlerExtR)(TIFF* tif, void* warnhandler_user_data, const char * module, const char* fmt, va_list ap)
-
-.. c:function:: void TIFFSetWarningHandlerExtR(TIFF* tif, TIFFWarningHandlerExtR handler, void* warnhandler_user_data)
-
-
 Description
 -----------
 
@@ -54,15 +49,8 @@ as *fd*, which represents the TIFF file handle (file descriptor).
 With :c:func:`TIFFSetWarningHandlerExt` an extra warning handler can be
 setup up.
 
-:c:func:`TIFFSetWarningHandlerExtR` (added in libtiff 4.5) installs a warning
-handler for a given TIFF handle. The R suffix means re-entrant, in that it avoids
-the global effects of :c:func:`TIFFSetWarningHandler` or :c:func:`TIFFSetWarningHandlerExt`.
-The installed handler replaces any previously set handler with that function.
-The handler should nominally return a non-0 value. If it returns 0, then the
-global handler set with :c:func:`TIFFSetWarningHandler` or :c:func:`TIFFSetWarningHandlerExt`
-will also be called.
-Note that this per-TIFF handler may also be installed with :c:func:`TIFFOpenExt`
-or :c:func:`TIFFClientOpenExt`
+Note that, starting with libtiff 4.5, a per-TIFF handler may also be installed
+with :c:func:`TIFFOpenExt` or :c:func:`TIFFClientOpenExt`
 
 Note
 ----
