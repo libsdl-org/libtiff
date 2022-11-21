@@ -43,7 +43,13 @@ as *fd*, which represents the TIFF file handle (file descriptor).
 
 .. TODO: Check description, how to setup a TIFFErrorExt handler and its file handle.
 
-With :c:func:`TIFFSetErrorHandlerExt` an extra error handler can be setup.
+With :c:func:`TIFFSetErrorHandlerExt` an extra error handler can be setup
+in order to write to a file. The file handle needs to be stored in
+``tif->tif_clientdata`` if the ``libtiff`` internal errors shall also
+be written to that file.
+
+Note that, starting with libtiff 4.5, a per-TIFF handler may also be installed
+with :c:func:`TIFFOpenExt` or :c:func:`TIFFClientOpenExt`
 
 Note
 ----

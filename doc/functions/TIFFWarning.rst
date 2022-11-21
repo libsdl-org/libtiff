@@ -49,6 +49,9 @@ as *fd*, which represents the TIFF file handle (file descriptor).
 With :c:func:`TIFFSetWarningHandlerExt` an extra warning handler can be
 setup up.
 
+Note that, starting with libtiff 4.5, a per-TIFF handler may also be installed
+with :c:func:`TIFFOpenExt` or :c:func:`TIFFClientOpenExt`
+
 Note
 ----
 

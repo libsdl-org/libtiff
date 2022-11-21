@@ -202,18 +202,29 @@ _tiffUnmapProc(thandle_t fd, void* base, toff_t size)
 TIFF*
 TIFFFdOpen(int fd, const char* name, const char* mode)
 {
+    return TIFFFdOpenExt(fd, name, mode, NULL);
+}
+
+TIFF*
+TIFFFdOpenExt(int fd, const char* name, const char* mode, TIFFOpenOptions* opts)
+{
 	TIFF* tif;
 
-	fd_as_handle_union_t fdh;
-	fdh.fd = fd;
-	tif = TIFFClientOpen(name, mode,
-	    fdh.h,
-	    _tiffReadProc, _tiffWriteProc,
-	    _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
-	    _tiffMapProc, _tiffUnmapProc);
-	if (tif)
-		tif->tif_fd = fd;
-	return (tif);
+    fd_as_handle_union_t fdh;
+    fdh.fd = fd;
+    tif = TIFFClientOpenExt(name, mode,
+                            fdh.h,
+                            _tiffReadProc,
+                            _tiffWriteProc,
+                            _tiffSeekProc,
+                            _tiffCloseProc,
+                            _tiffSizeProc,
+                            _tiffMapProc,
+                            _tiffUnmapProc,
+                            opts);
+    if (tif)
+        tif->tif_fd = fd;
+    return (tif);
 }
 
 /*
@@ -222,11 +233,17 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 TIFF*
 TIFFOpen(const char* name, const char* mode)
 {
+    return TIFFOpenExt(name, mode, NULL);
+}
+
+TIFF*
+TIFFOpenExt(const char* name, const char* mode, TIFFOpenOptions* opts)
+{
 	static const char module[] = "TIFFOpen";
 	int m, fd;
 	TIFF* tif;
 
-	m = _TIFFgetMode(mode, module);
+	m = _TIFFgetMode(opts, NULL, mode, module);
 	if (m == -1)
 		return ((TIFF*)0);
 
@@ -238,14 +255,14 @@ TIFFOpen(const char* name, const char* mode)
 	fd = open(name, m, 0666);
 	if (fd < 0) {
 		if (errno > 0 && strerror(errno) != NULL ) {
-			TIFFErrorExt(0, module, "%s: %s", name, strerror(errno) );
+			_TIFFErrorEarly(opts, NULL, module, "%s: %s", name, strerror(errno) );
 		} else {
-			TIFFErrorExt(0, module, "%s: Cannot open", name);
+			_TIFFErrorEarly(opts, NULL, module, "%s: Cannot open", name);
 		}
 		return ((TIFF *)0);
 	}
 
-	tif = TIFFFdOpen((int)fd, name, mode);
+	tif = TIFFFdOpenExt((int)fd, name, mode, opts);
 	if(!tif)
 		close(fd);
 	return tif;
@@ -258,6 +275,11 @@ TIFFOpen(const char* name, const char* mode)
  */
 TIFF*
 TIFFOpenW(const wchar_t* name, const char* mode)
+{
+    return TIFFOpenWEx(name, mode, NULL);
+}
+TIFF*
+TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
 {
 	static const char module[] = "TIFFOpenW";
 	int m, fd;
@@ -276,7 +298,7 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 
 	fd = _wopen(name, m, 0666);
 	if (fd < 0) {
-		TIFFErrorExt(0, module, "%ls: Cannot open", name);
+		_TIFFErrorEarly(opts, NULL, module, "%ls: Cannot open", name);
 		return ((TIFF *)0);
 	}
 
@@ -285,7 +307,7 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 	if (mbsize > 0) {
 		mbname = _TIFFmalloc(mbsize);
 		if (!mbname) {
-			TIFFErrorExt(0, module,
+			_TIFFErrorEarly(opts, NULL, module,
 			"Can't allocate space for filename conversion buffer");
 			return ((TIFF*)0);
 		}
@@ -294,8 +316,8 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 				    NULL, NULL);
 	}
 
-	tif = TIFFFdOpen((int)fd, (mbname != NULL) ? mbname : "<unknown>",
-			 mode);
+	tif = TIFFFdOpenExt((int)fd, (mbname != NULL) ? mbname : "<unknown>",
+			 mode, opts);
 	
 	_TIFFfree(mbname);
 	
