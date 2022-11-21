@@ -140,7 +140,8 @@ will work.
     * - :c:func:`TIFFCleanup`
       - auxiliary function to free the TIFF structure
     * - :c:func:`TIFFClientdata`
-      - return open file's clientdata handle
+      - return open file's clientdata handle, which represents
+        the file descriptor used within ``libtiff``.
     * - :c:func:`TIFFClientOpen`
       - open a file for reading or writing
     * - :c:func:`TIFFClose`
@@ -375,7 +376,8 @@ will work.
     * - :c:func:`TIFFScanlineSize64`
       - return size of a scanline as :c:type:`uint64_t`
     * - :c:func:`TIFFSetClientdata`
-      - set open file's clientdata, and return previous value
+      - set open file's clientdata (file descriptor/handle),
+        and return previous value
     * - :c:func:`TIFFSetClientInfo`
       - adds or replaces an entry in the clientinfo-list
     * - :c:func:`TIFFSetCompressionScheme`
@@ -391,14 +393,15 @@ will work.
     * - :c:func:`TIFFSetFileName`
       - sets the file name in the tif-structure and returns the old file name
     * - :c:func:`TIFFSetFileno`
-      - sets open file's I/O descriptor, and return previous value
+      - overwrites a copy of the open file's I/O descriptor, and return previous value
+        (refer to detailed description)
     * - :c:func:`TIFFSetMode`
-      - sets the `libtiff` open mode in the tif-structure and returns the old mode
+      - sets the ``libtiff`` open mode in the tif-structure and returns the old mode
     * - :c:func:`TIFFSetSubDirectory`
       - set the current directory
     * - :c:func:`TIFFSetTagExtender`
       - is used to register the merge function for user defined tags as an
-        extender callback with libtiff
+        extender callback with ``libtiff``
     * - :c:func:`TIFFSetupStrips`
       -
     * - :c:func:`TIFFSetWarningHandler`
@@ -508,9 +511,9 @@ will work.
     * - :c:func:`_TIFFfree`
       - free memory buffer
     * - :c:func:`_TIFFGetExifFields`
-      - return a pointer to the libtiff internal definition list of the EXIF tags
+      - return a pointer to the ``libtiff`` internal definition list of the EXIF tags
     * - :c:func:`_TIFFGetGpsFields`
-      - return a pointer to the libtiff internal definition list of the GPS tags
+      - return a pointer to the ``libtiff`` internal definition list of the GPS tags
     * - :c:func:`_TIFFmalloc`
       - dynamically allocate memory buffer
     * - :c:func:`_TIFFmemcmp`

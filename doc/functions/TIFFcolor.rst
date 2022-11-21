@@ -26,7 +26,7 @@ Description
 TIFF supports several color spaces for images stored in that format. There is
 usually a problem of application to handle the data properly and convert
 between different colorspaces for displaying and printing purposes. To
-simplify this task libtiff implements several color conversion routines
+simplify this task ``libtiff`` implements several color conversion routines
 itself. In particular, these routines used in the :doc:`TIFFRGBAImage`
 interface.
 

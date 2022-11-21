@@ -89,10 +89,11 @@ file should be closed using its file descriptor *fd*.
 :c:func:`TIFFSetFileName` sets the file name in the tif-structure
 and returns the old file name.
 
-:c:func:`TIFFSetFileno` sets open file's I/O descriptor,
-and returns the previous value.
+:c:func:`TIFFSetFileno` overwrites a copy of the open file's I/O descriptor,
+that was saved when the TIFF file was first opened,
+and returns the previous value. See note below.
 
-:c:func:`TIFFSetMode` sets the `libtiff` open mode in the tif-structure
+:c:func:`TIFFSetMode` sets the ``libtiff`` open mode in the tif-structure
 and returns the old mode.
 
 :c:func:`TIFFClientOpen` is like :c:func:`TIFFOpen` except that the caller
@@ -107,9 +108,21 @@ memory; c.f. :c:func:`mmap` (2) and :c:func:`munmap` (2).
 The *clientdata* parameter is an opaque "handle" passed to the client-specified
 routines passed as parameters to :c:func:`TIFFClientOpen`.
 
-:c:func:`TIFFClientdata` returns open file's clientdata handle.
+:c:func:`TIFFClientdata` returns open file's clientdata handle,
+which is the real open file's I/O descriptor used by ``libtiff``.
+Note: Within tif_unix.c this handle is converted into an integer file descriptor.
 
 :c:func:`TIFFSetClientdata` sets open file's clientdata, and return previous value.
+The clientdata is used as open file's I/O descriptor within ``libtiff``.
+
+.. note::
+  *clientdata* is used as file descriptor or handle of the opened TIFF file within
+  `libtif`, whereas the file descriptor *fd* (changeable by :c:func:`TIFFSetFileno`)
+  is only set once to the value of *clientdata* converted to an integer
+  (in tif_win32.c as well as in tif_unix.c).
+  When updating the file's clientdata with :c:func:`TIFFSetClientdata`,
+  the *fd* value is **not** updated.
+
 
 Options
 -------

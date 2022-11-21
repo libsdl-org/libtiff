@@ -36,7 +36,7 @@ return a pointer to TIFF field information structure `fip` by the tag's
 With dt== :c:macro:`TIFF_ANY` the behaviour is the same than for
 *TIFFFieldWithTag()*.
 
-    .. TODO: Check if libtiff is able to handle tag definitions with two different
+    .. TODO: Check if ``libtiff`` is able to handle tag definitions with two different
              definitions. From the code point of view, I don't believe that.
 
     Such a `TIFFDataType` dependent search could be useful when the same
