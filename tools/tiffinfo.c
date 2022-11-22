@@ -152,7 +152,14 @@ main(int argc, char* argv[])
 	for (; optind < argc; optind++) {
 		if (multiplefiles)
 			printf("File %s:\n", argv[optind]);
-		tif = TIFFOpen(argv[optind], chopstrips ? "rC" : "rc");
+		TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+		if (opts == NULL) {
+		    status = EXIT_FAILURE;
+		    break;
+		}
+		TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+		tif = TIFFOpenExt(argv[optind], chopstrips ? "rC" : "rc", opts);
+		TIFFOpenOptionsFree(opts);
 		if (tif != NULL) {
 			if (dirnum != -1) {
 				if (TIFFSetDirectory(tif, (tdir_t) dirnum))

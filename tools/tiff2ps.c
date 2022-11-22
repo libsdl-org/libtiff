@@ -485,7 +485,13 @@ main(int argc, char* argv[])
 	  PSavoiddeadzone = FALSE;
 
 	for (; argc - optind > 0; optind++) {
-		TIFF* tif = TIFFOpen(filename = argv[optind], "r");
+		TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+		if (opts == NULL) {
+		    return EXIT_FAILURE;
+		}
+		TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+		TIFF* tif = TIFFOpenExt(filename = argv[optind], "r", opts);
+		TIFFOpenOptionsFree(opts);
 		if (tif != NULL) {
 			if (dirnum != -1
                             && !TIFFSetDirectory(tif, (tdir_t)dirnum))

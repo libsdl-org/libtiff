@@ -159,9 +159,14 @@ static TIFF* openSrcImage (char **imageSpec)
 	TIFF *tif;
 	char *fn = *imageSpec;
 	*imageSpec = strchr (fn, comma);
+	TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+	if (opts == NULL) {
+	    return NULL;
+	}
+    TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
 	if (*imageSpec) {  /* there is at least one image number specifier */
 		**imageSpec = '\0';
-		tif = TIFFOpen (fn, mode);
+		tif = TIFFOpenExt (fn, mode, opts);
 		/* but, ignore any single trailing comma */
 		if (!(*imageSpec)[1]) {*imageSpec = NULL; return tif;}
 		if (tif) {
@@ -172,7 +177,8 @@ static TIFF* openSrcImage (char **imageSpec)
 			}
 		}
 	}else
-		tif = TIFFOpen (fn, mode);
+		tif = TIFFOpenExt (fn, mode, opts);
+	TIFFOpenOptionsFree(opts);
 	return tif;
 }
 
@@ -317,7 +323,13 @@ main(int argc, char* argv[])
 		}
 	if (argc - optind < 2)
 		usage(EXIT_FAILURE);
-	out = TIFFOpen(argv[argc-1], mode);
+	TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+	if (opts == NULL) {
+	    return EXIT_FAILURE;
+	}
+	TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+	out = TIFFOpenExt(argv[argc-1], mode, opts);
+	TIFFOpenOptionsFree(opts);
 	if (out == NULL)
 		return (EXIT_FAILURE);
 	if ((argc - optind) == 2)

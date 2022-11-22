@@ -2277,7 +2277,13 @@ update_output_file (TIFF **tiffout, char *mode, int autoindex,
       }
     exportname[sizeof(exportname) - 1] = '\0';
 
-    *tiffout = TIFFOpen(exportname, mode);
+    TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+    if (opts == NULL) {
+        return 1;
+    }
+    TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+    *tiffout = TIFFOpenExt(exportname, mode, opts);
+    TIFFOpenOptionsFree(opts);
     if (*tiffout == NULL)
       {
       TIFFError("update_output_file", "Unable to open output file %s", exportname);
@@ -2359,7 +2365,14 @@ main(int argc, char* argv[])
   /* Read multiple input files and write to output file(s) */
   while (optind < argc - 1)
     {
-    in = TIFFOpen (argv[optind], "r");
+
+    TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+    if (opts == NULL) {
+        return -3;
+    }
+    TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+    in = TIFFOpenExt(argv[optind], "r", opts);
+    TIFFOpenOptionsFree(opts);
     if (in == NULL)
       return (-3);
 
