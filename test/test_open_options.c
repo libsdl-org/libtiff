@@ -24,7 +24,7 @@
 /*
  * TIFF Library
  *
- * Test error handlers
+ * Test open options
  */
 
 #include "tif_config.h"
@@ -62,7 +62,7 @@ static int myErrorHandler(TIFF* tiff, void* user_data, const char* module, const
     return 1;
 }
 
-int test_open_ext()
+int test_error_handler()
 {
     int ret = 0;
     char error_buffer[ERROR_STRING_SIZE] = {0};
@@ -135,6 +135,6 @@ int test_open_ext()
 int main()
 {
     int ret = 0;
-    ret += test_open_ext(1);
+    ret += test_error_handler();
     return ret;
 }
