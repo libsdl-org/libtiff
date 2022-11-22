@@ -85,6 +85,7 @@ EXPORTS	TIFFAccessTagMethods
 	TIFFOpenWExt
 	TIFFOpenOptionsAlloc
 	TIFFOpenOptionsFree
+	TIFFOpenOptionsSetMaxSingleMemAlloc
 	TIFFOpenOptionsSetErrorHandlerExtR
 	TIFFOpenOptionsSetWarningHandlerExtR
 	TIFFPrintDirectory
