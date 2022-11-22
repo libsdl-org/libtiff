@@ -62,7 +62,7 @@ static int myErrorHandler(TIFF* tiff, void* user_data, const char* module, const
     return 1;
 }
 
-int test_error_handler()
+static int test_error_handler()
 {
     int ret = 0;
     char error_buffer[ERROR_STRING_SIZE] = {0};
@@ -132,9 +132,28 @@ int test_error_handler()
     return ret;
 }
 
+static int test_TIFFOpenOptionsSetMaxSingleMemAlloc(tmsize_t limit)
+{
+    int ret = 0;
+    TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+    assert(opts);
+    TIFFOpenOptionsSetMaxSingleMemAlloc(opts, limit);
+    TIFF* tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
+    TIFFOpenOptionsFree(opts);
+    if( tif != NULL )
+    {
+        fprintf(stderr, "Expected TIFFOpenExt() to fail due to memory limitation\n");
+        ret = 1;
+        TIFFClose(tif);
+    }
+    unlink("test_error_handler.tif");
+    return ret;
+}
+
 int main()
 {
     int ret = 0;
     ret += test_error_handler();
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(1);
     return ret;
 }
