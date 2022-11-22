@@ -99,23 +99,37 @@ void TIFFOpenOptionsSetWarningHandlerExtR(TIFFOpenOptions* opts, TIFFErrorHandle
     opts->warnhandler_user_data = warnhandler_user_data;
 }
 
+static void _TIFFEmitErrorAboveMaxSingleMemAlloc(TIFF* tif, const char* pszFunction, tmsize_t s)
+{
+    TIFFErrorExtR(tif, pszFunction,
+                  "Memory allocation of %" PRIu64 " bytes is beyond the %" PRIu64 " byte limit defined in open options",
+                  (uint64_t)s,
+                  (uint64_t)tif->tif_max_single_mem_alloc);
+}
+
 /** malloc() version that takes into account memory-specific open options */
 void* _TIFFmallocExt(TIFF* tif, tmsize_t s)
 {
     if (tif != NULL && tif->tif_max_single_mem_alloc > 0 && s > tif->tif_max_single_mem_alloc)
+    {
+        _TIFFEmitErrorAboveMaxSingleMemAlloc(tif, "_TIFFmallocExt", s);
         return NULL;
+    }
     return _TIFFmalloc(s);
 }
 
 /** calloc() version that takes into account memory-specific open options */
 void* _TIFFcallocExt(TIFF* tif, tmsize_t nmemb, tmsize_t siz)
 {
-    if( tif != NULL )
+    if (tif != NULL && tif->tif_max_single_mem_alloc > 0)
     {
         if (nmemb <= 0 || siz <= 0 || nmemb > TIFF_TMSIZE_T_MAX / siz)
             return NULL;
-        if (tif->tif_max_single_mem_alloc > 0 && nmemb * siz > tif->tif_max_single_mem_alloc)
+        if (nmemb * siz > tif->tif_max_single_mem_alloc)
+        {
+            _TIFFEmitErrorAboveMaxSingleMemAlloc(tif, "_TIFFcallocExt", nmemb * siz);
             return NULL;
+        }
     }
     return _TIFFcalloc(nmemb, siz);
 }
@@ -124,7 +138,10 @@ void* _TIFFcallocExt(TIFF* tif, tmsize_t nmemb, tmsize_t siz)
 void* _TIFFreallocExt(TIFF* tif, void* p, tmsize_t s)
 {
     if (tif != NULL && tif->tif_max_single_mem_alloc > 0 && s > tif->tif_max_single_mem_alloc)
+    {
+        _TIFFEmitErrorAboveMaxSingleMemAlloc(tif, "_TIFFreallocExt", s);
         return NULL;
+    }
     return _TIFFrealloc(p, s);
 }
 
@@ -209,7 +226,7 @@ TIFFClientOpenExt(
 	tmsize_t size_to_alloc = (tmsize_t)(sizeof (TIFF) + strlen(name) + 1);
 	if (opts && opts->max_single_mem_alloc > 0 &&
 	    size_to_alloc > opts->max_single_mem_alloc) {
-		_TIFFErrorEarly(opts, clientdata, module, "%s: Out of memory (TIFF structure)", name);
+		_TIFFErrorEarly(opts, clientdata, module, "%s: Memory allocation of %" PRIu64 " bytes is beyond the %" PRIu64 " byte limit defined in open options", name, size_to_alloc, opts->max_single_mem_alloc);
 		goto bad2;
 	}
 	tif = (TIFF *)_TIFFmallocExt(NULL, size_to_alloc);
