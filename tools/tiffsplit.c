@@ -126,9 +126,15 @@ main(int argc, char* argv[])
 		fname[sizeof(fname) - 1] = '\0';
 	}
 
-	in = TIFFOpen(argv[optind], "r");
+	TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+	if (opts == NULL) {
+	    return EXIT_FAILURE;
+	}
+	TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+	in = TIFFOpenExt(argv[optind], "r", opts);
 	if (in == NULL) {
 		fprintf(stderr, "tiffsplit: Error: Could not open %s \n", argv[optind]);
+        TIFFOpenOptionsFree(opts);
 		usage(EXIT_FAILURE);
 	}
 
@@ -143,23 +149,26 @@ main(int argc, char* argv[])
 		if (!path) {
 			fprintf(stderr, "tiffsplit: Error: Can't allocate %"TIFF_SSIZE_FORMAT" bytes for path-variable.\n", path_len);
 			TIFFClose(in);
+			TIFFOpenOptionsFree(opts);
 			return (EXIT_FAILURE);
 		}
 		strncpy(path, fname, path_len);
 		path[path_len - 1] = '\0';
 		strncat(path, TIFF_SUFFIX, path_len - strlen(path) - 1);
-		out = TIFFOpen(path, TIFFIsBigEndian(in) ? "wb" : "wl");
+		out = TIFFOpenExt(path, TIFFIsBigEndian(in) ? "wb" : "wl", opts);
 
 		if (out == NULL) {
 			TIFFClose(in);
 			fprintf(stderr, "tiffsplit: Error: Could not open output file %s \n", path);
 			_TIFFfree(path);
+			TIFFOpenOptionsFree(opts);
 			return (EXIT_FAILURE);
 		}
 		_TIFFfree(path);
 		if (!tiffcp(in, out)) {
 			TIFFClose(in);
 			TIFFClose(out);
+			TIFFOpenOptionsFree(opts);
 			fprintf(stderr, "tiffsplit: Error: Could not copy data from input to output.\n");
 			return (EXIT_FAILURE);
 
@@ -167,6 +176,7 @@ main(int argc, char* argv[])
 		TIFFClose(out);
 	} while (TIFFReadDirectory(in));
 
+	TIFFOpenOptionsFree(opts);
 	(void)TIFFClose(in);
 
 	return (EXIT_SUCCESS);

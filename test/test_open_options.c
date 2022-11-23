@@ -24,7 +24,7 @@
 /*
  * TIFF Library
  *
- * Test error handlers
+ * Test open options
  */
 
 #include "tif_config.h"
@@ -39,6 +39,7 @@
 #endif
 
 #include "tiffio.h"
+#include "tiffiop.h" // for struct TIFF
 
 #define ERROR_STRING_SIZE 1024
 
@@ -62,7 +63,7 @@ static int myErrorHandler(TIFF* tiff, void* user_data, const char* module, const
     return 1;
 }
 
-int test_open_ext()
+static int test_error_handler()
 {
     int ret = 0;
     char error_buffer[ERROR_STRING_SIZE] = {0};
@@ -132,9 +133,66 @@ int test_open_ext()
     return ret;
 }
 
+static int test_TIFFOpenOptionsSetMaxSingleMemAlloc(tmsize_t limit,
+                                                    int expected_to_fail_in_open,
+                                                    int expected_to_fail_in_write_directory)
+{
+    int ret = 0;
+    TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+    assert(opts);
+    TIFFOpenOptionsSetMaxSingleMemAlloc(opts, limit);
+    TIFF* tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
+    TIFFOpenOptionsFree(opts);
+    if (expected_to_fail_in_open)
+    {
+        if (tif != NULL)
+        {
+            fprintf(stderr, "Expected TIFFOpenExt() to fail due to memory limitation\n");
+            ret = 1;
+            TIFFClose(tif);
+        }
+    }
+    else
+    {
+        if (tif == NULL)
+        {
+            fprintf(stderr, "Expected TIFFOpenExt() to succeed\n");
+            ret = 1;
+        }
+        else
+        {
+#define VALUE_SAMPLESPERPIXEL 10000
+            TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, VALUE_SAMPLESPERPIXEL);
+            TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+            if (TIFFWriteDirectory(tif) == 0)
+            {
+                if (!expected_to_fail_in_write_directory)
+                {
+                    fprintf(stderr, "Expected TIFFWriteDirectory() to succeed\n");
+                    ret = 1;
+                }
+            }
+            else
+            {
+                if (expected_to_fail_in_write_directory)
+                {
+                    fprintf(stderr, "Expected TIFFWriteDirectory() to fail\n");
+                    ret = 1;
+                }
+            }
+            TIFFClose(tif);
+        }
+    }
+    unlink("test_error_handler.tif");
+    return ret;
+}
+
 int main()
 {
     int ret = 0;
-    ret += test_open_ext(1);
+    ret += test_error_handler();
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(1, TRUE, -1);
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(sizeof(TIFF) + strlen("test_error_handler.tif") + 1, FALSE, TRUE);
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(VALUE_SAMPLESPERPIXEL * sizeof(short), FALSE, FALSE);
     return ret;
 }

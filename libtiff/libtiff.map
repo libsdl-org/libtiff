@@ -210,6 +210,7 @@ LIBTIFF_4.5 {
     TIFFWarningExtR;
     TIFFOpenOptionsAlloc;
     TIFFOpenOptionsFree;
+    TIFFOpenOptionsSetMaxSingleMemAlloc;
     TIFFOpenOptionsSetErrorHandlerExtR;
     TIFFOpenOptionsSetWarningHandlerExtR;
 } LIBTIFF_4.4;

@@ -129,24 +129,33 @@ main(int argc, char* argv[])
 	if (argc - optind < 2)
 		usage(EXIT_FAILURE);
 
-	out = TIFFOpen(argv[argc-1], bigtiff_output?"w8":"w");
-	if (out == NULL)
+	TIFFOpenOptions* opts = TIFFOpenOptionsAlloc();
+	if (opts == NULL) {
+	    return EXIT_FAILURE;
+	}
+	TIFFOpenOptionsSetMaxSingleMemAlloc(opts, maxMalloc);
+	out = TIFFOpenExt(argv[argc-1], bigtiff_output?"w8":"w", opts);
+	if (out == NULL) {
+		TIFFOpenOptionsFree(opts);
 		return (EXIT_FAILURE);
+	}
 
 	for (; optind < argc-1; optind++) {
-		in = TIFFOpen(argv[optind], "r");
+		in = TIFFOpenExt(argv[optind], "r", opts);
 		if (in != NULL) {
 			do {
 				if (!tiffcvt(in, out) ||
 				    !TIFFWriteDirectory(out)) {
 					(void) TIFFClose(out);
 					(void) TIFFClose(in);
+					TIFFOpenOptionsFree(opts);
 					return (1);
 				}
 			} while (TIFFReadDirectory(in));
 			(void) TIFFClose(in);
 		}
 	}
+	TIFFOpenOptionsFree(opts);
 	(void) TIFFClose(out);
 	return (EXIT_SUCCESS);
 }
