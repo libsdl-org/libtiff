@@ -1251,10 +1251,10 @@ writeBufferToSeparateStrips (TIFF* out, uint8_t* buf,
 	}
       if ((dump->outfile != NULL) && (dump->level == 1))
         {
-          if (scanlinesize > 0x0ffffffffULL) {
+          if ((uint64_t)scanlinesize > 0x0ffffffffULL) {
               dump_info(dump->infile, dump->format, "loadImage",
                   "Attention: scanlinesize %"PRIu64" is larger than UINT32_MAX.\nFollowing dump might be wrong.",
-                  scanlinesize);
+                  (uint64_t)scanlinesize);
           }
           dump_info(dump->outfile, dump->format,"",
                   "Sample %2d, Strip: %2d, bytes: %4d, Row %4d, bytes: %4d, Input offset: %6d", 
@@ -6545,10 +6545,10 @@ loadImage(TIFF* in, struct image_data *image, struct dump_opts *dump, unsigned c
     dump_info  (dump->infile, dump->format, "", 
                 "Bits per sample %"PRIu16", Samples per pixel %"PRIu16, bps, spp);
 
-    if (scanlinesize > 0x0ffffffffULL) {
+    if ((uint64_t)scanlinesize > 0x0ffffffffULL) {
         dump_info(dump->infile, dump->format, "loadImage",
             "Attention: scanlinesize %"PRIu64" is larger than UINT32_MAX.\nFollowing dump might be wrong.",
-            scanlinesize);
+            (uint64_t)scanlinesize);
     }
     for (i = 0; i < length; i++)
       dump_buffer(dump->infile, dump->format, 1, (uint32_t)scanlinesize, 
