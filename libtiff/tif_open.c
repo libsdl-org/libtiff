@@ -226,7 +226,9 @@ TIFFClientOpenExt(
 	tmsize_t size_to_alloc = (tmsize_t)(sizeof (TIFF) + strlen(name) + 1);
 	if (opts && opts->max_single_mem_alloc > 0 &&
 	    size_to_alloc > opts->max_single_mem_alloc) {
-		_TIFFErrorEarly(opts, clientdata, module, "%s: Memory allocation of %" PRIu64 " bytes is beyond the %" PRIu64 " byte limit defined in open options", name, size_to_alloc, opts->max_single_mem_alloc);
+		_TIFFErrorEarly(opts, clientdata, module,
+		                "%s: Memory allocation of %" PRIu64 " bytes is beyond the %" PRIu64 " byte limit defined in open options",
+		                name, (uint64_t)size_to_alloc, (uint64_t)opts->max_single_mem_alloc);
 		goto bad2;
 	}
 	tif = (TIFF *)_TIFFmallocExt(NULL, size_to_alloc);
