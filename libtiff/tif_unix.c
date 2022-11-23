@@ -276,7 +276,7 @@ TIFFOpenExt(const char* name, const char* mode, TIFFOpenOptions* opts)
 TIFF*
 TIFFOpenW(const wchar_t* name, const char* mode)
 {
-    return TIFFOpenWEx(name, mode, NULL);
+    return TIFFOpenWExt(name, mode, NULL);
 }
 TIFF*
 TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
@@ -287,7 +287,7 @@ TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
 	char *mbname;
 	TIFF* tif;
 
-	m = _TIFFgetMode(mode, module);
+	m = _TIFFgetMode(opts, NULL, mode, module);
 	if (m == -1)
 		return ((TIFF*)0);
 
