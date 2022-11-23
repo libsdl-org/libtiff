@@ -168,7 +168,11 @@ static TIFF* openSrcImage (char **imageSpec)
 		**imageSpec = '\0';
 		tif = TIFFOpenExt (fn, mode, opts);
 		/* but, ignore any single trailing comma */
-		if (!(*imageSpec)[1]) {*imageSpec = NULL; return tif;}
+		if (!(*imageSpec)[1]) {
+		    *imageSpec = NULL;
+		    TIFFOpenOptionsFree(opts);
+		    return tif;
+		}
 		if (tif) {
 			**imageSpec = comma;  /* replace the comma */
 			if (!nextSrcImage(tif, imageSpec)) {
