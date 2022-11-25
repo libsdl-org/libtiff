@@ -153,4 +153,10 @@ else
 extra_CPPFLAGS =
 endif
 
-AM_CPPFLAGS = -I$(top_srcdir)/libtiff -I$(top_srcdir)/port $(extra_CPPFLAGS)
+if HAVE_JPEGTURBO_DUAL_MODE_8_12
+JPEGTURBO_CPPFLAGS = -DHAVE_JPEGTURBO_DUAL_MODE_8_12
+else
+JPEGTURBO_CPPFLAGS =
+endif
+
+AM_CPPFLAGS = -I$(top_srcdir)/libtiff -I$(top_srcdir)/port $(extra_CPPFLAGS) $(JPEGTURBO_CPPFLAGS)

@@ -559,6 +559,7 @@ dnl Check for JPEG.
 dnl ---------------------------------------------------------------------------
 
 HAVE_JPEG=no
+HAVE_JPEGTURBO_DUAL_MODE_8_12=no
 
 AC_ARG_ENABLE(jpeg,
 	      AS_HELP_STRING([--disable-jpeg],
@@ -591,6 +592,9 @@ if test "x$enable_jpeg" != "xno" ; then
   fi
 
   if test "$jpeg_lib" = "yes" -a "$jpeg_h" = "yes" ; then
+    dnl Check for jpeg12_read_scanlines which has been added in libjpeg-turbo 2.2
+    dnl for dual 8/12 bit mode.
+    AC_CHECK_LIB(jpeg, jpeg12_read_scanlines, [HAVE_JPEGTURBO_DUAL_MODE_8_12=yes], [HAVE_JPEGTURBO_DUAL_MODE_8_12=no],)
     HAVE_JPEG=yes
   fi
 
@@ -606,9 +610,13 @@ if test "$HAVE_JPEG" = "yes" ; then
     LIBDIR="-R $with_jpeg_lib_dir $LIBDIR"
   fi
 
+  if test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = "yes"; then
+      AC_DEFINE(HAVE_JPEGTURBO_DUAL_MODE_8_12,1,[libjpeg-turbo >= 2.2 dual mode enabled])
+  fi
 fi
 
 AM_CONDITIONAL(HAVE_JPEG, test "$HAVE_JPEG" = 'yes')
+AM_CONDITIONAL(HAVE_JPEGTURBO_DUAL_MODE_8_12, test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = 'yes')
 
 dnl ---------------------------------------------------------------------------
 dnl Check for Old JPEG.
@@ -918,34 +926,37 @@ AM_CONDITIONAL(HAVE_WEBP, test "$HAVE_WEBP" = 'yes')
 
 dnl ---------------------------------------------------------------------------
 dnl Should 8/12 bit jpeg mode be enabled?
+dnl This should not be used starting with libjpeg-turbo >= 2.2 that has
+dnl built-in support for dual mode.
 dnl ---------------------------------------------------------------------------
 
-HAVE_JPEG12=no
+if test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = "no"; then
+    HAVE_JPEG12=no
 
-AC_ARG_ENABLE(jpeg12,
-	      AS_HELP_STRING([--enable-jpeg12],
-			     [enable libjpeg 8/12bit dual mode]),,)
-AC_ARG_WITH(jpeg12-include-dir,
-	    AS_HELP_STRING([--with-jpeg12-include-dir=DIR],
-			   [location of libjpeg 12bit headers]),,)
-AC_ARG_WITH(jpeg12-lib,
-	    AS_HELP_STRING([--with-jpeg12-lib=LIBRARY],
-			   [path to libjpeg 12bit library]),,)
+    AC_ARG_ENABLE(jpeg12,
+              AS_HELP_STRING([--enable-jpeg12],
+                     [enable libjpeg 8/12bit dual mode (not to be used with libjpeg-turbo >= 2.2)]),,)
+    AC_ARG_WITH(jpeg12-include-dir,
+            AS_HELP_STRING([--with-jpeg12-include-dir=DIR],
+                   [location of libjpeg 12bit headers]),,)
+    AC_ARG_WITH(jpeg12-lib,
+            AS_HELP_STRING([--with-jpeg12-lib=LIBRARY],
+                   [path to libjpeg 12bit library]),,)
 
-if test "x$enable_jpeg12" = "xyes" ; then
+    if test "x$enable_jpeg12" = "xyes" ; then
 
-  if test "x$with_jpeg12_lib" != "x" ; then
-    LIBS="$with_jpeg12_lib $LIBS"
-  fi
-  
-  HAVE_JPEG12=yes
+      if test "x$with_jpeg12_lib" != "x" ; then
+        LIBS="$with_jpeg12_lib $LIBS"
+      fi
+      
+      HAVE_JPEG12=yes
 
-  AC_DEFINE(JPEG_DUAL_MODE_8_12,1,[8/12 bit libjpeg dual mode enabled])
-  if test "x$with_jpeg12_include_dir" != "x" ; then
-    AC_DEFINE_UNQUOTED(LIBJPEG_12_PATH,"$with_jpeg12_include_dir/jpeglib.h",[12bit libjpeg primary include file with path])
-  fi
+      AC_DEFINE(JPEG_DUAL_MODE_8_12,1,[8/12 bit libjpeg dual mode enabled])
+      if test "x$with_jpeg12_include_dir" != "x" ; then
+        AC_DEFINE_UNQUOTED(LIBJPEG_12_PATH,"$with_jpeg12_include_dir/jpeglib.h",[12bit libjpeg primary include file with path])
+      fi
+    fi
 fi
-
 
 dnl ---------------------------------------------------------------------------
 dnl Check for C++.
@@ -1240,7 +1251,11 @@ LOC_MSG([  libdeflate support:                 ${HAVE_LIBDEFLATE}])
 LOC_MSG([  Pixar log-format algorithm:         ${HAVE_PIXARLOG}])
 LOC_MSG([  JPEG support:                       ${HAVE_JPEG}])
 LOC_MSG([  Old JPEG support:                   ${HAVE_OJPEG}])
-LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEG12}])
+if test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = "yes"; then
+    LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEGTURBO_DUAL_MODE_8_12} (libjpeg turbo >= 2.2 dual mode)])
+else
+    LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEG12}])
+fi
 LOC_MSG([  ISO JBIG support:                   ${HAVE_JBIG}])
 LOC_MSG([  LERC support:                       ${HAVE_LERC}])
 LOC_MSG([  LZMA2 support:                      ${HAVE_LZMA}])
