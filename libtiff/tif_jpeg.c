@@ -367,27 +367,28 @@ static int TIFFjpeg_start_compress(JPEGState *sp, boolean write_all_tables) {
 
 static int TIFFjpeg_write_scanlines(JPEGState *sp, TIFF_JSAMPARRAY scanlines,
                                     int num_lines) {
-  return CALLJPEG(sp, -1,
 #if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
+  return CALLJPEG(sp, -1,
                   (int)jpeg12_write_scanlines(&sp->cinfo.c, scanlines,
-                                            (JDIMENSION)num_lines)
+                                            (JDIMENSION)num_lines));
 #else
+  return CALLJPEG(sp, -1,
                   (int)jpeg_write_scanlines(&sp->cinfo.c, scanlines,
-                                            (JDIMENSION)num_lines)
+                                            (JDIMENSION)num_lines));
 #endif
-                 );
 }
 
 static int TIFFjpeg_write_raw_data(JPEGState *sp, TIFF_JSAMPIMAGE data,
                                    int num_lines) {
+#if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
   return CALLJPEG(
       sp, -1,
-#if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
-      (int)jpeg12_write_raw_data(&sp->cinfo.c, data, (JDIMENSION)num_lines)
+      (int)jpeg12_write_raw_data(&sp->cinfo.c, data, (JDIMENSION)num_lines));
 #else
-      (int)jpeg_write_raw_data(&sp->cinfo.c, data, (JDIMENSION)num_lines)
+  return CALLJPEG(
+      sp, -1,
+      (int)jpeg_write_raw_data(&sp->cinfo.c, data, (JDIMENSION)num_lines));
 #endif
-  );
 }
 
 static int TIFFjpeg_finish_compress(JPEGState *sp) {
@@ -423,27 +424,29 @@ static int TIFFjpeg_start_decompress(JPEGState *sp) {
 static int TIFFjpeg_read_scanlines(JPEGState *sp,
                                    TIFF_JSAMPARRAY scanlines,
                                    int max_lines) {
+#if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
   return CALLJPEG(
       sp, -1,
-#if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
-      (int)jpeg12_read_scanlines(&sp->cinfo.d, scanlines, (JDIMENSION)max_lines)
+      (int)jpeg12_read_scanlines(&sp->cinfo.d, scanlines, (JDIMENSION)max_lines));
 #else
-      (int)jpeg_read_scanlines(&sp->cinfo.d, scanlines, (JDIMENSION)max_lines)
+  return CALLJPEG(
+      sp, -1,
+      (int)jpeg_read_scanlines(&sp->cinfo.d, scanlines, (JDIMENSION)max_lines));
 #endif
-  );
 }
 
 static int TIFFjpeg_read_raw_data(JPEGState *sp,
                                   TIFF_JSAMPIMAGE data,
                                   int max_lines) {
+#if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
   return CALLJPEG(
       sp, -1,
-#if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12) && BITS_IN_JSAMPLE == 12
-      (int)jpeg12_read_raw_data(&sp->cinfo.d, data, (JDIMENSION)max_lines)
+      (int)jpeg12_read_raw_data(&sp->cinfo.d, data, (JDIMENSION)max_lines));
 #else
-      (int)jpeg_read_raw_data(&sp->cinfo.d, data, (JDIMENSION)max_lines)
+  return CALLJPEG(
+      sp, -1,
+      (int)jpeg_read_raw_data(&sp->cinfo.d, data, (JDIMENSION)max_lines));
 #endif
-  );
 }
 
 static int TIFFjpeg_finish_decompress(JPEGState *sp) {
