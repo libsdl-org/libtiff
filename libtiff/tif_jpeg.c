@@ -2111,7 +2111,7 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s) {
 
       for (iPair = 0; iPair < value_pairs; iPair++) {
         unsigned char *in_ptr = ((unsigned char *)buf) + iPair * 3;
-        JSAMPLE *out_ptr = (JSAMPLE *)(line16 + iPair * 2);
+        TIFF_JSAMPLE *out_ptr = (TIFF_JSAMPLE *)(line16 + iPair * 2);
 
         out_ptr[0] = (in_ptr[0] << 4) | ((in_ptr[1] & 0xf0) >> 4);
         out_ptr[1] = ((in_ptr[1] & 0x0f) << 8) | in_ptr[2];
