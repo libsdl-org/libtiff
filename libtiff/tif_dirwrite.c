@@ -763,7 +763,7 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64_t* pdiroff)
 								goto bad;
 							/*-- ToDo: After Testing, this should be removed and tv_size==4 should be set as default. */
 							if (tv_size != 4) {
-								TIFFErrorExt(0,"TIFFLib: _TIFFWriteDirectorySec()", "Rational2Double: .set_field_type in not 4 but %d", tv_size); 
+								TIFFErrorExtR(tif,"TIFFLib: _TIFFWriteDirectorySec()", "Rational2Double: .set_field_type is not 4 but %d", tv_size); 
 							}
 						}
 					}
@@ -782,7 +782,7 @@ TIFFWriteDirectorySec(TIFF* tif, int isimage, int imagedone, uint64_t* pdiroff)
 								goto bad;
 							/*-- ToDo: After Testing, this should be removed and tv_size==4 should be set as default. */
 							if (tv_size != 4) {
-								TIFFErrorExt(0,"TIFFLib: _TIFFWriteDirectorySec()", "Rational2Double: .set_field_type in not 4 but %d", tv_size); 
+								TIFFErrorExtR(tif,"TIFFLib: _TIFFWriteDirectorySec()", "Rational2Double: .set_field_type is not 4 but %d", tv_size); 
 							}
 						}
 					}
