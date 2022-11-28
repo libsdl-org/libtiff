@@ -30,6 +30,7 @@ TIFF Functions Overview
     functions/TIFFmemory
     functions/TIFFMergeFieldInfo
     functions/TIFFOpen
+    functions/TIFFOpenOptions
     functions/TIFFPrintDirectory
     functions/TIFFProcFunctions
     functions/TIFFquery

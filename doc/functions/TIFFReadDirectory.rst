@@ -41,8 +41,8 @@ be read.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
-All warning messages are directed to the :c:func:`TIFFWarning` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
+Likewise, warning messages are directed to the :c:func:`TIFFWarningExtR` routine.
 
 ``Seek error accessing TIFF directory``:
 

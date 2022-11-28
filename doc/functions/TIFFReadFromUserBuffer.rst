@@ -33,7 +33,7 @@ Returns 1 in case of success, 0 otherwise.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFErrorExt` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 See also
 --------

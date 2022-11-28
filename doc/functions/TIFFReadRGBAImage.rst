@@ -103,7 +103,7 @@ Otherwise, 0 is returned if an error was encountered and
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 ``"Sorry, can not handle %d-bit pictures"``:
 

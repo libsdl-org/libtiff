@@ -26,7 +26,7 @@ returned.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 ``%s: File not open for writing``:
 

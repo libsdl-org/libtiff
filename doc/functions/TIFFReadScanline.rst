@@ -46,7 +46,7 @@ returned.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 ``"Compression algorithm does not support random access"``:
 
