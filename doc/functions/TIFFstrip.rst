@@ -77,9 +77,7 @@ if data are organized in separate planes (``PlanarConfiguration`` = 2).
 
 :c:func:`TIFFNumberOfStrips` returns the number of strips in the image.
 
-.. TODO: Explain the function
-
-:c:func:`TIFFSetupStrips`  ?????
+:c:func:`TIFFSetupStrips` setup  or reset strip parameters and strip array memory.
 
 Diagnostics
 -----------

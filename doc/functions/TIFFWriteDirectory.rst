@@ -72,7 +72,7 @@ the directory contents.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 ``"Error post-encoding before directory write"``:
 

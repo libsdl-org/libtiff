@@ -60,7 +60,7 @@ encountered while reading the directory's contents.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 ``"%s: Error fetching directory count"``:
 

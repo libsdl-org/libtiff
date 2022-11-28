@@ -16,6 +16,12 @@ Synopsis
 
 .. c:function:: TIFF* TIFFFdOpen(const int fd, const char* filename, const char*mode)
 
+.. c:function:: TIFF* TIFFOpenExt(const char* filename, const char* mode, TIFFOpenOptions* opts)
+
+.. c:function:: TIFF* TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
+
+.. c:function:: TIFF* TIFFFdOpenExt(const int fd, const char* filename, const char*mode, TIFFOpenOptions* opts)
+
 .. c:function:: const char * TIFFSetFileName(TIFF* tif)
 
 .. c:function:: int TIFFSetFileno(TIFF* tif, int fd)
@@ -31,25 +37,11 @@ Synopsis
 
 .. c:function:: TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdata, TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc, TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc, TIFFUnmapFileProc unmapproc)
 
+.. c:function:: TIFF* TIFFClientOpenExt(const char* filename, const char* mode, thandle_t clientdata, TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc, TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc, TIFFUnmapFileProc unmapproc, TIFFOpenOptions* opts)
+
 .. c:function:: thandle_t TIFFClientdata(TIFF* tif)
 
 .. c:function:: thandle_t TIFFSetClientdata(TIFF* tif, thandle_t newvalue)
-
-.. c:function:: TIFFOpenOptions* TIFFOpenOptionsAlloc(void)
-
-.. c:function:: void TIFFOpenOptionsFree(TIFFOpenOptions*);
-
-.. c:function:: void TIFFOpenOptionsSetErrorHandlerExtR(TIFFOpenOptions* opts, TIFFErrorHandlerExtR handler, void* errorhandler_user_data)
-
-.. c:function:: void TIFFOpenOptionsSetWarningHandlerExtR(TIFFOpenOptions* opts, TIFFErrorHandlerExtR handler, void* warnhandler_user_data)
-
-.. c:function:: TIFF* TIFFOpenExt(const char* filename, const char* mode, TIFFOpenOptions* opts)
-
-.. c:function:: TIFF* TIFFOpenWExt(const wchar_t* name, const char* mode, TIFFOpenOptions* opts)
-
-.. c:function:: TIFF* TIFFFdOpenExt(const int fd, const char* filename, const char*mode, TIFFOpenOptions* opts)
-
-.. c:function:: TIFF* TIFFClientOpenExt(const char* filename, const char* mode, thandle_t clientdata, TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc, TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc, TIFFUnmapFileProc unmapproc, TIFFOpenOptions* opts)
 
 Description
 -----------
@@ -102,23 +94,21 @@ first :c:func:`TIFFCleanup` should be called to free the internal
 TIFF structure without closing the file handle and afterwards the
 file should be closed using its file descriptor *fd*.
 
-:c:func:`TIFFOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFOpen`, but options,
-such as re-entrant error and warning handlers may be passed. The opts argument
-may be NULL. Note that in the early stages of the execution of the function,
-the TIFF* argument passed to the re-entrant error handler (specified in opts)
-may be NULL.
+:c:func:`TIFFOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFOpen`,
+but options, such as re-entrant error and warning handlers may be passed
+with the *opts* argument. The *opts* argument may be NULL. 
+Refer to :doc:`TIFFOpenOptions` for allocating and filling the *opts* argument
+parameters. The allocated memory for :c:type:`TIFFOpenOptions`
+can be released straight after successful execution of the related
+"TIFFOpenExt" functions.
 
-:c:func:`TIFFOpenWExt` (added in libtiff 4.5) is like :c:func:`TIFFOpenW`, but options,
-such as re-entrant error and warning handlers may be passed. The opts argument
-may be NULL. Note that in the early stages of the execution of the function,
-the TIFF* argument passed to the re-entrant error handler (specified in opts)
-may be NULL.
+:c:func:`TIFFOpenWExt` (added in libtiff 4.5) is like :c:func:`TIFFOpenExt`,
+but opens a TIFF file with a Unicode filename.
 
-:c:func:`TIFFFdOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFFdOpen`, but options,
-such as re-entrant error and warning handlers may be passed. The opts argument
-may be NULL. Note that in the early stages of the execution of the function,
-the TIFF* argument passed to the re-entrant error handler (specified in opts)
-may be NULL.
+:c:func:`TIFFFdOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFFdOpen`,
+but options, such as re-entrant error and warning handlers may be passed
+with the *opts* argument. The *opts* argument may be NULL. 
+Refer to :doc:`TIFFOpenOptions` for filling the *opts* argument.
 
 :c:func:`TIFFSetFileName` sets the file name in the tif-structure
 and returns the old file name.
@@ -142,6 +132,9 @@ memory; c.f. :c:func:`mmap` (2) and :c:func:`munmap` (2).
 The *clientdata* parameter is an opaque "handle" passed to the client-specified
 routines passed as parameters to :c:func:`TIFFClientOpen`.
 
+:c:func:`TIFFClientOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFClientOpen`,
+but options argument *opts* like for :c:func:`TIFFOpenExt` can be passed.
+
 :c:func:`TIFFClientdata` returns open file's clientdata handle,
 which is the real open file's I/O descriptor used by ``libtiff``.
 Note: Within tif_unix.c this handle is converted into an integer file descriptor.
@@ -156,12 +149,6 @@ The clientdata is used as open file's I/O descriptor within ``libtiff``.
   (in tif_win32.c as well as in tif_unix.c).
   When updating the file's clientdata with :c:func:`TIFFSetClientdata`,
   the *fd* value is **not** updated.
-
-:c:func:`TIFFClientOpenExt` (added in libtiff 4.5) is like :c:func:`TIFFClientOpen`, but options,
-such as re-entrant error and warning handlers may be passed. The opts argument
-may be NULL. Note that in the early stages of the execution of the function,
-the TIFF* argument passed to the re-entrant error handler (specified in opts)
-may be NULL.
 
 Options
 -------
@@ -294,8 +281,8 @@ Diagnostics
 -----------
 
 
-All error messages are directed to the :c:func:`TIFFError` routine.
-Likewise, warning messages are directed to the :c:func:`TIFFWarning` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
+Likewise, warning messages are directed to the :c:func:`TIFFWarningExtR` routine.
 
 ``"%s": Bad mode``:
 
@@ -335,4 +322,5 @@ See also
 
 :doc:`libtiff` (3tiff),
 :doc:`TIFFClose` (3tiff),
-:doc:`TIFFStrileQuery`
+:doc:`TIFFStrileQuery`,
+:doc:`TIFFOpenOptions`

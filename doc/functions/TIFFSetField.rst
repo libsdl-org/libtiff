@@ -378,7 +378,7 @@ Otherwise, 0 is returned if an error was detected.
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
 
 ``%s: Cannot modify tag "%s" while writing``:
 

@@ -144,6 +144,9 @@ will work.
         the file descriptor used within ``libtiff``.
     * - :c:func:`TIFFClientOpen`
       - open a file for reading or writing
+    * - :c:func:`TIFFClientOpenExt`
+      - open a file for reading or writing with options,
+        such as re-entrant error and warning handlers may be passed
     * - :c:func:`TIFFClose`
       - close a previously opened TIFF file
     * - :c:func:`TIFFComputeStrip`
@@ -183,11 +186,19 @@ will work.
         and must be used in a particular sequence together with
         TIFFForceStrileArrayWriting() (see description)
     * - :c:func:`TIFFError`
-      - library error handler printing to ``stderr``
+      - library-wide error handling function printing to ``stderr``
     * - :c:func:`TIFFErrorExt`
-      - library error handler printing to ``stderr`` and/or a file
+      - user-specific library-wide error handling function that can be passed
+        a file handle, which is set to the open TIFF file within ``libtiff``
+    * - :c:func:`TIFFErrorExtR`
+      - user-specific re-entrant library error handling function,
+        to which its TIFF structure is passed
+        containing the pointer to a user-specific data object
     * - :c:func:`TIFFFdOpen`
       - open a file for reading or writing
+    * - :c:func:`TIFFFdOpenExt`
+      - open a file for reading or writing with options,
+        such as re-entrant error and warning handlers may be passed
     * - :c:func:`TIFFFieldDataType`
       - get data type from field information
     * - :c:func:`TIFFFieldIsAnonymous`
@@ -300,12 +311,28 @@ will work.
       - return number of tiles in an image
     * - :c:func:`TIFFOpen`
       - open a file for reading or writing
+    * - :c:func:`TIFFOpenExt`
+      - open a file for reading or writing  with options,
+        such as re-entrant error and warning handlers may be passed
     * - :c:func:`TIFFOpenW`
       - opens a TIFF file with a Unicode filename, for read/writing
+    * - :c:func:`TIFFOpenWExt`
+      - opens a TIFF file with a Unicode filename, for read/writing
+        with options, such as re-entrant error and warning handlers may be passed
+    * - :c:func:`TIFFOpenOptionsAlloc`
+      - allocates memory for :c:type:`TIFFOpenOptions` opaque structure
+    * - :c:func:`TIFFOpenOptionsFree`
+      - releases the allocated memory for :c:type:`TIFFOpenOptions`
+    * - :c:func:`TIFFOpenOptionsSetMaxSingleMemAlloc`
+      - limits the maximum single memory allocation within ``libtiff``
+    * - :c:func:`TIFFOpenOptionsSetErrorHandlerExtR`
+      - setup of a user-specific and per-TIFF handle (re-entrant) error handler
+    * - :c:func:`TIFFOpenOptionsSetWarningHandlerExtR`
+      - setup of a user-specific and per-TIFF handle (re-entrant) warning handler
     * - :c:func:`TIFFPrintDirectory`
       - print description of the current directory
     * - :c:func:`TIFFRasterScanlineSize`
-      - eturns the size in bytes of a complete decoded and packed raster scanline
+      - returns the size in bytes of a complete decoded and packed raster scanline
     * - :c:func:`TIFFRasterScanlineSize64`
       - return size as :c:type:`uint64_t`
     * - :c:func:`TIFFRawStripSize`
@@ -340,17 +367,17 @@ will work.
       - read an image into a fixed format raster
     * - :c:func:`TIFFReadRGBAImageOriented`
       - works like :c:func:`TIFFReadRGBAImage` except that the user can specify
-          the raster origin position
+        the raster origin position
     * - :c:func:`TIFFReadRGBAStrip`
       - reads a single strip of a strip-based image into memory, storing the
         result in the user supplied RGBA raster
     * - :c:func:`TIFFReadRGBAStripExt`
-      - same as :c:func:`TIFFReadRGBAStrip` but providing the paramater `stop_on_error`
+      - same as :c:func:`TIFFReadRGBAStrip` but providing the parameter `stop_on_error`
     * - :c:func:`TIFFReadRGBATile`
       - reads a single tile of a tile-based image into memory, storing the
         result in the user supplied RGBA raster
     * - :c:func:`TIFFReadRGBATileExt`
-      - same as :c:func:`TIFFReadRGBATile` but providing the paramater `stop_on_error`
+      - same as :c:func:`TIFFReadRGBATile` but providing the parameter `stop_on_error`
     * - :c:func:`TIFFReadScanline`
       - read and decode a row of data
     * - :c:func:`TIFFReadTile`
@@ -391,19 +418,19 @@ will work.
     * - :c:func:`TIFFSetField`
       - set a tag's value in the current directory
     * - :c:func:`TIFFSetFileName`
-      - sets the file name in the tif-structure and returns the old file name
+      - sets the file name in the TIFF-structure and returns the old file name
     * - :c:func:`TIFFSetFileno`
       - overwrites a copy of the open file's I/O descriptor, and return previous value
         (refer to detailed description)
     * - :c:func:`TIFFSetMode`
-      - sets the ``libtiff`` open mode in the tif-structure and returns the old mode
+      - sets the ``libtiff`` open mode in the TIFF-structure and returns the old mode
     * - :c:func:`TIFFSetSubDirectory`
       - set the current directory
     * - :c:func:`TIFFSetTagExtender`
       - is used to register the merge function for user defined tags as an
         extender callback with ``libtiff``
     * - :c:func:`TIFFSetupStrips`
-      -
+      - setup  or reset strip parameters and strip array memory
     * - :c:func:`TIFFSetWarningHandler`
       - set warning handler function
     * - :c:func:`TIFFSetWarningHandlerExt`
@@ -463,12 +490,17 @@ will work.
     * - :c:func:`TIFFVTileSize`
       - returns the number of bytes in a row-aligned tile with *nrows* of data
     * - :c:func:`TIFFVTileSize64`
-      - returns the number of bytes in a row-alignedtile with *nrows* of data
+      - returns the number of bytes in a row-aligned tile with *nrows* of data
         a :c:type:`uint64_t` number
     * - :c:func:`TIFFWarning`
-      - library warning handler
+      - library-wide warning handling function printing to ``stderr``
     * - :c:func:`TIFFWarningExt`
-      - library warning handler printing to ``stderr`` and a file
+      - user-specific library-wide warning handling function that can be passed
+        a file handle, which is set to the open TIFF file within ``libtiff``
+    * - :c:func:`TIFFWarningExtR`
+      - user-specific re-entrant library warning handling function,
+        to which its TIFF structure is passed
+        containing the pointer to a user-specific data object
     * - :c:func:`TIFFWriteBufferSetup`
       - sets up the data buffer used to write raw (encoded) data to a file
     * - :c:func:`TIFFWriteCheck`
@@ -1090,11 +1122,11 @@ The table below summarizes the defined pseudo-tags.
 Diagnostics
 -----------
 
-All error messages are directed through the :c:func:`TIFFError` routine.
+All error messages are directed through the :c:func:`TIFFErrorExtR` routine.
 By default messages are directed to ``stderr`` in the form:
 ``module: message\n``.
 Warning messages are likewise directed through the
-:c:func:`TIFFWarning` routine.
+:c:func:`TIFFWarningExtR` routine.
 
 See also
 --------

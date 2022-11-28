@@ -66,8 +66,8 @@ Be aware:
 Diagnostics
 -----------
 
-All error messages are directed to the :c:func:`TIFFError` routine.
-Likewise, warning messages are directed to the :c:func:`TIFFWarning` routine.
+All error messages are directed to the :c:func:`TIFFErrorExtR` routine.
+Likewise, warning messages are directed to the :c:func:`TIFFWarningExtR` routine.
 
 See also
 --------
