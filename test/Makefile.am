@@ -76,7 +76,7 @@ if TIFF_TESTS
 check_PROGRAMS = \
 	ascii_tag long_tag short_tag strip_rw rewrite custom_dir custom_dir_EXIF_231 \
 	defer_strile_loading defer_strile_writing test_directory test_open_options \
-	testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG) $(STATIC_CHECK_PROGS)
+	test_append_to_strip testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG) $(STATIC_CHECK_PROGS)
 endif
 
 # Test scripts to execute
@@ -248,6 +248,8 @@ test_directory_SOURCES = test_directory.c
 test_directory_LDADD = $(LIBTIFF)
 test_open_options_SOURCES = test_open_options.c
 test_open_options_LDADD = $(LIBTIFF)
+test_append_to_strip_SOURCES = test_append_to_strip.c
+test_append_to_strip_LDADD = $(LIBTIFF)
 
 AM_CPPFLAGS = -I$(top_srcdir)/libtiff
 
