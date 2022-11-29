@@ -180,6 +180,11 @@ target_sources(test_open_options PRIVATE test_open_options.c)
 target_link_libraries(test_open_options PRIVATE tiff tiff_port)
 list(APPEND simple_tests test_open_options)
 
+add_executable(test_append_to_strip ../placeholder.h)
+target_sources(test_append_to_strip PRIVATE test_append_to_strip.c)
+target_link_libraries(test_append_to_strip PRIVATE tiff tiff_port)
+list(APPEND simple_tests test_append_to_strip)
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.
