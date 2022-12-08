@@ -101,9 +101,6 @@
  * may cause buffer overflows.
  */
 
-static char tiffcrop_version_id[] = "2.5.4";
-static char tiffcrop_rev_date[] = "27-08-2022";
-
 #include "libport.h"
 #include "tif_config.h"
 #include "tiffiop.h"
@@ -1933,8 +1930,6 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 break;
             case 'v':
                 printf("Library Release: %s\n", TIFFGetVersion());
-                printf("Tiffcrop version: %s, last updated: %s\n",
-                       tiffcrop_version_id, tiffcrop_rev_date);
                 printf("Tiffcp code: Copyright (c) 1988-1997 Sam Leffler\n");
                 printf("           : Copyright (c) 1991-1997 Silicon Graphics, "
                        "Inc\n");
