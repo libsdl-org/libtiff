@@ -1,0 +1,9 @@
+repos:
+    -   repo: https://github.com/pre-commit/mirrors-clang-format
+        rev: 'v15.0.4'
+        hooks:
+        -   id: clang-format
+            exclude: >
+              (?x)^(
+                libtiff/tif_fax3sm.c
+              )
