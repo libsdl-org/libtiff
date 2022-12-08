@@ -8,10 +8,3 @@
 /* #define HAVE_UNISTD_H 0 */
 
 #endif /* _LIBPORT_CONFIG_H_ */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */
