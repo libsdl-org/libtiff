@@ -309,13 +309,3 @@ extern int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, uint16_t *dir
 }
 #endif
 #endif /* _TIFFDIR_ */
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

@@ -2030,12 +2030,3 @@ TIFFUnlinkDirectory(TIFF* tif, uint16_t dirn)
 	tif->tif_curstrip = (uint32_t) -1;
 	return (1);
 }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

@@ -284,5 +284,3 @@ write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 
 	return 0;
 }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */

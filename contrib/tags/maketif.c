@@ -64,14 +64,3 @@ void WriteImage(TIFF *tif)
 		if (!TIFFWriteScanline(tif, buffer, i, 0))
 			TIFFErrorExtR(tif, "WriteImage","failure in WriteScanline\n");
 }
-
-
-
-
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

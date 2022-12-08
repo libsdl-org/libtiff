@@ -58,11 +58,3 @@ int TIFFReInitJPEG_12(TIFF *tif, const JPEGOtherSettings *otherSettings,
 }
 
 #endif /* defined(JPEG_DUAL_MODE_8_12) */
-
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

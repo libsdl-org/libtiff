@@ -9526,13 +9526,3 @@ invertImage(uint16_t photometric, uint16_t spp, uint16_t bps, uint32_t width, ui
 
   return (0);
   }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */
-

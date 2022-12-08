@@ -557,11 +557,3 @@ eol2d:									\
     CLEANUP_RUNS();							\
 } while (0)
 #endif /* _FAX3_ */
-/* vim: set ts=8 sts=4 sw=4 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

@@ -97,11 +97,3 @@ void TIFFWarningExtR(TIFF* tif, const char* module, const char* fmt, ...)
 		va_end(ap);
 	}
 }
-
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

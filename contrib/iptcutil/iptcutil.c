@@ -944,10 +944,3 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 
   return 0;
 }
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 2
- * fill-column: 78
- * End:
- */

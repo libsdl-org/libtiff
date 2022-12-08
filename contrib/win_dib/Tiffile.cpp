@@ -439,11 +439,3 @@ getStripContig1Bit(TIFFRGBAImage* img, uint32_t* raster, uint32_t w, uint32_t h)
     _TIFFfree(buf);
     return (ret);
 }
-
-/*
- * Local Variables:
- * mode: c++
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

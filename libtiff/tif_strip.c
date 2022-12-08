@@ -341,12 +341,3 @@ TIFFRasterScanlineSize(TIFF* tif)
 	m=TIFFRasterScanlineSize64(tif);
 	return _TIFFCastUInt64ToSSize(tif, m, module);
 }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

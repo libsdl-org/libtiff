@@ -93,11 +93,3 @@ uint32_t TIFF_WriteOverview( TIFF *, uint32_t, uint32_t, int, int, int, int, int
 #endif
     
 #endif /* ndef TIF_OVRCACHE_H_INCLUDED */
-
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

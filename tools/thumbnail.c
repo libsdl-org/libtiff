@@ -678,12 +678,3 @@ usage(int code)
 		fprintf(out, "%s\n", usage_info[i]);
 	exit(code);
 }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

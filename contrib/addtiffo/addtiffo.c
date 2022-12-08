@@ -170,10 +170,3 @@ int main( int argc, char ** argv )
 
     return( 0 );
 }
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 4
- * fill-column: 78
- * End:
- */

@@ -920,12 +920,3 @@ TIFFSetWriteOffset(TIFF* tif, toff_t off)
 	tif->tif_curoff = off;
 	tif->tif_lastvalidoff = 0;
 }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

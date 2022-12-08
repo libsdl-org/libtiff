@@ -7208,13 +7208,3 @@ static int _TIFFFillStrilesInternal( TIFF *tif, int loadStripByteCount )
 
     return return_value;
 }
-
-
-/* vim: set ts=8 sts=8 sw=8 noet: */
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

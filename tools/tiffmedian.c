@@ -925,10 +925,3 @@ bad:
 	_TIFFfree(nextline);
 	_TIFFfree(outline);
 }
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */

@@ -53,5 +53,3 @@ main()
 	CHECK_TYPE(tmsize_t , sizeof(size_t))
 	return 0;
 }
-
-/* vim: set ts=8 sts=8 sw=8 noet: */

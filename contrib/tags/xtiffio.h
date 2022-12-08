@@ -49,11 +49,3 @@ extern void  XTIFFClose(TIFF *tif);
 #endif
 
 #endif /* __xtiffio_h */
-
-/*
- * Local Variables:
- * mode: c
- * c-basic-offset: 8
- * fill-column: 78
- * End:
- */
