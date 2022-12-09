@@ -192,6 +192,7 @@ rst_sources = \
 	releases/v3.5.3.rst \
 	releases/v4.0.4.rst \
 	releases/v3.7.2.rst \
+	releases/v4.5.0.rst \
 	functions.rst \
 	tools.rst \
 	terms.rst \
@@ -220,6 +221,7 @@ rst_sources = \
 	functions/TIFFFieldReadCount.rst \
 	functions/TIFFError.rst \
 	functions/TIFFOpen.rst \
+	functions/TIFFOpenOptions.rst \
 	functions/TIFFcodec.rst \
 	functions/TIFFFlush.rst \
 	functions/TIFFDataWidth.rst \

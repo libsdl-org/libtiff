@@ -11,7 +11,7 @@ LibTIFF - TIFF Library and Utilities
     Home Page #1           http://www.simplesystems.org/libtiff/
     Home Page #2           https://libtiff.gitlab.io/libtiff/
     Home Page #3           http://libtiff.maptools.org/
-    Latest Stable Release  v4.4.0
+    Latest Stable Release  v4.5.0
     Master Download Site   `download.osgeo.org <https://download.osgeo.org/libtiff/>`_
     Mailing List           `tiff@lists.osgeo.org <tiff@lists.osgeo.org>`_
     List subscription      http://lists.osgeo.org/mailman/listinfo/tiff/
