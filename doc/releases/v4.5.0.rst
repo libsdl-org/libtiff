@@ -79,7 +79,7 @@ Bug fixes:
   (:issue:`364`)
 * Revised handling of TIFFTAG_INKNAMES and related TIFFTAG_NUMBEROFINKS value
   (:issue:`149`, :issue:`150`, :issue:`152`, :issue:`168`, :issue:`250`,
-  :issue:`269`,:issue:`398`, :issue:`456`)
+  :issue:`269`,:issue:`398`, CVE-2022-3599, :issue:`456`)
 * TIFFAdvanceDirectory(): fix unsigned-integer-overflow in mapped case
   (oss-fuzz #52309)
 * Improved/fixes IFD-Loop Handling (:issue:`455`)
@@ -93,7 +93,8 @@ Bug fixes:
 * TIFFReadFromUserBuffer(): fix clearing of TIFF_CODERSETUP flag that could
   cause issues with reading JPEG compressed files
 * _TIFFCheckFieldIsValidForCodec(): return FALSE when passed a codec-specific
-  tag and the codec is not configured (:issue:`433`)
+  tag and the codec is not configured (:issue:`433`, :issue:`486`,
+  CVE-2022-34526)
 * Add basic 16 bit cielab support.
 * WEBP codec: avoid temporary buffer and memcpy() on whole tile/strip decoding
 * tif_predict.c: make horAcc8() work with icc (ICC) 2021.6.0 20220226 -O2
@@ -113,13 +114,14 @@ Bug fixes:
   (:issue:`470` and :issue:`450`)
 * :program:`tiffcrop`: Fix memory allocation to require a larger buffer
   (:issue:`271`, :issue:`381`, :issue:`386`, :issue:`388`, :issue:`389`,
-  :issue:`435`)
+  :issue:`435`, CVE-2022-3570, CVE-2022-3598)
 * :program:`tiffcrop`: disable incompatibility of -Z, -X, -Y, -z options with
-  any PAGE_MODE_x option (:issue:`411`, :issue:`413`)
+  any PAGE_MODE_x option (:issue:`411`, CVE-2022-3627, :issue:`413`,
+  CVE-2022-3597, :issue:`426`, CVE-2022-3626)
 * :program:`tiffcrop`: -S option mutually exclusive (:issue:`349`,
   :issue:`414`, :issue:`422`, :issue:`423`, :issue:`424`)
 * :program:`tiffcrop`: fix floating-point exception (:issue:`415`,
-  :issue:`427`, :issue:`428`)
+  :issue:`427`, :issue:`428`, CVE-2022-2056, CVE-2022-2057, CVE-2022-2058)
 * :program:`tiff2pdf`: Don't try to seek into stdout (:issue:`441`)
 
 Contributed software changes
