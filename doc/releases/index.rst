@@ -7,6 +7,7 @@ LibTIFF releases.
     :maxdepth: 1
     :titlesonly:
 
+    v4.5.0
     v4.4.0
     v4.3.0
     v4.2.0

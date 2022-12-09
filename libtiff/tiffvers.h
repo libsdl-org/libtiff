@@ -1,5 +1,5 @@
 #define TIFFLIB_VERSION_STR                                                    \
-    "LIBTIFF, Version 4.4.0\nCopyright (c) 1988-1996 Sam Leffler\nCopyright "  \
+    "LIBTIFF, Version 4.5.0\nCopyright (c) 1988-1996 Sam Leffler\nCopyright "  \
     "(c) 1991-1996 Silicon Graphics, Inc."
 /*
  * This define can be used in code that requires
@@ -8,4 +8,4 @@
  * version checking should be done based on the
  * string returned by TIFFGetVersion.
  */
-#define TIFFLIB_VERSION 20220520
+#define TIFFLIB_VERSION 20221209
