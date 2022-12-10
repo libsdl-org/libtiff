@@ -7,3 +7,17 @@
  * string returned by TIFFGetVersion.
  */
 #define TIFFLIB_VERSION LIBTIFF_RELEASE_DATE
+
+/* The following defines have been added in 4.5.0 */
+#define TIFFLIB_MAJOR_VERSION LIBTIFF_MAJOR_VERSION
+#define TIFFLIB_MINOR_VERSION LIBTIFF_MINOR_VERSION
+#define TIFFLIB_MICRO_VERSION LIBTIFF_MICRO_VERSION
+
+/* Macro added in 4.5.0. Returns TRUE if the current libtiff version is
+ * greater or equal to major.minor.micro
+ */
+#define TIFFLIB_AT_LEAST(major, minor, micro) \
+    (TIFFLIB_MAJOR_VERSION > (major) || \
+     (TIFFLIB_MAJOR_VERSION == (major) && TIFFLIB_MINOR_VERSION > (minor)) || \
+     (TIFFLIB_MAJOR_VERSION == (major) && TIFFLIB_MINOR_VERSION == (minor) && \
+      TIFFLIB_MICRO_VERSION >= (micro)))
