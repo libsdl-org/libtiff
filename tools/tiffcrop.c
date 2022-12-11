@@ -1,3 +1,4 @@
+/* clang-format off */
 /* tiffcrop.c -- a port of tiffcp.c extended to include manipulations of
  * the image data through additional options listed below
  *
@@ -39,67 +40,92 @@
  *
  * New Options:
  * -h             Display the syntax guide.
- * -v             Report the version and last build date for tiffcrop and
- * libtiff. -z x1,y1,x2,y2:x3,y3,x4,y4:..xN,yN,xN + 1, yN + 1 Specify a series
- * of coordinates to define rectangular regions by the top left and lower right
- * corners. -e c|d|i|m|s   export mode for images and selections from input
- * images combined     All images and selections are written to a single file
- * (default) with multiple selections from one image combined into a single
- * image divided      All images and selections are written to a single file
+ * -v             Report the version and last build date for tiffcrop
+ *                and libtiff.
+ * -z x1,y1,x2,y2:x3,y3,x4,y4:..xN,yN,xN + 1, yN + 1
+ *                Specify a series of coordinates to define rectangular
+ *                regions by the top left and lower right corners.
+ * -e c|d|i|m|s   export mode for images and selections from input images
+ *   combined     All images and selections are written to a single
+ *                file (default) with multiple selections from one image
+ *                combined into a single image
+ *   divided      All images and selections are written to a single file
  *                with each selection from one image written to a new image
- *   image        Each input image is written to a new file (numeric filename
- * sequence) with multiple selections from the image combined into one image
- *   multiple     Each input image is written to a new file (numeric filename
- * sequence) with each selection from the image written to a new image separated
- * Individual selections from each image are written to separate files -U units
- * [in, cm, px ] inches, centimeters or pixels -H #           Set horizontal
- * resolution of output images to # -V #           Set vertical resolution of
- * output images to # -J #           Horizontal margin of output page to #
- * expressed in current units when sectioning image into columns x rows using
- * the -S cols:rows option. -K #           Vertical margin of output page to #
- * expressed in current units when sectioning image into columns x rows using
- * the -S cols:rows option. -X #           Horizontal dimension of region to
- * extract expressed in current units, relative to the specified origin
- * reference 'edge' left (default for X) or right. -Y #           Vertical
- * dimension of region to extract expressed in current units, relative to the
- * specified origin reference 'edge' top (default for Y) or bottom. -O orient
- * Orientation for output image, portrait, landscape, auto -P page        Page
- * size for output image segments, eg letter, legal, tabloid, etc. -S cols:rows
- * Divide the image into equal sized segments using cols across and rows down -E
- * t|l|r|b     Edge to use as origin (i.e. 'side' of the image not 'corner') top
- * = width from left, zones from top to bottom (default) bottom = width from
- * left, zones from bottom to top left   = zones from left to right, length from
- * top right  = zones from right to left, length from top -m #,#,#,#     Margins
- * from edges for selection: top, left, bottom, right (commas separated) -Z
- * #:#,#:#     Zones of the image designated as zone X of Y, eg 1:3 would be
- * first of three equal portions measured from reference edge (i.e. 'side' not
- * corner) -N odd|even|#,#-#,#|last Select sequences and/or ranges of images
- * within file to process. The words odd or even may be used to specify all odd
- * or even numbered images the word last may be used in place of a number in the
- * sequence to indicate the final image in the file without knowing how many
- * images there are. -R #           Rotate image or crop selection by 90,180,or
- * 270 degrees clockwise -F h|v         Flip (mirror) image or crop selection
- * horizontally or vertically -I [black|white|data|both] Invert color space, eg
- * dark to light for bilevel and grayscale images If argument is white or black,
- * set the PHOTOMETRIC_INTERPRETATION tag to MinIsBlack or MinIsWhite without
- * altering the image data If the argument is data or both, the image data are
- * modified: both inverts the data and the PHOTOMETRIC_INTERPRETATION tag, data
- * inverts the data but not the PHOTOMETRIC_INTERPRETATION tag -D
- * input:<filename1>,output:<filename2>,format:<raw|txt>,level:N,debug:N Dump
- * raw data for input and/or output images to individual files in raw (binary)
- * format or text (ASCII) representing binary data as strings of 1s and 0s. The
- * filename arguments are used as stems from which individual files are created
- * for each image. Text format includes annotations for image parameters and
- * scanline info. Level selects which functions dump data, with higher numbers
- * selecting lower level, scanline level routines. Debug reports a limited set
+ *   image        Each input image is written to a new file
+ *                (numeric filename sequence) with multiple selections from
+ *                the image combined into one image
+ *   multiple     Each input image is written to a new file
+ *                (numeric filename sequence) with each selection from
+ *                the image written to a new image
+ *   separated    Individual selections from each image are written
+ *                to separate files
+ * -U units       [in, cm, px ] inches, centimeters or pixels
+ * -H #           Set horizontal resolution of output images to #
+ * -V #           Set vertical resolution of output images to #
+ * -J #           Horizontal margin of output page to # expressed in current
+ *                units when sectioning image into columns x rows
+ *                using the -S cols:rows option.
+ * -K #           Vertical margin of output page to # expressed in current
+ *                units when sectioning image into columns x rows
+ *                using the -S cols:rows option.
+ * -X #           Horizontal dimension of region to extract expressed in current
+ *                units, relative to the specified origin reference 'edge' left
+ *                (default for X) or right.
+ * -Y #           Vertical dimension of region to extract expressed in current
+ *                units, relative to the specified origin reference 'edge' top
+ *                (default for Y) or bottom.
+ * -O orient      Orientation for output image, portrait, landscape, auto
+ * -P page        Page size for output image segments, eg letter, legal, tabloid,
+ *                etc.
+ * -S cols:rows   Divide the image into equal sized segments using cols across
+ *                and rows down
+ * -E t|l|r|b     Edge to use as origin (i.e. 'side' of the image not 'corner')
+ *                  top    = width from left, zones from top to bottom (default)
+ *                  bottom = width from left, zones from bottom to top
+ *                  left   = zones from left to right, length from top
+ *                  right  = zones from right to left, length from top
+ * -m #,#,#,#     Margins from edges for selection: top, left, bottom, right
+ *                (commas separated)
+ * -Z #:#,#:#     Zones of the image designated as zone X of Y,
+ *                eg 1:3 would be first of three equal portions measured
+ *                from reference edge (i.e. 'side' not corner)
+ * -N odd|even|#,#-#,#|last
+ *                Select sequences and/or ranges of images within file
+ *                to process. The words odd or even may be used to specify
+ *                all odd or even numbered images the word last may be used
+ *                in place of a number in the sequence to indicate the final
+ *                image in the file without knowing how many images there are.
+ * -R #           Rotate image or crop selection by 90,180,or 270 degrees
+ *                clockwise
+ * -F h|v         Flip (mirror) image or crop selection horizontally
+ *                or vertically
+ * -I [black|white|data|both]
+ *                Invert color space, eg dark to light for bilevel and
+ *                grayscale images If argument is white or black, set the
+ *                PHOTOMETRIC_INTERPRETATION tag to MinIsBlack or MinIsWhite
+ *                without altering the image data. If the argument is data
+ *                or both, the image data are modified:
+ *                both inverts the data and the PHOTOMETRIC_INTERPRETATION tag,
+ *                data inverts the data but not the PHOTOMETRIC_INTERPRETATION tag
+ * -D input:<filename1>,output:<filename2>,format:<raw|txt>,level:N,debug:N
+ *                Dump raw data for input and/or output images to individual
+ *                files in raw (binary) format or text (ASCII) representing
+ *                binary data as strings of 1s and 0s. The filename arguments
+ *                are used as stems from which individual files are created for
+ *                each image. Text format includes annotations for image
+ *                parameters and scanline info. Level selects which functions
+ *                dump data, with higher numbers selecting lower level,
+ *                scanline level routines. Debug reports a limited set
  *                of messages to monitor progress without enabling dump logs.
  *
  * Note 1:  The (-X|-Y), -Z, -z and -S options are mutually exclusive.
- *          In no case should the options be applied to a given selection
- * successively. Note 2:  Any of the -X, -Y, -Z and -z options together with
- * other PAGE_MODE_x options such as -H, -V, -P, -J or -K are not supported and
- * may cause buffer overflows.
+ *          In no case should the options be applied to a given
+ *          selection successively.
+ * Note 2:  Any of the -X, -Y, -Z and -z options together with other
+ *          PAGE_MODE_x options such as -H, -V, -P, -J or -K are not supported
+ *          and may cause buffer overflows.
  */
+/* clang-format on */
 
 #include "libport.h"
 #include "tif_config.h"
