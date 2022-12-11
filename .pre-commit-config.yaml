@@ -3,7 +3,11 @@ repos:
         rev: 'v15.0.4'
         hooks:
         -   id: clang-format
+            # tif_fax3sm.c is a generated file
+            # tiffvers.h as well, and its formatting is sensitive for
+            # FindTIFF.cmake to detect the version number
             exclude: >
               (?x)^(
-                libtiff/tif_fax3sm.c
+                libtiff/tif_fax3sm.c|
+                libtiff/tiffvers.h
               )

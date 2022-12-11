@@ -43,6 +43,31 @@
 
 #define ERROR_STRING_SIZE 1024
 
+/* Test TIFFLIB_AT_LEAST() macro */
+#if !TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION, TIFFLIB_MINOR_VERSION,            \
+                      TIFFLIB_MICRO_VERSION)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+#if !TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION, TIFFLIB_MINOR_VERSION, 0)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+#if !TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION, 0, 0)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+#if !TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION - 1, 0, 0)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+#if TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION + 1, 0, 0)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+#if TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION, TIFFLIB_MINOR_VERSION + 1, 0)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+#if TIFFLIB_AT_LEAST(TIFFLIB_MAJOR_VERSION, TIFFLIB_MINOR_VERSION,             \
+                     TIFFLIB_MICRO_VERSION + 1)
+#error "TIFFLIB_AT_LEAST broken"
+#endif
+
 typedef struct MyErrorHandlerUserDataStruct
 {
     char *buffer;
