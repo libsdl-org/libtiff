@@ -1,3 +1,8 @@
+/* clang-format off */
+
+/* clang-format disabled because FindTIFF.cmake is very sensitive to the
+ * formatting of below line being a single line.
+ */
 #define TIFFLIB_VERSION_STR "LIBTIFF, Version 4.5.0\nCopyright (c) 1988-1996 Sam Leffler\nCopyright (c) 1991-1996 Silicon Graphics, Inc."
 /*
  * This define can be used in code that requires
@@ -21,3 +26,5 @@
      (TIFFLIB_MAJOR_VERSION == (major) && TIFFLIB_MINOR_VERSION > (minor)) || \
      (TIFFLIB_MAJOR_VERSION == (major) && TIFFLIB_MINOR_VERSION == (minor) && \
       TIFFLIB_MICRO_VERSION >= (micro)))
+
+/* clang-format on */
