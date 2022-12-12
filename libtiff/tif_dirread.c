@@ -5275,6 +5275,40 @@ static void MissingRequired(TIFF *tif, const char *tagname)
                   "TIFF directory is missing required \"%s\" field", tagname);
 }
 
+static unsigned long hashFuncOffsetToNumber(const void *elt)
+{
+    const TIFFOffsetAndDirNumber *offsetAndDirNumber =
+        (const TIFFOffsetAndDirNumber *)elt;
+    const uint32_t hash = (uint32_t)(offsetAndDirNumber->offset >> 32) ^
+                          ((uint32_t)offsetAndDirNumber->offset & 0xFFFFFFFFU);
+    return hash;
+}
+
+static bool equalFuncOffsetToNumber(const void *elt1, const void *elt2)
+{
+    const TIFFOffsetAndDirNumber *offsetAndDirNumber1 =
+        (const TIFFOffsetAndDirNumber *)elt1;
+    const TIFFOffsetAndDirNumber *offsetAndDirNumber2 =
+        (const TIFFOffsetAndDirNumber *)elt2;
+    return offsetAndDirNumber1->offset == offsetAndDirNumber2->offset;
+}
+
+static unsigned long hashFuncNumberToOffset(const void *elt)
+{
+    const TIFFOffsetAndDirNumber *offsetAndDirNumber =
+        (const TIFFOffsetAndDirNumber *)elt;
+    return offsetAndDirNumber->dirNumber;
+}
+
+static bool equalFuncNumberToOffset(const void *elt1, const void *elt2)
+{
+    const TIFFOffsetAndDirNumber *offsetAndDirNumber1 =
+        (const TIFFOffsetAndDirNumber *)elt1;
+    const TIFFOffsetAndDirNumber *offsetAndDirNumber2 =
+        (const TIFFOffsetAndDirNumber *)elt2;
+    return offsetAndDirNumber1->dirNumber == offsetAndDirNumber2->dirNumber;
+}
+
 /*
  * Check the directory number and offset against the list of already seen
  * directory numbers and offsets. This is a trick to prevent IFD looping.
@@ -5287,51 +5321,74 @@ static void MissingRequired(TIFF *tif, const char *tagname)
  */
 int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
 {
-    uint16_t n;
-
     if (diroff == 0) /* no more directories */
         return 0;
+
+    if (tif->tif_map_dir_offset_to_number == NULL)
+    {
+        tif->tif_map_dir_offset_to_number = TIFFHashSetNew(
+            hashFuncOffsetToNumber, equalFuncOffsetToNumber, free);
+        if (tif->tif_map_dir_offset_to_number == NULL)
+        {
+            TIFFErrorExtR(tif, "_TIFFCheckDirNumberAndOffset",
+                          "Not enough memory");
+            return 1;
+        }
+    }
+
+    if (tif->tif_map_dir_number_to_offset == NULL)
+    {
+        tif->tif_map_dir_number_to_offset = TIFFHashSetNew(
+            hashFuncNumberToOffset, equalFuncNumberToOffset, free);
+        if (tif->tif_map_dir_number_to_offset == NULL)
+        {
+            TIFFErrorExtR(tif, "_TIFFCheckDirNumberAndOffset",
+                          "Not enough memory");
+            return 1;
+        }
+    }
 
     /* Check if offset is already in the list:
      * - yes: check, if offset is at the same IFD number - if not, it is an IFD
      * loop
      * -  no: add to list or update offset at that IFD number
      */
-    for (n = 0;
-         n < tif->tif_dirnumber && tif->tif_dirlistdirn && tif->tif_dirlistoff;
-         n++)
+    TIFFOffsetAndDirNumber entry;
+    entry.offset = diroff;
+    entry.dirNumber = dirn;
+
+    TIFFOffsetAndDirNumber *foundEntry =
+        (TIFFOffsetAndDirNumber *)TIFFHashSetLookup(
+            tif->tif_map_dir_offset_to_number, &entry);
+    if (foundEntry)
     {
-        if (tif->tif_dirlistoff[n] == diroff)
+        if (foundEntry->dirNumber == dirn)
         {
-            if (tif->tif_dirlistdirn[n] == dirn)
-            {
-                return 1;
-            }
-            else
-            {
-                TIFFWarningExtR(
-                    tif, "_TIFFCheckDirNumberAndOffset",
-                    "TIFF directory %d has IFD looping to directory %" PRIu16
-                    " at offset 0x%" PRIx64 " (%" PRIu64 ")",
-                    (int)dirn - 1, tif->tif_dirlistdirn[n], diroff, diroff);
-                return 0;
-            }
+            return 1;
+        }
+        else
+        {
+            TIFFWarningExtR(tif, "_TIFFCheckDirNumberAndOffset",
+                            "TIFF directory %d has IFD looping to directory %u "
+                            "at offset 0x%" PRIx64 " (%" PRIu64 ")",
+                            (int)dirn - 1, foundEntry->dirNumber, diroff,
+                            diroff);
+            return 0;
         }
     }
+
     /* Check if offset of an IFD has been changed and update offset of that IFD
      * number. */
-    if (dirn < tif->tif_dirnumber && tif->tif_dirlistdirn &&
-        tif->tif_dirlistoff)
+    entry.dirNumber = dirn;
+    entry.offset = 0; /* not used */
+
+    foundEntry = (TIFFOffsetAndDirNumber *)TIFFHashSetLookup(
+        tif->tif_map_dir_number_to_offset, &entry);
+    if (foundEntry)
     {
         /* tif_dirlistdirn can have IFD numbers dirn in random order */
-        for (n = 0; n < tif->tif_dirnumber; n++)
-        {
-            if (tif->tif_dirlistdirn[n] == dirn)
-            {
-                tif->tif_dirlistoff[n] = diroff;
-                return 1;
-            }
-        }
+        foundEntry->offset = diroff;
+        return 1;
     }
 
     if (tif->tif_dirnumber == 65535)
@@ -5341,38 +5398,34 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
         return 0;
     }
 
-    /* Add IFD offset and dirn to IFD directory list */
-    tif->tif_dirnumber++;
-
-    if (tif->tif_dirlistoff == NULL || tif->tif_dirlistdirn == NULL ||
-        tif->tif_dirnumber > tif->tif_dirlistsize)
+    TIFFOffsetAndDirNumber *entry1 =
+        (TIFFOffsetAndDirNumber *)malloc(sizeof(TIFFOffsetAndDirNumber));
+    TIFFOffsetAndDirNumber *entry2 =
+        (TIFFOffsetAndDirNumber *)malloc(sizeof(TIFFOffsetAndDirNumber));
+    if (entry1 == NULL || entry2 == NULL)
     {
-        uint64_t *new_dirlist;
-        /*
-         * XXX: Reduce memory allocation granularity of the dirlist
-         * array.
-         */
-        if (tif->tif_dirnumber >= 32768)
-            tif->tif_dirlistsize = 65535;
-        else
-            tif->tif_dirlistsize = 2 * tif->tif_dirnumber;
-
-        new_dirlist = (uint64_t *)_TIFFCheckRealloc(
-            tif, tif->tif_dirlistoff, tif->tif_dirlistsize, sizeof(uint64_t),
-            "for IFD offset list");
-        if (!new_dirlist)
-            return 0;
-        tif->tif_dirlistoff = new_dirlist;
-        new_dirlist = (uint64_t *)_TIFFCheckRealloc(
-            tif, tif->tif_dirlistdirn, tif->tif_dirlistsize, sizeof(uint16_t),
-            "for IFD dirnumber list");
-        if (!new_dirlist)
-            return 0;
-        tif->tif_dirlistdirn = (uint16_t *)new_dirlist;
+        free(entry1);
+        free(entry2);
+        return 0;
     }
 
-    tif->tif_dirlistoff[tif->tif_dirnumber - 1] = diroff;
-    tif->tif_dirlistdirn[tif->tif_dirnumber - 1] = dirn;
+    /* Add IFD offset and dirn to IFD directory list */
+    *entry1 = entry;
+    *entry2 = entry;
+
+    if (!TIFFHashSetInsert(tif->tif_map_dir_offset_to_number, entry1))
+    {
+        free(entry1);
+        free(entry2);
+        return 0;
+    }
+    if (!TIFFHashSetInsert(tif->tif_map_dir_number_to_offset, entry2))
+    {
+        free(entry2);
+        return 0;
+    }
+
+    tif->tif_dirnumber++;
 
     return 1;
 } /* --- _TIFFCheckDirNumberAndOffset() ---*/
@@ -5386,8 +5439,6 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
  */
 int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, uint16_t *dirn)
 {
-    uint16_t n;
-
     if (diroff == 0) /* no more directories */
         return 0;
     if (tif->tif_dirnumber == 65535)
@@ -5401,27 +5452,31 @@ int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, uint16_t *dirn)
      * number. Otherwise update IFD list using TIFFNumberOfDirectories() and
      * search again in IFD list.
      */
-    for (n = 0;
-         n < tif->tif_dirnumber && tif->tif_dirlistoff && tif->tif_dirlistdirn;
-         n++)
+    if (tif->tif_map_dir_offset_to_number == NULL)
+        return 0;
+    TIFFOffsetAndDirNumber entry;
+    entry.offset = diroff;
+    entry.dirNumber = 0; /* not used */
+
+    TIFFOffsetAndDirNumber *foundEntry =
+        (TIFFOffsetAndDirNumber *)TIFFHashSetLookup(
+            tif->tif_map_dir_offset_to_number, &entry);
+    if (foundEntry)
     {
-        if (tif->tif_dirlistoff[n] == diroff)
-        {
-            *dirn = tif->tif_dirlistdirn[n];
-            return 1;
-        }
+        *dirn = (uint16_t)foundEntry->dirNumber;
+        return 1;
     }
+
     TIFFNumberOfDirectories(tif);
-    for (n = 0;
-         n < tif->tif_dirnumber && tif->tif_dirlistoff && tif->tif_dirlistdirn;
-         n++)
+
+    foundEntry = (TIFFOffsetAndDirNumber *)TIFFHashSetLookup(
+        tif->tif_map_dir_offset_to_number, &entry);
+    if (foundEntry)
     {
-        if (tif->tif_dirlistoff[n] == diroff)
-        {
-            *dirn = tif->tif_dirlistdirn[n];
-            return 1;
-        }
+        *dirn = (uint16_t)foundEntry->dirNumber;
+        return 1;
     }
+
     return 0;
 } /*--- _TIFFGetDirNumberFromOffset() ---*/
 

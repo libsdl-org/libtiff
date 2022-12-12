@@ -46,6 +46,7 @@
 #define assert(x)
 #endif
 
+#include "tif_hash_set.h"
 #include "tiffio.h"
 
 #include "tif_dir.h"
@@ -85,6 +86,13 @@ typedef int (*TIFFSeekMethod)(TIFF *, uint32_t);
 typedef void (*TIFFPostMethod)(TIFF *tif, uint8_t *buf, tmsize_t size);
 typedef uint32_t (*TIFFStripMethod)(TIFF *, uint32_t);
 typedef void (*TIFFTileMethod)(TIFF *, uint32_t *, uint32_t *);
+
+struct TIFFOffsetAndDirNumber
+{
+    uint64_t offset;
+    uint32_t dirNumber;
+};
+typedef struct TIFFOffsetAndDirNumber TIFFOffsetAndDirNumber;
 
 struct tiff
 {
@@ -132,11 +140,10 @@ struct tiff
     uint64_t tif_lastdiroff;  /* file offset of last directory written so far */
     uint64_t *tif_dirlistoff; /* list of offsets to already seen directories to
                                  prevent IFD looping */
-    uint16_t *tif_dirlistdirn; /* list of directory numbers to already seen
-                                  directories to prevent IFD looping */
-    uint16_t tif_dirlistsize;  /* number of entries in offset list */
-    uint16_t tif_dirnumber;    /* number of already seen directories */
-    TIFFDirectory tif_dir;     /* internal rep of current directory */
+    TIFFHashSet *tif_map_dir_offset_to_number;
+    TIFFHashSet *tif_map_dir_number_to_offset;
+    uint16_t tif_dirnumber; /* number of already seen directories */
+    TIFFDirectory tif_dir;  /* internal rep of current directory */
     TIFFDirectory
         tif_customdir; /* custom IFDs are separated from the main ones */
     union
