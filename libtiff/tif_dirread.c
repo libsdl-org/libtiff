@@ -4079,7 +4079,8 @@ int TIFFReadDirectory(TIFF *tif)
             tif, tif->tif_curdir == 0xFFFFFFFFU ? 0 : tif->tif_curdir + 1,
             nextdiroff))
     {
-        return 0; /* bad offset (IFD looping or more than 1048576 IFDs) */
+        return 0; /* bad offset (IFD looping or more than TIFF_MAX_DIR_COUNT
+                     IFDs) */
     }
     dircount = TIFFFetchDirectory(tif, nextdiroff, &dir, &tif->tif_nextdiroff);
     if (!dircount)
@@ -5397,10 +5398,11 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, tdir_t dirn, uint64_t diroff)
     }
 
     /* Arbitrary (hopefully big enough) limit */
-    if (tif->tif_dirnumber >= 1048576)
+    if (tif->tif_dirnumber >= TIFF_MAX_DIR_COUNT)
     {
         TIFFErrorExtR(tif, "_TIFFCheckDirNumberAndOffset",
-                      "Cannot handle more than 1048576 TIFF directories");
+                      "Cannot handle more than %u TIFF directories",
+                      TIFF_MAX_DIR_COUNT);
         return 0;
     }
 
@@ -5447,10 +5449,11 @@ int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, tdir_t *dirn)
 {
     if (diroff == 0) /* no more directories */
         return 0;
-    if (tif->tif_dirnumber >= 1048576)
+    if (tif->tif_dirnumber >= TIFF_MAX_DIR_COUNT)
     {
         TIFFErrorExtR(tif, "_TIFFGetDirNumberFromOffset",
-                      "Cannot handle more than 1048576 TIFF directories");
+                      "Cannot handle more than %u TIFF directories",
+                      TIFF_MAX_DIR_COUNT);
         return 0;
     }
 
