@@ -4075,9 +4075,11 @@ int TIFFReadDirectory(TIFF *tif)
     /* tif_curdir++ and tif_nextdiroff should only be updated after SUCCESSFUL
      * reading of the directory. Otherwise, invalid IFD offsets could corrupt
      * the IFD list. */
-    if (!_TIFFCheckDirNumberAndOffset(tif, tif->tif_curdir + 1, nextdiroff))
+    if (!_TIFFCheckDirNumberAndOffset(
+            tif, tif->tif_curdir == 0xFFFFFFFFU ? 0 : tif->tif_curdir + 1,
+            nextdiroff))
     {
-        return 0; /* bad offset (IFD looping or more than 65535 IFDs) */
+        return 0; /* bad offset (IFD looping or more than 1048576 IFDs) */
     }
     dircount = TIFFFetchDirectory(tif, nextdiroff, &dir, &tif->tif_nextdiroff);
     if (!dircount)
@@ -4090,7 +4092,10 @@ int TIFFReadDirectory(TIFF *tif)
     /* Set global values after a valid directory has been fetched.
      * tif_diroff is already set to nextdiroff in TIFFFetchDirectory() in the
      * beginning. */
-    tif->tif_curdir++;
+    if (tif->tif_curdir == 0xffffffffu)
+        tif->tif_curdir = 0;
+    else
+        tif->tif_curdir++;
     (*tif->tif_cleanup)(tif); /* cleanup any previous compression state */
 
     TIFFReadDirectoryCheckOrder(tif, dir, dircount);
@@ -5319,7 +5324,7 @@ static bool equalFuncNumberToOffset(const void *elt1, const void *elt2)
  * Returns 1 if all is ok; 0 if last directory or IFD loop is encountered,
  * or an error has occurred.
  */
-int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
+int _TIFFCheckDirNumberAndOffset(TIFF *tif, tdir_t dirn, uint64_t diroff)
 {
     if (diroff == 0) /* no more directories */
         return 0;
@@ -5391,10 +5396,11 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
         return 1;
     }
 
-    if (tif->tif_dirnumber == 65535)
+    /* Arbitrary (hopefully big enough) limit */
+    if (tif->tif_dirnumber >= 1048576)
     {
         TIFFErrorExtR(tif, "_TIFFCheckDirNumberAndOffset",
-                      "Cannot handle more than 65535 TIFF directories");
+                      "Cannot handle more than 1048576 TIFF directories");
         return 0;
     }
 
@@ -5437,14 +5443,14 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
  * can be returned.
  * Otherwise returns 0 or if an error occurred.
  */
-int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, uint16_t *dirn)
+int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, tdir_t *dirn)
 {
     if (diroff == 0) /* no more directories */
         return 0;
-    if (tif->tif_dirnumber == 65535)
+    if (tif->tif_dirnumber >= 1048576)
     {
         TIFFErrorExtR(tif, "_TIFFGetDirNumberFromOffset",
-                      "Cannot handle more than 65535 TIFF directories");
+                      "Cannot handle more than 1048576 TIFF directories");
         return 0;
     }
 
@@ -5463,7 +5469,7 @@ int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, uint16_t *dirn)
             tif->tif_map_dir_offset_to_number, &entry);
     if (foundEntry)
     {
-        *dirn = (uint16_t)foundEntry->dirNumber;
+        *dirn = foundEntry->dirNumber;
         return 1;
     }
 
@@ -5473,7 +5479,7 @@ int _TIFFGetDirNumberFromOffset(TIFF *tif, uint64_t diroff, uint16_t *dirn)
         tif->tif_map_dir_offset_to_number, &entry);
     if (foundEntry)
     {
-        *dirn = (uint16_t)foundEntry->dirNumber;
+        *dirn = foundEntry->dirNumber;
         return 1;
     }
 

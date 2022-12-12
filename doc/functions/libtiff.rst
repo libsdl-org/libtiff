@@ -70,7 +70,7 @@ definitions or through parameters passed through the varargs interfaces.
 ::
 
     typedef uint32_t ttag_t;    // directory tag
-    typedef uint16_t tdir_t;    // directory index
+    typedef uint32_t tdir_t;    // directory index
     typedef uint16_t tsample_t; // sample number
     typedef uint32_t tstrip_t;  // strip number
     typedef uint32_t ttile_t;   // tile number
@@ -94,10 +94,14 @@ Likewise
 is limited by the 16-bit field used to store the
 ``SamplesPerPixel``
 tag.
+
 :c:type:`tdir_t`
 constrains the maximum number of
 IFDs
 that may appear in an image and may be an arbitrary size (w/o penalty).
+Starting with libtiff 4.5.0, tdir_t is a 32-bit unsigned integer. Previously,
+it was a 16-bit unsigned integer.
+
 :c:type:`ttag_t`
 must be either int, unsigned int, pointer, or double because the library uses
 a varargs interface and
