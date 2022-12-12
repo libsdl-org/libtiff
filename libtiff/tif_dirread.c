@@ -4077,12 +4077,7 @@ int TIFFReadDirectory(TIFF *tif)
      * the IFD list. */
     if (!_TIFFCheckDirNumberAndOffset(tif, tif->tif_curdir + 1, nextdiroff))
     {
-        TIFFWarningExtR(
-            tif, module,
-            "Didn't read next directory due to IFD looping at offset 0x%" PRIx64
-            " (%" PRIu64 ") to offset 0x%" PRIx64 " (%" PRIu64 ")",
-            tif->tif_diroff, tif->tif_diroff, nextdiroff, nextdiroff);
-        return 0; /* bad offset (IFD looping) */
+        return 0; /* bad offset (IFD looping or more than 65535 IFDs) */
     }
     dircount = TIFFFetchDirectory(tif, nextdiroff, &dir, &tif->tif_nextdiroff);
     if (!dircount)
@@ -5296,12 +5291,6 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
 
     if (diroff == 0) /* no more directories */
         return 0;
-    if (tif->tif_dirnumber == 65535)
-    {
-        TIFFErrorExtR(tif, "_TIFFCheckDirNumberAndOffset",
-                      "Cannot handle more than 65535 TIFF directories");
-        return 0;
-    }
 
     /* Check if offset is already in the list:
      * - yes: check, if offset is at the same IFD number - if not, it is an IFD
@@ -5343,6 +5332,13 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, uint16_t dirn, uint64_t diroff)
                 return 1;
             }
         }
+    }
+
+    if (tif->tif_dirnumber == 65535)
+    {
+        TIFFErrorExtR(tif, "_TIFFCheckDirNumberAndOffset",
+                      "Cannot handle more than 65535 TIFF directories");
+        return 0;
     }
 
     /* Add IFD offset and dirn to IFD directory list */
