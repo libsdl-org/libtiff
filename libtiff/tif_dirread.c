@@ -37,6 +37,7 @@
 #include "tiffconf.h"
 #include "tiffiop.h"
 #include <float.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -4076,7 +4077,7 @@ int TIFFReadDirectory(TIFF *tif)
      * reading of the directory. Otherwise, invalid IFD offsets could corrupt
      * the IFD list. */
     if (!_TIFFCheckDirNumberAndOffset(
-            tif, tif->tif_curdir == 0xFFFFFFFFU ? 0 : tif->tif_curdir + 1,
+            tif, tif->tif_curdir == UINT_MAX ? 0 : tif->tif_curdir + 1,
             nextdiroff))
     {
         return 0; /* bad offset (IFD looping or more than TIFF_MAX_DIR_COUNT
@@ -4093,7 +4094,7 @@ int TIFFReadDirectory(TIFF *tif)
     /* Set global values after a valid directory has been fetched.
      * tif_diroff is already set to nextdiroff in TIFFFetchDirectory() in the
      * beginning. */
-    if (tif->tif_curdir == 0xffffffffu)
+    if (tif->tif_curdir == UINT_MAX)
         tif->tif_curdir = 0;
     else
         tif->tif_curdir++;

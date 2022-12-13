@@ -30,6 +30,7 @@
  */
 #include "tiffiop.h"
 #include <float.h> /*--: for Rational2Double */
+#include <limits.h>
 
 /*
  * These are used in the backwards compatibility code...
@@ -2070,7 +2071,7 @@ int TIFFSetSubDirectory(TIFF *tif, uint64_t diroff)
     if (diroff == 0)
     {
         /* Special case to invalidate the tif_lastdiroff member. */
-        tif->tif_curdir = 0xffffffffu;
+        tif->tif_curdir = UINT_MAX;
     }
     else
     {
@@ -2080,7 +2081,7 @@ int TIFFSetSubDirectory(TIFF *tif, uint64_t diroff)
             probablySubIFD = 1;
         }
         /* -1 because TIFFReadDirectory() will increment tif_curdir. */
-        tif->tif_curdir = curdir == 0 ? 0xffffffffu : curdir - 1;
+        tif->tif_curdir = curdir == 0 ? UINT_MAX : curdir - 1;
     }
 
     tif->tif_nextdiroff = diroff;
@@ -2089,7 +2090,7 @@ int TIFFSetSubDirectory(TIFF *tif, uint64_t diroff)
      * back. */
     if (!retval)
     {
-        if (tif->tif_curdir == 0xffffffffu)
+        if (tif->tif_curdir == UINT_MAX)
             tif->tif_curdir = 0;
         else
             tif->tif_curdir++;
