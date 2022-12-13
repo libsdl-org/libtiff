@@ -133,6 +133,8 @@ Bug fixes:
 * :program:`tiffcrop`: fix floating-point exception (:issue:`415`,
   :issue:`427`, :issue:`428`, CVE-2022-2056, CVE-2022-2057, CVE-2022-2058)
 * :program:`tiff2pdf`: Don't try to seek into stdout (:issue:`441`)
+* :program:`tiffinfo`: update curdir from uint16_t to tdir_t for more than 64k
+  IFD handling.
 
 Contributed software changes
 ----------------------------
