@@ -504,7 +504,6 @@ void *TIFFHashSetLookup(TIFFHashSet *set, const void *elt)
     return NULL;
 }
 
-#ifdef notused
 /************************************************************************/
 /*                     TIFFHashSetRemoveInternal()                      */
 /************************************************************************/
@@ -575,6 +574,7 @@ bool TIFFHashSetRemove(TIFFHashSet *set, const void *elt)
     return TIFFHashSetRemoveInternal(set, elt, false);
 }
 
+#ifdef notused
 /************************************************************************/
 /*                     TIFFHashSetRemoveDeferRehash()                   */
 /************************************************************************/

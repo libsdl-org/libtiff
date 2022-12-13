@@ -87,8 +87,9 @@ extern "C"
 
     void *TIFFHashSetLookup(TIFFHashSet *set, const void *elt);
 
-#ifdef notused
     bool TIFFHashSetRemove(TIFFHashSet *set, const void *elt);
+
+#ifdef notused
     bool TIFFHashSetRemoveDeferRehash(TIFFHashSet *set, const void *elt);
 #endif
 
