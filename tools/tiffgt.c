@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
      */
     glutInitWindowSize(width, height);
     snprintf(title, TITLE_LENGTH - 1, "%s [%u]", filelist[fileindex],
-             (unsigned int)TIFFCurrentDirectory(tif));
+             TIFFCurrentDirectory(tif));
     glutCreateWindow(title);
     glutDisplayFunc(raster_draw);
     glutReshapeFunc(raster_reshape);
@@ -322,7 +322,7 @@ static void raster_reshape(int win_w, int win_h)
     glPixelZoom(xratio, yratio);
     glViewport(0, 0, win_w, win_h);
     snprintf(title, 1024, "%s [%u] %d%%", filelist[fileindex],
-             (unsigned int)TIFFCurrentDirectory(tif), ratio);
+             TIFFCurrentDirectory(tif), ratio);
     glutSetWindowTitle(title);
 }
 
