@@ -185,6 +185,12 @@ target_sources(test_append_to_strip PRIVATE test_append_to_strip.c)
 target_link_libraries(test_append_to_strip PRIVATE tiff tiff_port)
 list(APPEND simple_tests test_append_to_strip)
 
+add_executable(test_ifd_loop_detection ../placeholder.h)
+target_sources(test_ifd_loop_detection PRIVATE test_ifd_loop_detection.c)
+target_link_libraries(test_ifd_loop_detection PRIVATE tiff tiff_port)
+target_compile_definitions(test_ifd_loop_detection PRIVATE SOURCE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
+list(APPEND simple_tests test_ifd_loop_detection)
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.
