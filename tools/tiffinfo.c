@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
                 do
                 {
                     toff_t offset = 0;
-                    uint16_t curdir = TIFFCurrentDirectory(tif);
+                    tdir_t curdir = TIFFCurrentDirectory(tif);
                     printf("=== TIFF directory %d ===\n", curdir);
                     tiffinfo(tif, order, flags, 1);
                     if (TIFFGetField(tif, TIFFTAG_EXIFIFD, &offset))
