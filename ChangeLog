@@ -1,6 +1,90 @@
+2022-12-14  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff v4.5.0rc2 preparation
+
+2022-12-13  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_502' into 'master'
+	Make TIFFSetDirectory(tiff, 65534) work again (fixes #502)
+
+	Closes #502
+
+	See merge request libtiff/libtiff!436
+
+2022-12-13  Even Rouault  <even.rouault@spatialys.com>
+
+	Add tests for IFD loop detection.
+
+	Fix IFD loop detection.
+
+	Use UINT_MAX.
+
+	Make TIFF_MAX_DIR_COUNT a autoconf/CMake setting.
+
+2022-12-13  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'build-shared-by-default' into 'master'
+	Restore shared libraries by default
+
+	See merge request libtiff/libtiff!437
+
+2022-12-13  shaun walbridge  <shaun.walbridge@gmail.com>
+
+	CMake: restore shared libraries by default for top-level build.
+
+2022-12-12  Even Rouault  <even.rouault@spatialys.com>
+
+	Add a TIFF_MAX_DIR_COUNT public #define.
+
+	TIFFCurrentDirectory(), TIFFNumberOfDirectories(), TIFFSetDirectory(), TIFFUnlinkDirectory(): use tdir_t that is now a uint32_t, and raise limit of IFDs to 1048576
+
+	IFD loop checking: use hashmap to avoid quadratic performance.
+
+	Add a hashset/hashmap implementation (ported from GDAL's CPLHashSet)
+
+	Make TIFFSetDirectory(tiff, 65534) work again (fixes #502)
+
+2022-12-11  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'do_not_format_tiffvers_h' into 'master'
+	Revert formatting of tiffvers.h and add TIFFLIB_MAJOR_VERSION, TIFFLIB_MINOR_VERSION, TIFFLIB_MICRO_VERSION defines
+
+	See merge request libtiff/libtiff!434
+
+2022-12-11  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'tiffcrop_exclude_some_comment_from_clang-format' into 'master'
+	tiffcrop: Exclude some comments from clang-format
+
+	See merge request libtiff/libtiff!435
+
+2022-12-11  Su Laus  <sulau@freenet.de>
+
+	tiffcrop: Exclude some comments from clang-format.
+
+2022-12-11  Even Rouault  <even.rouault@spatialys.com>
+
+	tiffvers.h.in: add clang-format off/on.
+
+2022-12-10  Even Rouault  <even.rouault@spatialys.com>
+
+	tiffvers.h: add TIFFLIB_MAJOR_VERSION, TIFFLIB_MINOR_VERSION, TIFFLIB_MICRO_VERSION defines
+	Also add a TIFFLIB_AT_LEAST() macro
+
+	tiffvers.h: revert formatting.
+
+	Exclude reformatting of tiffvers.h which breaks version detection for FindTIFF.cmake
+
 2022-12-09  Even Rouault  <even.rouault@spatialys.com>
 
-	libtiff v4.5.0 released
+	Merge branch 'release_4_5_0' into 'master'
+	Prepare v4.5.0 release
+
+	See merge request libtiff/libtiff!433
+
+2022-12-09  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff v4.5.0rc1 preparation
 
 2022-12-08  Even Rouault  <even.rouault@spatialys.com>
 
