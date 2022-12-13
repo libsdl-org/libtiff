@@ -62,6 +62,16 @@ New/improved functionalities:
   to specify per-TIFF handle re-entrant error and warning callbacks
   with :c:func:`TIFFOpenOptionsSetErrorHandlerExtR` and
   :c:func:`TIFFOpenOptionsSetWarningHandlerExtR`
+* Related to IFD-Loop detection refactoring, the number of IFDs that libtiff
+  can browse through has been extended from 65535 to 1048576. This value is
+  a build-time setting that can be configured with CMake's TIFF_MAX_DIR_COUNT
+  variable or autoconf's --with-max-dir-count option.
+
+API/ABI breaks:
+
+* tdir_t type updated to uint32_t. This type is now used for the return value of
+  :c:func:`TIFFCurrentDirectory` and :c:func:`TIFFNumberOfDirectories`, and
+  as the argument of :c:func:`TIFFSetDirectory` and :c:func:`TIFFUnlinkDirectory`
 
 Bug fixes:
 
@@ -82,7 +92,7 @@ Bug fixes:
   :issue:`269`,:issue:`398`, CVE-2022-3599, :issue:`456`)
 * TIFFAdvanceDirectory(): fix unsigned-integer-overflow in mapped case
   (oss-fuzz #52309)
-* Improved/fixes IFD-Loop Handling (:issue:`455`)
+* Improved/fixes IFD-Loop Handling (:issue:`455`).
 * Update getimage to support large raster images.
 * Presetting of default tag values extended (e.g. PlanarConfig). (:issue:`449`)
 * Deal with RichTIFFIPTC tag written with LONG type (:issue:`225`)
