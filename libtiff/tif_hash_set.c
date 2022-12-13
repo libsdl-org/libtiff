@@ -27,6 +27,7 @@
  ****************************************************************************/
 
 #include "tif_hash_set.h"
+#include "tif_config.h"
 
 #include <assert.h>
 #include <stdbool.h>
