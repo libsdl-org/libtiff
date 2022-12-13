@@ -2,6 +2,10 @@
 
 	libtiff v4.5.0rc2 preparation
 
+2022-12-14  Su_Laus  <sulau@freenet.de>
+
+	tiffinfo: update curdir from uint16_t to tdir_t for more than 64k IFD handling.
+
 2022-12-13  Even Rouault  <even.rouault@spatialys.com>
 
 	Merge branch 'fix_502' into 'master'
