@@ -185,11 +185,11 @@ int main(int argc, char *argv[])
                 {
                     toff_t offset = 0;
                     tdir_t curdir = TIFFCurrentDirectory(tif);
-                    printf("=== TIFF directory %d ===\n", curdir);
+                    printf("=== TIFF directory %u ===\n", curdir);
                     tiffinfo(tif, order, flags, 1);
                     if (TIFFGetField(tif, TIFFTAG_EXIFIFD, &offset))
                     {
-                        printf("--- EXIF directory within directory %d \n",
+                        printf("--- EXIF directory within directory %u \n",
                                curdir);
                         if (TIFFReadEXIFDirectory(tif, offset))
                         {
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
                     }
                     if (TIFFGetField(tif, TIFFTAG_GPSIFD, &offset))
                     {
-                        printf("--- GPS directory within directory %d \n",
+                        printf("--- GPS directory within directory %u \n",
                                curdir);
                         if (TIFFReadGPSDirectory(tif, offset))
                         {
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
                                 memcpy(subIFDoffsets, vPtr,
                                        nCount * sizeof(subIFDoffsets[0]));
                                 printf("--- SubIFD image descriptor tag within "
-                                       "TIFF directory %d with array of %d "
+                                       "TIFF directory %u with array of %d "
                                        "SubIFD chains ---\n",
                                        curdir, nCount);
                                 for (int i = 0; i < nCount; i++)
