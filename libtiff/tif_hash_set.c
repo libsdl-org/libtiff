@@ -433,7 +433,8 @@ static void **TIFFHashSetFindPtr(TIFFHashSet *set, const void *elt)
  * @param set the hash set
  * @param elt the new element to insert in the hash set
  *
- * @return true if success
+ * @return true if success. If false is returned, elt has not been inserted,
+ * but TIFFHashSetInsert() will have run the free function if provided.
  */
 
 bool TIFFHashSetInsert(TIFFHashSet *set, void *elt)
@@ -457,6 +458,8 @@ bool TIFFHashSetInsert(TIFFHashSet *set, void *elt)
         if (!TIFFHashSetRehash(set))
         {
             set->nIndiceAllocatedSize--;
+            if (set->fnFreeEltFunc)
+                set->fnFreeEltFunc(elt);
             return false;
         }
     }
@@ -470,6 +473,8 @@ bool TIFFHashSetInsert(TIFFHashSet *set, void *elt)
     TIFFList *new_elt = TIFFHashSetGetNewListElt(set);
     if (new_elt == NULL)
     {
+        if (set->fnFreeEltFunc)
+            set->fnFreeEltFunc(elt);
         return false;
     }
     new_elt->pData = elt;
