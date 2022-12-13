@@ -14,7 +14,7 @@ Synopsis
 
 .. c:function:: int TIFFFreeDirectory(TIFF* tif)
 
-.. c:function:: int TIFFUnlinkDirectory(TIFF* tif, uint16_t dirn)
+.. c:function:: int TIFFUnlinkDirectory(TIFF* tif, tdir_t dirn)
 
 Description
 -----------

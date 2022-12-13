@@ -12,11 +12,11 @@ Synopsis
 
 .. c:function:: tdir_t TIFFCurrentDirectory(TIFF* tif)
 
-.. c:function:: int TIFFCurrentDirOffset(TIFF* tif)
+.. c:function:: uint64_t TIFFCurrentDirOffset(TIFF* tif)
 
 .. c:function:: int TIFFLastDirectory(TIFF* tif)
 
-.. c:function:: int TIFFNumberOfDirectories(TIFF* tif)
+.. c:function:: tdir_t TIFFNumberOfDirectories(TIFF* tif)
 
 .. c:function:: uint32_t TIFFCurrentRow(TIFF* tif)
 

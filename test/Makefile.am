@@ -76,7 +76,7 @@ if TIFF_TESTS
 check_PROGRAMS = \
 	ascii_tag long_tag short_tag strip_rw rewrite custom_dir custom_dir_EXIF_231 \
 	defer_strile_loading defer_strile_writing test_directory test_open_options \
-	test_append_to_strip testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG) $(STATIC_CHECK_PROGS)
+	test_append_to_strip test_ifd_loop_detection testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG) $(STATIC_CHECK_PROGS)
 endif
 
 # Test scripts to execute
@@ -210,6 +210,9 @@ IMAGES_EXTRA_DIST = \
 	images/test_float64_predictor2_le_lzw.tif \
 	images/test_float64_predictor2_be_lzw.tif \
 	images/tiff_with_subifd_chain.tif \
+	images/test_ifd_loop_to_self.tif \
+	images/test_ifd_loop_to_first.tif \
+	images/test_two_ifds.tif \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 
@@ -250,6 +253,9 @@ test_open_options_SOURCES = test_open_options.c
 test_open_options_LDADD = $(LIBTIFF)
 test_append_to_strip_SOURCES = test_append_to_strip.c
 test_append_to_strip_LDADD = $(LIBTIFF)
+test_ifd_loop_detection_CFLAGS = -DSOURCE_DIR=\"@srcdir@\"
+test_ifd_loop_detection_SOURCES = test_ifd_loop_detection.c
+test_ifd_loop_detection_LDADD = $(LIBTIFF)
 
 AM_CPPFLAGS = -I$(top_srcdir)/libtiff
 
