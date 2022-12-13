@@ -55,6 +55,10 @@
 #define STRIP_SIZE_DEFAULT 8192
 #endif
 
+#ifndef TIFF_MAX_DIR_COUNT
+#define TIFF_MAX_DIR_COUNT 1048576
+#endif
+
 #define streq(a, b) (strcmp(a, b) == 0)
 #define strneq(a, b, n) (strncmp(a, b, n) == 0)
 

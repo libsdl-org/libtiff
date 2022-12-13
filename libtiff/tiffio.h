@@ -277,11 +277,6 @@ typedef struct
 #define TIFF_ATTRIBUTE(x) /*nothing*/
 #endif
 
-/** Maximum number of TIFF IFDs that libtiff can iterate through in a file. */
-#ifndef TIFF_MAX_DIR_COUNT
-#define TIFF_MAX_DIR_COUNT 1048576
-#endif
-
 #if defined(c_plusplus) || defined(__cplusplus)
 extern "C"
 {

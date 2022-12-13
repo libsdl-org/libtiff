@@ -1081,6 +1081,20 @@ if test "$HAVE_STRIPCHOP" = "yes" \
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl Maximum number of TIFF directories that libtiff can browse through
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_WITH(max-dir-count,
+    AS_HELP_STRING([--with-max-dir-count=SIZE],
+       [Maximum number of TIFF directories that libtiff can browse through [[default=1048576]]]),,)
+
+if test "x$with_max_dir_count" = "x" -o "x$with_max_dir_count" = "xyes"; then
+    with_max_dir_count="1048576"
+fi
+
+AC_DEFINE_UNQUOTED(TIFF_MAX_DIR_COUNT,$with_max_dir_count,[Maximum number of TIFF directories that libtiff can browse through])
+
+dnl ---------------------------------------------------------------------------
 dnl Should we try to defer loading of strip/tile offsets and sizes to 
 dnl optimize directory scanning?
 dnl ---------------------------------------------------------------------------
