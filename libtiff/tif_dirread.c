@@ -5398,8 +5398,8 @@ int _TIFFCheckDirNumberAndOffset(TIFF *tif, tdir_t dirn, uint64_t diroff)
         if (foundEntry->offset != diroff)
         {
             TIFFOffsetAndDirNumber entryOld;
-            entryOld.offset = diroff;
-            entryOld.dirNumber = foundEntry->offset;
+            entryOld.offset = foundEntry->offset;
+            entryOld.dirNumber = dirn;
             TIFFOffsetAndDirNumber *foundEntryOld =
                 (TIFFOffsetAndDirNumber *)TIFFHashSetLookup(
                     tif->tif_map_dir_offset_to_number, &entryOld);
