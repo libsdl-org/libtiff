@@ -274,7 +274,7 @@ TIFF *TIFFOpenExt(const char *name, const char *mode, TIFFOpenOptions *opts)
             dwMode = OPEN_EXISTING;
             break;
         case O_RDWR:
-            dwMode = OPEN_ALWAYS;
+            dwMode = OPEN_EXISTING;
             break;
         case O_RDWR | O_CREAT:
             dwMode = OPEN_ALWAYS;
