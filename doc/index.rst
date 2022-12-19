@@ -46,6 +46,7 @@ The following sections are included in this documentation:
     build
     terms
     libtiff
+    multi_page
     functions
     internals
     addingtags
