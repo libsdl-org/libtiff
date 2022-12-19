@@ -24,9 +24,12 @@ Description
 -----------
 
 :c:func:`TIFFWriteDirectory` will write the contents of the current
-directory to the file and setup to create a new subfile in the same
-file. Applications only need to call :c:func:`TIFFWriteDirectory`
-when writing multiple subfiles to a single TIFF file.
+directory (IFD) to the file and setup to create a new directory (IFD)
+using :c:func:`TIFFCreateDirectory`.
+Applications only need to call :c:func:`TIFFWriteDirectory`
+when writing multiple subfiles (images) to a single TIFF file.
+This is called "multi-page TIFF" or "multi-image TIFF"
+(see :doc:`/multi_page`).
 :c:func:`TIFFWriteDirectory` is automatically called by
 :c:func:`TIFFClose` and :c:func:`TIFFFlush` to write a modified
 directory if the file is open for writing.
@@ -133,4 +136,5 @@ See also
 :doc:`TIFFSetDirectory` (3tiff),
 :doc:`TIFFReadDirectory` (3tiff),
 :doc:`TIFFError` (3tiff),
+:doc:`/multi_page`,
 :doc:`libtiff` (3tiff)
