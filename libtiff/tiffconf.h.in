@@ -4,6 +4,11 @@
   from this file in your programs.
 */
 
+/* clang-format off */
+/* clang-format disabled because CMake scripts are very sensitive to the
+ * formatting of this file.
+ */
+
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
@@ -125,3 +130,5 @@
 #define IPTC_SUPPORT
 
 #endif /* _TIFFCONF_ */
+
+/* clang-format on */

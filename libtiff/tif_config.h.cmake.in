@@ -1,3 +1,8 @@
+/* clang-format off */
+/* clang-format disabled because CMake scripts are very sensitive to the
+ * formatting of this file.
+ */
+
 /* libtiff/tif_config.h.cmake.in.  Not generated, but originated from autoheader.  */
 /* This file must be kept up-to-date with needed substitutions from libtiff/tif_config.h.in. */
 
@@ -156,3 +161,5 @@
 #else
 #  error "Unsupported size_t size; please submit a bug report"
 #endif
+
+/* clang-format on */
