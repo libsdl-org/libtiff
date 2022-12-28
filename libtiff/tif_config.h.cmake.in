@@ -1,6 +1,7 @@
 /* clang-format off */
 /* clang-format disabled because CMake scripts are very sensitive to the
- * formatting of this file.
+ * formatting of this file. configure_file variables of type "@VAR@" are
+ * modified by clang-format and won't be substituted.
  */
 
 /* libtiff/tif_config.h.cmake.in.  Not generated, but originated from autoheader.  */
