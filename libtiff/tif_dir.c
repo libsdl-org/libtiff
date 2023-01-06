@@ -2232,6 +2232,7 @@ int TIFFUnlinkDirectory(TIFF *tif, tdir_t dirn)
     tif->tif_row = (uint32_t)-1;
     tif->tif_curstrip = (uint32_t)-1;
     tif->tif_curdir = TIFF_NON_EXISTENT_DIR_NUMBER;
+    tif->tif_dirnumber = 0;
     _TIFFCleanupIFDOffsetAndNumberMaps(tif);
     return (1);
 }
