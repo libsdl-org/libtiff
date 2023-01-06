@@ -143,11 +143,9 @@ struct tiff
 #define TIFF_CHOPPEDUPARRAYS                                                   \
     0x4000000U /* set when allocChoppedUpStripArrays() has modified strip      \
                   array */
-    uint64_t tif_diroff;      /* file offset of current directory */
-    uint64_t tif_nextdiroff;  /* file offset of following directory */
-    uint64_t tif_lastdiroff;  /* file offset of last directory written so far */
-    uint64_t *tif_dirlistoff; /* list of offsets to already seen directories to
-                                 prevent IFD looping */
+    uint64_t tif_diroff;     /* file offset of current directory */
+    uint64_t tif_nextdiroff; /* file offset of following directory */
+    uint64_t tif_lastdiroff; /* file offset of last directory written so far */
     TIFFHashSet *tif_map_dir_offset_to_number;
     TIFFHashSet *tif_map_dir_number_to_offset;
     tdir_t tif_dirnumber;  /* number of already seen directories */
