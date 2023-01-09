@@ -162,7 +162,6 @@ TIFFHashSet *TIFFHashSetNew(TIFFHashSetHashFunc fnHashFunc,
     return set;
 }
 
-#ifdef notdef
 /************************************************************************/
 /*                          TIFFHashSetSize()                            */
 /************************************************************************/
@@ -182,7 +181,6 @@ int TIFFHashSetSize(const TIFFHashSet *set)
     assert(set != NULL);
     return set->nSize;
 }
-#endif
 
 /************************************************************************/
 /*                       TIFFHashSetGetNewListElt()                      */
