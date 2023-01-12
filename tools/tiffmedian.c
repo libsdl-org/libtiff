@@ -144,8 +144,13 @@ int main(int argc, char *argv[])
                 num_colors = atoi(optarg);
                 if (num_colors > MAX_CMAP_SIZE)
                 {
-                    fprintf(stderr, "-c: colormap too big, max %d\n",
+                    fprintf(stderr, "-C: colormap too big, max %d\n",
                             MAX_CMAP_SIZE);
+                    usage(EXIT_FAILURE);
+                }
+                if (num_colors < 2)
+                {
+                    fprintf(stderr, "-C: colormap too small, min %d\n", 2);
                     usage(EXIT_FAILURE);
                 }
                 break;
