@@ -332,9 +332,9 @@ void fax2ps(TIFF *tif, uint16_t npages, uint16_t *pages, char *filename)
 
 static int pcompar(const void *va, const void *vb)
 {
-    const int *pa = (const int *)va;
-    const int *pb = (const int *)vb;
-    return (*pa - *pb);
+    const uint16_t *pa = (const uint16_t *)va;
+    const uint16_t *pb = (const uint16_t *)vb;
+    return ((int32_t)*pa - (int32_t)*pb);
 }
 
 static void usage(int code);
