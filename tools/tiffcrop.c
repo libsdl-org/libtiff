@@ -8591,7 +8591,7 @@ static int processCropSelections(struct image_data *image,
                     cropsize + NUM_BUFF_OVERSIZE_BYTES);
             else
             {
-                prev_cropsize = seg_buffs[0].size;
+                prev_cropsize = seg_buffs[i].size;
                 if (prev_cropsize < cropsize)
                 {
                     next_buff = _TIFFrealloc(
