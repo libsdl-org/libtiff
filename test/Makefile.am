@@ -170,7 +170,7 @@ REFFILES = \
 	refs/o-tiff2ps-PS2.ps \
 	refs/o-tiff2ps-PS3.ps \
 	refs/o-testfax4.tiff \
-	refs/o-testfax3_bug_513.sh.tiff \
+	refs/o-testfax3_bug_513.tiff \
 	refs/o-deflate-last-strip-extra-data.tiff
 
 # This list should contain all of the TIFF files in the 'images'
