@@ -7516,7 +7516,7 @@ processCropSelections(struct image_data *image, struct crop_mask *crop,
       crop_buff = (unsigned char *)limitMalloc(cropsize + NUM_BUFF_OVERSIZE_BYTES);
     else
       {
-      prev_cropsize = seg_buffs[0].size;
+      prev_cropsize = seg_buffs[1].size;
       if (prev_cropsize < cropsize)
         {
         next_buff = _TIFFrealloc(crop_buff, cropsize + NUM_BUFF_OVERSIZE_BYTES);
