@@ -26,8 +26,9 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
-#include "tif_hash_set.h"
 #include "tif_config.h"
+
+#include "tif_hash_set.h"
 
 #include <assert.h>
 #include <stdbool.h>
