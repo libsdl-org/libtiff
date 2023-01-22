@@ -158,6 +158,7 @@ TESTSCRIPTS = \
 	tiff2rgba-rgb-3c-16b.sh \
 	tiff2rgba-rgb-3c-8b.sh \
 	testfax4.sh \
+	testfax3_bug_513.sh \
 	testdeflatelaststripextradata.sh \
 	$(JPEG_DEPENDENT_TESTSCRIPTS)
 
@@ -169,6 +170,7 @@ REFFILES = \
 	refs/o-tiff2ps-PS2.ps \
 	refs/o-tiff2ps-PS3.ps \
 	refs/o-testfax4.tiff \
+	refs/o-testfax3_bug_513.tiff \
 	refs/o-deflate-last-strip-extra-data.tiff
 
 # This list should contain all of the TIFF files in the 'images'
@@ -193,7 +195,8 @@ TIFFIMAGES = \
 	images/ojpeg_single_strip_no_rowsperstrip.tiff \
 	images/testfax4.tiff \
 	images/deflate-last-strip-extra-data.tiff \
-	images/custom_dir_EXIF_GPS.tiff
+	images/custom_dir_EXIF_GPS.tiff \
+	images/testfax3_bug_513.tiff
 
 PNMIMAGES = \
 	images/minisblack-1c-8b.pgm \

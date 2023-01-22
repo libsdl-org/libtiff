@@ -46,7 +46,9 @@ set(TIFFIMAGES
     images/rgb-3c-8b.tiff
     images/quad-lzw-compat.tiff
     images/lzw-single-strip.tiff
-    images/testfax4.tiff)
+    images/testfax4.tiff
+    images/testfax3_bug_513.tiff
+)
 # TIFF images using old-jpeg.  Unused unless JPEG support is enabled.
 set(TIFFIMAGES_OJPEG)
 
