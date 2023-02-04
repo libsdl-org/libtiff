@@ -216,6 +216,7 @@ IMAGES_EXTRA_DIST = \
 	images/test_ifd_loop_to_self.tif \
 	images/test_ifd_loop_to_first.tif \
 	images/test_two_ifds.tif \
+	images/test_ifd_loop_subifd.tif \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 
