@@ -9676,7 +9676,7 @@ static int rotateImage(uint16_t rotation, struct image_data *image,
                       "Integer overflow when calculating buffer size.");
             return (-1);
         }
-        buffsize = (rowsize + 1) * length;
+        buffsize = ((tmsize_t)rowsize + 1) * length;
     }
 
     bytes_per_sample = (bps + 7) / 8;
