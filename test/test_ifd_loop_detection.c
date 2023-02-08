@@ -36,30 +36,34 @@
 
 #include "tiffio.h"
 
+/* Compare 'requested_dir_number' with number written in PageName tag
+ * into the IFD to identify that IFD.  */
 int is_requested_directory(TIFF *tif, int requested_dir_number,
                            const char *filename)
 {
-    char *ptr;
+    char *ptr = NULL;
+    char *auxStr = NULL;
 
     if (!TIFFGetField(tif, TIFFTAG_PAGENAME, &ptr))
     {
         fprintf(stderr, "Can't get TIFFTAG_PAGENAME tag.\n");
         return 0;
     }
-    /* Retrieve directory number from ASCII string */
-    char *auxStr = strchr(ptr, ' ');
-    int nthIFD;
-    nthIFD = atoi(ptr);
-
     /* Check for reading errors */
-    if (strncmp(auxStr, " th.", 4))
+    if (ptr != NULL)
+        auxStr = strchr(ptr, ' ');
+
+    if (ptr == NULL || auxStr == NULL || strncmp(auxStr, " th.", 4))
     {
+        ptr = ptr == NULL ? "(null)" : ptr;
         fprintf(stderr,
                 "Error reading IFD directory number from PageName tag: %s\n",
                 ptr);
         return 0;
     }
 
+    /* Retrieve IFD identification number from ASCII string */
+    const int nthIFD = atoi(ptr);
     if (nthIFD == requested_dir_number)
     {
         return 1;
