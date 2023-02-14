@@ -6771,9 +6771,7 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
     uint32_t tw = 0, tl = 0; /* Tile width and length */
     tmsize_t tile_rowsize = 0;
     unsigned char *read_buff = NULL;
-    unsigned char *new_buff = NULL;
     int readunit = 0;
-    static tmsize_t prev_readsize = 0;
 
     TIFFGetFieldDefaulted(in, TIFFTAG_BITSPERSAMPLE, &bps);
     TIFFGetFieldDefaulted(in, TIFFTAG_SAMPLESPERPIXEL, &spp);
@@ -7097,43 +7095,25 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
     }
 
     read_buff = *read_ptr;
-    /* +3 : add a few guard bytes since reverseSamples16bits() can read a bit */
-    /* outside buffer */
+    /* +3 : add a few guard bytes since reverseSamples16bits() can read a bit
+     * outside buffer */
+    /* Reuse of read_buff from previous image is quite unsafe, because other
+     * functions (like rotateImage() etc.) reallocate that buffer with different
+     * size without updating the local prev_readsize value. */
+    if (read_buff)
+    {
+        _TIFFfree(read_buff);
+    }
+    if (buffsize > 0xFFFFFFFFU - 3)
+    {
+        TIFFError("loadImage", "Required read buffer size too large");
+        return (-1);
+    }
+    read_buff =
+        (unsigned char *)limitMalloc(buffsize + NUM_BUFF_OVERSIZE_BYTES);
     if (!read_buff)
     {
-        if (buffsize > 0xFFFFFFFFU - 3)
-        {
-            TIFFError("loadImage", "Unable to allocate/reallocate read buffer");
-            return (-1);
-        }
-        read_buff =
-            (unsigned char *)limitMalloc(buffsize + NUM_BUFF_OVERSIZE_BYTES);
-    }
-    else
-    {
-        if (prev_readsize < buffsize)
-        {
-            if (buffsize > 0xFFFFFFFFU - 3)
-            {
-                TIFFError("loadImage",
-                          "Unable to allocate/reallocate read buffer");
-                return (-1);
-            }
-            new_buff =
-                _TIFFrealloc(read_buff, buffsize + NUM_BUFF_OVERSIZE_BYTES);
-            if (!new_buff)
-            {
-                free(read_buff);
-                read_buff = (unsigned char *)limitMalloc(
-                    buffsize + NUM_BUFF_OVERSIZE_BYTES);
-            }
-            else
-                read_buff = new_buff;
-        }
-    }
-    if (!read_buff)
-    {
-        TIFFError("loadImage", "Unable to allocate/reallocate read buffer");
+        TIFFError("loadImage", "Unable to allocate read buffer");
         return (-1);
     }
 
@@ -7141,7 +7121,6 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
     read_buff[buffsize + 1] = 0;
     read_buff[buffsize + 2] = 0;
 
-    prev_readsize = buffsize;
     *read_ptr = read_buff;
 
     /* N.B. The read functions used copy separate plane data into a buffer as
