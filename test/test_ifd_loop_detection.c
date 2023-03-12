@@ -49,6 +49,7 @@ int is_requested_directory(TIFF *tif, int requested_dir_number,
         fprintf(stderr, "Can't get TIFFTAG_PAGENAME tag.\n");
         return 0;
     }
+
     /* Check for reading errors */
     if (ptr != NULL)
         auxStr = strchr(ptr, ' ');
@@ -107,12 +108,12 @@ int test_subifd_loop(void)
     }
     if (i != 4)
     {
-        fprintf(stderr, "(20) Expected fifth TIFFReadDirectory() to fail\n");
+        fprintf(stderr, "(30) Expected fifth TIFFReadDirectory() to fail\n");
         ret = 1;
     }
     if (!is_requested_directory(tif, 4, filename))
     {
-        fprintf(stderr, "(21) Expected fifth main IFD to be loaded\n");
+        fprintf(stderr, "(31) Expected fifth main IFD to be loaded\n");
         ret = 1;
     }
 
@@ -139,7 +140,7 @@ int test_subifd_loop(void)
                 ret = 1;
             if (!is_requested_directory(tif, 200 + i, filename))
             {
-                fprintf(stderr, "(22) Expected SubIFD %d to be loaded.\n", i);
+                fprintf(stderr, "(32) Expected SubIFD %d to be loaded.\n", i);
                 ret = 1;
             }
             /* Now test SubIFD loop detection.
@@ -153,7 +154,7 @@ int test_subifd_loop(void)
             {
                 fprintf(
                     stderr,
-                    "(23) Expected third SubIFD-TIFFReadDirectory() to fail\n");
+                    "(33) Expected third SubIFD-TIFFReadDirectory() to fail\n");
                 ret = 1;
             }
         }
@@ -162,13 +163,13 @@ int test_subifd_loop(void)
             ret = 1;
         if (!is_requested_directory(tif, 3, filename))
         {
-            fprintf(stderr, "(24) Expected fourth main IFD to be loaded\n");
+            fprintf(stderr, "(34) Expected fourth main IFD to be loaded\n");
             ret = 1;
         }
     }
     else
     {
-        fprintf(stderr, "(25) No or wrong expected SubIFDs within main IFD\n");
+        fprintf(stderr, "(35) No or wrong expected SubIFDs within main IFD\n");
         ret = 1;
     }
 
@@ -299,6 +300,31 @@ int main()
             fprintf(stderr, "(17) Expected TIFFReadDirectory() to fail\n");
             ret = 1;
         }
+        if (TIFFSetDirectory(tif, 0) != 1)
+        {
+            fprintf(stderr, "(18) Expected TIFFSetDirectory() to succeed\n");
+            ret = 1;
+        }
+        if (TIFFSetDirectory(tif, 1) != 1)
+        {
+            fprintf(stderr, "(19) Expected TIFFSetDirectory() to succeed\n");
+            ret = 1;
+        }
+        if (TIFFSetDirectory(tif, 2))
+        {
+            fprintf(stderr, "(20) Expected TIFFSetDirectory() to fail\n");
+            ret = 1;
+        }
+        if (TIFFSetDirectory(tif, 1) != 1)
+        {
+            fprintf(stderr, "(21) Expected TIFFSetDirectory() to succeed\n");
+            ret = 1;
+        }
+        if (TIFFSetDirectory(tif, 0) != 1)
+        {
+            fprintf(stderr, "(22) Expected TIFFSetDirectory() to succeed\n");
+            ret = 1;
+        }
         TIFFClose(tif);
     }
     {
@@ -309,7 +335,7 @@ int main()
         {
             fprintf(
                 stderr,
-                "(18) Expected TIFFNumberOfDirectories() to return 2. Got %d\n",
+                "(23) Expected TIFFNumberOfDirectories() to return 2. Got %d\n",
                 n);
             ret = 1;
         }
