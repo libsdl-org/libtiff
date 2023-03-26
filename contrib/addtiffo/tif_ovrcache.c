@@ -43,6 +43,7 @@ TIFFOvrCache *TIFFCreateOvrCache(TIFF *hTIFF, toff_t nDirOffset)
 {
     TIFFOvrCache *psCache;
     toff_t nBaseDirOffset;
+    int nRet;
 
     psCache = (TIFFOvrCache *)_TIFFmalloc(sizeof(TIFFOvrCache));
     psCache->nDirOffset = nDirOffset;
@@ -52,7 +53,9 @@ TIFFOvrCache *TIFFCreateOvrCache(TIFF *hTIFF, toff_t nDirOffset)
     /*      Get definition of this raster from the TIFF file itself.        */
     /* -------------------------------------------------------------------- */
     nBaseDirOffset = TIFFCurrentDirOffset(psCache->hTIFF);
-    TIFFSetSubDirectory(hTIFF, nDirOffset);
+    nRet = TIFFSetSubDirectory(hTIFF, nDirOffset);
+    (void)nRet;
+    assert(nRet == 1);
 
     TIFFGetField(hTIFF, TIFFTAG_IMAGEWIDTH, &(psCache->nXSize));
     TIFFGetField(hTIFF, TIFFTAG_IMAGELENGTH, &(psCache->nYSize));
@@ -120,7 +123,9 @@ TIFFOvrCache *TIFFCreateOvrCache(TIFF *hTIFF, toff_t nDirOffset)
 
     psCache->nBlockOffset = 0;
 
-    TIFFSetSubDirectory(psCache->hTIFF, nBaseDirOffset);
+    nRet = TIFFSetSubDirectory(psCache->hTIFF, nBaseDirOffset);
+    (void)nRet;
+    assert(nRet == 1);
 
     return psCache;
 }
