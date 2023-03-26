@@ -381,6 +381,68 @@ int test_arbitrary_directrory_loading(bool is_big_tiff)
         goto failure;
     }
 
+    /* Test very fast  TIFFSetDirectory() using IFD loop directory list.
+     * First populate IFD loop directory list and then go through directories in
+     * reverse order. Within between read after end of IFDs using
+     * TIFFReadDirectory() where IFD loop directory list should be kept. */
+    for (int i = 0; i < N_DIRECTORIES; i++)
+    {
+        if (!TIFFSetDirectory(tif, i))
+        {
+            fprintf(stderr, "Can't set %d.th directory from %s\n", i, filename);
+            goto failure;
+        }
+    }
+    TIFFReadDirectory(tif);
+    for (int i = N_DIRECTORIES - 1; i >= 0; i--)
+    {
+        if (!TIFFSetDirectory(tif, i))
+        {
+            fprintf(stderr, "Can't set %d.th directory from %s\n", i, filename);
+            goto failure;
+        }
+        if (!is_requested_directory(tif, i, filename))
+        {
+            goto failure;
+        }
+    }
+
+    /* Test not existing directory number */
+    if (TIFFSetDirectory(tif, N_DIRECTORIES))
+    {
+        fprintf(stderr,
+                "No expected fail for accessing not existant directory number "
+                "%d in file %s\n",
+                N_DIRECTORIES, filename);
+        goto failure;
+    }
+
+    /* Close and Reopen prepared testfile */
+    TIFFClose(tif);
+    tif = TIFFOpen(filename, "r+");
+    if (!tif)
+    {
+        fprintf(stderr, "Can't create %s\n", filename);
+        return 1;
+    }
+
+    /* Step through directories just using TIFFSetSubDirectory() */
+    for (int i = N_DIRECTORIES - 1; i >= 0; i--)
+    {
+        if (!TIFFSetSubDirectory(tif, offsets_base[i]))
+        {
+            fprintf(stderr, "Can't set %d.th directory from %s\n", i, filename);
+            goto failure;
+        }
+        if (!is_requested_directory(tif, i, filename))
+        {
+            goto failure;
+        }
+    }
+
+    /* More specialized test cases for relative seeking within TIFFSetDirectory.
+     * However, with using IFD loop directory list, most of this test cases will
+     * never be reached! */
     if (!TIFFSetDirectory(tif, 2))
     {
         fprintf(stderr, "Can't set directory %d within %s\n", 2, filename);
@@ -614,6 +676,165 @@ failure:
     return 1;
 }
 
+/* Tests SubIFD writing and reading
+ *
+ *
+ */
+int test_SubIFD_directrory_handling(bool is_big_tiff)
+{
+    const char *filename = "test_SubIFD_directrory_handling.tif";
+
+/* Define the number of sub-IFDs you are going to write */
+#define NUMBER_OF_SUBIFDs 3
+    uint16_t number_of_sub_IFDs = NUMBER_OF_SUBIFDs;
+    toff_t sub_IFDs_offsets[NUMBER_OF_SUBIFDs] = {
+        0UL}; /* array for SubIFD tag */
+    int blnWriteSubIFD = 0;
+    int i;
+    int iIFD = 0, iSubIFD = 0;
+    TIFF *tif;
+    int expected_original_dirnumber;
+
+    /* Create a file and write N_DIRECTORIES (10) directories to it */
+    tif = TIFFOpen(filename, is_big_tiff ? "w8" : "w");
+    if (!tif)
+    {
+        fprintf(stderr, "Can't create %s\n", filename);
+        return 1;
+    }
+    for (i = 0; i < N_DIRECTORIES; i++)
+    {
+        if (write_data_to_current_directory(
+                tif, blnWriteSubIFD ? 200 + iSubIFD++ : iIFD++))
+        {
+            fprintf(stderr, "Can't write data to current directory in %s\n",
+                    filename);
+            goto failure;
+        }
+        if (blnWriteSubIFD)
+        {
+            /* SUBFILETYPE tag is not mandatory for SubIFD writing, but a
+             * good idea to indicate thumbnails */
+            if (!TIFFSetField(tif, TIFFTAG_SUBFILETYPE, FILETYPE_REDUCEDIMAGE))
+                goto failure;
+        }
+
+        /* For the second multi-page image, trigger TIFFWriteDirectory() to
+         * switch for the next number_of_sub_IFDs calls to add those as SubIFDs
+         * e.g. for thumbnails */
+        if (1 == i)
+        {
+            blnWriteSubIFD = 1;
+            /* Now here is the trick: the next n directories written
+             * will be sub-IFDs of the main-IFD (where n is number_of_sub_IFDs
+             * specified when you set the TIFFTAG_SUBIFD field.
+             * The SubIFD offset array sub_IFDs_offsets is filled automatically
+             * with the proper offset values by the following number_of_sub_IFDs
+             * TIFFWriteDirectory() calls and are updated in the related
+             * main-IFD with the last call.
+             */
+            if (!TIFFSetField(tif, TIFFTAG_SUBIFD, number_of_sub_IFDs,
+                              sub_IFDs_offsets))
+                goto failure;
+        }
+
+        if (!TIFFWriteDirectory(tif))
+        {
+            fprintf(stderr, "Can't write directory to %s\n", filename);
+            goto failure;
+        }
+
+        if (iSubIFD >= number_of_sub_IFDs)
+            blnWriteSubIFD = 0;
+    }
+    TIFFClose(tif);
+
+    /* Reopen prepared testfile */
+    tif = TIFFOpen(filename, "r+");
+    if (!tif)
+    {
+        fprintf(stderr, "Can't create %s\n", filename);
+        goto failure;
+    }
+
+    tdir_t numberOfMainIFDs = TIFFNumberOfDirectories(tif);
+    if (numberOfMainIFDs != N_DIRECTORIES - number_of_sub_IFDs)
+    {
+        fprintf(stderr,
+                "Unexpected number of directories in %s. Expected %i, "
+                "found %i.\n",
+                filename, N_DIRECTORIES - number_of_sub_IFDs, numberOfMainIFDs);
+        goto failure;
+    }
+
+    tdir_t currentDirNumber = TIFFCurrentDirectory(tif);
+
+    /* The first directory is already read through TIFFOpen() */
+    int blnRead = 0;
+    expected_original_dirnumber = 1;
+    do
+    {
+        /* Check if there are SubIFD subfiles */
+        void *ptr;
+        if (TIFFGetField(tif, TIFFTAG_SUBIFD, &number_of_sub_IFDs, &ptr))
+        {
+            /* Copy SubIFD array from pointer */
+            memcpy(sub_IFDs_offsets, ptr,
+                   number_of_sub_IFDs * sizeof(sub_IFDs_offsets[0]));
+
+            for (i = 0; i < number_of_sub_IFDs; i++)
+            {
+                /* Read first SubIFD directory */
+                if (!TIFFSetSubDirectory(tif, sub_IFDs_offsets[i]))
+                    goto failure;
+                if (!is_requested_directory(tif, 200 + i, filename))
+                {
+                    goto failure;
+                }
+                /* Check if there is a SubIFD chain behind the first one from
+                 * the array, as specified by Adobe */
+                int n = 0;
+                while (TIFFReadDirectory(tif))
+                {
+                    /* analyse subfile */
+                    if (!is_requested_directory(tif, 201 + i + n++, filename))
+                        goto failure;
+                }
+            }
+            /* Go back to main-IFD chain and re-read that main-IFD directory */
+            if (!TIFFSetDirectory(tif, currentDirNumber))
+                goto failure;
+        }
+        /* Read next main-IFD directory (subfile) */
+        blnRead = TIFFReadDirectory(tif);
+        currentDirNumber = TIFFCurrentDirectory(tif);
+        if (blnRead && !is_requested_directory(
+                           tif, expected_original_dirnumber++, filename))
+            goto failure;
+    } while (blnRead);
+
+    /*--- Now test arbitrary directory loading with SubIFDs ---*/
+    if (!TIFFSetSubDirectory(tif, sub_IFDs_offsets[1]))
+        goto failure;
+    if (!is_requested_directory(tif, 201, filename))
+    {
+        goto failure;
+    }
+
+    TIFFClose(tif);
+    unlink(filename);
+    return 0;
+
+failure:
+    if (tif)
+    {
+        TIFFClose(tif);
+        tif = NULL;
+    }
+    unlink(filename);
+    return 1;
+} /*--- test_SubIFD_directrory_handling() ---*/
+
 /* Checks that rewriting a directory does not break the directory linked
  * list
  *
@@ -623,6 +844,8 @@ failure:
  * skipped, otherwise the linked list will be broken at the point where it
  * connected to the rewritten directory, resulting in the loss of the
  * directories that come after it.
+ * Rewriting the first directory requires an additional test, because it is
+ * treated differently from the directories that have a predecessor in the list.
  */
 int test_rewrite_lastdir_offset(bool is_big_tiff)
 {
@@ -652,17 +875,22 @@ int test_rewrite_lastdir_offset(bool is_big_tiff)
         }
     }
 
-    /* Without closing it, go to the fifth directory */
+    /* Without closing the file, go to the fifth directory
+     * and check, if dirn is requested directory. */
     TIFFSetDirectory(tif, 4);
-
-    /* Check, if dirn is requested directory */
     if (!is_requested_directory(tif, 4, filename))
     {
         TIFFClose(tif);
         return 4;
     }
 
-    /* Rewrite the fifth directory by calling TIFFRewriteDirectory */
+    /* Rewrite the fifth directory by calling TIFFRewriteDirectory
+     * and check, if the offset of IFD loaded by TIFFSetDirectory() is
+     * different. Then, the IFD loop directory list is correctly maintained for
+     * speed up of TIFFSetDirectory() with directly getting the offset that
+     * list.
+     */
+    uint64_t off1 = TIFFCurrentDirOffset(tif);
     if (write_data_to_current_directory(tif, 4))
     {
         fprintf(stderr, "Can't write data to fifth directory in %s\n",
@@ -672,6 +900,64 @@ int test_rewrite_lastdir_offset(bool is_big_tiff)
     if (!TIFFRewriteDirectory(tif))
     {
         fprintf(stderr, "Can't rewrite fifth directory to %s\n", filename);
+        goto failure;
+    }
+    i = 4;
+    if (!TIFFSetDirectory(tif, i))
+    {
+        fprintf(stderr, "Can't set %d.th directory from %s\n", i, filename);
+        goto failure;
+    }
+    uint64_t off2 = TIFFCurrentDirOffset(tif);
+    if (!is_requested_directory(tif, i, filename))
+    {
+        goto failure;
+    }
+    if (off1 == off2)
+    {
+        fprintf(stderr,
+                "Rewritten directory %d was not correctly accessed by "
+                "TIFFSetDirectory() in file %s\n",
+                i, filename);
+        goto failure;
+    }
+
+    /* Now, perform the test for the first directory */
+    TIFFSetDirectory(tif, 0);
+    if (!is_requested_directory(tif, 0, filename))
+    {
+        TIFFClose(tif);
+        return 5;
+    }
+    off1 = TIFFCurrentDirOffset(tif);
+    if (write_data_to_current_directory(tif, 0))
+    {
+        fprintf(stderr, "Can't write data to first directory in %s\n",
+                filename);
+        goto failure;
+    }
+    if (!TIFFRewriteDirectory(tif))
+    {
+        fprintf(stderr, "Can't rewrite first directory to %s\n", filename);
+        goto failure;
+    }
+    i = 0;
+    if (!TIFFSetDirectory(tif, i))
+    {
+        fprintf(stderr, "Can't set %d.th directory from %s\n", i, filename);
+        goto failure;
+    }
+    off2 = TIFFCurrentDirOffset(tif);
+    if (!is_requested_directory(tif, i, filename))
+    {
+        goto failure;
+    }
+    if (off1 == off2)
+    {
+        fprintf(stderr,
+                "Rewritten directory %d was not correctly accessed by "
+                "TIFFSetDirectory() in file %s\n",
+                i, filename);
         goto failure;
     }
 
@@ -866,7 +1152,7 @@ int main()
         return 1;
     }
 
-    /* Finally test arbitrary directory loading */
+    /* Test arbitrary directory loading */
     if (test_arbitrary_directrory_loading(false))
     {
         fprintf(stderr,
@@ -877,6 +1163,20 @@ int main()
     {
         fprintf(stderr,
                 "Failed during BigTIFF ArbitraryDirectoryLoading test.\n");
+        return 1;
+    }
+
+    /* Test SubIFD writing and reading */
+    if (test_SubIFD_directrory_handling(false))
+    {
+        fprintf(stderr,
+                "Failed during non-BigTIFF SubIFD_directrory_handling test.\n");
+        return 1;
+    }
+    if (test_SubIFD_directrory_handling(true))
+    {
+        fprintf(stderr,
+                "Failed during BigTIFF SubIFD_directrory_handling test.\n");
         return 1;
     }
 

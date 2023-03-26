@@ -158,13 +158,14 @@ static int test_error_handler()
 
 static int test_TIFFOpenOptionsSetMaxSingleMemAlloc(
     tmsize_t limit, int expected_to_fail_in_open,
-    int expected_to_fail_in_write_directory)
+    int expected_to_fail_in_write_directory, bool is_big_tiff)
 {
     int ret = 0;
     TIFFOpenOptions *opts = TIFFOpenOptionsAlloc();
     assert(opts);
     TIFFOpenOptionsSetMaxSingleMemAlloc(opts, limit);
-    TIFF *tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
+    TIFF *tif =
+        TIFFOpenExt("test_error_handler.tif", is_big_tiff ? "w8" : "w", opts);
     TIFFOpenOptionsFree(opts);
     if (expected_to_fail_in_open)
     {
@@ -217,10 +218,21 @@ int main()
 {
     int ret = 0;
     ret += test_error_handler();
-    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(1, TRUE, -1);
+    fprintf(stderr, "---- test_TIFFOpenOptionsSetMaxSingleMemAlloc "
+                    "with non-BigTIFF ---- \n");
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(1, TRUE, -1, FALSE);
     ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(
-        sizeof(TIFF) + strlen("test_error_handler.tif") + 1, FALSE, TRUE);
+        sizeof(TIFF) + strlen("test_error_handler.tif") + 1, FALSE, TRUE,
+        FALSE);
     ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(
-        VALUE_SAMPLESPERPIXEL * sizeof(short), FALSE, FALSE);
+        VALUE_SAMPLESPERPIXEL * sizeof(short), FALSE, FALSE, FALSE);
+
+    fprintf(stderr, "\n---- test_TIFFOpenOptionsSetMaxSingleMemAlloc "
+                    "with BigTIFF ---- \n");
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(1, TRUE, -1, TRUE);
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(
+        sizeof(TIFF) + strlen("test_error_handler.tif") + 1, FALSE, TRUE, TRUE);
+    ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(
+        VALUE_SAMPLESPERPIXEL * sizeof(short), FALSE, FALSE, TRUE);
     return ret;
 }
