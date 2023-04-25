@@ -5,6 +5,9 @@ The library is capable of dealing with images that are written to
 follow the 5.0 or 6.0 TIFF spec.  There is also considerable support
 for some of the more esoteric portions of the 6.0 TIFF spec.
 
+Baseline
+--------
+
 .. list-table:: Core requirements
     :widths: 5 20
     :header-rows: 0
@@ -176,6 +179,25 @@ proposal given in TIFF Technical Note #2.
 The following table shows the tags that are recognized
 and how they are used by the library.  If no use is indicated,
 then the library reads and writes the tag, but does not use it internally.
+For the meaning of the tags look in https://www.awaresystems.be/imaging/tiff/tifftags.html
+
+:file:`libtiff` supports also many private tags allocated for organizations that wish to
+store additional information in a TIFF file.
+Tags for TIFF/EP and for Digital Negative (DNG) Specification 1.6.0
+(see https://helpx.adobe.com/content/dam/help/en/photoshop/pdf/dng_spec_1_6_0_0.pdf)
+are included.
+
+Note that some tags are meaningful only when a particular
+compression scheme is being used; e.g. ``Group3Options``
+is only useful if ``Compression``
+is set to CCITT Group 3 encoding.
+Tags of this sort are considered *codec-specific*
+tags and the library does not recognize them except when the
+``Compression``
+tag has been previously set to the relevant compression scheme.
+
+Tags Recognized by LibTIFF
+--------------------------
 
 .. list-table:: Tags used by libtiff
     :widths: 5 1 1 5
@@ -186,15 +208,15 @@ then the library reads and writes the tag, but does not use it internally.
       - R/W<
       - Library's Use (Comments)
 
-    * - ``NewSubFileType``
+    * - ``SubfileType``
       - 254
       - R/W
-      - none (called ``SubFileType`` in :file:`<tiff.h>`)
+      - none (also known as ``NewSubfileType``)
 
-    * - ``SubFileType``
+    * - ``OldSubfileType``
       - 255
       - R/W
-      - none (called ``OSubFileType`` in :file:`<tiff.h>`)
+      - parsed but ignored (also known as ``SubFileType``)
 
     * - ``ImageWidth``
       - 256
@@ -224,17 +246,17 @@ then the library reads and writes the tag, but does not use it internally.
     * - ``Thresholding``
       - 263
       - R/W
-      -
+      - (tag in tif.h wrongly written as "Threshholding")
 
     * - ``CellWidth``
       - 264
+      - R/W
       -
-      - parsed but ignored
 
     * - ``CellLength``
       - 265
+      - R/W
       -
-      - parsed but ignored
 
     * - ``FillOrder``
       - 266
@@ -322,39 +344,29 @@ then the library reads and writes the tag, but does not use it internally.
       -
 
     * - ``YPosition``
-      - 286
+      - 287
       - R/W
       -
 
     * - ``FreeOffsets``
       - 288
-      -
+      - R/W
       - parsed but ignored
 
     * - ``FreeByteCounts``
       - 289
-      -
+      - R/W
       - parsed but ignored
 
     * - ``GrayResponseUnit``
       - 290
-      -
+      - R/W
       - parsed but ignored
 
     * - ``GrayResponseCurve``
       - 291
-      -
+      - R/W
       - parsed but ignored
-
-    * - ``Group3Options``
-      - 292
-      - R/W
-      - used by Group 3 codec
-
-    * - ``Group4Options``
-      - 293
-      - R/W
-      -
 
     * - ``ResolutionUnit``
       - 296
@@ -368,7 +380,7 @@ then the library reads and writes the tag, but does not use it internally.
 
     * - ``ColorResponseUnit``
       - 300
-      -
+      - R/W
       - parsed but ignored
 
     * - ``TransferFunction``
@@ -396,23 +408,23 @@ then the library reads and writes the tag, but does not use it internally.
       - R/W
       -
 
-    * - ``Predictor``
-      - 317
-      - R/W
-      - used by LZW codec
-
     * - ``WhitePoint``
       - 318
       - R/W
       -
 
-    * - ``PrimaryChromacities``
+    * - ``PrimaryChromaticities``
       - 319
       - R/W
       -
 
     * - ``ColorMap``
       - 320
+      - R/W
+      -
+
+    * - ``HalftoneHints``
+      - 321
       - R/W
       -
 
@@ -432,24 +444,9 @@ then the library reads and writes the tag, but does not use it internally.
       - data i/o
 
     * - ``TileByteCounts``
-      - 324
+      - 325
       - R/W
       - data i/o
-
-    * - ``BadFaxLines``
-      - 326
-      - R/W
-      -
-
-    * - ``CleanFaxData``
-      - 327
-      - R/W
-      -
-
-    * - ``ConsecutiveBadFaxLines``
-      - 328
-      - R/W
-      -
 
     * - ``SubIFD``
       - 330
@@ -463,6 +460,11 @@ then the library reads and writes the tag, but does not use it internally.
 
     * - ``InkNames``
       - 333
+      - R/W
+      -
+
+    * - ``NumberOfInks``
+      - 334
       - R/W
       -
 
@@ -496,10 +498,20 @@ then the library reads and writes the tag, but does not use it internally.
       - R/W
       -
 
-    * - ``JPEGTables``
-      - 347
+    * - ``ClipPath``
+      - 343
       - R/W
-      - used by JPEG codec
+      -
+
+    * - ``XClipPathUnits``
+      - 344
+      - R/W
+      -
+
+    * - ``YClipPathUnits``
+      - 345
+      - R/W
+      -
 
     * - ``YCbCrCoefficients``
       - 529
@@ -509,7 +521,7 @@ then the library reads and writes the tag, but does not use it internally.
     * - ``YCbCrSubsampling``
       - 530
       - R/W
-      - tile/strip size calculations
+      - tile / strip size calculations
 
     * - ``YCbCrPositioning``
       - 531
@@ -518,6 +530,11 @@ then the library reads and writes the tag, but does not use it internally.
 
     * - ``ReferenceBlackWhite``
       - 532
+      - R/W
+      -
+
+    * - ``XMLPacket``
+      - 700
       - R/W
       -
 
@@ -534,15 +551,908 @@ then the library reads and writes the tag, but does not use it internally.
     * - ``ImageDepth``
       - 32997
       - R/W
-      - tile/strip calculations
+      - tile / strip size calculations
 
     * - ``TileDepth``
       - 32998
       - R/W
-      - tile/strip calculations
+      - tile / strip size calculations
+
+    * - ``ImageFullWidth``
+      - 33300
+      - R/W
+      -
+
+    * - ``ImageFullLength``
+      - 33301
+      - R/W
+      -
+
+    * - ``TextureFormat``
+      - 33302
+      - R/W
+      -
+
+    * - ``TextureWrapModes``
+      - 33303
+      - R/W
+      -
+
+    * - ``FieldOfViewCotangent``
+      - 33304
+      - R/W
+      -
+
+    * - ``MatrixWorldToScreen``
+      - 33305
+      - R/W
+      -
+
+    * - ``MatrixWorldToCamera``
+      - 33306
+      - R/W
+      -
+
+    * - ``Copyright``
+      - 33432
+      - R/W
+      -
+
+    * - ``RichTIFFIPTC``
+      - 33723
+      - R/W
+      - (also known as TIFF/EP IPTC/NAA; 
+        :file:`libtiff` type is UNDEFINED or BYTE,
+        but often times incorrectly specified as LONG,
+        because TIFF/EP (ISO/DIS 12234-2) specifies type LONG or ASCII)
+
+    * - ``Photoshop``
+      - 34377
+      - R/W
+      -
+
+    * - ``EXIFIFDOffset``
+      - 34665
+      - R/W
+      -
+
+    * - ``ICC Profile``
+      - 34675
+      - R/W
+      -
+
+    * - ``GPSIFDOffset``
+      - 34853
+      - R/W
+      -
+
+    * - ``FaxRecvParams``
+      - 34908
+      - R/W
+      -
+
+    * - ``FaxSubAddress``
+      - 34909
+      - R/W
+      -
+
+    * - ``FaxRecvTime``
+      - 34910
+      - R/W
+      -
+
+    * - ``FaxDcs``
+      - 34911
+      - R/W
+      -
 
     * - ``StoNits``
       - 37439
+      - R/W
+      -
+
+    * - ``Adobe Photoshop Document Data Block``
+      - 37724
+      - R/W
+      -
+
+    * - ``InteroperabilityIFDOffset``
+      - 40965
+      - R/W
+      -
+
+    * - ``DNGVersion``
+      - 50706
+      - R/W
+      - DNG 1.0 tags
+
+    * - ``DNGBackwardVersion``
+      - 50707
+      - R/W
+      -
+
+    * - ``UniqueCameraModel``
+      - 50708
+      - R/W
+      -
+
+    * - ``LocalizedCameraModel``
+      - 50709
+      - R/W
+      -
+
+    * - ``CFAPlaneColor``
+      - 50710
+      - R/W
+      -
+
+    * - ``CFALayout``
+      - 50711
+      - R/W
+      -
+
+    * - ``LinearizationTable``
+      - 50712
+      - R/W
+      -
+
+    * - ``BlackLevelRepeatDim``
+      - 50713
+      - R/W
+      -
+
+    * - ``BlackLevel``
+      - 50714
+      - R/W
+      -
+
+    * - ``BlackLevelDeltaH``
+      - 50715
+      - R/W
+      -
+
+    * - ``BlackLevelDeltaV``
+      - 50716
+      - R/W
+      -
+
+    * - ``WhiteLevel``
+      - 50717
+      - R/W
+      -
+
+    * - ``DefaultScale``
+      - 50718
+      - R/W
+      -
+
+    * - ``DefaultCropOrigin``
+      - 50719
+      - R/W
+      -
+
+    * - ``DefaultCropSize``
+      - 50720
+      - R/W
+      -
+
+    * - ``ColorMatrix1``
+      - 50721
+      - R/W
+      -
+
+    * - ``ColorMatrix2``
+      - 50722
+      - R/W
+      -
+
+    * - ``CameraCalibration1``
+      - 50723
+      - R/W
+      -
+
+    * - ``CameraCalibration2``
+      - 50724
+      - R/W
+      -
+
+    * - ``ReductionMatrix1``
+      - 50725
+      - R/W
+      -
+
+    * - ``ReductionMatrix2``
+      - 50726
+      - R/W
+      -
+
+    * - ``AnalogBalance``
+      - 50727
+      - R/W
+      -
+
+    * - ``AsShotNeutral``
+      - 50728
+      - R/W
+      -
+
+    * - ``AsShotWhiteXY``
+      - 50729
+      - R/W
+      -
+
+    * - ``BaselineExposure``
+      - 50730
+      - R/W
+      -
+
+    * - ``BaselineNoise``
+      - 50731
+      - R/W
+      -
+
+    * - ``BaselineSharpness``
+      - 50732
+      - R/W
+      -
+
+    * - ``BayerGreenSplit``
+      - 50733
+      - R/W
+      -
+
+    * - ``LinearResponseLimit``
+      - 50734
+      - R/W
+      -
+
+    * - ``CameraSerialNumber``
+      - 50735
+      - R/W
+      -
+
+    * - ``LensInfo``
+      - 50736
+      - R/W
+      -
+
+    * - ``ChromaBlurRadius``
+      - 50737
+      - R/W
+      -
+
+    * - ``AntiAliasStrength``
+      - 50738
+      - R/W
+      -
+
+    * - ``ShadowScale``
+      - 50739
+      - R/W
+      -
+
+    * - ``DNGPrivateData``
+      - 50740
+      - R/W
+      -
+
+    * - ``MakerNoteSafety``
+      - 50741
+      - R/W
+      -
+
+    * - ``CalibrationIlluminant1``
+      - 50778
+      - R/W
+      -
+
+    * - ``CalibrationIlluminant2``
+      - 50779
+      - R/W
+      -
+
+    * - ``BestQualityScale``
+      - 50780
+      - R/W
+      -
+
+    * - ``RawDataUniqueID``
+      - 50781
+      - R/W
+      -
+
+    * - ``OriginalRawFileName``
+      - 50827
+      - R/W
+      -
+
+    * - ``OriginalRawFileData``
+      - 50828
+      - R/W
+      -
+
+    * - ``ActiveArea``
+      - 50829
+      - R/W
+      -
+
+    * - ``MaskedAreas``
+      - 50830
+      - R/W
+      -
+
+    * - ``AsShotICCProfile``
+      - 50831
+      - R/W
+      -
+
+    * - ``AsShotPreProfileMatrix``
+      - 50832
+      - R/W
+      -
+
+    * - ``CurrentICCProfile``
+      - 50833
+      - R/W
+      -
+
+    * - ``CurrentPreProfileMatrix``
+      - 50834
+      - R/W
+      -
+
+    * - ``PerSample``
+      - 65563
+      - R/W
+      -  (only internal pseudo tag)
+
+    * - ``ColorimetricReference``
+      - 50879
+      - R/W
+      - DNG 1.2 tags
+
+    * - ``CameraCalibrationSignature``
+      - 50931
+      - R/W
+      -
+
+    * - ``ProfileCalibrationSignature``
+      - 50932
+      - R/W
+      -
+
+    * - ``ExtraCameraProfiles``
+      - 50933
+      - R/W
+      -
+
+    * - ``AsShotProfileName``
+      - 50934
+      - R/W
+      -
+
+    * - ``NoiseReductionApplied``
+      - 50935
+      - R/W
+      -
+
+    * - ``ProfileName``
+      - 50936
+      - R/W
+      -
+
+    * - ``ProfileHueSatMapDims``
+      - 50937
+      - R/W
+      -
+
+    * - ``ProfileHueSatMapData1``
+      - 50938
+      - R/W
+      -
+
+    * - ``ProfileHueSatMapData2``
+      - 50939
+      - R/W
+      -
+
+    * - ``ProfileToneCurve``
+      - 50940
+      - R/W
+      -
+
+    * - ``ProfileEmbedPolicy``
+      - 50941
+      - R/W
+      -
+
+    * - ``ProfileCopyright``
+      - 50942
+      - R/W
+      -
+
+    * - ``ForwardMatrix1``
+      - 50964
+      - R/W
+      -
+
+    * - ``ForwardMatrix2``
+      - 50965
+      - R/W
+      -
+
+    * - ``PreviewApplicationName``
+      - 50966
+      - R/W
+      -
+
+    * - ``PreviewApplicationVersion``
+      - 50967
+      - R/W
+      -
+
+    * - ``PreviewSettingsName``
+      - 50968
+      - R/W
+      -
+
+    * - ``PreviewSettingsDigest``
+      - 50969
+      - R/W
+      -
+
+    * - ``PreviewColorSpace``
+      - 50970
+      - R/W
+      -
+
+    * - ``PreviewDateTime``
+      - 50971
+      - R/W
+      -
+
+    * - ``RawImageDigest``
+      - 50972
+      - R/W
+      -
+
+    * - ``OriginalRawFileDigest``
+      - 50973
+      - R/W
+      -
+
+    * - ``SubTileBlockSize``
+      - 50974
+      - R/W
+      -
+
+    * - ``RowInterleaveFactor``
+      - 50975
+      - R/W
+      -
+
+    * - ``ProfileLookTableDims``
+      - 50981
+      - R/W
+      -
+
+    * - ``ProfileLookTableData``
+      - 50982
+      - R/W
+      -
+
+    * - ``OpcodeList1``
+      - 51008
+      - R/W
+      - DNG 1.3 tags
+
+    * - ``OpcodeList2``
+      - 51009
+      - R/W
+      -
+
+    * - ``OpcodeList3``
+      - 51022
+      - R/W
+      -
+
+    * - ``NoiseProfile``
+      - 51041
+      - R/W
+      -
+
+    * - ``DefaultUserCrop``
+      - 51125
+      - R/W
+      - DNG 1.4 tags
+
+    * - ``DefaultBlackRender``
+      - 51110
+      - R/W
+      -
+
+    * - ``BaselineExposureOffset``
+      - 51109
+      - R/W
+      -
+
+    * - ``ProfileLookTableEncoding``
+      - 51108
+      - R/W
+      -
+
+    * - ``ProfileHueSatMapEncoding``
+      - 51107
+      - R/W
+      -
+
+    * - ``OriginalDefaultFinalSize``
+      - 51089
+      - R/W
+      -
+
+    * - ``OriginalBestQualityFinalSize``
+      - 51090
+      - R/W
+      -
+
+    * - ``OriginalDefaultCropSize``
+      - 51091
+      - R/W
+      -
+
+    * - ``NewRawImageDigest``
+      - 51111
+      - R/W
+      -
+
+    * - ``RawToPreviewGain``
+      - 51112
+      - R/W
+      -
+
+    * - ``DepthFormat``
+      - 51177
+      - R/W
+      - DNG 1.5 tags
+
+    * - ``DepthNear``
+      - 51178
+      - R/W
+      -
+
+    * - ``DepthFar``
+      - 51179
+      - R/W
+      -
+
+    * - ``DepthUnits``
+      - 51180
+      - R/W
+      -
+
+    * - ``DepthMeasureType``
+      - 51181
+      - R/W
+      -
+
+    * - ``EnhanceParams``
+      - 51182
+      - R/W
+      -
+
+    * - ``ProfileGainTableMap``
+      - 52525
+      - R/W
+      - DNG 1.6 tags
+
+    * - ``SemanticName``
+      - 52526
+      - R/W
+      -
+
+    * - ``SemanticInstanceID``
+      - 52528
+      - R/W
+      -
+
+    * - ``MaskSubArea``
+      - 52536
+      - R/W
+      -
+
+    * - ``RGBTables``
+      - 52543
+      - R/W
+      -
+
+    * - ``CalibrationIlluminant3``
+      - 52529
+      - R/W
+      -
+
+    * - ``ColorMatrix3``
+      - 52531
+      - R/W
+      -
+
+    * - ``CameraCalibration3``
+      - 52530
+      - R/W
+      -
+
+    * - ``ReductionMatrix3``
+      - 52538
+      - R/W
+      -
+
+    * - ``ProfileHueSatMapData3``
+      - 52537
+      - R/W
+      -
+
+    * - ``ForwardMatrix3``
+      - 52532
+      - R/W
+      -
+
+    * - ``IlluminantData1``
+      - 52533
+      - R/W
+      -
+
+    * - ``IlluminantData2``
+      - 52534
+      - R/W
+      -
+
+    * - ``IlluminantData3``
+      - 53535
+      - R/W
+      -
+
+    * - ``EP CFARepeatPatternDim``
+      - 33421
+      - R/W
+      - TIFF/EP tags
+
+    * - ``EP CFAPattern``
+      - 33422
+      - R/W
+      -
+
+    * - ``EP BatteryLevel``
+      - 33423
+      - R/W
+      -
+
+    * - ``EP Interlace``
+      - 34857
+      - R/W
+      -
+
+    * - ``EP TimeZoneOffset``
+      - 34858
+      - R/W
+      -
+
+    * - ``EP SelfTimerMode``
+      - 34859
+      - R/W
+      -
+
+    * - ``EP FlashEnergy``
+      - 37387
+      - R/W
+      -
+
+    * - ``EP SpatialFrequencyResponse``
+      - 37388
+      - R/W
+      -
+
+    * - ``EP Noise``
+      - 37389
+      - R/W
+      -
+
+    * - ``EP FocalPlaneXResolution``
+      - 37390
+      - R/W
+      -
+
+    * - ``EP FocalPlaneYResolution``
+      - 37391
+      - R/W
+      -
+
+    * - ``EP FocalPlaneResolutionUnit``
+      - 37392
+      - R/W
+      -
+
+    * - ``EP ImageNumber``
+      - 37393
+      - R/W
+      -
+
+    * - ``EP SecurityClassification``
+      - 37394
+      - R/W
+      -
+
+    * - ``EP ImageHistory``
+      - 37395
+      - R/W
+      -
+
+    * - ``EP ExposureIndex``
+      - 37397
+      - R/W
+      -
+
+    * - ``EP StandardId``
+      - 37398
+      - R/W
+      -
+
+    * - ``EP SensingMethod``
+      - 37399
+      - R/W
+      -
+
+    * - ``EP ExposureTime``
+      - 33434
+      - R/W
+      - TIFF/EP tags equivalent to EXIF tags
+
+    * - ``EP FNumber``
+      - 33437
+      - R/W
+      -
+
+    * - ``EP ExposureProgram``
+      - 34850
+      - R/W
+      -
+
+    * - ``EP SpectralSensitivity``
+      - 34852
+      - R/W
+      -
+
+    * - ``EP ISOSpeedRatings``
+      - 34855
+      - R/W
+      -
+
+    * - ``EP OptoelectricConversionFactor``
+      - 34856
+      - R/W
+      -
+
+    * - ``EP DateTimeOriginal``
+      - 36867
+      - R/W
+      -
+
+    * - ``EP CompressedBitsPerPixel``
+      - 37122
+      - R/W
+      -
+
+    * - ``EP ShutterSpeedValue``
+      - 37377
+      - R/W
+      -
+
+    * - ``EP ApertureValue``
+      - 37378
+      - R/W
+      -
+
+    * - ``EP BrightnessValue``
+      - 37379
+      - R/W
+      -
+
+    * - ``EP ExposureBiasValue``
+      - 37380
+      - R/W
+      -
+
+    * - ``EP MaxApertureValue``
+      - 37381
+      - R/W
+      -
+
+    * - ``EP SubjectDistance``
+      - 37382
+      - R/W
+      -
+
+    * - ``EP MeteringMode``
+      - 37383
+      - R/W
+      -
+
+    * - ``EP LightSource``
+      - 37384
+      - R/W
+      -
+
+    * - ``EP Flash``
+      - 37385
+      - R/W
+      -
+
+    * - ``EP FocalLength``
+      - 37386
+      - R/W
+      -
+
+    * - ``EP SubjectLocation``
+      - 37396
+      - R/W
+      -
+
+    * - ``Indexed``
+      - 346
+      - R/W
+      - TIFF/FX tags
+
+    * - ``GlobalParametersIFD``
+      - 400
+      - R/W
+      -
+
+    * - ``ProfileType``
+      - 401
+      - R/W
+      -
+
+    * - ``FaxProfile``
+      - 402
+      - R/W
+      -
+
+    * - ``CodingMethods``
+      - 403
+      - R/W
+      -
+
+    * - ``VersionYear``
+      - 404
+      - R/W
+      -
+
+    * - ``ModeNumber``
+      - 405
+      - R/W
+      -
+
+    * - ``Decode``
+      - 433
+      - R/W
+      -
+
+    * - ``ImageBaseColor``
+      - 434
+      - R/W
+      -
+
+    * - ``T82Options``
+      - 435
+      - R/W
+      -
+
+    * - ``StripRowCounts``
+      - 559
+      - R/W
+      - part of RFC 2301 for fax
+
+    * - ``ImageLayer``
+      - 34732
       - R/W
       -
 
@@ -555,6 +1465,9 @@ that if you use Associated Alpha, you are expected to save data that is
 pre-multipled by Alpha.  If this means nothing to you, check out
 Porter & Duff's paper in the '84 SIGGRAPH proceedings: "Compositing Digital
 Images".
+
+Tag ``RichTIFFIPTC`` (33723)is defined wrongly in TIFF/EP definition as "LONG or ASCII".
+``libtiff`` defines it as "UNDEFINED or BYTE".
 
 The ``ImageDepth``
 tag is a non-standard, but registered tag that specifies
@@ -569,7 +1482,700 @@ subvolume "tiling" of a volume of data.
 The Colorimetry, and CMYK tags are additions that appear in TIFF 6.0.
 Consult the TIFF 6.0 specification and :doc:`index`.
 
+Codecs / Compression
+--------------------
+
+The following tags are used by codecs.
+
+.. list-table:: Codec / Compression Tags used by libtiff
+    :widths: 5 1 1 5
+    :header-rows: 1
+
+    * - Tag Name
+      - Value
+      - R/W<
+      - Library's Use (Comments)
+
+    * - ``Predictor``
+      - 317
+      - R/W
+      - LZW codec
+
+    * - ``JPEGTables``
+      - 347
+      - R/W
+      - JPEG
+
+    * - ``JpegInterchangeFormat``
+      - 513
+      - R/W
+      - OJPEG
+
+    * - ``JpegInterchangeFormatLength``
+      - 514
+      - R/W
+      - OJPEG
+
+    * - ``JpegQTables``
+      - 519
+      - R/W
+      - OJPEG
+
+    * - ``JpegDcTables``
+      - 520
+      - R/W
+      - OJPEG
+
+    * - ``JpegAcTables``
+      - 521
+      - R/W
+      - OJPEG
+
+    * - ``JpegProc``
+      - 512
+      - R/W
+      - OJPEG
+
+    * - ``JpegRestartInterval``
+      - 515
+      - R/W
+      - OJPEG
+
+    * - ``BadFaxLines``
+      - 326
+      - R/W
+      - CCITT / fax
+
+    * - ``CleanFaxData``
+      - 327
+      - R/W
+      - CCITT / fax
+
+    * - ``ConsecutiveBadFaxLines``
+      - 328
+      - R/W
+      - CCITT / fax
+
+    * - ``Group3Options``
+      - 292
+      - R/W
+      - CCITT / fax
+
+    * - ``Group4Options``
+      - 293
+      - R/W
+      - CCITT / fax
+
+    * - ``LercParameters``
+      - 50674
+      - R/W
+      - LERC
+
+Note: This *codec-specific*
+tags and the library does not recognize them except when the
+``Compression``
+tag has been previously set to the relevant compression scheme.
+
 The JPEG-related tag is specified in
 :doc:`technote2`, which defines
 a revised JPEG-in-TIFF scheme (revised over the appendix that was
 part of the TIFF 6.0 specification).
+
+EXIF / GPS Custom IFDs
+----------------------
+
+In addition to the standard TIFF tags, :file:`libtiff` has predefined IFDs
+(image file directories) with the tags for EXIF (version 2.32) and EXIF-GPS
+as custom directories.
+For reading / writing of this IFDs refer to :doc:`/functions/TIFFCustomDirectory`.
+
+EXIF Custom Tags
+................
+
+.. list-table:: EXIF 2.32 Tags used by libtiff
+    :widths: 5 1 1 5
+    :header-rows: 1
+
+    * - Tag Name
+      - Value
+      - R/W<
+      - Library's Use (Comments)
+
+    * - ``ExposureTime``
+      - 33434
+      - R/W
+      -
+
+    * - ``FNumber``
+      - 33437
+      - R/W
+      -
+
+    * - ``ExposureProgram``
+      - 34850
+      - R/W
+      -
+
+    * - ``SpectralSensitivity``
+      - 34852
+      - R/W
+      -
+
+    * - ``ISOSpeedRatings``
+      - 34855
+      - R/W
+      - After EXIF 2.2.1 ISOSpeedRatings is named ``PhotographicSensitivity``.
+        In addition, while "Count=Any", only 1 count should be used. 
+
+    * - ``OptoelectricConversionFactor``
+      - 34856
+      - R/W
+      -
+
+    * - ``SensitivityType``
+      - 34864
+      - R/W
+      -
+
+    * - ``StandardOutputSensitivity``
+      - 34865
+      - R/W
+      -
+
+    * - ``RecommendedExposureIndex``
+      - 34866
+      - R/W
+      -
+
+    * - ``ISOSpeed``
+      - 34867
+      - R/W
+      -
+
+    * - ``ISOSpeedLatitudeyyy``
+      - 34868
+      - R/W
+      -
+
+    * - ``ISOSpeedLatitudezzz``
+      - 34869
+      - R/W
+      -
+
+    * - ``ExifVersion``
+      - 36864
+      - R/W
+      -
+
+    * - ``DateTimeOriginal``
+      - 36867
+      - R/W
+      -
+
+    * - ``DateTimeDigitized``
+      - 36868
+      - R/W
+      -
+
+    * - ``OffsetTime``
+      - 36880
+      - R/W
+      -
+
+    * - ``OffsetTimeOriginal``
+      - 36881
+      - R/W
+      -
+
+    * - ``OffsetTimeDigitized``
+      - 36882
+      - R/W
+      -
+
+    * - ``ComponentsConfiguration``
+      - 37121
+      - R/W
+      -
+
+    * - ``CompressedBitsPerPixel``
+      - 37122
+      - R/W
+      -
+
+    * - ``ShutterSpeedValue``
+      - 37377
+      - R/W
+      -
+
+    * - ``ApertureValue``
+      - 37378
+      - R/W
+      -
+
+    * - ``BrightnessValue``
+      - 37379
+      - R/W
+      -
+
+    * - ``ExposureBiasValue``
+      - 37380
+      - R/W
+      -
+
+    * - ``MaxApertureValue``
+      - 37381
+      - R/W
+      -
+
+    * - ``SubjectDistance``
+      - 37382
+      - R/W
+      -
+
+    * - ``MeteringMode``
+      - 37383
+      - R/W
+      -
+
+    * - ``LightSource``
+      - 37384
+      - R/W
+      -
+
+    * - ``Flash``
+      - 37385
+      - R/W
+      -
+
+    * - ``FocalLength``
+      - 37386
+      - R/W
+      -
+
+    * - ``SubjectArea``
+      - 37396
+      - R/W
+      -
+
+    * - ``MakerNote``
+      - 37500
+      - R/W
+      -
+
+    * - ``UserComment``
+      - 37510
+      - R/W
+      -
+
+    * - ``SubSecTime``
+      - 37520
+      - R/W
+      -
+
+    * - ``SubSecTimeOriginal``
+      - 37521
+      - R/W
+      -
+
+    * - ``SubSecTimeDigitized``
+      - 37522
+      - R/W
+      -
+
+    * - ``Temperature``
+      - 37888
+      - R/W
+      -
+
+    * - ``Humidity``
+      - 37889
+      - R/W
+      -
+
+    * - ``Pressure``
+      - 37890
+      - R/W
+      -
+
+    * - ``WaterDepth``
+      - 37891
+      - R/W
+      -
+
+    * - ``Acceleration``
+      - 37892
+      - R/W
+      -
+
+    * - ``CameraElevationAngle``
+      - 37893
+      - R/W
+      -
+
+    * - ``FlashpixVersion``
+      - 40960
+      - R/W
+      -
+
+    * - ``ColorSpace``
+      - 40961
+      - R/W
+      -
+
+    * - ``PixelXDimension``
+      - 40962
+      - R/W
+      -
+
+    * - ``PixelYDimension``
+      - 40963
+      - R/W
+      -
+
+    * - ``RelatedSoundFile``
+      - 40964
+      - R/W
+      -
+
+    * - ``FlashEnergy``
+      - 41483
+      - R/W
+      -
+
+    * - ``SpatialFrequencyResponse``
+      - 41484
+      - R/W
+      -
+
+    * - ``FocalPlaneXResolution``
+      - 41486
+      - R/W
+      -
+
+    * - ``FocalPlaneYResolution``
+      - 41487
+      - R/W
+      -
+
+    * - ``FocalPlaneResolutionUnit``
+      - 41488
+      - R/W
+      -
+
+    * - ``SubjectLocation``
+      - 41492
+      - R/W
+      -
+
+    * - ``ExposureIndex``
+      - 41493
+      - R/W
+      -
+
+    * - ``SensingMethod``
+      - 41495
+      - R/W
+      -
+
+    * - ``FileSource``
+      - 41728
+      - R/W
+      -
+
+    * - ``SceneType``
+      - 41729
+      - R/W
+      -
+
+    * - ``CFAPattern``
+      - 41730
+      - R/W
+      -
+
+    * - ``CustomRendered``
+      - 41985
+      - R/W
+      -
+
+    * - ``ExposureMode``
+      - 41986
+      - R/W
+      -
+
+    * - ``WhiteBalance``
+      - 41987
+      - R/W
+      -
+
+    * - ``DigitalZoomRatio``
+      - 41988
+      - R/W
+      -
+
+    * - ``FocalLengthIn35mmFilm``
+      - 41989
+      - R/W
+      -
+
+    * - ``SceneCaptureType``
+      - 41990
+      - R/W
+      -
+
+    * - ``GainControl``
+      - 41991
+      - R/W
+      -
+
+    * - ``Contrast``
+      - 41992
+      - R/W
+      -
+
+    * - ``Saturation``
+      - 41993
+      - R/W
+      -
+
+    * - ``Sharpness``
+      - 41994
+      - R/W
+      -
+
+    * - ``DeviceSettingDescription``
+      - 41995
+      - R/W
+      -
+
+    * - ``SubjectDistanceRange``
+      - 41996
+      - R/W
+      -
+
+    * - ``ImageUniqueID``
+      - 42016
+      - R/W
+      -
+
+    * - ``CameraOwnerName``
+      - 42032
+      - R/W
+      -
+
+    * - ``BodySerialNumber``
+      - 42033
+      - R/W
+      -
+
+    * - ``LensSpecification``
+      - 42034
+      - R/W
+      -
+
+    * - ``LensMake``
+      - 42035
+      - R/W
+      -
+
+    * - ``LensModel``
+      - 42036
+      - R/W
+      -
+
+    * - ``LensSerialNumber``
+      - 42037
+      - R/W
+      -
+
+    * - ``Gamma``
+      - 42240
+      - R/W
+      -
+
+    * - ``CompositeImage``
+      - 42080
+      - R/W
+      -
+
+    * - ``SourceImageNumberOfCompositeImage``
+      - 42081
+      - R/W
+      -
+
+    * - ``SourceExposureTimesOfCompositeImage``
+      - 42082
+      - R/W
+      -
+
+GPS Custom Tags
+...............
+
+.. list-table:: GPS 2.32 Tags used by libtiff
+    :widths: 5 1 1 5
+    :header-rows: 1
+
+    * - Tag Name
+      - Value
+      - R/W<
+      - Library's Use (Comments)
+
+    * - ``VersionID``
+      - 0
+      - R/W
+      -
+
+    * - ``LatitudeRef``
+      - 1
+      - R/W
+      -
+
+    * - ``Latitude``
+      - 2
+      - R/W
+      -
+
+    * - ``LongitudeRef``
+      - 3
+      - R/W
+      -
+
+    * - ``Longitude``
+      - 4
+      - R/W
+      -
+
+    * - ``AltitudeRef``
+      - 5
+      - R/W
+      -
+
+    * - ``Altitude``
+      - 6
+      - R/W
+      -
+
+    * - ``TimeStamp``
+      - 7
+      - R/W
+      -
+
+    * - ``Satellites``
+      - 8
+      - R/W
+      -
+
+    * - ``Status``
+      - 9
+      - R/W
+      -
+
+    * - ``MeasureMode``
+      - 10
+      - R/W
+      -
+
+    * - ``DOP``
+      - 11
+      - R/W
+      -
+
+    * - ``SpeedRef``
+      - 12
+      - R/W
+      -
+
+    * - ``Speed``
+      - 13
+      - R/W
+      -
+
+    * - ``TrackRef``
+      - 14
+      - R/W
+      -
+
+    * - ``Track``
+      - 15
+      - R/W
+      -
+
+    * - ``ImgDirectionRef``
+      - 16
+      - R/W
+      -
+
+    * - ``ImgDirection``
+      - 17
+      - R/W
+      -
+
+    * - ``MapDatum``
+      - 18
+      - R/W
+      -
+
+    * - ``DestLatitudeRef``
+      - 19
+      - R/W
+      -
+
+    * - ``DestLatitude``
+      - 20
+      - R/W
+      -
+
+    * - ``DestLongitudeRef``
+      - 21
+      - R/W
+      -
+
+    * - ``DestLongitude``
+      - 22
+      - R/W
+      -
+
+    * - ``DestBearingRef``
+      - 23
+      - R/W
+      -
+
+    * - ``DestBearing``
+      - 24
+      - R/W
+      -
+
+    * - ``DestDistanceRef``
+      - 25
+      - R/W
+      -
+
+    * - ``DestDistance``
+      - 26
+      - R/W
+      -
+
+    * - ``ProcessingMethod``
+      - 27
+      - R/W
+      -
+
+    * - ``AreaInformation``
+      - 28
+      - R/W
+      -
+
+    * - ``DateStamp``
+      - 29
+      - R/W
+      -
+
+    * - ``Differential``
+      - 30
+      - R/W
+      -
+
+    * - ``HorizontalPositioningError``
+      - 31
+      - R/W
+      -
+

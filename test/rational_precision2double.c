@@ -322,7 +322,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     char *tFieldName;
 
 #define STRSIZE 1000
-#define N_SIZE 200
+#define N_SIZE 400
 #define VARIABLE_ARRAY_SIZE 6
 
     /* -- Test data for writing -- */
