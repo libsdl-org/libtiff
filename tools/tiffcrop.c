@@ -2472,8 +2472,13 @@ main(int argc, char* argv[])
         {  /* Whole image or sections not based on output page size */
         if (crop.selections > 0)
           {
-	  writeSelections(in, &out, &crop, &image, &dump, seg_buffs,
-                          mp, argv[argc - 1], &next_page, total_pages);
+	  if (writeSelections(in, &out, &crop, &image, &dump, seg_buffs,
+	                      mp, argv[argc - 1], &next_page, total_pages))
+	      {
+	         TIFFError("main",
+	                   "Unable to write new image selections");
+	         exit(EXIT_FAILURE);
+	      }
           }
 	else  /* One file all images and sections */
           {
