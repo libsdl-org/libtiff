@@ -29,6 +29,8 @@ In the case of several SubIFDs of a main image, there are two possibilities
 that are not even mutually exclusive.
 
 a. The ``SubIFD`` tag contains an array with all offsets of the SubIFDs.
+   This is called SubIFD tree and DNG recommends the use of SubIFD trees,
+   as described in the TIFF-EP specification. SubIFD chains are not supported.
 b. The SubIFDs are concatenated with their ``NextIFD`` parameters
    to a SubIFD chain.
 
