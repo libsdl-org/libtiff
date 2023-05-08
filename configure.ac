@@ -255,22 +255,6 @@ dnl Will use local replacements for unavailable functions
 AC_REPLACE_FUNCS(getopt)
 
 dnl ---------------------------------------------------------------------------
-dnl Check the native cpu bit order.
-dnl ---------------------------------------------------------------------------
-AC_MSG_CHECKING([native cpu bit order])
-case "$host_cpu" in
-    i*86*|x86_64*)
-        HOST_FILLORDER=FILLORDER_LSB2MSB
-	AC_MSG_RESULT([lsb2msb])
-	;;
-    *)
-	HOST_FILLORDER=FILLORDER_MSB2LSB
-	AC_MSG_RESULT([msb2lsb])
-        ;;
-esac
-AC_DEFINE_UNQUOTED(HOST_FILLORDER, $HOST_FILLORDER, [Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB)])
-
-dnl ---------------------------------------------------------------------------
 dnl Configure legacy tifconf.h HOST_BIGENDIAN.
 dnl ---------------------------------------------------------------------------
 if test "$ac_cv_c_bigendian" = yes ; then
