@@ -150,6 +150,11 @@ if(NOT BUILD_SHARED_LIBS)
   target_sources(rational_precision2double PRIVATE rational_precision2double.c)
   target_link_libraries(rational_precision2double PRIVATE tiff tiff_port)
   list(APPEND simple_tests rational_precision2double)
+  
+  add_executable(test_write_read_tags ../placeholder.h)
+  target_sources(test_write_read_tags PRIVATE test_write_read_tags.c)
+  target_link_libraries(test_write_read_tags PRIVATE tiff)
+  list(APPEND simple_tests test_write_read_tags)
 endif()
 
 add_executable(custom_dir_EXIF_231 ../placeholder.h)
