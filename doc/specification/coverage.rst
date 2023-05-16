@@ -1466,7 +1466,7 @@ pre-multipled by Alpha.  If this means nothing to you, check out
 Porter & Duff's paper in the '84 SIGGRAPH proceedings: "Compositing Digital
 Images".
 
-Tag ``RichTIFFIPTC`` (33723)is defined wrongly in TIFF/EP definition as "LONG or ASCII".
+Tag ``RichTIFFIPTC`` (33723) is defined wrongly in TIFF/EP definition as "LONG or ASCII".
 ``libtiff`` defines it as "UNDEFINED or BYTE".
 
 The ``ImageDepth``
