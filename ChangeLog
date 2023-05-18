@@ -1,6 +1,75 @@
-2023-05-07  Su_Laus  <sulau@freenet.de>
+2023-05-18  Even Rouault  <even.rouault@spatialys.com>
 
-	Prepare release 4.5.1.
+	Merge branch 'fix_559_DNG_1.6_passcount_error' into 'master'
+	Fix #559 DNG 1.6 passcount assertion
+
+	Closes #574 et #559
+
+	See merge request libtiff/libtiff!489
+
+2023-05-18  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_557_TagExtender_for_CustomDirectories_not_possible' into 'master'
+	manpage: TIFFSetTagExtender() cannot add tags to custom directories. Closes #557.
+
+	Closes #557
+
+	See merge request libtiff/libtiff!490
+
+2023-05-17  Su_Laus  <sulau@freenet.de>
+
+	Documentation update: TIFFSetTagExtender() cannot add tags to custom directories.
+	Closes #557.
+
+2023-05-16  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_558' into 'master'
+	Hardcode HOST_FILLORDER to FILLORDER_LSB2MSB, and make 'H' flag of TIFFOpen()...
+
+	See merge request libtiff/libtiff!488
+
+2023-05-16  Su_Laus  <sulau@freenet.de>
+
+	Fix #559 DNG 1.6 passcount assertion.
+	Amend DNG tags definition introduced with MR 482:
+	- DNG 1.6 tags specified as UTF-8 strings are defined as variable TIFF_BYTE with  passcount=TRUE.
+	- For all tags with TIFF_SETGET_C32_UINT8 the readcount and writecount were corrected to -3 (TIFF_VARIABLE2).
+
+	Testprogram to write and read all tags defined within LibTIFF is introduced.
+	It also checks for valid passcount flag setting for the defined tags but some special tags are excluded from that check.
+
+	Closes #559.
+
+2023-05-09  Even Rouault  <even.rouault@spatialys.com>
+
+	Hardcode HOST_FILLORDER to FILLORDER_LSB2MSB, and make 'H' flag of TIFFOpen() to warn and an alias of FILLORDER_MSB2LSB
+
+	tif_lerc.c: use WORDS_BIGENDIAN instead of HOST_BIGENDIAN.
+
+2023-05-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_484_TIFFDirectory_32_64_bit' into 'master'
+	Fix 484 TIFFDirectory td_fieldsset uses unsigned long which can be 32 or 64 bits.
+
+	Closes #484
+
+	See merge request libtiff/libtiff!471
+
+2023-05-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'DNG_1.6_EP_tags' into 'master'
+	Add DNG tags up to version 1.6.0.0 and some TIFF/EP tags and update documentation
+
+	See merge request libtiff/libtiff!482
+
+2023-05-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'issue547' into 'master'
+	do not install libtiff-4.pc when tiff-install is reset
+
+	Closes #547
+
+	See merge request libtiff/libtiff!481
 
 2023-05-06  Even Rouault  <even.rouault@spatialys.com>
 
@@ -41,16 +110,19 @@
 
 	LZWDecode(): avoid crash when trying to read again from a strip whith a missing end-of-information marker (fixes #548)
 
-2023-04-21  Even Rouault  <even.rouault@spatialys.com>
+2023-04-25  Su_Laus  <sulau@freenet.de>
 
-	Merge branch 'mymaster1' into 'master'
-	fix runtime error: applying zero offset to null pointer
+	Add DNG tags up to version 1.6.0.0 and some TIFF/EP tags and update documentation
+	Amend MR !337 'Add support for DNG tags up to version 1.6.0.0 and some TIFF/EP tags' from Sami Liedes:
+	- Set most tags to OkToChange=1.
+	- Define BATTERYLEVEL tag as ASCII and convert values of rational variant to ASCII.
+	- TIFF documentation updated for tags recognized by LibTiff (DNG 1.6 and others).
+	- TIFF/EP tags added, which are equivalent to EXIF tags. This addresses part of #418 as well.
+	- Definition of tags reformatted (clang-format off) for better readability of tag comments in tiff.h and tif_dirinfo.c
 
-	See merge request libtiff/libtiff!479
+2023-04-23  Roman  <kosobrodov@fastmail.fm>
 
-2023-04-21  xiaoxiaoafeifei  <lliangliang2007@163.com>
-
-	countInkNamesString(): fix `UndefinedBehaviorSanitizer`: applying zero offset to null pointer
+	do not install libtiff-4.pc when tiff-install is reset.
 
 2023-04-21  Even Rouault  <even.rouault@spatialys.com>
 
@@ -176,6 +248,11 @@
 	Reuse of read_buff within loadImage() from previous image is quite unsafe, because other functions (like rotateImage() etc.) reallocate that buffer with different size without updating the local prev_readsize value.
 
 	Closes #527
+
+2023-02-08  Su_Laus  <sulau@freenet.de>
+
+	Fix 484 TIFFDirectory td_fieldsset uses unsigned long which can be 32 or 64 bits.
+	Closes #484
 
 2023-02-08  Even Rouault  <even.rouault@spatialys.com>
 

@@ -33,6 +33,14 @@ None
 Software configuration changes
 ------------------------------
 
+* test: add :file:`test_write_read_tags.c`, which writes and then 
+  reads and checks nearly all tags defined in :file:`tif_dirinfo.c`.
+
+* Definition of tags reformatted (clang-format off) for better
+  readability of tag comments in tiff.h and tif_dirinfo.c
+
+* Do not install libtiff-4.pc when tiff-install is reset.
+
 * test: avoid running tool tests if not built
   (:issue:`421`).
 
@@ -50,6 +58,16 @@ Library changes
 
 New/improved functionalities:
 
+* Hardcode HOST_FILLORDER to FILLORDER_LSB2MSB and make 'H' flag of
+  :c:func:`TIFFOpen` to warn and an alias of FILLORDER_MSB2LSB. 
+  :file:`tif_lerc.c`: use WORDS_BIGENDIAN instead of HOST_BIGENDIAN.
+
+* Add DNG tags up to version 1.6.0.0 and some TIFF/EP tags and update documentation.
+	- Set most tags to OkToChange=1.
+	- Define BATTERYLEVEL tag as ASCII and convert values of rational variant to ASCII.
+	- TIFF documentation updated for tags recognized by LibTiff (DNG 1.6 and others).
+	- TIFF/EP tags added, which are equivalent to EXIF tags.
+
 * Optimize relative seeking within :c:func:`TIFFSetDirectory`
   by using the learned list of IFD offsets.
 
@@ -65,6 +83,14 @@ API/ABI breaks:
 * None
 
 Bug fixes:
+
+* TIFFDirectory td_fieldsset type changed from unsigned long, which can
+  be 32 or 64 bits, to uint32_t (fixes :issue:`484`).
+
+*	tif_ojpeg.c: checking for division by zero (fixes :issue:`554`).
+
+* LZWDecode(): avoid crash when trying to read again from a strip whith
+  a missing end-of-information marker (fixes :issue:`548`).
 
 * Fixed runtime error: applying zero offset to null pointer
   in :c:func:`countInkNamesString`.
@@ -106,6 +132,8 @@ New/improved functionality:
 * None
 
 Bug fixes:
+
+*	:program:`tiffcrop`: Consider error return of writeSelections() (fixes :issue:`553`).
 
 * :program:`tiffcrop`: fix memory leak
   (:issue:`475`).
