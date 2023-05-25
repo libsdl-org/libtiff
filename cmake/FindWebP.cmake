@@ -85,7 +85,7 @@ if(WebP_FOUND)
 
         if(NOT WebP_LIBRARY_RELEASE AND NOT WebP_LIBRARY_DEBUG)
             set_target_properties(WebP::webp PROPERTIES
-                    IMPORTED_LOCATION_RELEASE "${WebP_LIBRARY}")
+                    IMPORTED_LOCATION "${WebP_LIBRARY}")
         endif()
     endif()
 endif()
