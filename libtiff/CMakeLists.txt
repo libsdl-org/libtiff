@@ -209,7 +209,6 @@ if(tiff-install)
   configure_file(${PROJECT_SOURCE_DIR}/cmake/TiffConfig.cmake.in
                  ${CMAKE_CURRENT_BINARY_DIR}/TiffConfig.cmake @ONLY)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TiffConfig.cmake DESTINATION ${TIFF_CONFIGDIR})
-
 endif()
 
 if(CXX_SUPPORT)
