@@ -193,6 +193,7 @@ rst_sources = \
 	releases/v4.0.4.rst \
 	releases/v3.7.2.rst \
 	releases/v4.5.0.rst \
+	releases/v4.5.1.rst \
 	functions.rst \
 	tools.rst \
 	terms.rst \
