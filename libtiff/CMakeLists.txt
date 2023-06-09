@@ -46,7 +46,7 @@ set(tiff_private_HEADERS
 
 
 add_library(tiff libtiff.def)
-add_library(TIFF::TIFF ALIAS tiff)
+add_library(TIFF::tiff ALIAS tiff)
 
 target_sources(tiff PRIVATE
         ${tiff_public_HEADERS}
@@ -104,6 +104,7 @@ target_include_directories(tiff
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${TIFF_INCLUDES}
 )
@@ -197,6 +198,17 @@ if(tiff-install)
           NAMESPACE TIFF::
           DESTINATION ${TIFF_CONFIGDIR}
   )
+
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file(
+    TiffConfigVersion.cmake
+    VERSION ${LIBTIFF_VERSION}
+    COMPATIBILITY SameMajorVersion)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TiffConfigVersion.cmake DESTINATION ${TIFF_CONFIGDIR})
+
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/TiffConfig.cmake.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/TiffConfig.cmake @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TiffConfig.cmake DESTINATION ${TIFF_CONFIGDIR})
 endif()
 
 if(CXX_SUPPORT)

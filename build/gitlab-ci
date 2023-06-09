@@ -51,6 +51,12 @@ cmake_build()
     $COVERITY_BUILD cmake --build .
     cmake --build . --target install
     ctest -V
+    cd ..
+    # Build test project using find_package(Tiff CONFIG)
+    mkdir cmake-test-build
+    cd cmake-test-build
+    cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" "-DTiff_DIR=$PWD/../cmake-install/lib/cmake/tiff" -S ../build/test_cmake -B .
+    cmake --build .
 }
 
 # Static-analysis with coverity
