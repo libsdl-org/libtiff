@@ -1,3 +1,139 @@
+2023-06-09  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff v4.5.1 released
+
+2023-06-09  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge remote-tracking branch 'sulaus/Rel_4.5.1_preparation'
+
+2023-06-09  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'disable_dng_tags' into 'master'
+	tif_dirinfo.c: disable DNG 1.2->1.6 tags
+
+	Closes #575
+
+	See merge request libtiff/libtiff!497
+
+2023-06-09  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_577' into 'master'
+	CMake related fixes
+
+	Closes #577
+
+	See merge request libtiff/libtiff!496
+
+2023-06-07  Even Rouault  <even.rouault@spatialys.com>
+
+	tif_dirinfo.c: disable DNG 1.2->1.6 tags.
+	They were added per b90b20d36d7833f54a1f3014c324f6c21b988006 but it has
+	been found in https://gitlab.com/libtiff/libtiff/-/issues/575 that it
+	could cause compatibity issues with libtiff users, so this addition
+	should be defered for a feature release (likely 4.6.0) and not a patch one.
+
+	Fixes #575
+
+2023-06-06  Timothy Lyanguzov  <theta682@gmail.com>
+
+	Apply 1 suggestion(s) to 1 file(s)
+
+2023-06-05  Even Rouault  <even.rouault@spatialys.com>
+
+	CI: add testing of find_package(Tiff CONFIG)
+
+	CMake: export TiffConfig.cmake and TiffConfigVersion.cmake files.
+
+	libtiff/CMakeLists.txt: fix export of INTERFACE_INCLUDE_DIRECTORIES.
+
+	libtiff/CMakeLists.txt: correctly define TIFF::tiff alias (fixes #577)
+
+2023-06-05  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'TIFFField_downgrade_errors_to_warnings' into 'master'
+	TIFFFieldWithName() and TIFFFieldWithTag() downgrade errors to warnings.
+
+	See merge request libtiff/libtiff!495
+
+2023-05-28  Su_Laus  <sulau@freenet.de>
+
+	TIFFFieldWithName() and TIFFFieldWithTag() downgrade errors to warnings. see https://gitlab.com/libtiff/libtiff/-/issues/575#note_1407633888
+
+2023-05-25  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'bebuch-master-patch-58347' into 'master'
+	check if upstream lzma (xz) config was used and bind to it if so
+
+	See merge request libtiff/libtiff!494
+
+2023-05-25  Benjamin Buch  <benni.buch@gmail.com>
+
+	check if upstream lzma (xz) config was used and bind to it if so.
+
+2023-05-25  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'upstream-zstd-config' into 'master'
+	check if upstream zstd config was used and bind to it if so
+
+	See merge request libtiff/libtiff!493
+
+2023-05-25  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'cmake_FindDeflate_bugs_see_526' into 'master'
+	CMake: FindDeflate several errors fixed (see #526)
+
+	See merge request libtiff/libtiff!491
+
+2023-05-24  Su_Laus  <sulau@freenet.de>
+
+	CMake: FindDeflate several errors (see #526)
+	There are CMake issues if the library is not included in the environment path and only set with CMake -D option.
+	- For FindDeflate.cmake, FindJBIG.cmake, FindLERC.cmake, FindWebP.cmake, FindZSTD.cmake:
+	  Set IMPORTED_LOCATION (without debug or release) if neither <library>_LIBRARY_RELEASE nor <library>_LIBRARY_DEBUG were set.
+	- FindDeflate.cmake: Correct code to retrieve library version information from libdeflate.h
+	- FindLERC.cmake version string return added.
+
+2023-05-24  Benjamin Buch  <benni.buch@gmail.com>
+
+	prefer shared over static.
+
+	check if upstream zstd config was used and bind to it if so.
+
+2023-05-24  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'master' into 'master'
+	make WebP component name compatible with upstream ConfigWebP.cmake
+
+	See merge request libtiff/libtiff!492
+
+2023-05-24  Benjamin Buch  <benni.buch@gmail.com>
+
+	CMake: make WebP component name compatible with upstream ConfigWebP.cmake
+
+2023-05-18  Su_Laus  <sulau@freenet.de>
+
+	Prepare release 4.5.1 - Update till 18.05.23 after fix_559_DNG_1.6_passcount_error
+
+	Prepare release 4.5.1.
+
+2023-05-18  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_559_DNG_1.6_passcount_error' into 'master'
+	Fix #559 DNG 1.6 passcount assertion
+
+	Closes #574 et #559
+
+	See merge request libtiff/libtiff!489
+
+2023-05-18  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'fix_557_TagExtender_for_CustomDirectories_not_possible' into 'master'
+	manpage: TIFFSetTagExtender() cannot add tags to custom directories. Closes #557.
+
+	Closes #557
+
+	See merge request libtiff/libtiff!490
+
 2023-05-18  Even Rouault  <even.rouault@spatialys.com>
 
 	Merge branch 'fix_559_DNG_1.6_passcount_error' into 'master'
