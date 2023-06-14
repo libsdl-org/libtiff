@@ -148,4 +148,6 @@ Notes on releasing.
       scp tiff-*.tar.gz tiff-*.tar.gz.sig tiff-*.tar.xz tiff-*.tar.xz.sig tiff-*.zip tiff-*.zip.sig \
          bfriesen@upload.osgeo.org:/osgeo/download/libtiff
 
-18. Announce to list: tiff@lists.osgeo.org
+18. Create a gitlab release at https://gitlab.com/libtiff/libtiff/-/releases
+
+19. Announce to list: tiff@lists.osgeo.org
