@@ -28,6 +28,15 @@ included in the release package and by the Git commit history:
     default, and issues related to them will no longer be accepted in the
     libtiff bug tracker.
 
+
+.. warning::
+
+    Some CMake related changes, in particular related to the CMake config file
+    now installed, should be considered as a preview and may change in the next
+    releases based on user feedback.
+    See discussion in https://gitlab.com/libtiff/libtiff/-/merge_requests/496
+    and https://gitlab.com/libtiff/libtiff/-/merge_requests/494
+
 Major changes
 -------------
 
