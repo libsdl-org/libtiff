@@ -151,8 +151,9 @@ static int TWebPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
 
         int webp_width, webp_height;
         if (!WebPGetInfo(tif->tif_rawcp,
-                         tif->tif_rawcc > UINT32_MAX ? UINT32_MAX
-                                                     : (uint32_t)tif->tif_rawcc,
+                         (uint64_t)tif->tif_rawcc > UINT32_MAX
+                             ? UINT32_MAX
+                             : (uint32_t)tif->tif_rawcc,
                          &webp_width, &webp_height))
         {
             TIFFErrorExtR(tif, module, "WebPGetInfo() failed");
@@ -177,7 +178,7 @@ static int TWebPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
 
         const bool bWebPGetFeaturesOK =
             WebPGetFeatures(tif->tif_rawcp,
-                            tif->tif_rawcc > UINT32_MAX
+                            (uint64_t)tif->tif_rawcc > UINT32_MAX
                                 ? UINT32_MAX
                                 : (uint32_t)tif->tif_rawcc,
                             &config.input) == VP8_STATUS_OK;
