@@ -68,7 +68,8 @@ before_build:
   - mkdir %AV_TIFF_BUILD%
   - cd %AV_TIFF_BUILD%
   - echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_TIFF_CMAKE_SOURCE%
-  - 'if %compiler%==cygwin-cmake bash -c "cmake -G \"%generator%\" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%"'
+  # Disable doc building because of 'Could not import extension sphinxcontrib.applehelp (exception: No module named 'sphinxcontrib.applehelp')'
+  - 'if %compiler%==cygwin-cmake bash -c "cmake -G \"%generator%\" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE% -Dtiff-docs=off"'
   - 'if %compiler%==mingw-cmake cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
   - 'if %compiler%==vc14-cmake cmake -G "%generator%" -A %arch% -DCMAKE_INSTALL_PREFIX:PATH=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_CMAKE_ARGS% %AV_TIFF_CMAKE_SOURCE%'
 
