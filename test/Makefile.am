@@ -222,6 +222,7 @@ IMAGES_EXTRA_DIST = \
 	images/test_ifd_loop_to_first.tif \
 	images/test_two_ifds.tif \
 	images/test_ifd_loop_subifd.tif \
+	images/webp_lossless_rgba_alpha_fully_opaque.tif \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 

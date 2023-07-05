@@ -395,6 +395,9 @@ if(tiff-tools)
   add_convert_test(tiffcp   noner1     "-c none -r 1"  "images/lzw-single-strip.tiff" FALSE)
   add_convert_test(tiffcp   float64_lzw_2_le "-c lzw:2"       "images/test_float64_predictor2_le_lzw.tif" FALSE)
   add_convert_test(tiffcp   float64_lzw_2_be "-c lzw:2"       "images/test_float64_predictor2_be_lzw.tif" FALSE)
+  if(WEBP_SUPPORT)
+      add_convert_test(tiffcp   webp_lossless_rgba_alpha_fully_opaque "-c none"       "images/webp_lossless_rgba_alpha_fully_opaque.tif" FALSE)
+  endif()
 
   # tiffdump
   add_reader_test(tiffdump "" "images/miniswhite-1c-1b.tiff")
