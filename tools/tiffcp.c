@@ -1754,6 +1754,13 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                   "Width * Samples/Pixel)");
         return 0;
     }
+
+    if ( (imagew - tilew * spp) > INT_MAX ){
+        TIFFError(TIFFFileName(in),
+                  "Error, image raster scan line size is too large");
+        return 0;       
+    }   
+
     iskew = imagew - tilew * spp;
     tilebuf = limitMalloc(tilesize);
     if (tilebuf == 0)
