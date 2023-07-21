@@ -155,6 +155,7 @@ if(NOT BUILD_SHARED_LIBS)
   target_sources(test_write_read_tags PRIVATE test_write_read_tags.c)
   target_link_libraries(test_write_read_tags PRIVATE tiff)
   list(APPEND simple_tests test_write_read_tags)
+  
   add_executable(test_transferfunction_write_read ../placeholder.h)
   target_sources(test_transferfunction_write_read PRIVATE test_transferfunction_write_read.c)
   target_link_libraries(test_transferfunction_write_read PRIVATE tiff)
