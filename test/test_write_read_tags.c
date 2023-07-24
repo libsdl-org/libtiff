@@ -1009,7 +1009,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                 if ((tSetFieldType == TIFF_SETGET_UINT8) &&
                     (auxInt32ArrayW[i] > 255))
                     auxInt32ArrayW[i] = 255;
-                else if ((tSetFieldType == TIFF_SETGET_UINT8) &&
+                else if ((tSetFieldType == TIFF_SETGET_UINT16) &&
                          (auxInt32ArrayW[i] > 65535))
                     auxInt32ArrayW[i] = 65535;
                 if (tTag == TIFFTAG_FILLORDER)
