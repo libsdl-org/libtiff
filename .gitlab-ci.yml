@@ -30,6 +30,11 @@ cmake-makefiles-current:
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
+cmake-makefiles-current-static:
+  stage: build
+  script:
+    - sh build/gitlab-ci cmake "Unix Makefiles" Release static
+
 cmake-ninja-current:
   stage: build
   script:
