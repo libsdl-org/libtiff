@@ -69,7 +69,7 @@ JPEG_DEPENDENT_TESTSCRIPTS=
 endif
 
 if BUILD_STATIC
-STATIC_CHECK_PROGS=rational_precision2double
+STATIC_CHECK_PROGS=rational_precision2double test_write_read_tags test_transferfunction_write_read
 endif
 
 # Executable programs which need to be built in order to support tests
@@ -249,6 +249,14 @@ if BUILD_STATIC
 rational_precision2double_SOURCES = rational_precision2double.c
 rational_precision2double_LDADD = $(LIBTIFF)
 rational_precision2double_LDFLAGS = -static
+
+test_write_read_tags_SOURCES = test_write_read_tags.c
+test_write_read_tags_LDADD = $(LIBTIFF)
+test_write_read_tags_LDFLAGS = -static
+
+test_transferfunction_write_read_SOURCES = test_transferfunction_write_read.c
+test_transferfunction_write_read_LDADD = $(LIBTIFF)
+test_transferfunction_write_read_LDFLAGS = -static
 endif
 
 custom_dir_EXIF_231_SOURCES = custom_dir_EXIF_231.c
