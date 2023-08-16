@@ -60,7 +60,7 @@ distcheck-hook:
 	rm -rf $(distdir)/_build/cmake
 	rm -rf $(distdir)/_inst/cmake
 
-SUBDIRS = port libtiff tools build contrib test doc
+SUBDIRS = port libtiff tools build contrib test doc tools/unsupported
 
 release:
 	(rm -f $(top_srcdir)/RELEASE-DATE && echo $(LIBTIFF_RELEASE_DATE) > $(top_srcdir)/RELEASE-DATE)
