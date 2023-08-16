@@ -319,6 +319,12 @@ AC_ARG_ENABLE(tools,
                              [TIFF_TOOLS=$enableval], [TIFF_TOOLS=yes])
 AM_CONDITIONAL(TIFF_TOOLS, test "$TIFF_TOOLS" = "yes")
 
+AC_ARG_ENABLE(tools-unsupported,
+              AS_HELP_STRING([--enable-tools-unsupported],
+                             [Enable building of unsupported tools]),
+                             [TIFF_TOOLS_UNSUPPORTED=$enableval], [TIFF_TOOLS_UNSUPPORTED=no])
+AM_CONDITIONAL(TIFF_TOOLS_UNSUPPORTED, test "$TIFF_TOOLS_UNSUPPORTED" = "yes")
+
 AC_ARG_ENABLE(tests,
               AS_HELP_STRING([--disable-tests],
                              [Disable building of tests]),
@@ -960,38 +966,6 @@ fi
 AM_CONDITIONAL(HAVE_CXX, test "$HAVE_CXX" = "yes")
 
 dnl ---------------------------------------------------------------------------
-dnl Check for OpenGL and GLUT.
-dnl ---------------------------------------------------------------------------
-
-HAVE_OPENGL=no
-
-AC_ARG_ENABLE(opengl,
-	      AS_HELP_STRING([--disable-opengl],
-			     [disable OpenGL usage (required by tiffgt, enabled by default)]),,)
-
-if test "x$enable_opengl" != "xno" ; then
-
-  AC_PATH_XTRA
-
-  dnl AX_CHECK_GL sets GL_CFLAGS & GL_LIBS.  Also PTHREAD_LIBS,
-  dnl PTHREAD_CFLAGS, & PTHREAD_CC as a side-effect
-  AX_CHECK_GL
-
-  dnl AX_CHECK_GLU sets GLU_CFLAGS & GLU_LIBS
-  AX_CHECK_GLU
-
-  dnl AX_CHECK_GLUT sets GLUT_CFLAGS & GLUT_LIBS
-  AX_CHECK_GLUT
-
-  if test "$no_x" != "yes" -a "$no_gl" != "yes" \
-      -a "$no_glu" != "yes" -a "$no_glut" != "yes" ; then
-    HAVE_OPENGL=yes
-  fi
-fi
-
-AM_CONDITIONAL(HAVE_OPENGL, test "$HAVE_OPENGL" = "yes")
-
-dnl ---------------------------------------------------------------------------
 dnl Check for Win32 IO: make sure we have windows.h but not cygwin
 dnl this must be after the ogl test, since that looks for windows.h and we
 dnl test it
@@ -1211,7 +1185,8 @@ AC_CONFIG_FILES([Makefile \
 		 libtiff/Makefile \
 		 port/Makefile \
 		 test/Makefile \
-		 tools/Makefile])
+		 tools/Makefile \
+		 tools/unsupported/Makefile])
 AC_OUTPUT
 
 dnl ---------------------------------------------------------------------------
@@ -1226,6 +1201,7 @@ LOC_MSG([  Documentation directory:            ${LIBTIFF_DOCDIR}])
 LOC_MSG([  C compiler:                         ${CC} ${CFLAGS}])
 LOC_MSG([  C++ compiler:                       ${CXX} ${CXXFLAGS}])
 LOC_MSG([  Build tools:                        ${TIFF_TOOLS}])
+LOC_MSG([  Build tools-unsupported:            ${TIFF_TOOLS_UNSUPPORTED}])
 LOC_MSG([  Build tests:                        ${TIFF_TESTS}])
 LOC_MSG([  Build contrib:                      ${TIFF_CONTRIB}])
 LOC_MSG([  Build docs:                         ${TIFF_DOCS}])
@@ -1263,6 +1239,5 @@ LOC_MSG()
 LOC_MSG([  C++ support:                        ${HAVE_CXX}])
 LOC_MSG()
 dnl LOC_MSG([  X Athena Widgets support:           ${HAVE_XAW}])
-LOC_MSG([  OpenGL support:                     ${HAVE_OPENGL}])
 LOC_MSG()
 
