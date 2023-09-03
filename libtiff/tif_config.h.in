@@ -85,17 +85,11 @@
 /* Define to the full name of this package. */
 #undef PACKAGE_NAME
 
-/* Define to the full name and version of this package. */
-#undef PACKAGE_STRING
-
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
 /* Define to the home page for this package. */
 #undef PACKAGE_URL
-
-/* Define to the version of this package. */
-#undef PACKAGE_VERSION
 
 /* The size of `size_t', as computed by sizeof. */
 #undef SIZEOF_SIZE_T
@@ -108,9 +102,6 @@
 
 /* define to use win32 IO system */
 #undef USE_WIN32_FILEIO
-
-/* Version number of package */
-#undef VERSION
 
 /* Support webp compression */
 #undef WEBP_SUPPORT

@@ -23,17 +23,21 @@
 # OF THIS SOFTWARE.
 
 # Generate headers
+# and update configuration settings and package / version information.
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tif_config.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h
                @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
                @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffvers.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/tiffvers.h
+               @ONLY)
 
 set(tiff_public_HEADERS
         tiff.h
         tiffio.h
-        tiffvers.h
+        ${CMAKE_CURRENT_BINARY_DIR}/tiffvers.h
         ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h)
 
 set(tiff_private_HEADERS

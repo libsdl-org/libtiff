@@ -44,8 +44,9 @@ LIBTIFF_MINOR_VERSION=5
 LIBTIFF_MICRO_VERSION=1
 LIBTIFF_ALPHA_VERSION=
 LIBTIFF_VERSION=$LIBTIFF_MAJOR_VERSION.$LIBTIFF_MINOR_VERSION.$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION
-dnl This will be used with the 'make release' target
-LIBTIFF_RELEASE_DATE=`date +"%Y%m%d"`
+dnl This (LIBTIFF_RELEASE_DATE) is used to set the #define TIFFLIB_VERSION in tiffvers.h.
+LIBTIFF_RELEASE_DATE=$(cat ${srcdir}/RELEASE-DATE)
+
 
 dnl Libtool library revision control info
 dnl See the libtool documentation under the heading "Libtool's versioning
@@ -1183,6 +1184,7 @@ AC_CONFIG_FILES([Makefile \
 		 doc/Makefile \
 		 libtiff-4.pc \
 		 libtiff/Makefile \
+		 libtiff/tiffvers.h \
 		 port/Makefile \
 		 test/Makefile \
 		 tools/Makefile \
@@ -1195,6 +1197,10 @@ dnl ---------------------------------------------------------------------------
 
 LOC_MSG()
 LOC_MSG([Libtiff is now configured for ${host}])
+LOC_MSG()
+LOC_MSG([  Libtiff build version:              ${LIBTIFF_VERSION}])
+LOC_MSG([  Libtiff library version:            ${LIBTIFF_VERSION_INFO}])
+LOC_MSG([  Libtiff release date:               ${LIBTIFF_RELEASE_DATE}])
 LOC_MSG()
 LOC_MSG([  Installation directory:             ${prefix}])
 LOC_MSG([  Documentation directory:            ${LIBTIFF_DOCDIR}])
