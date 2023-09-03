@@ -82,17 +82,11 @@
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "@PACKAGE_NAME@"
 
-/* Define to the full name and version of this package. */
-#define PACKAGE_STRING "@PACKAGE_STRING@"
-
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "@PACKAGE_TARNAME@"
 
 /* Define to the home page for this package. */
 #define PACKAGE_URL "@PACKAGE_URL@"
-
-/* Define to the version of this package. */
-#define PACKAGE_VERSION "@PACKAGE_VERSION@"
 
 /* Size of size_t */
 #define SIZEOF_SIZE_T @SIZEOF_SIZE_T@
@@ -105,9 +99,6 @@
 
 /* define to use win32 IO system */
 #cmakedefine USE_WIN32_FILEIO 1
-
-/* Version number of package */
-#define VERSION "@PACKAGE_VERSION@"
 
 /* Support WEBP compression */
 #cmakedefine WEBP_SUPPORT 1
