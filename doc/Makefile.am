@@ -178,6 +178,7 @@ rst_sources = \
 	releases/v3.7.2.rst \
 	releases/v4.5.0.rst \
 	releases/v4.5.1.rst \
+	releases/v4.6.0.rst \
 	functions.rst \
 	tools.rst \
 	terms.rst \
@@ -242,6 +243,7 @@ rst_sources = \
 	functions/TIFFSetTagExtender.rst \
 	functions/TIFFStrileQuery.rst \
 	libtiff.rst \
+	multi_page.rst \
 	images.rst
 
 EXTRA_DIST = \
