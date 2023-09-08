@@ -968,13 +968,13 @@ AM_CONDITIONAL(HAVE_CXX, test "$HAVE_CXX" = "yes")
 
 dnl ---------------------------------------------------------------------------
 dnl Check for Win32 IO: make sure we have windows.h but not cygwin
-dnl this must be after the ogl test, since that looks for windows.h and we
-dnl test it
 dnl ---------------------------------------------------------------------------
 
 AC_ARG_ENABLE(win32-io,
 	      AS_HELP_STRING([--disable-win32-io],
 			     [disable Win32 I/O (Windows only, enabled by default except for Cygwin)]),,)
+
+AC_CHECK_HEADER(windows.h)
 
 win32_io_ok=no
 case "${host_os}" in
