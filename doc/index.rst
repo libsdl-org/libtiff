@@ -39,9 +39,12 @@ UNIX (Linux, BSD, MacOS X) and Windows.
     Starting with libtiff v4.6.0, the source code for most TIFF tools (except tiffinfo,
     tiffdump, tiffcp and tiffset) was discontinued, due to the lack of contributors
     able to address reported security issues.
-    It will still be available in the source distribution, but they
-    will no longer be built by default, and issues related to them
-    will no longer be accepted in the libtiff bug tracker.
+    tiff2ps and tiff2pdf source code has been moved in a unsupported category,
+    no longer built by default, but are still part of the the source
+    distribution. Other retired utilities are in a archive/ directory, only
+    available in the libtiff git repository.
+    Issues related to unsupported and archived tools will no longer be accepted
+    in the libtiff bug tracker.
 
 
 The following sections are included in this documentation:

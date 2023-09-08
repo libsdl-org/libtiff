@@ -26,12 +26,15 @@ Major changes
     of maintenance over the years and were the source of various reported
     security issues.
     See "Removed functionality" below for the list of removed utilities.
-    Starting with libtiff v4.6.0, their source code, at this time, will still be
-    available in the source distribution, but they will no longer be built by
-    default, and issues related to them will no longer be accepted in the
-    libtiff bug tracker.
-    The only remaining supported TIFF tools are tiffinfo, tiffdump, tiffcp,
-    tiffset and tiffsplit.
+    Starting with libtiff v4.6.0, the source code for most TIFF tools (except tiffinfo,
+    tiffdump, tiffcp and tiffset) was discontinued, due to the lack of contributors
+    able to address reported security issues.
+    tiff2ps and tiff2pdf source code has been moved in a unsupported category,
+    no longer built by default, but are still part of the the source
+    distribution. Other retired utilities are in a archive/ directory, only
+    available in the libtiff git repository.
+    Issues related to unsupported and archived tools will no longer be accepted
+    in the libtiff bug tracker.
 
 
 Software configuration changes
