@@ -846,6 +846,8 @@ static int tiffcp(TIFF *in, TIFF *out)
     if (!TIFFIsCODECConfigured(compression))
         return FALSE;
     TIFFGetFieldDefaulted(in, TIFFTAG_COMPRESSION, &input_compression);
+    if (!TIFFIsCODECConfigured(input_compression))
+        return FALSE;
     TIFFGetFieldDefaulted(in, TIFFTAG_PHOTOMETRIC, &input_photometric);
     if (input_compression == COMPRESSION_JPEG)
     {
