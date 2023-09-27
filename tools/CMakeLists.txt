@@ -22,8 +22,8 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-# MSVC specific resource preparation
-if (WIN32 AND MSVC)
+# Windows specific resource preparation
+if (WIN32)
   message(STATUS "Include resource version information for TOOLS")
   set(MSVC_RESSOURCE_FILE tif_tools_versioninfo.rc)
   source_group("Resource Files" FILES tif_tools_versioninfo.rc)
