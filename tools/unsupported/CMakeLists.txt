@@ -24,8 +24,8 @@
 
 message(STATUS "====  Tools - Unsupported =========")
 
-# MSVC specific resource preparation
-if (WIN32 AND MSVC)
+# Windows specific resource preparation
+if (WIN32)
   message(STATUS "Include resource version information for TOOLS-UNSUPPORTED")
   set(MSVC_RESSOURCE_FILE tif_tools-unsupported_versioninfo.rc)
   source_group("Resource Files" FILES tif_tools-unsupported_versioninfo.rc)
