@@ -808,10 +808,6 @@ static const struct cpTag
     {TIFFTAG_DOTRANGE, 2, TIFF_SHORT},
     {TIFFTAG_TARGETPRINTER, 1, TIFF_ASCII},
     {TIFFTAG_SAMPLEFORMAT, 1, TIFF_SHORT},
-    {TIFFTAG_YCBCRCOEFFICIENTS, (uint16_t)-1, TIFF_RATIONAL},
-    {TIFFTAG_YCBCRSUBSAMPLING, 2, TIFF_SHORT},
-    {TIFFTAG_YCBCRPOSITIONING, 1, TIFF_SHORT},
-    {TIFFTAG_REFERENCEBLACKWHITE, (uint16_t)-1, TIFF_RATIONAL},
     {TIFFTAG_EXTRASAMPLES, (uint16_t)-1, TIFF_SHORT},
     {TIFFTAG_SMINSAMPLEVALUE, 1, TIFF_DOUBLE},
     {TIFFTAG_SMAXSAMPLEVALUE, 1, TIFF_DOUBLE},
@@ -875,6 +871,18 @@ static int tiffcp(TIFF *in, TIFF *out)
             input_photometric == PHOTOMETRIC_YCBCR)
         {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, jpeg_photometric);
+            if (jpeg_photometric == PHOTOMETRIC_YCBCR)
+            {
+                uint16_t subsamplinghor = 2, subsamplingver = 2;
+                if (input_compression == COMPRESSION_JPEG &&
+                    input_photometric == PHOTOMETRIC_YCBCR)
+                {
+                    TIFFGetFieldDefaulted(in, TIFFTAG_YCBCRSUBSAMPLING,
+                                          &subsamplinghor, &subsamplingver);
+                }
+                TIFFSetField(out, TIFFTAG_YCBCRSUBSAMPLING, subsamplinghor,
+                             subsamplingver);
+            }
         }
         else
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, input_photometric);
@@ -1112,7 +1120,9 @@ static int tiffcp(TIFF *in, TIFF *out)
     }
 
     for (p = tags; p < &tags[NTAGS]; p++)
+    {
         CopyTag(p->tag, p->count, p->type);
+    }
 
     cf = pickCopyFunc(in, out, bitspersample, samplesperpixel);
     return (cf ? (*cf)(in, out, length, width, samplesperpixel) : FALSE);
