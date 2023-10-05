@@ -228,7 +228,7 @@ if(CXX_SUPPORT)
           tiffio.hxx)
 
   # No .def file for this library.
-  if (WIN32)
+  if (WIN32 AND NOT MINGW)
       add_library(tiffxx STATIC ../placeholder.h)
   else()
       add_library(tiffxx ../placeholder.h)
