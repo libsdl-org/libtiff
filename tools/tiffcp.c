@@ -893,7 +893,12 @@ static int tiffcp(TIFF *in, TIFF *out)
                      samplesperpixel == 1 ? PHOTOMETRIC_LOGL
                                           : PHOTOMETRIC_LOGLUV);
     else
-        CopyTag(TIFFTAG_PHOTOMETRIC, 1, TIFF_SHORT);
+    {
+        if (input_photometric == PHOTOMETRIC_YCBCR)
+            TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+        else
+            CopyTag(TIFFTAG_PHOTOMETRIC, 1, TIFF_SHORT);
+    }
     if (fillorder != 0)
         TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
     else
