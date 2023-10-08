@@ -879,6 +879,12 @@ static int tiffcp(TIFF *in, TIFF *out)
                 {
                     TIFFGetFieldDefaulted(in, TIFFTAG_YCBCRSUBSAMPLING,
                                           &subsamplinghor, &subsamplingver);
+
+                    float *refBW = NULL;
+                    if (TIFFGetField(in, TIFFTAG_REFERENCEBLACKWHITE, &refBW))
+                    {
+                        TIFFSetField(out, TIFFTAG_REFERENCEBLACKWHITE, refBW);
+                    }
                 }
                 TIFFSetField(out, TIFFTAG_YCBCRSUBSAMPLING, subsamplinghor,
                              subsamplingver);
