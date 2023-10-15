@@ -236,8 +236,8 @@ _TIFFDefaultStripSize(TIFF* tif, uint32 s)
 		rows=(uint64)STRIP_SIZE_DEFAULT/scanlinesize;
 		if (rows==0)
 			rows=1;
-		else if (rows>0xFFFFFFFF)
-			rows=0xFFFFFFFF;
+		else if (rows>0xFFFFFFFFULL)
+			rows=0xFFFFFFFFULL;
 		s=(uint32)rows;
 	}
 	return (s);

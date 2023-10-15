@@ -375,7 +375,7 @@ TIFFRewriteDirectory( TIFF *tif )
 				}
 				if (tif->tif_flags & TIFF_SWAB)
 					TIFFSwabLong8(&dircount64);
-				if (dircount64>0xFFFF)
+				if (dircount64>0xFFFFULL)
 				{
 					TIFFErrorExt(tif->tif_clientdata, module,
 					     "Sanity check on tag count failed, likely corrupt TIFF");
@@ -1875,7 +1875,7 @@ TIFFWriteDirectoryTagLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, 
 
         for (q=p, ma=value, mb=0; mb<count; ma++, mb++, q++)
         {
-            if (*ma>0xFFFFFFFF)
+            if (*ma>0xFFFFFFFFULL)
             {
                 TIFFErrorExt(tif->tif_clientdata,module,
                             "Attempt to write value larger than 0xFFFFFFFF in LONG array.");
@@ -1903,7 +1903,7 @@ TIFFWriteDirectoryTagLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, 
 
         for (q=p, ma=value, mb=0; mb<count; ma++, mb++, q++)
         {
-            if (*ma>0xFFFF)
+            if (*ma>0xFFFFULL)
             {
                 /* Should not happen normally given the check we did before */
                 TIFFErrorExt(tif->tif_clientdata,module,
@@ -1963,7 +1963,7 @@ TIFFWriteDirectoryTagIfdIfd8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* dir, ui
 
     for (q=p, ma=value, mb=0; mb<count; ma++, mb++, q++)
     {
-        if (*ma>0xFFFFFFFF)
+        if (*ma>0xFFFFFFFFULL)
         {
             TIFFErrorExt(tif->tif_clientdata,module,
                          "Attempt to write value larger than 0xFFFFFFFF in Classic TIFF file.");
@@ -1996,9 +1996,9 @@ TIFFWriteDirectoryTagShortLongLong8Array(TIFF* tif, uint32* ndir, TIFFDirEntry* 
 	n=0;
 	for (ma=value, mb=0; mb<count; ma++, mb++)
 	{
-		if ((n==0)&&(*ma>0xFFFF))
+		if ((n==0)&&(*ma>0xFFFFULL))
 			n=1;
-		if ((n==1)&&(*ma>0xFFFFFFFF))
+		if ((n==1)&&(*ma>0xFFFFFFFFULL))
 		{
 			n=2;
 			break;
@@ -2155,7 +2155,7 @@ TIFFWriteDirectoryTagSubifd(TIFF* tif, uint32* ndir, TIFFDirEntry* dir)
                         assert(pa != 0);
 
                         /* Could happen if an classicTIFF has a SubIFD of type LONG8 (which is illegal) */
-                        if( *pa > 0xFFFFFFFFUL)
+                        if( *pa > 0xFFFFFFFFULL)
                         {
                             TIFFErrorExt(tif->tif_clientdata,module,"Illegal value for SubIFD tag");
                             _TIFFfree(o);
@@ -2859,7 +2859,7 @@ void DoubleToRational(double value, uint32 *num, uint32 *denom)
 	ToRationalEuclideanGCD(value, FALSE, FALSE, &ullNum, &ullDenom);
 	ToRationalEuclideanGCD(value, FALSE, TRUE, &ullNum2, &ullDenom2);
 	/*-- Double-Check, that returned values fit into ULONG :*/
-	if (ullNum > 0xFFFFFFFFUL || ullDenom > 0xFFFFFFFFUL || ullNum2 > 0xFFFFFFFFUL || ullDenom2 > 0xFFFFFFFFUL) {
+	if (ullNum > 0xFFFFFFFFULL || ullDenom > 0xFFFFFFFFULL || ullNum2 > 0xFFFFFFFFULL || ullDenom2 > 0xFFFFFFFFULL) {
 #if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
 		TIFFErrorExt(0, "TIFFLib: DoubleToRational()", " Num or Denom exceeds ULONG: val=%14.6f, num=%I64u, denom=%I64u | num2=%I64u, denom2=%I64u", value, ullNum, ullDenom, ullNum2, ullDenom2);
 #else

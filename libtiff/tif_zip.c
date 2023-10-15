@@ -238,7 +238,7 @@ ZIPDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 	    appropriately even before we simplify it */
 	do {
                 int state;
-                uInt avail_in_before = (uint64)tif->tif_rawcc <= 0xFFFFFFFFU ? (uInt)tif->tif_rawcc : 0xFFFFFFFFU;
+                uInt avail_in_before = (uint64)tif->tif_rawcc <= 0xFFFFFFFFULL ? (uInt)tif->tif_rawcc : 0xFFFFFFFFU;
                 uInt avail_out_before = (uint64)occ < 0xFFFFFFFFU ? (uInt) occ : 0xFFFFFFFFU;
                 sp->stream.avail_in = avail_in_before;
                 sp->stream.avail_out = avail_out_before;
@@ -318,7 +318,7 @@ ZIPPreEncode(TIFF* tif, uint16 s)
 	    we need to simplify this code to reflect a ZLib that is likely updated
 	    to deal with 8byte memory sizes, though this code will respond
 	    appropriately even before we simplify it */
-	sp->stream.avail_out = (uint64)tif->tif_rawdatasize <= 0xFFFFFFFFU ? (uInt)tif->tif_rawdatasize : 0xFFFFFFFFU;
+	sp->stream.avail_out = (uint64)tif->tif_rawdatasize <= 0xFFFFFFFFULL ? (uInt)tif->tif_rawdatasize : 0xFFFFFFFFU;
 	return (deflateReset(&sp->stream) == Z_OK);
 }
 
@@ -430,7 +430,7 @@ ZIPEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 	    to deal with 8byte memory sizes, though this code will respond
 	    appropriately even before we simplify it */
 	do {
-                uInt avail_in_before = (uint64)cc <= 0xFFFFFFFFU ? (uInt)cc : 0xFFFFFFFFU;
+                uInt avail_in_before = (uint64)cc <= 0xFFFFFFFFULL ? (uInt)cc : 0xFFFFFFFFU;
                 sp->stream.avail_in = avail_in_before;
 		if (deflate(&sp->stream, Z_NO_FLUSH) != Z_OK) {
 			TIFFErrorExt(tif->tif_clientdata, module, 
@@ -443,7 +443,7 @@ ZIPEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 			if (!TIFFFlushData1(tif))
 				return 0;
 			sp->stream.next_out = tif->tif_rawdata;
-			sp->stream.avail_out = (uint64)tif->tif_rawdatasize <= 0xFFFFFFFFU ? (uInt)tif->tif_rawdatasize : 0xFFFFFFFFU;
+			sp->stream.avail_out = (uint64)tif->tif_rawdatasize <= 0xFFFFFFFFULL ? (uInt)tif->tif_rawdatasize : 0xFFFFFFFFU;
 		}
 		cc -= (avail_in_before - sp->stream.avail_in);
 	} while (cc > 0);
@@ -478,7 +478,7 @@ ZIPPostEncode(TIFF* tif)
 				if (!TIFFFlushData1(tif))
 					return 0;
 				sp->stream.next_out = tif->tif_rawdata;
-				sp->stream.avail_out = (uint64)tif->tif_rawdatasize <= 0xFFFFFFFFU ? (uInt)tif->tif_rawdatasize : 0xFFFFFFFFU;
+				sp->stream.avail_out = (uint64)tif->tif_rawdatasize <= 0xFFFFFFFFULL ? (uInt)tif->tif_rawdatasize : 0xFFFFFFFFU;
 			}
 			break;
 		default:

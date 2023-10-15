@@ -3300,7 +3300,7 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryCheckRangeLongSlong(int32 value)
 static enum TIFFReadDirEntryErr
 TIFFReadDirEntryCheckRangeLongLong8(uint64 value)
 {
-	if (value > TIFF_UINT32_MAX)
+	if (value > (uint64)(TIFF_UINT32_MAX))
 		return(TIFFReadDirEntryErrRange);
 	else
 		return(TIFFReadDirEntryErrOk);
