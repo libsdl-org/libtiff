@@ -781,6 +781,12 @@ static const char* usage_info[] = {
 " ",
 "             The four debug/dump options are independent, though it makes little sense to",
 "             specify a dump file without specifying a detail level.",
+"Note 1:      The (-X|-Y), -Z, -z and -S options are mutually exclusive.\n"
+"             In no case should the options be applied to a given selection successively.\n"
+"\n"
+"Note 2:      Any of the -X, -Y, -Z and -z options together with other PAGE_MODE_x options\n"
+"             such as - H, -V, -P, -J or -K are not supported and may cause buffer overflows.\n"
+"\n"
 " ",
 NULL
 };
@@ -2144,6 +2150,37 @@ void  process_command_opts (int argc, char *argv[], char *mp, char *mode, uint32
 		/*NOTREACHED*/
       }
     }
+    /*-- Check for not allowed combinations (e.g. -X, -Y and -Z, -z and -S are
+     * mutually exclusive) --*/
+    char XY, Z, R, S;
+    XY = ((crop_data->crop_mode & CROP_WIDTH) ||
+          (crop_data->crop_mode & CROP_LENGTH))
+             ? 1
+             : 0;
+    Z = (crop_data->crop_mode & CROP_ZONES) ? 1 : 0;
+    R = (crop_data->crop_mode & CROP_REGIONS) ? 1 : 0;
+    S = (page->mode & PAGE_MODE_ROWSCOLS) ? 1 : 0;
+    if (XY + Z + R + S > 1)
+    {
+        TIFFError("tiffcrop input error", "The crop options(-X|-Y), -Z, -z and "
+                                          "-S are mutually exclusive.->exit");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Check for not allowed combination:
+     * Any of the -X, -Y, -Z and -z options together with other PAGE_MODE_x
+options
+     * such as -H, -V, -P, -J or -K are not supported and may cause buffer
+overflows.
+.    */
+    if ((XY + Z + R > 0) && page->mode != PAGE_MODE_NONE)
+    {
+        TIFFError("tiffcrop input error",
+                  "Any of the crop options -X, -Y, -Z and -z together with "
+                  "other PAGE_MODE_x options such as - H, -V, -P, -J or -K is "
+                  "not supported and may cause buffer overflows..->exit");
+        exit(EXIT_FAILURE);
+    }
   }  /* end process_command_opts */
 
 /* Start a new output file if one has not been previously opened or
@@ -2416,6 +2453,7 @@ main(int argc, char* argv[])
         exit (EXIT_FAILURE);
 	}
 
+      /* Crop input image and copy zones and regions from input image into seg_buffs or crop_buff. */
       if (crop.selections > 0)
         {
         if (processCropSelections(&image, &crop, &read_buff, seg_buffs))
@@ -2432,6 +2470,7 @@ main(int argc, char* argv[])
           exit (EXIT_FAILURE);
 	  }
 	}
+      /* Format and write selected image parts to output file(s). */
       if (page.mode == PAGE_MODE_NONE)
         {  /* Whole image or sections not based on output page size */
         if (crop.selections > 0)
