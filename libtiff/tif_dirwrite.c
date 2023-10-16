@@ -2087,30 +2087,33 @@ TIFFWriteDirectoryTagTransferfunction(TIFF* tif, uint32* ndir, TIFFDirEntry* dir
 		(*ndir)++;
 		return(1);
 	}
+	/* TIFFTAG_TRANSFERFUNCTION expects (1 or 3) pointer to arrays with
+	 *  (1 << BitsPerSample) * uint16 values.
+	 */
 	m=(1<<tif->tif_dir.td_bitspersample);
-	n=tif->tif_dir.td_samplesperpixel-tif->tif_dir.td_extrasamples;
+	n=(tif->tif_dir.td_samplesperpixel-tif->tif_dir.td_extrasamples) > 1 ? 3 : 1;
+	/* Check for proper number of transferfunctions */
+	for (p=0; p<n; p++)
+	{
+		if (tif->tif_dir.td_transferfunction[p] == NULL)
+		{
+			TIFFWarningExt(tif->tif_clientdata,module,
+				"Too few TransferFunctions provided. Tag not written to file");
+			return (1); /* Not an error; only tag is not written. */
+		}
+	}
 	/*
 	 * Check if the table can be written as a single column,
 	 * or if it must be written as 3 columns.  Note that we
 	 * write a 3-column tag if there are 2 samples/pixel and
 	 * a single column of data won't suffice--hmm.
 	 */
-	if (n>3)
-		n=3;
 	if (n==3)
 	{
-		if (tif->tif_dir.td_transferfunction[2] == NULL ||
-		    !_TIFFmemcmp(tif->tif_dir.td_transferfunction[0],tif->tif_dir.td_transferfunction[2],m*sizeof(uint16)))
-			n=2;
-	}
-	if (n==2)
-	{
-		if (tif->tif_dir.td_transferfunction[1] == NULL ||
+		if (!_TIFFmemcmp(tif->tif_dir.td_transferfunction[0],tif->tif_dir.td_transferfunction[2],m*sizeof(uint16)) &&
 		    !_TIFFmemcmp(tif->tif_dir.td_transferfunction[0],tif->tif_dir.td_transferfunction[1],m*sizeof(uint16)))
 			n=1;
 	}
-	if (n==0)
-		n=1;
 	o=_TIFFmalloc(n*m*sizeof(uint16));
 	if (o==NULL)
 	{
