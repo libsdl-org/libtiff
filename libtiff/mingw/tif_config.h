@@ -1,21 +1,18 @@
 /* libtiff/tif_config.h.  Generated from tif_config.h.in by configure.  */
 /* libtiff/tif_config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* Define if building universal (internal helper macro) */
-/* #undef AC_APPLE_UNIVERSAL_BUILD */
-
 /* Support CCITT Group 3 & 4 algorithms */
 #define CCITT_SUPPORT 1
 
 /* Pick up YCbCr subsampling info from the JPEG data stream to support files
    lacking the tag (default enabled). */
-#define CHECK_JPEG_YCBCR_SUBSAMPLING 1
+/* #undef CHECK_JPEG_YCBCR_SUBSAMPLING */
 
 /* enable partial strip reading for large strips */
 /* #undef CHUNKY_STRIP_READ_SUPPORT */
 
 /* Support C++ stream API (requires C++ compiler) */
-#define CXX_SUPPORT 1
+/* #undef CXX_SUPPORT */
 
 /* Treat extra sample as alpha (default enabled). The RGBA interface will
    treat a fourth sample with no EXTRASAMPLE_ value as being ASSOCALPHA. Many
@@ -30,7 +27,7 @@
 
 /* Define to 1 if you have the declaration of `optarg', and to 0 if you don't.
    */
-#define HAVE_DECL_OPTARG 1
+/* #undef HAVE_DECL_OPTARG */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
@@ -42,7 +39,7 @@
 /* #undef HAVE_FSEEKO */
 
 /* Define to 1 if you have the `getopt' function. */
-#define HAVE_GETOPT 1
+/* #undef HAVE_GETOPT */
 
 /* Define to 1 if you have the <GLUT/glut.h> header file. */
 /* #undef HAVE_GLUT_GLUT_H */
@@ -51,10 +48,10 @@
 /* #undef HAVE_GL_GLUT_H */
 
 /* Define to 1 if you have the <GL/glu.h> header file. */
-#define HAVE_GL_GLU_H 1
+/* #undef HAVE_GL_GLU_H */
 
 /* Define to 1 if you have the <GL/gl.h> header file. */
-#define HAVE_GL_GL_H 1
+/* #undef HAVE_GL_GL_H */
 
 /* Define as 0 or 1 according to the floating point format suported by the
    machine */
@@ -130,7 +127,7 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 1
+/* #undef HAVE_UNISTD_H */
 
 /* Use nonstandard varargs form for the GLU tesselator callback */
 /* #undef HAVE_VARARGS_GLU_TESSCB */
@@ -152,7 +149,7 @@
 /* #undef JPEG_DUAL_MODE_8_12 */
 
 /* Support JPEG compression (requires IJG JPEG library) */
-#define JPEG_SUPPORT 1
+/* #undef JPEG_SUPPORT */
 
 /* Support libdeflate enhanced compression */
 /* #undef LIBDEFLATE_SUPPORT */
@@ -162,9 +159,6 @@
 
 /* Support LogLuv high dynamic range encoding */
 #define LOGLUV_SUPPORT 1
-
-/* Define to the sub-directory where libtool stores uninstalled libraries. */
-#define LT_OBJDIR ".libs/"
 
 /* Support LZMA2 compression */
 /* #undef LZMA_SUPPORT */
@@ -179,7 +173,7 @@
 #define NEXT_SUPPORT 1
 
 /* Support Old JPEG compresson (read-only) */
-#define OJPEG_SUPPORT 1
+/* #undef OJPEG_SUPPORT */
 
 /* Name of package */
 #define PACKAGE "tiff"
@@ -206,7 +200,7 @@
 #define PACKBITS_SUPPORT 1
 
 /* Support Pixar log-format algorithm (requires Zlib) */
-#define PIXARLOG_SUPPORT 1
+/* #undef PIXARLOG_SUPPORT */
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
@@ -347,29 +341,13 @@
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
-#if defined AC_APPLE_UNIVERSAL_BUILD
-# if defined __BIG_ENDIAN__
-#  define WORDS_BIGENDIAN 1
-# endif
-#else
-# ifndef WORDS_BIGENDIAN
-/* #  undef WORDS_BIGENDIAN */
-# endif
-#endif
-
-/* Define to 1 if the X Window System is missing or not being used. */
-/* #undef X_DISPLAY_MISSING */
+/* #undef WORDS_BIGENDIAN */
 
 /* Support Deflate compression */
-#define ZIP_SUPPORT 1
+/* #undef ZIP_SUPPORT */
 
 /* Support zstd compression */
 /* #undef ZSTD_SUPPORT */
-
-/* Enable large inode numbers on Mac OS X 10.5.  */
-#ifndef _DARWIN_USE_64_BIT_INODE
-# define _DARWIN_USE_64_BIT_INODE 1
-#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */

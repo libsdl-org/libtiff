@@ -1,13 +1,14 @@
 CROSS	=
 CC	= $(CROSS)gcc
+RC	= $(CROSS)windres
 
 DLLNAME = libtiff-5.dll
 LIBNAME = libtiff.dll.a
-INCLUDES= -I. -Iexternal/include
+INCLUDES= -I.
 CPPFLAGS= -DDLL_EXPORT -DNDEBUG
 CFLAGS	= -O2 -Wall
 LDFLAGS = -Wl,--enable-auto-image-base -Wl,--no-undefined
-LDLIBS	= -Lexternal/lib -ljpeg -lz
+LDLIBS	= 
 
 OBJ =	tif_aux.o \
 	tif_close.o \
@@ -59,6 +60,9 @@ all: $(DLLNAME)
 
 %.o: ../%.c
 	$(CC) -c $(CPPFLAGS) $(INCLUDES) $(CFLAGS) -o $@ $<
+
+%.o: ../%.rc
+	$(RC) -c $(CPPFLAGS) $(INCLUDES) -o $@ $<
 
 $(DLLNAME): $(OBJ)
 	$(CC) -shared -o $(DLLNAME) ../libtiff.def $(OBJ) $(LDFLAGS) $(LDLIBS) \
