@@ -143,7 +143,16 @@ EOF
   LDFLAGS="$save_LDFLAGS"
   AC_MSG_RESULT($have_ld_version_script)
 fi
+case "$host" in
+    *-*-darwin*)
+        have_darwin_exports=yes
+        have_ld_version_script=no
+        ;;
+   *)   have_darwin_exports=no
+        ;;
+esac
 AM_CONDITIONAL(HAVE_LD_VERSION_SCRIPT, test "$have_ld_version_script" = "yes")
+AM_CONDITIONAL(HAVE_DARWIN_EXPORTS, test "$have_darwin_exports" = "yes")
 
 
 dnl Tests for Windows
