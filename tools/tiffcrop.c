@@ -5181,6 +5181,14 @@ static void initDumpOptions(struct dump_opts *dump)
   dump->outfile = NULL;
   }
 
+static uint32 _TIFFClampDoubleToUInt32(double val)
+{
+    if (val < 0)
+        return 0;
+    if (val > 0xFFFFFFFFU || val != val)
+        return 0xFFFFFFFFU;
+    return (uint32)val;
+}
 /* Compute pixel offsets into the image for margins and fixed regions */
 static int
 computeInputPixelOffsets(struct crop_mask *crop, struct image_data *image,
