@@ -50,13 +50,13 @@ else()
   option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 endif()
 
-option(tiff-tools "build TIFF tools" ON)
+option(tiff-tools "build TIFF tools" OFF)
 option(tiff-tools-unsupported "build unsupported TIFF tools" OFF)
-option(tiff-tests "build TIFF tests" ON)
-option(tiff-contrib "build TIFF contrib" ON)
-option(tiff-docs "build TIFF documentation" ON)
+option(tiff-tests "build TIFF tests" OFF)
+option(tiff-contrib "build TIFF contrib" OFF)
+option(tiff-docs "build TIFF documentation" OFF)
 option(tiff-deprecated "build TIFF deprecated features" OFF)
-option(tiff-install "install TIFF targets" ${TIFF_INSTALL_DEFAULT})
+option(tiff-install "install TIFF targets" OFF)
 
 # Disable deprecated features to ensure clean build
 if (tiff-deprecated)
