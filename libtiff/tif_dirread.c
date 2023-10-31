@@ -1316,7 +1316,7 @@ TIFFReadDirEntryArrayWithLimit(TIFF *tif, TIFFDirEntry *direntry,
     {
         TIFFWarningExtR(tif, "ReadDirEntryArray",
                         "Requested memory size for tag %d (0x%x) %" PRIu32
-                        " is greather than filesize %" PRIu64
+                        " is greater than filesize %" PRIu64
                         ". Memory not allocated, tag not read",
                         direntry->tdir_tag, direntry->tdir_tag, datasize,
                         filesize);
@@ -5289,7 +5289,7 @@ static int EstimateStripByteCounts(TIFF *tif, TIFFDirEntry *dir,
     {
         TIFFWarningExtR(tif, module,
                         "Requested memory size for StripByteCounts of %" PRIu64
-                        " is greather than filesize %" PRIu64
+                        " is greater than filesize %" PRIu64
                         ". Memory not allocated",
                         allocsize, filesize);
         return -1;
@@ -5843,7 +5843,7 @@ static uint16_t TIFFFetchDirectory(TIFF *tif, uint64_t diroff,
             TIFFWarningExtR(
                 tif, module,
                 "Requested memory size for TIFF directory of %" PRIu64
-                " is greather than filesize %" PRIu64
+                " is greater than filesize %" PRIu64
                 ". Memory not allocated, TIFF directory not read",
                 allocsize, filesize);
             return 0;
@@ -5971,7 +5971,7 @@ static uint16_t TIFFFetchDirectory(TIFF *tif, uint64_t diroff,
             TIFFWarningExtR(
                 tif, module,
                 "Requested memory size for TIFF directory of %" PRIu64
-                " is greather than filesize %" PRIu64
+                " is greater than filesize %" PRIu64
                 ". Memory not allocated, TIFF directory not read",
                 allocsize, filesize);
             return 0;
@@ -7229,7 +7229,7 @@ static int TIFFFetchStripThing(TIFF *tif, TIFFDirEntry *dir, uint32_t nstrips,
         {
             TIFFWarningExtR(tif, module,
                             "Requested memory size for StripArray of %" PRIu64
-                            " is greather than filesize %" PRIu64
+                            " is greater than filesize %" PRIu64
                             ". Memory not allocated",
                             allocsize, filesize);
             _TIFFfreeExt(tif, data);
@@ -7345,7 +7345,7 @@ static void allocChoppedUpStripArrays(TIFF *tif, uint32_t nstrips,
         TIFFWarningExtR(tif, "allocChoppedUpStripArrays",
                         "Requested memory size for StripByteCount and "
                         "StripOffsets %" PRIu64
-                        " is greather than filesize %" PRIu64
+                        " is greater than filesize %" PRIu64
                         ". Memory not allocated",
                         allocsize, filesize);
         return;
