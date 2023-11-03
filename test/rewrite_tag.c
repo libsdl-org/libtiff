@@ -39,7 +39,6 @@
 #include "tiffio.h"
 #include "tiffiop.h"
 
-const uint32_t length = 40;
 const uint32_t rows_per_strip = 1;
 
 int test_packbits()

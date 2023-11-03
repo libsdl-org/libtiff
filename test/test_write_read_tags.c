@@ -158,14 +158,14 @@ uint32_t listTagsNotFollowPasscountRules[] = {
 int check_tag_definitions(void);
 int write_test_tiff(TIFF *tif, const char *filenameRead);
 int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
-                   uint32_t *listTagsNotToWrite, uint32_t nTagsInList,
+                   uint32_t *plistTagsNotToWrite, uint32_t nTagsInList,
                    uint32_t *iCnt);
 int tagIsInList(uint32_t tTag, uint32_t *list, uint32_t nTagsInList);
 int testPasscountFlag(const char *szMsg, const TIFFFieldArray *tFieldArray,
-                      uint32_t *listTagsNotFollowPasscountRules,
+                      uint32_t *plistTagsNotFollowPasscountRules,
                       uint32_t nTagsInList);
 int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
-                  uint32_t *listTagsNotToWrite, uint32_t nTagsNotToWrite,
+                  uint32_t *plistTagsNotToWrite, uint32_t nTagsNotToWrite,
                   uint32_t *iCnt);
 
 /* ==== main() ========================================================
@@ -686,7 +686,7 @@ failure:
  *
  */
 int testPasscountFlag(const char *szMsg, const TIFFFieldArray *tFieldArray,
-                      uint32_t *listTagsNotFollowPasscountRules,
+                      uint32_t *plistTagsNotFollowPasscountRules,
                       uint32_t nTagsInList)
 {
     uint32_t t;
@@ -699,7 +699,7 @@ int testPasscountFlag(const char *szMsg, const TIFFFieldArray *tFieldArray,
     for (t = 0; t < nTags; t++)
     {
         if (tagIsInList(tFieldArray->fields[t].field_tag,
-                        listTagsNotFollowPasscountRules, nTagsInList))
+                        plistTagsNotFollowPasscountRules, nTagsInList))
             continue;
 
         if (tFieldArray->fields[t].field_writecount !=
@@ -728,7 +728,7 @@ int testPasscountFlag(const char *szMsg, const TIFFFieldArray *tFieldArray,
     for (t = 0; t < nTags; t++)
     {
         if (tagIsInList(tFieldArray->fields[t].field_tag,
-                        listTagsNotFollowPasscountRules, nTagsInList))
+                        plistTagsNotFollowPasscountRules, nTagsInList))
             continue;
 
         if (tFieldArray->fields[t].field_writecount < 0)
@@ -828,7 +828,7 @@ int testPasscountFlag(const char *szMsg, const TIFFFieldArray *tFieldArray,
     for (t = 0; t < nTags; t++)
     {
         if (tagIsInList(tFieldArray->fields[t].field_tag,
-                        listTagsNotFollowPasscountRules, nTagsInList))
+                        plistTagsNotFollowPasscountRules, nTagsInList))
             continue;
 
         /* TIFF_SETGET_UNDEFINED tags FIELD_IGNORE tags are not written to file.
@@ -935,7 +935,7 @@ int testPasscountFlag(const char *szMsg, const TIFFFieldArray *tFieldArray,
  * iCnt is an index into predefined arrays for the values to write.
  */
 int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
-                   uint32_t *listTagsNotToWrite, uint32_t nTagsInList,
+                   uint32_t *plistTagsNotToWrite, uint32_t nTagsInList,
                    uint32_t *iCnt)
 {
 
@@ -950,7 +950,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
         uint32_t variableArrayCount = VARIABLE_ARRAY_SIZE;
 
         uint32_t tTag = tFieldArray->fields[t].field_tag;
-        if (tagIsInList(tTag, listTagsNotToWrite, nTagsInList))
+        if (tagIsInList(tTag, plistTagsNotToWrite, nTagsInList))
             continue;
 
         TIFFDataType tType =
@@ -1271,7 +1271,7 @@ int tagIsInList(uint32_t tTag, uint32_t *list, uint32_t nTagsInList)
  * The read values are compared to the written ones.
  */
 int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
-                  uint32_t *listTagsNotToWrite, uint32_t nTagsNotToWrite,
+                  uint32_t *plistTagsNotToWrite, uint32_t nTagsNotToWrite,
                   uint32_t *iCnt)
 {
 
@@ -1315,7 +1315,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
             tFieldArray->fields[t]
                 .set_field_type; /* e.g. TIFF_SETGET_C0_FLOAT */
         char *tFieldName = tFieldArray->fields[t].field_name;
-        if (tagIsInList(tTag, listTagsNotToWrite, nTagsNotToWrite))
+        if (tagIsInList(tTag, plistTagsNotToWrite, nTagsNotToWrite))
             continue;
 
         /*-- dependent on set_field_type read value --*/

@@ -1199,11 +1199,11 @@ typedef void biasFn(void *image, void *bias, uint32_t pixels);
     static void subtract##bits(void *i, void *b, uint32_t pixels)              \
     {                                                                          \
         uint##bits##_t *image = i;                                             \
-        uint##bits##_t *bias = b;                                              \
+        uint##bits##_t *biasx = b;                                             \
         while (pixels--)                                                       \
         {                                                                      \
-            *image = *image > *bias ? *image - *bias : 0;                      \
-            image++, bias++;                                                   \
+            *image = *image > *biasx ? *image - *biasx : 0;                    \
+            image++, biasx++;                                                  \
         }                                                                      \
     }
 
@@ -1854,7 +1854,7 @@ done:
 
 DECLAREwriteFunc(writeBufferToContigStrips)
 {
-    uint32_t row, rowsperstrip;
+    uint32_t row;
     tstrip_t strip = 0;
 
     (void)imagewidth;
@@ -1879,7 +1879,6 @@ DECLAREwriteFunc(writeBufferToContigStrips)
 DECLAREwriteFunc(writeBufferToSeparateStrips)
 {
     uint32_t rowsize = imagewidth * spp;
-    uint32_t rowsperstrip;
     tsize_t stripsize = TIFFStripSize(out);
     tdata_t obuf;
     tstrip_t strip = 0;
@@ -1915,7 +1914,7 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
             uint32_t nrows = (row + rowsperstrip > imagelength)
                                  ? imagelength - row
                                  : rowsperstrip;
-            tsize_t stripsize = TIFFVStripSize(out, nrows);
+            stripsize = TIFFVStripSize(out, nrows);
 
             cpContigBufToSeparateBuf(obuf, (uint8_t *)buf + row * rowsize + s,
                                      nrows, imagewidth, 0, 0, spp,
