@@ -169,7 +169,7 @@ you do not need to call :c:func:`TIFFFlush`.
 
     In order to prevent out-of-memory issues when opening a TIFF file
     :c:func:`TIFFOpenExt` can be used and then the maximum single memory
-    limit in byte that ``libtiff`` internal memory allocation functions
+    limit in bytes that ``libtiff`` internal memory allocation functions
     are allowed to request per call can be set with
     :c:func:`TIFFOpenOptionsSetMaxSingleMemAlloc`.
 
