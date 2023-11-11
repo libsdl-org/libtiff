@@ -38,11 +38,16 @@ opaque structure and returns a :c:type:`TIFFOpenOptions` pointer.
 :c:func:`TIFFOpenOptionsFree` releases the allocated memory for
 :c:type:`TIFFOpenOptions`. The allocated memory for :c:type:`TIFFOpenOptions`
 can be released straight after successful execution of the related
-TIFF open"Ext" functions like :c:func:`TIFFOpenExt`.
+TIFFOpen"Ext" functions like :c:func:`TIFFOpenExt`.
 
 :c:func:`TIFFOpenOptionsSetMaxSingleMemAlloc` sets parameter for the
 maximum single memory limit in byte that ``libtiff`` internal memory allocation
 functions are allowed to request per call.
+
+.. note::
+    However, the ``libtiff`` external functions :c:func:`_TIFFmalloc`
+    and :c:func:`_TIFFrealloc` **do not apply** this internal memory
+    allocation limit set by :c:func:`TIFFOpenOptionsSetMaxSingleMemAlloc`!
 
 :c:func:`TIFFOpenOptionsSetErrorHandlerExtR` sets the function pointer to
 an application-specific and per-TIFF handle (re-entrant) error handler.
@@ -54,6 +59,43 @@ The *errorhandler_user_data* argument may be NULL.
 :c:func:`TIFFOpenOptionsSetWarningHandlerExtR` works like
 :c:func:`TIFFOpenOptionsSetErrorHandlerExtR` but for the warning handler,
 which is invoked through  :c:func:`TIFFWarningExtR`
+
+Example
+-------
+
+::
+
+    #include "tiffio.h"
+
+    typedef struct MyErrorHandlerUserDataStruct
+    {
+        /* ... any user data structure ... */
+    } MyErrorHandlerUserDataStruct;
+
+    static int myErrorHandler(TIFF *tiff, void *user_data, const char *module,
+                          const char *fmt, va_list ap)
+    {
+        MyErrorHandlerUserDataStruct *errorhandler_user_data =
+            (MyErrorHandlerUserDataStruct *)user_data;
+        /*... code of myErrorHandler ...*/
+        return 1;
+    }
+
+
+    main()
+    {
+        tmsize_t limit = (256 * 1024 * 1024);
+        MyErrorHandlerUserDataStruct user_data = { /* ... any data ... */};
+
+        TIFFOpenOptions *opts = TIFFOpenOptionsAlloc();
+        TIFFOpenOptionsSetMaxSingleMemAlloc(opts, limit);
+        TIFFOpenOptionsSetErrorHandlerExtR(opts, myErrorHandler, &user_data);
+        TIFF *tif = TIFFOpenExt("foo.tif", "r", opts);
+        TIFFOpenOptionsFree(opts);
+        /* ... go on here ... */
+
+        TIFFClose(tif);
+    }
 
 Note
 ----
