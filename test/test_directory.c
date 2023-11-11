@@ -758,7 +758,7 @@ int test_SubIFD_directrory_handling(bool is_big_tiff)
     }
 
     tdir_t numberOfMainIFDs = TIFFNumberOfDirectories(tif);
-    if (numberOfMainIFDs != N_DIRECTORIES - number_of_sub_IFDs)
+    if (numberOfMainIFDs != (tdir_t)N_DIRECTORIES - number_of_sub_IFDs)
     {
         fprintf(stderr,
                 "Unexpected number of directories in %s. Expected %i, "
