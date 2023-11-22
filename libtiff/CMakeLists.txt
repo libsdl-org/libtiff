@@ -98,6 +98,10 @@ target_sources(tiff PRIVATE
         tif_zip.c
         tif_zstd.c)
 
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
+  set_property(SOURCE tif_jpeg.c tif_jpeg12.c PROPERTY SKIP_UNITY_BUILD_INCLUSION ON)
+endif ()
+
 if(USE_WIN32_FILEIO)
   target_sources(tiff PRIVATE tif_win32.c)
 else()
