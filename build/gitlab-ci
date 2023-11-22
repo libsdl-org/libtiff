@@ -52,8 +52,8 @@ cmake_build()
     else
         opts2=""
     fi
-    echo "Running cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ${opts2} .."
-    cmake -G "$1" -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ${opts2}  ..
+    echo "Running cmake -G "$1" -DCMAKE_UNITY_BUILD=ON -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ${opts2} .."
+    cmake -G "$1" -DCMAKE_UNITY_BUILD=ON -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ${opts2}  ..
     $COVERITY_BUILD cmake --build .
     cmake --build . --target install
     ctest -V
