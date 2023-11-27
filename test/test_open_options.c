@@ -214,6 +214,63 @@ static int test_TIFFOpenOptionsSetMaxSingleMemAlloc(
     return ret;
 }
 
+static int test_TIFFOpenOptionsSetMaxCumulatedMemAlloc(
+    tmsize_t limit, int expected_to_fail_in_open,
+    int expected_to_fail_in_write_directory)
+{
+    int ret = 0;
+    TIFFOpenOptions *opts = TIFFOpenOptionsAlloc();
+    assert(opts);
+    TIFFOpenOptionsSetMaxCumulatedMemAlloc(opts, limit);
+    TIFF *tif = TIFFOpenExt("test_error_handler.tif", "w", opts);
+    TIFFOpenOptionsFree(opts);
+    if (expected_to_fail_in_open)
+    {
+        if (tif != NULL)
+        {
+            fprintf(
+                stderr,
+                "Expected TIFFOpenExt() to fail due to memory limitation\n");
+            ret = 1;
+            TIFFClose(tif);
+        }
+    }
+    else
+    {
+        if (tif == NULL)
+        {
+            fprintf(stderr, "Expected TIFFOpenExt() to succeed\n");
+            ret = 1;
+        }
+        else
+        {
+#define VALUE_SAMPLESPERPIXEL 10000
+            TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, VALUE_SAMPLESPERPIXEL);
+            TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+            if (TIFFWriteDirectory(tif) == 0)
+            {
+                if (!expected_to_fail_in_write_directory)
+                {
+                    fprintf(stderr,
+                            "Expected TIFFWriteDirectory() to succeed\n");
+                    ret = 1;
+                }
+            }
+            else
+            {
+                if (expected_to_fail_in_write_directory)
+                {
+                    fprintf(stderr, "Expected TIFFWriteDirectory() to fail\n");
+                    ret = 1;
+                }
+            }
+            TIFFClose(tif);
+        }
+    }
+    unlink("test_error_handler.tif");
+    return ret;
+}
+
 int main()
 {
     int ret = 0;
@@ -234,5 +291,14 @@ int main()
         sizeof(TIFF) + strlen("test_error_handler.tif") + 1, FALSE, TRUE, TRUE);
     ret += test_TIFFOpenOptionsSetMaxSingleMemAlloc(
         VALUE_SAMPLESPERPIXEL * sizeof(short), FALSE, FALSE, TRUE);
+
+    fprintf(stderr, "---- test_TIFFOpenOptionsSetMaxCumulatedMemAlloc ---- \n");
+    ret += test_TIFFOpenOptionsSetMaxCumulatedMemAlloc(1, TRUE, -1);
+    ret += test_TIFFOpenOptionsSetMaxCumulatedMemAlloc(
+        sizeof(TIFF) + strlen("test_error_handler.tif") + 1, FALSE, TRUE);
+    ret += test_TIFFOpenOptionsSetMaxCumulatedMemAlloc(
+        sizeof(TIFF) + strlen("test_error_handler.tif") + 1 + 30000, FALSE,
+        FALSE);
+
     return ret;
 }
