@@ -27,6 +27,10 @@
  * Windows Common RunTime Library.
  */
 
+#ifdef TIFF_DO_NOT_USE_NON_EXT_ALLOC_FUNCTIONS
+#undef TIFF_DO_NOT_USE_NON_EXT_ALLOC_FUNCTIONS
+#endif
+
 #include "tif_config.h"
 
 #ifdef HAVE_SYS_TYPES_H

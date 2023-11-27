@@ -99,6 +99,11 @@ With ``libtiff`` 4.5 a method was introduced to limit the internal
 memory allocation that functions are allowed to request per call
 (see  :c:func:`TIFFOpenOptionsSetMaxSingleMemAlloc` and :c:func:`TIFFOpenExt`).
 
+With ``libtiff`` 4.6.1 a method was introduced to limit the internal
+cumulated memory allocation that functions are allowed to request for a given
+TIFF handle
+(see  :c:func:`TIFFOpenOptionsSetMaxCumulatedMemAlloc` and :c:func:`TIFFOpenExt`).
+
 Error Handling
 --------------
 
