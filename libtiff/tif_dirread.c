@@ -1016,7 +1016,7 @@ TIFFReadDirEntryFloat(TIFF *tif, TIFFDirEntry *direntry, float *value)
             err = TIFFReadDirEntryCheckedLong8(tif, direntry, &m);
             if (err != TIFFReadDirEntryErrOk)
                 return (err);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(_WIN32) && (_MSC_VER < 1500)
             /*
              * XXX: MSVC 6.0 does not support conversion
              * of 64-bit integers into floating point
@@ -1130,7 +1130,7 @@ TIFFReadDirEntryDouble(TIFF *tif, TIFFDirEntry *direntry, double *value)
             err = TIFFReadDirEntryCheckedLong8(tif, direntry, &m);
             if (err != TIFFReadDirEntryErrOk)
                 return (err);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(_WIN32) && (_MSC_VER < 1500)
             /*
              * XXX: MSVC 6.0 does not support conversion
              * of 64-bit integers into floating point
@@ -2904,7 +2904,7 @@ TIFFReadDirEntryFloatArray(TIFF *tif, TIFFDirEntry *direntry, float **value)
             {
                 if (tif->tif_flags & TIFF_SWAB)
                     TIFFSwabLong8(ma);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(_WIN32) && (_MSC_VER < 1500)
                 /*
                  * XXX: MSVC 6.0 does not support
                  * conversion of 64-bit integers into
@@ -3149,7 +3149,7 @@ TIFFReadDirEntryDoubleArray(TIFF *tif, TIFFDirEntry *direntry, double **value)
             {
                 if (tif->tif_flags & TIFF_SWAB)
                     TIFFSwabLong8(ma);
-#if defined(__WIN32__) && (_MSC_VER < 1500)
+#if defined(_WIN32) && (_MSC_VER < 1500)
                 /*
                  * XXX: MSVC 6.0 does not support
                  * conversion of 64-bit integers into
