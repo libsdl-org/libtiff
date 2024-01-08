@@ -440,9 +440,6 @@ extern "C"
     extern void *_TIFFCheckRealloc(TIFF *, void *, tmsize_t, tmsize_t,
                                    const char *);
 
-    extern double _TIFFUInt64ToDouble(uint64_t);
-    extern float _TIFFUInt64ToFloat(uint64_t);
-
     extern float _TIFFClampDoubleToFloat(double);
     extern uint32_t _TIFFClampDoubleToUInt32(double);
 
