@@ -1023,7 +1023,7 @@ T2P *t2p_init()
 
 void t2p_free(T2P *t2p)
 {
-    int i = 0;
+    unsigned int i = 0;
 
     if (t2p != NULL)
     {
