@@ -617,6 +617,7 @@ static const char usage_info[] =
     "\n"
     /* "and the other options are:\n" */
     " -r rows/strip\n"
+    " -t rows/strip (same as -r)\n"
     " -b (progress by block rather than as a whole image)\n"
     " -n don't emit alpha component.\n"
     " -8 write BigTIFF file instead of ClassicTIFF\n"
