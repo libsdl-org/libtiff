@@ -151,6 +151,12 @@ int main(int argc, char *argv[])
                 break;
             case 'X': /* input width */
                 xsize = (uint32_t)atoi(optarg);
+                if (xsize < 1 || xsize > 10000)
+                {
+                    fprintf(stderr, "%s: The input width %s is not reasonable\n", argv[0],
+                            optarg);
+                    return EXIT_FAILURE;
+                }
                 break;
 
                 /* output-related options */
