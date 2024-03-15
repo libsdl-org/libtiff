@@ -64,6 +64,7 @@ int verbose;
 int stretch;
 uint16_t badfaxrun;
 uint32_t badfaxlines;
+int compression_in;
 
 int copyFaxFile(TIFF *tifin, TIFF *tifout);
 static void usage(int code);
@@ -84,7 +85,7 @@ int main(int argc, char *argv[])
     TIFF *out = NULL;
     FAX_Client_Data client_data;
     TIFFErrorHandler whandler = NULL;
-    int compression_in = COMPRESSION_CCITTFAX3;
+    compression_in = COMPRESSION_CCITTFAX3;
     int compression_out = COMPRESSION_CCITTFAX3;
     int fillorder_in = FILLORDER_LSB2MSB;
     int fillorder_out = FILLORDER_LSB2MSB;
@@ -401,8 +402,13 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
     while (tifin->tif_rawcc > 0)
     {
         ok = (*tifin->tif_decoderow)(tifin, (tdata_t)rowbuf, linesize, 0);
-        if (!ok)
+        if (ok < 1)
         {
+            if (compression_in == COMPRESSION_CCITTFAX4)
+            {
+                /* This is proably EOFB, but if it's corrupt data, then we can't continue, anyway. */
+                break;
+            }
             badfaxlines++;
             badrun++;
             /* regenerate line from previous good line */
