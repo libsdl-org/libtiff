@@ -755,10 +755,9 @@ static const char usage_info[] =
     " -c jpeg[:opts] Compress output with JPEG encoding\n"
     /* "    JPEG options:\n" */
     "    #        Set compression quality level (0-100, default 100)\n"
-    "    raw      Output color image as raw YCbCr (default)\n"
-    "    rgb      Output color image as RGB\n"
-    "    For example, -c jpeg:rgb:50 for JPEG-encoded RGB with 50% comp. "
-    "quality\n"
+    "    raw      Output same colorspace image as input (default)\n"
+    "    For example, -c jpeg:raw:50 for JPEG-encoded with 50% comp. "
+    "quality and the same colorspace\n"
 #endif
 #ifdef PACKBITS_SUPPORT
     " -c packbits Compress output with packbits encoding\n"
@@ -1653,8 +1652,10 @@ static int processCompressOptions(char *opt)
                 quality = atoi(cp + 1);
             else if (strneq(cp + 1, "raw", 3))
                 jpegcolormode = JPEGCOLORMODE_RAW;
+/* libjpeg does not support colorspace conversion to RGB
             else if (strneq(cp + 1, "rgb", 3))
                 jpegcolormode = JPEGCOLORMODE_RGB;
+*/
             else
                 usage(EXIT_FAILURE);
             cp = strchr(cp + 1, ':');
