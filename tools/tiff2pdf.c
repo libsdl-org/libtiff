@@ -583,7 +583,7 @@ printf	(-z: compress with Zip/Deflate (requires zlib configured with libtiff));
 #endif
     -q: compression quality
     -n: no compressed data passthrough
-    -d: do not compress (decompress)
+    -d: do not compress (decompress) - except monochrome to CCITT Group 4
     -i: invert colors
     -u: set distance unit, 'i' for inch, 'm' for centimeter
     -x: set x resolution default
@@ -902,7 +902,7 @@ static void usage_info(int code)
 #if defined(JPEG_SUPPORT) || defined(ZIP_SUPPORT)
         " -q: compression quality\n"
         " -n: no compressed data passthrough\n"
-        " -d: do not compress (decompress)\n"
+        " -d: do not compress (decompress) - except monochrome to CCITT Group 4\n"
 #endif
         " -i: invert colors\n"
         " -u: set distance unit, 'i' for inch, 'm' for centimeter\n"
