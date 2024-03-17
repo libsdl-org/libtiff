@@ -150,7 +150,7 @@ static int nextSrcImage(TIFF *tif, char **imageSpec)
         }
         if (TIFFSetDirectory(tif, nextImage))
             return 1;
-        fprintf(stderr, "%s%c%" PRIu16 " not found!\n", TIFFFileName(tif),
+        fprintf(stderr, "%s%c%" PRIu32 " not found!\n", TIFFFileName(tif),
                 comma, nextImage);
     }
     return 0;
@@ -1290,8 +1290,8 @@ DECLAREcpFunc(cpBiasedContig2Contig)
             }
         }
         TIFFError(TIFFFileName(in),
-                  "Bias image %s,%" PRIu16
-                  "\nis not the same size as %s,%" PRIu16 "\n",
+                  "Bias image %s,%" PRIu32
+                  "\nis not the same size as %s,%" PRIu32 "\n",
                   TIFFFileName(bias), TIFFCurrentDirectory(bias),
                   TIFFFileName(in), TIFFCurrentDirectory(in));
         return 0;
@@ -1299,7 +1299,7 @@ DECLAREcpFunc(cpBiasedContig2Contig)
     else
     {
         TIFFError(TIFFFileName(in),
-                  "Can't bias %s,%" PRIu16 " as it has >1 Sample/Pixel\n",
+                  "Can't bias %s,%" PRIu32 " as it has >1 Sample/Pixel\n",
                   TIFFFileName(in), TIFFCurrentDirectory(in));
         return 0;
     }
