@@ -446,7 +446,6 @@ int main(int argc, char *argv[])
         int inputlen = BUFFER_SZ;
 
         line = (char *)malloc(inputlen);
-        token = (char *)NULL;
         while ((line = super_fgets(line, &inputlen, ifile)) != NULL)
         {
             state = 0;
@@ -518,9 +517,7 @@ int main(int argc, char *argv[])
                 state++;
             }
             free(token);
-            token = (char *)NULL;
             free(newstr);
-            newstr = (char *)NULL;
         }
         free(line);
 
