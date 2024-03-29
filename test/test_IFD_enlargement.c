@@ -917,7 +917,7 @@ int test_EXIF_enlargement(const char *filename, bool is_big_tiff)
             goto failure;
         }
         /* Set EXIFIFD tag with dummy value to reserve space in IFD. */
-        if (!TIFFSetField(tif, TIFFTAG_EXIFIFD, 0))
+        if (!TIFFSetField(tif, TIFFTAG_EXIFIFD, (uint64_t)0))
         {
             fprintf(stderr, "Can't set TIFFTAG_EXIFIFD tag. Testline %d\n",
                     __LINE__);
