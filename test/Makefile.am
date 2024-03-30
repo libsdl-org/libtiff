@@ -68,6 +68,15 @@ JPEG_DEPENDENT_CHECK_PROG=
 JPEG_DEPENDENT_TESTSCRIPTS=
 endif
 
+if HAVE_JBIG
+if TIFF_TOOLS
+JBIG_DEPENDENT_TESTSCRIPTS=\
+	tiffcp-lzw-single-strip-jbig.sh
+endif
+else
+JBIG_DEPENDENT_TESTSCRIPTS=
+endif
+
 if BUILD_STATIC
 STATIC_CHECK_PROGS=rational_precision2double test_write_read_tags test_transferfunction_write_read
 endif
@@ -162,7 +171,8 @@ TESTSCRIPTS = \
 	testfax4.sh \
 	testfax3_bug_513.sh \
 	testdeflatelaststripextradata.sh \
-	$(JPEG_DEPENDENT_TESTSCRIPTS)
+	$(JPEG_DEPENDENT_TESTSCRIPTS) \
+	$(JBIG_DEPENDENT_TESTSCRIPTS)
 else
 TESTSCRIPTS=
 endif
