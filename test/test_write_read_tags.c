@@ -103,7 +103,7 @@ char inkNamesW[] = {"Ink1\0Ink2\0Ink3"};
 #define NUM_ELEMENTS(x) (sizeof(x) / sizeof(x[0]))
 
 /* -- List of tags, which must not be written with arbitrary values because they
- *    are written explicitely by the test program (like the basic TIFF tags),
+ *    are written explicitly by the test program (like the basic TIFF tags),
  *    are automatically written by LibTIFF (e.g.TIFFTAG_NUMBEROFINKS),
  *    have some special characteristics, or write procedure is not supported
  * yet.
@@ -519,7 +519,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     /*-- Write dummy pixel data at the end of all directories. --*/
     if (TIFFWriteScanline(tif, buf, 0, 0) < 0)
     {
-        fprintf(stderr, "Can't write image data after all direcories.\n");
+        fprintf(stderr, "Can't write image data after all directories.\n");
         goto failure;
     }
 #endif
@@ -946,7 +946,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
     for (uint32_t t = 0; t < nTags; i++, t++)
     {
         bool deferredSetField = false;
-        /* Allways reset variableArrayCount to default value here. */
+        /* Always reset variableArrayCount to default value here. */
         uint32_t variableArrayCount = VARIABLE_ARRAY_SIZE;
 
         uint32_t tTag = tFieldArray->fields[t].field_tag;
@@ -1103,7 +1103,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                             tSetFieldType, tFieldArray->fields[t].field_name);
                 }
                 break;
-                /* _Cxx_ just defines the precense and size of the count
+                /* _Cxx_ just defines the presence and size of the count
                  * parameter for the array:
                  * - C0=no count parameter (fixed array where,
                  *      positive readcount/writecount gives array count)
@@ -1613,7 +1613,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
             case TIFF_SETGET_C32_UINT32:
             case TIFF_SETGET_C32_SINT32:
             {
-                /* _Cxx_ just defines the precense and size of the count
+                /* _Cxx_ just defines the presence and size of the count
                  * parameter for the array:
                  * - C0=no count parameter (fixed array where,
                  *      positive readcount/writecount gives array count)

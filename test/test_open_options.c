@@ -357,7 +357,7 @@ int open_file_and_write(const char *filename, char *openModeString,
  * 'tiff_offsetsize' are swapped or not, depending how the file was opened: They
  * were not swapped when opening with "w" or opening an not existent file with
  * "a". They were swapped when opening an existent file with "r" or "a". This
- * behaviour shall be harmonized so that the internal parameters are allways in
+ * behaviour shall be harmonized so that the internal parameters are always in
  * host byte-order.
  */
 int test_TIFFheader_swapping(void)
