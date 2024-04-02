@@ -135,8 +135,8 @@ int write_directory_to_closed_file(const char *filename, unsigned int openMode,
 {
     TIFF *tif;
     /* Replace 'w' for write by 'a' for append. */
-    char strAux[8];
-    strncpy(strAux, openModeStrings[openMode], sizeof(strAux));
+    char strAux[8] = {0};
+    strncpy(strAux, openModeStrings[openMode], sizeof(strAux) - 1);
     strAux[0] = 'a';
     tif = TIFFOpen(filename, strAux);
     if (!tif)
