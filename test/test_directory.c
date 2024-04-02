@@ -444,7 +444,7 @@ int test_arbitrary_directrory_loading(unsigned int openMode)
     if (TIFFSetDirectory(tif, N_DIRECTORIES))
     {
         fprintf(stderr,
-                "No expected fail for accessing not existant directory number "
+                "No expected fail for accessing not existent directory number "
                 "%d in file %s\n",
                 N_DIRECTORIES, filename);
         goto failure;
@@ -530,7 +530,7 @@ int test_arbitrary_directrory_loading(unsigned int openMode)
     }
 
     /* Second UnlinkDirectory -> two IFDs are missing in the main-IFD chain
-     * then, orignal dirnum 2 and 3 */
+     * then, original dirnum 2 and 3 */
     if (!TIFFUnlinkDirectory(tif, 3))
     {
         fprintf(stderr, "Can't unlink directory %d within %s\n", 3, filename);
@@ -649,7 +649,7 @@ int test_arbitrary_directrory_loading(unsigned int openMode)
     }
 
     /* Third UnlinkDirectory -> three IFDs are missing in the main-IFD chain
-     * then, orignal dirnum 0, 2 and 3
+     * then, original dirnum 0, 2 and 3
      * Furthermore, this test checks that TIFFUnlinkDirectory() can unlink
      * the first directory dirnum = 0 and a following TIFFSetDirectory(0)
      * does not load the unlinked directory. */
