@@ -8,7 +8,7 @@ Author: Even Rouault
 
 Contact: even.rouault at spatials.com
 
-Status: **Draft**
+Status: Adopted
 
 Summary
 -------
@@ -101,3 +101,7 @@ This document is a direct adaptation from
 `GDAL Project Management Committee Guidelines <https://gdal.org/development/rfc/rfc1_pmc.html>`__,
 authored by Frank Warmerdam.
 
+Voting history
+--------------
+
+Adopted by +1 vote from all above mentionned initial members of the PSC.
