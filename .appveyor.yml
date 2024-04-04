@@ -59,12 +59,12 @@ before_build:
   - 'if %compiler%==cygwin-cmake cmake --version || echo CMake not found'
   - set "AV_CMAKE_ARGS=-DBUILD_SHARED_LIBS:BOOL=%shared%"
   - 'if %compiler%==cygwin-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS% -Dfatal-warnings=ON"'
-  - 'if %compiler%==mingw32-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS% -Dfatal-warnings=ON"'
+  - 'if %compiler%==mingw-cmake set "AV_CMAKE_ARGS=%AV_CMAKE_ARGS% -Dfatal-warnings=ON"'
   - set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_SOURCE%"
   - set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_INSTALL%"
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_SOURCE=%AV_TIFF_CYG_SOURCE%'
   - 'if %compiler%==cygwin-cmake set "AV_TIFF_CMAKE_INSTALL=%AV_TIFF_CYG_INSTALL%'
-  - 'if %compiler%==mingw-cmake set "PATH=C:\MinGW\bin;%PATH%"'
+  - 'if %compiler%==mingw-cmake set "PATH=C:\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin;%PATH%"'
   - mkdir %AV_TIFF_BUILD%
   - cd %AV_TIFF_BUILD%
   - echo Running cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=%AV_TIFF_CMAKE_INSTALL% -DCMAKE_BUILD_TYPE=%configuration% %AV_TIFF_CMAKE_SOURCE%
