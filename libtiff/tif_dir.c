@@ -1862,7 +1862,9 @@ static int TIFFAdvanceDirectory(TIFF *tif, uint64_t *nextdiroff, uint64_t *off,
             if (((uint64_t)poffa != poff) || (poffb < poffa) ||
                 (poffb < (tmsize_t)sizeof(uint16_t)) || (poffb > tif->tif_size))
             {
-                TIFFErrorExtR(tif, module, "Error fetching directory count");
+                TIFFErrorExtR(tif, module,
+                              "%s:%d: %s: Error fetching directory count",
+                              __FILE__, __LINE__, tif->tif_name);
                 *nextdiroff = 0;
                 return (0);
             }
@@ -1891,14 +1893,18 @@ static int TIFFAdvanceDirectory(TIFF *tif, uint64_t *nextdiroff, uint64_t *off,
             uint16_t dircount16;
             if (poff > (uint64_t)TIFF_TMSIZE_T_MAX - sizeof(uint64_t))
             {
-                TIFFErrorExtR(tif, module, "Error fetching directory count");
+                TIFFErrorExtR(tif, module,
+                              "%s:%d: %s: Error fetching directory count",
+                              __FILE__, __LINE__, tif->tif_name);
                 return (0);
             }
             poffa = (tmsize_t)poff;
             poffb = poffa + sizeof(uint64_t);
             if (poffb > tif->tif_size)
             {
-                TIFFErrorExtR(tif, module, "Error fetching directory count");
+                TIFFErrorExtR(tif, module,
+                              "%s:%d: %s: Error fetching directory count",
+                              __FILE__, __LINE__, tif->tif_name);
                 return (0);
             }
             _TIFFmemcpy(&dircount64, tif->tif_base + poffa, sizeof(uint64_t));
@@ -1940,8 +1946,9 @@ static int TIFFAdvanceDirectory(TIFF *tif, uint64_t *nextdiroff, uint64_t *off,
             if (!SeekOK(tif, *nextdiroff) ||
                 !ReadOK(tif, &dircount, sizeof(uint16_t)))
             {
-                TIFFErrorExtR(tif, module, "%s: Error fetching directory count",
-                              tif->tif_name);
+                TIFFErrorExtR(tif, module,
+                              "%s:%d: %s: Error fetching directory count",
+                              __FILE__, __LINE__, tif->tif_name);
                 return (0);
             }
             if (tif->tif_flags & TIFF_SWAB)
@@ -1967,15 +1974,18 @@ static int TIFFAdvanceDirectory(TIFF *tif, uint64_t *nextdiroff, uint64_t *off,
             if (!SeekOK(tif, *nextdiroff) ||
                 !ReadOK(tif, &dircount64, sizeof(uint64_t)))
             {
-                TIFFErrorExtR(tif, module, "%s: Error fetching directory count",
-                              tif->tif_name);
+                TIFFErrorExtR(tif, module,
+                              "%s:%d: %s: Error fetching directory count",
+                              __FILE__, __LINE__, tif->tif_name);
                 return (0);
             }
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabLong8(&dircount64);
             if (dircount64 > 0xFFFF)
             {
-                TIFFErrorExtR(tif, module, "Error fetching directory count");
+                TIFFErrorExtR(tif, module,
+                              "%s:%d: %s: Error fetching directory count",
+                              __FILE__, __LINE__, tif->tif_name);
                 return (0);
             }
             dircount16 = (uint16_t)dircount64;
