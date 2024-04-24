@@ -583,7 +583,7 @@ if test "x$enable_jpeg" != "xno" ; then
   fi
 
   if test "$jpeg_lib" = "yes" -a "$jpeg_h" = "yes" ; then
-    dnl Check for jpeg12_read_scanlines which has been added in libjpeg-turbo 2.2
+    dnl Check for jpeg12_read_scanlines which has been added in libjpeg-turbo 3.0
     dnl for dual 8/12 bit mode.
     AC_CHECK_LIB(jpeg, jpeg12_read_scanlines, [HAVE_JPEGTURBO_DUAL_MODE_8_12=yes], [HAVE_JPEGTURBO_DUAL_MODE_8_12=no],)
     HAVE_JPEG=yes
@@ -602,7 +602,7 @@ if test "$HAVE_JPEG" = "yes" ; then
   fi
 
   if test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = "yes"; then
-      AC_DEFINE(HAVE_JPEGTURBO_DUAL_MODE_8_12,1,[libjpeg-turbo >= 2.2 dual mode enabled])
+      AC_DEFINE(HAVE_JPEGTURBO_DUAL_MODE_8_12,1,[libjpeg-turbo >= 3.0 dual mode enabled])
   fi
 fi
 
@@ -917,7 +917,7 @@ AM_CONDITIONAL(HAVE_WEBP, test "$HAVE_WEBP" = 'yes')
 
 dnl ---------------------------------------------------------------------------
 dnl Should 8/12 bit jpeg mode be enabled?
-dnl This should not be used starting with libjpeg-turbo >= 2.2 that has
+dnl This should not be used starting with libjpeg-turbo >= 3.0 that has
 dnl built-in support for dual mode.
 dnl ---------------------------------------------------------------------------
 
@@ -926,7 +926,7 @@ if test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = "no"; then
 
     AC_ARG_ENABLE(jpeg12,
               AS_HELP_STRING([--enable-jpeg12],
-                     [enable libjpeg 8/12bit dual mode (not to be used with libjpeg-turbo >= 2.2)]),,)
+                     [enable libjpeg 8/12bit dual mode (not to be used with libjpeg-turbo >= 3.0)]),,)
     AC_ARG_WITH(jpeg12-include-dir,
             AS_HELP_STRING([--with-jpeg12-include-dir=DIR],
                    [location of libjpeg 12bit headers]),,)
