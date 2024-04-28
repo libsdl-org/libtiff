@@ -19,7 +19,7 @@ to the archive in libtiff 4.6.0 should be reactivated.
 Prehistory
 ----------
 
-The very old and unmaintained tools in libtiff caused many vulnerabilities
+The tools in libtiff caused many vulnerabilities
 and CVEs that were attributed to the libtiff library itself.
 Trying to fix the security holes in the tools turned out to be a
 Sisyphean task (can never be done). 
@@ -34,12 +34,7 @@ Some problems with the tools have now been fixed
 Proposed procedure
 ------------------
 
-* Only the required tools should be restored.
-  These are: fax2ps, tiff2bw, tiff2pdf, tiff2ps as well as the already
-  active tools tiffcp, tiffdither, tiffdump, tiffinfo, tiffset, tiffsplit.
-* Thus following tools will not be restored and will remain in the archive:
-  fax2tiff, pal2rgb, ppm2tiff, raw2tiff, rgb2ycbcr, thumbnail, tiff2rgba,
-  tiffcmp, tiffcrop, tiffgt, tiffmedian.
+* All tools as of libtiff 4.5.1 shall be restored.
 * Bugfixes in MR !569 are applied in single merge requests for traceability
   and selectively as some changes might not be applicable.
 * Remove “wontfix-unmaintained” from closed issues, when fixed.
@@ -53,10 +48,11 @@ Proposed procedure
 
 References to previous contributions to the discussion
 ------------------------------------------------------
-https://gitlab.com/libtiff/libtiff/-/issues/580 and related merge request
-https://www.asmail.be/msg0054917226.html 
-https://www.asmail.be/msg0055015786.html 
-https://gitlab.com/libtiff/libtiff/-/merge_requests/569 
+https://gitlab.com/libtiff/libtiff/-/issues/580 and related merge request, 
+https://www.asmail.be/msg0054917226.html, 
+https://www.asmail.be/msg0055015786.html, 
+https://gitlab.com/libtiff/libtiff/-/merge_requests/569,
+and discussion in https://gitlab.com/libtiff/libtiff/-/merge_requests/581
 
 Voting history
 --------------
