@@ -8,7 +8,7 @@ Author: Su Laus
 
 Contact: (@Su_Laus)
 
-Status: Proposed
+Status: Approved
 
 Summary
 -------
@@ -57,4 +57,6 @@ and discussion in https://gitlab.com/libtiff/libtiff/-/merge_requests/581
 Voting history
 --------------
 
-### to be filled after comments and votes ###
++1 from PSC members @bobfriesenhahn, @1-Olivier, @Su_Laus
+
++0 from PSC members @theta682 and @rouault
