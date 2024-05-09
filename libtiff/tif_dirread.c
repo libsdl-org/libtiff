@@ -4093,6 +4093,12 @@ static bool EvaluateIFDdatasizeReading(TIFF *tif, TIFFDirEntry *dp)
     const uint64_t datalength = dp->tdir_count * data_width;
     if (datalength > ((tif->tif_flags & TIFF_BIGTIFF) ? 0x8U : 0x4U))
     {
+        if (tif->tif_dir.td_dirdatasize_read > UINT64_MAX - datalength)
+        {
+            TIFFErrorExtR(tif, "EvaluateIFDdatasizeReading",
+                          "Too large IFD data size");
+            return false;
+        }
         tif->tif_dir.td_dirdatasize_read += datalength;
         if (!(tif->tif_flags & TIFF_BIGTIFF))
         {
