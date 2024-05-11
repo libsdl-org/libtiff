@@ -51,7 +51,6 @@ else()
 endif()
 
 option(tiff-tools "build TIFF tools" ON)
-option(tiff-tools-unsupported "build unsupported TIFF tools" OFF)
 option(tiff-tests "build TIFF tests" ON)
 option(tiff-contrib "build TIFF contrib" ON)
 option(tiff-docs "build TIFF documentation" ON)
@@ -125,6 +124,9 @@ include(WebPCodec)
 # Option for C++ libtiffxx library
 include(CXXLibrary)
 
+# Checks for OpenGL support
+include(OpenGLChecks)
+
 # Windows support
 include(WindowsSupport)
 
@@ -143,9 +145,6 @@ add_subdirectory(port)
 add_subdirectory(libtiff)
 if(tiff-tools)
   add_subdirectory(tools)
-endif()
-if(tiff-tools-unsupported)
-  add_subdirectory(tools/unsupported)
 endif()
 if(tiff-tests)
   add_subdirectory(test)
@@ -177,7 +176,6 @@ message(STATUS "  C compiler:                         ${CMAKE_C_COMPILER}")
 message(STATUS "  C++ compiler:                       ${CMAKE_CXX_COMPILER}")
 message(STATUS "  Build shared libraries:             ${BUILD_SHARED_LIBS}")
 message(STATUS "  Build tools:                        ${tiff-tools}")
-message(STATUS "  Build tools-unsupported:            ${tiff-tools-unsupported}")
 message(STATUS "  Build tests:                        ${tiff-tests}")
 message(STATUS "  Build contrib:                      ${tiff-contrib}")
 message(STATUS "  Build docs:                         ${tiff-docs}")
@@ -228,5 +226,7 @@ message(STATUS "  ZSTD support:                       Requested:${zstd} Availabi
 message(STATUS "  WEBP support:                       Requested:${webp} Availability:${WebP_FOUND} Support:${WEBP_SUPPORT}")
 message(STATUS "")
 message(STATUS "  C++ support:                        ${cxx} (requested) ${CXX_SUPPORT} (availability)")
+message(STATUS "")
 # message(STATUS "  X Athena Widgets support:           ${HAVE_XAW}")
+message(STATUS "  OpenGL support:                     Requested:${tiff-opengl} Availability:${HAVE_OPENGL} Support:${OPENGL_SUPPORT}")
 message(STATUS "")
