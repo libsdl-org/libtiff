@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
 
     *mp++ = 'w';
     *mp = '\0';
-    while ((c = getopt(argc, argv, "m:,:b:c:f:l:o:p:r:w:astBLMC8xh")) != -1)
+    while ((c = getopt(argc, argv, "m:,:b:c:f:l:o:p:r:w:aistBLMC8xh")) != -1)
         switch (c)
         {
             case 'm':
@@ -272,6 +272,9 @@ int main(int argc, char *argv[])
                     deffillorder = FILLORDER_MSB2LSB;
                 else
                     usage(EXIT_FAILURE);
+                break;
+            case 'i': /* ignore errors */
+                ignore = TRUE;
                 break;
             case 'l': /* tile length */
                 outtiled = TRUE;
@@ -567,6 +570,7 @@ static const char usage_info[] =
     " -L              write little-endian instead of native byte order\n"
     " -M              disable use of memory-mapped files\n"
     " -C              disable strip chopping\n"
+    " -i              ignore read errors\n"
     " -b file[,#]     bias (dark) monochrome image to be subtracted from all "
     "others\n"
     " -,=%            use % rather than , to separate image #'s (per Note "
