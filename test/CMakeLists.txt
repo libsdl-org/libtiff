@@ -102,6 +102,7 @@ set(noinst_HEADERS tifftest.h)
 
 set(simple_tests)
 
+# Test programs
 add_executable(test_signed_tags ../placeholder.h)
 target_sources(test_signed_tags PRIVATE test_signed_tags.c)
 target_link_libraries(test_signed_tags PRIVATE tiff tiff_port)
@@ -387,6 +388,10 @@ if(tiff-tools)
   add_convert_test(ppm2tiff rgb        "" "images/rgb-3c-8b.ppm"        TRUE)
 
   # tiffcp
+  # Reading / writing TIFF images with different encoding schemes.
+  add_convert_tests(tiffcp TIFFIMG    ""                         TIFFIMAGES TRUE)
+
+  # Convert some images to another coding scheme.
   add_convert_test(tiffcp   g3         "-c g3"         "images/miniswhite-1c-1b.tiff" FALSE)
   add_convert_test(tiffcp   g31d       "-c g3:1d"      "images/miniswhite-1c-1b.tiff" FALSE)
   add_convert_test(tiffcp   g31dfill   "-c g3:1d:fill" "images/miniswhite-1c-1b.tiff" FALSE)
@@ -404,6 +409,10 @@ if(tiff-tools)
   if(WEBP_SUPPORT)
       add_convert_test(tiffcp   webp_lossless_rgba_alpha_fully_opaque "-c none"       "images/webp_lossless_rgba_alpha_fully_opaque.tif" FALSE)
   endif()
+  # Old-JPEG tests
+  #--- tiffcp does not support subsampled images, as the OldJPEG ones are ---
+  #    ToDo: a test for OldJPEG is missing.
+  #add_convert_tests(test_tiffcp OldJPEG    ""                         TIFFIMAGES_OJPEG TRUE)
 
   # tiffdump
   add_reader_test(tiffdump "" "images/miniswhite-1c-1b.tiff")
