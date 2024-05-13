@@ -34,17 +34,16 @@ your needs for reading and writing TIFF images.
 LibTIFF is portable software, supported on various operating systems including
 UNIX (Linux, BSD, MacOS X) and Windows.
 
-.. warning::
+.. note::
 
-    Starting with libtiff v4.6.0, the source code for most TIFF tools (except tiffinfo,
-    tiffdump, tiffcp and tiffset) was discontinued, due to the lack of contributors
-    able to address reported security issues.
+    At libtiff v4.6.0, the source code for most TIFF tools (except tiffinfo,
+    tiffdump, tiffcp and tiffset) has been moved to archive/ directory
+    and was not built.
     tiff2ps and tiff2pdf source code has been moved in a unsupported category,
-    no longer built by default, but are still part of the the source
-    distribution. Other retired utilities are in a archive/ directory, only
-    available in the libtiff git repository.
-    Issues related to unsupported and archived tools will no longer be accepted
-    in the libtiff bug tracker.
+    no longer built by default, but were still part of the the source
+    distribution.
+
+    With libtiff v4.7.0 those tools were restored.
 
 
 The following sections are included in this documentation:

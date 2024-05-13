@@ -103,10 +103,26 @@ rst_sources = \
 	index.rst \
 	build.rst \
 	internals.rst \
+	tools/tiffgt.rst \
+	tools/tiffdither.rst \
+	tools/tiff2pdf.rst \
+	tools/tiff2ps.rst \
+	tools/ppm2tiff.rst \
+	tools/raw2tiff.rst \
+	tools/fax2tiff.rst \
+	tools/tiffcrop.rst \
+	tools/tiff2bw.rst \
+	tools/fax2ps.rst \
+	tools/thumbnail.rst \
+	tools/tiffcmp.rst \
 	tools/tiffdump.rst \
+	tools/tiff2rgba.rst \
 	tools/tiffinfo.rst \
+	tools/rgb2ycbcr.rst \
 	tools/tiffset.rst \
 	tools/tiffsplit.rst \
+	tools/tiffmedian.rst \
+	tools/pal2rgb.rst \
 	tools/tiffcp.rst \
 	project/license.rst \
 	project/index.rst \
