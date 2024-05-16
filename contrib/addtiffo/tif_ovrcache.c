@@ -198,8 +198,11 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
                     nTileID = TIFFComputeTile(
                         psCache->hTIFF, iTileX * psCache->nBlockXSize,
                         iTileY * psCache->nBlockYSize, 0, (tsample_t)iSample);
-                    TIFFWriteEncodedTile(psCache->hTIFF, nTileID, pabyData,
-                                         TIFFTileSize(psCache->hTIFF));
+                    if (TIFFWriteEncodedTile(psCache->hTIFF, nTileID, pabyData,
+                                             TIFFTileSize(psCache->hTIFF)) < 0)
+                    {
+                        fprintf(stderr, "TIFFWriteEncodedTile() failed\n");
+                    }
                 }
                 else
                 {
@@ -210,9 +213,12 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
                     if ((iTileY + 1) * psCache->nBlockYSize > psCache->nYSize)
                         RowsInStrip =
                             psCache->nYSize - iTileY * psCache->nBlockYSize;
-                    TIFFWriteEncodedStrip(
-                        psCache->hTIFF, nTileID, pabyData,
-                        TIFFVStripSize(psCache->hTIFF, RowsInStrip));
+                    if (TIFFWriteEncodedStrip(
+                            psCache->hTIFF, nTileID, pabyData,
+                            TIFFVStripSize(psCache->hTIFF, RowsInStrip)) < 0)
+                    {
+                        fprintf(stderr, "TIFFWriteEncodedStrip() failed\n");
+                    }
                 }
             }
         }
@@ -225,8 +231,11 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
                 nTileID = TIFFComputeTile(psCache->hTIFF,
                                           iTileX * psCache->nBlockXSize,
                                           iTileY * psCache->nBlockYSize, 0, 0);
-                TIFFWriteEncodedTile(psCache->hTIFF, nTileID, pabyData,
-                                     TIFFTileSize(psCache->hTIFF));
+                if (TIFFWriteEncodedTile(psCache->hTIFF, nTileID, pabyData,
+                                         TIFFTileSize(psCache->hTIFF)) < 0)
+                {
+                    fprintf(stderr, "TIFFWriteEncodedTile() failed\n");
+                }
             }
             else
             {
@@ -236,14 +245,15 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
                 if ((iTileY + 1) * psCache->nBlockYSize > psCache->nYSize)
                     RowsInStrip =
                         psCache->nYSize - iTileY * psCache->nBlockYSize;
-                TIFFWriteEncodedStrip(
-                    psCache->hTIFF, nTileID, pabyData,
-                    TIFFVStripSize(psCache->hTIFF, RowsInStrip));
+                if (TIFFWriteEncodedStrip(
+                        psCache->hTIFF, nTileID, pabyData,
+                        TIFFVStripSize(psCache->hTIFF, RowsInStrip)) < 0)
+                {
+                    fprintf(stderr, "TIFFWriteEncodedStrip() failed\n");
+                }
             }
         }
     }
-    /* TODO: add checks on error status return of TIFFWriteEncodedTile and
-     * TIFFWriteEncodedStrip */
 
     /* -------------------------------------------------------------------- */
     /*      Rotate buffers.                                                 */
