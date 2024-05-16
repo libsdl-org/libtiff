@@ -641,7 +641,7 @@ static const char usage_info[] =
     " -c jpeg[:opts]  compress output with JPEG encoding\n"
     /* "    JPEG options:", */
     "    #            set compression quality level (0-100, default 75)\n"
-    "    r            outupt color image as RGB rather than YCbCr\n"
+    "    r            output color image as RGB rather than YCbCr\n"
     "    For example, -c jpeg:r:50 for JPEG-encoded RGB with 50% comp. "
     "quality\n"
 #endif
