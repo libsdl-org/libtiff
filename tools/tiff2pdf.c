@@ -4475,6 +4475,7 @@ tsize_t t2p_write_pdf_string(const char *pdfstr, TIFF *output)
         {
             switch (pdfstr[i])
             {
+                /* These cases are not reached.  They are handled above.
                 case 0x08:
                     written += t2pWriteFile(output, (tdata_t) "\\b", 2);
                     break;
@@ -4490,6 +4491,7 @@ tsize_t t2p_write_pdf_string(const char *pdfstr, TIFF *output)
                 case 0x0D:
                     written += t2pWriteFile(output, (tdata_t) "\\r", 2);
                     break;
+                */
                 case 0x28:
                     written += t2pWriteFile(output, (tdata_t) "\\(", 2);
                     break;
