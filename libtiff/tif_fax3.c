@@ -1556,6 +1556,7 @@ static int Fax4Decode(TIFF *tif, uint8_t *buf, tmsize_t occ, uint16_t s)
         return (-1);
     }
     CACHE_STATE(tif, sp);
+    int start = sp->line;
     while (occ > 0)
     {
         a0 = 0;
@@ -1604,7 +1605,7 @@ static int Fax4Decode(TIFF *tif, uint8_t *buf, tmsize_t occ, uint16_t s)
         }
         (*sp->fill)(buf, thisrun, pa, lastx);
         UNCACHE_STATE(tif, sp);
-        return (sp->line ? 1 : -1); /* don't error on badly-terminated strips */
+        return (sp->line != start ? 1 : -1); /* don't error on badly-terminated strips */
     }
     UNCACHE_STATE(tif, sp);
     return (1);
