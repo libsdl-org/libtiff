@@ -493,6 +493,7 @@ static uint16_t defcompression = (uint16_t)-1;
 static uint16_t defpredictor = (uint16_t)-1;
 static int pageNum = 0;
 static int little_endian = 1;
+static tmsize_t check_buffsize = 0;
 
 /* Functions adapted from tiffcp with additions or significant modifications */
 static int readContigStripsIntoBuffer(TIFF *, uint8_t *);
@@ -2394,6 +2395,11 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                     TIFFError(
                         "Limit for subdivisions, ie rows x columns, exceeded",
                         "%d", MAX_SECTIONS);
+                    exit(EXIT_FAILURE);
+                }
+                if ((page->cols * page->rows) < 1)
+                {
+                    TIFFError("No subdivisions", "%d", (page->cols * page->rows));
                     exit(EXIT_FAILURE);
                 }
                 page->mode |= PAGE_MODE_ROWSCOLS;
@@ -4936,7 +4942,7 @@ static int combineSeparateTileSamplesBytes(unsigned char *srcbuffs[],
         dst = out + (row * dst_rowsize);
         src_offset = row * src_rowsize;
 #ifdef DEVELMODE
-        TIFFError("", "Tile row %4d, Src offset %6d   Dst offset %6d", row,
+        TIFFError("", "Tile row %4d, Src offset %6d   Dst offset %6zd", row,
                   src_offset, dst - out);
 #endif
         for (col = 0; col < cols; col++)
@@ -5576,7 +5582,7 @@ static int readSeparateStripsIntoBuffer(TIFF *in, uint8_t *obuf,
             }
 #ifdef DEVELMODE
             TIFFError("",
-                      "Strip %2" PRIu32 ", read %5" PRId32
+                      "Strip %2" PRIu32 ", read %5zd"
                       " bytes for %4" PRIu32 " scanlines, shift width %d",
                       strip, bytes_read, rows_this_strip, shift_width);
 #endif
@@ -7112,6 +7118,7 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
         TIFFError("loadImage", "Unable to allocate read buffer");
         return (-1);
     }
+    check_buffsize = buffsize + NUM_BUFF_OVERSIZE_BYTES;
 
     read_buff[buffsize] = 0;
     read_buff[buffsize + 1] = 0;
@@ -7794,6 +7801,11 @@ static int extractImageSection(struct image_data *image,
             TIFFError("", "Src offset: %8" PRIu32 ", Dst offset: %8" PRIu32,
                       src_offset, dst_offset);
 #endif
+            if (src_offset + full_bytes >= check_buffsize)
+            {
+                printf("Bad input. Preventing reading outside of input buffer.\n");
+                return(-1);
+            }
             _TIFFmemcpy(sect_buff + dst_offset, src_buff + src_offset,
                         full_bytes);
             dst_offset += full_bytes;
@@ -7840,6 +7852,11 @@ static int extractImageSection(struct image_data *image,
             bytebuff1 = bytebuff2 = 0;
             if (shift1 == 0) /* the region is byte and sample aligned */
             {
+                if (offset1 + full_bytes >= check_buffsize)
+                {
+                    printf("Bad input. Preventing reading outside of input buffer.\n");
+                    return(-1);
+                }
                 _TIFFmemcpy(sect_buff + dst_offset, src_buff + offset1,
                             full_bytes);
 
@@ -7867,6 +7884,11 @@ static int extractImageSection(struct image_data *image,
                 {
                     /* Only copy higher bits of samples and mask lower bits of
                      * not wanted column samples to zero */
+                    if (offset1 + full_bytes >= check_buffsize)
+                    {
+                        printf("Bad input. Preventing reading outside of input buffer.\n");
+                        return(-1);
+                    }
                     bytebuff2 = src_buff[offset1 + full_bytes] &
                                 ((unsigned char)255 << (8 - trailing_bits));
                     sect_buff[dst_offset] = bytebuff2;
@@ -7907,6 +7929,11 @@ static int extractImageSection(struct image_data *image,
                      * shift1 bits before save to destination.*/
                     /* Attention: src_buff size needs to be some bytes larger
                      * than image size, because could read behind image here. */
+                    if (offset1 + j + 1 >= check_buffsize)
+                    {
+                        printf("Bad input. Preventing reading outside of input buffer.\n");
+                        return(-1);
+                    }
                     bytebuff1 =
                         src_buff[offset1 + j] & ((unsigned char)255 >> shift1);
                     bytebuff2 = src_buff[offset1 + j + 1] &
