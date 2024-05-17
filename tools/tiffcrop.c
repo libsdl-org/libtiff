@@ -487,8 +487,7 @@ static uint32_t g3opts = 0;
 static int ignore = FALSE; /* if true, ignore read errors */
 static uint32_t defg3opts = (uint32_t)-1;
 static int quality = 100; /* JPEG quality */
-/* static int    jpegcolormode = -1;        was JPEGCOLORMODE_RGB;  */
-static int jpegcolormode = JPEGCOLORMODE_RGB;
+static int jpegcolormode = -1;        /* means YCbCr or to not convert */
 static uint16_t defcompression = (uint16_t)-1;
 static uint16_t defpredictor = (uint16_t)-1;
 static int pageNum = 0;
@@ -756,10 +755,10 @@ static const char usage_info[] =
     " -c jpeg[:opts] Compress output with JPEG encoding\n"
     /* "    JPEG options:\n" */
     "    #        Set compression quality level (0-100, default 100)\n"
-    "    raw      Output color image as raw YCbCr (default)\n"
-    "    rgb      Output color image as RGB\n"
-    "    For example, -c jpeg:rgb:50 for JPEG-encoded RGB with 50% comp. "
-    "quality\n"
+    "    raw      Output same colorspace image as input\n"
+    "    rgb      Output color image as RGB (default is YCbCr)\n"
+    "    For example, -c jpeg:raw:50 for JPEG-encoded with 50% comp. "
+    "quality and the same colorspace\n"
 #endif
 #ifdef PACKBITS_SUPPORT
     " -c packbits Compress output with packbits encoding\n"
@@ -7074,7 +7073,6 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
 
     if (input_compression == COMPRESSION_JPEG)
     { /* Force conversion to RGB */
-        jpegcolormode = JPEGCOLORMODE_RGB;
         TIFFSetField(in, TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RGB);
     }
     /* The clause up to the read statement is taken from Tom Lane's tiffcp patch
@@ -8229,11 +8227,18 @@ static int writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
                                                                  : "mask");
             return (-1);
         }
-        if ((input_photometric == PHOTOMETRIC_RGB) &&
-            (jpegcolormode == JPEGCOLORMODE_RGB))
+        if (jpegcolormode == JPEGCOLORMODE_RGB && input_photometric == PHOTOMETRIC_YCBCR)
+        {
+            TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+        }
+        else if (jpegcolormode == -1 && input_photometric == PHOTOMETRIC_RGB)
+        {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_YCBCR);
+        }
         else
+        {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, input_photometric);
+        }
     }
     else
     {
@@ -8996,11 +9001,18 @@ static int writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
                                                                  : "mask");
             return (-1);
         }
-        if ((input_photometric == PHOTOMETRIC_RGB) &&
-            (jpegcolormode == JPEGCOLORMODE_RGB))
+        if (jpegcolormode == JPEGCOLORMODE_RGB && input_photometric == PHOTOMETRIC_YCBCR)
+        {
+            TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+        }
+        else if (jpegcolormode == -1 && input_photometric == PHOTOMETRIC_RGB)
+        {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_YCBCR);
+        }
         else
+        {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, input_photometric);
+        }
     }
     else
     {
