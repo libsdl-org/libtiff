@@ -628,6 +628,7 @@ static const char usage_info[] =
     "\n"
     /* "and the other options are:\n" */
     " -r rows/strip\n"
+    " -t rows/strip (same as -r)\n"
     " -b (progress by block rather than as a whole image)\n"
     " -n don't emit alpha component.\n"
     " -B use this value as the background when doing alpha compositing\n"
