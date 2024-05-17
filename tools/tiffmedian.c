@@ -270,7 +270,10 @@ int main(int argc, char *argv[])
      */
     out = TIFFOpen(argv[optind + 1], "w");
     if (out == NULL)
+    {
+        _TIFFfree(ColorCells);
         return (EXIT_FAILURE);
+    }
 
     CopyField(TIFFTAG_SUBFILETYPE, longv);
     CopyField(TIFFTAG_IMAGEWIDTH, longv);
@@ -320,6 +323,7 @@ int main(int argc, char *argv[])
     }
     TIFFSetField(out, TIFFTAG_COLORMAP, rm, gm, bm);
     (void)TIFFClose(out);
+    _TIFFfree(ColorCells);
     return (EXIT_SUCCESS);
 }
 
@@ -785,7 +789,7 @@ static C_cell *create_colorcell(int red, int green, int blue)
 static void map_colortable(void)
 {
     register uint32_t *histp = &histogram[0][0][0];
-    register C_cell *cell;
+    register C_cell *cell = NULL;
     register int j, tmp, d2, dist;
     int ir, ig, ib, i;
 
@@ -824,6 +828,7 @@ static void map_colortable(void)
                     }
                 }
             }
+    _TIFFfree(cell);
 }
 
 /*
