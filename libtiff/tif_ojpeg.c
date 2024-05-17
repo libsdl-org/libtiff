@@ -755,6 +755,9 @@ static int OJPEGPreDecode(TIFF *tif, uint16_t s)
         if (OJPEGWriteHeaderInfo(tif) == 0)
             return (0);
     }
+
+    sp->subsampling_convert_state = 0;
+
     while (sp->write_curstrile < m)
     {
         if (sp->libjpeg_jpeg_query_style == 0)
