@@ -1366,7 +1366,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
                   "bytes_per_sample * (width + 1)");
         return 1;
     }
-    rowstripsize = (tsize_t) rowsperstrip * bytes_per_sample * (width + 1);
+    rowstripsize = (tsize_t)rowsperstrip * bytes_per_sample * (width + 1);
 
     /* Add 3 padding bytes for extractContigSamples32bits */
     obuf = limitMalloc(rowstripsize + NUM_BUFF_OVERSIZE_BYTES);
@@ -1398,11 +1398,12 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
                               "might be wrong.",
                               (uint64_t)scanlinesize);
                 }
-                dump_info(dump->outfile, dump->format, "",
-                          "Sample %2d, Strip: %2d, bytes: %4zd, Row %4d, bytes: "
-                          "%4d, Input offset: %6zd",
-                          s + 1, strip + 1, stripsize, row + 1,
-                          (uint32_t)scanlinesize, src - buf);
+                dump_info(
+                    dump->outfile, dump->format, "",
+                    "Sample %2d, Strip: %2d, bytes: %4zd, Row %4d, bytes: "
+                    "%4d, Input offset: %6zd",
+                    s + 1, strip + 1, stripsize, row + 1,
+                    (uint32_t)scanlinesize, src - buf);
                 dump_buffer(dump->outfile, dump->format, nrows,
                             (uint32_t)scanlinesize, row, obuf);
             }
