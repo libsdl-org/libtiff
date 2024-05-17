@@ -23,7 +23,7 @@
 
 # Process this file with automake to produce Makefile.in.
 
-AUTOMAKE_OPTIONS = 1.12 color-tests parallel-tests foreign
+AUTOMAKE_OPTIONS = 1.11 color-tests parallel-tests foreign
 
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 
