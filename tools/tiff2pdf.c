@@ -902,7 +902,8 @@ static void usage_info(int code)
 #if defined(JPEG_SUPPORT) || defined(ZIP_SUPPORT)
         " -q: compression quality\n"
         " -n: no compressed data passthrough\n"
-        " -d: do not compress (decompress) - except monochrome to CCITT Group 4\n"
+        " -d: do not compress (decompress) - except monochrome to CCITT Group "
+        "4\n"
 #endif
         " -i: invert colors\n"
         " -u: set distance unit, 'i' for inch, 'm' for centimeter\n"

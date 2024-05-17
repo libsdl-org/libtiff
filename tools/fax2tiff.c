@@ -154,8 +154,9 @@ int main(int argc, char *argv[])
                 xsize = (uint32_t)atoi(optarg);
                 if (xsize < 1 || xsize > 10000)
                 {
-                    fprintf(stderr, "%s: The input width %s is not reasonable\n", argv[0],
-                            optarg);
+                    fprintf(stderr,
+                            "%s: The input width %s is not reasonable\n",
+                            argv[0], optarg);
                     return EXIT_FAILURE;
                 }
                 break;
@@ -412,7 +413,8 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
         {
             if (compression_in == COMPRESSION_CCITTFAX4)
             {
-                /* This is proably EOFB, but if it's corrupt data, then we can't continue, anyway. */
+                /* This is proably EOFB, but if it's corrupt data, then we can't
+                 * continue, anyway. */
                 break;
             }
             badfaxlines++;

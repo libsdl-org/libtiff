@@ -486,8 +486,8 @@ static uint32_t rowsperstrip = 0;
 static uint32_t g3opts = 0;
 static int ignore = FALSE; /* if true, ignore read errors */
 static uint32_t defg3opts = (uint32_t)-1;
-static int quality = 100; /* JPEG quality */
-static int jpegcolormode = -1;        /* means YCbCr or to not convert */
+static int quality = 100;      /* JPEG quality */
+static int jpegcolormode = -1; /* means YCbCr or to not convert */
 static uint16_t defcompression = (uint16_t)-1;
 static uint16_t defpredictor = (uint16_t)-1;
 static int pageNum = 0;
@@ -2398,7 +2398,8 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 }
                 if ((page->cols * page->rows) < 1)
                 {
-                    TIFFError("No subdivisions", "%d", (page->cols * page->rows));
+                    TIFFError("No subdivisions", "%d",
+                              (page->cols * page->rows));
                     exit(EXIT_FAILURE);
                 }
                 page->mode |= PAGE_MODE_ROWSCOLS;
@@ -7801,8 +7802,9 @@ static int extractImageSection(struct image_data *image,
 #endif
             if (src_offset + full_bytes >= check_buffsize)
             {
-                printf("Bad input. Preventing reading outside of input buffer.\n");
-                return(-1);
+                printf(
+                    "Bad input. Preventing reading outside of input buffer.\n");
+                return (-1);
             }
             _TIFFmemcpy(sect_buff + dst_offset, src_buff + src_offset,
                         full_bytes);
@@ -7852,8 +7854,9 @@ static int extractImageSection(struct image_data *image,
             {
                 if (offset1 + full_bytes >= check_buffsize)
                 {
-                    printf("Bad input. Preventing reading outside of input buffer.\n");
-                    return(-1);
+                    printf("Bad input. Preventing reading outside of input "
+                           "buffer.\n");
+                    return (-1);
                 }
                 _TIFFmemcpy(sect_buff + dst_offset, src_buff + offset1,
                             full_bytes);
@@ -7884,8 +7887,9 @@ static int extractImageSection(struct image_data *image,
                      * not wanted column samples to zero */
                     if (offset1 + full_bytes >= check_buffsize)
                     {
-                        printf("Bad input. Preventing reading outside of input buffer.\n");
-                        return(-1);
+                        printf("Bad input. Preventing reading outside of input "
+                               "buffer.\n");
+                        return (-1);
                     }
                     bytebuff2 = src_buff[offset1 + full_bytes] &
                                 ((unsigned char)255 << (8 - trailing_bits));
@@ -7929,8 +7933,9 @@ static int extractImageSection(struct image_data *image,
                      * than image size, because could read behind image here. */
                     if (offset1 + j + 1 >= check_buffsize)
                     {
-                        printf("Bad input. Preventing reading outside of input buffer.\n");
-                        return(-1);
+                        printf("Bad input. Preventing reading outside of input "
+                               "buffer.\n");
+                        return (-1);
                     }
                     bytebuff1 =
                         src_buff[offset1 + j] & ((unsigned char)255 >> shift1);
@@ -8227,7 +8232,8 @@ static int writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
                                                                  : "mask");
             return (-1);
         }
-        if (jpegcolormode == JPEGCOLORMODE_RGB && input_photometric == PHOTOMETRIC_YCBCR)
+        if (jpegcolormode == JPEGCOLORMODE_RGB &&
+            input_photometric == PHOTOMETRIC_YCBCR)
         {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
         }
@@ -9001,7 +9007,8 @@ static int writeCroppedImage(TIFF *in, TIFF *out, struct image_data *image,
                                                                  : "mask");
             return (-1);
         }
-        if (jpegcolormode == JPEGCOLORMODE_RGB && input_photometric == PHOTOMETRIC_YCBCR)
+        if (jpegcolormode == JPEGCOLORMODE_RGB &&
+            input_photometric == PHOTOMETRIC_YCBCR)
         {
             TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
         }
