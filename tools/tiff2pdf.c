@@ -4248,9 +4248,9 @@ tsize_t t2p_sample_rgba_to_rgb(tdata_t data, uint32_t samplecount)
     {
         sample = ((uint32_t *)data)[i];
         alpha = (uint8_t)((255 - ((sample >> 24) & 0xff)));
-        ((uint8_t *)data)[i * 3] = (uint8_t)((sample >> 16) & 0xff) + alpha;
+        ((uint8_t *)data)[i * 3 + 2] = (uint8_t)((sample >> 16) & 0xff) + alpha;
         ((uint8_t *)data)[i * 3 + 1] = (uint8_t)((sample >> 8) & 0xff) + alpha;
-        ((uint8_t *)data)[i * 3 + 2] = (uint8_t)(sample & 0xff) + alpha;
+        ((uint8_t *)data)[i * 3] = (uint8_t)(sample & 0xff) + alpha;
     }
 
     return (i * 3);
