@@ -2077,7 +2077,7 @@
 	to
 	{ TIFFTAG_INTEROPERABILITYIFD, 1, 1, TIFF_IFD8, 0, TIFF_SETGET_IFD8, TIFF_SETGET_UNDEFINED, FIELD_CUSTOM, 0, 0, "InteroperabilityIFDOffset", NULL },
 
-	However, if those tags should not be handled by LibTiff because they are deamed as abandoned or unwanted tags, those tags need to be defined with FIELD_IGNORE instead of FIELD_CUSTOM and keeping set_field_type  = TIFF_SETGET_UNDEFINED
+	However, if those tags should not be handled by LibTiff because they are deemed as abandoned or unwanted tags, those tags need to be defined with FIELD_IGNORE instead of FIELD_CUSTOM and keeping set_field_type  = TIFF_SETGET_UNDEFINED
 
 2022-07-01  Su_Laus  <sulau@freenet.de>
 
@@ -3960,7 +3960,7 @@
 2021-03-07  Antonio Valentino  <Antonio.Valentino@esa.int>
 
 	Add LERC plugin.
-	The lerc plugin code has been copied:* form GDAL.
+	The lerc plugin code has been copied from GDAL.
 
 2021-03-06  Roger Leigh  <rleigh@codelibre.net>
 
@@ -4634,7 +4634,7 @@
 2020-12-31  Kurt Schwehr  <schwehr@google.com>
 
 	custom_dir_EXIF_231.c: dos2unix and codespell.
-	additional, Varable, greather, alwasy
+	additional, Variable, greater, always
 
 2020-12-31  Kurt Schwehr  <schwehr@google.com>
 
@@ -6208,7 +6208,7 @@
 
 2019-10-03  Even Rouault  <even.rouault@spatialys.com>
 
-	tif_read: align code of TIFFReadRawStrip() and TIFFReadRawTile() that deferred for non good reason. Non-functional change normally. (fixes GitLab #162)
+	tif_read: align code of TIFFReadRawStrip() and TIFFReadRawTile() that differed for non good reason. Non-functional change normally. (fixes GitLab #162)
 
 2019-10-01  Even Rouault  <even.rouault@spatialys.com>
 
