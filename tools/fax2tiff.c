@@ -238,6 +238,11 @@ int main(int argc, char *argv[])
     refbuf = _TIFFmalloc(TIFFhowmany8(xsize));
     if (rowbuf == NULL || refbuf == NULL)
     {
+        TIFFClose(out);
+        if (rowbuf)
+            _TIFFfree(rowbuf);
+        if (refbuf)
+            _TIFFfree(refbuf);
         fprintf(stderr, "%s: Not enough memory\n", argv[0]);
         return (EXIT_FAILURE);
     }
@@ -248,6 +253,11 @@ int main(int argc, char *argv[])
         if (out == NULL)
         {
             fprintf(stderr, "%s: Can not create fax.tif\n", argv[0]);
+            TIFFClose(out);
+            if (rowbuf)
+                _TIFFfree(rowbuf);
+            if (refbuf)
+                _TIFFfree(refbuf);
             return (EXIT_FAILURE);
         }
     }
@@ -261,6 +271,11 @@ int main(int argc, char *argv[])
     if (faxTIFF == NULL)
     {
         fprintf(stderr, "%s: Can not create fake input file\n", argv[0]);
+        TIFFClose(out);
+        if (rowbuf)
+            _TIFFfree(rowbuf);
+        if (refbuf)
+            _TIFFfree(refbuf);
         return (EXIT_FAILURE);
     }
     TIFFSetMode(faxTIFF, O_RDONLY);
@@ -392,6 +407,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
     if (!ReadOK(tifin, tifin->tif_rawdata, tifin->tif_rawdatasize))
     {
         TIFFError(tifin->tif_name, "Read error at scanline 0");
+        _TIFFfree(tifin->tif_rawdata);
         return (0);
     }
     tifin->tif_rawcp = tifin->tif_rawdata;

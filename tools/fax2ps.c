@@ -388,9 +388,11 @@ int main(int argc, char **argv)
                 maxline = atoi(optarg);
                 break;
             case 'h':
+                free(pages);
                 usage(EXIT_SUCCESS);
                 break;
             case '?':
+                free(pages);
                 usage(EXIT_FAILURE);
         }
     if (npages > 0)
@@ -422,6 +424,7 @@ int main(int argc, char **argv)
         if (fd == NULL)
         {
             fprintf(stderr, "Could not obtain temporary file.\n");
+            free(pages);
             exit(EXIT_FAILURE);
         }
 #if defined(HAVE_SETMODE) && defined(O_BINARY)
@@ -433,6 +436,7 @@ int main(int argc, char **argv)
             {
                 fclose(fd);
                 fprintf(stderr, "Could not copy stdin to temporary file.\n");
+                free(pages);
                 exit(EXIT_FAILURE);
             }
         }
@@ -455,6 +459,7 @@ int main(int argc, char **argv)
     printf("%%%%Pages: %u\n", totalPages);
     printf("%%%%EOF\n");
 
+    free(pages);
     return (EXIT_SUCCESS);
 }
 
