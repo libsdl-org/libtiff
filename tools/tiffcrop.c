@@ -6304,6 +6304,18 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                     crop->combined_width += (uint32_t)zwidth;
                 else
                     crop->combined_width = (uint32_t)zwidth;
+
+                /* When the degrees clockwise rotation is 90 or 270, check the
+                 * boundary */
+                if (((crop->rotation == 90) || (crop->rotation == 270)) &&
+                    ((crop->combined_length > image->width) ||
+                     (crop->combined_width > image->length)))
+                {
+                    TIFFError("getCropOffsets",
+                              "The crop size exceeds the image boundary size");
+                    return -1;
+                }
+
                 break;
             case EDGE_BOTTOM: /* width from left, zones from bottom to top */
                 zwidth = offsets.crop_width;
@@ -6351,6 +6363,18 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                 else
                     crop->combined_length = (uint32_t)zlength;
                 crop->combined_width = (uint32_t)zwidth;
+
+                /* When the degrees clockwise rotation is 90 or 270, check the
+                 * boundary */
+                if (((crop->rotation == 90) || (crop->rotation == 270)) &&
+                    ((crop->combined_length > image->width) ||
+                     (crop->combined_width > image->length)))
+                {
+                    TIFFError("getCropOffsets",
+                              "The crop size exceeds the image boundary size");
+                    return -1;
+                }
+
                 break;
             case EDGE_RIGHT: /* zones from right to left, length from top */
                 zlength = offsets.crop_length;
@@ -6400,6 +6424,18 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                     crop->combined_width += (uint32_t)zwidth;
                 else
                     crop->combined_width = (uint32_t)zwidth;
+
+                /* When the degrees clockwise rotation is 90 or 270, check the
+                 * boundary */
+                if (((crop->rotation == 90) || (crop->rotation == 270)) &&
+                    ((crop->combined_length > image->width) ||
+                     (crop->combined_width > image->length)))
+                {
+                    TIFFError("getCropOffsets",
+                              "The crop size exceeds the image boundary size");
+                    return -1;
+                }
+
                 break;
             case EDGE_TOP: /* width from left, zones from top to bottom */
             default:
@@ -6460,6 +6496,18 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                 else
                     crop->combined_length = (uint32_t)zlength;
                 crop->combined_width = (uint32_t)zwidth;
+
+                /* When the degrees clockwise rotation is 90 or 270, check the
+                 * boundary */
+                if (((crop->rotation == 90) || (crop->rotation == 270)) &&
+                    ((crop->combined_length > image->width) ||
+                     (crop->combined_width > image->length)))
+                {
+                    TIFFError("getCropOffsets",
+                              "The crop size exceeds the image boundary size");
+                    return -1;
+                }
+
                 break;
         } /* end switch statement */
 
@@ -7765,13 +7813,12 @@ static int extractImageSection(struct image_data *image,
      * the input file. Furthermore, bytes and bits are arranged in buffer
      * according to COMPRESSION=1 and FILLORDER=1
      */
-    img_rowsize = (((img_width * spp * bps) + 7) /
-                   8); /* row size in full bytes of source image */
-    full_bytes = (sect_width * spp * bps) /
-                 8; /* number of COMPLETE bytes per row in section */
-    trailing_bits =
-        (sect_width * spp * bps) %
-        8; /* trailing bits within the last byte of destination buffer */
+    /* row size in full bytes of source image */
+    img_rowsize = (((img_width * spp * bps) + 7) / 8);
+    /* number of COMPLETE bytes per row in section */
+    full_bytes = (sect_width * spp * bps) / 8;
+    /* trailing bits within the last byte of destination buffer */
+    trailing_bits = (sect_width * spp * bps) % 8;
 
 #ifdef DEVELMODE
     TIFFError("",
