@@ -129,6 +129,7 @@ rst_sources = \
 	project/acknowledgements.rst \
 	project/bugs.rst \
 	project/mailinglist.rst \
+	project/psc.rst \
 	addingtags.rst \
 	specification/index.rst \
 	specification/bigtiff.rst \
@@ -195,6 +196,8 @@ rst_sources = \
 	releases/v4.5.0.rst \
 	releases/v4.5.1.rst \
 	releases/v4.6.0.rst \
+	rfcs/index.rst \
+	rfcs/rfc1_psc.rst \
 	functions.rst \
 	tools.rst \
 	terms.rst \
