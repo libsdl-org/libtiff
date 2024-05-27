@@ -190,6 +190,8 @@ static int LZMADecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     sp->stream.avail_out = (size_t)occ;
     if ((tmsize_t)sp->stream.avail_out != occ)
     {
+        // read_error not set here as this is a usage issue that can be
+        // recovered in a following call.
         memset(op, 0, (size_t)occ);
         TIFFErrorExtR(tif, module,
                       "Liblzma cannot deal with buffers this size");

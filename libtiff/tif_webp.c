@@ -290,6 +290,8 @@ static int TWebPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
 
     if (occ % sp->sDecBuffer.u.RGBA.stride)
     {
+        // read_error not set here as this is a usage issue that can be
+        // recovered in a following call.
         memset(op, 0, (size_t)occ);
         /* Do not set read_error as could potentially be recovered */
         TIFFErrorExtR(tif, module, "Fractional scanlines cannot be read");
