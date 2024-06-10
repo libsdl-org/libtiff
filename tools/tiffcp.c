@@ -1252,6 +1252,8 @@ DECLAREcpFunc(cpBiasedContig2Contig)
                 uint32_t row;
                 buf = limitMalloc(bufSize);
                 biasBuf = limitMalloc(bufSize);
+                if (!buf || !biasBuf)
+                    goto bad;
                 for (row = 0; row < imagelength; row++)
                 {
                     if (TIFFReadScanline(in, buf, row, 0) < 0 && !ignore)
@@ -1281,8 +1283,10 @@ DECLAREcpFunc(cpBiasedContig2Contig)
                 TIFFSetDirectory(bias, TIFFCurrentDirectory(bias)); /* rewind */
                 return 1;
             bad:
-                _TIFFfree(buf);
-                _TIFFfree(biasBuf);
+                if (buf)
+                    _TIFFfree(buf);
+                if (biasBuf)
+                    _TIFFfree(biasBuf);
                 return 0;
             }
             else
