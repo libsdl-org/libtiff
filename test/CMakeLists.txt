@@ -294,6 +294,39 @@ function(tiff_test_reader name command infile)
            -P "${CMAKE_CURRENT_SOURCE_DIR}/TiffTest.cmake")
 endfunction()
 
+function(add_convert_test_multi_out_in commandname1 commandname2 commandname3
+      categoryname commandargs1 commandargs2 commandargs3
+      image validate)
+  string(REPLACE " " "^" escaped_commandargs1 "${commandargs1}")
+  string(REPLACE " " "^" escaped_commandargs2 "${commandargs2}")
+  string(REPLACE " " "^" escaped_commandargs3 "${commandargs3}")
+  get_filename_component(name "${image}" NAME)
+  get_filename_component(base "${image}" NAME_WE)
+  set(testname "${commandname1}-${categoryname}-${base}")
+  if(commandname1)
+    set(command1
+        "$<TARGET_FILE:${commandname1}>^${escaped_commandargs1}")
+  else()
+    set(command1)
+  endif()
+  if(commandname2)
+    set(command2
+        "$<TARGET_FILE:${commandname2}>^${escaped_commandargs2}")
+  else()
+    set(command2)
+  endif()
+  if(commandname3)
+    set(command3
+        "$<TARGET_FILE:${commandname3}>^${escaped_commandargs3}")
+  else()
+    set(command3)
+  endif()
+  set(infile "${TEST_OUTPUT}/${image}")
+  set(outfile "${TEST_OUTPUT}/${commandname1}-${categoryname}-${base}.tiff")
+  tiff_test_convert("${testname}" "${command1}" "${command2}" "${command3}"
+                    "${infile}" "${outfile}" "${validate}")
+endfunction()
+
 function(add_convert_test_multi commandname1 commandname2 commandname3
       categoryname commandargs1 commandargs2 commandargs3
       image validate)
@@ -408,8 +441,19 @@ if(tiff-tools)
   add_convert_test(tiffcp   float64_lzw_2_le "-c lzw:2"       "images/test_float64_predictor2_le_lzw.tif" FALSE)
   add_convert_test(tiffcp   float64_lzw_2_be "-c lzw:2"       "images/test_float64_predictor2_be_lzw.tif" FALSE)
   if(WEBP_SUPPORT)
-      add_convert_test(tiffcp   webp_lossless_rgba_alpha_fully_opaque "-c none"       "images/webp_lossless_rgba_alpha_fully_opaque.tif" FALSE)
+    add_convert_test(tiffcp   webp_lossless_rgba_alpha_fully_opaque "-c none"    "images/webp_lossless_rgba_alpha_fully_opaque.tif" FALSE)
   endif()
+  
+  add_convert_test(tiff2rgba 32BPP    "-B 255 -n"     "images/32bpp-None.tiff" TRUE)
+  if(JPEG_SUPPORT)
+    # use output of tiff2rgba-32BPP as input!
+    add_convert_test_multi_out_in(tiffcp "" "" 32BPP-JPEG "-c jpeg" "" ""       "tiff2rgba-32BPP-32bpp-None.tiff" TRUE)
+  endif()
+
+  if(JBIG_SUPPORT)
+    add_convert_test(tiffcp   jbig         "-c jbig"         "images/lzw-single-strip.tiff" TRUE)
+  endif()
+  
   # Old-JPEG tests
   #--- tiffcp does not support subsampled images, as the OldJPEG ones are ---
   #    ToDo: a test for OldJPEG is missing.
