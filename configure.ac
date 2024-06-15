@@ -735,6 +735,7 @@ if test "$HAVE_LERC" = "yes" ; then
   AC_DEFINE(LERC_SUPPORT,1,[Support lerc compression])
   LIBS="-l${lerc_lib_name} $LIBS"
   tiff_libs_private="-l${lerc_lib_name} ${tiff_libs_private}"
+  tiff_requires_private="Lerc ${tiff_requires_private}"
 
   if test "$HAVE_RPATH" = "yes" -a "x$with_lerc_lib_dir" != "x" ; then
     LIBDIR="-R $with_lerc_lib_dir $LIBDIR"
