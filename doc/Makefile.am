@@ -52,9 +52,9 @@ man3_MANS = $(TIFF_MAN3_GEN)
 all-local: doc-html doc-man
 
 clean-local:
-	rm -r html
-	rm -r man
-	rm -r cache
+	rm -rf html
+	rm -rf man
+	rm -rf cache
 
 html_installdir = html
 else
