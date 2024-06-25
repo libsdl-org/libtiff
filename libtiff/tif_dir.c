@@ -2160,8 +2160,10 @@ int TIFFSetSubDirectory(TIFF *tif, uint64_t diroff)
             probablySubIFD = 1;
         }
         /* -1 because TIFFReadDirectory() will increment tif_curdir. */
-        tif->tif_curdir =
-            curdir == 0 ? TIFF_NON_EXISTENT_DIR_NUMBER : curdir - 1;
+        if (curdir >= 1)
+            tif->tif_curdir = curdir - 1;
+        else
+            tif->tif_curdir = TIFF_NON_EXISTENT_DIR_NUMBER;
     }
 
     tif->tif_nextdiroff = diroff;
