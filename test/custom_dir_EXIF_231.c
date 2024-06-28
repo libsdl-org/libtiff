@@ -1002,7 +1002,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_IMAGELENGTH");
     }
-    if (auxUint32 != width)
+    if (auxUint32 != length)
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_IMAGELENGTH %" PRIu32
