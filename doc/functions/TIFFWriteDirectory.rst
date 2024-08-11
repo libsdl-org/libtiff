@@ -38,7 +38,8 @@ The :c:func:`TIFFRewriteDirectory` function operates similarly to
 :c:func:`TIFFWriteDirectory`, but can be called with directories
 previously read or written that already have an established location
 in the file.  It will rewrite the directory, but instead of placing it
-at its old location (as :c:func:`TIFFWriteDirectory` would) it will
+at its old location (as :c:func:`TIFFWriteDirectory` would, if the size
+of the directory has not grown) it will
 place them at the end of the file, correcting the pointer from the
 preceding directory or file header to point to it's new location.  This
 is particularly important in cases where the size of the directory and
