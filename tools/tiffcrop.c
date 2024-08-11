@@ -5570,7 +5570,14 @@ static int readSeparateStripsIntoBuffer(TIFF *in, uint8_t *obuf,
             buff = srcbuffs[s];
             strip = (s * strips_per_sample) + j;
             bytes_read = TIFFReadEncodedStrip(in, strip, buff, stripsize);
-            rows_this_strip = (uint32_t)(bytes_read / src_rowsize);
+            if (bytes_read < 0)
+            {
+                rows_this_strip = 0;
+            }
+            else
+            {
+                rows_this_strip = (uint32_t)(bytes_read / src_rowsize);
+            }
             if (bytes_read < 0 && !ignore)
             {
                 TIFFError(TIFFFileName(in),
@@ -5999,7 +6006,7 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
             rmargin = _TIFFClampDoubleToUInt32(crop->margins[3] * scale * xres);
         }
 
-        if ((lmargin + rmargin) > image->width)
+        if (lmargin == 0xFFFFFFFFU || rmargin == 0xFFFFFFFFU || (lmargin + rmargin) > image->width)
         {
             TIFFError("computeInputPixelOffsets",
                       "Combined left and right margins exceed image width");
@@ -6007,7 +6014,7 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
             rmargin = (uint32_t)0;
             return (-1);
         }
-        if ((tmargin + bmargin) > image->length)
+        if (tmargin == 0xFFFFFFFFU || bmargin == 0xFFFFFFFFU || (tmargin + bmargin) > image->length)
         {
             TIFFError("computeInputPixelOffsets",
                       "Combined top and bottom margins exceed image length");
@@ -6637,14 +6644,14 @@ static int computeOutputPixelOffsets(struct crop_mask *crop,
                                                ((image->bps + 7) / 8));
         }
 
-        if ((hmargin * 2.0) > (pwidth * page->hres))
+        if (hmargin == 0xFFFFFFFFU || (hmargin * 2.0) > (pwidth * page->hres))
         {
             TIFFError("computeOutputPixelOffsets",
                       "Combined left and right margins exceed page width");
             hmargin = (uint32_t)0;
             return (-1);
         }
-        if ((vmargin * 2.0) > (plength * page->vres))
+        if (vmargin == 0xFFFFFFFFU || (vmargin * 2.0) > (plength * page->vres))
         {
             TIFFError("computeOutputPixelOffsets",
                       "Combined top and bottom margins exceed page length");
