@@ -3198,7 +3198,7 @@ static int TIFFLinkDirectory(TIFF *tif)
         /*
          * Not the first directory, search to the last and append.
          */
-        tdir_t dirn = -1;
+        tdir_t dirn = 0;
         if (tif->tif_lastdiroff != 0 &&
             _TIFFGetDirNumberFromOffset(tif, tif->tif_lastdiroff, &dirn))
         {
@@ -3276,7 +3276,7 @@ static int TIFFLinkDirectory(TIFF *tif)
         /*
          * Not the first directory, search to the last and append.
          */
-        tdir_t dirn = -1;
+        tdir_t dirn = 0;
         if (tif->tif_lastdiroff != 0 &&
             _TIFFGetDirNumberFromOffset(tif, tif->tif_lastdiroff, &dirn))
         {
