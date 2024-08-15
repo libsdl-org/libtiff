@@ -2140,10 +2140,7 @@ int test_curdircount_setting(unsigned int openMode)
     return 0;
 
 failure:
-    if (tif)
-    {
-        TIFFClose(tif);
-    }
+    TIFFClose(tif);
     return 1;
 } /*-- test_curdircount_setting() --*/
 
