@@ -296,6 +296,10 @@ uint64_t TIFFScanlineSize64(TIFF *tif)
             uint64_t scanline_samples;
             uint32_t scanline_width = td->td_imagewidth;
 
+#if 0
+            // Tries to fix https://gitlab.com/libtiff/libtiff/-/merge_requests/564
+            // but causes regression when decoding legit files with tiffcp -c none
+            // Cf https://gitlab.com/libtiff/libtiff/-/merge_requests/644
             if (td->td_photometric == PHOTOMETRIC_YCBCR)
             {
                 uint16_t subsampling_hor;
@@ -306,6 +310,7 @@ uint64_t TIFFScanlineSize64(TIFF *tif)
                     scanline_width =
                         TIFFroundup_32(scanline_width, subsampling_hor);
             }
+#endif
 
             scanline_samples = _TIFFMultiply64(tif, scanline_width,
                                                td->td_samplesperpixel, module);
