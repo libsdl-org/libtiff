@@ -8,7 +8,7 @@ case `uname` in
     libtoolize --force --copy
     ;;
 esac
-aclocal -I ./m4
+aclocal --install -I ./m4
 autoheader
 automake --foreign --add-missing --copy
 autoconf
