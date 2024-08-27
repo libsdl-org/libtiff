@@ -2144,6 +2144,100 @@ failure:
     return 1;
 } /*-- test_curdircount_setting() --*/
 
+/* Test writing and reading of a custom directory only (solitary) without having
+ * touched a normal directory.
+ * Reproduces issue https://gitlab.com/libtiff/libtiff/-/issues/643.
+ * Error analysis of issue 643:
+ *   Opening a file as read with "h" option does not initialize a default
+ *   directory and thus, the pointer tif->tif_tagmethods.vsetfield and
+ *   tif->tif_tagmethods.vgetfield are not initialized. This is done in
+ *   TIFFDefaultDirectory(). In standard read functions, that default directory
+ *   is set up but not for reading custom directories. Any call to
+ *   TIFFSetField() or TIFFGetField() within TIFFReadCustomDirectory() will then
+ *   fail or cause a SegFault.
+ */
+int test_solitary_custom_directory(unsigned int openMode)
+{
+    char filename[128] = {0};
+
+    if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
+    {
+        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+                openMode);
+        return 1;
+    }
+
+    /* Get individual filenames and delete existent ones. */
+    sprintf(filename, "test_solitary_custom_directory_%s.tif",
+            openModeStrings[openMode]);
+    unlink(filename);
+
+    /* Create a dummy file without IFD. */
+    TIFF *tif = TIFFOpen(filename, openModeStrings[openMode]);
+    if (!tif)
+    {
+        fprintf(stderr, "Can't create %s\n", filename);
+        return 1;
+    }
+    /* A TIFFSetFiled() here would work. */
+    TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, "DocName");
+    TIFFClose(tif);
+
+    /* Open file without reading a directory using option "h".
+     * Option "h" supresses to load the directory. Thus reading functions are
+     * hot set. Read TIFF header only, do not load the first image directory.
+     * That could be useful in case of the broken first directory. We can open
+     * the file and proceed to the other directories.
+     */
+    tif = TIFFOpen(filename, "r+h");
+    if (!tif)
+    {
+        fprintf(stderr, "Can't open %s\n", filename);
+        return 1;
+    }
+    /* A TIFFSetField() here would fail or cause a SegFault, because of the "h"
+     * option before fix of issue 643. */
+    TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, "DocName");
+
+    /* Write a custom directory. */
+    uint64_t offsetEXIFBase;
+    if (write_EXIF_data_to_current_directory(tif, 0, &offsetEXIFBase))
+    {
+        fprintf(stderr,
+                "Can't write solitary EXIF data into %s. "
+                "Testline %d\n",
+                filename, __LINE__);
+        goto failure;
+    }
+    TIFFClose(tif);
+
+    /* Open and read custom directory without touching another IFD. */
+    tif = TIFFOpen(filename, "rh");
+    if (!tif)
+    {
+        fprintf(stderr, "Can't open %s\n", filename);
+        return 1;
+    }
+    /* This custom directory reading will cause a SegFault due to the "h"
+     * option before fix of issue 643. */
+    if (!TIFFReadEXIFDirectory(tif, offsetEXIFBase))
+    {
+        fprintf(stderr,
+                "Can't read solitary EXIF data from %s. "
+                "Testline %d\n",
+                filename, __LINE__);
+        goto failure;
+    }
+
+    TIFFClose(tif);
+    unlink(filename);
+    return 0;
+
+failure:
+    TIFFClose(tif);
+    return 1;
+} /*-- test_solitary_custom_directory() --*/
+
 int main()
 {
 
@@ -2218,6 +2312,22 @@ int main()
                         i, openModeText[openMode]);
                 return 1;
             }
+        }
+    }
+
+    /* Test for reading / writing custom directory (e.g. EXIF) without having
+     * touched a normal directory. */
+    for (unsigned int openMode = 0; openMode < openModeMax; openMode++)
+    {
+        fprintf(stderr,
+                "\n--- Test for test_solitary_custom_directory %s ---\n",
+                openModeText[openMode]);
+        if (test_solitary_custom_directory(openMode))
+        {
+            fprintf(stderr,
+                    "Failed during test_solitary_custom_directory in %s.\n",
+                    openModeText[openMode]);
+            return 1;
         }
     }
 
