@@ -1,4 +1,4 @@
-image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
+image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu24.04:latest
 
 stages:
   - build
@@ -48,7 +48,7 @@ cmake-makefiles-old:
 
 coverity:
   stage: static-analysis
-  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04-coverity:latest
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu24.04-coverity:latest
   script:
     - sh build/gitlab-ci coverity "Ninja" Debug
   only:
