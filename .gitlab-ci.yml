@@ -19,7 +19,7 @@ autoconf-current:
 
 autoconf-old:
   stage: build
-  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04:latest
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
   script:
     - sh build/gitlab-ci autoconf-minimal
   after_script:
@@ -42,7 +42,7 @@ cmake-ninja-current:
 
 cmake-makefiles-old:
   stage: build
-  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu20.04:latest
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
