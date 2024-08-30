@@ -164,7 +164,12 @@ AC_SUBST(tiff_libs_private)
 tiff_requires_private=
 AC_SUBST(tiff_requires_private)
 
+
 AM_CONDITIONAL(BUILD_STATIC, test "$enable_static" = "yes")
+
+dnl Avoid -Werror to interfere with feature detection
+SAVED_CFLAGS="$CFLAGS"
+CFLAGS=$(echo "$CFLAGS " | sed "s/-Werror //")
 
 dnl We don't need to add math library to all targets
 case "${host_os}" in
@@ -1190,6 +1195,7 @@ fi
 
 dnl ---------------------------------------------------------------------------
 
+CFLAGS="$SAVED_CFLAGS"
 
 AC_SUBST(LIBDIR)
 
