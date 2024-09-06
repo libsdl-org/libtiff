@@ -2184,7 +2184,7 @@ int test_solitary_custom_directory(unsigned int openMode)
     TIFFClose(tif);
 
     /* Open file without reading a directory using option "h".
-     * Option "h" supresses to load the directory. Thus reading functions are
+     * Option "h" suppresses to load the directory. Thus reading functions are
      * hot set. Read TIFF header only, do not load the first image directory.
      * That could be useful in case of the broken first directory. We can open
      * the file and proceed to the other directories.

@@ -3916,9 +3916,9 @@ static int extractContigSamplesShifted24bits(uint8_t *in, uint8_t *out,
      */
     /*--- Remark, which is true for all those functions
      * extractCongigSamplesXXX() -- The mitigation of the start/end test does
-     * not allways make sense, because the function is often called with e.g.:
+     * not always make sense, because the function is often called with e.g.:
      *  start = 31; end = 32; cols = 32  to extract the last column in a 32x32
-     * sample image. If then, a worng parameter (e.g. cols = 10) is provided,
+     * sample image. If then, a wrong parameter (e.g. cols = 10) is provided,
      * the mitigated settings would be start=0; end=1. Therefore, an error
      * message and no copy action might be the better reaction to wrong
      * parameter configurations.
@@ -6006,7 +6006,8 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
             rmargin = _TIFFClampDoubleToUInt32(crop->margins[3] * scale * xres);
         }
 
-        if (lmargin == 0xFFFFFFFFU || rmargin == 0xFFFFFFFFU || (lmargin + rmargin) > image->width)
+        if (lmargin == 0xFFFFFFFFU || rmargin == 0xFFFFFFFFU ||
+            (lmargin + rmargin) > image->width)
         {
             TIFFError("computeInputPixelOffsets",
                       "Combined left and right margins exceed image width");
@@ -6014,7 +6015,8 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
             rmargin = (uint32_t)0;
             return (-1);
         }
-        if (tmargin == 0xFFFFFFFFU || bmargin == 0xFFFFFFFFU || (tmargin + bmargin) > image->length)
+        if (tmargin == 0xFFFFFFFFU || bmargin == 0xFFFFFFFFU ||
+            (tmargin + bmargin) > image->length)
         {
             TIFFError("computeInputPixelOffsets",
                       "Combined top and bottom margins exceed image length");
@@ -6273,7 +6275,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                     offsets.startx +
                     (uint32_t)(offsets.crop_width * 1.0 * (seg - 1) / total);
                 /* FAULT: IMHO in the old code here, the calculation of x2 was
-                 * based on wrong assumtions. The whole image was assumed and
+                 * based on wrong assumptions. The whole image was assumed and
                  * 'endy' and 'starty' are not respected anymore!*/
                 /* NEW PROPOSED Code: Assumption: offsets are within image with
                  * top left corner as origin (0,0) and 'start' <= 'end'. */
@@ -6330,7 +6332,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                 crop->regionlist[i].x2 = offsets.endx;
 
                 /* FAULT: IMHO in the old code here, the calculation of y1/y2
-                 * was based on wrong assumtions. The whole image was assumed
+                 * was based on wrong assumptions. The whole image was assumed
                  * and 'endy' and 'starty' are not respected anymore!*/
                 /* NEW PROPOSED Code: Assumption: offsets are within image with
                  * top left corner as origin (0,0) and 'start' <= 'end'. */
@@ -6392,7 +6394,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                     offsets.startx + (uint32_t)(offsets.crop_width *
                                                 (total - seg) * 1.0 / total);
                 /* FAULT: IMHO from here on, the calculation of y2 are based on
-                 * wrong assumtions. The whole image is assumed and 'endy' and
+                 * wrong assumptions. The whole image is assumed and 'endy' and
                  * 'starty' are not respected anymore!*/
                 /* NEW PROPOSED Code: Assumption: offsets are within image with
                  * top left corner as origin (0,0) and 'start' <= 'end'. */
@@ -6463,7 +6465,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                 }
 
                 /* FAULT: IMHO from here on, the calculation of y2 are based on
-                 * wrong assumtions. The whole image is assumed and 'endy' and
+                 * wrong assumptions. The whole image is assumed and 'endy' and
                  * 'starty' are not respected anymore!*/
                 /* OLD Code:
                 test = offsets.starty + (uint32_t)(offsets.crop_length * 1.0 *
