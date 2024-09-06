@@ -12,7 +12,7 @@ case `uname` in
     libtoolize --force --copy || retval=$?
     ;;
 esac
-aclocal --install -I ./m4 || retval=$?
+aclocal -I ./m4 || retval=$?
 autoheader || retval=$?
 automake --foreign --add-missing --copy || retval=$?
 autoconf || retval=$?
