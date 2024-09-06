@@ -18,13 +18,6 @@ Notes on releasing.
    It is recommended to install m4 before autoconf, since the later
    requires the former.
 
-   Additionally make sure that you have current releases of autoconf-archive
-   and pkg-config (for additional macros used when generating the configure
-   script). These packages may be downloaded from the following locations:
-
-     autoconf-archive - https://ftp.gnu.org/pub/gnu/autoconf-archive/
-     pkg-config       - https://pkgconfig.freedesktop.org/releases/
-
    Release builds should only be done on a system with a functioning
    and correctly set system clock and on a filesystem which accurately
    records file update times.  Use of GNU make is recommended.
@@ -107,7 +100,7 @@ Notes on releasing.
 
      make release
 
-   This will update "RELEASE-DATE", "VERSION" in the source tree,
+   This will update "RELEASE-DATE", "VERSION" in the source tree, 
    and libtiff/tiffvers.h in the build tree.
 
 12. In the source tree, verify that the version info in RELEASE-DATE,
