@@ -26,7 +26,7 @@
 docdir = $(LIBTIFF_DOCDIR)
 
 AUTOMAKE_OPTIONS = 1.11 dist-zip foreign
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 --install
 
 docfiles = \
 	ChangeLog \

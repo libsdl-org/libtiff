@@ -107,8 +107,13 @@ dnl Checks for programs.
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
 
+dnl Fail if autoconf-archive isn't installed.
+m4_pattern_forbid([^AX_(|CFLAGS_WARN_ALL|CHECK_(GL|GLU|GLUT))$])
+dnl autoconf-archive uses pkg.m4
+m4_pattern_forbid([^PKG_])
+
 dnl We want warnings. As many warnings as possible.
-VL_PROG_CC_WARNINGS()
+AX_CFLAGS_WARN_ALL
 
 dnl Checks for programs
 AC_PROG_INSTALL
@@ -976,25 +981,25 @@ AC_ARG_ENABLE(opengl,
 	      AS_HELP_STRING([--disable-opengl],
 			     [disable OpenGL usage (required by tiffgt, enabled by default)]),,)
 
-if test "x$enable_opengl" != "xno" ; then
+AS_IF([test "x$enable_opengl" != "xno"], [
 
   AC_PATH_XTRA
 
   dnl AX_CHECK_GL sets GL_CFLAGS & GL_LIBS.  Also PTHREAD_LIBS,
   dnl PTHREAD_CFLAGS, & PTHREAD_CC as a side-effect
-  AX_CHECK_GL
+  AX_CHECK_GL(, [:])
 
   dnl AX_CHECK_GLU sets GLU_CFLAGS & GLU_LIBS
-  AX_CHECK_GLU
+  AX_CHECK_GLU(, [:])
 
   dnl AX_CHECK_GLUT sets GLUT_CFLAGS & GLUT_LIBS
-  AX_CHECK_GLUT
+  AX_CHECK_GLUT(, [:])
 
   if test "$no_x" != "yes" -a "$no_gl" != "yes" \
       -a "$no_glu" != "yes" -a "$no_glut" != "yes" ; then
     HAVE_OPENGL=yes
   fi
-fi
+])
 
 AM_CONDITIONAL(HAVE_OPENGL, test "$HAVE_OPENGL" = "yes")
 
