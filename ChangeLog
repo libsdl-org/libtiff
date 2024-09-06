@@ -1,5 +1,9 @@
 2024-09-06  Even Rouault  <even.rouault@spatialys.com>
 
+	libtiff v4.7.0rc1 preparation
+
+2024-09-06  Even Rouault  <even.rouault@spatialys.com>
+
 	Merge branch 'autoconf-archive' into 'master'
 	autotools: allow pulling in updated macros from autoconf-archive
 
