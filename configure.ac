@@ -987,15 +987,16 @@ AS_IF([test "x$enable_opengl" != "xno"], [
 
   dnl AX_CHECK_GL sets GL_CFLAGS & GL_LIBS.  Also PTHREAD_LIBS,
   dnl PTHREAD_CFLAGS, & PTHREAD_CC as a side-effect
-  AX_CHECK_GL([HAVE_GL=yes], [HAVE_GL=no])
+  AX_CHECK_GL(, [:])
 
   dnl AX_CHECK_GLU sets GLU_CFLAGS & GLU_LIBS
-  AX_CHECK_GLU([HAVE_GLU=yes], [HAVE_GLU=no])
+  AX_CHECK_GLU(, [:])
 
   dnl AX_CHECK_GLUT sets GLUT_CFLAGS & GLUT_LIBS
-  AX_CHECK_GLUT([HAVE_GLUT=yes], [HAVE_GLUT=no])
+  AX_CHECK_GLUT(, [:])
 
-  if test "$HAVE_GL" = "yes" -a "$HAVE_GLU" = "yes" -a "$HAVE_GLUT" = "yes" ; then
+  if test "$no_x" != "yes" -a "$no_gl" != "yes" \
+      -a "$no_glu" != "yes" -a "$no_glut" != "yes" ; then
     HAVE_OPENGL=yes
   fi
 ])
