@@ -26,11 +26,6 @@ had been dropped in v4.6.0 (cf :ref:`rfc2_restoring_needed_tools`)
 Software configuration changes
 ------------------------------
 
-- autoconf build: requires "autoconf-archive" M4 macros
-  (https://ftp.gnu.org/pub/gnu/autoconf-archive/) if running ./autogen.sh to
-  regenerate autoconf/automake files. Not needed if just running ./configure from
-  the tarball. Using autoconf-archive makes sure that m4 macros are up-to-date.
-
 - autoconf build: configure.ac: avoid -Werror passed to CFLAGS to interfere with feature detection
 
 - autoconf build: fix error when running make clean (fixes :issue:`630`)
