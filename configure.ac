@@ -25,7 +25,7 @@ dnl OF THIS SOFTWARE.
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.64)
-AC_INIT([LibTIFF Software],[4.6.0],[tiff@lists.osgeo.org],[tiff])
+AC_INIT([LibTIFF Software],[4.7.0],[tiff@lists.osgeo.org],[tiff])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(m4)
 AC_LANG(C)
@@ -40,7 +40,7 @@ AM_MAINTAINER_MODE
 dnl Versioning.
 dnl Don't fill the ALPHA_VERSION field, if not applicable.
 LIBTIFF_MAJOR_VERSION=4
-LIBTIFF_MINOR_VERSION=6
+LIBTIFF_MINOR_VERSION=7
 LIBTIFF_MICRO_VERSION=0
 LIBTIFF_ALPHA_VERSION=
 LIBTIFF_VERSION=$LIBTIFF_MAJOR_VERSION.$LIBTIFF_MINOR_VERSION.$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION
@@ -77,9 +77,9 @@ dnl  5. If any interfaces have been added since the last public release, then
 dnl     increment age.
 dnl  6. If any interfaces have been removed since the last public release,
 dnl     then set age to 0.                                
-LIBTIFF_CURRENT=6
-LIBTIFF_REVISION=2
-LIBTIFF_AGE=0
+LIBTIFF_CURRENT=7
+LIBTIFF_REVISION=0
+LIBTIFF_AGE=1
 LIBTIFF_VERSION_INFO=$LIBTIFF_CURRENT:$LIBTIFF_REVISION:$LIBTIFF_AGE
 
 # This is a special hack for OpenBSD and MirOS systems. The dynamic linker
@@ -107,13 +107,8 @@ dnl Checks for programs.
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
 
-dnl Fail if autoconf-archive isn't installed.
-m4_pattern_forbid([^AX_(|CFLAGS_WARN_ALL|CHECK_(GL|GLU|GLUT))$])
-dnl autoconf-archive uses pkg.m4
-m4_pattern_forbid([^PKG_])
-
 dnl We want warnings. As many warnings as possible.
-AX_CFLAGS_WARN_ALL
+VL_PROG_CC_WARNINGS()
 
 dnl Checks for programs
 AC_PROG_INSTALL
@@ -981,25 +976,25 @@ AC_ARG_ENABLE(opengl,
 	      AS_HELP_STRING([--disable-opengl],
 			     [disable OpenGL usage (required by tiffgt, enabled by default)]),,)
 
-AS_IF([test "x$enable_opengl" != "xno"], [
+if test "x$enable_opengl" != "xno" ; then
 
   AC_PATH_XTRA
 
   dnl AX_CHECK_GL sets GL_CFLAGS & GL_LIBS.  Also PTHREAD_LIBS,
   dnl PTHREAD_CFLAGS, & PTHREAD_CC as a side-effect
-  AX_CHECK_GL(, [:])
+  AX_CHECK_GL
 
   dnl AX_CHECK_GLU sets GLU_CFLAGS & GLU_LIBS
-  AX_CHECK_GLU(, [:])
+  AX_CHECK_GLU
 
   dnl AX_CHECK_GLUT sets GLUT_CFLAGS & GLUT_LIBS
-  AX_CHECK_GLUT(, [:])
+  AX_CHECK_GLUT
 
   if test "$no_x" != "yes" -a "$no_gl" != "yes" \
       -a "$no_glu" != "yes" -a "$no_glut" != "yes" ; then
     HAVE_OPENGL=yes
   fi
-])
+fi
 
 AM_CONDITIONAL(HAVE_OPENGL, test "$HAVE_OPENGL" = "yes")
 

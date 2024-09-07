@@ -429,8 +429,8 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
         {
             if (compression_in == COMPRESSION_CCITTFAX4)
             {
-                /* This is proably EOFB, but if it's corrupt data, then we can't
-                 * continue, anyway. */
+                /* This is probably EOFB, but if it's corrupt data, then we
+                 * can't continue, anyway. */
                 break;
             }
             badfaxlines++;
