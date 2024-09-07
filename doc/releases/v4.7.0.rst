@@ -7,9 +7,9 @@ Changes in TIFF v4.7.0
     ======================  ==========================================
     Current Version         v4.7.0 (:tag:`v4.7.0`)
     Previous Version        :doc:`v4.6.0 <v4.6.0>`
-    Master Download Site    `<https://download.osgeo.org/libtiff/>`_
-    Master HTTP Site #1     `<http://www.simplesystems.org/libtiff/>`_
-    Master HTTP Site #2     `<https://libtiff.gitlab.io/libtiff/>`_
+    Primary Download Site   `<https://download.osgeo.org/libtiff/>`_
+    Home HTTP Site #1       `<http://www.simplesystems.org/libtiff/>`_
+    Home HTTP Site #2       `<https://libtiff.gitlab.io/libtiff/>`_
     ======================  ==========================================
 
 This document provides a summary of significant changes made to the
