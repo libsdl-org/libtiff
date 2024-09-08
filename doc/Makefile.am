@@ -203,21 +203,23 @@ EXTRA_DIST = \
 
 if TIFF_DOCS
 if SPHINX
-doc-html:
+doc-html: $(EXTRA_DIST) ../configure.ac
 	$(SPHINX_BUILD) \
 	-D "release=$(LIBTIFF_VERSION)" \
 	-D "version=$(LIBTIFF_MAJOR_VERSION).$(LIBTIFF_MINOR_VERSION)" \
 	-d "$(builddir)/cache" \
 	-b html \
 	"$(srcdir)" "$(builddir)/html"
+	touch doc-html
 
-doc-man:
+doc-man: $(EXTRA_DIST) ../configure.ac
 	$(SPHINX_BUILD) \
 	-D "release=$(LIBTIFF_VERSION)" \
 	-D "version=$(LIBTIFF_MAJOR_VERSION).$(LIBTIFF_MINOR_VERSION)" \
 	-d "$(builddir)/cache" \
 	-b man \
 	"$(srcdir)" "$(builddir)/man"
+	touch doc-man
 
 man1_MANS = $(TIFF_MAN1_GEN)
 man3_MANS = $(TIFF_MAN3_GEN)
@@ -230,6 +232,8 @@ clean-local:
 	rm -rf html
 	rm -rf man
 	rm -rf cache
+	rm -f doc-html
+	rm -f doc-man
 
 html_installdir = html
 else
@@ -241,6 +245,8 @@ doc-html:
 doc-man:
 	echo "Manual page documentation generation not configured (sphinx not available)"
 	exit 1
+
+.PHONY: doc-html doc-man
 
 man1_MANS = $(TIFF_MAN1_PREBUILT)
 man3_MANS = $(TIFF_MAN3_PREBUILT)
@@ -272,10 +278,11 @@ doc-html:
 doc-man:
 	echo "Manual page documentation generation not configured"
 	exit 1
+
+.PHONY: doc-html doc-man
+
 endif
 
 dist-hook: doc-html doc-man
 	cp -r html $(distdir)/html-prebuilt
 	cp -r man $(distdir)/man-prebuilt
-
-.PHONY: doc-html doc-man
