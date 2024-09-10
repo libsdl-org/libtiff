@@ -157,8 +157,8 @@ Re-added tools:
   - pal2rgb
   - ppm2tiff
   - raw2tiff
-  - rgb2ycbcr
-  - thumbnail
+  - rgb2ycbcr (not installed)
+  - thumbnail (not installed)
   - tiff2bw
   - tiff2rgba
   - tiffcmp
