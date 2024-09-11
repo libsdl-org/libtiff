@@ -94,6 +94,7 @@ set(UNCOMPRESSEDIMAGES
 set(IMAGES_EXTRA_DIST
     images/README.txt
     images/miniswhite-1c-1b.g3
+    images/32bpp-None-jpeg.tiff
     ${BMPIMAGES}
     ${GIFIMAGES}
     ${PNMIMAGES}
@@ -446,8 +447,7 @@ if(tiff-tools)
   
   add_convert_test(tiff2rgba 32BPP    "-B 255 -n"     "images/32bpp-None.tiff" TRUE)
   if(JPEG_SUPPORT)
-    # use output of tiff2rgba-32BPP as input!
-    add_convert_test_multi_out_in(tiffcp "" "" 32BPP-JPEG "-c jpeg" "" ""       "tiff2rgba-32BPP-32bpp-None.tiff" TRUE)
+    add_convert_test(tiffcp 32BPP-JPEG "-c jpeg"      "images/32bpp-None-jpeg.tiff" TRUE)
   endif()
 
   if(JBIG_SUPPORT)

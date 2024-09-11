@@ -1,3 +1,97 @@
+2024-09-11  Even Rouault  <even.rouault@spatialys.com>
+
+	libtiff v4.7.0rc2 preparation
+
+2024-09-11  Even Rouault  <even.rouault@spatialys.com>
+
+	configure.ac: make a provision to look for up to python 3.16 ...
+	hopefully we'll have ditched autoconf support at that point...
+
+	Fix test dependency on tiff2rgba-32BPP that breaks 'make check -jX'
+
+	test/tiff2ps*.sh scripts: try to use POSIX only diff flags.
+
+2024-09-11  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'automake_doc_fix' into 'master'
+	doc/Makefile.am: make sure that 'doc-html' and 'doc-man' targets have dependencies to avoid them to be rebuilt by successive make
+
+	See merge request libtiff/libtiff!657
+
+2024-09-10  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch '4_7_0_rst_rgb2ycbcr_thumbnail' into 'master'
+	v4.7.0.rst: clarify that rgb2ycbcr and thumbnail are not installed
+
+	See merge request libtiff/libtiff!659
+
+2024-09-10  Even Rouault  <even.rouault@spatialys.com>
+
+	v4.7.0.rst: clarify that rgb2ycbcr and thumbnail are not installed.
+
+2024-09-08  Even Rouault  <even.rouault@spatialys.com>
+
+	doc/Makefile.am: make sure that 'doc-html' and 'doc-man' targets have dependencies to avoid them to be rebuilt by successive make
+
+	doc/Makefile.am: move rst_sources and EXTRA_DIST variables on top of file
+
+2024-09-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'index_rst_formatting_issue' into 'master'
+	index.rst: fix formatting issue
+
+	See merge request libtiff/libtiff!656
+
+2024-09-07  Even Rouault  <even.rouault@spatialys.com>
+
+	index.rst: fix formatting issue.
+
+2024-09-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'prepare_release_4_7_0' into 'master'
+	Prepare release 4.7.0
+
+	See merge request libtiff/libtiff!654
+
+2024-09-07  Even Rouault  <even.rouault@spatialys.com>
+
+	Doc: remove 'Master' terminlogy.
+
+	v4.7.0.rst: remove mention about autoconf-archive since that change has been reverted
+
+	Revert "autotools: allow pulling in updated macros from autoconf-archive"
+	This reverts commit c820d16c30c27b3be6c3d10834b6d75607ae9d77.
+
+	Revert "HOWTO-RELEASE: document the necessary dependencies for producing dist tarballs"
+	This reverts commit f1a91e42b3f23641cb5559fb60e1d73d201275eb.
+
+	Revert "configure.ac: fix HAVE_OPENGL determination due to recent changes"
+	This reverts commit c370e67f7fd9320674544113218b7fbca4f65c2b.
+
+	configure.ac: fix HAVE_OPENGL determination due to recent changes.
+
+	Update version numbers for 4.7.0.
+
+	Update ChangeLog and create release notes for v4.7.0.
+
+2024-09-06  Even Rouault  <even.rouault@spatialys.com>
+
+	typo fixes.
+
+2024-09-06  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'autoconf-archive' into 'master'
+	autotools: allow pulling in updated macros from autoconf-archive
+
+	See merge request libtiff/libtiff!645
+
+2024-09-06  Even Rouault  <even.rouault@spatialys.com>
+
+	Merge branch 'remove_last_usage_of_get_field_type' into 'master'
+	Change last usage of get_field_type at TIFFWriteDirectorySec() to set_field_type
+
+	See merge request libtiff/libtiff!653
+
 2024-09-06  Even Rouault  <even.rouault@spatialys.com>
 
 	libtiff v4.7.0rc1 preparation

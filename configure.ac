@@ -1152,8 +1152,7 @@ if test "$CHECK_JPEG_YCBCR_SUBSAMPLING" = "yes" ; then
 	    [Pick up YCbCr subsampling info from the JPEG data stream to support files lacking the tag (default enabled).])
 fi
 
-
-for python in python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3 python3.2 python3.1 python3.0 python3 python; do
+for python in python3.16 python3.15 python3.14 python3.13 python3.12 python3.11 python3.10 python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3 python3.2 python3.1 python3.0 python3 python; do
   AC_CHECK_PROGS(PYTHON_BIN, [$python])
   if test "x$PYTHON_BIN" != "x"; then
     break
