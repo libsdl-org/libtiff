@@ -85,6 +85,9 @@
 /* Support LERC compression */
 #cmakedefine LERC_SUPPORT 1
 
+/* Define to 1 when building a static libtiff with LERC enabled. */
+#cmakedefine LERC_STATIC
+
 /* 12bit libjpeg primary include file with path */
 #define LIBJPEG_12_PATH "@LIBJPEG_12_PATH@"
 

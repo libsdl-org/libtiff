@@ -88,6 +88,9 @@
 /* Support LERC compression */
 #undef LERC_SUPPORT
 
+/* Define to 1 when building a static libtiff with LERC enabled. */
+#undef LERC_STATIC
+
 /* 12bit libjpeg primary include file with path */
 #undef LIBJPEG_12_PATH
 
