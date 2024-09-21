@@ -151,10 +151,4 @@ mkg3states_LDADD = $(LIBPORT)
 faxtable: mkg3states
 	(rm -f tif_fax3sm.c && ./mkg3states -b -c const tif_fax3sm.c)
 
-if HAVE_JPEGTURBO_DUAL_MODE_8_12
-JPEGTURBO_CPPFLAGS = -DHAVE_JPEGTURBO_DUAL_MODE_8_12
-else
-JPEGTURBO_CPPFLAGS =
-endif
-
-AM_CPPFLAGS = -I$(top_srcdir)/libtiff -I$(top_srcdir)/port $(JPEGTURBO_CPPFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir)/libtiff -I$(top_srcdir)/port

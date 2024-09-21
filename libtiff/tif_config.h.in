@@ -85,6 +85,9 @@
 /* 8/12 bit libjpeg dual mode enabled */
 #undef JPEG_DUAL_MODE_8_12
 
+/* 8/12 bit dual mode JPEG built into libjpeg-turbo 3.0+ */
+#undef HAVE_JPEGTURBO_DUAL_MODE_8_12
+
 /* Support LERC compression */
 #undef LERC_SUPPORT
 
