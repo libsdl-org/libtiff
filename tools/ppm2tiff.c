@@ -155,8 +155,8 @@ static void pack_words(unsigned char *buf, unsigned int smpls, uint16_t bps)
     {
         t <<= 16 - bits;
 
-        buf[out++] = (t >> (16 + 8));
-        buf[out++] = (t >> (16 + 0));
+        buf[out++] = (t >> (0 + 8));
+        buf[out++] = (t >> (0 + 0));
     }
 }
 
