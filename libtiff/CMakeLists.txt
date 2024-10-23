@@ -201,8 +201,13 @@ if(NOT CYGWIN)
     set_target_properties(tiff PROPERTIES VERSION ${SO_VERSION})
 endif()
 if(HAVE_LD_VERSION_SCRIPT)
-  set_target_properties(tiff PROPERTIES LINK_FLAGS
-                        "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiff.map")
+  if (CMAKE_VERSION GREATER_EQUAL 3.29 AND CMAKE_C_COMPILER_LINKER_ID STREQUAL "LLD" AND CMAKE_C_COMPILER_LINKER_VERSION GREATER_EQUAL 17)
+    set_target_properties(tiff PROPERTIES LINK_FLAGS
+                              "-Wl,--undefined-version -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiff.map")
+  else()
+    set_target_properties(tiff PROPERTIES LINK_FLAGS
+                              "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiff.map")
+  endif()
 endif()
 
 if(tiff-install)
