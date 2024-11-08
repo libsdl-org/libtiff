@@ -289,39 +289,46 @@ int main(int argc, char *argv[])
         TIFFClose(in);
         return (EXIT_FAILURE);
     }
-    CopyField(TIFFTAG_IMAGEWIDTH, imagewidth);
-    TIFFGetField(in, TIFFTAG_IMAGELENGTH, &imagelength);
-    TIFFSetField(out, TIFFTAG_IMAGELENGTH, imagelength - 1);
-    TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 1);
-    TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, 1);
-    TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
-    if (fillorder)
-        TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
-    else
-        CopyField(TIFFTAG_FILLORDER, shortv);
-    snprintf(thing, sizeof(thing), "Dithered B&W version of %s", argv[optind]);
-    TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
-    CopyField(TIFFTAG_PHOTOMETRIC, shortv);
-    CopyField(TIFFTAG_ORIENTATION, shortv);
-    CopyField(TIFFTAG_XRESOLUTION, floatv);
-    CopyField(TIFFTAG_YRESOLUTION, floatv);
-    CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
-    rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
-    TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
-    switch (compression)
+
+    do
     {
-        case COMPRESSION_CCITTFAX3:
-            TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, group3options);
-            break;
-        case COMPRESSION_LZW:
-        case COMPRESSION_ADOBE_DEFLATE:
-        case COMPRESSION_DEFLATE:
-            if (predictor)
-                TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
-            break;
-    }
-    fsdither(in, out);
+        CopyField(TIFFTAG_IMAGEWIDTH, imagewidth);
+        TIFFGetField(in, TIFFTAG_IMAGELENGTH, &imagelength);
+        TIFFSetField(out, TIFFTAG_IMAGELENGTH, imagelength - 1);
+        TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 1);
+        TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, 1);
+        TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+        TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
+        if (fillorder)
+            TIFFSetField(out, TIFFTAG_FILLORDER, fillorder);
+        else
+            CopyField(TIFFTAG_FILLORDER, shortv);
+        snprintf(thing, sizeof(thing), "Dithered B&W version of %s",
+                 argv[optind]);
+        TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
+        CopyField(TIFFTAG_PHOTOMETRIC, shortv);
+        CopyField(TIFFTAG_ORIENTATION, shortv);
+        CopyField(TIFFTAG_XRESOLUTION, floatv);
+        CopyField(TIFFTAG_YRESOLUTION, floatv);
+        CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
+        rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
+        TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
+        switch (compression)
+        {
+            case COMPRESSION_CCITTFAX3:
+                TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, group3options);
+                break;
+            case COMPRESSION_LZW:
+            case COMPRESSION_ADOBE_DEFLATE:
+            case COMPRESSION_DEFLATE:
+                if (predictor)
+                    TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
+                break;
+        }
+        fsdither(in, out);
+        TIFFWriteDirectory(out);
+    } while (TIFFReadDirectory(in));
+
     TIFFClose(in);
     TIFFClose(out);
     return (EXIT_SUCCESS);
