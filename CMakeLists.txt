@@ -29,6 +29,11 @@ cmake_minimum_required(VERSION 3.9.0)
 # Default policy is from 3.9.0
 cmake_policy(VERSION 3.9.0)
 
+if(POLICY CMP0074)
+  # Allow find_package() to use the ZLIB_ROOT variable, if available.
+  cmake_policy(SET CMP0074 NEW)
+endif()
+
 # Find CMake modules in cmake/
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
