@@ -2650,6 +2650,20 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
                     t2pSeekFile(input, inputoffset, SEEK_SET);
                     TIFFGetField(input, TIFFTAG_YCBCRSUBSAMPLING, &h_samp,
                                  &v_samp);
+                    /* The only valid values for h_samp and v_samp are 1, 2
+                     * or 4. Cf tif_jpeg.c line 960. However just a simple check
+                     * to avoid division by zero below. */
+                    if (h_samp == 0 || h_samp > 4 || v_samp == 0 || v_samp > 4)
+                    {
+                        TIFFError(
+                            TIFF2PDF_MODULE,
+                            "YCBRSUBSAMPLING value outside allowed range (1, "
+                            "2, 4). h_samp= %" PRIu16 " v_samp= %" PRIu16,
+                            h_samp, v_samp);
+                        _TIFFfree(buffer);
+                        t2p->t2p_error = T2P_ERR_ERROR;
+                        return (0);
+                    }
                     buffer[bufferoffset++] = 0xff;
                     buffer[bufferoffset++] = 0xdd;
                     buffer[bufferoffset++] = 0x00;
