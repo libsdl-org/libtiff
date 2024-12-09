@@ -167,6 +167,13 @@ Therefore, images with a TIFF orientation of 5 (LeftTop) to 8 (LeftBottom)
 are not stored correctly in the raster, as this would require an additional
 rotation of 90 degrees and an exchange of width and height dimension.
 
+If an alpha channel is used in an image, there are two common representations
+that are available: straight (unassociated) alpha and premultiplied (associated)
+alpha, which is specified by the value of ExtraSamples tag.
+For files with unassociated alpha, the :c:func:`TIFFRGBAImage` reading routines
+multiply the RGB values by the alpha channel values before saving them in the raster.
+The other TIFFReadxxx (like :c:func:`TIFFReadScanline`) functions do not do this.
+
 Return values
 -------------
 
