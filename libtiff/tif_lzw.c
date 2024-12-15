@@ -1377,7 +1377,7 @@ static void LZWCleanup(TIFF *tif)
 {
     (void)TIFFPredictorCleanup(tif);
 
-    assert(tif->tif_data != 0);
+    assert(tif->tif_data != NULL);
 
     if (LZWDecoderState(tif)->dec_codetab)
         _TIFFfreeExt(tif, LZWDecoderState(tif)->dec_codetab);
