@@ -78,7 +78,7 @@ static int PackBitsEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     op = tif->tif_rawcp;
     ep = tif->tif_rawdata + tif->tif_rawdatasize;
     state = BASE;
-    lastliteral = 0;
+    lastliteral = NULL;
     while (cc > 0)
     {
         /*
