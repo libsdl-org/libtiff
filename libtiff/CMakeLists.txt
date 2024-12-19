@@ -284,6 +284,7 @@ endif()
 if(NOT CMAKE_CROSSCOMPILING)
   add_executable(tiff_mkg3states ../placeholder.h)
   target_sources(tiff_mkg3states PRIVATE mkg3states.c tif_fax3.h)
+  set_target_properties(tiff_mkg3states PROPERTIES LINKER_LANGUAGE CXX)
   target_link_libraries(tiff_mkg3states tiff tiff_port)
 
   add_custom_target(tiff_faxtable
