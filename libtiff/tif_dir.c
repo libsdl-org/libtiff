@@ -723,10 +723,9 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
             {
                 TIFFTagValue *new_customValues;
 
-                td->td_customValueCount++;
                 new_customValues = (TIFFTagValue *)_TIFFreallocExt(
                     tif, td->td_customValues,
-                    sizeof(TIFFTagValue) * td->td_customValueCount);
+                    sizeof(TIFFTagValue) * (td->td_customValueCount + 1));
                 if (!new_customValues)
                 {
                     TIFFErrorExtR(tif, module,
@@ -737,6 +736,7 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
                     goto end;
                 }
 
+                td->td_customValueCount++;
                 td->td_customValues = new_customValues;
 
                 tv = td->td_customValues + (td->td_customValueCount - 1);
