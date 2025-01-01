@@ -535,6 +535,14 @@ static int Fax3SetupState(TIFF *tif)
                       "Bits/sample must be 1 for Group 3/4 encoding/decoding");
         return (0);
     }
+    if (td->td_samplesperpixel != 1 && td->td_planarconfig != PLANARCONFIG_SEPARATE)
+    {
+        TIFFErrorExtR(
+            tif, module,
+            "Samples/pixel shall be 1 for Group 3/4 encoding/decoding, "
+            "or PlanarConfiguration must be set to Separate.");
+        return 0;
+    }
     /*
      * Calculate the scanline/tile widths.
      */
