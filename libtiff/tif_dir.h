@@ -336,7 +336,7 @@ extern "C"
         uint32_t
             field_anonymous; /* if true, this is a unknown / anonymous tag */
         TIFFSetGetFieldType set_field_type; /* type to be passed to TIFFSetField
-                                               and TIFFGetField*/
+                                               and TIFFGetField */
         TIFFSetGetFieldType get_field_type; /* not used */
         unsigned short field_bit;           /* bit in fieldsset bit vector */
         unsigned char field_oktochange;  /* if true, can change while writing */
