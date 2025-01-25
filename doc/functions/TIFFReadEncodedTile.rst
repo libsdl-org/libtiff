@@ -10,7 +10,7 @@ Synopsis
 
     #include <tiffio.h>
 
-.. c:function:: int TIFFReadEncodedTile(TIFF* tif, ttile_t tile, tdata_t buf, tsize_t size)
+.. c:function:: tmsize_t TIFFReadEncodedTile(TIFF* tif, ttile_t tile, tdata_t buf, tsize_t size)
 
 Description
 -----------
