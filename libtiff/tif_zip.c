@@ -282,6 +282,7 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             break;
         if (state == Z_DATA_ERROR)
         {
+            /* coverity[overrun-buffer-arg:SUPPRESS] */
             memset(sp->stream.next_out, 0, sp->stream.avail_out);
             TIFFErrorExtR(tif, module, "Decoding error at scanline %lu, %s",
                           (unsigned long)tif->tif_row, SAFE_MSG(sp));

@@ -355,11 +355,16 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
     whole_strip = 1;
 #endif
 
+    /* Silence Coverity Scan warning about dead code below because whole_strip
+     * can be only !=1 if CHUNKY_STRIP_READ_SUPPORT is enabled. */
+    /* coverity[dead_error_condition:SUPPRESS] */
     if (!whole_strip)
     {
         /* 16 is for YCbCr mode where we may need to read 16 */
         /* lines at a time to get a decompressed line, and 5000 */
         /* is some constant value, for example for JPEG tables */
+
+        /* coverity[dead_error_line:SUPPRESS] */
         if (tif->tif_scanlinesize < TIFF_TMSIZE_T_MAX / 16 &&
             tif->tif_scanlinesize * 16 < TIFF_TMSIZE_T_MAX - 5000)
         {
@@ -385,6 +390,10 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
         }
         else
         {
+            /* Silence Coverity Scan warning about dead code below because
+             * whole_strip can be only !=1 if CHUNKY_STRIP_READ_SUPPORT is
+             * enabled. */
+            /* coverity[dead_error_line:SUPPRESS] */
             if (!TIFFFillStripPartial(tif, strip, read_ahead, 1))
                 return 0;
         }
@@ -393,8 +402,10 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
     /*
     ** If we already have some data loaded, do we need to read some more?
     */
+    /* coverity[dead_error_condition:SUPPRESS] */
     else if (!whole_strip)
     {
+        /* coverity[dead_error_line:SUPPRESS] */
         if (((tif->tif_rawdata + tif->tif_rawdataloaded) - tif->tif_rawcp) <
                 read_ahead &&
             (uint64_t)tif->tif_rawdataoff + tif->tif_rawdataloaded <
