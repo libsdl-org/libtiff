@@ -20,7 +20,7 @@ This structure looks like this:
 ::
 
     typedef struct {
-      ttag_t         field_tag;        /* field's tag */
+      uint32_t       field_tag;        /* field's tag */
       short          field_readcount;  /* read count / TIFF_VARIABLE / TIFF_VARIABLE2 / TIFF_SPP */
       short          field_writecount; /* write count / TIFF_VARIABLE / TIFF_VARIABLE2 */
       TIFFDataType   field_type;       /* type of associated data */
@@ -31,7 +31,7 @@ This structure looks like this:
     } TIFFFieldInfo;
 
 
-.. c:member:: ttag_t TIFFFieldInfo.field_tag
+.. c:member:: uint32_t TIFFFieldInfo.field_tag
 
     The tag number.  For instance 277 for the
     SamplesPerPixel tag.  Builtin tags will generally have a ``#define`` in
@@ -243,7 +243,7 @@ order by the tag number. Sorting is done when setting up the
 ::
 
     typedef struct _TIFFField {
-      ttag_t               field_tag;        /* field's tag */
+      uint32_t             field_tag;        /* field's tag */
       short                field_readcount;  /* read count / TIFF_VARIABLE / TIFF_VARIABLE2 / TIFF_SPP */
       short                field_writecount; /* write count / TIFF_VARIABLE / TIFF_VARIABLE2 */
       TIFFDataType         field_type;       /* type of associated data */

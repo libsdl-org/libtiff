@@ -28,12 +28,12 @@ Synopsis
 
 .. c:function:: int TIFFSetMode(TIFF* tif, int mode)
 
-.. c:type:: tsize_t (*TIFFReadWriteProc)(thandle_t, tdata_t, tsize_t)
+.. c:type:: tmsize_t (*TIFFReadWriteProc)(thandle_t, void *, tmsize_t)
 .. c:type:: toff_t (*TIFFSeekProc)(thandle_t, toff_t, int)
 .. c:type:: int (*TIFFCloseProc)(thandle_t)
 .. c:type:: toff_t (*TIFFSizeProc)(thandle_t)
-.. c:type:: int (*TIFFMapFileProc)(thandle_t, tdata_t*, toff_t*)
-.. c:type:: void (*TIFFUnmapFileProc)(thandle_t, tdata_t, toff_t)
+.. c:type:: int (*TIFFMapFileProc)(thandle_t, void **base, toff_t *size)
+.. c:type:: void (*TIFFUnmapFileProc)(thandle_t, void *base, toff_t size)
 
 .. c:function:: TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdata, TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc, TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc, TIFFUnmapFileProc unmapproc)
 

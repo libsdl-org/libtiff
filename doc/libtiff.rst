@@ -492,7 +492,7 @@ is assumed to be organized in strips, the following might be used:
         TIFF* tif = TIFFOpen("myfile.tif", "r");
         if (tif) {
             uint32_t imagelength;
-            tdata_t buf;
+            void *buf;
             uint32_t row;
             
             TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imagelength);
@@ -519,7 +519,7 @@ to handle either case one might use the following instead:
         TIFF* tif = TIFFOpen("myfile.tif", "r");
         if (tif) {
             uint32_t imagelength;
-            tdata_t buf;
+            void *buf;
             uint32_t row;
             
             TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imagelength);
@@ -528,10 +528,10 @@ to handle either case one might use the following instead:
             if (config == PLANARCONFIG_CONTIG) {
                 for (row = 0; row < imagelength; row++)
                     TIFFReadScanline(tif, buf, row, 0);
-            } else if (config == planarconfig_separate) {
+            } else if (config == PLANARCONFIG_SEPARATE) {
                 uint16_t s, nsamples;
                 
-                tiffgetfield(tif, tifftag_samplesperpixel, &nsamples);
+                TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &nsamples);
                 for (s = 0; s < nsamples; s++)
                     for (row = 0; row < imagelength; row++)
                         TIFFReadScanline(tif, buf, row, s);
@@ -574,12 +574,12 @@ A simple example of reading an image by strips is:
     {
         TIFF* tif = TIFFOpen("myfile.tif", "r");
         if (tif) {
-            tdata_t buf;
-            tstrip_t strip;
+            void *buf;
+            uint32_t strip;
             
             buf = _TIFFmalloc(TIFFStripSize(tif));
-            for (strip = 0; strip < tiffnumberofstrips(tif); strip++)
-                tiffreadencodedstrip(tif, strip, buf, (tsize_t) -1);
+            for (strip = 0; strip < TIFFNumberOfStrips(tif); strip++)
+                TIFFReadEncodedStrip(tif, strip, buf, (tmsize_t) -1);
             _TIFFfree(buf);
             TIFFClose(tif);
         }
@@ -609,15 +609,15 @@ a file:
     {
         TIFF* tif = TIFFOpen("myfile.tif", "r");
         if (tif) {
-            tdata_t buf;
-            tstrip_t strip;
-            uint32_t* bc;
+            void *buf;
+            uint32_t strip;
+            uint32_t *bc;
             uint32_t stripsize;
             
             TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc);
             stripsize = bc[0];
             buf = _TIFFmalloc(stripsize);
-            for (strip = 0; strip < tiffnumberofstrips(tif); strip++) {
+            for (strip = 0; strip < TIFFNumberOfStrips(tif); strip++) {
                 if (bc[strip] > stripsize) {
                     buf = _TIFFrealloc(buf, bc[strip]);
                     stripsize = bc[strip];
@@ -666,7 +666,7 @@ code of the following sort might be used:
             uint32_t imageWidth, imageLength;
             uint32_t tileWidth, tileLength;
             uint32_t x, y;
-            tdata_t buf;
+            void *buf;
             
             TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &imageWidth);
             TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imageLength);
@@ -675,7 +675,7 @@ code of the following sort might be used:
             buf = _TIFFmalloc(TIFFTileSize(tif));
             for (y = 0; y < imagelength; y += tilelength)
                 for (x = 0; x < imagewidth; x += tilewidth)
-                    tiffreadtile(tif, buf, x, y, 0);
+                    TIFFReadTile(tif, buf, x, y, 0);
             _TIFFfree(buf);
             TIFFClose(tif);
         }
@@ -696,12 +696,12 @@ and written with :c:func:`TIFFWriteEncodedTile` or
     {
         TIFF* tif = TIFFOpen("myfile.tif", "r");
         if (tif) {
-            tdata_t buf;
-            ttile_t tile;
+            void *buf;
+            uint32_t tile;
 
             buf = _TIFFmalloc(TIFFTileSize(tif));
-            for (tile = 0; tile < tiffnumberoftiles(tif); tile++)
-                tiffreadencodedtile(tif, tile, buf, (tsize_t) -1);
+            for (tile = 0; tile < TIFFNumberOfTiles(tif); tile++)
+                TIFFReadEncodedTile(tif, tile, buf, (tmsize_t) -1);
             _TIFFfree(buf);
             TIFFClose(tif);
         }
