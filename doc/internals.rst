@@ -275,86 +275,18 @@ purely by fiddling with the following machine-dependent typedefs:
       - 32-bit signed integer
       - :file:`tiff.h`
 
-    * - :c:type:`dblparam_t`
-      - promoted type for floats
-      - :file:`tiffcomp.h`
+    * - :c:type:`uint64_t`
+      - 64-bit unsigned integer
+      - :file:`tiff.h`
 
-(to clarify :c:type:`dblparam_t`, it is the type that float parameters are
-promoted to when passed by value in a function call.)
-
-The following typedefs are used throughout the library and interfaces
-to refer to certain objects whose size is dependent on the TIFF image
-structure:
-
-.. list-table:: TIFF image typedefs
-    :widths: 10 10 10
-    :header-rows: 1
-
-    * - Typedef
-      - Type
-      - Description
+    * - :c:type:`int64_t`
+      - 64-bit signed integer
+      - :file:`tiff.h`
 
 
-    * - :c:type:`ttag_t`
-      - :c:expr:`unsigned int`
-      - directory tag
-
-    * - :c:type:`tdir_t`
-      - :c:type:`uint16_t`
-      - directory index
-
-    * - :c:type:`tsample_t`
-      - :c:type:`uint16_t`
-      - sample number
-
-    * - :c:type:`tstrip_t`
-      - :c:type:`uint32_t`
-      - strip number
-
-    * - :c:type:`ttile_t`
-      - :c:type:`uint32_t`
-      - tile number
-
-    * - :c:type:`tsize_t`
-      - :c:type:`int32_t`
-      - i/o size in bytes
-
-    * - :c:type:`tdata_t`
-      - :c:expr:`void *`
-      - image data ref
-
-    * - :c:type:`thandle_t`
-      - :c:expr:`void *`
-      - client data handle
-
-    * - :c:type:`toff_t`
-      - :c:type:`int32_t`
-      - file offset (should be off_t)
-
-    * - :c:type:`tidata_t`
-      - :c:expr:`unsigned char *`
-      - internal image data
-
-Note that :c:type:`tstrip_t`, :c:type:`ttile_t`, and :c:type:`tsize_t`
-are constrained to be
-no more than 32-bit quantities by 32-bit fields they are stored
-in in the TIFF image.  Likewise :c:type:`tsample_t` is limited by the 16-bit
-field used to store the ``SamplesPerPixel`` tag.  :c:type:`tdir_t`
-constrains
-the maximum number of IFDs that may appear in an image and may
-be an arbitrary size (without penalty).  :c:type:`ttag_t` must be either
-:c:expr:`int`, :c:expr:`unsigned int`, pointer, or :c:expr:`double`
-because the library uses a varargs
-interface and ANSI C restricts the type of the parameter before an
-ellipsis to be a promoted type.  :c:type:`toff_t` is defined as
-:c:type:`int32_t` because
-TIFF file offsets are (unsigned) 32-bit quantities.  A signed
-value is used because some interfaces return -1 on error (sigh).
-Finally, note that :c:type:`tidata_t` is used internally to the library to
-manipulate internal data.  User-specified data references are
-passed as opaque handles and only cast at the lowest layers where
-their type is presumed.
-
+Most of the previously used type definitions that refer to
+specific objects are deprecated.
+For more information about typedefs see :ref:`Data Types <DataTypes>`.
 
 General Comments
 ----------------
