@@ -351,13 +351,7 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
          * chunk strip */
         whole_strip = 1;
     }
-#else
-    whole_strip = 1;
-#endif
 
-    /* Silence Coverity Scan warning about dead code below because whole_strip
-     * can be only !=1 if CHUNKY_STRIP_READ_SUPPORT is enabled. */
-    /* coverity[dead_error_condition:SUPPRESS] */
     if (!whole_strip)
     {
         /* 16 is for YCbCr mode where we may need to read 16 */
@@ -375,6 +369,9 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
             read_ahead = tif->tif_scanlinesize;
         }
     }
+#else
+    whole_strip = 1;
+#endif
 
     /*
      * If we haven't loaded this strip, do so now, possibly
@@ -388,21 +385,19 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
             if (!TIFFFillStrip(tif, strip))
                 return (0);
         }
+#if defined(CHUNKY_STRIP_READ_SUPPORT)
         else
         {
-            /* Silence Coverity Scan warning about dead code below because
-             * whole_strip can be only !=1 if CHUNKY_STRIP_READ_SUPPORT is
-             * enabled. */
-            /* coverity[dead_error_line:SUPPRESS] */
             if (!TIFFFillStripPartial(tif, strip, read_ahead, 1))
                 return 0;
         }
+#endif
     }
 
+#if defined(CHUNKY_STRIP_READ_SUPPORT)
     /*
     ** If we already have some data loaded, do we need to read some more?
     */
-    /* coverity[dead_error_condition:SUPPRESS] */
     else if (!whole_strip)
     {
         /* coverity[dead_error_line:SUPPRESS] */
@@ -415,6 +410,7 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
                 return 0;
         }
     }
+#endif
 
     if (row < tif->tif_row)
     {
