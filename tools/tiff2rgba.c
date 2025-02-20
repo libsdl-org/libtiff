@@ -431,7 +431,7 @@ static int cvt_whole_image(TIFF *in, TIFF *out)
     pixel_count = width * height;
 
     /* XXX: Check the integer overflow. */
-    if (!width || !height || pixel_count / width != height)
+    if (!width || !height || SIZE_MAX / width < height)
     {
         TIFFError(
             TIFFFileName(in),
