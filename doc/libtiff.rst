@@ -707,6 +707,32 @@ and written with :c:func:`TIFFWriteEncodedTile` or
         }
     }
 
+Re-entrancy and Thread Safety
+-----------------------------
+
+``Libtiff`` contains no static state except for the registered error /
+warning handler.
+All data for an opened TIFF file is encapsulated via the TIFF handle
+returned by :c:func:`TIFFOpen`. Only the error handlers
+:c:func:`TIFFError` and :c:func:`TIFFErrorExt`, 
+(as well as :c:func:`TIFFWarning` and :c:func:`TIFFWarningExt`)
+use TIFF handle independent, common error handler functions.
+
+:c:func:`TIFFErrorHandlerExtR` and :c:func:`TIFFWarningHandlerExtR`
+(introduced in ``libtiff`` 4.5) offer the option of registering
+a separate error handler for each TIFF handle.
+This error handler is called via the TIFF handle and is therefore
+re-entrant, which means that it is naturally thread-safe.
+
+These handlers can already be set before opening a TIFF file using the
+:c:func:`TIFFOpenOptionsSetErrorHandlerExtR` and
+:c:func:`TIFFOpenOptionsSetWarningHandlerExtR` functions, respectively.
+
+This allows multiple TIFF files to be processed simultaneously
+with multiple threads, with each thread having its own TIFF file.
+It is not possible (safe) to edit a single TIFF file with multiple
+threads at the same time.
+
 Other Stuff
 -----------
 
