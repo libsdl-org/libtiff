@@ -17,6 +17,8 @@ config/test-driver
 *.o
 *.la
 *.lo
+*.framework
+*.xcframework
 .deps
 .libs
 config.log
