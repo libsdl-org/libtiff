@@ -270,7 +270,7 @@ if(CXX_SUPPORT)
   endif()
 
   if(tiff-install)
-    install(TARGETS tiffxx
+    install(TARGETS tiffxx EXPORT TiffTargets
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -278,7 +278,7 @@ if(CXX_SUPPORT)
     install(FILES ${tiffxx_HEADERS}
             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
   endif()
-      
+
 endif()
 
 if(NOT CMAKE_CROSSCOMPILING)
