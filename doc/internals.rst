@@ -63,6 +63,9 @@ Support for JPEG compression is controlled by :c:macro:`JPEG_SUPPORT`.
 The JPEG codec that comes with LibTIFF is designed for
 use with release 5 or later of the Independent JPEG Group's freely
 available software distribution.
+
+################## The following ftp.uu.net links do not work anymore ##########
+
 This software can be retrieved from the directory
 `<ftp://ftp.uu.net/graphics/jpeg>`_.
 
@@ -76,6 +79,9 @@ Experimental support for the deflate algorithm is controlled by
 The deflate codec that comes with LibTIFF is designed
 for use with version 0.99 or later of the freely available
 ``libz`` library written by Jean-loup Gailly and Mark Adler.
+
+################## The following ftp.uu.net links do not work anymore ##########
+
 The data format used by this library is described
 in the files
 `<ftp://ftp.uu.net/pub/archiving/zip/doc/zlib-3.1.doc>`_,

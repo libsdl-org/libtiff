@@ -105,7 +105,7 @@ The default generator for UNIX is ``Unix Makefiles``, and on Windows is
 ``NMake Makefiles`` or ``MSBuild`` depending upon the setup.
 Run :command:`cmake --help` to list all the
 generators available for your platform.  For example, to use the Ninja
-`build system <https://martine.github.io/ninja/>`_ on UNIX or
+`build system <https://ninja-build.org/>`_ on UNIX or
 Windows:
 
 .. code-block:: shell

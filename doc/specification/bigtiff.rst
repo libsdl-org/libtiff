@@ -66,6 +66,7 @@ Samples
 
 `Example files <http://www.awaresystems.be/imaging/tiff/bigtiff/BigTIFFSamples.zip>`_
 from Joris Van Damme.
+########################### ??????????????? ###########################
 
 
 Changes
@@ -88,3 +89,4 @@ See also
 --------
 
 `AWare Systems' informal overview of the BigTIFF proposal <http://www.awaresystems.be/imaging/tiff/bigtiff.html>`_.
+########################### ??????????????? ###########################

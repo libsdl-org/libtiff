@@ -14,7 +14,6 @@ LibTIFF - TIFF Library and Utilities
     Primary Download Site  `download.osgeo.org <https://download.osgeo.org/libtiff/>`_
     Mailing List           `tiff@lists.osgeo.org <tiff@lists.osgeo.org>`_
     List subscription      http://lists.osgeo.org/mailman/listinfo/tiff/
-    List archive           http://www.awaresystems.be/imaging/tiff/tml.html
     Source repository      https://gitlab.com/libtiff/libtiff
     =====================  =====================================
 

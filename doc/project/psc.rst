@@ -15,5 +15,4 @@ As of April 2024, the project has been placed in the hands of a Project Steering
 
 Note that discussion of proposals to the PSC take place on the libtiff mailing list
 (tiff@lists.osgeo.org, requiring subscription at https://lists.osgeo.org/mailman/listinfo/tiff,
-archived at https://www.awaresystems.be/imaging/tiff/tml.html),
 and input from all subscribers is welcome. A list of past :ref:`rfcs` is available for review.
