@@ -64,7 +64,8 @@ The JPEG codec that comes with LibTIFF is designed for
 use with release 5 or later of the Independent JPEG Group's freely
 available software distribution.
 
-################## The following ftp.uu.net links do not work anymore ##########
+################## ToDo: The following ftp.uu.net links do not work anymore.
+Are there replacemanet links?  ##########
 
 This software can be retrieved from the directory
 `<ftp://ftp.uu.net/graphics/jpeg>`_.

@@ -2,8 +2,7 @@ LibTIFF Coverage of the BigTIFF Specification
 =============================================
 
 Since LibTIFF version 4.0.0, the BigTIFF format specification has been implemented within LibTIFF.
-BigTIFF is a backward-compatible extension to the TIFF
-file format.
+BigTIFF is a backward-compatible extension to the TIFF file format.
 
 BigTIFF logically extends the original TIFF file format (referred to as 'ClassicTIFF' from now on).
 The BigTIFF specification is the result of work by a variety of parties on the LibTIFF mailing list, including
@@ -18,7 +17,7 @@ still seek to use an open, simple, and extendable format. This requirement is fr
 geospatial field, but also concerns large format scanners, medical imaging and other fields.
 
 The LibTiff BigTIFF support was made possible by four sponsors funding the project. The programming work was
-primarily done by Joris Van Damme (AWare Systems).
+primarily done by Joris Van Damme (AWare Systems) from 2004 to 2008.
 
 The sponsors for the BigTIFF support work in LibTIFF, in alphabetical order:
 
