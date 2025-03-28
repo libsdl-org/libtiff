@@ -420,6 +420,8 @@ int main(int argc, char **argv)
         FILE *fd;
         char buf[16 * 1024];
 
+        /* Silence Coverity Scan warning about insecure temporary file name. */
+        /* coverity[secure_temp:SUPPRESS] */
         fd = tmpfile();
         if (fd == NULL)
         {

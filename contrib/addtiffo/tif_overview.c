@@ -617,6 +617,8 @@ void TIFF_ProcessFullResBlock(TIFF *hTIFF, int nPlanarConfig, int bSubsampled,
             }
             else
             {
+                /* Silence Coverity Scan warning about checking return. */
+                /* coverity[check_return:SUPPRESS] */
                 TIFFReadEncodedStrip(
                     hTIFF, TIFFComputeStrip(hTIFF, nSYOff, (tsample_t)iSample),
                     pabySrcTile, TIFFStripSize(hTIFF));

@@ -6117,6 +6117,9 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
     off->endx = endx;
     off->endy = endy;
 
+    /* Silence Coverity Scan warning because this seems to be a false positive.
+     * "endx is known to be equal to 4294967295" might not be right here. */
+    /* coverity[overflow_const:SUPPRESS] */
     if (endx + 1 <= startx)
     {
         TIFFError(
@@ -7257,6 +7260,10 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
                 (uint64_t)scanlinesize);
         }
         for (i = 0; i < length; i++)
+            /* Apparently, the scanlinesize test above was accepted to fail.
+             * Thus silence Coverity Scan warning because this seems to be
+             * intentional. */
+            /* coverity[overflow_sink:SUPPRESS] */
             dump_buffer(dump->infile, dump->format, 1, (uint32_t)scanlinesize,
                         i, read_buff + (i * scanlinesize));
     }

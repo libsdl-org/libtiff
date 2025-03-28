@@ -2408,6 +2408,8 @@ void t2p_read_tiff_size_tile(T2P *t2p, TIFF *input, ttile_t tile)
                     if (count > 4)
                     {
                         k = checkAdd64(k, count, t2p);
+                        /* Coverity Scan false positive because here k>4 */
+                        /* coverity[overflow_const:FALSE] */
                         k -= 2; /* don't use EOI of header or SOI of tile */
                     }
                 }
