@@ -1606,13 +1606,13 @@ static int cpImage(TIFF *in, TIFF *out, readFunc fin, writeFunc fout,
     int status = 0;
     tdata_t buf = NULL;
     tsize_t scanlinesize = TIFFRasterScanlineSize(in);
-    tsize_t bytes = scanlinesize * (tsize_t)imagelength;
     /*
      * XXX: Check for integer overflow.
      */
     if (scanlinesize && imagelength &&
-        bytes / (tsize_t)imagelength == scanlinesize)
+        ((TIFF_TMSIZE_T_MAX / (tmsize_t)imagelength) > scanlinesize))
     {
+        tsize_t bytes = scanlinesize * (tsize_t)imagelength;
         buf = limitMalloc(bytes);
         if (buf)
         {
@@ -1631,7 +1631,8 @@ static int cpImage(TIFF *in, TIFF *out, readFunc fin, writeFunc fout,
     }
     else
     {
-        TIFFError(TIFFFileName(in), "Error, no space for image buffer");
+        TIFFError(TIFFFileName(in),
+                  "Error, no space for image buffer - integer overflow");
     }
 
     return status;
