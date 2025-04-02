@@ -269,7 +269,8 @@ static void Fax3PrematureEOF(const char *module, TIFF *tif, uint32_t line,
 
 #define Nop
 
-int CheckReachedCounters(TIFF *tif, const char *module, Fax3CodecState *sp)
+static int CheckReachedCounters(TIFF *tif, const char *module,
+                                Fax3CodecState *sp)
 {
     if (sp->eofReachedCount >= EOF_REACHED_COUNT_THRESHOLD)
     {
