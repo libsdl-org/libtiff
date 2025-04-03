@@ -228,11 +228,9 @@ and the hardly recommendable ``TIFF_LONG``, are still valid, too.
 
 Samples
 -------
-BigTIFF sample files BigTIFFSamples.zip contains a series of 8 different BigTIFF files.
+BigTIFF sample file BigTIFFSamples.zip contains a series of 8 different BigTIFF files.
 Especially note the BigTIFFSamples.html file in this zip, documenting their characteristics.
 
-`BigTIFF Example files <http://download.osgeo.org/BigTIFFSamples.zip>`_
-from Joris Van Damme.
+That sample file from Joris Van Damme can still be found at the Wayback Machine:
+`BigTIFF Example files <https://web.archive.org/web/20240329145231/https://www.awaresystems.be/imaging/tiff/bigtiff/BigTIFFSamples.zip>`_
 
-########################### ToDo: Upload zip-file to LibTIFF download site:
-download.osgeo.org ###########################

@@ -8,9 +8,9 @@ BigTIFF logically extends the original TIFF file format (referred to as 'Classic
 The BigTIFF specification is the result of work by a variety of parties on the LibTIFF mailing list, including
 the then current LibTIFF maintainers, Joris Van Damme and Adobe staff. The BigTIFF specification has not yet
 been officially approved by the TIFF specification owner (Adobe), but implementation within LibTIFF
-could accelerate that process.  For more information on the BigTIFF file format, for example see 
-:doc:`bigtiff`
-or the `BigTIFF page <https://www.loc.gov/preservation/digital/formats/fdd/fdd000328.shtml>`_.
+could accelerate that process.  For more information on the BigTIFF file format, for example see :doc:`bigtiff`.
+Another overview and some further links can be found at
+`<https://www.loc.gov/preservation/digital/formats/fdd/fdd000328.shtml>`_.
 
 BigTIFF is especially useful for people and vendors that are confronted with very large images, and
 still seek to use an open, simple, and extendable format. This requirement is frequently encountered in the
