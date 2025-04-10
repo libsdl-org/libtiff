@@ -733,6 +733,19 @@ with multiple threads, with each thread having its own TIFF file.
 It is not possible (safe) to edit a single TIFF file with multiple
 threads at the same time.
 
+Multi Page / Multi Image TIFF
+-----------------------------
+
+TIFF images can contain more than one image or page and each image can
+have sub-images. Furthermore, additional information about an image
+can be put into *custom* TIFF directories, such as EXIF or GPS.
+Writing TIFF files with more than one directory (IFD) is not easy
+because some side effects need to be known.
+How to read and write multi page TIFF files using ``libtiff`` is explained
+in :doc:`/multi_page`.
+For custom directories refer to :doc:`/functions/TIFFCustomDirectory`.
+ 
+
 Other Stuff
 -----------
 
