@@ -63,8 +63,9 @@ Support for JPEG compression is controlled by :c:macro:`JPEG_SUPPORT`.
 The JPEG codec that comes with LibTIFF is designed for
 use with release 5 or later of the Independent JPEG Group's freely
 available software distribution.
-This software can be retrieved from the directory
-`<ftp://ftp.uu.net/graphics/jpeg>`_.
+
+This software can be retrieved from
+`<https://ijg.org/>`_ or as an alternative from `<https://libjpeg-turbo.org/>`_.
 
 .. note::
 
@@ -76,30 +77,28 @@ Experimental support for the deflate algorithm is controlled by
 The deflate codec that comes with LibTIFF is designed
 for use with version 0.99 or later of the freely available
 ``libz`` library written by Jean-loup Gailly and Mark Adler.
-The data format used by this library is described
-in the files
-`<ftp://ftp.uu.net/pub/archiving/zip/doc/zlib-3.1.doc>`_,
-and
-`<ftp://ftp.uu.net/pub/archiving/zip/doc/deflate-1.1.doc>`_,
-available in the directory
-`<ftp://ftp.uu.net/pub/archiving/zip/doc>`_..
-The library can be retried from the directory
-`<ftp://ftp.uu.net/pub/archiving/zip/zlib>`_
-(or try `<ftp://quest.jpl.nasa.gov/beta/zlib/>`_).
 
-.. warning::
+The data format used by the zlib library is described by RFCs (Request for
+Comments) 1950 to 1952 in the files http://tools.ietf.org/html/rfc1950
+(zlib format), rfc1951 (deflate format) and rfc1952 (gzip format).
 
-    **The deflate algorithm is experimental.  Do not expect
-    to exchange files using this compression scheme;
-    it is included only because the similar, and more common,
-    LZW algorithm is claimed to be governed by licensing restrictions.**
+The ``libz`` library can be fetched from `<https://www.zlib.net/>`_,
+and ``libdeflate`` from  `<https://github.com/ebiggers/libdeflate>`_
+
+Other codec libraries supported by LibTIFF are:
+
+* JBIG:    `<https://www.cl.cam.ac.uk/~mgk25/jbigkit/>`_
+* ESRI Lerc: `<https://github.com/Esri/lerc>`_
+* LZMA2:   `<https://tukaani.org/xz/>`_
+* | ZSTD:  info at `<https://facebook.github.io/zstd/>`_
+  | and can be retrieved from `<https://github.com/facebook/zstd>`_
+* WebP:  `<https://developers.google.com/speed/webp>`_
 
 By default :file:`tiffconf.h` defines
 :c:macro:`COLORIMETRY_SUPPORT`,
 :c:macro:`YCBCR_SUPPORT`,
 and 
 :c:macro:`CMYK_SUPPORT`.
-
 
 .. list-table:: :file:`tiffconf.h` defines
     :widths: 5 20
@@ -125,18 +124,49 @@ and
 
     * - :c:macro:`OJPEG_SUPPORT`
       - obsolete JPEG scheme defined in the 6.0 spec (compression 6)
+        (requires JPEG library with old JPEG support)
 
     * - :c:macro:`JPEG_SUPPORT`
       - current JPEG scheme defined in TTN2 (compression 7)
+        (requires JPEG library)
+
+    * - :c:macro:`JBIG_SUPPORT`
+      - current JBIG (compression 9=T85, 10=43 and 34661=ISO)
+        (requires JBIG-KIT library)
+
+    * - :c:macro:`LERC_SUPPORT`
+      - current LERC (compression 34887)
+        (requires LERC and Zlib library)
 
     * - :c:macro:`ZIP_SUPPORT`
       - experimental Deflate scheme (compression 32946)
+        (requires Zlib)
+
+    * - :c:macro:`LIBDEFLATE_SUPPORT`
+      - support libdeflate enhanced compression (compression 32946)
+        (requires libdeflate and Zlib)
+
+    * - :c:macro:`LZMA_SUPPORT`
+      - Lempel–Ziv–Markov chain algorithm (LZMA2) (compression 34925)
+        (requires liblzma)
+
+    * - :c:macro:`ZSTD_SUPPORT`
+      - ZStandard (ZSTD) deflate like scheme
+        (compression 50000 - not registered in Adobe-maintained registry)
+        (requires zstd library)
+
+    * - :c:macro:`WEBP_SUPPORT`
+      - WebP raster graphic compression support
+        (compression 50001 - not registered in Adobe-maintained registry)
+        (requires webp library)
 
     * - :c:macro:`PIXARLOG_SUPPORT`
-      - Pixar's compression scheme for high-resolution color images (compression 32909)
+      - Pixar's compression scheme for high-resolution color images
+        (compression 32909) (requires Zlib)
 
     * - :c:macro:`SGILOG_SUPPORT`
-      - SGI's compression scheme for high-resolution color images (compression 34676 and 34677)
+      - SGI's compression scheme for high-resolution color images
+        (compression 34676 and 34677)
 
     * - :c:macro:`COLORIMETRY_SUPPORT`
       - support for the TIFF 6.0 colorimetry tags

@@ -25,7 +25,7 @@ ext_source_user = None
 # -- Project information -----------------------------------------------------
 
 project = 'LibTIFF'
-copyright = '1988-2022, LibTIFF contributors'
+copyright = '1988-2025, LibTIFF contributors'
 author = 'LibTIFF contributors'
 
 # The full version, including alpha/beta/rc tags
