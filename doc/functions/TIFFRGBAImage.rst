@@ -251,4 +251,5 @@ See also
 :doc:`TIFFReadRGBAImage` (3tiff),
 :doc:`TIFFReadRGBAStrip` (3tiff),
 :doc:`TIFFReadRGBATile` (3tiff),
+:doc:`TIFFcolor` (3tiff),
 :doc:`libtiff` (3tiff)
