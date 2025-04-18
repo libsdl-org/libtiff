@@ -296,6 +296,12 @@ int write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
         return -1;
     }
 
+    if (length * scanlinesize > size)
+    {
+        fprintf(stderr, "Wrong size of buffer.\n");
+        return -1;
+    }
+
     for (offset = 0, row = 0; row < length; offset += scanlinesize, row++)
     {
         if (TIFFWriteScanline(tif, (char *)array + offset, row, 0) == -1)
