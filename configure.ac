@@ -687,14 +687,6 @@ dnl Check for liblerc.
 dnl ---------------------------------------------------------------------------
 
 HAVE_LERC=no
-STATIC_LERC=no
-
-if test "$enable_static" = "no"; then
-    static_lerc=no
-else
-    static_lerc=yes
-fi
-AM_CONDITIONAL([STATIC_LERC], [ test "$static_lerc" = yes ])
 
 AC_ARG_ENABLE(lerc,
       AS_HELP_STRING([--disable-lerc],
@@ -746,6 +738,9 @@ if test "$HAVE_LERC" = "yes" ; then
     LIBDIR="-R $with_lerc_lib_dir $LIBDIR"
   fi
 
+  if test "$enable_static" != "no"; then
+    AC_DEFINE([LERC_STATIC], 1, [Define to 1 when building a static libtiff with LERC enabled.])
+  fi
 fi
 
 AM_CONDITIONAL(HAVE_LERC, test "$HAVE_LERC" = 'yes')
