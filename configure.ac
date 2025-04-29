@@ -24,7 +24,7 @@ dnl OF THIS SOFTWARE.
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.64)
+AC_PREREQ([2.69])
 AC_INIT([LibTIFF Software],[4.7.0],[tiff@lists.osgeo.org],[tiff])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(m4)
@@ -104,8 +104,8 @@ AC_SUBST(LIBTIFF_VERSION_INFO)
 AC_SUBST(LIBTIFF_RELEASE_DATE)
 
 dnl Checks for programs.
-AC_PROG_CC_C99
-AM_PROG_CC_C_O
+AC_PROG_CC
+AM_PROG_CC_C_O  # Necessary if objects are placed in subdirectories.
 
 dnl We want warnings. As many warnings as possible.
 VL_PROG_CC_WARNINGS()
@@ -192,7 +192,7 @@ AC_C_CONST
 AC_C_BIGENDIAN
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
+
 AC_STRUCT_TM
 
 dnl If the `fseeko' function is available, define `HAVE_FSEEKO'. Define
