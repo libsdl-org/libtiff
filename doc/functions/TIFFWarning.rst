@@ -90,7 +90,7 @@ Return values
 returns a reference to the previous warning handler function.
 
 :c:func:`TIFFWarningHandlerExtR` returns an integer as "stop" to control the call
-of furhter warning handler functions within :c:func:`TIFFWarningExtR`:
+of further warning handler functions within :c:func:`TIFFWarningExtR`:
 
   - 0: both functions :c:func:`TIFFWarningHandler` and :c:func:`TIFFWarningHandlerExt` are called.
   - non-zero: no further warning message function is called.

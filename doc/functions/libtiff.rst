@@ -545,7 +545,7 @@ will work.
     * - :c:func:`TIFFYCbCrToRGBInit`
       - initialize YCbCr to RGB conversion state
 
-.. list-table:: *Libtiff auxillary functions*
+.. list-table:: *Libtiff auxiliary functions*
     :widths: 5 20
     :header-rows: 1
 
