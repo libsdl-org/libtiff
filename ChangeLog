@@ -469,9 +469,9 @@
 
 	LERCDecode: zero-initialize output buffer if failure.
 
-	LZMADecode: zero-initialize (not-yet-written parts of) output buffer if failure, and handle repeated calls to decoding same tile/strip if previous failure occured
+	LZMADecode: zero-initialize (not-yet-written parts of) output buffer if failure, and handle repeated calls to decoding same tile/strip if previous failure occurred
 
-	TWebPDecode: zero-initialize output buffer if failure, and handle repeated calls to decoding same tile/strip if previous failure occured
+	TWebPDecode: zero-initialize output buffer if failure, and handle repeated calls to decoding same tile/strip if previous failure occurred
 
 	ThunderDecode: zero-initialize (not-yet-written parts of) output buffer if failure
 
@@ -479,7 +479,7 @@
 
 	JBIGDecode: zero-initialize (not-yet-written parts of) output buffer if failure
 
-	ZIPDecode: zero-initialize (not-yet-written parts of) output buffer if failure, and handle repeated calls to decoding same tile/strip if previous failure occured
+	ZIPDecode: zero-initialize (not-yet-written parts of) output buffer if failure, and handle repeated calls to decoding same tile/strip if previous failure occurred
 
 	LZWDecode: zero-initialize (not-yet-written parts of) output buffer if failure
 
@@ -891,13 +891,13 @@
 2024-04-25  Even Rouault  <even.rouault@spatialys.com>
 
 	Merge branch 'libjpeg_turbo_3_0' into 'master'
-	Change messages/comments refering libjpeg-turbo 2.2 to 3.0
+	Change messages/comments referring libjpeg-turbo 2.2 to 3.0
 
 	See merge request libtiff/libtiff!584
 
 2024-04-24  Even Rouault  <even.rouault@spatialys.com>
 
-	Change messages/comments refering libjpeg-turbo 2.2 to 3.0.
+	Change messages/comments referring libjpeg-turbo 2.2 to 3.0.
 	libjpeg-turbo 2.2 was actually released as 3.0. Reflect that
 
 2024-04-22  Even Rouault  <even.rouault@spatialys.com>
@@ -1054,7 +1054,7 @@
 	The LERC codec up-to-now didn't do any special processing when writing a strile
 	in a multi-band PlanarConfig=Contig file, resulting in corruptions. Now we
 	generate a mask buffer in that situation. Actually, if the NaN values are not
-	at the same location accross bands, we need to write one mask-per-band, which
+	at the same location across bands, we need to write one mask-per-band, which
 	requires liblerc >= 3.0, and in that situation change the LERC blob to
 	multi-band instead of multi-depth/dim, with liblerc >= 3.0. When all bands have
 	NaN values at the same location, we generate a single mask, which is compatible
@@ -1102,7 +1102,7 @@
 	                        ^~~~~~~~
 
 	This updates the format specifiers from `PRIu16` to `PRIu32` for `tdir_t`
-	(which is a `typdef`ed `uint32_t`) and from `TIFF_SSIZE_FORMAT` to
+	(which is a `typedef`ed `uint32_t`) and from `TIFF_SSIZE_FORMAT` to
 	`TIFF_SIZE_FORMAT` for `size_t`, which makes sense given that it's an unsigned
 	type.
 
@@ -1122,13 +1122,13 @@
 2024-03-14  Even Rouault  <even.rouault@spatialys.com>
 
 	Merge branch 'fix_wrong_return_TIFFIsBigTIFF_if_swapping_case' into 'master'
-	Fix wrong return of TIFFIsBigTIFF() in case byte-swapping is acitve
+	Fix wrong return of TIFFIsBigTIFF() in case byte-swapping is active
 
 	See merge request libtiff/libtiff!567
 
 2024-03-13  Su_Laus  <sulau@freenet.de>
 
-	Fix wrong return of TIFFIsBigTIFF() in case byte-swapping is acitve (i.e. little endian image on a big endian machine).
+	Fix wrong return of TIFFIsBigTIFF() in case byte-swapping is active (i.e. little endian image on a big endian machine).
 
 2024-01-30  Even Rouault  <even.rouault@spatialys.com>
 
@@ -1263,7 +1263,7 @@
 2023-11-11  Even Rouault  <even.rouault@spatialys.com>
 
 	Merge branch 'manpage_621_TIFFOpenOptionsSetMaxSingleMemAlloc' into 'master'
-	manpage: Update TIFF documentation about TIFFOpenOptions.rst and memory limitting.
+	manpage: Update TIFF documentation about TIFFOpenOptions.rst and memory limiting.
 
 	Closes #621
 
@@ -1351,7 +1351,7 @@
 2023-10-31  Even Rouault  <even.rouault@spatialys.com>
 
 	tif_dirread.c: only issue TIFFGetFileSize() for large enough RAM requests
-	Ammends 5320c9d89c054fa805d037d84c57da874470b01a
+	Amends 5320c9d89c054fa805d037d84c57da874470b01a
 
 	This fixes a performance regression caught by the GDAL regression test
 	suite.
@@ -1421,7 +1421,7 @@
 2023-10-12  Even Rouault  <even.rouault@spatialys.com>
 
 	Merge branch 'tiffcp_cancel_ycbcr' into 'master'
-	tiffcp: replace PHOTOMETRIC_YCBCR with PHOTOMETRIC_RGB when outputing to...
+	tiffcp: replace PHOTOMETRIC_YCBCR with PHOTOMETRIC_RGB when outputting to...
 
 	See merge request libtiff/libtiff!540
 
@@ -1445,7 +1445,7 @@
 
 2023-10-07  Even Rouault  <even.rouault@spatialys.com>
 
-	tiffcp: replace PHOTOMETRIC_YCBCR with PHOTOMETRIC_RGB when outputing to compression != JPEG (refs #571)
+	tiffcp: replace PHOTOMETRIC_YCBCR with PHOTOMETRIC_RGB when outputting to compression != JPEG (refs #571)
 
 2023-10-05  Even Rouault  <even.rouault@spatialys.com>
 
@@ -9779,14 +9779,14 @@
 	* libtiff/tif_pixarlog.c: PixarLogDecode(): resync tif_rawcp with
 	next_in and tif_rawcc with avail_in at beginning and end of function,
 	similarly to what is done in LZWDecode(). Likely needed so that it
-	works properly with latest chnges in tif_read.c in CHUNKY_STRIP_READ_SUPPORT
+	works properly with latest changes in tif_read.c in CHUNKY_STRIP_READ_SUPPORT
 	mode. But untested...
 
 2017-05-17 Even Rouault <even.rouault at spatialys.com>
 
 	* libtiff/tif_lzw.c: update dec_bitsleft at beginning of LZWDecode(),
 	and update tif_rawcc at end of LZWDecode(). This is needed to properly
-	work with the latest chnges in tif_read.c in CHUNKY_STRIP_READ_SUPPORT
+	work with the latest changes in tif_read.c in CHUNKY_STRIP_READ_SUPPORT
 	mode.
 
 2017-05-14 Even Rouault <even.rouault at spatialys.com>
@@ -10209,7 +10209,7 @@
 
 	* tools/tiffdump.c (ReadDirectory): Remove uint32 cast to
 	_TIFFmalloc() argument which resulted in Coverity report.  Added
-	more mutiplication overflow checks.
+	more multiplication overflow checks.
 
 2016-11-18 Even Rouault <even.rouault at spatialys.com>
 
@@ -10726,7 +10726,7 @@
 
 	Builds with CMake 2.8.9 and newer.
 
-	Tar is now resquested to use POSIX PAX format.
+	Tar is now requested to use POSIX PAX format.
 
 2015-08-31  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
 
@@ -10809,7 +10809,7 @@
 
 2015-08-23  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
 
-	* libtiff/tiffiop.h: For MinGW comiles, make sure that build
+	* libtiff/tiffiop.h: For MinGW compiles, make sure that build
 	supports necessary __MSVCRT_VERSION__ (at least at least 0x800).
 	Otherwise large files can not be supported for POSIX-style I/O.
 
@@ -16427,7 +16427,7 @@ btiff/tif_win32.c: Replace custom Win32 memory api with generic
 2002-03-15  Andrey Kiselev  <dron@ak4719.spb.edu>
 
 	* libtiff/: tif_dir.c, tif_dir.h, tif_dirinfo.c, tif_dirread.c,
-	tif_dirwrite.c: Added routine TIFFDataWidth for detrmining
+	tif_dirwrite.c: Added routine TIFFDataWidth for determining
 	TIFFDataType sizes instead of working with tiffDataWidth array
 	directly. Should prevent out-of-borders bugs in case of unknown or
 	broken data types.  EstimateStripByteCounts routine modified, so it
@@ -17241,7 +17241,7 @@ Tue Dec 21 14:01:51 1999  Frank Warmerdam  <warmerda@gdal.velocet.ca>
 
 Tue Dec 21 11:04:45 EST 1999  Mike Welles <mike@onshore.com> *** 3.5.4 release ***
 
-	* Aadded Pixar tag support.  Contributed by Phil Beffery <phil@pixar.com>
+	* Added Pixar tag support.  Contributed by Phil Beffery <phil@pixar.com>
 
 	* Made one more change to tif_dir.c for removal of LZW compression. Also added notice
 	  when LZW compression invoked.

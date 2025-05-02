@@ -122,7 +122,7 @@ typedef enum
     T2P_SAMPLE_REALIZE_PALETTE =
         0x0020, /* The unencoded samples are indexes into the color map */
     T2P_SAMPLE_SIGNED_TO_UNSIGNED =
-        0x0040, /* The unencoded samples are signed instead of unsignd */
+        0x0040, /* The unencoded samples are signed instead of unsigned */
     T2P_SAMPLE_LAB_SIGNED_TO_UNSIGNED =
         0x0040, /* The L*a*b* samples have a* and b* signed */
     T2P_SAMPLE_PLANAR_SEPARATE_TO_CONTIG =

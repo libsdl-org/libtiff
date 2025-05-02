@@ -24,7 +24,7 @@ The raster is assumed to be an array of ``ImageWidth`` × ``RowsPerStrip``
 (:c:macro:`TIFFTAG_IMAGEWIDTH`) and ``RowsPerStrip`` is the maximum lines
 in a strip (:c:macro:`TIFFTAG_ROWSPERSTRIP`).
 
-:c:func:`TIFFReadRGBAStripExt` provides the paramater `stop_on_error`.
+:c:func:`TIFFReadRGBAStripExt` provides the parameter `stop_on_error`.
 Its behaviour is described at :doc:`TIFFReadRGBAImage`.
 
 The *row* value should be the row of the first row in the strip

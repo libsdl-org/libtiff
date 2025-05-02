@@ -538,7 +538,7 @@ static void initScale()
 }
 
 /*
- * Calculate the horizontal accumulation parameteres
+ * Calculate the horizontal accumulation parameters
  * according to the widths of the src and dst images.
  */
 static void setupStepTables(uint32_t sw)
