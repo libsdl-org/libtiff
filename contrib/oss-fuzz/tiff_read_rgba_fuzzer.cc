@@ -125,6 +125,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
     }
 
     raster = (uint32_t *)_TIFFmalloc(size * sizeof(uint32_t));
+    int ret = 0;
     if (raster != NULL)
     {
         TIFFReadRGBAImage(tif, w, h, raster, 0);
@@ -137,9 +138,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
             if (!buffer)
             {
                 fprintf(stderr, "Memory allocation failed\n");
-                _TIFFfree(buffer);
-                TIFFClose(tif);
-                return 1;
+                ret = 1;
+                goto cleanup;
             }
 
             // Read each scanline
@@ -148,17 +148,18 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
                 if (TIFFReadScanline(tif, buffer, row, 0) < 0)
                 {
                     _TIFFfree(buffer);
-                    TIFFClose(tif);
-                    return 1;
+                    ret = 1;
+                    goto cleanup;
                 }
             }
+            _TIFFfree(buffer);
         }
-
+    cleanup:
         _TIFFfree(raster);
     }
     TIFFClose(tif);
 
-    return 0;
+    return ret;
 }
 
 #ifdef STANDALONE
