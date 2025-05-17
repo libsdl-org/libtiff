@@ -428,7 +428,7 @@ static int cvt_whole_image(TIFF *in, TIFF *out)
 
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
     TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
-    pixel_count = width * height;
+    pixel_count = (size_t)width * height;
 
     /* XXX: Check the integer overflow. */
     if (!width || !height || SIZE_MAX / width < height)
@@ -531,8 +531,8 @@ static int cvt_whole_image(TIFF *in, TIFF *out)
             rows_to_write = rowsperstrip;
 
         if (TIFFWriteEncodedStrip(out, row / rowsperstrip, raster_strip,
-                                  bytes_per_pixel * rows_to_write * width) ==
-            -1)
+                                  (tmsize_t)bytes_per_pixel * rows_to_write *
+                                      width) == -1)
         {
             _TIFFfree(raster);
             return 0;
