@@ -917,10 +917,10 @@ static void quant_fsdither(TIFF *in, TIFF *out)
     outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
 
     GetInputLine(in, 0, goto bad); /* get first line */
-    for (i = 1; i <= imagelength; ++i)
+    for (i = 0; i < imagelength; ++i)
     {
         SWAP(short *, thisline, nextline);
-        lastline = (i >= imax);
+        lastline = (i == imax);
         if (i <= imax)
             GetInputLine(in, i, break);
         thisptr = thisline;
@@ -997,7 +997,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
                 nextptr += 3;
             }
         }
-        if (TIFFWriteScanline(out, outline, i - 1, 0) < 0)
+        if (TIFFWriteScanline(out, outline, i, 0) < 0)
             break;
     }
 bad:
