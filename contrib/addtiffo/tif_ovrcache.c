@@ -100,9 +100,9 @@ TIFFOvrCache *TIFFCreateOvrCache(TIFF *hTIFF, toff_t nDirOffset)
     /* -------------------------------------------------------------------- */
 
     psCache->pabyRow1Blocks =
-        (unsigned char *)_TIFFmalloc(psCache->nBytesPerRow);
+        (unsigned char *)_TIFFmalloc((tmsize_t)psCache->nBytesPerRow);
     psCache->pabyRow2Blocks =
-        (unsigned char *)_TIFFmalloc(psCache->nBytesPerRow);
+        (unsigned char *)_TIFFmalloc((tmsize_t)psCache->nBytesPerRow);
 
     if (psCache->pabyRow1Blocks == NULL || psCache->pabyRow2Blocks == NULL)
     {
@@ -118,8 +118,8 @@ TIFFOvrCache *TIFFCreateOvrCache(TIFF *hTIFF, toff_t nDirOffset)
         return NULL;
     }
 
-    _TIFFmemset(psCache->pabyRow1Blocks, 0, psCache->nBytesPerRow);
-    _TIFFmemset(psCache->pabyRow2Blocks, 0, psCache->nBytesPerRow);
+    _TIFFmemset(psCache->pabyRow1Blocks, 0, (tmsize_t)psCache->nBytesPerRow);
+    _TIFFmemset(psCache->pabyRow2Blocks, 0, (tmsize_t)psCache->nBytesPerRow);
 
     psCache->nBlockOffset = 0;
 
@@ -153,20 +153,78 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
     /* -------------------------------------------------------------------- */
     if (TIFFIsByteSwapped(psCache->hTIFF))
     {
+        uint64_t n;
         if (psCache->nBitsPerPixel == 16)
+        {
+            n = (psCache->nBytesPerBlock * psCache->nSamples) / 2;
+#ifdef SIZEOF_SIZE_T
+#if SIZEOF_SIZE_T <= 4
+            if (n > INT32_MAX)
+#else
+            if (n > INT64_MAX)
+#endif
+#else
+#pragma message(                                                               \
+    "---- Error: SIZEOF_SIZE_T not defined. Generate a compile error. ----")
+            SIZEOF_SIZE_T
+#endif
+            {
+                TIFFErrorExt(TIFFClientdata(psCache->hTIFF),
+                             "TIFFWriteOvrRow()",
+                             "Integer overflow of number of 'short' to swap");
+                n = 0;
+            }
             TIFFSwabArrayOfShort((uint16_t *)psCache->pabyRow1Blocks,
-                                 (psCache->nBytesPerBlock * psCache->nSamples) /
-                                     2);
+                                 (tmsize_t)n);
+        }
 
         else if (psCache->nBitsPerPixel == 32)
+        {
+            n = (psCache->nBytesPerBlock * psCache->nSamples) / 4;
+#ifdef SIZEOF_SIZE_T
+#if SIZEOF_SIZE_T <= 4
+            if (n > INT32_MAX)
+#else
+            if (n > INT64_MAX)
+#endif
+#else
+#pragma message(                                                               \
+    "---- Error: SIZEOF_SIZE_T not defined. Generate a compile error. ----")
+            SIZEOF_SIZE_T
+#endif
+            {
+                TIFFErrorExt(TIFFClientdata(psCache->hTIFF),
+                             "TIFFWriteOvrRow()",
+                             "Integer overflow of number of 'long' to swap");
+                n = 0;
+            }
             TIFFSwabArrayOfLong((uint32_t *)psCache->pabyRow1Blocks,
-                                (psCache->nBytesPerBlock * psCache->nSamples) /
-                                    4);
+                                (tmsize_t)n);
+        }
 
         else if (psCache->nBitsPerPixel == 64)
-            TIFFSwabArrayOfDouble(
-                (double *)psCache->pabyRow1Blocks,
-                (psCache->nBytesPerBlock * psCache->nSamples) / 8);
+        {
+            n = (psCache->nBytesPerBlock * psCache->nSamples) / 8;
+#ifdef SIZEOF_SIZE_T
+#if SIZEOF_SIZE_T <= 4
+            if (n > INT32_MAX)
+#else
+            if (n > INT64_MAX)
+#endif
+#else
+#pragma message(                                                               \
+    "---- Error: SIZEOF_SIZE_T not defined. Generate a compile error. ----")
+            SIZEOF_SIZE_T
+#endif
+            {
+                TIFFErrorExt(TIFFClientdata(psCache->hTIFF),
+                             "TIFFWriteOvrRow()",
+                             "Integer overflow of number of 'double' to swap");
+                n = 0;
+            }
+            TIFFSwabArrayOfDouble((double *)psCache->pabyRow1Blocks,
+                                  (tmsize_t)n);
+        }
     }
 
     /* -------------------------------------------------------------------- */
@@ -262,7 +320,7 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
     psCache->pabyRow1Blocks = psCache->pabyRow2Blocks;
     psCache->pabyRow2Blocks = pabyData;
 
-    _TIFFmemset(pabyData, 0, psCache->nBytesPerRow);
+    _TIFFmemset(pabyData, 0, (tmsize_t)psCache->nBytesPerRow);
 
     psCache->nBlockOffset++;
 
@@ -286,7 +344,7 @@ unsigned char *TIFFGetOvrBlock(TIFFOvrCache *psCache, int iTileX, int iTileY,
                                int iSample)
 
 {
-    long nRowOffset;
+    toff_t nRowOffset;
 
     if (iTileY > psCache->nBlockOffset + 1)
         TIFFWriteOvrRow(psCache);
@@ -318,7 +376,7 @@ unsigned char *TIFFGetOvrBlock_Subsampled(TIFFOvrCache *psCache, int iTileX,
                                           int iTileY)
 
 {
-    int nRowOffset;
+    toff_t nRowOffset;
 
     if (iTileY > psCache->nBlockOffset + 1)
         TIFFWriteOvrRow(psCache);

@@ -165,7 +165,7 @@ uint32_t TIFF_WriteOverview(TIFF *hTIFF, uint32_t nXSize, uint32_t nYSize,
 
     TIFFSetSubDirectory(hTIFF, nBaseDirOffset);
 
-    return nOffset;
+    return (uint32_t)nOffset;
 }
 
 /************************************************************************/
