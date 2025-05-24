@@ -24,10 +24,10 @@
 # LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
 # OF THIS SOFTWARE.
 
-cmake_minimum_required(VERSION 3.9.0)
+cmake_minimum_required(VERSION 3.10)
 
-# Default policy is from 3.9.0
-cmake_policy(VERSION 3.9.0)
+# Default policy is from 3.10
+cmake_policy(VERSION 3.10)
 
 if(POLICY CMP0074)
   # Allow find_package() to use the ZLIB_ROOT variable, if available.
