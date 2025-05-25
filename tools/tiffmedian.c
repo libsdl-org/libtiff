@@ -920,7 +920,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
     outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
 
     GetInputLine(in, 0, goto bad); /* get first line */
-    for (i = 0; i <= imagelength; ++i)
+    for (i = 0; i < imagelength; ++i)
     {
         SWAP(short *, thisline, nextline);
         lastline = (i >= imax);
