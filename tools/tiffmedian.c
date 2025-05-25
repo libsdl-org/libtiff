@@ -414,7 +414,10 @@ static void get_histogram(TIFF *in, Colorbox *box)
     for (i = 0; i < imagelength; i++)
     {
         if (TIFFReadScanline(in, inputline, i, 0) <= 0)
-            break;
+        {
+            fprintf(stderr, "Error reading scanline\n");
+            exit(EXIT_FAILURE);
+        }
         inptr = inputline;
         for (j = imagewidth; j-- > 0;)
         {
