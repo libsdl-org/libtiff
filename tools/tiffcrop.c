@@ -7863,7 +7863,7 @@ static int extractImageSection(struct image_data *image,
             TIFFError("", "Src offset: %8" PRIu32 ", Dst offset: %8" PRIu32,
                       src_offset, dst_offset);
 #endif
-            if (src_offset + full_bytes >= check_buffsize)
+            if (((int64_t)src_offset + full_bytes) >= check_buffsize)
             {
                 printf(
                     "Bad input. Preventing reading outside of input buffer.\n");
@@ -7915,7 +7915,7 @@ static int extractImageSection(struct image_data *image,
             bytebuff1 = bytebuff2 = 0;
             if (shift1 == 0) /* the region is byte and sample aligned */
             {
-                if (offset1 + full_bytes >= check_buffsize)
+                if (((int64_t)offset1 + full_bytes) >= check_buffsize)
                 {
                     printf("Bad input. Preventing reading outside of input "
                            "buffer.\n");
@@ -7948,7 +7948,7 @@ static int extractImageSection(struct image_data *image,
                 {
                     /* Only copy higher bits of samples and mask lower bits of
                      * not wanted column samples to zero */
-                    if (offset1 + full_bytes >= check_buffsize)
+                    if (((int64_t)offset1 + full_bytes) >= check_buffsize)
                     {
                         printf("Bad input. Preventing reading outside of input "
                                "buffer.\n");
@@ -7994,7 +7994,7 @@ static int extractImageSection(struct image_data *image,
                      * shift1 bits before save to destination.*/
                     /* Attention: src_buff size needs to be some bytes larger
                      * than image size, because could read behind image here. */
-                    if (offset1 + j + 1 >= check_buffsize)
+                    if (((int64_t)offset1 + j + 1) >= check_buffsize)
                     {
                         printf("Bad input. Preventing reading outside of input "
                                "buffer.\n");
