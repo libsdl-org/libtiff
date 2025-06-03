@@ -434,7 +434,13 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
         return -1;
     }
 
-    imagesize = (filestat.st_size - hdr_size) / nbands / depth;
+    if (((filestat.st_size - hdr_size) / nbands / depth) > UINT32_MAX)
+    {
+        fprintf(stderr, "Too large image size calculated.\n");
+        return -1;
+    }
+    else
+        imagesize = (uint32_t)((filestat.st_size - hdr_size) / nbands / depth);
 
     if (*width != 0 && *length == 0)
     {

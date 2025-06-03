@@ -281,6 +281,31 @@ typedef struct
     tsize_t outputwritten;
 } T2P;
 
+/* This is a helper function. */
+static uint32_t _TIFFCastSSizeToUInt32(tmsize_t val, const char *module)
+{
+    if (val < 0)
+    {
+        TIFFError(module, "Unsigned integer underflow (negative)");
+        return 0;
+    }
+    /* sizeof(tmsize_t) is determined by SIZEOF_SIZE_T */
+#ifdef SIZEOF_SIZE_T
+#if SIZEOF_SIZE_T > 4
+    if (val > UINT32_MAX)
+    {
+        TIFFError(module, "Integer overflow");
+        return 0;
+    }
+#endif
+#else
+#pragma message(                                                               \
+    "---- Error: SIZEOF_SIZE_T not defined. Generate a compile error. ----")
+    SIZEOF_SIZE_T
+#endif
+    return (uint32_t)val;
+}
+
 /* These functions are called by main. */
 
 static void usage_info(int);
@@ -2260,7 +2285,8 @@ void t2p_read_tiff_size(T2P *t2p, TIFF *input)
                                         "Input file %s has short JPEG "
                                         "interchange file byte count",
                                         TIFFFileName(input));
-                            t2p->pdf_ojpegiflength = t2p->tiff_datasize;
+                            t2p->pdf_ojpegiflength = _TIFFCastSSizeToUInt32(
+                                t2p->tiff_datasize, "t2p_read_tiff_size");
                             k = checkAdd64(k, t2p->tiff_datasize, t2p);
                             k = checkAdd64(k, 6, t2p);
                             k = checkAdd64(k, stripcount, t2p);
@@ -2535,7 +2561,7 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
     uint64_t *sbc;
     unsigned char *stripbuffer;
     tsize_t striplength = 0;
-    uint32_t max_striplength = 0;
+    uint64_t max_striplength = 0;
 #endif /* ifdef JPEG_SUPPORT */
     const char mod[] = "t2p_readwrite_pdf_image()";
     tsize_t tsdummy = 0;
@@ -2813,7 +2839,7 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
             if (stripbuffer == NULL)
             {
                 TIFFError(TIFF2PDF_MODULE,
-                          "Can't allocate %" PRId32
+                          "Can't allocate %" PRId64
                           " bytes of memory for t2p_readwrite_pdf_image, %s",
                           max_striplength, TIFFFileName(input));
                 _TIFFfree(buffer);
@@ -2899,7 +2925,9 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
             sepstripcount = TIFFNumberOfStrips(input);
 
             stripsize = sepstripsize * t2p->tiff_samplesperpixel;
-            stripcount = sepstripcount / t2p->tiff_samplesperpixel;
+            stripcount = _TIFFCastSSizeToUInt32(sepstripcount /
+                                                    t2p->tiff_samplesperpixel,
+                                                "t2p_readwrite_pdf_image");
 
             buffer = (unsigned char *)_TIFFmalloc(t2p->tiff_datasize);
             if (buffer == NULL)
@@ -3224,7 +3252,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P *t2p, TIFF *input, TIFF *output,
 #ifdef JPEG_SUPPORT
     unsigned char *jpt;
     float *xfloatp;
-    uint32_t xuint32 = 0;
+    tmsize_t xint = 0;
 #endif
     const char mod[] = "t2p_readwrite_pdf_image_tile()";
     tsize_t tsdummy = 0;
@@ -3408,7 +3436,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P *t2p, TIFF *input, TIFF *output,
                     /* Store last 2 bytes of the JpegTables */
                     table_end[0] = buffer[bufferoffset - 2];
                     table_end[1] = buffer[bufferoffset - 1];
-                    xuint32 = bufferoffset;
+                    xint = bufferoffset;
                     bufferoffset -= 2;
                     retTIFFReadRawTile = TIFFReadRawTile(
                         input, tile,
@@ -3423,8 +3451,8 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P *t2p, TIFF *input, TIFF *output,
                     bufferoffset += retTIFFReadRawTile;
                     /* Overwrite SOI marker of image scan with previously */
                     /* saved end of JpegTables */
-                    buffer[xuint32 - 2] = table_end[0];
-                    buffer[xuint32 - 1] = table_end[1];
+                    buffer[xint - 2] = table_end[0];
+                    buffer[xint - 1] = table_end[1];
                 }
             }
             add_t2pWriteFile_check(output, (tdata_t)buffer, bufferoffset, mod,
@@ -6320,17 +6348,20 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
     t2p->pdf_info = 2;
     t2p->pdf_pages = 3;
     written += t2p_write_pdf_header(t2p, output);
-    t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+    t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+        _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
     t2p->pdf_catalog = t2p->pdf_xrefcount;
     written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
     written += t2p_write_pdf_catalog(t2p, output);
     written += t2p_write_pdf_obj_end(output);
-    t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+    t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+        _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
     t2p->pdf_info = t2p->pdf_xrefcount;
     written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
     written += t2p_write_pdf_info(t2p, input, output);
     written += t2p_write_pdf_obj_end(output);
-    t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+    t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+        _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
     t2p->pdf_pages = t2p->pdf_xrefcount;
     written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
     written += t2p_write_pdf_pages(t2p, output);
@@ -6343,11 +6374,13 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
         {
             return (0);
         }
-        t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+        t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+            _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
         written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
         written += t2p_write_pdf_page(t2p->pdf_xrefcount, t2p, output);
         written += t2p_write_pdf_obj_end(output);
-        t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+        t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+            _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
         written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
         written += t2p_write_pdf_stream_dict_start(output);
         written += t2p_write_pdf_stream_dict(0, t2p->pdf_xrefcount + 1, output);
@@ -6358,19 +6391,22 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
         streamlen = written - streamlen;
         written += t2p_write_pdf_stream_end(output);
         written += t2p_write_pdf_obj_end(output);
-        t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+        t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+            _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
         written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
         written += t2p_write_pdf_stream_length(streamlen, output);
         written += t2p_write_pdf_obj_end(output);
         if (t2p->tiff_transferfunctioncount != 0)
         {
-            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
             written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
             written += t2p_write_pdf_transfer(t2p, output);
             written += t2p_write_pdf_obj_end(output);
             for (i = 0; i < t2p->tiff_transferfunctioncount; i++)
             {
-                t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+                t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                    _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
                 written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
                 written += t2p_write_pdf_stream_dict_start(output);
                 written += t2p_write_pdf_transfer_dict(t2p, output, i);
@@ -6385,7 +6421,8 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
         }
         if ((t2p->pdf_colorspace & T2P_CS_PALETTE) != 0)
         {
-            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
             t2p->pdf_palettecs = t2p->pdf_xrefcount;
             written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
             written += t2p_write_pdf_stream_dict_start(output);
@@ -6401,7 +6438,8 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
         }
         if ((t2p->pdf_colorspace & T2P_CS_ICCBASED) != 0)
         {
-            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
             t2p->pdf_icccs = t2p->pdf_xrefcount;
             written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
             written += t2p_write_pdf_stream_dict_start(output);
@@ -6419,7 +6457,8 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
             for (i2 = 0; i2 < t2p->tiff_tiles[t2p->pdf_page].tiles_tilecount;
                  i2++)
             {
-                t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+                t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                    _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
                 written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
                 written += t2p_write_pdf_stream_dict_start(output);
                 written +=
@@ -6449,7 +6488,8 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
                 streamlen = written - streamlen;
                 written += t2p_write_pdf_stream_end(output);
                 written += t2p_write_pdf_obj_end(output);
-                t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+                t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                    _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
                 written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
                 written += t2p_write_pdf_stream_length(streamlen, output);
                 written += t2p_write_pdf_obj_end(output);
@@ -6457,7 +6497,8 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
         }
         else
         {
-            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
             written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
             written += t2p_write_pdf_stream_dict_start(output);
             written += t2p_write_pdf_xobject_stream_dict(0, t2p, output);
@@ -6486,13 +6527,14 @@ tsize_t t2p_write_pdf(T2P *t2p, TIFF *input, TIFF *output)
             streamlen = written - streamlen;
             written += t2p_write_pdf_stream_end(output);
             written += t2p_write_pdf_obj_end(output);
-            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] = written;
+            t2p->pdf_xrefoffsets[t2p->pdf_xrefcount++] =
+                _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
             written += t2p_write_pdf_obj_start(t2p->pdf_xrefcount, output);
             written += t2p_write_pdf_stream_length(streamlen, output);
             written += t2p_write_pdf_obj_end(output);
         }
     }
-    t2p->pdf_startxref = written;
+    t2p->pdf_startxref = _TIFFCastSSizeToUInt32(written, "t2p_write_pdf");
     written += t2p_write_pdf_xreftable(t2p, output);
     written += t2p_write_pdf_trailer(t2p, output);
     t2p_disable(output);
