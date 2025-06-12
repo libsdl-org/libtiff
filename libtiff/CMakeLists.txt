@@ -49,7 +49,7 @@ set(tiff_private_HEADERS
         ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h)
 
 
-add_library(tiff libtiff.def)
+add_library(tiff ${TIFF_BUILD_LIB_VALUE} libtiff.def)
 add_library(TIFF::tiff ALIAS tiff)
 
 target_sources(tiff PRIVATE
@@ -242,7 +242,7 @@ if(CXX_SUPPORT)
   if (WIN32 AND NOT MINGW)
       add_library(tiffxx STATIC ../placeholder.h)
   else()
-      add_library(tiffxx ../placeholder.h)
+      add_library(tiffxx ${TIFF_BUILD_LIB_VALUE} ../placeholder.h)
   endif()
 
   add_library(TIFF::CXX ALIAS tiffxx)
