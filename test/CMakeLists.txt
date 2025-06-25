@@ -231,6 +231,13 @@ target_link_libraries(test_ifd_loop_detection PRIVATE tiff tiff_port)
 target_compile_definitions(test_ifd_loop_detection PRIVATE SOURCE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 list(APPEND simple_tests test_ifd_loop_detection)
 
+add_executable(test_RGBAImage ../placeholder.h)
+target_sources(test_RGBAImage PRIVATE test_RGBAImage.c)
+set_target_properties(test_RGBAImage PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(test_RGBAImage PRIVATE tiff tiff_port)
+target_compile_definitions(test_RGBAImage PRIVATE SOURCE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
+list(APPEND simple_tests test_RGBAImage)
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.
