@@ -205,6 +205,8 @@ typedef struct
     int samplesperclump;
 
     JPEGOtherSettings otherSettings;
+
+    int encode_raw_error;
 } JPEGState;
 
 #define JState(tif) ((JPEGState *)(tif)->tif_data)
@@ -2303,6 +2305,7 @@ static int JPEGPreEncode(TIFF *tif, uint16_t s)
             return (0);
     }
     sp->scancount = 0;
+    sp->encode_raw_error = FALSE;
 
     return (1);
 }
@@ -2399,6 +2402,13 @@ static int JPEGEncodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
 
     (void)s;
     assert(sp != NULL);
+
+    if (sp->encode_raw_error)
+    {
+        TIFFErrorExtR(tif, tif->tif_name, "JPEGEncodeRaw() already failed");
+        return 0;
+    }
+
     /* data is expected to be supplied in multiples of a clumpline */
     /* a clumpline is equivalent to v_sampling desubsampled scanlines */
     /* TODO: the following calculation of bytesperclumpline, should substitute
@@ -2470,7 +2480,10 @@ static int JPEGEncodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
         {
             int n = sp->cinfo.c.max_v_samp_factor * DCTSIZE;
             if (TIFFjpeg_write_raw_data(sp, sp->ds_buffer, n) != n)
+            {
+                sp->encode_raw_error = TRUE;
                 return (0);
+            }
             sp->scancount = 0;
         }
         tif->tif_row += sp->v_sampling;
