@@ -2631,6 +2631,7 @@ int main(int argc, char *argv[])
     size_t length;
     char temp_filename[PATH_MAX + 16]; /* Extra space keeps the compiler from
                                           complaining */
+    int retval = 0;                    /* return value of tiffcrop */
 
     assert(NUM_BUFF_OVERSIZE_BYTES >= 3);
 
@@ -2665,16 +2666,19 @@ int main(int argc, char *argv[])
         in = TIFFOpenExt(argv[optind], "r", opts);
         TIFFOpenOptionsFree(opts);
         if (in == NULL)
-            return (-3);
+        {
+            TIFFError("An input file cannot be opened: ", "%s", argv[optind]);
+            retval = -3;
+            goto failure;
+        }
 
         /* If only one input file is specified, we can use directory count */
         total_images = TIFFNumberOfDirectories(in);
         if (total_images > TIFF_DIR_MAX)
         {
             TIFFError(TIFFFileName(in), "File contains too many directories");
-            if (out != NULL)
-                (void)TIFFClose(out);
-            return (1);
+            retval = 1;
+            goto failure;
         }
         if (image_count == 0)
         {
@@ -2705,18 +2709,16 @@ int main(int argc, char *argv[])
                       "Invalid image number %" PRIu32
                       ", File contains only %" PRIu32 " images",
                       dirnum + 1u, total_images);
-            if (out != NULL)
-                (void)TIFFClose(out);
-            return (1);
+            retval = 1;
+            goto failure;
         }
 
         if (dirnum != 0 && !TIFFSetDirectory(in, (tdir_t)dirnum))
         {
             TIFFError(TIFFFileName(in),
                       "Error, setting subdirectory at %" PRIu32, dirnum);
-            if (out != NULL)
-                (void)TIFFClose(out);
-            return (1);
+            retval = 1;
+            goto failure;
         }
 
         end_of_input = FALSE;
@@ -2750,7 +2752,8 @@ int main(int argc, char *argv[])
                     {
                         TIFFError("Unable to open dump file for writing", "%s",
                                   temp_filename);
-                        exit(EXIT_FAILURE);
+                        retval = EXIT_FAILURE;
+                        goto failure;
                     }
                     dump_info(dump.infile, dump.format, "Reading image",
                               "%u from %s", dump_images, TIFFFileName(in));
@@ -2771,7 +2774,8 @@ int main(int argc, char *argv[])
                     {
                         TIFFError("Unable to open dump file for writing", "%s",
                                   temp_filename);
-                        exit(EXIT_FAILURE);
+                        retval = EXIT_FAILURE;
+                        goto failure;
                     }
                     dump_info(dump.outfile, dump.format, "Writing image",
                               "%u from %s", dump_images, TIFFFileName(in));
@@ -2785,7 +2789,8 @@ int main(int argc, char *argv[])
             if (loadImage(in, &image, &dump, &read_buff))
             {
                 TIFFError("main", "Unable to load source image");
-                exit(EXIT_FAILURE);
+                retval = EXIT_FAILURE;
+                goto failure;
             }
 
             /* Correct the image orientation if it was not ORIENTATION_TOPLEFT.
@@ -2799,7 +2804,8 @@ int main(int argc, char *argv[])
             if (getCropOffsets(&image, &crop, &dump))
             {
                 TIFFError("main", "Unable to define crop regions");
-                exit(EXIT_FAILURE);
+                retval = EXIT_FAILURE;
+                goto failure;
             }
 
             /* Crop input image and copy zones and regions from input image into
@@ -2809,7 +2815,8 @@ int main(int argc, char *argv[])
                 if (processCropSelections(&image, &crop, &read_buff, seg_buffs))
                 {
                     TIFFError("main", "Unable to process image selections");
-                    exit(EXIT_FAILURE);
+                    retval = EXIT_FAILURE;
+                    goto failure;
                 }
             }
             else /* Single image segment without zones or regions */
@@ -2817,7 +2824,8 @@ int main(int argc, char *argv[])
                 if (createCroppedImage(&image, &crop, &read_buff, &crop_buff))
                 {
                     TIFFError("main", "Unable to create output image");
-                    exit(EXIT_FAILURE);
+                    retval = EXIT_FAILURE;
+                    goto failure;
                 }
             }
             /* Format and write selected image parts to output file(s). */
@@ -2831,21 +2839,26 @@ int main(int argc, char *argv[])
                     {
                         TIFFError("main",
                                   "Unable to write new image selections");
-                        exit(EXIT_FAILURE);
+                        retval = EXIT_FAILURE;
+                        goto failure;
                     }
                 }
                 else /* One file all images and sections */
                 {
                     if (update_output_file(&out, mp, crop.exp_mode,
                                            argv[argc - 1], &next_page))
-                        exit(EXIT_FAILURE);
+                    {
+                        retval = EXIT_FAILURE;
+                        goto failure;
+                    }
                     if (writeCroppedImage(in, out, &image, &dump,
                                           crop.combined_width,
                                           crop.combined_length, crop_buff,
                                           next_page, total_pages))
                     {
                         TIFFError("main", "Unable to write new image");
-                        exit(EXIT_FAILURE);
+                        retval = EXIT_FAILURE;
+                        goto failure;
                     }
                 }
             }
@@ -2863,7 +2876,8 @@ int main(int argc, char *argv[])
                                               &dump))
                 {
                     TIFFError("main", "Unable to compute output section data");
-                    exit(EXIT_FAILURE);
+                    retval = EXIT_FAILURE;
+                    goto failure;
                 }
                 /* If there are multiple files on the command line, the final
                  * one is assumed to be the output filename into which the
@@ -2871,13 +2885,17 @@ int main(int argc, char *argv[])
                  */
                 if (update_output_file(&out, mp, crop.exp_mode, argv[argc - 1],
                                        &next_page))
-                    exit(EXIT_FAILURE);
+                {
+                    retval = EXIT_FAILURE;
+                    goto failure;
+                }
 
                 if (writeImageSections(in, out, &image, &page, sections, &dump,
                                        sect_src, &sect_buff))
                 {
                     TIFFError("main", "Unable to write image sections");
-                    exit(EXIT_FAILURE);
+                    retval = EXIT_FAILURE;
+                    goto failure;
                 }
             }
 
@@ -2897,8 +2915,13 @@ int main(int argc, char *argv[])
                 end_of_input = TRUE;
         }
         TIFFClose(in);
+        in = NULL;
         optind++;
     }
+
+failure:
+    /* In error case all files needs to be closed and
+     * all buffers need to be released. */
 
     /* If we did not use the read buffer as the crop buffer */
     if (read_buff)
@@ -2927,12 +2950,17 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (out != NULL)
+    if (in != NULL)
     {
-        TIFFClose(out);
+        (void)TIFFClose(in);
     }
 
-    return (0);
+    if (out != NULL)
+    {
+        (void)TIFFClose(out);
+    }
+
+    return (retval);
 } /* end main */
 
 /* Debugging functions */
