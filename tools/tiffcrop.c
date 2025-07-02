@@ -5805,6 +5805,7 @@ static void initCropMasks(struct crop_mask *cps)
     cps->invert = (uint16_t)0;
     cps->zones = (uint32_t)0;
     cps->regions = (uint32_t)0;
+    cps->selections = (uint16_t)0;
     for (i = 0; i < MAX_REGIONS; i++)
     {
         cps->corners[i].X1 = 0.0;
