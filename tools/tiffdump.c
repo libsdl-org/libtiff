@@ -25,6 +25,7 @@
 #include "libport.h"
 #include "tif_config.h"
 
+#include <math.h> /* for isfinite() */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -798,7 +799,7 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
             uint32_t *lp = (uint32_t *)data;
             while (count-- > 0)
             {
-                if (lp[1] == 0)
+                if (lp[1] == 0 || !isfinite((double)lp[1]))
                     fprintf(fd, "%sNan (%" PRIu32 "/%" PRIu32 ")", sep, lp[0],
                             lp[1]);
                 else
