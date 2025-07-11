@@ -90,6 +90,7 @@ int TIFFJPEGIsFullStripRequired_12(TIFF *tif);
 
 /* HAVE_JPEGTURBO_DUAL_MODE_8_12 is defined for libjpeg-turbo >= 3.0 which
  * adds a dual-mode 8/12 bit API in the same library.
+ * (note: libjpeg-turbo 2.2 was actually released as 3.0)
  */
 
 #if defined(HAVE_JPEGTURBO_DUAL_MODE_8_12)
@@ -1771,7 +1772,8 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                     {
                         unsigned char *out_ptr =
                             ((unsigned char *)buf) + iPair * 3;
-                        JSAMPLE *in_ptr = (JSAMPLE *)(tmpbuf + iPair * 2);
+                        TIFF_JSAMPLE *in_ptr =
+                            (TIFF_JSAMPLE *)(tmpbuf + iPair * 2);
                         out_ptr[0] = (unsigned char)((in_ptr[0] & 0xff0) >> 4);
                         out_ptr[1] =
                             (unsigned char)(((in_ptr[0] & 0xf) << 4) |
