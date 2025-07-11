@@ -1257,7 +1257,7 @@ LOC_MSG([  Pixar log-format algorithm:         ${HAVE_PIXARLOG}])
 LOC_MSG([  JPEG support:                       ${HAVE_JPEG}])
 LOC_MSG([  Old JPEG support:                   ${HAVE_OJPEG}])
 if test "$HAVE_JPEGTURBO_DUAL_MODE_8_12" = "yes"; then
-    LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEGTURBO_DUAL_MODE_8_12} (libjpeg turbo >= 2.2 dual mode)])
+    LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEGTURBO_DUAL_MODE_8_12} (libjpeg turbo >= 3.0 dual mode)])
 else
     LOC_MSG([  JPEG 8/12 bit dual mode:            ${HAVE_JPEG12}])
 fi
