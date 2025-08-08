@@ -105,7 +105,10 @@ int main(int argc, char *argv[])
         return (2);
     tif2 = TIFFOpen(argv[optind + 1], "r");
     if (tif2 == NULL)
+    {
+        TIFFClose(tif1);
         return (2);
+    }
     dirnum = 0;
     while (tiffcmp(tif1, tif2))
     {
