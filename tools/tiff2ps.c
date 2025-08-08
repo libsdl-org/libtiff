@@ -2434,12 +2434,22 @@ int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
     if (tiled_image)
     {
         num_chunks = TIFFNumberOfTiles(tif);
-        TIFFGetField(tif, TIFFTAG_TILEBYTECOUNTS, &bc);
+        if (!TIFFGetField(tif, TIFFTAG_TILEBYTECOUNTS, &bc))
+        {
+            TIFFError(filename,
+                      "Can't read bytecounts of tiles at PS_Lvl2page()");
+            return (FALSE);
+        }
     }
     else
     {
         num_chunks = TIFFNumberOfStrips(tif);
-        TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc);
+        if (!TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc))
+        {
+            TIFFError(filename,
+                      "Can't read bytecounts of strips at PS_Lvl2page()");
+            return (FALSE);
+        }
     }
 
     if (use_rawdata)
@@ -3108,7 +3118,11 @@ void PSRawDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
     (void)w;
     (void)h;
     TIFFGetFieldDefaulted(tif, TIFFTAG_FILLORDER, &fillorder);
-    TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc);
+    if (!TIFFGetField(tif, TIFFTAG_STRIPBYTECOUNTS, &bc))
+    {
+        TIFFError(filename, "Can't read bytecounts of strips at PSRawDataBW()");
+        return;
+    }
 
     /*
      * Find largest strip:
