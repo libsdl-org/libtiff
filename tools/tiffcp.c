@@ -1045,7 +1045,23 @@ static int tiffcp(TIFF *in, TIFF *out)
                     }
                 }
             }
-            /*fallthrough*/
+            if (preset != -1)
+            {
+                switch (compression)
+                {
+                    case COMPRESSION_ADOBE_DEFLATE:
+                    case COMPRESSION_DEFLATE:
+                        TIFFSetField(out, TIFFTAG_ZIPQUALITY, preset);
+                        break;
+                    case COMPRESSION_LZMA:
+                        TIFFSetField(out, TIFFTAG_LZMAPRESET, preset);
+                        break;
+                    case COMPRESSION_ZSTD:
+                        TIFFSetField(out, TIFFTAG_ZSTD_LEVEL, preset);
+                        break;
+                }
+            }
+            break;
         case COMPRESSION_WEBP:
             if (preset != -1)
             {
