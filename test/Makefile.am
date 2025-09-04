@@ -176,6 +176,7 @@ BASE_TESTSCRIPTS = \
 	tiff2rgba-rgb-3c-8b.sh \
 	testfax4.sh \
 	testfax3_bug_513.sh \
+	testfax3_bug54_1dnoEOL.sh \
 	testdeflatelaststripextradata.sh
 
 TESTSCRIPTS =$(BASE_TESTSCRIPTS) \
@@ -199,6 +200,7 @@ REFFILES = \
 	refs/o-tiff2ps-PS3.ps \
 	refs/o-testfax4.tiff \
 	refs/o-testfax3_bug_513.tiff \
+	refs/o-testfax3_bug54_1dnoEOL.tiff \
 	refs/o-deflate-last-strip-extra-data.tiff
 
 # This list should contain all of the TIFF files in the 'images'
@@ -248,6 +250,7 @@ IMAGES_EXTRA_DIST = \
 	images/test_ifd_loop_subifd.tif \
 	images/webp_lossless_rgba_alpha_fully_opaque.tif \
 	images/32bpp-None-jpeg.tiff \
+	images/testfax3_bug54_1dnoEOL.tif \
 	$(PNMIMAGES) \
 	$(TIFFIMAGES)
 
