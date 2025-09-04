@@ -468,6 +468,11 @@ if(tiff-tools)
   add_convert_test(tiffcp   noner1     "-c none -r 1"  "images/lzw-single-strip.tiff" FALSE)
   add_convert_test(tiffcp   float64_lzw_2_le "-c lzw:2"       "images/test_float64_predictor2_le_lzw.tif" FALSE)
   add_convert_test(tiffcp   float64_lzw_2_be "-c lzw:2"       "images/test_float64_predictor2_be_lzw.tif" FALSE)
+
+  # Test for Group 3 fax 1d without EOL
+  add_convert_test(tiffcp   testfax3_bug54_1dnoEOL "-c none"  "images/testfax3_bug54_1dnoEOL.tif" TRUE)
+  
+
   if(WEBP_SUPPORT)
     add_convert_test(tiffcp   webp_lossless_rgba_alpha_fully_opaque "-c none"    "images/webp_lossless_rgba_alpha_fully_opaque.tif" FALSE)
   endif()
