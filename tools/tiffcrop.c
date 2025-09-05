@@ -4401,7 +4401,7 @@ static int combineSeparateSamplesBytes(unsigned char *srcbuffs[],
     {
         if ((dumpfile != NULL) && (level == 2))
         {
-            for (s = 0; s < spp; s++)
+            for (s = 0; (s < spp) && (s < MAX_SAMPLES); s++)
             {
                 dump_info(dumpfile, format, "combineSeparateSamplesBytes",
                           "Input data, Sample %" PRIu16, s);
