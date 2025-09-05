@@ -87,6 +87,11 @@ static int fsdither(TIFF *in, TIFF *out)
         fprintf(stderr, "Out of memory.\n");
         goto skip_on_error;
     }
+    if (imagewidth > TIFFScanlineSize(in))
+    {
+        fprintf(stderr, "Image width exceeds scanline size.\n");
+        goto skip_on_error;
+    }
 
     /*
      * Get first line
