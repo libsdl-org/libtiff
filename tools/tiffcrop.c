@@ -2951,7 +2951,7 @@ failure:
         if (dump.outfile != NULL)
         {
             dump_info(dump.outfile, dump.format, "", "Completed run for %s",
-                      TIFFFileName(out));
+                      out ? TIFFFileName(out) : "(not opened)");
             fclose(dump.outfile);
         }
     }
