@@ -2418,6 +2418,12 @@ void t2p_read_tiff_size_tile(T2P *t2p, TIFF *input, ttile_t tile)
         else
         {
             TIFFGetField(input, TIFFTAG_TILEBYTECOUNTS, &tbc);
+            if (!tbc)
+            {
+                t2p->t2p_error = T2P_ERR_ERROR;
+                t2p_set_tiff_datasize(t2p, 0);
+                return;
+            }
             k = tbc[tile];
 #ifdef OJPEG_SUPPORT
             if (t2p->tiff_compression == COMPRESSION_OJPEG)
