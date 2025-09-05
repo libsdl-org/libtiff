@@ -1072,6 +1072,7 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                                           "Unable to extract row %" PRIu32
                                           " from tile %" PRIu32,
                                           row, TIFFCurrentTile(in));
+                                _TIFFfree(tilebuf);
                                 return 1;
                             }
                             break;
@@ -1086,6 +1087,7 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                                               "Unable to extract row %" PRIu32
                                               " from tile %" PRIu32,
                                               row, TIFFCurrentTile(in));
+                                    _TIFFfree(tilebuf);
                                     return 1;
                                 }
                                 break;
@@ -1098,6 +1100,7 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                                           "Unable to extract row %" PRIu32
                                           " from tile %" PRIu32,
                                           row, TIFFCurrentTile(in));
+                                _TIFFfree(tilebuf);
                                 return 1;
                             }
                             break;
@@ -1110,6 +1113,7 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                                           "Unable to extract row %" PRIu32
                                           " from tile %" PRIu32,
                                           row, TIFFCurrentTile(in));
+                                _TIFFfree(tilebuf);
                                 return 1;
                             }
                             break;
@@ -1124,12 +1128,14 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                                           "Unable to extract row %" PRIu32
                                           " from tile %" PRIu32,
                                           row, TIFFCurrentTile(in));
+                                _TIFFfree(tilebuf);
                                 return 1;
                             }
                             break;
                         default:
                             TIFFError("readContigTilesIntoBuffer",
                                       "Unsupported bit depth %" PRIu16, bps);
+                            _TIFFfree(tilebuf);
                             return 1;
                     }
                 }
@@ -2924,7 +2930,7 @@ failure:
      * all buffers need to be released. */
 
     /* If we did not use the read buffer as the crop buffer */
-    if (read_buff)
+    if (read_buff && read_buff != crop_buff)
         _TIFFfree(read_buff);
 
     if (crop_buff)
