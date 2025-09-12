@@ -124,6 +124,7 @@ rst_sources = \
 	releases/v4.5.1.rst \
 	releases/v4.6.0.rst \
 	releases/v4.7.0.rst \
+	releases/v4.7.1.rst \
 	rfcs/index.rst \
 	rfcs/rfc1_psc.rst \
 	rfcs/rfc2_restoring_needed_tools.rst \
