@@ -229,7 +229,7 @@ if(tiff-install)
     COMPATIBILITY SameMajorVersion)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tiff-config-version.cmake DESTINATION ${TIFF_CONFIGDIR})
 
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/TiffConfig.cmake.in
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/tiff-config.cmake.in
                  ${CMAKE_CURRENT_BINARY_DIR}/tiff-config.cmake @ONLY)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tiff-config.cmake DESTINATION ${TIFF_CONFIGDIR})
 endif()
