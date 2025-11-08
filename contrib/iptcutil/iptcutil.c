@@ -151,13 +151,13 @@ int convertHTMLcodes(char *s, int len)
         if (sscanf(s, "&#%d;", &val) == 1)
         {
             o = 3;
-            while (s[o] != ';')
+            while (o < len && s[o] != ';')
             {
                 o++;
                 if (o > 5)
                     break;
             }
-            if (o < 5)
+            if (o < 5 && o < len)
                 strcpy(s + 1, s + 1 + o);
             *s = val;
             return o;
