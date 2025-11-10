@@ -7199,6 +7199,7 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
     if (read_buff)
     {
         _TIFFfree(read_buff);
+        *read_ptr = NULL;
     }
     if (buffsize > 0xFFFFFFFFU - 3)
     {
