@@ -1680,14 +1680,6 @@ static int TIFFWriteDirectoryTagLong8Array(TIFF *tif, uint32_t *ndir,
     uint32_t *q;
     int o;
 
-    /* is this just a counting pass? */
-    if (dir == NULL)
-    {
-        /* only evaluate IFD data size and inc. ndir */
-        return (TIFFWriteDirectoryTagCheckedLong8Array(tif, ndir, dir, tag,
-                                                       count, value));
-    }
-
     /* We always write Long8 for BigTIFF, no checking needed. */
     if (tif->tif_flags & TIFF_BIGTIFF)
         return (TIFFWriteDirectoryTagCheckedLong8Array(tif, ndir, dir, tag,
@@ -1741,13 +1733,6 @@ static int TIFFWriteDirectoryTagSlong8Array(TIFF *tif, uint32_t *ndir,
     int32_t *q;
     int o;
 
-    /* is this just a counting pass? */
-    if (dir == NULL)
-    {
-        /* only evaluate IFD data size and inc. ndir */
-        return (TIFFWriteDirectoryTagCheckedSlong8Array(tif, ndir, dir, tag,
-                                                        count, value));
-    }
     /* We always write SLong8 for BigTIFF, no checking needed. */
     if (tif->tif_flags & TIFF_BIGTIFF)
         return (TIFFWriteDirectoryTagCheckedSlong8Array(tif, ndir, dir, tag,
