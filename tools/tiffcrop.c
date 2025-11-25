@@ -140,6 +140,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -10375,13 +10376,13 @@ static int reverseSamples32bits(uint16_t spp, uint16_t bps, uint32_t width,
             if (little_endian)
             {
                 longbuff1 =
-                    (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
+                    ((uint32_t)src[0] << 24) | ((uint32_t)src[1] << 16) | ((uint32_t)src[2] << 8) | (uint32_t)src[3];
                 longbuff2 = longbuff1;
             }
             else
             {
                 longbuff1 =
-                    (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
+                    ((uint32_t)src[3] << 24) | ((uint32_t)src[2] << 16) | ((uint32_t)src[1] << 8) | (uint32_t)src[0];
                 longbuff2 = longbuff1;
             }
             buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
