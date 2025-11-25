@@ -2571,6 +2571,7 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
 #endif /* ifdef JPEG_SUPPORT */
     const char mod[] = "t2p_readwrite_pdf_image()";
     tsize_t tsdummy = 0;
+    (void)tsdummy;
 
     /* Fail if prior error (in particular, can't trust tiff_datasize) */
     if (t2p->t2p_error != T2P_ERR_OK)
@@ -3262,6 +3263,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P *t2p, TIFF *input, TIFF *output,
 #endif
     const char mod[] = "t2p_readwrite_pdf_image_tile()";
     tsize_t tsdummy = 0;
+    (void)tsdummy;
 
     /* Fail if prior error (in particular, can't trust tiff_datasize) */
     if (t2p->t2p_error != T2P_ERR_OK)
