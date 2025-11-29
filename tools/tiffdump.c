@@ -540,6 +540,11 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
                         break;
                 }
             }
+            /* Silence Coverity Scan warning about tainted_data: Passing tainted
+             * expression *datamem to PrintData, which uses it as a divisor or
+             * modulus. False positive because division by zero is checked in
+             * PrintData(). */
+            /* coverity[tainted_data:SUPPRESS] */
             PrintData(stdout, type, (uint32_t)count, datamem);
             if (datatruncated)
                 printf(" ...");
