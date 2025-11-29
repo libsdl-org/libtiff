@@ -3292,7 +3292,7 @@ TIFFReadDirEntryPersampleShort(TIFF *tif, TIFFDirEntry *direntry,
                 tif, "TIFFReadDirEntryPersampleShort",
                 "Tag %s entry count is %" PRIu64
                 " , whereas it should be SamplesPerPixel=%d. Assuming that "
-                "missing entries are all at the value of the first one.",
+                "missing entries are all at the value of the first one",
                 fip ? fip->field_name : "unknown tagname", direntry->tdir_count,
                 tif->tif_dir.td_samplesperpixel);
         }
@@ -3301,7 +3301,7 @@ TIFFReadDirEntryPersampleShort(TIFF *tif, TIFFDirEntry *direntry,
             TIFFWarningExtR(tif, "TIFFReadDirEntryPersampleShort",
                             "Tag %s entry count is %" PRIu64
                             " , whereas it should be SamplesPerPixel=%d. "
-                            "Ignoring extra entries.",
+                            "Ignoring extra entries",
                             fip ? fip->field_name : "unknown tagname",
                             direntry->tdir_count,
                             tif->tif_dir.td_samplesperpixel);
