@@ -354,7 +354,7 @@ static int tiffcvt(TIFF *in, TIFF *out)
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     {
         char buf[2048];
-        char *cp = strrchr(TIFFFileName(in), '/');
+        const char *cp = strrchr(TIFFFileName(in), '/');
         snprintf(buf, sizeof(buf), "YCbCr conversion of %s",
                  cp ? cp + 1 : TIFFFileName(in));
         TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, buf);

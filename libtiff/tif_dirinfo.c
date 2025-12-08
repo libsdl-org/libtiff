@@ -523,7 +523,7 @@ void _TIFFSetupFields(TIFF *tif, const TIFFFieldArray *fieldarray)
             {
                 if (fld->field_bit == FIELD_CUSTOM && TIFFFieldIsAnonymous(fld))
                 {
-                    _TIFFfreeExt(tif, fld->field_name);
+                    _TIFFfreeExt(tif, (void *)fld->field_name);
                     /* caution: tif_fields[i] must not be the beginning of a
                      * fields-array. Otherwise the following tags are also freed
                      * with the first free().
@@ -962,8 +962,8 @@ TIFFField *_TIFFCreateAnonField(TIFF *tif, uint32_t tag,
     fld->field_bit = FIELD_CUSTOM;
     fld->field_oktochange = TRUE;
     fld->field_passcount = TRUE;
-    fld->field_name = (char *)_TIFFmallocExt(tif, 32);
-    if (fld->field_name == NULL)
+    char *field_name_buf = (char *)_TIFFmallocExt(tif, 32);
+    if (field_name_buf == NULL)
     {
         _TIFFfreeExt(tif, fld);
         return NULL;
@@ -976,7 +976,8 @@ TIFFField *_TIFFCreateAnonField(TIFF *tif, uint32_t tag,
      * Update:
      *   This special sign is replaced by fld->field_anonymous  flag.
      */
-    (void)snprintf(fld->field_name, 32, "Tag %d", (int)tag);
+    (void)snprintf(field_name_buf, 32, "Tag %d", (int)tag);
+    fld->field_name = field_name_buf;
 
     return fld;
 }
