@@ -396,9 +396,9 @@ static void usage(int code)
 
 static void get_histogram(TIFF *in, Colorbox *box)
 {
-    register unsigned char *inptr;
-    register int red, green, blue;
-    register uint32_t j, i;
+    unsigned char *inptr;
+    int red, green, blue;
+    uint32_t j, i;
     unsigned char *inputline;
 
     inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
@@ -412,7 +412,7 @@ static void get_histogram(TIFF *in, Colorbox *box)
     box->total = imagewidth * imagelength;
 
     {
-        register uint32_t *ptr = &histogram[0][0][0];
+        uint32_t *ptr = &histogram[0][0][0];
         for (i = B_LEN * B_LEN * B_LEN; i-- > 0;)
             *ptr++ = 0;
     }
@@ -455,8 +455,8 @@ static void get_histogram(TIFF *in, Colorbox *box)
 
 static Colorbox *largest_box(void)
 {
-    register Colorbox *p, *b;
-    register uint32_t size;
+    Colorbox *p, *b;
+    uint32_t size;
 
     b = NULL;
     size = 0;
@@ -471,11 +471,11 @@ static void splitbox(Colorbox *ptr)
 {
     uint32_t hist2[B_LEN];
     int first = 0, last = 0;
-    register Colorbox *new;
-    register uint32_t *iptr, *histp;
-    register int i, j;
-    register int ir, ig, ib;
-    register uint32_t sum, sum1, sum2;
+    Colorbox *new_box;
+    uint32_t *iptr, *histp;
+    int i, j;
+    int ir, ig, ib;
+    uint32_t sum, sum1, sum2;
     enum
     {
         RED,
@@ -560,52 +560,52 @@ static void splitbox(Colorbox *ptr)
         i++;
 
     /* Create new box, re-allocate points */
-    new = freeboxes;
-    freeboxes = new->next;
+    new_box = freeboxes;
+    freeboxes = new_box->next;
     if (freeboxes)
         freeboxes->prev = NULL;
     if (usedboxes)
-        usedboxes->prev = new;
-    new->next = usedboxes;
-    usedboxes = new;
+        usedboxes->prev = new_box;
+    new_box->next = usedboxes;
+    usedboxes = new_box;
 
     histp = &hist2[first];
     for (sum1 = 0, j = first; j < i; j++)
         sum1 += *histp++;
     for (sum2 = 0, j = i; j <= last; j++)
         sum2 += *histp++;
-    new->total = sum1;
+    new_box->total = sum1;
     ptr->total = sum2;
 
-    new->rmin = ptr->rmin;
-    new->rmax = ptr->rmax;
-    new->gmin = ptr->gmin;
-    new->gmax = ptr->gmax;
-    new->bmin = ptr->bmin;
-    new->bmax = ptr->bmax;
+    new_box->rmin = ptr->rmin;
+    new_box->rmax = ptr->rmax;
+    new_box->gmin = ptr->gmin;
+    new_box->gmax = ptr->gmax;
+    new_box->bmin = ptr->bmin;
+    new_box->bmax = ptr->bmax;
     switch (axis)
     {
         case RED:
-            new->rmax = i - 1;
+            new_box->rmax = i - 1;
             ptr->rmin = i;
             break;
         case GREEN:
-            new->gmax = i - 1;
+            new_box->gmax = i - 1;
             ptr->gmin = i;
             break;
         case BLUE:
-            new->bmax = i - 1;
+            new_box->bmax = i - 1;
             ptr->bmin = i;
             break;
     }
-    shrinkbox(new);
+    shrinkbox(new_box);
     shrinkbox(ptr);
 }
 
 static void shrinkbox(Colorbox *box)
 {
-    register uint32_t *histp;
-    register int ir, ig, ib;
+    uint32_t *histp;
+    int ir, ig, ib;
 
     if (box->rmax > box->rmin)
     {
@@ -704,10 +704,10 @@ have_bmax:;
 
 static C_cell *create_colorcell(int red, int green, int blue)
 {
-    register int ir, ig, ib, i;
-    register C_cell *ptr;
+    int ir, ig, ib, i;
+    C_cell *ptr;
     int mindist, next_n;
-    register int tmp, dist, n;
+    int tmp, dist, n;
 
     ir = red >> (COLOR_DEPTH - C_DEPTH);
     ig = green >> (COLOR_DEPTH - C_DEPTH);
@@ -796,9 +796,9 @@ static C_cell *create_colorcell(int red, int green, int blue)
 
 static void map_colortable(void)
 {
-    register uint32_t *histp = &histogram[0][0][0];
-    register C_cell *cell = NULL;
-    register int j, tmp, d2, dist;
+    uint32_t *histp = &histogram[0][0][0];
+    C_cell *cell = NULL;
+    int j, tmp, d2, dist;
     int ir, ig, ib, i;
 
     for (ir = 0; ir < B_LEN; ++ir)
@@ -847,9 +847,9 @@ static void map_colortable(void)
 static void quant(TIFF *in, TIFF *out)
 {
     unsigned char *outline, *inputline;
-    register unsigned char *outptr, *inptr;
-    register uint32_t i, j;
-    register int red, green, blue;
+    unsigned char *outptr, *inptr;
+    uint32_t i, j;
+    int red, green, blue;
 
     inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
     outline = (unsigned char *)_TIFFmalloc(imagewidth);
@@ -911,9 +911,9 @@ static void quant_fsdither(TIFF *in, TIFF *out)
 {
     unsigned char *outline, *inputline, *inptr;
     short *thisline, *nextline;
-    register unsigned char *outptr;
-    register short *thisptr, *nextptr;
-    register uint32_t i, j;
+    unsigned char *outptr;
+    short *thisptr, *nextptr;
+    uint32_t i, j;
     uint32_t imax, jmax;
     int lastline, lastpixel;
 
@@ -937,7 +937,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
         for (j = 0; j < imagewidth; ++j)
         {
             int red, green, blue;
-            register int oval, r2, g2, b2;
+            int oval, r2, g2, b2;
 
             lastpixel = (j == jmax);
             GetComponent(*thisptr++, r2, red);
@@ -947,8 +947,8 @@ static void quant_fsdither(TIFF *in, TIFF *out)
             if (oval == -1)
             {
                 int ci;
-                register int cj, tmp, d2, dist;
-                register C_cell *cell;
+                int cj, tmp, d2, dist;
+                C_cell *cell;
 
                 cell = *(ColorCells +
                          (((r2 >> (B_DEPTH - C_DEPTH)) << C_DEPTH * 2) +

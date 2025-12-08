@@ -1437,8 +1437,8 @@ DECLAREcpFunc(cpContig2SeparateByRow)
     tsize_t scanlinesizeout = TIFFScanlineSize(out);
     tdata_t inbuf;
     tdata_t outbuf;
-    register uint8_t *inp, *outp;
-    register uint32_t n;
+    uint8_t *inp, *outp;
+    uint32_t n;
     uint32_t row;
     tsample_t s;
     uint16_t bps = 0;
@@ -1506,8 +1506,8 @@ DECLAREcpFunc(cpSeparate2ContigByRow)
     tsize_t scanlinesizeout = TIFFScanlineSize(out);
     tdata_t inbuf;
     tdata_t outbuf;
-    register uint8_t *inp, *outp;
-    register uint32_t n;
+    uint8_t *inp, *outp;
+    uint32_t n;
     uint32_t row;
     tsample_t s;
     uint16_t bps = 0;

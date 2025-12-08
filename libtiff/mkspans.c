@@ -58,7 +58,7 @@ main()
     memset(runs[0], 0, 256 * sizeof(char));
     memset(runs[1], 0, 256 * sizeof(char));
     {
-        register int run, runlen, i;
+        int run, runlen, i;
         runlen = 1;
         for (run = 0x80; run != 0xff; run = (run >> 1) | 0x80)
         {
