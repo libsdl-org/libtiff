@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     TIFFDataType dtype = TIFF_BYTE;
     int16_t depth = 1;                 /* bytes per pixel in input image */
     int swab = 0;                      /* byte swapping flag */
-    InterleavingType interleaving = 0; /* interleaving type flag */
+    InterleavingType interleaving = PIXEL; /* interleaving type flag */
     uint32_t rowsperstrip = (uint32_t)-1;
     uint16_t photometric = PHOTOMETRIC_MINISBLACK;
     uint16_t config = PLANARCONFIG_CONTIG;
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
                 else if (strncmp(optarg, "band", 6) == 0)
                     interleaving = BAND;
                 else
-                    interleaving = 0;
+                    interleaving = PIXEL;
                 break;
             case 'o':
                 outfilename = optarg;

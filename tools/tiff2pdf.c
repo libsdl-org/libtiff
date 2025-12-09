@@ -1705,7 +1705,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
                 t2p->t2p_error = T2P_ERR_ERROR;
                 return;
             }
-            t2p->pdf_colorspace = T2P_CS_RGB | T2P_CS_PALETTE;
+            t2p->pdf_colorspace = (t2p_cs_t)(T2P_CS_RGB | T2P_CS_PALETTE);
             t2p->pdf_palettesize = 0x0001 << t2p->tiff_bitspersample;
             if (!TIFFGetField(input, TIFFTAG_COLORMAP, &r, &g, &b))
             {
@@ -1808,7 +1808,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
                 t2p->t2p_error = T2P_ERR_ERROR;
                 return;
             }
-            t2p->pdf_colorspace = T2P_CS_CMYK | T2P_CS_PALETTE;
+            t2p->pdf_colorspace = (t2p_cs_t)(T2P_CS_CMYK | T2P_CS_PALETTE);
             t2p->pdf_palettesize = 0x0001 << t2p->tiff_bitspersample;
             if (!TIFFGetField(input, TIFFTAG_COLORMAP, &r, &g, &b, &a))
             {
@@ -2075,8 +2075,10 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
     {
         if (t2p->pdf_colorspace & T2P_CS_PALETTE)
         {
-            t2p->pdf_sample |= T2P_SAMPLE_REALIZE_PALETTE;
-            t2p->pdf_colorspace ^= T2P_CS_PALETTE;
+            t2p->pdf_sample =
+                (t2p_sample_t)(t2p->pdf_sample | T2P_SAMPLE_REALIZE_PALETTE);
+            t2p->pdf_colorspace =
+                (t2p_cs_t)(t2p->pdf_colorspace ^ T2P_CS_PALETTE);
             t2p->tiff_pages[t2p->pdf_page].page_extra--;
         }
     }
@@ -2146,11 +2148,13 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
         t2p->tiff_whitechromaticities[1] = xfloatp[1];
         if (t2p->pdf_colorspace & T2P_CS_GRAY)
         {
-            t2p->pdf_colorspace |= T2P_CS_CALGRAY;
+            t2p->pdf_colorspace =
+                (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_CALGRAY);
         }
         if (t2p->pdf_colorspace & T2P_CS_RGB)
         {
-            t2p->pdf_colorspace |= T2P_CS_CALRGB;
+            t2p->pdf_colorspace =
+                (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_CALRGB);
         }
     }
     if (TIFFGetField(input, TIFFTAG_PRIMARYCHROMATICITIES, &xfloatp) != 0)
@@ -2163,7 +2167,8 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
         t2p->tiff_primarychromaticities[5] = xfloatp[5];
         if (t2p->pdf_colorspace & T2P_CS_RGB)
         {
-            t2p->pdf_colorspace |= T2P_CS_CALRGB;
+            t2p->pdf_colorspace =
+                (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_CALRGB);
         }
     }
     if (t2p->pdf_colorspace & T2P_CS_LAB)
@@ -2182,7 +2187,8 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
     if (TIFFGetField(input, TIFFTAG_ICCPROFILE, &(t2p->tiff_iccprofilelength),
                      &(t2p->tiff_iccprofile)) != 0)
     {
-        t2p->pdf_colorspace |= T2P_CS_ICCBASED;
+        t2p->pdf_colorspace =
+            (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_ICCBASED);
     }
     else
     {
@@ -5682,9 +5688,11 @@ tsize_t t2p_write_pdf_xobject_cs(T2P *t2p, TIFF *output)
     {
         add_t2pWriteFile_check(output, (tdata_t) "[ /Indexed ", 11, mod,
                                written);
-        t2p->pdf_colorspace ^= T2P_CS_PALETTE;
+        t2p->pdf_colorspace =
+            (t2p_cs_t)(t2p->pdf_colorspace ^ T2P_CS_PALETTE);
         written += t2p_write_pdf_xobject_cs(t2p, output);
-        t2p->pdf_colorspace |= T2P_CS_PALETTE;
+        t2p->pdf_colorspace =
+            (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_PALETTE);
         buflen = snprintf(buffer, sizeof(buffer), "%" PRIu32,
                           (uint32_t)(0x1u << t2p->tiff_bitspersample) - 1u);
         check_snprintf_ret(t2p, buflen, buffer);
@@ -5985,9 +5993,9 @@ tsize_t t2p_write_pdf_xobject_icccs_dict(T2P *t2p, TIFF *output)
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) "/Alternate ", 11, mod, written);
-    t2p->pdf_colorspace ^= T2P_CS_ICCBASED;
+    t2p->pdf_colorspace = (t2p_cs_t)(t2p->pdf_colorspace ^ T2P_CS_ICCBASED);
     written += t2p_write_pdf_xobject_cs(t2p, output);
-    t2p->pdf_colorspace |= T2P_CS_ICCBASED;
+    t2p->pdf_colorspace = (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_ICCBASED);
     written += t2p_write_pdf_stream_dict(t2p->tiff_iccprofilelength, 0, output);
 
     return (written);
