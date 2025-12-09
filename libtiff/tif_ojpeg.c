@@ -2475,7 +2475,7 @@ static void OJPEGWriteStreamSoi(TIFF *tif, void **mem, uint32_t *len)
     sp->out_buffer[1] = JPEG_MARKER_SOI;
     *len = 2;
     *mem = (void *)sp->out_buffer;
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static void OJPEGWriteStreamQTable(TIFF *tif, uint8_t table_index, void **mem,
@@ -2487,7 +2487,7 @@ static void OJPEGWriteStreamQTable(TIFF *tif, uint8_t table_index, void **mem,
         *mem = (void *)(sp->qtable[table_index] + sizeof(uint32_t));
         *len = *((uint32_t *)sp->qtable[table_index]) - sizeof(uint32_t);
     }
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static void OJPEGWriteStreamDcTable(TIFF *tif, uint8_t table_index, void **mem,
@@ -2499,7 +2499,7 @@ static void OJPEGWriteStreamDcTable(TIFF *tif, uint8_t table_index, void **mem,
         *mem = (void *)(sp->dctable[table_index] + sizeof(uint32_t));
         *len = *((uint32_t *)sp->dctable[table_index]) - sizeof(uint32_t);
     }
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static void OJPEGWriteStreamAcTable(TIFF *tif, uint8_t table_index, void **mem,
@@ -2511,7 +2511,7 @@ static void OJPEGWriteStreamAcTable(TIFF *tif, uint8_t table_index, void **mem,
         *mem = (void *)(sp->actable[table_index] + sizeof(uint32_t));
         *len = *((uint32_t *)sp->actable[table_index]) - sizeof(uint32_t);
     }
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static void OJPEGWriteStreamDri(TIFF *tif, void **mem, uint32_t *len)
@@ -2529,7 +2529,7 @@ static void OJPEGWriteStreamDri(TIFF *tif, void **mem, uint32_t *len)
         *len = 6;
         *mem = (void *)sp->out_buffer;
     }
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static void OJPEGWriteStreamSof(TIFF *tif, void **mem, uint32_t *len)
@@ -2566,7 +2566,7 @@ static void OJPEGWriteStreamSof(TIFF *tif, void **mem, uint32_t *len)
     }
     *len = 10 + sp->samples_per_pixel_per_plane * 3;
     *mem = (void *)sp->out_buffer;
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static void OJPEGWriteStreamSos(TIFF *tif, void **mem, uint32_t *len)
@@ -2598,7 +2598,7 @@ static void OJPEGWriteStreamSos(TIFF *tif, void **mem, uint32_t *len)
     sp->out_buffer[5 + sp->samples_per_pixel_per_plane * 2 + 2] = 0;
     *len = 8 + sp->samples_per_pixel_per_plane * 2;
     *mem = (void *)sp->out_buffer;
-    sp->out_state++;
+    sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
 
 static int OJPEGWriteStreamCompressed(TIFF *tif, void **mem, uint32_t *len)
