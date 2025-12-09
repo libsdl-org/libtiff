@@ -1661,9 +1661,9 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
         int samples_per_clump = sp->samplesperclump;
 
 #if defined(JPEG_LIB_MK1_OR_12BIT)
-        tmpbuf = _TIFFmallocExt(tif, sizeof(unsigned short) *
-                                         sp->cinfo.d.output_width *
-                                         sp->cinfo.d.num_components);
+        tmpbuf = (unsigned short *)_TIFFmallocExt(
+            tif, sizeof(unsigned short) * sp->cinfo.d.output_width *
+                     sp->cinfo.d.num_components);
         if (tmpbuf == NULL)
         {
             TIFFErrorExtR(tif, "JPEGDecodeRaw", "Out of memory");
