@@ -222,7 +222,8 @@ int main(int argc, char *argv[])
                     {
                         if (nCount > 0)
                         {
-                            subIFDoffsets = malloc(nCount * sizeof(uint64_t));
+                            subIFDoffsets =
+                                (uint64_t *)malloc(nCount * sizeof(uint64_t));
                             if (subIFDoffsets != NULL)
                             {
                                 memcpy(subIFDoffsets, vPtr,

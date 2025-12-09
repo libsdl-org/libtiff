@@ -74,7 +74,7 @@ int write_image_data(TIFF *tif, uint16_t width, uint16_t length, bool tiled,
         bufLen = (((size_t)width * SPP * BPS) + 7) / 8;
     }
 
-    pbufLine = _TIFFmalloc(bufLen);
+    pbufLine = (unsigned char *)_TIFFmalloc(bufLen);
     if (pbufLine == NULL)
         return 1;
 

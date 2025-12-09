@@ -71,7 +71,8 @@ int setup_transfer_functions(void)
 
     /* Setup array with some more values to shift start of the three arrays. */
     nSamplesPerTransferFunction = ((uint32_t)1 << bps);
-    pTransferFunctionData = _TIFFmalloc(3 * (tmsize_t)nSamplesPerTransferFunction * sizeof(uint16_t));
+    pTransferFunctionData = (uint16_t *)_TIFFmalloc(
+        3 * (tmsize_t)nSamplesPerTransferFunction * sizeof(uint16_t));
     if (!pTransferFunctionData)
         return 1;
 
@@ -228,7 +229,7 @@ int write_basic_IFD_data(TIFF **ptif, const char *filename, int wrtTransferFunct
 
     /* Setup buffer for image line */
     size_t bufLen = (size_t)width * spp * (bps + 7) / 8;
-    bufLine = _TIFFmalloc(bufLen);
+    bufLine = (uint8_t *)_TIFFmalloc(bufLen);
     if (!bufLine)
     {
         fprintf(stderr, "write_basic_IFD_data(): Can't allocate bufLine buffer.\n");
