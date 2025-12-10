@@ -568,7 +568,7 @@ static int SeparateCompare(int reversed, int sample, uint32_t row,
     {
         if (*cp1 != *p2)
         {
-            printf("Scanline %" PRIu32 ", pixel %" PRIu32 ", sample %d: ", row,
+            printf("Scanline %" PRIu32 ", pixel %d, sample %d: ", row,
                    pixel, sample);
             if (reversed)
                 printf("%02x %02x\n", *p2, *cp1);

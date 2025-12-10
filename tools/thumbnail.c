@@ -240,8 +240,8 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
         break;
         default:
             TIFFError(TIFFFileName(in),
-                      "Data type %d is not supported, tag %d skipped.", tag,
-                      type);
+                      "Data type %u is not supported, tag %d skipped.",
+                      type, tag);
     }
 }
 
@@ -626,7 +626,7 @@ static void setrow(uint8_t *row, uint32_t nrows, const uint8_t *rows[])
         }
         else
         {
-            fprintf(stderr, "acc=%d, area=%d\n", acc, area);
+            fprintf(stderr, "acc=%u, area=%u\n", acc, area);
             *row++ = cmap[0];
         }
     }

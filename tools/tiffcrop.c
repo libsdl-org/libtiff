@@ -1795,8 +1795,8 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             break;
         default:
             TIFFError(TIFFFileName(in),
-                      "Data type %" PRIu16 " is not supported, tag %d skipped",
-                      tag, type);
+                      "Data type %u is not supported, tag %u skipped",
+                      (unsigned)type, (unsigned)tag);
     }
 }
 
@@ -2414,7 +2414,7 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 }
                 if ((page->cols * page->rows) < 1)
                 {
-                    TIFFError("No subdivisions", "%d",
+                    TIFFError("No subdivisions", "%u",
                               (page->cols * page->rows));
                     exit(EXIT_FAILURE);
                 }
@@ -2762,7 +2762,7 @@ int main(int argc, char *argv[])
                     /* dump.infilename is guaranteed to be NUL terminated and
                        have 20 bytes fewer than PATH_MAX */
                     snprintf(temp_filename, sizeof(temp_filename),
-                             "%s-read-%03d.%s", dump.infilename, dump_images,
+                             "%s-read-%03u.%s", dump.infilename, dump_images,
                              (dump.format == DUMP_TEXT) ? "txt" : "raw");
                     if ((dump.infile = fopen(temp_filename, dump.mode)) == NULL)
                     {
@@ -2783,7 +2783,7 @@ int main(int argc, char *argv[])
                     /* dump.outfilename is guaranteed to be NUL terminated and
                        have 20 bytes fewer than PATH_MAX */
                     snprintf(temp_filename, sizeof(temp_filename),
-                             "%s-write-%03d.%s", dump.outfilename, dump_images,
+                             "%s-write-%03u.%s", dump.outfilename, dump_images,
                              (dump.format == DUMP_TEXT) ? "txt" : "raw");
                     if ((dump.outfile = fopen(temp_filename, dump.mode)) ==
                         NULL)
@@ -2799,7 +2799,7 @@ int main(int argc, char *argv[])
             }
 
             if (dump.debug)
-                TIFFError("main", "Reading image %4d of %4d total pages.",
+                TIFFError("main", "Reading image %4u of %4u total pages.",
                           dirnum + 1, total_pages);
 
             if (loadImage(in, &image, &dump, &read_buff))
@@ -3174,7 +3174,19 @@ static void dump_info(FILE *dumpfile, int format, char *prefix, char *msg, ...)
         va_list ap;
         va_start(ap, msg);
         fprintf(dumpfile, "%s ", prefix);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#elif defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+#endif
         vfprintf(dumpfile, msg, ap);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#elif defined(__clang__)
+#pragma clang diagnostic pop
+#endif
         fprintf(dumpfile, "\n");
         va_end(ap);
     }
@@ -4365,7 +4377,7 @@ static int readContigStripsIntoBuffer(TIFF *in, uint8_t *buf)
         rows = bytes_read / scanline_size;
         if ((strip < (nstrips - 1)) && (bytes_read != (int32_t)stripsize))
             TIFFError("",
-                      "Strip %" PRIu32 ": read %" PRId64
+                      "Strip %" PRIu32 ": read %" PRIu64
                       " bytes, strip size %" PRIu64,
                       strip + 1, (uint64_t)bytes_read, (uint64_t)stripsize);
 
@@ -6306,7 +6318,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
         if (seg == 0 || total == 0 || seg > total)
         {
             TIFFError("getCropOffsets",
-                      "Crop zone %d:%d is out of specification, thus skipped.",
+                      "Crop zone %u:%u is out of specification, thus skipped.",
                       seg, total);
             continue;
         }
@@ -7350,8 +7362,8 @@ static int correct_orientation(struct image_data *image,
             rotation = (uint16_t)270;
         else
         {
-            TIFFError("correct_orientation", "Invalid rotation value: %" PRIu16,
-                      (uint16_t)(image->adjustments & ROTATE_ANY));
+            TIFFError("correct_orientation", "Invalid rotation value: %u",
+                      (unsigned int)(image->adjustments & ROTATE_ANY));
             return (-1);
         }
         /* Dummy variable in order not to switch two times the

@@ -114,9 +114,9 @@ static int check_rgba_pixel(int pixel, int min_red, int max_red, int min_green,
     fprintf(stderr,
             "Got R=%d (expected %d..%d), G=%d (expected %d..%d), B=%d "
             "(expected %d..%d), A=%d (expected %d..%d)\n",
-            TIFFGetR(rgba), min_red, max_red, TIFFGetG(rgba), min_green,
-            max_green, TIFFGetB(rgba), min_blue, max_blue, TIFFGetA(rgba),
-            min_alpha, max_alpha);
+            (int)TIFFGetR(rgba), min_red, max_red, (int)TIFFGetG(rgba),
+            min_green, max_green, (int)TIFFGetB(rgba), min_blue, max_blue,
+            (int)TIFFGetA(rgba), min_alpha, max_alpha);
     return 1;
 }
 

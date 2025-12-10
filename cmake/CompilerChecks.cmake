@@ -79,15 +79,15 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
         list(APPEND test_flags
                 -pedantic
                 -Wextra
-        )
-    endif()
-    if(broken-warnings)
-        list(APPEND test_flags
                 -Wformat
                 -Wformat-overflow
                 -Wformat-nonliteral
                 -Wformat-signedness
                 -Wformat-truncation
+        )
+    endif()
+    if(broken-warnings)
+        list(APPEND test_flags
                 -Wdeclaration-after-statement
                 -Wconversion
                 -Wsign-conversion

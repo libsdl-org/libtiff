@@ -638,7 +638,7 @@ static int readTestTiff_ignore_some_tags(const char *szFileName)
     if (ret != 0)
     {
         fprintf(stdout,
-                "Error: Tag %d, set to be ignored, has been read from file.\n",
+                "Error: Tag %u, set to be ignored, has been read from file.\n",
                 tiff_field_info[2].field_tag);
         GOTOFAILURE
     }
@@ -647,7 +647,7 @@ static int readTestTiff_ignore_some_tags(const char *szFileName)
     if (ret != 0)
     {
         fprintf(stdout,
-                "Error: Tag %d, set to be ignored, has been read from file.\n",
+                "Error: Tag %u, set to be ignored, has been read from file.\n",
                 tiff_field_info[4].field_tag);
         GOTOFAILURE
     }

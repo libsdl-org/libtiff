@@ -1271,7 +1271,7 @@ int test_SubIFD_enlargement(const char *filename, bool is_big_tiff)
     {
         fprintf(stderr,
                 "Unexpected number of directories in %s. Expected %i, "
-                "found %i.\n",
+                "found %u.\n",
                 filename, NUMBER_OF_DIRS - number_of_sub_IFDs,
                 numberOfMainIFDs);
         goto failure;
