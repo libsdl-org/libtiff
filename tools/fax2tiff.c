@@ -424,7 +424,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
     badrun = 0; /* current run of bad lines */
     while (tifin->tif_rawcc > 0)
     {
-        ok = (*tifin->tif_decoderow)(tifin, (tdata_t)rowbuf, linesize, 0);
+        ok = (*tifin->tif_decoderow)(tifin, (uint8_t *)rowbuf, linesize, 0);
         if (ok < 1)
         {
             if (compression_in == COMPRESSION_CCITTFAX4)

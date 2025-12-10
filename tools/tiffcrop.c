@@ -1389,7 +1389,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
             stripsize = TIFFVStripSize(out, nrows);
             src = buf + (row * rowsize);
             memset(obuf, '\0', rowstripsize + NUM_BUFF_OVERSIZE_BYTES);
-            if (extractContigSamplesToBuffer(obuf, src, nrows, width, s, spp,
+            if (extractContigSamplesToBuffer((uint8_t *)obuf, src, nrows, width, s, spp,
                                              bps, dump))
             {
                 _TIFFfree(obuf);
@@ -1412,7 +1412,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
                     s + 1, strip + 1, stripsize, row + 1,
                     (uint32_t)scanlinesize, src - buf);
                 dump_buffer(dump->outfile, dump->format, nrows,
-                            (uint32_t)scanlinesize, row, obuf);
+                            (uint32_t)scanlinesize, row, (unsigned char *)obuf);
             }
 
             if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0)
@@ -1588,7 +1588,7 @@ static int writeBufferToSeparateTiles(TIFF *out, uint8_t *buf,
 
             for (s = 0; s < spp; s++)
             {
-                if (extractContigSamplesToTileBuffer(obuf, bufp, nrow, ncol,
+                if (extractContigSamplesToTileBuffer((uint8_t *)obuf, bufp, nrow, ncol,
                                                      imagewidth, tw, s, 1, spp,
                                                      bps, dump) > 0)
                 {

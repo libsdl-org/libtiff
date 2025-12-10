@@ -638,7 +638,7 @@ static void TIFFReadRawDataStriped(TIFF *tif, int bitrev)
             {
                 if (bitrev)
                 {
-                    TIFFReverseBits(buf, (tmsize_t)stripbc[s]);
+                    TIFFReverseBits((uint8_t *)buf, (tmsize_t)stripbc[s]);
                     printf("%s %" PRIu32 ": (bit reversed)\n ", what, s);
                 }
                 else
@@ -701,7 +701,7 @@ static void TIFFReadRawDataTiled(TIFF *tif, int bitrev)
             {
                 if (bitrev)
                 {
-                    TIFFReverseBits(buf, (tmsize_t)tilebc[t]);
+                    TIFFReverseBits((uint8_t *)buf, (tmsize_t)tilebc[t]);
                     printf("%s %" PRIu32 ": (bit reversed)\n ", what, t);
                 }
                 else

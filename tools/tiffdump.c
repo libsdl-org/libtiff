@@ -545,7 +545,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
              * modulus. False positive because division by zero is checked in
              * PrintData(). */
             /* coverity[tainted_data:SUPPRESS] */
-            PrintData(stdout, type, (uint32_t)count, datamem);
+            PrintData(stdout, type, (uint32_t)count, (unsigned char *)datamem);
             if (datatruncated)
                 printf(" ...");
             if (!datafits)
