@@ -224,21 +224,21 @@ if(tiff-install)
 
   set(TIFF_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/tiff)
   install(EXPORT TiffTargets
-          FILE TiffTargets.cmake
+          FILE tiff-targets.cmake
           NAMESPACE TIFF::
           DESTINATION ${TIFF_CONFIGDIR}
   )
 
   include(CMakePackageConfigHelpers)
   write_basic_package_version_file(
-    TiffConfigVersion.cmake
+    tiff-config-version.cmake
     VERSION ${LIBTIFF_VERSION}
     COMPATIBILITY SameMajorVersion)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TiffConfigVersion.cmake DESTINATION ${TIFF_CONFIGDIR})
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tiff-config-version.cmake DESTINATION ${TIFF_CONFIGDIR})
 
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/TiffConfig.cmake.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/TiffConfig.cmake @ONLY)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TiffConfig.cmake DESTINATION ${TIFF_CONFIGDIR})
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/tiff-config.cmake.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/tiff-config.cmake @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tiff-config.cmake DESTINATION ${TIFF_CONFIGDIR})
 endif()
 
 if(CXX_SUPPORT)
