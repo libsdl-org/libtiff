@@ -305,7 +305,7 @@ static void usage(int code)
 static void ShowStrip(tstrip_t strip, unsigned char *pp, uint32_t nrow,
                       tsize_t scanline)
 {
-    register tsize_t cc;
+    tsize_t cc;
 
     printf("Strip %" PRIu32 ":\n", strip);
     while (nrow-- > 0)

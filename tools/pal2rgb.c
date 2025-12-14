@@ -200,8 +200,8 @@ int main(int argc, char *argv[])
     }
     {
         unsigned char *ibuf, *obuf;
-        register unsigned char *pp;
-        register uint32_t x;
+        unsigned char *pp;
+        uint32_t x;
         tmsize_t tss_in = TIFFScanlineSize(in);
         tmsize_t tss_out = TIFFScanlineSize(out);
         if (tss_out / tss_in < 3)

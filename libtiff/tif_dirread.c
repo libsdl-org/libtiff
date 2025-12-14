@@ -7890,7 +7890,7 @@ static void allocChoppedUpStripArrays(TIFF *tif, uint32_t nstrips,
  */
 static void ChopUpSingleUncompressedStrip(TIFF *tif)
 {
-    register TIFFDirectory *td = &tif->tif_dir;
+    TIFFDirectory *td = &tif->tif_dir;
     uint64_t bytecount;
     uint64_t offset;
     uint32_t rowblock;
@@ -8406,7 +8406,7 @@ int _TIFFFillStriles(TIFF *tif) { return _TIFFFillStrilesInternal(tif, 1); }
 
 static int _TIFFFillStrilesInternal(TIFF *tif, int loadStripByteCount)
 {
-    register TIFFDirectory *td = &tif->tif_dir;
+    TIFFDirectory *td = &tif->tif_dir;
     int return_value = 1;
 
     /* Do not do anything if TIFF_DEFERSTRILELOAD is not set */
