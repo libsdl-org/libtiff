@@ -351,6 +351,7 @@ int test_arbitrary_directrory_loading(unsigned int openMode)
     char filename[128] = {0};
     TIFF *tif;
     uint64_t offsets_base[N_DIRECTORIES];
+    uint64_t off2;
     int expected_original_dirnumber;
     tdir_t expected_curdir = (tdir_t)(-1);
 
@@ -546,7 +547,7 @@ int test_arbitrary_directrory_loading(unsigned int openMode)
         goto failure;
     }
     CHECKCURDIRNUM_M(tif, 2, __LINE__);
-    uint64_t off2 = TIFFCurrentDirOffset(tif);
+    off2 = TIFFCurrentDirOffset(tif);
     /* Note that dirnum = 2 is deleted here since TIFFUnlinkDirectory()
      * starts with 1 instead of 0. */
     if (!TIFFUnlinkDirectory(tif, 3))
@@ -808,6 +809,10 @@ int test_SubIFD_directrory_handling(unsigned int openMode)
     int iIFD = 0, iSubIFD = 0;
     TIFF *tif;
     int expected_original_dirnumber;
+    tdir_t expected_curdir;
+    tdir_t numberOfMainIFDs;
+    tdir_t currentDirNumber;
+    int blnRead;
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
@@ -888,7 +893,7 @@ int test_SubIFD_directrory_handling(unsigned int openMode)
         goto failure;
     }
 
-    tdir_t numberOfMainIFDs = TIFFNumberOfDirectories(tif);
+    numberOfMainIFDs = TIFFNumberOfDirectories(tif);
     CHECKCURDIRNUM_M(tif, 0, __LINE__);
     if (numberOfMainIFDs != (tdir_t)N_DIRECTORIES - number_of_sub_IFDs)
     {
@@ -899,10 +904,10 @@ int test_SubIFD_directrory_handling(unsigned int openMode)
         goto failure;
     }
 
-    tdir_t currentDirNumber = TIFFCurrentDirectory(tif);
+    currentDirNumber = TIFFCurrentDirectory(tif);
 
     /* The first directory is already read through TIFFOpen() */
-    int blnRead = 0;
+    blnRead = 0;
     expected_original_dirnumber = 1;
     do
     {
@@ -1001,7 +1006,7 @@ int test_SubIFD_directrory_handling(unsigned int openMode)
     /*-- Test TIFFCheckpointDirectory() with SubIFDs --
      * However, SubIFDs cannot be re-written to another location because
      * TIFFRewriteDirectory() does not support SubIFDs. Overwriting works. */
-    tdir_t expected_curdir = TIFFNumberOfDirectories(tif);
+    expected_curdir = TIFFNumberOfDirectories(tif);
     TIFFCreateDirectory(tif);
     if (write_data_to_current_directory(tif, expected_curdir, false))
     {
@@ -1226,6 +1231,7 @@ int test_rewrite_lastdir_offset(unsigned int openMode)
     char filename[128] = {0};
     int i, count;
     TIFF *tif;
+    uint64_t off1, off2;
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
@@ -1276,7 +1282,7 @@ int test_rewrite_lastdir_offset(unsigned int openMode)
      * speed up of TIFFSetDirectory() with directly getting the offset that
      * list.
      */
-    uint64_t off1 = TIFFCurrentDirOffset(tif);
+    off1 = TIFFCurrentDirOffset(tif);
     if (write_data_to_current_directory(tif, 4, false))
     {
         fprintf(stderr, "Can't write data to fifth directory in %s\n",
@@ -1294,7 +1300,7 @@ int test_rewrite_lastdir_offset(unsigned int openMode)
         fprintf(stderr, "Can't set %d.th directory from %s\n", i, filename);
         goto failure;
     }
-    uint64_t off2 = TIFFCurrentDirOffset(tif);
+    off2 = TIFFCurrentDirOffset(tif);
     if (!is_requested_directory(tif, i, filename))
     {
         goto failure;
@@ -2110,6 +2116,8 @@ int test_curdircount_setting(unsigned int openMode)
 #define N_DIRECTORIES_2 2
     char filename[128] = {0};
     tdir_t expected_curdir = (tdir_t)(-1);
+    TIFF *tif;
+    tdir_t numdir;
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
@@ -2123,7 +2131,7 @@ int test_curdircount_setting(unsigned int openMode)
     unlink(filename);
 
     /* Create a file and write N_DIRECTORIES_2 directories to it. */
-    TIFF *tif = TIFFOpen(filename, openModeStrings[openMode]);
+    tif = TIFFOpen(filename, openModeStrings[openMode]);
     if (!tif)
     {
         fprintf(stderr, "Can't create %s\n", filename);
@@ -2157,7 +2165,7 @@ int test_curdircount_setting(unsigned int openMode)
     TIFFCreateDirectory(tif);
     TIFFWriteDirectory(tif);
     CHECKCURDIRNUM_M(tif, 2, __LINE__);
-    tdir_t numdir = TIFFNumberOfDirectories(tif);
+    numdir = TIFFNumberOfDirectories(tif);
     TIFFClose(tif);
 
     /* Testcase iswrittentofile=0 for SetSubDirectory(0). */

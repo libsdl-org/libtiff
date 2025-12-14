@@ -266,6 +266,12 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     uint16_t auxUint16 = 0;
     uint32_t auxUint32 = 0;
     int i;
+    uint64_t read_dir_offset = 0;
+    uint64_t dir_offset = 0;
+    uint64_t dir_offset_GPS = 0;
+    uint64_t dir_offset_EXIF = 0;
+    const TIFFFieldArray *tFieldArray;
+    uint32_t iDataCnt = 0;
 
     /*-- Fill test data arrays for writing and later comparison when written
      * tags are checked. */
@@ -338,7 +344,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
      *   space for final dir_offset value,
      *   which is properly written at the end.
      */
-    uint64_t dir_offset = 0; /* Zero, in case no Custom-IFD is written */
+    dir_offset = 0; /* Zero, in case no Custom-IFD is written */
 
     if (!TIFFSetField(tif, TIFFTAG_GPSIFD, dir_offset))
     {
@@ -352,11 +358,11 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
 
     /*============ Write mostly all other TIFF tags ==================*/
     /* Get array, where tag fields are defined. */
-    const TIFFFieldArray *tFieldArray = _TIFFGetFields();
+    tFieldArray = _TIFFGetFields();
 
     /*-- write_all_tags() writes all tags automatically with the defined
      *   precision according to its set_get_field_type definition. --*/
-    uint32_t iDataCnt = 0;
+    iDataCnt = 0;
     if (write_all_tags(tif, tFieldArray, listTagsNotToWrite,
                        NUM_ELEMENTS(listTagsNotToWrite), &iDataCnt))
     {
@@ -427,7 +433,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     /*-- GPS - write custom directory GPS into file and
      *   get back the offset of GPS directory.
      */
-    uint64_t dir_offset_GPS = 0;
+    dir_offset_GPS = 0;
     if (!TIFFWriteCustomDirectory(tif, &dir_offset_GPS))
     {
         fprintf(stderr, "TIFFWriteCustomDirectory() with GPS failed.\n");
@@ -492,7 +498,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     /*-- EXIF - write custom directory EXIF into file and
      *   get back the offset of EXIF directory.
      */
-    uint64_t dir_offset_EXIF = 0;
+    dir_offset_EXIF = 0;
     if (!TIFFWriteCustomDirectory(tif, &dir_offset_EXIF))
     {
         fprintf(stderr, "TIFFWriteCustomDirectory() with EXIF failed.\n");
@@ -613,7 +619,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
      *   TIFFReadGPSDirectory().
      *   (this will destroy previously main directory fields in memory!)
      */
-    uint64_t read_dir_offset = 0;
+    read_dir_offset = 0;
     fprintf(stderr, "----Read GPS tags ...\n");
     if (!TIFFGetField(tif, TIFFTAG_GPSIFD, &read_dir_offset))
     {
@@ -1327,6 +1333,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
         switch (tSetFieldType)
         {
             case TIFF_SETGET_ASCII:
+            {
                 /* Either the stringlength is defined as a fixed length in
                  * .field_writecount or a NULL-terminated string is used. */
                 if (!TIFFGetField(tif, tTag, &pAscii))
@@ -1355,6 +1362,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                     GOTOFAILURE
                 }
                 break;
+            }
             case TIFF_SETGET_C16_ASCII:
                 if (tTag == TIFFTAG_INKNAMES)
                 {
