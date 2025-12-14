@@ -6379,8 +6379,8 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
                     /* TIFFReadDirEntryArrayWithLimit() ensures this can't be
                      * larger than MAX_SIZE_TAG_DATA */
                     assert((uint32_t)dp->tdir_count + 1 == dp->tdir_count + 1);
-                    uint8_t *o =
-                        _TIFFmallocExt(tif, (uint32_t)dp->tdir_count + 1);
+                    uint8_t *o = (uint8_t *)_TIFFmallocExt(
+                        tif, (uint32_t)dp->tdir_count + 1);
                     if (o == NULL)
                     {
                         if (data != NULL)
@@ -6962,8 +6962,8 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
                                         "byte. Forcing it to be null",
                                         fip->field_name);
                         /* Enlarge buffer and add terminating null. */
-                        uint8_t *o =
-                            _TIFFmallocExt(tif, (uint32_t)dp->tdir_count + 1);
+                        uint8_t *o = (uint8_t *)_TIFFmallocExt(
+                            tif, (uint32_t)dp->tdir_count + 1);
                         if (o == NULL)
                         {
                             if (data != NULL)
@@ -7333,8 +7333,8 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
                         "in null byte. Forcing it to be null",
                         fip->field_name);
                     /* Enlarge buffer and add terminating null. */
-                    uint8_t *o =
-                        _TIFFmallocExt(tif, (uint32_t)dp->tdir_count + 1);
+                    uint8_t *o = (uint8_t *)_TIFFmallocExt(
+                        tif, (uint32_t)dp->tdir_count + 1);
                     if (o == NULL)
                     {
                         if (data != NULL)

@@ -2547,7 +2547,7 @@ int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
          * 5*chunk_size/4.
          */
 
-        ascii85_p = limitMalloc((chunk_size + (chunk_size / 2)) + 8);
+        ascii85_p = (uint8_t *)limitMalloc((chunk_size + (chunk_size / 2)) + 8);
 
         if (!ascii85_p)
         {
@@ -3049,7 +3049,7 @@ void PSDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
          * 5*stripsize/4.
          */
 
-        ascii85_p = limitMalloc((stripsize + (stripsize / 2)) + 8);
+        ascii85_p = (uint8_t *)limitMalloc((stripsize + (stripsize / 2)) + 8);
 
         if (!ascii85_p)
         {
@@ -3216,7 +3216,7 @@ void PSRawDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
          * 5*bufsize/4.
          */
 
-        ascii85_p = limitMalloc((bufsize + (bufsize / 2)) + 8);
+        ascii85_p = (uint8_t *)limitMalloc((bufsize + (bufsize / 2)) + 8);
 
         if (!ascii85_p)
         {

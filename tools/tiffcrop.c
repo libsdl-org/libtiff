@@ -997,7 +997,7 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                   "Integer overflow when calculating buffer size.");
         exit(EXIT_FAILURE);
     }
-    tilebuf = limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
+    tilebuf = (unsigned char *)limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
     if (tilebuf == 0)
         return 0;
     tilebuf[tile_buffsize] = 0;
@@ -1489,7 +1489,7 @@ static int writeBufferToContigTiles(TIFF *out, uint8_t *buf,
     src_rowsize = ((imagewidth * spp * bps) + 7U) / 8;
 
     /* Add 3 padding bytes for extractContigSamples32bits */
-    tilebuf = limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
+    tilebuf = (unsigned char *)limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
     if (tilebuf == 0)
         return 1;
     memset(tilebuf, 0, tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
@@ -5580,7 +5580,7 @@ static int readSeparateStripsIntoBuffer(TIFF *in, uint8_t *obuf,
     for (s = 0; (s < spp) && (s < MAX_SAMPLES); s++)
     {
         srcbuffs[s] = NULL;
-        buff = limitMalloc(stripsize + NUM_BUFF_OVERSIZE_BYTES);
+        buff = (unsigned char *)limitMalloc(stripsize + NUM_BUFF_OVERSIZE_BYTES);
         if (!buff)
         {
             TIFFError(
@@ -8599,8 +8599,8 @@ static int createImageSection(uint32_t sectsize, unsigned char **sect_buff_ptr)
     {
         if (prev_sectsize < sectsize)
         {
-            new_buff =
-                _TIFFrealloc(sect_buff, sectsize + NUM_BUFF_OVERSIZE_BYTES);
+            new_buff = (unsigned char *)_TIFFrealloc(
+                sect_buff, sectsize + NUM_BUFF_OVERSIZE_BYTES);
             if (!new_buff)
             {
                 _TIFFfree(sect_buff);
@@ -8655,8 +8655,8 @@ static int processCropSelections(struct image_data *image,
             prev_cropsize = seg_buffs[0].size;
             if (prev_cropsize < cropsize)
             {
-                next_buff =
-                    _TIFFrealloc(crop_buff, cropsize + NUM_BUFF_OVERSIZE_BYTES);
+                next_buff = (unsigned char *)_TIFFrealloc(
+                    crop_buff, cropsize + NUM_BUFF_OVERSIZE_BYTES);
                 if (!next_buff)
                 {
                     _TIFFfree(crop_buff);
@@ -8776,7 +8776,7 @@ static int processCropSelections(struct image_data *image,
                 prev_cropsize = seg_buffs[i].size;
                 if (prev_cropsize < cropsize)
                 {
-                    next_buff = _TIFFrealloc(
+                    next_buff = (unsigned char *)_TIFFrealloc(
                         crop_buff, cropsize + NUM_BUFF_OVERSIZE_BYTES);
                     if (!next_buff)
                     {
@@ -8945,8 +8945,8 @@ static int createCroppedImage(struct image_data *image, struct crop_mask *crop,
     {
         if (prev_cropsize < cropsize)
         {
-            new_buff =
-                _TIFFrealloc(crop_buff, cropsize + NUM_BUFF_OVERSIZE_BYTES);
+            new_buff = (unsigned char *)_TIFFrealloc(
+                crop_buff, cropsize + NUM_BUFF_OVERSIZE_BYTES);
             if (!new_buff)
             {
                 free(crop_buff);

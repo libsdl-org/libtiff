@@ -234,8 +234,8 @@ int main(int argc, char *argv[])
     if (npages < 1)
         usage(EXIT_FAILURE);
 
-    rowbuf = _TIFFmalloc(TIFFhowmany8(xsize));
-    refbuf = _TIFFmalloc(TIFFhowmany8(xsize));
+    rowbuf = (char *)_TIFFmalloc(TIFFhowmany8(xsize));
+    refbuf = (char *)_TIFFmalloc(TIFFhowmany8(xsize));
     if (rowbuf == NULL || refbuf == NULL)
     {
         TIFFClose(out);
@@ -398,7 +398,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
         TIFFError(tifin->tif_name, "Empty input file");
         return (0);
     }
-    tifin->tif_rawdata = _TIFFmalloc(tifin->tif_rawdatasize);
+    tifin->tif_rawdata = (uint8_t *)_TIFFmalloc(tifin->tif_rawdatasize);
     if (tifin->tif_rawdata == NULL)
     {
         TIFFError(tifin->tif_name, "Not enough memory");

@@ -236,7 +236,7 @@ static int writeTestTiff(const char *szFileName, int isBigTiff)
     TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK);
     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, 1);
-    ret = (int)TIFFWriteEncodedStrip(tif, 0, "\0", 1);
+    ret = (int)TIFFWriteEncodedStrip(tif, 0, (void *)"\0", 1);
     if (ret != 1)
     {
         fprintf(stdout, "Error TIFFWriteEncodedStrip: ret=%d\n", ret);
