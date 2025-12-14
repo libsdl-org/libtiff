@@ -1494,7 +1494,7 @@ int test_lastdir_offset(unsigned int openMode)
             (file_i == 0) ? filename_optimized : filename_non_optimized;
 
         for (enum DirWalkMode mode = DirWalkMode_ReadDirectory;
-             mode <= DirWalkMode_SetDirectory_Reverse; ++mode)
+             mode <= DirWalkMode_SetDirectory_Reverse; mode = (enum DirWalkMode)(mode + 1))
         {
             if (get_dir_offsets(filename, offsets_comparison, mode))
             {
