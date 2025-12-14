@@ -473,7 +473,7 @@ int TIFFInitOJPEG(TIFF *tif, int scheme)
     }
 
     /* state block */
-    sp = _TIFFmallocExt(tif, sizeof(OJPEGState));
+    sp = (OJPEGState *)_TIFFmallocExt(tif, sizeof(OJPEGState));
     if (sp == NULL)
     {
         TIFFErrorExtR(tif, module, "No space for OJPEG state block");
@@ -819,7 +819,7 @@ static int OJPEGPreDecodeSkipScanlines(TIFF *tif)
     uint32_t m;
     if (sp->skip_buffer == NULL)
     {
-        sp->skip_buffer = _TIFFmallocExt(tif, sp->bytes_per_line);
+        sp->skip_buffer = (uint8_t *)_TIFFmallocExt(tif, sp->bytes_per_line);
         if (sp->skip_buffer == NULL)
         {
             TIFFErrorExtR(tif, module, "Out of memory");
@@ -1384,7 +1384,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
              * OJPEGPreDecode() should also likely */
             /* reset subsampling_convert_state to 0 when changing tile. */
             sp->subsampling_convert_ycbcrbuf =
-                _TIFFcallocExt(tif, 1, sp->subsampling_convert_ycbcrbuflen);
+                (uint8_t *)_TIFFcallocExt(tif, 1, sp->subsampling_convert_ycbcrbuflen);
             if (sp->subsampling_convert_ycbcrbuf == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
@@ -1398,7 +1398,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
             sp->subsampling_convert_ycbcrimagelen =
                 3 + sp->subsampling_convert_ylines +
                 2 * sp->subsampling_convert_clines;
-            sp->subsampling_convert_ycbcrimage = _TIFFmallocExt(
+            sp->subsampling_convert_ycbcrimage = (uint8_t **)_TIFFmallocExt(
                 tif, sp->subsampling_convert_ycbcrimagelen * sizeof(uint8_t *));
             if (sp->subsampling_convert_ycbcrimage == 0)
             {
@@ -1671,7 +1671,7 @@ static int OJPEGReadHeaderInfoSecStreamDqt(TIFF *tif)
                 return (0);
             }
             na = sizeof(uint32_t) + 69;
-            nb = _TIFFmallocExt(tif, na);
+            nb = (uint8_t *)_TIFFmallocExt(tif, na);
             if (nb == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
@@ -1730,7 +1730,7 @@ static int OJPEGReadHeaderInfoSecStreamDht(TIFF *tif)
     else
     {
         na = sizeof(uint32_t) + 2 + m;
-        nb = _TIFFmallocExt(tif, na);
+        nb = (uint8_t *)_TIFFmallocExt(tif, na);
         if (nb == 0)
         {
             TIFFErrorExtR(tif, module, "Out of memory");
@@ -2030,7 +2030,7 @@ static int OJPEGReadHeaderInfoSecTablesQTable(TIFF *tif)
                 }
             }
             oa = sizeof(uint32_t) + 69;
-            ob = _TIFFmallocExt(tif, oa);
+            ob = (uint8_t *)_TIFFmallocExt(tif, oa);
             if (ob == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
@@ -2099,7 +2099,7 @@ static int OJPEGReadHeaderInfoSecTablesDcTable(TIFF *tif)
             for (n = 0; n < 16; n++)
                 q += o[n];
             ra = sizeof(uint32_t) + 21 + q;
-            rb = _TIFFmallocExt(tif, ra);
+            rb = (uint8_t *)_TIFFmallocExt(tif, ra);
             if (rb == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
@@ -2169,7 +2169,7 @@ static int OJPEGReadHeaderInfoSecTablesAcTable(TIFF *tif)
             for (n = 0; n < 16; n++)
                 q += o[n];
             ra = sizeof(uint32_t) + 21 + q;
-            rb = _TIFFmallocExt(tif, ra);
+            rb = (uint8_t *)_TIFFmallocExt(tif, ra);
             if (rb == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
@@ -2345,7 +2345,7 @@ static int OJPEGReadBlock(OJPEGState *sp, uint16_t len, void *mem)
     uint16_t n;
     assert(len > 0);
     mlen = len;
-    mmem = mem;
+    mmem = (uint8_t *)mem;
     do
     {
         if (sp->in_buffer_togo == 0)
@@ -2770,7 +2770,7 @@ OJPEGLibjpegJpegSourceMgrFillInputBuffer(jpeg_decompress_struct *cinfo)
         jpeg_encap_unwind(tif);
     }
     sp->libjpeg_jpeg_source_mgr.bytes_in_buffer = len;
-    sp->libjpeg_jpeg_source_mgr.next_input_byte = mem;
+    sp->libjpeg_jpeg_source_mgr.next_input_byte = (const JOCTET *)mem;
     return (1);
 }
 

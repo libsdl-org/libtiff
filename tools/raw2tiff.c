@@ -494,8 +494,8 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
                 /* reads 2 lines at the middle of the image and calculate their
                  * correlation. it works for h >= 2. (in this case it will
                  * compare line 0 and line 1 */
-                buf1 = _TIFFmalloc(scanlinesize);
-                buf2 = _TIFFmalloc(scanlinesize);
+                buf1 = (char *)_TIFFmalloc(scanlinesize);
+                buf2 = (char *)_TIFFmalloc(scanlinesize);
                 do
                 {
                     if (_TIFF_lseek_f(

@@ -314,7 +314,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     TIFFSetGetFieldType tSetFieldType;
     unsigned short tFieldBit;
     const TIFFField *fip;
-    char *tFieldName;
+    const char *tFieldName;
 
 #define STRSIZE 1000
 #define N_SIZE 400
@@ -495,7 +495,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
        is converted to either a signed or an unsigned int using integral
        promotion.
             - Any argument of class type is passed by value as a data structure;
-       the copy is created by binary copying instead of by invoking the class’s
+       the copy is created by binary copying instead of by invoking the classï¿½s
        copy constructor (if one exists). So, if your argument types are of float
        type, you should expect the argument retrieved to be of type double and
        it is char or short, you should expect it to be signed or unsigned int.

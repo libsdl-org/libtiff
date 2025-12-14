@@ -56,10 +56,9 @@ int is_requested_directory(TIFF *tif, int requested_dir_number,
 
     if (ptr == NULL || auxStr == NULL || strncmp(auxStr, " th.", 4))
     {
-        ptr = ptr == NULL ? "(null)" : ptr;
         fprintf(stderr,
                 "Error reading IFD directory number from PageName tag: %s\n",
-                ptr);
+                ptr == NULL ? "(null)" : ptr);
         return 0;
     }
 

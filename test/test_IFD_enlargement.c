@@ -74,7 +74,7 @@ int write_image_data(TIFF *tif, uint16_t width, uint16_t length, bool tiled,
         bufLen = (((size_t)width * SPP * BPS) + 7) / 8;
     }
 
-    pbufLine = _TIFFmalloc(bufLen);
+    pbufLine = (unsigned char *)_TIFFmalloc(bufLen);
     if (pbufLine == NULL)
         return 1;
 
@@ -291,11 +291,10 @@ int is_requested_directory(TIFF *tif, int requested_dir_number,
 
     if (ptr == NULL || auxStr == NULL || strncmp(auxStr, " th.", 4))
     {
-        ptr = ptr == NULL ? "(null)" : ptr;
         fprintf(stderr,
                 "Error reading IFD directory number from PageName tag: %s. "
                 "Testline %d\n",
-                ptr, __LINE__);
+                ptr == NULL ? "(null)" : ptr, __LINE__);
         return 0;
     }
 

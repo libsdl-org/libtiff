@@ -64,9 +64,9 @@ static int fsdither(TIFF *in, TIFF *out)
 {
     unsigned char *outline, *inputline, *inptr;
     short *thisline, *nextline, *tmpptr;
-    register unsigned char *outptr;
-    register short *thisptr, *nextptr;
-    register uint32_t i, j;
+    unsigned char *outptr;
+    short *thisptr, *nextptr;
+    uint32_t i, j;
     uint32_t imax, jmax;
     int lastline, lastpixel;
     int bit;
@@ -121,7 +121,7 @@ static int fsdither(TIFF *in, TIFF *out)
         bit = 0x80;
         for (j = 0; j < imagewidth; ++j)
         {
-            register int v;
+            int v;
 
             lastpixel = (j == jmax);
             v = *thisptr++;

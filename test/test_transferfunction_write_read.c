@@ -71,7 +71,8 @@ int setup_transfer_functions(void)
 
     /* Setup array with some more values to shift start of the three arrays. */
     nSamplesPerTransferFunction = ((uint32_t)1 << bps);
-    pTransferFunctionData = _TIFFmalloc(3 * (tmsize_t)nSamplesPerTransferFunction * sizeof(uint16_t));
+    pTransferFunctionData = (uint16_t *)_TIFFmalloc(
+        3 * (tmsize_t)nSamplesPerTransferFunction * sizeof(uint16_t));
     if (!pTransferFunctionData)
         return 1;
 
