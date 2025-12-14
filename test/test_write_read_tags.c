@@ -965,7 +965,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
         TIFFSetGetFieldType tSetFieldType =
             tFieldArray->fields[t]
                 .set_get_field_type; /* e.g. TIFF_SETGET_C0_FLOAT */
-        char *tFieldName = tFieldArray->fields[t].field_name;
+        const char *tFieldName = tFieldArray->fields[t].field_name;
         void *pVoid = NULL;
 
         /*-- dependent on set_get_field_type write value --*/
@@ -1319,7 +1319,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
         TIFFSetGetFieldType tSetFieldType =
             tFieldArray->fields[t]
                 .set_get_field_type; /* e.g. TIFF_SETGET_C0_FLOAT */
-        char *tFieldName = tFieldArray->fields[t].field_name;
+        const char *tFieldName = tFieldArray->fields[t].field_name;
         if (tagIsInList(tTag, plistTagsNotToWrite, nTagsNotToWrite))
             continue;
 

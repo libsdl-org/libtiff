@@ -198,7 +198,7 @@ void WriteTable(FILE *fd, const TIFFFaxTabEnt *T, int Size, const char *name)
 int main(int argc, char *argv[])
 {
     FILE *fd;
-    char *outputfile;
+    const char *outputfile;
     int c;
 
 #if !HAVE_DECL_OPTARG
