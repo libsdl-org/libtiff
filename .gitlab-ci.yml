@@ -6,7 +6,7 @@ stages:
   - pages
 
 
-autoconf-current:
+linux-ac-current:
   stage: build
   script:
     - sh build/gitlab-ci autoconf
@@ -17,7 +17,7 @@ autoconf-current:
     paths:
     - distribution
 
-autoconf-old:
+linux-ac-old:
   stage: build
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
   script:
@@ -25,26 +25,51 @@ autoconf-old:
   after_script:
     - 'cat autoconf-build/test/test-suite.log'
 
-cmake-makefiles-current:
+linux-cmake-make-current:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
-cmake-makefiles-current-static:
+linux-cmake-make-current-static:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release static
 
-cmake-ninja-current:
+linux-cmake-ninja-current:
   stage: build
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
 
-cmake-makefiles-old:
+linux-cmake-make-old:
   stage: build
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
+
+freebsd15-release:
+  stage: build
+  tags: [freebsd15]
+  script:
+    - sh build/gitlab-ci cmake Ninja Release
+
+freebsd15-debug:
+  stage: build
+  tags: [freebsd15]
+  script:
+    - sh build/gitlab-ci cmake Ninja Debug
+
+macos26-release:
+  stage: build
+  tags: [macos26]
+  script:
+    - sh build/gitlab-ci cmake Ninja Release
+
+macos26-debug:
+  stage: build
+  tags: [macos26]
+  script:
+    - sh build/gitlab-ci cmake Ninja Debug
+
 
 coverity:
   stage: static-analysis
