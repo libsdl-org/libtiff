@@ -1,4 +1,6 @@
-image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu24.04:latest
+default:
+  tags: [linux,docker]
+  image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu24.04:latest
 
 stages:
   - build
