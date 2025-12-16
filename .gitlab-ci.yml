@@ -72,6 +72,59 @@ macos26-debug:
   script:
     - sh build/gitlab-ci cmake Ninja Debug
 
+windows-vs2026-release:
+  stage: build
+  tags: [windows, vs2026]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2026 Ninja Release
+
+windows-vs2026-debug:
+  stage: build
+  tags: [windows, vs2026]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2026 Ninja Debug
+
+windows-vs2022-release:
+  stage: build
+  tags: [windows, vs2022]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2022 Ninja Release
+
+windows-vs2022-debug:
+  stage: build
+  tags: [windows, vs2022]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2022 Ninja Debug
+
+windows-cygwin-release:
+  stage: build
+  tags: [windows, cygwin]
+  script:
+    - $cygpath = & "C:\tools\cygwin\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\cygwin\bin\bash.exe" -l -c "cd '$cygpath' && sed -i 's/\r$//' build/gitlab-ci-cygwin && bash build/gitlab-ci-cygwin Ninja Release"
+
+windows-cygwin-debug:
+  stage: build
+  tags: [windows, cygwin]
+  script:
+    - $cygpath = & "C:\tools\cygwin\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\cygwin\bin\bash.exe" -l -c "cd '$cygpath' && sed -i 's/\r$//' build/gitlab-ci-cygwin && bash build/gitlab-ci-cygwin Ninja Debug"
+
+windows-mingw-release:
+  stage: build
+  tags: [windows, mingw]
+  variables:
+    MSYSTEM: UCRT64
+    CHERE_INVOKING: '1'
+  script:
+    - $mingwpath = & "C:\tools\msys64\usr\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\msys64\usr\bin\bash.exe" -l -c "cd '$mingwpath' && sed -i 's/\r$//' build/gitlab-ci-mingw && bash build/gitlab-ci-mingw Ninja Release"
+
+windows-mingw-debug:
+  stage: build
+  tags: [windows, mingw]
+  variables:
+    MSYSTEM: UCRT64
+    CHERE_INVOKING: '1'
+  script:
+    - $mingwpath = & "C:\tools\msys64\usr\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\msys64\usr\bin\bash.exe" -l -c "cd '$mingwpath' && sed -i 's/\r$//' build/gitlab-ci-mingw && bash build/gitlab-ci-mingw Ninja Release"
 
 coverity:
   stage: static-analysis
