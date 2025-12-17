@@ -1,0 +1,15 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Shell scripts must have LF line endings
+*.sh text eol=lf
+build/gitlab-ci text eol=lf
+build/gitlab-ci-cygwin text eol=lf
+build/gitlab-ci-mingw text eol=lf
+
+# PowerShell scripts can have CRLF
+*.ps1 text eol=crlf
+
+# Batch files must have CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
