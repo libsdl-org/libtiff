@@ -60,7 +60,7 @@ CMAKE_OPTS="$CMAKE_OPTS -Dtiff-docs=OFF"
 
 # Static or shared build
 LINK_TYPE_LOWER=$(echo "$LINK_TYPE" | tr '[:upper:]' '[:lower:]')
-if [ "$LINK_TYPE_LOWER" = "static" ]; then
+if [ "$LINK_TYPE_LOWER" == "static" ]; then
     echo "Building STATIC libraries"
     CMAKE_OPTS="$CMAKE_OPTS -DBUILD_SHARED_LIBS=OFF"
 else
@@ -106,7 +106,9 @@ echo "============================================================"
 ctest -V -C "$BUILD_TYPE"
 
 # Build test projects (skip for static builds)
-if [ "$LINK_TYPE_LOWER" != "static" ]; then
+if [ "$LINK_TYPE_LOWER" == "static" ]; then
+    echo "Skipping test project build for STATIC CI/CD build"
+else
     TIFF_DIR="$INSTALL_DIR/lib/cmake/tiff"
 
     echo ""
@@ -138,13 +140,9 @@ if [ "$LINK_TYPE_LOWER" != "static" ]; then
         -S "${SOURCE_DIR}/build/test_cmake_no_target" \
         -B .
     cmake --build . --config "$BUILD_TYPE"
-else
-    echo "Skipping test project build for STATIC CI/CD build"
 fi
 
 echo ""
 echo "============================================================"
 echo "Build Completed Successfully"
 echo "============================================================"
-
-exit 0
