@@ -1,0 +1,147 @@
+#!/bin/bash
+# MinGW/MSYS2 CI build script for LibTIFF
+# Used by GitLab CI for Windows MinGW builds
+#
+# This script is designed to run inside an MSYS2/MinGW shell environment
+# MSYS2 is expected to be installed at C:\tools\msys64
+# Uses the UCRT64 environment for modern Windows builds
+#
+# Usage: bash build/gitlab-ci-mingw <generator> <build_type> [static]
+#   generator:  CMake generator (e.g., "Ninja", "MSYS Makefiles")
+#   build_type: Release or Debug
+#   static:     Optional, use "static" for static library build
+
+set -e
+set -x
+
+GENERATOR="$1"
+BUILD_TYPE="$2"
+LINK_TYPE="$3"
+
+if [ -z "$GENERATOR" ] || [ -z "$BUILD_TYPE" ]; then
+    echo "Usage: $0 <generator> <build_type> [static]"
+    echo "  generator:  CMake generator (e.g., 'Ninja', 'MSYS Makefiles')"
+    echo "  build_type: Release or Debug"
+    echo "  static:     Optional, use 'static' for static library build"
+    exit 1
+fi
+
+# Get the source directory (parent of build directory)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SOURCE_DIR="$(dirname "$SCRIPT_DIR")"
+BUILD_DIR="${SOURCE_DIR}/cmake-build"
+INSTALL_DIR="${SOURCE_DIR}/cmake-install"
+
+echo "============================================================"
+echo "LibTIFF MinGW CI Build"
+echo "============================================================"
+echo "Generator:   $GENERATOR"
+echo "Build Type:  $BUILD_TYPE"
+echo "Link Type:   ${LINK_TYPE:-shared (default)}"
+echo "Source Dir:  $SOURCE_DIR"
+echo "Build Dir:   $BUILD_DIR"
+echo "Install Dir: $INSTALL_DIR"
+echo "MSYSTEM:     ${MSYSTEM:-not set}"
+echo "============================================================"
+
+# Verify MinGW tools are available
+echo ""
+echo "Checking MinGW environment..."
+which cmake || { echo "cmake not found in MinGW"; exit 1; }
+which ninja || which make || { echo "Neither ninja nor make found in MinGW"; exit 1; }
+cmake --version
+gcc --version || { echo "gcc not found in MinGW"; exit 1; }
+
+# Configure CMake options
+CMAKE_OPTS="-Dfatal-warnings=ON"
+CMAKE_OPTS="$CMAKE_OPTS -DCMAKE_UNITY_BUILD=ON"
+CMAKE_OPTS="$CMAKE_OPTS -DCMAKE_C_FLAGS=-Wall -Wextra -Werror"
+
+# Static or shared build
+LINK_TYPE_LOWER=$(echo "$LINK_TYPE" | tr '[:upper:]' '[:lower:]')
+if [ "$LINK_TYPE_LOWER" == "static" ]; then
+    echo "Building STATIC libraries"
+    CMAKE_OPTS="$CMAKE_OPTS -DBUILD_SHARED_LIBS=OFF"
+else
+    echo "Building SHARED libraries"
+    CMAKE_OPTS="$CMAKE_OPTS -DBUILD_SHARED_LIBS=ON"
+fi
+
+# Clean and create build directory
+echo ""
+echo "============================================================"
+echo "Configuring with CMake"
+echo "============================================================"
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
+
+echo "Running: cmake -G \"$GENERATOR\" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR $CMAKE_OPTS $SOURCE_DIR"
+cmake -G "$GENERATOR" \
+    -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+    -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
+    $CMAKE_OPTS \
+    "$SOURCE_DIR"
+
+# Build
+echo ""
+echo "============================================================"
+echo "Building"
+echo "============================================================"
+cmake --build . --config "$BUILD_TYPE"
+
+# Install
+echo ""
+echo "============================================================"
+echo "Installing"
+echo "============================================================"
+cmake --build . --config "$BUILD_TYPE" --target install
+
+# Test
+echo ""
+echo "============================================================"
+echo "Running Tests"
+echo "============================================================"
+ctest -V -C "$BUILD_TYPE"
+
+# Build test projects (skip for static builds)
+if [ "$LINK_TYPE_LOWER" == "static" ]; then
+    echo "Skipping test project build for STATIC CI/CD build"
+else
+    TIFF_DIR="$INSTALL_DIR/lib/cmake/tiff"
+
+    echo ""
+    echo "============================================================"
+    echo "Building Test Project (find_package CONFIG)"
+    echo "============================================================"
+    TEST_BUILD_DIR="${SOURCE_DIR}/cmake-test-build"
+    rm -rf "$TEST_BUILD_DIR"
+    mkdir -p "$TEST_BUILD_DIR"
+    cd "$TEST_BUILD_DIR"
+    cmake -G "$GENERATOR" \
+        -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+        -DTiff_DIR="$TIFF_DIR" \
+        -S "${SOURCE_DIR}/build/test_cmake" \
+        -B .
+    cmake --build . --config "$BUILD_TYPE"
+
+    echo ""
+    echo "============================================================"
+    echo "Building Test Project (no target)"
+    echo "============================================================"
+    TEST_NO_TARGET_DIR="${SOURCE_DIR}/cmake-test-no-target-build"
+    rm -rf "$TEST_NO_TARGET_DIR"
+    mkdir -p "$TEST_NO_TARGET_DIR"
+    cd "$TEST_NO_TARGET_DIR"
+    cmake -G "$GENERATOR" \
+        -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+        -DTiff_DIR="$TIFF_DIR" \
+        -S "${SOURCE_DIR}/build/test_cmake_no_target" \
+        -B .
+    cmake --build . --config "$BUILD_TYPE"
+fi
+
+echo ""
+echo "============================================================"
+echo "Build Completed Successfully"
+echo "============================================================"

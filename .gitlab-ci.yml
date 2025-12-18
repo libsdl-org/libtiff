@@ -3,13 +3,37 @@ default:
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu24.04:latest
 
 stages:
+  - pre-build
   - build
   - static-analysis
   - pages
 
+# Basic build that runs on all repositories (including forks)
+# This acts as a gate - if this fails, other jobs won't run
+# Split into two jobs because tags cannot be set conditionally
+
+basic-build-fork:
+  stage: pre-build
+  tags: [saas-linux-small-amd64]
+  rules:
+    - if: '$CI_PROJECT_PATH != "libtiff/libtiff"'
+  script:
+    - sh build/gitlab-ci cmake "Unix Makefiles" Release
+
+basic-build-main:
+  stage: pre-build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  script:
+    - sh build/gitlab-ci cmake "Unix Makefiles" Release
+
+# All jobs below only run on the main libtiff/libtiff repository
+# Forks will only run the basic-build-fork job above
 
 linux-ac-current:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   script:
     - sh build/gitlab-ci autoconf
   after_script:
@@ -21,6 +45,8 @@ linux-ac-current:
 
 linux-ac-old:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
   script:
     - sh build/gitlab-ci autoconf-minimal
@@ -29,61 +55,147 @@ linux-ac-old:
 
 linux-cmake-make-current:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
 linux-cmake-make-current-static:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release static
 
 linux-cmake-ninja-current:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
 
 linux-cmake-make-old:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu22.04:latest
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
 freebsd15-release:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   tags: [freebsd15]
   script:
     - sh build/gitlab-ci cmake Ninja Release
 
 freebsd15-debug:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   tags: [freebsd15]
   script:
     - sh build/gitlab-ci cmake Ninja Debug
 
 macos26-release:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   tags: [macos26]
   script:
     - sh build/gitlab-ci cmake Ninja Release
 
 macos26-debug:
   stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   tags: [macos26]
   script:
     - sh build/gitlab-ci cmake Ninja Debug
 
+windows-vs2026-release:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, vs2026]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2026 Ninja Release
+
+windows-vs2026-debug:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, vs2026]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2026 Ninja Debug
+
+windows-vs2022-release:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, vs2022]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2022 Ninja Release
+
+windows-vs2022-debug:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, vs2022]
+  script:
+    - pwsh build/gitlab-ci.ps1 -VSVersion 2022 Ninja Debug
+
+windows-cygwin-release:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, cygwin]
+  script:
+    - $cygpath = & "C:\tools\cygwin\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\cygwin\bin\bash.exe" -l -c "cd '$cygpath' && bash build/gitlab-ci-cygwin Ninja Release"
+
+windows-cygwin-debug:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, cygwin]
+  script:
+    - $cygpath = & "C:\tools\cygwin\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\cygwin\bin\bash.exe" -l -c "cd '$cygpath' && bash build/gitlab-ci-cygwin Ninja Debug"
+
+windows-mingw-release:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, mingw]
+  variables:
+    MSYSTEM: UCRT64
+    CHERE_INVOKING: '1'
+  script:
+    - $mingwpath = & "C:\tools\msys64\usr\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\msys64\usr\bin\bash.exe" -l -c "cd '$mingwpath' && build/gitlab-ci-mingw Ninja Release"
+
+windows-mingw-debug:
+  stage: build
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
+  tags: [windows, mingw]
+  variables:
+    MSYSTEM: UCRT64
+    CHERE_INVOKING: '1'
+  script:
+    - $mingwpath = & "C:\tools\msys64\usr\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\msys64\usr\bin\bash.exe" -l -c "cd '$mingwpath' && bash build/gitlab-ci-mingw Ninja Release"
 
 coverity:
   stage: static-analysis
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff" && $CI_COMMIT_BRANCH == "master"'
   image: registry.gitlab.com/libtiff/libtiff-ci-ubuntu24.04-coverity:latest
   script:
     - sh build/gitlab-ci coverity "Ninja" Debug
-  only:
-    refs:
-      - master
 
 pages:
   stage: pages
+  rules:
+    - if: '$CI_PROJECT_PATH == "libtiff/libtiff" && $CI_COMMIT_BRANCH == "master"'
   script:
     - sh build/gitlab-ci cmake "Ninja" Debug
     - cp -r cmake-install/share/doc/tiff/manual/html public
@@ -91,5 +203,3 @@ pages:
     name: $CI_PROJECT_NAME-$CI_JOB_NAME
     paths:
     - public
-  only:
-  - master
