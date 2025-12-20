@@ -391,6 +391,13 @@ tsize_t t2p_write_pdf_xobject_stream_filter(ttile_t, T2P *, TIFF *);
 tsize_t t2p_write_pdf_xreftable(T2P *, TIFF *);
 tsize_t t2p_write_pdf_trailer(T2P *, TIFF *);
 
+/* Suppress MSVC warning about constant conditional expression in do-while(0)
+ * macros */
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127) /* conditional expression is constant */
+#endif
+
 #define check_snprintf_ret(t2p, rv, buf)                                       \
     do                                                                         \
     {                                                                          \
@@ -437,6 +444,10 @@ tsize_t t2p_write_pdf_trailer(T2P *, TIFF *);
         }                                                                      \
     } while (0)
 
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 static void t2p_disable(TIFF *tif)
 {
     T2P *t2p = (T2P *)TIFFClientdata(tif);
@@ -479,7 +490,7 @@ static uint64_t t2pSeekFile(TIFF *tif, toff_t offset, int whence)
     TIFFSeekProc proc = TIFFGetSeekProc(tif);
     if (proc)
         return proc(client, offset, whence);
-    return -1;
+    return (uint64_t)-1;
 }
 
 static tmsize_t t2p_readproc(thandle_t handle, tdata_t data, tmsize_t size)
@@ -504,7 +515,7 @@ static uint64_t t2p_seekproc(thandle_t handle, uint64_t offset, int whence)
 {
     T2P *t2p = (T2P *)handle;
     if (t2p->outputdisable <= 0 && t2p->outputfile != stdout && t2p->outputfile)
-        return _TIFF_fseek_f(t2p->outputfile, (_TIFF_off_t)offset, whence);
+        return (uint64_t)_TIFF_fseek_f(t2p->outputfile, (_TIFF_off_t)offset, whence);
     return offset;
 }
 
@@ -517,7 +528,7 @@ static int t2p_closeproc(thandle_t handle)
 static uint64_t t2p_sizeproc(thandle_t handle)
 {
     (void)handle;
-    return -1;
+    return (uint64_t)-1;
 }
 
 static int t2p_mapproc(thandle_t handle, void **data, toff_t *offset)
@@ -731,7 +742,7 @@ int main(int argc, char **argv)
 #endif
 #ifdef ZIP_SUPPORT
             case 'z':
-                t2p->pdf_defaultcompression = T2P_COMPRESS_ZIP;
+                t2p->pdf_defaultcompression = (t2p_compress_t)T2P_COMPRESS_ZIP;
                 break;
 #endif
 #ifndef ZIP_SUPPORT
@@ -742,7 +753,7 @@ int main(int argc, char **argv)
                 break;
 #endif
             case 'q':
-                t2p->pdf_defaultcompressionquality = atoi(optarg);
+                t2p->pdf_defaultcompressionquality = (uint16_t)atoi(optarg);
                 break;
             case 'n':
                 t2p->pdf_nopassthrough = 1;
@@ -1032,7 +1043,7 @@ int tiff2pdf_match_paper_size(float *width, float *length, char *papersize)
     len = strlen(papersize);
     for (i = 0; i < len; i++)
     {
-        papersize[i] = toupper((int)papersize[i]);
+        papersize[i] = (char)toupper((int)papersize[i]);
     }
     for (i = 0; sizes[i] != NULL; i++)
     {
@@ -2709,11 +2720,11 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
                     buffer[bufferoffset++] = 0xdd;
                     buffer[bufferoffset++] = 0x00;
                     buffer[bufferoffset++] = 0x04;
-                    h_samp *= 8;
-                    v_samp *= 8;
-                    ri = (t2p->tiff_width + h_samp - 1) / h_samp;
+                    h_samp = (uint16_t)(h_samp * 8);
+                    v_samp = (uint16_t)(v_samp * 8);
+                    ri = (uint16_t)((t2p->tiff_width + h_samp - 1) / h_samp);
                     TIFFGetField(input, TIFFTAG_ROWSPERSTRIP, &rows);
-                    ri *= (rows + v_samp - 1) / v_samp;
+                    ri = (uint16_t)(ri * ((rows + v_samp - 1) / v_samp));
                     buffer[bufferoffset++] = (ri >> 8) & 0xff;
                     buffer[bufferoffset++] = ri & 0xff;
                     stripcount = TIFFNumberOfStrips(input);
@@ -3801,10 +3812,13 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
     uint32_t q_length = 0;
     void *dc;
     uint32_t dc_length = 0;
-    void *ac;
+    /* Initialize to NULL to suppress false positive MSVC warnings.
+     * Variables are initialized conditionally based on proc value
+     * and only used when properly initialized. */
+    void *ac = NULL;
     uint32_t ac_length = 0;
-    uint16_t *lp;
-    uint16_t *pt;
+    uint16_t *lp = NULL;
+    uint16_t *pt = NULL;
     uint16_t h_samp = 1;
     uint16_t v_samp = 1;
     unsigned char *ojpegdata;
@@ -3906,7 +3920,7 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
     }
     _TIFFmemset(t2p->pdf_ojpegdata, 0x00, 2048);
     t2p->pdf_ojpegdatalength = 0;
-    table_count = t2p->tiff_samplesperpixel;
+    table_count = (uint16_t)t2p->tiff_samplesperpixel;
     if (proc == JPEGPROC_BASELINE)
     {
         if (table_count > 2)
@@ -3925,30 +3939,30 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0xc3;
     }
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
-    ojpegdata[t2p->pdf_ojpegdatalength++] = (8 + 3 * t2p->tiff_samplesperpixel);
+    ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(8 + 3 * t2p->tiff_samplesperpixel);
     ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_bitspersample & 0xff);
     if (TIFFIsTiled(input))
     {
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength >> 8) & 0xff;
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength >> 8) & 0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength) & 0xff;
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength) & 0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth >> 8) & 0xff;
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth >> 8) & 0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth) & 0xff;
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth) & 0xff);
     }
     else
     {
-        ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_length >> 8) & 0xff;
-        ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_length) & 0xff;
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)((t2p->tiff_length >> 8) & 0xff);
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)((t2p->tiff_length) & 0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_width >> 8) & 0xff;
         ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_width) & 0xff;
     }
     ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_samplesperpixel & 0xff);
     for (i = 0; i < t2p->tiff_samplesperpixel; i++)
     {
-        ojpegdata[t2p->pdf_ojpegdatalength++] = i;
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)i;
         if (i == 0)
         {
             ojpegdata[t2p->pdf_ojpegdatalength] |= h_samp << 4 & 0xf0;
@@ -3959,7 +3973,7 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         {
             ojpegdata[t2p->pdf_ojpegdatalength++] = 0x11;
         }
-        ojpegdata[t2p->pdf_ojpegdatalength++] = i;
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)i;
     }
     for (dest = 0; dest < t2p->tiff_samplesperpixel; dest++)
     {
@@ -3967,7 +3981,7 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0xdb;
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0x43;
-        ojpegdata[t2p->pdf_ojpegdatalength++] = dest;
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)dest;
         _TIFFmemcpy(&(ojpegdata[t2p->pdf_ojpegdatalength++]),
                     &(((unsigned char *)q)[64 * dest]), 64);
         t2p->pdf_ojpegdatalength += 64;
@@ -3988,8 +4002,8 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         {
             code_count += ojpegdata[t2p->pdf_ojpegdatalength++];
         }
-        ojpegdata[offset_ms_l] = ((19 + code_count) >> 8) & 0xff;
-        ojpegdata[offset_ms_l + 1] = (19 + code_count) & 0xff;
+        ojpegdata[offset_ms_l] = (unsigned char)(((19 + code_count) >> 8) & 0xff);
+        ojpegdata[offset_ms_l + 1] = (unsigned char)((19 + code_count) & 0xff);
         _TIFFmemcpy(&(ojpegdata[t2p->pdf_ojpegdatalength]),
                     &(((unsigned char *)dc)[offset_table]), code_count);
         offset_table += code_count;
@@ -4014,8 +4028,8 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
             {
                 code_count += ojpegdata[t2p->pdf_ojpegdatalength++];
             }
-            ojpegdata[offset_ms_l] = ((19 + code_count) >> 8) & 0xff;
-            ojpegdata[offset_ms_l + 1] = (19 + code_count) & 0xff;
+            ojpegdata[offset_ms_l] = (unsigned char)(((19 + code_count) >> 8) & 0xff);
+            ojpegdata[offset_ms_l + 1] = (unsigned char)((19 + code_count) & 0xff);
             _TIFFmemcpy(&(ojpegdata[t2p->pdf_ojpegdatalength]),
                         &(((unsigned char *)ac)[offset_table]), code_count);
             offset_table += code_count;
@@ -4028,18 +4042,18 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0xdd;
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0x04;
-        h_samp *= 8;
-        v_samp *= 8;
-        ri = (t2p->tiff_width + h_samp - 1) / h_samp;
+        h_samp = (uint16_t)(h_samp * 8);
+        v_samp = (uint16_t)(v_samp * 8);
+        ri = (uint16_t)((t2p->tiff_width + h_samp - 1) / h_samp);
         TIFFGetField(input, TIFFTAG_ROWSPERSTRIP, &rows);
-        ri *= (rows + v_samp - 1) / v_samp;
-        ojpegdata[t2p->pdf_ojpegdatalength++] = (ri >> 8) & 0xff;
-        ojpegdata[t2p->pdf_ojpegdatalength++] = ri & 0xff;
+        ri = (uint16_t)(ri * ((rows + v_samp - 1) / v_samp));
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)((ri >> 8) & 0xff);
+        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(ri & 0xff);
     }
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0xff;
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0xda;
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
-    ojpegdata[t2p->pdf_ojpegdatalength++] = (6 + 2 * t2p->tiff_samplesperpixel);
+    ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(6 + 2 * t2p->tiff_samplesperpixel);
     ojpegdata[t2p->pdf_ojpegdatalength++] = t2p->tiff_samplesperpixel & 0xff;
     for (i = 0; i < t2p->tiff_samplesperpixel; i++)
     {
@@ -4443,7 +4457,14 @@ tsize_t t2p_write_pdf_obj_start(uint32_t number, TIFF *output)
     const char mod[] = "t2p_write_pdf_obj_start()";
 
     buflen = snprintf(buffer, sizeof(buffer), "%" PRIu32, number);
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127) /* conditional expression is constant */
+#endif
     check_snprintf_ret((T2P *)NULL, buflen, buffer);
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
     add_t2pWriteFile_check_2(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check_2(output, (tdata_t) " 0 obj\n", 7, mod, written);
 
@@ -4714,7 +4735,14 @@ tsize_t t2p_write_pdf_stream_dict(tsize_t len, uint32_t number, TIFF *output)
     else
     {
         buflen = snprintf(buffer, sizeof(buffer), "%" PRIu32, number);
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127) /* conditional expression is constant */
+#endif
         check_snprintf_ret((T2P *)NULL, buflen, buffer);
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
         add_t2pWriteFile_check_2(output, (tdata_t)buffer, buflen, mod, written);
         add_t2pWriteFile_check_2(output, (tdata_t) " 0 R \n", 6, mod, written);
     }
@@ -4766,7 +4794,14 @@ tsize_t t2p_write_pdf_stream_length(tsize_t len, TIFF *output)
     const char mod[] = "t2p_write_pdf_stream_length()";
 
     buflen = snprintf(buffer, sizeof(buffer), "%" TIFF_SSIZE_FORMAT, len);
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127) /* conditional expression is constant */
+#endif
     check_snprintf_ret((T2P *)NULL, buflen, buffer);
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
     add_t2pWriteFile_check_2(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check_2(output, (tdata_t) "\n", 1, mod, written);
 

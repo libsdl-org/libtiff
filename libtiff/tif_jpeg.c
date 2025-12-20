@@ -174,6 +174,10 @@ typedef struct jpeg_error_mgr jpeg_error_mgr;
  *     so we can safely cast JPEGState* -> jpeg_xxx_struct*
  *     and vice versa!
  */
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4324) /* structure padding due to alignment */
+#endif
 typedef struct
 {
     union
@@ -209,6 +213,9 @@ typedef struct
 
     int encode_raw_error;
 } JPEGState;
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #define JState(tif) ((JPEGState *)(tif)->tif_data)
 

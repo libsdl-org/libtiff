@@ -422,7 +422,7 @@ static void processZIPOptions(char *cp)
         {
             cp++;
             if (isdigit((int)*cp))
-                defpredictor = atoi(cp);
+                defpredictor = (uint16_t)atoi(cp);
             else if (*cp == 'p')
                 defpreset = atoi(++cp);
             else if (*cp == 's')
@@ -513,7 +513,7 @@ static int processCompressOptions(char *opt)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            defpredictor = atoi(cp + 1);
+            defpredictor = (uint16_t)atoi(cp + 1);
         defcompression = COMPRESSION_LZW;
     }
     else if (strneq(opt, "zip", 3))

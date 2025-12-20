@@ -248,9 +248,9 @@ int main(int argc, char *argv[])
      */
     for (i = 0, ptr = usedboxes; ptr != NULL; ++i, ptr = ptr->next)
     {
-        rm[i] = ((ptr->rmin + ptr->rmax) << COLOR_SHIFT) / 2;
-        gm[i] = ((ptr->gmin + ptr->gmax) << COLOR_SHIFT) / 2;
-        bm[i] = ((ptr->bmin + ptr->bmax) << COLOR_SHIFT) / 2;
+        rm[i] = (uint16_t)(((ptr->rmin + ptr->rmax) << COLOR_SHIFT) / 2);
+        gm[i] = (uint16_t)(((ptr->gmin + ptr->gmax) << COLOR_SHIFT) / 2);
+        bm[i] = (uint16_t)(((ptr->bmin + ptr->bmax) << COLOR_SHIFT) / 2);
     }
 
     /* We're done with the boxes now */
@@ -342,14 +342,14 @@ static int processCompressOptions(char *opt)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_LZW;
     }
     else if (strneq(opt, "zip", 3))
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_ADOBE_DEFLATE;
     }
     else
@@ -387,21 +387,21 @@ static const char usage_info[] =
 
 static void usage(int code)
 {
-    FILE *out = (code == EXIT_SUCCESS) ? stdout : stderr;
+    FILE *local_out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
-    fprintf(out, "%s\n\n", TIFFGetVersion());
-    fprintf(out, "%s", usage_info);
+    fprintf(local_out, "%s\n\n", TIFFGetVersion());
+    fprintf(local_out, "%s", usage_info);
     exit(code);
 }
 
-static void get_histogram(TIFF *in, Colorbox *box)
+static void get_histogram(TIFF *local_in, Colorbox *box)
 {
     unsigned char *inptr;
     int red, green, blue;
     uint32_t j, i;
     unsigned char *inputline;
 
-    inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
+    inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(local_in));
     if (inputline == NULL)
     {
         fprintf(stderr, "No space for scanline buffer\n");
@@ -418,7 +418,7 @@ static void get_histogram(TIFF *in, Colorbox *box)
     }
     for (i = 0; i < imagelength; i++)
     {
-        if (TIFFReadScanline(in, inputline, i, 0) <= 0)
+        if (TIFFReadScanline(local_in, inputline, i, 0) <= 0)
         {
             fprintf(stderr, "Error reading scanline\n");
             exit(EXIT_FAILURE);
@@ -807,7 +807,7 @@ static void map_colortable(void)
             {
                 if (*histp == 0)
                 {
-                    *histp = -1;
+                    *histp = (uint32_t)-1;
                     continue;
                 }
                 cell = *(ColorCells +
@@ -844,18 +844,18 @@ static void map_colortable(void)
  * closest to it.  Color values are rounded to the nearest color
  * table entry.
  */
-static void quant(TIFF *in, TIFF *out)
+static void quant(TIFF *local_in, TIFF *local_out)
 {
     unsigned char *outline, *inputline;
     unsigned char *outptr, *inptr;
     uint32_t i, j;
     int red, green, blue;
 
-    inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
+    inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(local_in));
     outline = (unsigned char *)_TIFFmalloc(imagewidth);
     for (i = 0; i < imagelength; i++)
     {
-        if (TIFFReadScanline(in, inputline, i, 0) <= 0)
+        if (TIFFReadScanline(local_in, inputline, i, 0) <= 0)
             break;
         inptr = inputline;
         outptr = outline;
@@ -866,7 +866,7 @@ static void quant(TIFF *in, TIFF *out)
             blue = *inptr++ >> COLOR_SHIFT;
             *outptr++ = (unsigned char)histogram[red][green][blue];
         }
-        if (TIFFWriteScanline(out, outline, i, 0) < 0)
+        if (TIFFWriteScanline(local_out, outline, i, 0) < 0)
             break;
     }
     _TIFFfree(inputline);
@@ -907,7 +907,7 @@ static void quant(TIFF *in, TIFF *out)
         cshift >>= COLOR_SHIFT;                                                \
     } while (0);
 
-static void quant_fsdither(TIFF *in, TIFF *out)
+static void quant_fsdither(TIFF *local_in, TIFF *local_out)
 {
     unsigned char *outline, *inputline, *inptr;
     short *thisline, *nextline;
@@ -919,18 +919,18 @@ static void quant_fsdither(TIFF *in, TIFF *out)
 
     imax = imagelength - 1;
     jmax = imagewidth - 1;
-    inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(in));
+    inputline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(local_in));
     thisline = (short *)_TIFFmalloc(imagewidth * 3 * sizeof(short));
     nextline = (short *)_TIFFmalloc(imagewidth * 3 * sizeof(short));
-    outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
+    outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(local_out));
 
-    GetInputLine(in, 0, goto bad); /* get first line */
+    GetInputLine(local_in, 0, goto bad); /* get first line */
     for (i = 0; i < imagelength; ++i)
     {
         SWAP(short *, thisline, nextline);
         lastline = (i == imax);
         if (i <= imax)
-            GetInputLine(in, i, break);
+            GetInputLine(local_in, i, break);
         thisptr = thisline;
         nextptr = nextline;
         outptr = outline;
@@ -975,37 +975,37 @@ static void quant_fsdither(TIFF *in, TIFF *out)
                 }
                 histogram[r2][g2][b2] = oval;
             }
-            *outptr++ = oval;
+            *outptr++ = (unsigned char)oval;
             red -= rm[oval];
             green -= gm[oval];
             blue -= bm[oval];
             if (!lastpixel)
             {
-                thisptr[0] += blue * 7 / 16;
-                thisptr[1] += green * 7 / 16;
-                thisptr[2] += red * 7 / 16;
+                thisptr[0] += (short)(blue * 7 / 16);
+                thisptr[1] += (short)(green * 7 / 16);
+                thisptr[2] += (short)(red * 7 / 16);
             }
             if (!lastline)
             {
                 if (j != 0)
                 {
-                    nextptr[-3] += blue * 3 / 16;
-                    nextptr[-2] += green * 3 / 16;
-                    nextptr[-1] += red * 3 / 16;
+                    nextptr[-3] += (short)(blue * 3 / 16);
+                    nextptr[-2] += (short)(green * 3 / 16);
+                    nextptr[-1] += (short)(red * 3 / 16);
                 }
-                nextptr[0] += blue * 5 / 16;
-                nextptr[1] += green * 5 / 16;
-                nextptr[2] += red * 5 / 16;
+                nextptr[0] += (short)(blue * 5 / 16);
+                nextptr[1] += (short)(green * 5 / 16);
+                nextptr[2] += (short)(red * 5 / 16);
                 if (!lastpixel)
                 {
-                    nextptr[3] += blue / 16;
-                    nextptr[4] += green / 16;
-                    nextptr[5] += red / 16;
+                    nextptr[3] += (short)(blue / 16);
+                    nextptr[4] += (short)(green / 16);
+                    nextptr[5] += (short)(red / 16);
                 }
                 nextptr += 3;
             }
         }
-        if (TIFFWriteScanline(out, outline, i, 0) < 0)
+        if (TIFFWriteScanline(local_out, outline, i, 0) < 0)
             break;
     }
 bad:

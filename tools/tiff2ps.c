@@ -2618,16 +2618,16 @@ int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
                 switch (ncomps)
                 {
                     case 1:
-                        buf_data[j++] = buf_data[i] + adjust;
+                        buf_data[j++] = (unsigned char)(buf_data[i] + adjust);
                         break;
                     case 2:
-                        buf_data[j++] = buf_data[i] + adjust;
-                        buf_data[j++] = buf_data[i + 1] + adjust;
+                        buf_data[j++] = (unsigned char)(buf_data[i] + adjust);
+                        buf_data[j++] = (unsigned char)(buf_data[i + 1] + adjust);
                         break;
                     case 3:
-                        buf_data[j++] = buf_data[i] + adjust;
-                        buf_data[j++] = buf_data[i + 1] + adjust;
-                        buf_data[j++] = buf_data[i + 2] + adjust;
+                        buf_data[j++] = (unsigned char)(buf_data[i] + adjust);
+                        buf_data[j++] = (unsigned char)(buf_data[i + 1] + adjust);
+                        buf_data[j++] = (unsigned char)(buf_data[i + 2] + adjust);
                         break;
                 }
             }
@@ -2846,7 +2846,7 @@ void PSDataColorContig(FILE *fd, TIFF *tif, uint32_t w, uint32_t h, int nc)
                 adjust = 255 - cp[nc];
                 for (int i = 0; i < nc; ++i)
                 {
-                    c = *cp++ + adjust;
+                    c = (unsigned char)(*cp++ + adjust);
                     puthex(c, fd);
                 }
                 cp += es;
@@ -2888,7 +2888,7 @@ void PSDataColorSeparate(FILE *fd, TIFF *tif, uint32_t w, uint32_t h, int nc)
         TIFFError(filename, "No space for scanline buffer");
         return;
     }
-    maxs = (samplesperpixel > nc ? nc : samplesperpixel);
+    maxs = (uint16_t)(samplesperpixel > nc ? nc : samplesperpixel);
     for (row = 0; row < h; row++)
     {
         for (s = 0; s < maxs; s++)
@@ -3096,7 +3096,7 @@ void PSDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
                 for (i = 0; i < (cc - 1); i += 2)
                 {
                     adjust = 255 - cp[i + 1];
-                    cp[i / 2] = cp[i] + adjust;
+                    cp[i / 2] = (unsigned char)(cp[i] + adjust);
                 }
                 cc /= 2;
             }
@@ -3127,7 +3127,7 @@ void PSDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
                      * where Cback = 1.
                      */
                     adjust = 255 - cp[1];
-                    c = *cp++ + adjust;
+                    c = (unsigned char)(*cp++ + adjust);
                     puthex(c, fd);
                     cp++, cc--;
                 }

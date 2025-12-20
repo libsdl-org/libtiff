@@ -225,9 +225,9 @@ int main(int argc, char *argv[])
                 short wc;
 
                 if (TIFFFieldWriteCount(fip) == TIFF_VARIABLE)
-                    wc = atoi(argv[arg_index++]);
+                    wc = (short)atoi(argv[arg_index++]);
                 else
-                    wc = TIFFFieldWriteCount(fip);
+                    wc = (short)TIFFFieldWriteCount(fip);
 
                 if (argc - arg_index < wc)
                 {
@@ -294,22 +294,22 @@ int main(int argc, char *argv[])
                         case TIFF_BYTE:
                             for (i = 0; i < wc; i++)
                                 ((uint8_t *)array)[i] =
-                                    atoi(argv[arg_index + i]);
+                                    (uint8_t)atoi(argv[arg_index + i]);
                             break;
                         case TIFF_SHORT:
                             for (i = 0; i < wc; i++)
                                 ((uint16_t *)array)[i] =
-                                    atoi(argv[arg_index + i]);
+                                    (uint16_t)atoi(argv[arg_index + i]);
                             break;
                         case TIFF_SBYTE:
                             for (i = 0; i < wc; i++)
                                 ((int8_t *)array)[i] =
-                                    atoi(argv[arg_index + i]);
+                                    (int8_t)atoi(argv[arg_index + i]);
                             break;
                         case TIFF_SSHORT:
                             for (i = 0; i < wc; i++)
                                 ((int16_t *)array)[i] =
-                                    atoi(argv[arg_index + i]);
+                                    (int16_t)atoi(argv[arg_index + i]);
                             break;
                         case TIFF_LONG:
                             for (i = 0; i < wc; i++)

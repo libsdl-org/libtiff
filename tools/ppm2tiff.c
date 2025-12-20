@@ -147,16 +147,16 @@ static void pack_words(unsigned char *buf, unsigned int smpls, uint16_t bps)
         {
 
             bits -= 16;
-            buf[out++] = (t >> (bits + 8));
-            buf[out++] = (t >> (bits + 0));
+            buf[out++] = (unsigned char)(t >> (bits + 8));
+            buf[out++] = (unsigned char)(t >> (bits + 0));
         }
     }
     if (0 != bits)
     {
         t <<= 16 - bits;
 
-        buf[out++] = (t >> (0 + 8));
-        buf[out++] = (t >> (0 + 0));
+        buf[out++] = (unsigned char)(t >> (0 + 8));
+        buf[out++] = (unsigned char)(t >> (0 + 0));
     }
 }
 
@@ -180,7 +180,9 @@ int main(int argc, char *argv[])
     double resolution = -1;
     unsigned char *buf = NULL;
     tmsize_t linebytes = 0;
-    int pbm;
+    /* Initialize to suppress false positive MSVC warning.
+     * Variable is always initialized in switch below, or BadPPM() exits. */
+    int pbm = 0;
     uint16_t spp = 1;
     uint16_t bpp = 8;
     void (*pack_func)(unsigned char *buf, unsigned int smpls, uint16_t bps);
@@ -508,14 +510,14 @@ static int processCompressOptions(char *opt)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_LZW;
     }
     else if (strneq(opt, "zip", 3))
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_ADOBE_DEFLATE;
     }
     else
