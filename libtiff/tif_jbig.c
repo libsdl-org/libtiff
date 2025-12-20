@@ -33,7 +33,14 @@
 #include "tiffiop.h"
 
 #ifdef JBIG_SUPPORT
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include "jbig.h"
+#ifdef __cplusplus
+}
+#endif
 
 static int JBIGSetupDecode(TIFF *tif)
 {
