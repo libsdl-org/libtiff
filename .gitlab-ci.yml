@@ -4,8 +4,8 @@ default:
 
 stages:
   - pre-build
+  - compat
   - build
-  - test
   - static-analysis
   - pages
 
@@ -84,7 +84,7 @@ linux-cmake-make-old:
     - sh build/gitlab-ci cmake "Unix Makefiles" Release
 
 gcc-cpp-compat:
-  stage: test
+  stage: compat
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   script:
@@ -107,7 +107,7 @@ freebsd15-debug:
     - sh build/gitlab-ci cmake Ninja Debug
 
 clang-cpp-compat:
-  stage: test
+  stage: compat
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   tags: [freebsd15]
