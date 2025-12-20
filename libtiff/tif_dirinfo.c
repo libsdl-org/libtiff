@@ -66,6 +66,9 @@ extern const TIFFFieldArray gpsFieldArray;
 #elif defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wc++-compat"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4132)
 #endif
 static const TIFFFieldArray tiffFieldArray;
 static const TIFFFieldArray exifFieldArray;
@@ -74,6 +77,8 @@ static const TIFFFieldArray gpsFieldArray;
 #pragma GCC diagnostic pop
 #elif defined(__clang__)
 #pragma clang diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
 #endif
 #endif
 /*--: Rational2Double: --
