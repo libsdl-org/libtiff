@@ -67,8 +67,17 @@
 
 #define TIFF_DIR_MAX 65534
 
-void TIFFBuildOverviews(TIFF *, int, int *, int, const char *,
-                        int (*)(double, void *), void *);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+    void TIFFBuildOverviews(TIFF *, int, int *, int, const char *,
+                            int (*)(double, void *), void *);
+
+#ifdef __cplusplus
+}
+#endif
 
 /************************************************************************/
 /*                         TIFF_WriteOverview()                         */

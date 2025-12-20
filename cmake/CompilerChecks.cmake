@@ -145,16 +145,40 @@ foreach(flag ${test_flags})
     endif (${test_c_flag})
 endforeach(flag ${test_flags})
 
-# Compile C files as C++ for compatibility checking
-if(cxx-compat-mode)
-    if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
-            CMAKE_C_COMPILER_ID MATCHES "Clang")
-        # -x c++ forces C++ mode, -std=c++17 for modern C++ compliance
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -x c++ -std=c++17")
-        message(STATUS "C++ compatibility mode enabled: compiling C files as C++17")
-    elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-        # /TP forces C++ mode for all source files
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /TP /std:c++17")
-        message(STATUS "C++ compatibility mode enabled: compiling C files as C++17")
+# Function to compile a target's C sources as C++ for compatibility checking
+# This is a better approach than modifying CMAKE_C_FLAGS globally, as it:
+# - Doesn't break CMake's feature detection tests
+# - Uses proper target properties instead of global flags
+# - Follows CMake best practices
+function(tiff_target_compile_as_cxx target_name)
+    if(NOT cxx-compat-mode)
+        return()
     endif()
-endif()
+
+    # Get all source files for the target
+    get_target_property(target_sources ${target_name} SOURCES)
+
+    # Filter for C source files (*.c)
+    set(c_sources "")
+    foreach(source ${target_sources})
+        if(source MATCHES "\\.c$")
+            list(APPEND c_sources ${source})
+        endif()
+    endforeach()
+
+    if(c_sources)
+        # Set these C files to be compiled as C++
+        set_source_files_properties(${c_sources}
+            PROPERTIES
+                LANGUAGE CXX
+        )
+        # Use target properties for C++ standard (more portable than COMPILE_FLAGS)
+        set_target_properties(${target_name}
+            PROPERTIES
+                CXX_STANDARD 17
+                CXX_STANDARD_REQUIRED ON
+                CXX_EXTENSIONS OFF
+        )
+        message(STATUS "C++ compatibility mode: compiling ${target_name} C sources as C++17")
+    endif()
+endfunction()

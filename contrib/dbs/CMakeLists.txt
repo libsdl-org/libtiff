@@ -38,6 +38,11 @@ add_executable(tiff-rgb tiff-rgb.c)
 set_target_properties(tiff-rgb PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(tiff-rgb tiff tiff_port ${CMath_LIBRARIES})
 
+# Apply C++ compatibility mode to all contrib/dbs targets if enabled
+foreach(target tiff-bi tiff-grayscale tiff-palette tiff-rgb)
+  tiff_target_compile_as_cxx(${target})
+endforeach()
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.

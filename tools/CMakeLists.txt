@@ -176,6 +176,38 @@ if(OPENGL_SUPPORT)
           RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 endif()
 
+# Apply C++ compatibility mode to all tool targets if enabled
+foreach(target fax2ps
+               fax2tiff
+               pal2rgb
+               ppm2tiff
+               raw2tiff
+               rgb2ycbcr
+               thumbnail
+               tiff2bw
+               tiff2pdf
+               tiff2ps
+               tiff2rgba
+               tiffcmp
+               tiffcp
+               tiffcrop
+               tiffdither
+               tiffdump
+               tiffinfo
+               tiffmedian
+               tiffset
+               tiffsplit)
+  tiff_target_compile_as_cxx(${target})
+endforeach()
+
+if(NOT CMAKE_CROSSCOMPILING)
+  tiff_target_compile_as_cxx(tiff_mkg3states)
+endif()
+
+if(OPENGL_SUPPORT)
+  tiff_target_compile_as_cxx(tiffgt)
+endif()
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.
