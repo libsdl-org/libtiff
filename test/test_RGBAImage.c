@@ -195,18 +195,18 @@ int write_image_data(TIFF *tif, uint32_t width, uint32_t length, bool tiled,
     size_t bufLen;
     unsigned char *pbufLine = NULL;
     unsigned int bpsmod = (1 << BPS);
-    uint32_t tlwidth;
-    uint32_t tllength;
+    uint32_t tlwidth = 0;
+    uint32_t tllength = 0;
     tmsize_t tlsize;
 
-    uint16_t planarconfig, samples_per_pixel;
-    uint32_t rows_per_strip = 0;
+    uint16_t local_planarconfig, samples_per_pixel;
+    uint32_t local_rows_per_strip = 0;
 
     (void)pixval;
 
     const char *filename = TIFFFileName(tif);
 
-    TIFFGetField_M(tif, TIFFTAG_PLANARCONFIG, &planarconfig, filename,
+    TIFFGetField_M(tif, TIFFTAG_PLANARCONFIG, &local_planarconfig, filename,
                    __LINE__);
     TIFFGetField_M(tif, TIFFTAG_SAMPLESPERPIXEL, &samples_per_pixel, filename,
                    __LINE__);
@@ -221,7 +221,7 @@ int write_image_data(TIFF *tif, uint32_t width, uint32_t length, bool tiled,
     }
     else
     {
-        TIFFGetField_M(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip, filename,
+        TIFFGetField_M(tif, TIFFTAG_ROWSPERSTRIP, &local_rows_per_strip, filename,
                        __LINE__);
         /* For strip mode get size of a row in bytes */
         bufLen = (((size_t)width * SPP * BPS) + 7) / 8;
@@ -238,7 +238,7 @@ int write_image_data(TIFF *tif, uint32_t width, uint32_t length, bool tiled,
          * the other. */
         uint32_t numtiles = TIFFNumberOfTiles(tif);
         uint32_t this_spp =
-            (planarconfig < PLANARCONFIG_SEPARATE ? 0 : (SPP - 1));
+            (local_planarconfig < PLANARCONFIG_SEPARATE ? 0 : (SPP - 1));
         uint32_t last_width = width % tlwidth;
         uint32_t tiles_per_row = width / tlwidth + (last_width > 0 ? 1 : 0);
         uint32_t last_length = length % tllength;
@@ -927,57 +927,57 @@ int test_ReadRGBAImage(const char *filename, unsigned int openMode,
     /*=== Test basic function TIFFRGBAImageGet() ===*/
     /* Full image */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width, length,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
 
     /* More lines - result will be different for NewCode - */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width, length + 2,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
 
     /* Less lines */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width, length - 1,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
 
     /* Less columns */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width - 3, length,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
 
     /* Less lines and less columns */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width - 5,
                                           length - 1, orientation,
-                                          req_orientation, __LINE__)))
+                                          (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /* More columns. */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width + 2, length,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
 
     /* More rows and columns. */
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width + 2,
                                           length + 2, orientation,
-                                          req_orientation, __LINE__)))
+                                          (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- Test an invalid raster size --*/
     if ((ret = testRGBAImageReadFunctions(tif, width, length, width, 0,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadFunctions(tif, width, length, 0, length,
-                                          orientation, req_orientation,
+                                          orientation, (uint16_t)req_orientation,
                                           __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadFunctions(tif, width, length, 0, 0, orientation,
-                                          req_orientation, __LINE__)))
+                                          (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*=== Testing reading with OFFSETs in the image file; raster can then also
@@ -986,35 +986,35 @@ int test_ReadRGBAImage(const char *filename, unsigned int openMode,
 testcase:
     if ((ret = testRGBAImageReadWithOffsets(tif, width, length, 0, length - 1,
                                             width, length, orientation,
-                                            req_orientation, __LINE__)))
+                                            (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(tif, width, length, 0, length - 4,
                                             width, 4, orientation,
-                                            req_orientation, __LINE__)))
+                                            (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(tif, width, length, 0, length - 4,
                                             width, 2, orientation,
-                                            req_orientation, __LINE__)))
+                                            (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- col_offset --*/
     if ((ret = testRGBAImageReadWithOffsets(tif, width, length, width - 2, 0,
                                             width, length, orientation,
-                                            req_orientation, __LINE__)))
+                                            (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(tif, width, length, width - 2, 0, 2,
                                             length, orientation,
-                                            req_orientation, __LINE__)))
+                                            (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(tif, width, length, width - 3, 0, 2,
                                             length, orientation,
-                                            req_orientation, __LINE__)))
+                                            (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- row_offset and col_offset --*/
     if ((ret = testRGBAImageReadWithOffsets(
              tif, width, length, width - 4, length - 2, width, length,
-             orientation, req_orientation, __LINE__)))
+             orientation, (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /* Here are some tests which are expected to fail. Suppress warning messages
@@ -1025,35 +1025,35 @@ testcase:
     /*-- row_offset --*/
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, 0, length,
                                              width, length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, 0, length + 5,
                                              width, length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, 0, -10, width,
                                              length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- col_offset --*/
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, width, 0,
                                              width, length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, width + 5, 0,
                                              width, length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, -15, 0, width,
                                              length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- row_offset and col_offset --*/
     if (!(ret = testRGBAImageReadWithOffsets(tif, width, length, -20, -30,
                                              width, length, orientation,
-                                             req_orientation, __LINE__)))
+                                             (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- Leaving function --*/
@@ -1183,13 +1183,13 @@ int main()
                             orientationStrings[orientation],
                             orientationStrings[req_orientation]);
                     /* clang-format off */
-                retval += test_ReadRGBAImage(filename, openMode, orientation,8, 4, tiled, req_orientation);  ntest++;
+                retval += test_ReadRGBAImage(filename, openMode, (uint16_t)orientation,8, 4, tiled, req_orientation);  ntest++;
                 if (retval != retvalLast) { fprintf(stdXOut, "    >>>> Test %d FAILED  (openMode %s; tiled=%d). <<<<\n\n", ntest, modeStrings[openMode], tiled); retvalLast = retval; }
-                retval += test_ReadRGBAImage(filename, openMode, orientation,16, 16, tiled, req_orientation);  ntest++;
+                retval += test_ReadRGBAImage(filename, openMode, (uint16_t)orientation,16, 16, tiled, req_orientation);  ntest++;
                 if (retval != retvalLast) { fprintf(stdXOut, "    >>>> Test %d FAILED  (openMode %s; tiled=%d). <<<<\n\n", ntest, modeStrings[openMode], tiled); retvalLast = retval; }
-                retval += test_ReadRGBAImage(filename, openMode, orientation,31, 18, tiled, req_orientation);  ntest++;
+                retval += test_ReadRGBAImage(filename, openMode, (uint16_t)orientation,31, 18, tiled, req_orientation);  ntest++;
                 if (retval != retvalLast) { fprintf(stdXOut, "    >>>> Test %d FAILED  (openMode %s; tiled=%d). <<<<\n\n", ntest, modeStrings[openMode], tiled); retvalLast = retval; }
-                retval += test_ReadRGBAImage(filename, openMode, orientation,32, 32, tiled, req_orientation);  ntest++;
+                retval += test_ReadRGBAImage(filename, openMode, (uint16_t)orientation,32, 32, tiled, req_orientation);  ntest++;
                 if (retval != retvalLast) { fprintf(stdXOut, "    >>>> Test %d FAILED  (openMode %s; tiled=%d). <<<<\n\n", ntest, modeStrings[openMode], tiled); retvalLast = retval; }
                     /* clang-format on */
                 }

@@ -115,6 +115,9 @@ else()
   set_property(SOURCE tif_unix.c APPEND PROPERTY COMPILE_DEFINITIONS ALLOW_TIFF_NON_EXT_ALLOC_FUNCTIONS)
 endif()
 
+# Apply C++ compatibility mode if enabled
+tiff_target_compile_as_cxx(tiff)
+
 target_include_directories(tiff
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

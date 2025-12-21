@@ -238,6 +238,11 @@ target_link_libraries(test_RGBAImage PRIVATE tiff tiff_port)
 target_compile_definitions(test_RGBAImage PRIVATE SOURCE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 list(APPEND simple_tests test_RGBAImage)
 
+# Apply C++ compatibility mode to all test targets if enabled
+foreach(target ${simple_tests})
+  tiff_target_compile_as_cxx(${target})
+endforeach()
+
 if(WEBP_SUPPORT AND EMSCRIPTEN)
   # Emscripten is pretty finnicky about linker flags.
   # It needs --shared-memory if and only if atomics or bulk-memory is used.

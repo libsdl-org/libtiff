@@ -159,7 +159,7 @@ int convertHTMLcodes(char *s, int len)
             }
             if (o < 5 && o < len)
                 strcpy(s + 1, s + 1 + o);
-            *s = val;
+            *s = (char)val;
             return o;
         }
     }
@@ -248,7 +248,7 @@ int formatIPTC(FILE *ifile, FILE *ofile)
                 c = getc(ifile);
                 if (c == EOF)
                     return -1;
-                buffer[i] = c;
+                buffer[i] = (unsigned char)c;
             }
             taglen = (((long)buffer[0]) << 24) | (((long)buffer[1]) << 16) |
                      (((long)buffer[2]) << 8) | (((long)buffer[3]));
@@ -285,7 +285,7 @@ int formatIPTC(FILE *ifile, FILE *ofile)
                 free(str);
                 return -1;
             }
-            str[tagindx] = c;
+            str[tagindx] = (char)c;
         }
         str[taglen] = 0;
 
@@ -750,11 +750,11 @@ void chstore(char *string, int max, char ch)
             switch (_p_flag & 3)
             {
                 case 1: /* convert to upper */
-                    c = toupper((int)ch);
+                    c = (char)toupper((int)ch);
                     break;
 
                 case 2: /* convert to lower */
-                    c = tolower((int)ch);
+                    c = (char)tolower((int)ch);
                     break;
 
                 default: /* use as is */

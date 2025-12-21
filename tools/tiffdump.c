@@ -363,7 +363,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         Error("Could only read %" PRIu32 " of %" PRIu16
               " entries in directory at offset %" PRIu64,
               n, dircount, off);
-        dircount = n;
+        dircount = (uint16_t)n;
         nextdiroff = 0;
     }
     else
@@ -435,7 +435,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         if (type >= NWIDTHS)
             typewidth = 0;
         else
-            typewidth = datawidth[type];
+            typewidth = (uint16_t)datawidth[type];
         datasize = TIFFSafeMultiply(tmsize_t, count, typewidth);
         datasizeoverflow = (typewidth > 0 && datasize / typewidth != count);
         datafits = 1;
@@ -545,7 +545,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
              * modulus. False positive because division by zero is checked in
              * PrintData(). */
             /* coverity[tainted_data:SUPPRESS] */
-            PrintData(stdout, type, (uint32_t)count, datamem);
+            PrintData(stdout, type, (uint32_t)count, (unsigned char *)datamem);
             if (datatruncated)
                 printf(" ...");
             if (!datafits)

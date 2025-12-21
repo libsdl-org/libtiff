@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
                     dtype = TIFF_DOUBLE;
                 else
                     dtype = TIFF_BYTE;
-                depth = TIFFDataWidth(dtype);
+                depth = (int16_t)TIFFDataWidth(dtype);
                 break;
             case 'L': /* input has lsb-to-msb fillorder */
                 fillorder = FILLORDER_LSB2MSB;
@@ -700,14 +700,14 @@ static int processCompressOptions(char *opt)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_LZW;
     }
     else if (strncmp(opt, "zip", 3) == 0)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_ADOBE_DEFLATE;
     }
     else

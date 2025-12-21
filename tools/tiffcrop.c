@@ -1308,15 +1308,15 @@ static int readSeparateTilesIntoBuffer(TIFF *in, uint8_t *obuf,
 static int writeBufferToContigStrips(TIFF *out, uint8_t *buf,
                                      uint32_t imagelength)
 {
-    uint32_t row, nrows, rowsperstrip;
+    uint32_t row, nrows, local_rowsperstrip;
     tstrip_t strip = 0;
     tsize_t stripsize;
 
-    TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
-    for (row = 0; row < imagelength; row += rowsperstrip)
+    TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &local_rowsperstrip);
+    for (row = 0; row < imagelength; row += local_rowsperstrip)
     {
-        nrows = (row + rowsperstrip > imagelength) ? imagelength - row
-                                                   : rowsperstrip;
+        nrows = (row + local_rowsperstrip > imagelength) ? imagelength - row
+                                                          : local_rowsperstrip;
         stripsize = TIFFVStripSize(out, nrows);
         if (TIFFWriteEncodedStrip(out, strip++, buf, stripsize) < 0)
         {
@@ -1344,7 +1344,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
 {
     uint8_t *src;
     uint16_t bps;
-    uint32_t row, nrows, rowsize, rowsperstrip;
+    uint32_t row, nrows, rowsize, local_rowsperstrip;
     uint32_t bytes_per_sample;
     tsample_t s;
     tstrip_t strip = 0;
@@ -1352,7 +1352,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
     tsize_t rowstripsize, scanlinesize = TIFFScanlineSize(out);
     tdata_t obuf;
 
-    (void)TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &rowsperstrip);
+    (void)TIFFGetFieldDefaulted(out, TIFFTAG_ROWSPERSTRIP, &local_rowsperstrip);
     (void)TIFFGetFieldDefaulted(out, TIFFTAG_BITSPERSAMPLE, &bps);
     bytes_per_sample = (bps + 7) / 8;
     if (width == 0 || (uint32_t)bps * (uint32_t)spp > UINT32_MAX / width ||
@@ -1365,15 +1365,15 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
     }
     rowsize =
         ((bps * spp * width) + 7U) / 8; /* source has interleaved samples */
-    if (bytes_per_sample == 0 || rowsperstrip > UINT32_MAX / bytes_per_sample ||
-        rowsperstrip * bytes_per_sample > UINT32_MAX / (width + 1))
+    if (bytes_per_sample == 0 || local_rowsperstrip > UINT32_MAX / bytes_per_sample ||
+        local_rowsperstrip * bytes_per_sample > UINT32_MAX / (width + 1))
     {
         TIFFError(TIFFFileName(out),
                   "Error, uint32_t overflow when computing rowsperstrip * "
                   "bytes_per_sample * (width + 1)");
         return 1;
     }
-    rowstripsize = (tsize_t)rowsperstrip * bytes_per_sample * (width + 1);
+    rowstripsize = (tsize_t)local_rowsperstrip * bytes_per_sample * (width + 1);
 
     /* Add 3 padding bytes for extractContigSamples32bits */
     obuf = limitMalloc(rowstripsize + NUM_BUFF_OVERSIZE_BYTES);
@@ -1382,14 +1382,14 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
 
     for (s = 0; s < spp; s++)
     {
-        for (row = 0; row < length; row += rowsperstrip)
+        for (row = 0; row < length; row += local_rowsperstrip)
         {
-            nrows = (row + rowsperstrip > length) ? length - row : rowsperstrip;
+            nrows = (row + local_rowsperstrip > length) ? length - row : local_rowsperstrip;
 
             stripsize = TIFFVStripSize(out, nrows);
             src = buf + (row * rowsize);
             memset(obuf, '\0', rowstripsize + NUM_BUFF_OVERSIZE_BYTES);
-            if (extractContigSamplesToBuffer(obuf, src, nrows, width, s, spp,
+            if (extractContigSamplesToBuffer((uint8_t *)obuf, src, nrows, width, s, spp,
                                              bps, dump))
             {
                 _TIFFfree(obuf);
@@ -1412,7 +1412,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
                     s + 1, strip + 1, stripsize, row + 1,
                     (uint32_t)scanlinesize, src - buf);
                 dump_buffer(dump->outfile, dump->format, nrows,
-                            (uint32_t)scanlinesize, row, obuf);
+                            (uint32_t)scanlinesize, row, (unsigned char *)obuf);
             }
 
             if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0)
@@ -1588,7 +1588,7 @@ static int writeBufferToSeparateTiles(TIFF *out, uint8_t *buf,
 
             for (s = 0; s < spp; s++)
             {
-                if (extractContigSamplesToTileBuffer(obuf, bufp, nrow, ncol,
+                if (extractContigSamplesToTileBuffer((uint8_t *)obuf, bufp, nrow, ncol,
                                                      imagewidth, tw, s, 1, spp,
                                                      bps, dump) > 0)
                 {
@@ -1681,14 +1681,14 @@ static int processCompressOptions(char *opt)
     {
         cp = strchr(opt, ':');
         if (cp)
-            defpredictor = atoi(cp + 1);
+            defpredictor = (uint16_t)atoi(cp + 1);
         defcompression = COMPRESSION_LZW;
     }
     else if (strneq(opt, "zip", 3))
     {
         cp = strchr(opt, ':');
         if (cp)
-            defpredictor = atoi(cp + 1);
+            defpredictor = (uint16_t)atoi(cp + 1);
         defcompression = COMPRESSION_ADOBE_DEFLATE;
     }
     else
@@ -2085,14 +2085,14 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                     /* convert option to lowercase */
                     end = (unsigned int)strlen(opt_ptr);
                     for (i = 0; i < end; i++)
-                        *(opt_ptr + i) = tolower((int)*(opt_ptr + i));
+                        *(opt_ptr + i) = (char)tolower((int)*(opt_ptr + i));
                     /* Look for dump format specification */
                     if (strncmp(opt_ptr, "for", 3) == 0)
                     {
                         /* convert value to lowercase */
                         end = (unsigned int)strlen(opt_offset + 1);
                         for (i = 1; i <= end; i++)
-                            *(opt_offset + i) = tolower((int)*(opt_offset + i));
+                            *(opt_offset + i) = (char)tolower((int)*(opt_offset + i));
                         /* check dump format value */
                         if (strncmp(opt_offset + 1, "txt", 3) == 0)
                         {
@@ -3576,9 +3576,9 @@ static int extractContigSamples24bits(uint8_t *in, uint8_t *out, uint32_t cols,
             }
             else /* If we have a full buffer's worth, write it out */
             {
-                bytebuff1 = (buff2 >> 24);
+                bytebuff1 = (uint8_t)(buff2 >> 24);
                 *dst++ = bytebuff1;
-                bytebuff2 = (buff2 >> 16);
+                bytebuff2 = (uint8_t)(buff2 >> 16);
                 *dst++ = bytebuff2;
                 ready_bits -= 16;
 
@@ -4018,9 +4018,9 @@ static int extractContigSamplesShifted24bits(uint8_t *in, uint8_t *out,
             }
             else /* If we have a full buffer's worth, write it out */
             {
-                bytebuff1 = (buff2 >> 24);
+                bytebuff1 = (uint8_t)(buff2 >> 24);
                 *dst++ = bytebuff1;
-                bytebuff2 = (buff2 >> 16);
+                bytebuff2 = (uint8_t)(buff2 >> 16);
                 *dst++ = bytebuff2;
                 ready_bits -= 16;
 
@@ -4253,7 +4253,7 @@ static int extractContigSamplesToBuffer(uint8_t *out, uint8_t *in,
 
 static int extractContigSamplesToTileBuffer(
     uint8_t *out, uint8_t *in, uint32_t rows, uint32_t cols,
-    uint32_t imagewidth, uint32_t tilewidth, tsample_t sample, uint16_t count,
+    uint32_t imagewidth, uint32_t local_tilewidth, tsample_t sample, uint16_t count,
     uint16_t spp, uint16_t bps, struct dump_opts *dump)
 {
     int shift_width, bytes_per_sample, bytes_per_pixel;
@@ -4281,7 +4281,7 @@ static int extractContigSamplesToTileBuffer(
     }
 
     src_rowsize = ((bps * spp * imagewidth) + 7) / 8;
-    dst_rowsize = ((bps * tilewidth * count) + 7) / 8;
+    dst_rowsize = ((bps * local_tilewidth * count) + 7) / 8;
 
     for (row = 0; row < rows; row++)
     {
@@ -4341,7 +4341,6 @@ static int readContigStripsIntoBuffer(TIFF *in, uint8_t *buf)
     uint32_t strip, nstrips = TIFFNumberOfStrips(in);
     tmsize_t stripsize = TIFFStripSize(in);
     tmsize_t rows = 0;
-    uint32_t rps = TIFFGetFieldDefaulted(in, TIFFTAG_ROWSPERSTRIP, &rps);
     tsize_t scanline_size = TIFFScanlineSize(in);
 
     if (scanline_size == 0)
@@ -4720,9 +4719,9 @@ static int combineSeparateSamples24bits(uint8_t *in[], uint8_t *out,
                 /* If we have a full buffer's worth, write it out */
                 if (ready_bits >= 16)
                 {
-                    bytebuff1 = (buff2 >> 24);
+                    bytebuff1 = (uint8_t)(buff2 >> 24);
                     *dst++ = bytebuff1;
-                    bytebuff2 = (buff2 >> 16);
+                    bytebuff2 = (uint8_t)(buff2 >> 16);
                     *dst++ = bytebuff2;
                     ready_bits -= 16;
 
@@ -5286,9 +5285,9 @@ static int combineSeparateTileSamples24bits(uint8_t *in[], uint8_t *out,
                 /* If we have a full buffer's worth, write it out */
                 if (ready_bits >= 16)
                 {
-                    bytebuff1 = (buff2 >> 24);
+                    bytebuff1 = (uint8_t)(buff2 >> 24);
                     *dst++ = bytebuff1;
-                    bytebuff2 = (buff2 >> 16);
+                    bytebuff2 = (uint8_t)(buff2 >> 16);
                     *dst++ = bytebuff2;
                     ready_bits -= 16;
 
@@ -6577,7 +6576,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
         i++;
     }
     /* set number of generated regions out of given zones */
-    crop->selections = i;
+    crop->selections = (uint16_t)i;
     return (0);
 } /* end getCropOffsets */
 
@@ -9598,9 +9597,9 @@ static int rotateContigSamples24bits(uint16_t rotation, uint16_t spp,
             /* If we have a full buffer's worth, write it out */
             if (ready_bits >= 16)
             {
-                bytebuff1 = (buff2 >> 24);
+                bytebuff1 = (uint8_t)(buff2 >> 24);
                 *dst++ = bytebuff1;
-                bytebuff2 = (buff2 >> 16);
+                bytebuff2 = (uint8_t)(buff2 >> 16);
                 *dst++ = bytebuff2;
                 ready_bits -= 16;
 
@@ -10294,9 +10293,9 @@ static int reverseSamples24bits(uint16_t spp, uint16_t bps, uint32_t width,
             }
             else /* If we have a full buffer's worth, write it out */
             {
-                bytebuff1 = (buff2 >> 24);
+                bytebuff1 = (uint8_t)(buff2 >> 24);
                 *dst++ = bytebuff1;
-                bytebuff2 = (buff2 >> 16);
+                bytebuff2 = (uint8_t)(buff2 >> 16);
                 *dst++ = bytebuff2;
                 ready_bits -= 16;
 

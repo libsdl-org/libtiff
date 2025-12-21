@@ -422,7 +422,7 @@ static void processZIPOptions(char *cp)
         {
             cp++;
             if (isdigit((int)*cp))
-                defpredictor = atoi(cp);
+                defpredictor = (uint16_t)atoi(cp);
             else if (*cp == 'p')
                 defpreset = atoi(++cp);
             else if (*cp == 's')
@@ -513,7 +513,7 @@ static int processCompressOptions(char *opt)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            defpredictor = atoi(cp + 1);
+            defpredictor = (uint16_t)atoi(cp + 1);
         defcompression = COMPRESSION_LZW;
     }
     else if (strneq(opt, "zip", 3))
@@ -1225,8 +1225,8 @@ typedef void biasFn(void *image, void *bias, uint32_t pixels);
 #define subtract(bits)                                                         \
     static void subtract##bits(void *i, void *b, uint32_t pixels)              \
     {                                                                          \
-        uint##bits##_t *image = i;                                             \
-        uint##bits##_t *biasx = b;                                             \
+        uint##bits##_t *image = (uint##bits##_t *)i;                           \
+        uint##bits##_t *biasx = (uint##bits##_t *)b;                           \
         while (pixels--)                                                       \
         {                                                                      \
             *image = *image > *biasx ? *image - *biasx : 0;                    \
@@ -1708,7 +1708,7 @@ DECLAREreadFunc(readSeparateStripsIntoBuffer)
             {
                 uint8_t *bp = bufp + s;
                 tsize_t n = scanlinesize;
-                uint8_t *sbuf = scanline;
+                uint8_t *sbuf = (uint8_t *)scanline;
 
                 if (TIFFReadScanline(in, scanline, row, s) < 0 && !ignore)
                 {
@@ -1796,11 +1796,11 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
             {
                 uint32_t width = imagew - colb;
                 uint32_t oskew = tilew - width;
-                cpStripToTile(bufp + colb, tilebuf, nrow, width, oskew + iskew,
+                cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, width, oskew + iskew,
                               oskew);
             }
             else
-                cpStripToTile(bufp + colb, tilebuf, nrow, tilew, iskew, 0);
+                cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, tilew, iskew, 0);
             colb += tilew;
         }
         bufp += imagew * nrow;
@@ -1895,13 +1895,13 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                     uint32_t width = imagew - colb;
                     int oskew = tilew * spp - width;
                     cpSeparateBufToContigBuf(
-                        bufp + colb + s * bytes_per_sample, tilebuf, nrow,
+                        bufp + colb + s * bytes_per_sample, (uint8_t *)tilebuf, nrow,
                         width / (spp * bytes_per_sample), oskew + iskew,
                         oskew / spp, spp, bytes_per_sample);
                 }
                 else
                     cpSeparateBufToContigBuf(bufp + colb + s * bytes_per_sample,
-                                             tilebuf, nrow, tw, iskew, 0, spp,
+                                             (uint8_t *)tilebuf, nrow, tw, iskew, 0, spp,
                                              bytes_per_sample);
             }
             colb += tilew * spp;
@@ -1977,7 +1977,7 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
                                  : rowsperstrip;
             stripsize = TIFFVStripSize(out, nrows);
 
-            cpContigBufToSeparateBuf(obuf, (uint8_t *)buf + row * rowsize + s,
+            cpContigBufToSeparateBuf((uint8_t *)obuf, (uint8_t *)buf + row * rowsize + s,
                                      nrows, imagewidth, 0, 0, spp,
                                      bytes_per_sample);
             if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0)
@@ -2030,11 +2030,11 @@ DECLAREwriteFunc(writeBufferToContigTiles)
             {
                 uint32_t width = imagew - colb;
                 int oskew = tilew - width;
-                cpStripToTile(obuf, bufp + colb, nrow, width, oskew,
+                cpStripToTile((uint8_t *)obuf, bufp + colb, nrow, width, oskew,
                               oskew + iskew);
             }
             else
-                cpStripToTile(obuf, bufp + colb, nrow, tilew, 0, iskew);
+                cpStripToTile((uint8_t *)obuf, bufp + colb, nrow, tilew, 0, iskew);
             if (TIFFWriteTile(out, obuf, col, row, 0, 0) < 0)
             {
                 TIFFError(TIFFFileName(out),
@@ -2110,13 +2110,13 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
                     uint32_t width = (imagew - colb);
                     int oskew = tilew - width;
 
-                    cpContigBufToSeparateBuf(obuf, bufp + (colb * spp) + s,
+                    cpContigBufToSeparateBuf((uint8_t *)obuf, bufp + (colb * spp) + s,
                                              nrow, width / bytes_per_sample,
                                              oskew, (oskew * spp) + iskew, spp,
                                              bytes_per_sample);
                 }
                 else
-                    cpContigBufToSeparateBuf(obuf, bufp + (colb * spp) + s,
+                    cpContigBufToSeparateBuf((uint8_t *)obuf, bufp + (colb * spp) + s,
                                              nrow, tilewidth, 0, iskew, spp,
                                              bytes_per_sample);
                 if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0)

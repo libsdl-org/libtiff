@@ -67,8 +67,17 @@
 
 #define TIFF_DIR_MAX 65534
 
-void TIFFBuildOverviews(TIFF *, int, int *, int, const char *,
-                        int (*)(double, void *), void *);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+    void TIFFBuildOverviews(TIFF *, int, int *, int, const char *,
+                            int (*)(double, void *), void *);
+
+#ifdef __cplusplus
+}
+#endif
 
 /************************************************************************/
 /*                         TIFF_WriteOverview()                         */
@@ -525,7 +534,7 @@ static void TIFF_DownSample_Subsampled(
                       (nDestY % nVerSubsampling) * nHorSubsampling +
                       (nDestX / nHorSubsampling) * nSampleBlockSize +
                       (nDestX % nHorSubsampling)) =
-                        ((nCummulator + (nCummulatorCount >> 1)) /
+                        (unsigned char)((nCummulator + (nCummulatorCount >> 1)) /
                          nCummulatorCount);
                 }
             }
@@ -572,7 +581,7 @@ static void TIFF_DownSample_Subsampled(
                                        (nSourceYSecEnd - nSourceY);
                     *(pabyOTile + nDestY * nDestSampleRowSize +
                       nDestX * nSampleBlockSize + nSampleOffsetInSampleBlock) =
-                        ((nCummulator + (nCummulatorCount >> 1)) /
+                        (unsigned char)((nCummulator + (nCummulatorCount >> 1)) /
                          nCummulatorCount);
                 }
             }

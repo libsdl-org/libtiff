@@ -35,6 +35,24 @@ option(extra-warnings "Enable extra compiler warnings" OFF)
 # This will cause the compiler to fail when an error occurs.
 option(fatal-warnings "Compiler warnings are errors" OFF)
 
+# Enable C++ compatibility warnings for C code. Note that -Wc++-compat
+# is limited and won't catch all C++ incompatibilities. For thorough
+# checking, use cxx-compat-mode instead which compiles C as C++.
+# Issues caught by -Wc++-compat:
+# - using C++ keywords as identifiers (new, class, template, etc.)
+# - some enum/int implicit conversions (GCC only)
+option(cxx-compat-warnings "Enable C++ compatibility warnings for C code" OFF)
+
+# Compile C source files as C++ to catch C++ incompatibilities as errors.
+# This catches issues that -Wc++-compat misses:
+# - implicit void* to typed pointer conversions
+# - register storage class (removed in C++17)
+# - goto/switch jumping over variable initialization
+# - enum arithmetic and implicit conversions
+# Note: This changes the language semantics and may break valid C code
+# that relies on C-specific behavior.
+option(cxx-compat-mode "Compile C files as C++ for compatibility checking" OFF)
+
 # Check if the compiler supports each of the following additional
 # flags, and enable them if supported.  This greatly improves the
 # quality of the build by checking for a number of common problems,
@@ -99,6 +117,10 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
         list(APPEND test_flags
                 -Werror)
     endif()
+    if(cxx-compat-warnings)
+        list(APPEND test_flags
+                -Wc++-compat)
+    endif()
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     set(test_flags)
     if(extra-warnings)
@@ -122,3 +144,41 @@ foreach(flag ${test_flags})
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}")
     endif (${test_c_flag})
 endforeach(flag ${test_flags})
+
+# Function to compile a target's C sources as C++ for compatibility checking
+# This is a better approach than modifying CMAKE_C_FLAGS globally, as it:
+# - Doesn't break CMake's feature detection tests
+# - Uses proper target properties instead of global flags
+# - Follows CMake best practices
+function(tiff_target_compile_as_cxx target_name)
+    if(NOT cxx-compat-mode)
+        return()
+    endif()
+
+    # Get all source files for the target
+    get_target_property(target_sources ${target_name} SOURCES)
+
+    # Filter for C source files (*.c)
+    set(c_sources "")
+    foreach(source ${target_sources})
+        if(source MATCHES "\\.c$")
+            list(APPEND c_sources ${source})
+        endif()
+    endforeach()
+
+    if(c_sources)
+        # Set these C files to be compiled as C++
+        set_source_files_properties(${c_sources}
+            PROPERTIES
+                LANGUAGE CXX
+        )
+        # Use target properties for C++ standard (more portable than COMPILE_FLAGS)
+        set_target_properties(${target_name}
+            PROPERTIES
+                CXX_STANDARD 17
+                CXX_STANDARD_REQUIRED ON
+                CXX_EXTENSIONS OFF
+        )
+        message(STATUS "C++ compatibility mode: compiling ${target_name} C sources as C++17")
+    endif()
+endfunction()

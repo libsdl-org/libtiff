@@ -62,7 +62,7 @@ static void compresscontig(unsigned char *out, unsigned char *rgb, uint32_t n)
         v = red * (*rgb++);
         v += green * (*rgb++);
         v += blue * (*rgb++);
-        *out++ = v >> 8;
+        *out++ = (unsigned char)(v >> 8);
     }
 }
 
@@ -97,7 +97,7 @@ static void compresspalette(unsigned char *out, unsigned char *data, uint32_t n,
         v = red * rmap[ix];
         v += green * gmap[ix];
         v += blue * bmap[ix];
-        *out++ = v >> 8;
+        *out++ = (unsigned char)(v >> 8);
     }
 }
 
@@ -369,14 +369,14 @@ static int processCompressOptions(char *opt)
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_LZW;
     }
     else if (strneq(opt, "zip", 3))
     {
         char *cp = strchr(opt, ':');
         if (cp)
-            predictor = atoi(cp + 1);
+            predictor = (uint16_t)atoi(cp + 1);
         compression = COMPRESSION_ADOBE_DEFLATE;
     }
     else
@@ -522,16 +522,16 @@ static void cpTags(TIFF *in, TIFF *out)
     {
         if (p->tag == TIFFTAG_GROUP3OPTIONS)
         {
-            uint16_t compression;
-            if (!TIFFGetField(in, TIFFTAG_COMPRESSION, &compression) ||
-                compression != COMPRESSION_CCITTFAX3)
+            uint16_t local_compression;
+            if (!TIFFGetField(in, TIFFTAG_COMPRESSION, &local_compression) ||
+                local_compression != COMPRESSION_CCITTFAX3)
                 continue;
         }
         if (p->tag == TIFFTAG_GROUP4OPTIONS)
         {
-            uint16_t compression;
-            if (!TIFFGetField(in, TIFFTAG_COMPRESSION, &compression) ||
-                compression != COMPRESSION_CCITTFAX4)
+            uint16_t local_compression;
+            if (!TIFFGetField(in, TIFFTAG_COMPRESSION, &local_compression) ||
+                local_compression != COMPRESSION_CCITTFAX4)
                 continue;
         }
         cpTag(in, out, p->tag, p->count, p->type);

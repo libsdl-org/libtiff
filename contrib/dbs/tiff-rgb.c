@@ -116,44 +116,44 @@ int main(int argc, char **argv)
         for (j = 0; j < 75; j++)
         {
             scan_line[j * 3] = 255;
-            scan_line[(j * 3) + 1] = 255 - i;
-            scan_line[(j * 3) + 2] = 255 - i;
+            scan_line[(j * 3) + 1] = (unsigned char)(255 - i);
+            scan_line[(j * 3) + 2] = (unsigned char)(255 - i);
         }
         for (j = 75; j < 150; j++)
         {
-            scan_line[j * 3] = 255 - i;
+            scan_line[j * 3] = (unsigned char)(255 - i);
             scan_line[(j * 3) + 1] = 255;
-            scan_line[(j * 3) + 2] = 255 - i;
+            scan_line[(j * 3) + 2] = (unsigned char)(255 - i);
         }
         for (j = 150; j < 225; j++)
         {
-            scan_line[j * 3] = 255 - i;
-            scan_line[(j * 3) + 1] = 255 - i;
+            scan_line[j * 3] = (unsigned char)(255 - i);
+            scan_line[(j * 3) + 1] = (unsigned char)(255 - i);
             scan_line[(j * 3) + 2] = 255;
         }
         for (j = 225; j < 300; j++)
         {
-            scan_line[j * 3] = (i - 1) / 2;
-            scan_line[(j * 3) + 1] = (i - 1) / 2;
-            scan_line[(j * 3) + 2] = (i - 1) / 2;
+            scan_line[j * 3] = (unsigned char)((i - 1) / 2);
+            scan_line[(j * 3) + 1] = (unsigned char)((i - 1) / 2);
+            scan_line[(j * 3) + 2] = (unsigned char)((i - 1) / 2);
         }
         for (j = 300; j < 375; j++)
         {
-            scan_line[j * 3] = 255 - i;
+            scan_line[j * 3] = (unsigned char)(255 - i);
             scan_line[(j * 3) + 1] = 255;
             scan_line[(j * 3) + 2] = 255;
         }
         for (j = 375; j < 450; j++)
         {
             scan_line[j * 3] = 255;
-            scan_line[(j * 3) + 1] = 255 - i;
+            scan_line[(j * 3) + 1] = (unsigned char)(255 - i);
             scan_line[(j * 3) + 2] = 255;
         }
         for (j = 450; j < 525; j++)
         {
             scan_line[j * 3] = 255;
             scan_line[(j * 3) + 1] = 255;
-            scan_line[(j * 3) + 2] = 255 - i;
+            scan_line[(j * 3) + 2] = (unsigned char)(255 - i);
         }
         TIFFWriteScanline(tif, scan_line, i, 0);
     }
@@ -161,44 +161,44 @@ int main(int argc, char **argv)
     {
         for (j = 0; j < 75; j++)
         {
-            scan_line[j * 3] = i;
+            scan_line[j * 3] = (unsigned char)i;
             scan_line[(j * 3) + 1] = 0;
             scan_line[(j * 3) + 2] = 0;
         }
         for (j = 75; j < 150; j++)
         {
             scan_line[j * 3] = 0;
-            scan_line[(j * 3) + 1] = i;
+            scan_line[(j * 3) + 1] = (unsigned char)i;
             scan_line[(j * 3) + 2] = 0;
         }
         for (j = 150; j < 225; j++)
         {
             scan_line[j * 3] = 0;
             scan_line[(j * 3) + 1] = 0;
-            scan_line[(j * 3) + 2] = i;
+            scan_line[(j * 3) + 2] = (unsigned char)i;
         }
         for (j = 225; j < 300; j++)
         {
-            scan_line[j * 3] = (i - 1) / 2;
-            scan_line[(j * 3) + 1] = (i - 1) / 2;
-            scan_line[(j * 3) + 2] = (i - 1) / 2;
+            scan_line[j * 3] = (unsigned char)((i - 1) / 2);
+            scan_line[(j * 3) + 1] = (unsigned char)((i - 1) / 2);
+            scan_line[(j * 3) + 2] = (unsigned char)((i - 1) / 2);
         }
         for (j = 300; j < 375; j++)
         {
             scan_line[j * 3] = 0;
-            scan_line[(j * 3) + 1] = i;
-            scan_line[(j * 3) + 2] = i;
+            scan_line[(j * 3) + 1] = (unsigned char)i;
+            scan_line[(j * 3) + 2] = (unsigned char)i;
         }
         for (j = 375; j < 450; j++)
         {
-            scan_line[j * 3] = i;
+            scan_line[j * 3] = (unsigned char)i;
             scan_line[(j * 3) + 1] = 0;
-            scan_line[(j * 3) + 2] = i;
+            scan_line[(j * 3) + 2] = (unsigned char)i;
         }
         for (j = 450; j < 525; j++)
         {
-            scan_line[j * 3] = i;
-            scan_line[(j * 3) + 1] = i;
+            scan_line[j * 3] = (unsigned char)i;
+            scan_line[(j * 3) + 1] = (unsigned char)i;
             scan_line[(j * 3) + 2] = 0;
         }
         TIFFWriteScanline(tif, scan_line, i, 0);

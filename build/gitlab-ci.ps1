@@ -209,7 +209,8 @@ function Invoke-CMakeConfigure {
             "-DCMAKE_BUILD_TYPE=$BuildType",
             "-DCMAKE_INSTALL_PREFIX=$InstallDir",
             "-DCMAKE_UNITY_BUILD=ON",
-            "-Dfatal-warnings=ON"
+            "-Dfatal-warnings=ON",
+            "-Dextra-warnings=ON"
         )
 
         # Add vcpkg toolchain if available
