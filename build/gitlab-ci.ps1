@@ -42,7 +42,7 @@ $TestBuildDir = Join-Path $SourceDir "cmake-test-build"
 $TestNoTargetBuildDir = Join-Path $SourceDir "cmake-test-no-target-build"
 
 # vcpkg integration (if available)
-$VcpkgRoot = "C:\vcpkg"
+$VcpkgRoot = "C:\vcpkg-libtiff"
 $VcpkgToolchain = Join-Path $VcpkgRoot "scripts\buildsystems\vcpkg.cmake"
 
 function Write-Header {
