@@ -4341,6 +4341,14 @@ int TIFFReadDirectory(TIFF *tif)
     tif->tif_flags &= ~TIFF_BUF4WRITE;   /* reset before new dir */
     tif->tif_flags &= ~TIFF_CHOPPEDUPARRAYS;
 
+    /* When changing directory, in deferred strile loading mode, we must also
+     * reinitialize the TIFF_LAZYSTRILELOAD bit if it was initally set,
+     * to make sure the strile offset/bytecount are read again (when they fit
+     * in the tag data area).
+     */
+    if ((tif->tif_flags & TIFF_LAZYSTRILELOAD_ASKED) != 0)
+        tif->tif_flags |= TIFF_LAZYSTRILELOAD;
+
     /* free any old stuff and reinit */
     TIFFFreeDirectory(tif);
     TIFFDefaultDirectory(tif);
