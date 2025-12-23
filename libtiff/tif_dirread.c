@@ -4342,7 +4342,7 @@ int TIFFReadDirectory(TIFF *tif)
     tif->tif_flags &= ~TIFF_CHOPPEDUPARRAYS;
 
     /* When changing directory, in deferred strile loading mode, we must also
-     * unset the TIFF_LAZYSTRILELOAD_DONE bit if it was initally set,
+     * unset the TIFF_LAZYSTRILELOAD_DONE bit if it was initially set,
      * to make sure the strile offset/bytecount are read again (when they fit
      * in the tag data area).
      */
