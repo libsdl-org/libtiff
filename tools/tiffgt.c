@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
                 break;
+            default:
+                break;
         }
     filenum = argc - optind;
     if (filenum < 1)
@@ -371,6 +373,8 @@ static void raster_keys(unsigned char key, int x, int y)
         case 'q': /* exit */
         case '\033':
             cleanup_and_exit(EXIT_SUCCESS);
+        default:
+            break;
     }
     glutPostRedisplay();
 }
@@ -429,6 +433,8 @@ static void raster_special(int key, int x, int y)
                 TIFFReadDirectory(tif);
             initImage();
             setWindowSize();
+            break;
+        default:
             break;
     }
     glutPostRedisplay();

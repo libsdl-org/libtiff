@@ -512,6 +512,8 @@ static void setupCmap(void)
             for (i = 1; i < 256; i++)
                 pct[i] = 1 - ((float)i) / (256 - 1);
             break;
+        default:
+            break;
     }
     switch (photometric)
     {
@@ -522,6 +524,8 @@ static void setupCmap(void)
         case PHOTOMETRIC_MINISBLACK:
             for (i = 0; i < 256; i++)
                 cmap[i] = (uint8_t)clamp(255 * pct[i], 0, 255);
+            break;
+        default:
             break;
     }
 }

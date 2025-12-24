@@ -394,6 +394,9 @@ int main(int argc, char **argv)
             case '?':
                 free(pages);
                 usage(EXIT_FAILURE);
+                break;
+            default:
+                break;
         }
     if (npages > 0)
         qsort(pages, npages, sizeof(uint16_t), pcompar);

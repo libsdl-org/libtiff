@@ -317,6 +317,8 @@ int main(int argc, char *argv[])
             if (predictor != 0)
                 TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
             break;
+        default:
+            break;
     }
     switch (interleaving)
     {

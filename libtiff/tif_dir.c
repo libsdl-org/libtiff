@@ -1376,6 +1376,8 @@ static int _TIFFVGetField(TIFF *tif, uint32_t tag, va_list ap)
                 case SAMPLEFORMAT_VOID:
                     *va_arg(ap, uint16_t *) = DATATYPE_VOID;
                     break;
+                default:
+                    break;
             }
             break;
         case TIFFTAG_SAMPLEFORMAT:

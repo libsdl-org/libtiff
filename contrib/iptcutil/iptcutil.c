@@ -799,6 +799,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
                 case IN_QUOTE: /* just keep going */
                     chstore(token, tokmax, c);
                     break;
+                default:
+                    break;
             }
         }
         else if ((qp = sindex(c, quote)) >= 0) /* quote */
@@ -827,6 +829,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
                 case IN_OZONE:
                     *brkused = c; /* uses quote as break char */
                     goto byebye;
+                default:
+                    break;
             }
         }
         else if ((qp = sindex(c, white)) >= 0) /* white */
@@ -843,6 +847,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
 
                 case IN_QUOTE:
                     chstore(token, tokmax, c); /* it's valid here */
+                    break;
+                default:
                     break;
             }
         }
@@ -871,6 +877,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
 
                 case IN_OZONE:
                     goto byebye;
+                default:
+                    break;
             }
         }
         else /* anything else is just a real character */
@@ -888,6 +896,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
 
                 case IN_OZONE:
                     goto byebye;
+                default:
+                    break;
             }
         }
     } /* end of main loop */

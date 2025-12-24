@@ -2462,6 +2462,8 @@ static int OJPEGWriteStream(TIFF *tif, void **mem, uint32_t *len)
             case ososEoi:
                 OJPEGWriteStreamEoi(tif, mem, len);
                 break;
+            default:
+                break;
         }
     } while (*len == 0);
     return (1);

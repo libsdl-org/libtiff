@@ -867,6 +867,8 @@ int main(int argc, char **argv)
             case '?':
                 usage_info(EXIT_FAILURE);
                 goto fail;
+            default:
+                break;
         }
     }
 
@@ -5479,6 +5481,8 @@ void t2p_compose_pdf_page_orient(T2P_BOX *boxp, uint16_t orientation)
             boxp->mat[4] = 0.0F;
             boxp->mat[6] += m1[4];
             break;
+        default:
+            break;
     }
 
     return;
@@ -5540,6 +5544,8 @@ void t2p_compose_pdf_page_orient_flip(T2P_BOX *boxp, uint16_t orientation)
             boxp->mat[3] = 0.0F - m1[0];
             boxp->mat[4] = 0.0F;
             boxp->mat[6] += m1[0];
+            break;
+        default:
             break;
     }
 

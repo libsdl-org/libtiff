@@ -456,6 +456,9 @@ int main(int argc, char *argv[])
                 break;
             case '?':
                 usage(EXIT_FAILURE);
+                break;
+            default:
+                break;
         }
 
     if (useImagemask == TRUE)
@@ -1833,6 +1836,8 @@ int TIFF2PS(FILE *fd, TIFF *tif, double pgwidth, double pgheight, double lm,
                 case 4:
                     photometric = PHOTOMETRIC_SEPARATED;
                     break;
+                default:
+                    break;
             }
         }
 
@@ -2281,6 +2286,8 @@ static int PS_Lvl2ImageDict(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
              */
             fputs("  /Decode [0 1 0 1 0 1 0 1]\n", fd);
             break;
+        default:
+            break;
     }
     fputs("  /DataSource", fd);
     if (planarconfiguration == PLANARCONFIG_SEPARATE && samplesperpixel > 1)
@@ -2642,6 +2649,8 @@ static int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
                         buf_data[j++] = (unsigned char)(buf_data[i + 1] + adjust);
                         buf_data[j++] = (unsigned char)(buf_data[i + 2] + adjust);
                         break;
+                    default:
+                        break;
                 }
             }
             byte_count -= j;
@@ -2773,6 +2782,8 @@ void PSpage(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
             fprintf(fd, "{currentfile scanLine readhexstring pop} bind\n");
             fprintf(fd, "%s\n", imageOp);
             PSDataBW(fd, tif, w, h);
+            break;
+        default:
             break;
     }
     putc('\n', fd);
@@ -3029,6 +3040,8 @@ void PSDataPalette(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
                     PUTRGBHEX(c & 0x1, fd);
                     c >>= 1;
                     PUTRGBHEX(c, fd);
+                    break;
+                default:
                     break;
             }
         }

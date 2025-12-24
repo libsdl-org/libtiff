@@ -116,6 +116,9 @@ int main(int argc, char *argv[])
             case '?':
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
+                break;
+            default:
+                break;
         }
     if (argc - optind != 2)
         usage(EXIT_FAILURE);
@@ -173,6 +176,8 @@ int main(int argc, char *argv[])
         case COMPRESSION_DEFLATE:
             if (predictor != 0)
                 TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
+            break;
+        default:
             break;
     }
     TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photometric);
@@ -255,6 +260,8 @@ int main(int argc, char *argv[])
                     if (!TIFFWriteScanline(out, obuf, row, 0))
                         goto done;
                 }
+                break;
+            default:
                 break;
         }
         _TIFFfree(ibuf);

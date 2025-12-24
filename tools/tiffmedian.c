@@ -168,6 +168,8 @@ int main(int argc, char *argv[])
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
                 break;
+            default:
+                break;
         }
     if (argc - optind != 2)
         usage(EXIT_FAILURE);
@@ -292,6 +294,8 @@ int main(int argc, char *argv[])
             case COMPRESSION_DEFLATE:
                 if (predictor != 0)
                     TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
+                break;
+            default:
                 break;
         }
     }
@@ -549,6 +553,8 @@ static void splitbox(Colorbox *ptr)
             first = ptr->bmin;
             last = ptr->bmax;
             break;
+        default:
+            break;
     }
     /* find median point */
     sum2 = ptr->total / 2;
@@ -596,6 +602,8 @@ static void splitbox(Colorbox *ptr)
         case BLUE:
             new_box->bmax = i - 1;
             ptr->bmin = i;
+            break;
+        default:
             break;
     }
     shrinkbox(new_box);

@@ -2485,6 +2485,8 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 TIFFError("For valid options type", "tiffcrop -h");
                 exit(EXIT_FAILURE);
                 /*NOTREACHED*/
+            default:
+                break;
         }
     }
     /*-- Check for not allowed combinations (e.g. -X, -Y and -Z, -z and -S are
@@ -8518,6 +8520,8 @@ static int writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
             CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
             CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
             CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
+            break;
+        default:
             break;
     }
     {

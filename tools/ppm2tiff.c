@@ -221,6 +221,9 @@ int main(int argc, char *argv[])
             case '?':
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
+                break;
+            default:
+                break;
         }
 
     if (optind + 2 < argc)
@@ -382,6 +385,8 @@ int main(int argc, char *argv[])
             break;
         case COMPRESSION_CCITTFAX3:
             TIFFSetField(out, TIFFTAG_GROUP3OPTIONS, g3opts);
+            break;
+        default:
             break;
     }
     if (pbm)

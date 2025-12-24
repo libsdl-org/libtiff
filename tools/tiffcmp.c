@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
                 usage(2);
                 /*NOTREACHED*/
                 break;
+            default:
+                break;
         }
     if (argc - optind < 2)
         usage(2);
@@ -253,6 +255,8 @@ static int tiffcmp(TIFF *tif1, TIFF *tif2)
                                  -1) if (ContigCompare(-1, row, buf1, buf2,
                                                        size1) < 0) goto bad1;
             }
+            break;
+        default:
             break;
     }
     if (buf1)
@@ -612,6 +616,9 @@ static int checkTag(TIFF *tif1, TIFF *tif2, int tag, char *name, void *p1,
                 case -1:                                                       \
                     return (1);                                                \
                 printf(fmt, name, v1, v2);                                     \
+                break;                                                         \
+            default:                                                           \
+                break;                                                         \
         }                                                                      \
         return (0);                                                            \
     }

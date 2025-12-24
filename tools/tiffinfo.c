@@ -151,6 +151,8 @@ int main(int argc, char *argv[])
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
                 break;
+            default:
+                break;
         }
     if (optind >= argc)
         usage(EXIT_FAILURE);

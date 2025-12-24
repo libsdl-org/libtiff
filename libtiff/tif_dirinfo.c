@@ -1367,6 +1367,8 @@ int _TIFFCheckFieldIsValidForCodec(TIFF *tif, ttag_t tag)
                 case TIFFTAG_JPEGPROC:
                 case TIFFTAG_JPEGRESTARTINTERVAL:
                     return 1;
+                default:
+                    break;
             }
             break;
         case COMPRESSION_CCITTRLE:
@@ -1386,6 +1388,8 @@ int _TIFFCheckFieldIsValidForCodec(TIFF *tif, ttag_t tag)
                 case TIFFTAG_GROUP4OPTIONS:
                     if (tif->tif_dir.td_compression == COMPRESSION_CCITTFAX4)
                         return 1;
+                    break;
+                default:
                     break;
             }
             break;
@@ -1416,6 +1420,8 @@ int _TIFFCheckFieldIsValidForCodec(TIFF *tif, ttag_t tag)
         case COMPRESSION_LERC:
             if (tag == TIFFTAG_LERC_PARAMETERS)
                 return 1;
+            break;
+        default:
             break;
     }
     return 0;

@@ -219,6 +219,8 @@ int main(int argc, char **argv)
             green[1] = SCALE(255);
             blue[1] = SCALE(255);
             break;
+        default:
+            break;
     }
 
     if ((tif = TIFFOpen(argv[3], "w")) == NULL)
@@ -268,6 +270,8 @@ int main(int argc, char **argv)
                     scan_line[k++] =
                         ((j / chunk_size) == (i / chunk_size)) ? 0x00 : 0xff;
                     j += 8;
+                    break;
+                default:
                     break;
             }
         }

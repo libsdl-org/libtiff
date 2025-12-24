@@ -229,6 +229,9 @@ int main(int argc, char *argv[])
             case '?':
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
+                break;
+            default:
+                break;
         }
     npages = argc - optind;
     if (npages < 1)

@@ -227,6 +227,8 @@ int main(int argc, char *argv[])
                         "usage: %s [-c const] [-s storage] [-p] [-b] file\n",
                         argv[0]);
                 return (-1);
+            default:
+                break;
         }
     outputfile = optind < argc ? argv[optind] : "g3states.h";
     fd = fopen(outputfile, "w");
