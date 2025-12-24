@@ -84,14 +84,13 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wformat-nonliteral
                 -Wformat-signedness
                 -Wformat-truncation
+                -Wnull-dereference
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wdeclaration-after-statement
                 -Wconversion
                 -Wsign-conversion
-                -Wnull-dereference
                 -Wdouble-promotion
                 -Wmisleading-indentation
                 -Wmissing-include-dirs
