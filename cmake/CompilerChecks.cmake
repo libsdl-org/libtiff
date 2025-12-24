@@ -85,6 +85,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wformat-signedness
                 -Wformat-truncation
                 -Wnull-dereference
+                -Wshadow
         )
     endif()
     if(broken-warnings)
@@ -103,7 +104,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wbool-operation
                 -Wduplicated-branches
                 -Wduplicated-cond
-                -Wshadow
                 -Wunused-macros
                 -Wc99-c11-compat
                 -Wcast-qual
