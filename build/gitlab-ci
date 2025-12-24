@@ -45,7 +45,7 @@ cmake_build()
     fi
     mkdir cmake-build
     cd cmake-build
-    opts="-Dfatal-warnings=ON"
+    opts="-Dfatal-warnings=ON -Dextra-warnings=ON -Dcxx-compat-warnings=ON"
     para3=`echo "$3" | sed 's/./\L&/g'`
     if [ "$para3" = "static" ]; then
         opts2="-DBUILD_SHARED_LIBS:BOOL=OFF"
@@ -55,7 +55,7 @@ cmake_build()
         opts2=""
     fi
     echo "Running cmake -G "$1" -DCMAKE_UNITY_BUILD=ON -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ${opts2} .."
-    cmake -G "$1" -DCMAKE_UNITY_BUILD=ON -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install -DCMAKE_C_FLAGS="-Wall -Wextra -Werror" -Dcxx-compat-warnings=ON ${opts} ${opts2} ..
+    cmake -G "$1" -DCMAKE_UNITY_BUILD=ON -DCMAKE_BUILD_TYPE="$2" -DCMAKE_INSTALL_PREFIX=../cmake-install ${opts} ${opts2} ..
     $COVERITY_BUILD cmake --build .
     cmake --build . --target install
     ctest -V

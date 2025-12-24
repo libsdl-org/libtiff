@@ -210,7 +210,8 @@ function Invoke-CMakeConfigure {
             "-DCMAKE_INSTALL_PREFIX=$InstallDir",
             "-DCMAKE_UNITY_BUILD=ON",
             "-Dfatal-warnings=ON",
-            "-Dextra-warnings=ON"
+            "-Dextra-warnings=ON",
+            "-Dcxx-compat-warnings=ON"
         )
 
         # Add vcpkg toolchain if available
@@ -234,9 +235,6 @@ function Invoke-CMakeConfigure {
             Write-Host "Building SHARED libraries"
             $cmakeArgs += "-DBUILD_SHARED_LIBS=ON"
         }
-
-        # Add MSVC-specific warning flags
-        $cmakeArgs += "-DCMAKE_C_FLAGS=/W4 /WX"
 
         $cmakeArgs += $SourceDir
 

@@ -21,7 +21,7 @@ basic-build-fork:
   script:
     - sh build/gitlab-ci cmake "Unix Makefiles" Debug static
 
-basic-build-main:
+basic-build:
   stage: pre-build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
