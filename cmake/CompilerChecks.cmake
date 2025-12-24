@@ -89,6 +89,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wstrict-prototypes
                 -Wmissing-prototypes
                 -Wswitch-default
+                -Wswitch-enum
         )
     endif()
     if(broken-warnings)
@@ -98,7 +99,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wdouble-promotion
                 -Wmisleading-indentation
                 -Wmissing-include-dirs
-                -Wswitch-enum
                 -Wunused-local-typedefs
                 -Wunused-parameter
                 -Wuninitialized

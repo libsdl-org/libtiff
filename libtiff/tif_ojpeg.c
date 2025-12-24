@@ -2248,6 +2248,8 @@ static int OJPEGReadBufferFill(OJPEGState *sp)
             case osibsJpegInterchangeFormat:
                 sp->in_buffer_source = osibsStrile;
                 break;
+            case osibsEof:
+                break;
             case osibsStrile:
                 if (sp->in_buffer_next_strile == sp->in_buffer_strile_count)
                     sp->in_buffer_source = osibsEof;
@@ -2628,6 +2630,8 @@ static int OJPEGWriteStreamCompressed(TIFF *tif, void **mem, uint32_t *len)
             case osibsEof:
                 sp->out_state = ososEoi;
                 break;
+            case osibsNotSetYet:
+            case osibsJpegInterchangeFormat:
             default:
                 break;
         }

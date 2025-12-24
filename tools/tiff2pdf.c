@@ -6114,6 +6114,8 @@ tsize_t t2p_write_pdf_xobject_stream_filter(ttile_t tile, T2P *t2p,
     add_t2pWriteFile_check(output, (tdata_t) "/Filter ", 8, mod, written);
     switch (t2p->pdf_compression)
     {
+        case T2P_COMPRESS_NONE:
+            break;
 #ifdef CCITT_SUPPORT
         case T2P_COMPRESS_G4:
             add_t2pWriteFile_check(output, (tdata_t) "/CCITTFaxDecode ", 16,

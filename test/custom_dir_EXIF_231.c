@@ -881,6 +881,23 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 pVoid = &auxInt32ArrayW[i];
                 deferredSetField = true;
                 break;
+            case TIFF_SETGET_UNDEFINED:
+            case TIFF_SETGET_UINT64:
+            case TIFF_SETGET_SINT64:
+            case TIFF_SETGET_UINT16_PAIR:
+            case TIFF_SETGET_C0_ASCII:
+            case TIFF_SETGET_C0_UINT64:
+            case TIFF_SETGET_C0_SINT64:
+            case TIFF_SETGET_C0_IFD8:
+            case TIFF_SETGET_C16_ASCII:
+            case TIFF_SETGET_C16_UINT64:
+            case TIFF_SETGET_C16_SINT64:
+            case TIFF_SETGET_C16_IFD8:
+            case TIFF_SETGET_C32_ASCII:
+            case TIFF_SETGET_C32_UINT64:
+            case TIFF_SETGET_C32_SINT64:
+            case TIFF_SETGET_C32_IFD8:
+            case TIFF_SETGET_OTHER:
             default:
                 fprintf(stderr,
                         "SetFieldType %u not defined within writing switch for "
@@ -1794,6 +1811,25 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
             case TIFF_SETGET_C32_UINT32:
             case TIFF_SETGET_C32_SINT32:
                 deferredSetField = true;
+                break;
+            case TIFF_SETGET_UNDEFINED:
+            case TIFF_SETGET_UINT64:
+            case TIFF_SETGET_SINT64:
+            case TIFF_SETGET_UINT16_PAIR:
+            case TIFF_SETGET_C0_ASCII:
+            case TIFF_SETGET_C0_UINT64:
+            case TIFF_SETGET_C0_SINT64:
+            case TIFF_SETGET_C0_IFD8:
+            case TIFF_SETGET_C16_ASCII:
+            case TIFF_SETGET_C16_UINT64:
+            case TIFF_SETGET_C16_SINT64:
+            case TIFF_SETGET_C16_IFD8:
+            case TIFF_SETGET_C32_ASCII:
+            case TIFF_SETGET_C32_UINT64:
+            case TIFF_SETGET_C32_SINT64:
+            case TIFF_SETGET_C32_IFD8:
+            case TIFF_SETGET_OTHER:
+                /* Not applicable for this test */
                 break;
             default:
                 fprintf(stderr,

@@ -392,6 +392,18 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
                 CopyField(tag, doubleav);
             }
             break;
+        case TIFF_NOTYPE:
+        case TIFF_BYTE:
+        case TIFF_SBYTE:
+        case TIFF_UNDEFINED:
+        case TIFF_SSHORT:
+        case TIFF_SLONG:
+        case TIFF_SRATIONAL:
+        case TIFF_FLOAT:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             TIFFError(TIFFFileName(in),
                       "Data type %u is not supported, tag %d skipped.",

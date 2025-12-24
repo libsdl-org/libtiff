@@ -4028,6 +4028,7 @@ static void TIFFReadDirEntryOutputErr(TIFF *tif, enum TIFFReadDirEntryErr err,
                 TIFFErrorExtR(tif, module, "Out of memory reading of \"%s\"",
                               tagname);
                 break;
+            case TIFFReadDirEntryErrOk:
             default:
                 assert(0); /* we should never get here */
                 break;
@@ -4074,6 +4075,7 @@ static void TIFFReadDirEntryOutputErr(TIFF *tif, enum TIFFReadDirEntryErr err,
                                 "Out of memory reading of \"%s\"; tag ignored",
                                 tagname);
                 break;
+            case TIFFReadDirEntryErrOk:
             default:
                 assert(0); /* we should never get here */
                 break;
@@ -7704,6 +7706,12 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
             }
         }
         break;
+        case TIFF_SETGET_INT:
+        case TIFF_SETGET_C0_ASCII:
+        case TIFF_SETGET_C0_IFD8:
+        case TIFF_SETGET_OTHER:
+            assert(0); /* these should not arrive here */
+            break;
         default:
             assert(0); /* we should never get here */
             break;
