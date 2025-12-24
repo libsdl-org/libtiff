@@ -791,7 +791,7 @@ static char *hex = "0123456789abcdef";
  * Only one of maxPageHeight or maxPageWidth can be used.
  * These are global variables unfortunately.
  */
-int get_subimage_count(double pagewidth, double pageheight, double imagewidth,
+static int get_subimage_count(double pagewidth, double pageheight, double imagewidth,
                        double imageheight, int *ximages, int *yimages,
                        int rotation, double scale)
 {
@@ -2481,7 +2481,7 @@ static void PS_FlipBytes(unsigned char *buf, tsize_t count)
 
 #define MAXLINE 36
 
-int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
+static int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
 {
     uint16_t fillorder;
     int use_rawdata, tiled_image, breaklen = MAXLINE;

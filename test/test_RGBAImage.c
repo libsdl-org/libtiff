@@ -188,9 +188,10 @@ const char *orientationStrings[] = {
 
 /* Writes some pixel data as scanline or tiles to file.
  */
-int write_image_data(TIFF *tif, uint32_t width, uint32_t length, bool tiled,
-                     unsigned int pixval, unsigned char *plastlinedata,
-                     unsigned int lastlinebytesmax)
+static int write_image_data(TIFF *tif, uint32_t width, uint32_t length,
+                            bool tiled, unsigned int pixval,
+                            unsigned char *plastlinedata,
+                            unsigned int lastlinebytesmax)
 {
     size_t bufLen;
     unsigned char *pbufLine = NULL;
@@ -377,11 +378,11 @@ failure:
  * an image with given number of lines as strips (scanlines) or tiles to
  * file.
  */
-int write_data_to_current_directory(TIFF *tif, uint32_t width, uint32_t length,
-                                    bool tiled, uint16_t orientation,
-                                    bool write_data,
-                                    unsigned char *plastlinedata,
-                                    unsigned int lastlinebytesmax)
+static int write_data_to_current_directory(TIFF *tif, uint32_t width,
+                                           uint32_t length, bool tiled,
+                                           uint16_t orientation, bool write_data,
+                                           unsigned char *plastlinedata,
+                                           unsigned int lastlinebytesmax)
 {
     if (!tif)
     {
@@ -436,8 +437,8 @@ failure:
 
 /* Check some contents of the raster buffer. Ensure they are correctly filled.
  */
-int checkRasterContents(char *txt, TIFFRGBAImage *img, uint32_t *raster,
-                        uint32_t rw, uint32_t rh, uint16_t orientation)
+static int checkRasterContents(char *txt, TIFFRGBAImage *img, uint32_t *raster,
+                               uint32_t rw, uint32_t rh, uint16_t orientation)
 {
     /* For this test, the image pixel samples are set for R= row, G= column, B=
      * 0xfe and the last raster component is 0xff. The raster is preset with
@@ -662,8 +663,9 @@ failure:
 } /*-- checkRasterContents() --*/
 
 /* Prints the raster buffer 2D matrix as hex to display and/or to file. */
-void printRaster(char *txt, TIFFRGBAImage *img, uint32_t *raster, uint32_t rw,
-                 uint32_t rh, uint16_t orientation, bool tiled)
+static void printRaster(char *txt, TIFFRGBAImage *img, uint32_t *raster,
+                        uint32_t rw, uint32_t rh, uint16_t orientation,
+                        bool tiled)
 {
     uint32_t h, w;
     FILE *fp = NULL;
@@ -743,10 +745,10 @@ void printRaster(char *txt, TIFFRGBAImage *img, uint32_t *raster, uint32_t rw,
  * reads the data from file into that raster. The raster content of both
  * functions is printed and checked.
  */
-int testRGBAImageReadFunctions(TIFF *tif, uint32_t imgWidth, uint32_t imgLength,
-                               uint32_t rWidth, uint32_t rHeight,
-                               uint16_t orientation, uint16_t req_orientation,
-                               int cLine)
+static int testRGBAImageReadFunctions(TIFF *tif, uint32_t imgWidth,
+                                      uint32_t imgLength, uint32_t rWidth,
+                                      uint32_t rHeight, uint16_t orientation,
+                                      uint16_t req_orientation, int cLine)
 {
     int ret;
     uint32_t *raster1 = NULL;
@@ -811,11 +813,11 @@ failure:
  * raster and reads the data from file into that raster. The raster content is
  * printed and checked.
  */
-int testRGBAImageReadWithOffsets(TIFF *tif, uint32_t imgWidth,
-                                 uint32_t imgLength, int w_offset, int l_offset,
-                                 uint32_t rWidth, uint32_t rHeight,
-                                 uint16_t orientation, uint16_t req_orientation,
-                                 int cLine)
+static int testRGBAImageReadWithOffsets(TIFF *tif, uint32_t imgWidth,
+                                        uint32_t imgLength, int w_offset,
+                                        int l_offset, uint32_t rWidth,
+                                        uint32_t rHeight, uint16_t orientation,
+                                        uint16_t req_orientation, int cLine)
 {
     int ret;
     uint32_t *raster1 = NULL;
@@ -875,9 +877,10 @@ failure:
 /* Tests TIFFReadRGBAImage functions with different raster sizes, col_offset,
  * row_offset and required orientations in the raster.
  */
-int test_ReadRGBAImage(const char *filename, unsigned int openMode,
-                       uint16_t orientation, uint32_t width, uint32_t length,
-                       bool tiled, unsigned int req_orientation)
+static int test_ReadRGBAImage(const char *filename, unsigned int openMode,
+                              uint16_t orientation, uint32_t width,
+                              uint32_t length, bool tiled,
+                              unsigned int req_orientation)
 {
 
     int ret;
@@ -1077,7 +1080,7 @@ failure:
  * new one is re-opened, and the stdXOut output is redirected from stderr to
  * file.
  */
-void checkOpenLogFile(int blnReOpen)
+static void checkOpenLogFile(int blnReOpen)
 {
     /* First open logfile, if it does not exist, otherwise leave it as is except
      * blnReOpen is set. */

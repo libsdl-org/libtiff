@@ -86,6 +86,8 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wformat-truncation
                 -Wnull-dereference
                 -Wshadow
+                -Wstrict-prototypes
+                -Wmissing-prototypes
         )
     endif()
     if(broken-warnings)
@@ -115,13 +117,11 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wsizeof-pointer-memaccess
                 -Wlogical-op
                 -Wlogical-not-parentheses
-                -Wstrict-prototypes
                 -Wmissing-declarations
                 -Wredundant-decls
                 -Wno-int-to-pointer-cast
                 -Wfloat-equal
                 -Wfloat-conversion
-                -Wmissing-prototypes
                 -Wunreachable-code)
     endif()
     if(fatal-warnings)

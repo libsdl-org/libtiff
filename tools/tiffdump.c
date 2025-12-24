@@ -101,7 +101,7 @@ extern int optind;
 extern char *optarg;
 #endif
 
-void usage(void)
+static void usage(void)
 {
     fprintf(stderr, "\nDisplay directory information from TIFF files\n\n");
     fprintf(stderr, "usage: %s [-h] [-o offset] [-m maxitems] file.tif ...\n",
