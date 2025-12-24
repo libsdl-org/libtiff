@@ -1114,7 +1114,7 @@ void checkOpenLogFile(int blnReOpen)
 }
 
 /* ============  MAIN =============== */
-int main()
+int main(void)
 {
     int retval = 0;
     int retvalLast = 0;

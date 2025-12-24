@@ -89,7 +89,7 @@ static int myErrorHandler(TIFF *tiff, void *user_data, const char *module,
     return 1;
 }
 
-static int test_error_handler()
+static int test_error_handler(void)
 {
     int ret = 0;
     char error_buffer[ERROR_STRING_SIZE] = {0};
@@ -471,7 +471,7 @@ int test_TIFFheader_swapping(void)
     return ret;
 }
 
-int main()
+int main(void)
 {
     int ret = 0;
     fprintf(stderr, "=== test_open_options .... ===\n");

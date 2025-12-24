@@ -68,7 +68,7 @@ static uint8_t *thumbnail;
 
 static int cpIFD(TIFF *, TIFF *);
 static int generateThumbnail(TIFF *, TIFF *);
-static void initScale();
+static void initScale(void);
 static void usage(int code);
 
 #if !HAVE_DECL_OPTARG
@@ -438,7 +438,7 @@ static uint32_t *rowoff;      /* row offset for stepping */
 static uint8_t cmap[256];     /* colormap indexes */
 static uint8_t bits[256];     /* count of bits set */
 
-static void setupBitsTables()
+static void setupBitsTables(void)
 {
     int i;
     for (i = 0; i < 256; i++)
@@ -483,7 +483,7 @@ static void expFill(float pct[], uint32_t p, uint32_t n)
         pct[i] = 0.;
 }
 
-static void setupCmap()
+static void setupCmap(void)
 {
     float pct[256]; /* known to be large enough */
     uint32_t i;
@@ -526,7 +526,7 @@ static void setupCmap()
     }
 }
 
-static void initScale()
+static void initScale(void)
 {
     src0 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
     src1 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);

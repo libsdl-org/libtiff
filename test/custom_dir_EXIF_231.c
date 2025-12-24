@@ -94,7 +94,7 @@ const uint16_t photometric = PHOTOMETRIC_RGB;
 const uint16_t rows_per_strip = 1;
 const uint16_t planarconfig = PLANARCONFIG_CONTIG;
 
-int main()
+int main(void)
 {
     TIFF *tif;
     int ret, ret1, ret2;

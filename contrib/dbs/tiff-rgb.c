@@ -35,7 +35,7 @@
 #define HEIGHT 512
 #define TIFF_GAMMA 2.2
 
-void Usage();
+void Usage(void);
 char *programName;
 
 int main(int argc, char **argv)
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
     exit(0);
 }
 
-void Usage()
+void Usage(void)
 {
     fprintf(stderr, "Usage: %s -gamma gamma tiff-image\n", programName);
     exit(0);

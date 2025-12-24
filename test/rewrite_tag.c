@@ -41,7 +41,7 @@
 
 const uint32_t rows_per_strip = 1;
 
-int test_packbits()
+int test_packbits(void)
 
 {
     TIFF *tif;

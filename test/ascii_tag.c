@@ -64,7 +64,7 @@ static const struct
 static const char ink_names[] = "Red\0Green\0Blue";
 const int ink_names_size = 15;
 
-int main()
+int main(void)
 {
     TIFF *tif;
     size_t i;

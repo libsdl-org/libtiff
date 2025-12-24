@@ -316,7 +316,7 @@ int test(int classictif, int height, int tiled)
     return 0;
 }
 
-int main()
+int main(void)
 {
     int is_classic;
     for (is_classic = 1; is_classic >= 0; is_classic--)

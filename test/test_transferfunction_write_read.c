@@ -265,7 +265,7 @@ failure:
 } /*-- write_basic_IFD_data() --*/
 
 /*==== main() ====*/
-int main()
+int main(void)
 {
 
     const char *filename = "test_transferfunction_write_read.tif";

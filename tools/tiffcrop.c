@@ -710,7 +710,8 @@ static void *limitMalloc(tmsize_t s)
     return _TIFFmalloc(s);
 }
 
-static const char usage_info[] =
+/* Note: Usage info split into multiple chunks to avoid C99 length limit of 4095 chars */
+static const char usage_info1[] =
     "Copy, crop, convert, extract, and/or process TIFF files\n\n"
     "usage: tiffcrop [options] source1 ... sourceN  destination\n"
     "where options are:\n"
@@ -778,7 +779,9 @@ static const char usage_info[] =
     defined(PACKBITS_SUPPORT) || defined(CCITT_SUPPORT)
     " -c none      Use no compression algorithm on output\n"
 #endif
-    "\n"
+    "\n";
+
+static const char usage_info2[] =
     "Page and selection options:\n"
     " -N odd|even|#,#-#,#|last         sequences and ranges of images within "
     "file to process\n"
@@ -806,7 +809,9 @@ static const char usage_info[] =
     " -z x1,y1,x2,y2:...:xN,yN,xN+1,yN+1\n"
     "             regions of the image designated by upper left and lower "
     "right coordinates\n"
-    "\n"
+    "\n";
+
+static const char usage_info3[] =
     "Export grouping options:\n"
     " -e c|d|i|m|s    export mode for images and selections from input "
     "images.\n"
@@ -873,7 +878,9 @@ static const char usage_info[] =
     "tag,\n"
     "             data inverts the data but not the PHOTOMETRIC_INTERPRETATION "
     "tag\n"
-    "\n"
+    "\n";
+
+static const char usage_info4[] =
     "-D opt1:value1,opt2:value2,opt3:value3:opt4:value4\n"
     "             Debug/dump program progress and/or data to non-TIFF files.\n"
     "             Options include the following and must be joined as a comma\n"
@@ -1702,7 +1709,10 @@ static void usage(int code)
     FILE *out = (code == EXIT_SUCCESS) ? stdout : stderr;
 
     fprintf(out, "\n%s\n\n", TIFFGetVersion());
-    fprintf(out, "%s", usage_info);
+    fprintf(out, "%s", usage_info1);
+    fprintf(out, "%s", usage_info2);
+    fprintf(out, "%s", usage_info3);
+    fprintf(out, "%s", usage_info4);
     exit(code);
 }
 

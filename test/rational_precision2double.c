@@ -191,7 +191,7 @@ static void _XTIFFDefaultDirectory(TIFF *tif)
         (*_ParentExtender)(tif);
 }
 
-int main()
+int main(void)
 {
     static const char filenameClassicTiff[] = "rationalPrecision2Double.tif";
     static const char filenameBigTiff[] = "rationalPrecision2Double_Big.tif";

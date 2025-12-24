@@ -1745,7 +1745,7 @@ failure:
     return 1;
 } /*-- test_OddDataSizes --*/
 
-int main()
+int main(void)
 {
 
     int retval = 0;

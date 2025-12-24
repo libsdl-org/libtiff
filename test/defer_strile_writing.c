@@ -219,7 +219,7 @@ int test(const char *mode, int tiled, int height)
     return 0;
 }
 
-int main()
+int main(void)
 {
     int tiled;
     for (tiled = 0; tiled <= 1; tiled++)
