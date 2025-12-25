@@ -91,6 +91,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wswitch-default
                 -Wswitch-enum
                 -Wwrite-strings
+                -Wc99-c11-compat
         )
     endif()
     if(broken-warnings)
@@ -108,7 +109,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wduplicated-branches
                 -Wduplicated-cond
                 -Wunused-macros
-                -Wc99-c11-compat
                 -Wcast-qual
                 -Wcast-align
                 -Wdangling-else
