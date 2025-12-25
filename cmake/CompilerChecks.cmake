@@ -90,6 +90,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wmissing-prototypes
                 -Wswitch-default
                 -Wswitch-enum
+                -Wwrite-strings
         )
     endif()
     if(broken-warnings)
@@ -110,7 +111,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wc99-c11-compat
                 -Wcast-qual
                 -Wcast-align
-                -Wwrite-strings
                 -Wdangling-else
                 -Wsizeof-array-div
                 -Wsizeof-pointer-div
