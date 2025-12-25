@@ -79,7 +79,6 @@ static const char sbytefmt[] = "%s%" PRId8;   /* SBYTE */
 static const char shortfmtd[] = "%s%" PRIu16; /* SHORT */
 static const char shortfmth[] = "%s%#" PRIx16;
 static const char sshortfmtd[] = "%s%" PRId16; /* SSHORT */
-static const char sshortfmth[] = "%s%#" PRIx16;
 static const char longfmtd[] = "%s%" PRIu32; /* LONG */
 static const char longfmth[] = "%s%#" PRIx32;
 static const char slongfmtd[] = "%s%" PRId32; /* SLONG */
@@ -102,7 +101,7 @@ extern int optind;
 extern char *optarg;
 #endif
 
-void usage()
+void usage(void)
 {
     fprintf(stderr, "\nDisplay directory information from TIFF files\n\n");
     fprintf(stderr, "usage: %s [-h] [-o offset] [-m maxitems] file.tif ...\n",
@@ -205,9 +204,9 @@ static void dump(int fd, uint64_t diroff)
         if (swabflag)
             TIFFSwabLong(&hdr.classic.tiff_diroff);
         printf("Magic: %#x <%s-endian> Version: %#x <%s>\n",
-               hdr.classic.tiff_magic,
-               hdr.classic.tiff_magic == TIFF_BIGENDIAN ? "big" : "little", 42,
-               "ClassicTIFF");
+               (unsigned)hdr.classic.tiff_magic,
+               hdr.classic.tiff_magic == TIFF_BIGENDIAN ? "big" : "little",
+               (unsigned)42, "ClassicTIFF");
         if (diroff == 0)
             diroff = hdr.classic.tiff_diroff;
     }
@@ -223,11 +222,12 @@ static void dump(int fd, uint64_t diroff)
             TIFFSwabShort(&hdr.big.tiff_unused);
             TIFFSwabLong8(&hdr.big.tiff_diroff);
         }
-        printf("Magic: %#x <%s-endian> Version: %#x <%s>\n", hdr.big.tiff_magic,
-               hdr.big.tiff_magic == TIFF_BIGENDIAN ? "big" : "little", 43,
-               "BigTIFF");
-        printf("OffsetSize: %#x Unused: %#x\n", hdr.big.tiff_offsetsize,
-               hdr.big.tiff_unused);
+        printf("Magic: %#x <%s-endian> Version: %#x <%s>\n",
+               (unsigned)hdr.big.tiff_magic,
+               hdr.big.tiff_magic == TIFF_BIGENDIAN ? "big" : "little",
+               (unsigned)43, "BigTIFF");
+        printf("OffsetSize: %#x Unused: %#x\n", (unsigned)hdr.big.tiff_offsetsize,
+               (unsigned)hdr.big.tiff_unused);
         if (diroff == 0)
             diroff = hdr.big.tiff_diroff;
         bigtiff = 1;
@@ -751,8 +751,14 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
         {
             int16_t *wp = (int16_t *)data;
             while (count-- > 0)
-                fprintf(fd, hex_mode ? sshortfmth : sshortfmtd, sep, *wp++),
-                    sep = " ";
+            {
+                int16_t val = *wp++;
+                if (hex_mode)
+                    fprintf(fd, "%s%#x", sep, (unsigned int)val);
+                else
+                    fprintf(fd, sshortfmtd, sep, val);
+                sep = " ";
+            }
             break;
         }
         case TIFF_LONG:
@@ -769,8 +775,14 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
         {
             int32_t *lp = (int32_t *)data;
             while (count-- > 0)
-                fprintf(fd, hex_mode ? slongfmth : slongfmtd, sep, *lp++),
-                    sep = " ";
+            {
+                int32_t val = *lp++;
+                if (hex_mode)
+                    fprintf(fd, slongfmth, sep, (uint32_t)val);
+                else
+                    fprintf(fd, slongfmtd, sep, val);
+                sep = " ";
+            }
             break;
         }
         case TIFF_LONG8:
@@ -876,7 +888,19 @@ static void ReadError(char *what) { Fatal("Error while reading %s", what); }
 static void vError(FILE *fd, const char *fmt, va_list ap)
 {
     fprintf(fd, "%s: ", curfile);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#elif defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+#endif
     vfprintf(fd, fmt, ap);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#elif defined(__clang__)
+#pragma clang diagnostic pop
+#endif
     fprintf(fd, ".\n");
 }
 

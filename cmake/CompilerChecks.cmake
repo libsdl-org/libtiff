@@ -29,8 +29,16 @@ include(CheckCCompilerFlag)
 
 # These are annoyingly verbose, produce false positives or don't work
 # nicely with all supported compiler versions, so are disabled unless
-# explicitly enabled.
+# explicitly enabled.  These warnings are expected to be clean for
+# CI builds when combined with fatal-warnings.
 option(extra-warnings "Enable extra compiler warnings" OFF)
+
+# These are annoyingly verbose, produce false positives or don't work
+# nicely with all supported compiler versions, so are disabled unless
+# explicitly enabled.  Not used in CI builds because it cannot be
+# guaranteed that the builds will be warning-free and so cannot be
+# combined with fatal-warnings without breaking the builds.
+option(broken-warnings "Enable compiler warnings which will warn erroneously or are broken on some platforms" OFF)
 
 # This will cause the compiler to fail when an error occurs.
 option(fatal-warnings "Compiler warnings are errors" OFF)
@@ -76,6 +84,10 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wformat-nonliteral
                 -Wformat-signedness
                 -Wformat-truncation
+        )
+    endif()
+    if(broken-warnings)
+        list(APPEND test_flags
                 -Wdeclaration-after-statement
                 -Wconversion
                 -Wsign-conversion

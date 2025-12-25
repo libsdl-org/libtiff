@@ -71,7 +71,7 @@ int CheckCurDirNum(TIFF *tif, tdir_t expected_dirnum, int line)
     if (curdir != expected_dirnum)
     {
         fprintf(stderr,
-                "Error: curdir %d is different to expected one %d at line %d\n",
+                "Error: curdir %u is different to expected one %u at line %d\n",
                 curdir, expected_dirnum, line);
         return 1;
     }
@@ -89,7 +89,7 @@ int CheckCurDirNum(TIFF *tif, tdir_t expected_dirnum, int line)
 #define TIFFCheckpointDirectory_M(tif, dirnum, filename, line)                 \
     if (!TIFFCheckpointDirectory(tif))                                         \
     {                                                                          \
-        fprintf(stderr, "Can't checkpoint directory %d of %s at line %d\n",    \
+        fprintf(stderr, "Can't checkpoint directory %u of %s at line %d\n",    \
                 dirnum, filename, line);                                       \
         goto failure;                                                          \
     }
@@ -97,7 +97,7 @@ int CheckCurDirNum(TIFF *tif, tdir_t expected_dirnum, int line)
 #define TIFFSetDirectory_M(tif, dirnum, filename, line)                        \
     if (!TIFFSetDirectory(tif, dirnum))                                        \
     {                                                                          \
-        fprintf(stderr, "Can't set directory %d of %s at line %d\n", dirnum,   \
+        fprintf(stderr, "Can't set directory %u of %s at line %d\n", dirnum,   \
                 filename, line);                                               \
         goto failure;                                                          \
     }
@@ -357,7 +357,7 @@ int test_arbitrary_directrory_loading(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -816,7 +816,7 @@ int test_SubIFD_directrory_handling(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -899,7 +899,7 @@ int test_SubIFD_directrory_handling(unsigned int openMode)
     {
         fprintf(stderr,
                 "Unexpected number of directories in %s. Expected %i, "
-                "found %i.\n",
+                "found %u.\n",
                 filename, N_DIRECTORIES - number_of_sub_IFDs, numberOfMainIFDs);
         goto failure;
     }
@@ -1091,7 +1091,7 @@ int test_SetSubDirectory_failure(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -1235,7 +1235,7 @@ int test_rewrite_lastdir_offset(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -1395,7 +1395,7 @@ int test_lastdir_offset(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -1499,7 +1499,7 @@ int test_lastdir_offset(unsigned int openMode)
             if (get_dir_offsets(filename, offsets_comparison, mode))
             {
                 fprintf(stderr,
-                        "Error reading directory offsets from %s in mode %d.\n",
+                        "Error reading directory offsets from %s in mode %u.\n",
                         filename, mode);
                 goto failure;
             }
@@ -1590,7 +1590,7 @@ int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -1810,7 +1810,7 @@ int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
         CHECKCURDIRNUM_M(tif, expected_curdir, __LINE__);
         expected_curdir++;
         /* Second loop starts with IFD 0 read from file. */
-        TIFFSetDirectory_M(tif, 0, filename, __LINE__);
+        TIFFSetDirectory_M(tif, 0u, filename, __LINE__);
         TIFFCreateDirectory(tif);
     }
 
@@ -1871,7 +1871,7 @@ int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
         expected_curdir++;
 
         /* Second loop starts with IFD 0 read from file. */
-        TIFFSetDirectory_M(tif, 0, filename, __LINE__);
+        TIFFSetDirectory_M(tif, 0u, filename, __LINE__);
         TIFFCreateDirectory(tif);
     }
 
@@ -1913,10 +1913,10 @@ int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
         CHECKCURDIRNUM_M(tif, expected_curdir, __LINE__);
         expected_curdir++;
     }
-    TIFFSetDirectory_M(tif, 0, filename, __LINE__);
+    TIFFSetDirectory_M(tif, 0u, filename, __LINE__);
     offsetBase[0] = TIFFCurrentDirOffset(tif);
     CHECKCURDIRNUM_M(tif, 0, __LINE__);
-    TIFFSetDirectory_M(tif, 1, filename, __LINE__);
+    TIFFSetDirectory_M(tif, 1u, filename, __LINE__);
     offsetBase[1] = TIFFCurrentDirOffset(tif);
     CHECKCURDIRNUM_M(tif, 1, __LINE__);
     /* TIFFReadDirectory() shall fail but curdir shall be incremented,
@@ -1932,7 +1932,7 @@ int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
     }
     offsetBase[2] = TIFFCurrentDirOffset(tif);
     CHECKCURDIRNUM_M(tif, 2, __LINE__);
-    TIFFSetDirectory_M(tif, 0, filename, __LINE__);
+    TIFFSetDirectory_M(tif, 0u, filename, __LINE__);
     CHECKCURDIRNUM_M(tif, 0, __LINE__);
     /* TIFFSetDirectory() shall fail on IFD2 but curdir shall be incremented,
      * because parts of corrupt IFD2 are read in. */
@@ -1947,7 +1947,7 @@ int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
     CHECKCURDIRNUM_M(tif, 2, __LINE__);
     /* Also TIFFSetSubDirectory() shall fail for IFD2 and curdir shall be
      * set correctly to 2. Therefore, set it back to IFD0 first. */
-    TIFFSetDirectory_M(tif, 0, filename, __LINE__);
+    TIFFSetDirectory_M(tif, 0u, filename, __LINE__);
     CHECKCURDIRNUM_M(tif, 0, __LINE__);
     if (TIFFSetSubDirectory(tif, offsetBase[2]))
     {
@@ -2121,7 +2121,7 @@ int test_curdircount_setting(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -2214,7 +2214,7 @@ int test_solitary_custom_directory(unsigned int openMode)
 
     if (openMode >= (sizeof(openModeStrings) / sizeof(openModeStrings[0])))
     {
-        fprintf(stderr, "Index %d for openMode parameter out of range.\n",
+        fprintf(stderr, "Index %u for openMode parameter out of range.\n",
                 openMode);
         return 1;
     }
@@ -2290,7 +2290,7 @@ failure:
     return 1;
 } /*-- test_solitary_custom_directory() --*/
 
-int main()
+int main(void)
 {
 
     unsigned int openModeMax =

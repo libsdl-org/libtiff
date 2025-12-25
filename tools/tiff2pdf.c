@@ -1062,7 +1062,7 @@ int tiff2pdf_match_paper_size(float *width, float *length, char *papersize)
  * This function allocates and initializes a T2P context struct pointer.
  */
 
-T2P *t2p_init()
+T2P *t2p_init(void)
 {
     T2P *t2p = (T2P *)_TIFFmalloc(sizeof(T2P));
     if (t2p == NULL)
@@ -1237,7 +1237,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
         if (!TIFFSetDirectory(input, i))
         {
             TIFFError(TIFF2PDF_MODULE,
-                      "Can't set directory %" PRIu16 " of input file %s", i,
+                      "Can't set directory %u of input file %s", i,
                       TIFFFileName(input));
             t2p->t2p_error = T2P_ERR_ERROR;
             return;
@@ -1346,7 +1346,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
             if (tiff_transferfunctioncount != t2p->tiff_transferfunctioncount)
             {
                 TIFFError(TIFF2PDF_MODULE,
-                          "Different transfer function on page %" PRIu16, i);
+                          "Different transfer function on page %u", i);
                 t2p->t2p_error = T2P_ERR_ERROR;
                 return;
             }
@@ -1409,7 +1409,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
                          &(t2p->tiff_tiles[i].tiles_tilewidth));
             if (t2p->tiff_tiles[i].tiles_tilewidth < 1)
             {
-                TIFFError(TIFF2PDF_MODULE, "Invalid tile width (%d), %s",
+                TIFFError(TIFF2PDF_MODULE, "Invalid tile width (%u), %s",
                           t2p->tiff_tiles[i].tiles_tilewidth,
                           TIFFFileName(input));
                 t2p->t2p_error = T2P_ERR_ERROR;
@@ -1419,7 +1419,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
                          &(t2p->tiff_tiles[i].tiles_tilelength));
             if (t2p->tiff_tiles[i].tiles_tilelength < 1)
             {
-                TIFFError(TIFF2PDF_MODULE, "Invalid tile length (%d), %s",
+                TIFFError(TIFF2PDF_MODULE, "Invalid tile length (%u), %s",
                           t2p->tiff_tiles[i].tiles_tilelength,
                           TIFFFileName(input));
                 t2p->t2p_error = T2P_ERR_ERROR;
@@ -2863,7 +2863,7 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
             if (stripbuffer == NULL)
             {
                 TIFFError(TIFF2PDF_MODULE,
-                          "Can't allocate %" PRId64
+                          "Can't allocate %" PRIu64
                           " bytes of memory for t2p_readwrite_pdf_image, %s",
                           max_striplength, TIFFFileName(input));
                 _TIFFfree(buffer);
@@ -4433,9 +4433,9 @@ tsize_t t2p_write_pdf_header(T2P *t2p, TIFF *output)
     int buflen = 0;
     const char mod[] = "t2p_write_pdf_header()";
 
-    buflen = snprintf(buffer, sizeof(buffer), "%%PDF-%" PRIu16 ".%" PRIu16 " ",
-                      (uint16_t)(t2p->pdf_majorversion & 0xff),
-                      (uint16_t)(t2p->pdf_minorversion & 0xff));
+    buflen = snprintf(buffer, sizeof(buffer), "%%PDF-%u.%u ",
+                      (unsigned int)(t2p->pdf_majorversion & 0xff),
+                      (unsigned int)(t2p->pdf_minorversion & 0xff));
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) "\n%\342\343\317\323\n", 7, mod,
@@ -5040,7 +5040,7 @@ tsize_t t2p_write_pdf_pages(T2P *t2p, TIFF *output)
         }
     }
     add_t2pWriteFile_check(output, (tdata_t) "] \n/Count ", 10, mod, written);
-    buflen = snprintf(buffer, sizeof(buffer), "%" PRIu16, t2p->tiff_pagecount);
+    buflen = snprintf(buffer, sizeof(buffer), "%u", t2p->tiff_pagecount);
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) " \n>> \n", 6, mod, written);
@@ -6298,7 +6298,7 @@ tsize_t t2p_write_pdf_trailer(T2P *t2p, TIFF *output)
     /* Silence CoverityScan warning about bad crypto function */
     /* coverity[dont_call] */
     for (i = 0; i < sizeof(t2p->pdf_fileid) - 8; i += 8)
-        snprintf(t2p->pdf_fileid + i, 9, "%.8X", rand());
+        snprintf(t2p->pdf_fileid + i, 9, "%.8X", (unsigned int)rand());
 
     add_t2pWriteFile_check(output, (tdata_t) "trailer\n<<\n/Size ", 17, mod,
                            written);

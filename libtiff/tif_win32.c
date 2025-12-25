@@ -5,6 +5,7 @@
  * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
+ * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
@@ -343,7 +344,7 @@ TIFF *TIFFOpenWExt(const wchar_t *name, const char *mode, TIFFOpenOptions *opts)
         NULL);
     if (fd == INVALID_HANDLE_VALUE)
     {
-        _TIFFErrorEarly(opts, NULL, module, "%S: Cannot open", name);
+        _TIFFErrorEarly(opts, NULL, module, "%ls: Cannot open", name);
         return ((TIFF *)0);
     }
 

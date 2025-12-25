@@ -58,7 +58,7 @@ static TIFFField customFields[] = {
 
 static TIFFFieldArray customFieldArray = {tfiatOther, 0, 2, customFields};
 
-int main()
+int main(void)
 {
     TIFF *tif;
     unsigned char buf[SPP] = {0, 127, 255};

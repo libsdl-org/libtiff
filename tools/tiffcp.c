@@ -776,8 +776,8 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             break;
         default:
             TIFFError(TIFFFileName(in),
-                      "Data type %" PRIu16 " is not supported, tag %d skipped.",
-                      tag, type);
+                      "Data type %u is not supported, tag %u skipped.",
+                      (unsigned)type, (unsigned)tag);
     }
 }
 

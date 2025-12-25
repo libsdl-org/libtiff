@@ -176,7 +176,7 @@ int test_subifd_loop(void)
     return ret;
 } /*-- test_subifd_loop() --*/
 
-int main()
+int main(void)
 {
     int ret = 0;
     {

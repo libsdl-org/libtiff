@@ -684,14 +684,27 @@ static const char RGBcolorimage[] = "\
  *
  * It is claimed to be part of some future revision of the EPS spec.
  */
-static void PhotoshopBanner(FILE *fd, uint32_t w, uint32_t h, tmsize_t bs,
-                            int nc, const char *startline)
+static void TIFF_ATTRIBUTE((__format__(__printf__, 6, 0)))
+    PhotoshopBanner(FILE *fd, uint32_t w, uint32_t h, tmsize_t bs, int nc,
+                    const char *startline)
 {
     fprintf(fd,
             "%%ImageData: %" PRIu32 " %" PRIu32 " %" PRIu16
             " %d 0 %" TIFF_SSIZE_FORMAT " 2 \"",
             w, h, bitspersample, nc, bs);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#elif defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+#endif
     fprintf(fd, startline, nc);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#elif defined(__clang__)
+#pragma clang diagnostic pop
+#endif
     fprintf(fd, "\"\n");
 }
 
@@ -2738,7 +2751,19 @@ void PSpage(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
             break;
         case PHOTOMETRIC_MINISBLACK:
         case PHOTOMETRIC_MINISWHITE:
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#elif defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+#endif
             PhotoshopBanner(fd, w, h, 1, 1, imageOp);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#elif defined(__clang__)
+#pragma clang diagnostic pop
+#endif
             fprintf(fd, "/scanLine %" TIFF_SSIZE_FORMAT " string def\n",
                     ps_bytesperrow);
             fprintf(fd, "%" PRIu32 " %" PRIu32 " %" PRIu16 "\n", w, h,

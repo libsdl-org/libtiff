@@ -76,8 +76,9 @@ typedef struct MyErrorHandlerUserDataStruct
     char module[64];
 } MyErrorHandlerUserDataStruct;
 
-static int myErrorHandler(TIFF *tiff, void *user_data, const char *module,
-                          const char *fmt, va_list ap)
+static int TIFF_ATTRIBUTE((__format__(__printf__, 4, 0)))
+    myErrorHandler(TIFF *tiff, void *user_data, const char *module,
+                   const char *fmt, va_list ap)
 {
     MyErrorHandlerUserDataStruct *errorhandler_user_data =
         (MyErrorHandlerUserDataStruct *)user_data;
@@ -89,7 +90,7 @@ static int myErrorHandler(TIFF *tiff, void *user_data, const char *module,
     return 1;
 }
 
-static int test_error_handler()
+static int test_error_handler(void)
 {
     int ret = 0;
     char error_buffer[ERROR_STRING_SIZE] = {0};
@@ -287,11 +288,11 @@ int test_header_byte_order(TIFF *tif, char *openModeString)
         (tif->tif_header.common.tiff_version != TIFF_VERSION_BIG))
     {
         fprintf(stderr,
-                "Bad version number %" PRIu16 " (0x%4.4" PRIx16
-                ") for '%s'. Should be 0x%4.4" PRIx16 ".\n",
-                tif->tif_header.common.tiff_version,
-                tif->tif_header.common.tiff_version, openModeString,
-                TIFF_VERSION_CLASSIC);
+                "Bad version number %u (0x%4.4x"
+                ") for '%s'. Should be 0x%4.4x.\n",
+                (unsigned int)tif->tif_header.common.tiff_version,
+                (unsigned int)tif->tif_header.common.tiff_version, openModeString,
+                (unsigned int)TIFF_VERSION_CLASSIC);
         return 1;
     }
     if (TIFFIsBigTIFF(tif))
@@ -471,7 +472,7 @@ int test_TIFFheader_swapping(void)
     return ret;
 }
 
-int main()
+int main(void)
 {
     int ret = 0;
     fprintf(stderr, "=== test_open_options .... ===\n");

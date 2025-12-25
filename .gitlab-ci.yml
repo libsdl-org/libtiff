@@ -19,14 +19,14 @@ basic-build-fork:
   rules:
     - if: '$CI_PROJECT_PATH != "libtiff/libtiff"'
   script:
-    - sh build/gitlab-ci cmake "Unix Makefiles" Release
+    - sh build/gitlab-ci cmake "Unix Makefiles" Debug static
 
-basic-build-main:
+basic-build:
   stage: pre-build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
   script:
-    - sh build/gitlab-ci cmake "Unix Makefiles" Release
+    - sh build/gitlab-ci cmake "Unix Makefiles" Debug static
 
 # All jobs below only run on the main libtiff/libtiff repository
 # Forks will only run the basic-build-fork job above

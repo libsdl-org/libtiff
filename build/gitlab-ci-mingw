@@ -53,7 +53,7 @@ cmake --version
 gcc --version || { echo "gcc not found in MinGW"; exit 1; }
 
 # Configure CMake options
-CMAKE_OPTS="-Dfatal-warnings=ON"
+CMAKE_OPTS="-Dfatal-warnings=ON -Dextra-warnings=ON -Dcxx-compat-warnings=ON"
 CMAKE_OPTS="$CMAKE_OPTS -DCMAKE_UNITY_BUILD=ON"
 CMAKE_OPTS="$CMAKE_OPTS -DCMAKE_C_FLAGS=-Wall -Wextra -Werror"
 

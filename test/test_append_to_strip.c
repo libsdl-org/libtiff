@@ -41,7 +41,7 @@
 
 #include "tiffio.h"
 
-int main()
+int main(void)
 {
     tmsize_t ret;
     TIFF *tif = TIFFOpen("test_append_to_strip.tif", "w");

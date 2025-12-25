@@ -41,7 +41,7 @@
 
 const uint32_t rows_per_strip = 1;
 
-int test_packbits()
+int test_packbits(void)
 
 {
     TIFF *tif;
@@ -292,10 +292,11 @@ int rewrite_test(const char *filename, uint32_t width, int length, int bigtiff,
         if (rowoffset[i] != expect)
         {
             fprintf(stderr,
-                    "%s:STRIPOFFSETS[%d]: Got %X:%08X instead of %X:%08X.\n",
-                    filename, i, (int)(rowoffset[i] >> 32),
-                    (int)(rowoffset[i] & 0xFFFFFFFF), (int)(expect >> 32),
-                    (int)(expect & 0xFFFFFFFF));
+                    "%s:STRIPOFFSETS[%u]: Got %X:%08X instead of %X:%08X.\n",
+                    filename, (unsigned)i, (unsigned)(rowoffset[i] >> 32),
+                    (unsigned)(rowoffset[i] & 0xFFFFFFFF),
+                    (unsigned)(expect >> 32),
+                    (unsigned)(expect & 0xFFFFFFFF));
             goto failure;
         }
     }
@@ -313,10 +314,11 @@ int rewrite_test(const char *filename, uint32_t width, int length, int bigtiff,
         if (rowbytes[i] != expect)
         {
             fprintf(stderr,
-                    "%s:STRIPBYTECOUNTS[%d]: Got %X:%08X instead of %X:%08X.\n",
-                    filename, i, (int)(rowbytes[i] >> 32),
-                    (int)(rowbytes[i] & 0xFFFFFFFF), (int)(expect >> 32),
-                    (int)(expect & 0xFFFFFFFF));
+                    "%s:STRIPBYTECOUNTS[%u]: Got %X:%08X instead of %X:%08X.\n",
+                    filename, (unsigned)i, (unsigned)(rowbytes[i] >> 32),
+                    (unsigned)(rowbytes[i] & 0xFFFFFFFF),
+                    (unsigned)(expect >> 32),
+                    (unsigned)(expect & 0xFFFFFFFF));
             goto failure;
         }
     }

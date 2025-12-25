@@ -181,8 +181,8 @@ const char *orientationStrings[] = {
     {                                                                          \
         fprintf(                                                               \
             stdXOut,                                                           \
-            "Can't write image data scanline %d sample %d of %s at line %d\n", \
-            row, sample, filename, line);                                      \
+            "Can't write image data scanline %u sample %u of %s at line %d\n", \
+            (unsigned)(row), (unsigned)(sample), filename, line);              \
         goto failure;                                                          \
     }
 
@@ -646,7 +646,7 @@ int checkRasterContents(char *txt, TIFFRGBAImage *img, uint32_t *raster,
         {
             fprintf(stdXOut,
                     "\nPixel value of P%d = (%d, %d, %d)/(%02x, %02x, %02x) in "
-                    "raster at offset %d does not match expected value "
+                    "raster at offset %u does not match expected value "
                     "(%d, "
                     "%d, %d)/(%02x, %02x, %02x)",
                     i, a.u8[0], a.u8[1], a.u8[2], a.u8[0], a.u8[1], a.u8[2],
@@ -683,8 +683,8 @@ void printRaster(char *txt, TIFFRGBAImage *img, uint32_t *raster, uint32_t rw,
     if (img->col_offset != 0 || img->row_offset != 0)
     {
         sprintf(straux,
-                "\n--- (%3d /%3d) Orientation = %d (%s) %s, %s readWidth = %d, "
-                "readLength = %d, col_off = %d, row_off = %d, "
+                "\n--- (%3u /%3u) Orientation = %d (%s) %s, %s readWidth = %u, "
+                "readLength = %u, col_off = %d, row_off = %d, "
                 "req_orientation=%d (%s) using %s---\n",
                 img->width, img->height, orientation,
                 orientationStrings[orientation],
@@ -696,8 +696,8 @@ void printRaster(char *txt, TIFFRGBAImage *img, uint32_t *raster, uint32_t rw,
     else
     {
         sprintf(straux,
-                "\n--- (%3d /%3d) Orientation = %d (%s) %s, %s readWidth = %d, "
-                "readLength = %d, req_orientation=%d (%s) using "
+                "\n--- (%3u /%3u) Orientation = %d (%s) %s, %s readWidth = %u, "
+                "readLength = %u, req_orientation=%d (%s) using "
                 "%s---\n",
                 img->width, img->height, orientation,
                 orientationStrings[orientation],
@@ -1114,7 +1114,7 @@ void checkOpenLogFile(int blnReOpen)
 }
 
 /* ============  MAIN =============== */
-int main()
+int main(void)
 {
     int retval = 0;
     int retvalLast = 0;

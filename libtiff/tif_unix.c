@@ -362,7 +362,8 @@ int _TIFFmemcmp(const void *p1, const void *p2, tmsize_t c)
     return (memcmp(p1, p2, (size_t)c));
 }
 
-static void unixWarningHandler(const char *module, const char *fmt, va_list ap)
+static void TIFF_ATTRIBUTE((__format__(__printf__, 2, 0)))
+    unixWarningHandler(const char *module, const char *fmt, va_list ap)
 {
     if (module != NULL)
         fprintf(stderr, "%s: ", module);
@@ -372,7 +373,8 @@ static void unixWarningHandler(const char *module, const char *fmt, va_list ap)
 }
 TIFFErrorHandler _TIFFwarningHandler = unixWarningHandler;
 
-static void unixErrorHandler(const char *module, const char *fmt, va_list ap)
+static void TIFF_ATTRIBUTE((__format__(__printf__, 2, 0)))
+    unixErrorHandler(const char *module, const char *fmt, va_list ap)
 {
     if (module != NULL)
         fprintf(stderr, "%s: ", module);

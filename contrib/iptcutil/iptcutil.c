@@ -291,10 +291,10 @@ int formatIPTC(FILE *ifile, FILE *ofile)
 
         /* now finish up by formatting this binary data into ASCII equivalent */
         if (strlen(readable) > 0)
-            fprintf(ofile, "%d#%d#%s=", (unsigned int)dataset,
+            fprintf(ofile, "%u#%u#%s=", (unsigned int)dataset,
                     (unsigned int)recnum, readable);
         else
-            fprintf(ofile, "%d#%d=", (unsigned int)dataset,
+            fprintf(ofile, "%u#%u=", (unsigned int)dataset,
                     (unsigned int)recnum);
         /* Silence Coverity Scan warning about tainted_data: Passing tainted
          * expression *str to formatString, which uses it as an offset. */

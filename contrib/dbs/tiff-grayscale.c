@@ -34,7 +34,7 @@
 #define HEIGHT WIDTH
 
 char *programName;
-void Usage();
+void Usage(void);
 
 int main(int argc, char **argv)
 {
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void Usage()
+void Usage(void)
 {
     fprintf(stderr, "Usage: %s -depth (8 | 4 | 2) tiff-image\n", programName);
     exit(0);

@@ -157,7 +157,7 @@ int test(int classictif, int height, int tiled)
                     if (offset > INT32_MAX)
                     {
                         fprintf(stderr,
-                                "Offset %" PRId64 " exceeds fseek limit.\n",
+                                "Offset %" PRIu64 " exceeds fseek limit.\n",
                                 offset);
                         TIFFClose(tif);
                         fclose(f);
@@ -225,7 +225,7 @@ int test(int classictif, int height, int tiled)
                     if (offset > INT32_MAX)
                     {
                         fprintf(stderr,
-                                "Offset %" PRId64 " exceeds fseek limit.\n",
+                                "Offset %" PRIu64 " exceeds fseek limit.\n",
                                 offset);
                         TIFFClose(tif);
                         fclose(f);
@@ -316,7 +316,7 @@ int test(int classictif, int height, int tiled)
     return 0;
 }
 
-int main()
+int main(void)
 {
     int is_classic;
     for (is_classic = 1; is_classic >= 0; is_classic--)

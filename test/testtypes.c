@@ -41,7 +41,7 @@
         return 1;                                                              \
     }
 
-int main()
+int main(void)
 {
 #ifdef _MSC_VER
 #pragma warning(push)

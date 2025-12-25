@@ -94,7 +94,7 @@ const uint16_t photometric = PHOTOMETRIC_RGB;
 const uint16_t rows_per_strip = 1;
 const uint16_t planarconfig = PLANARCONFIG_CONTIG;
 
-int main()
+int main(void)
 {
     TIFF *tif;
     int ret, ret1, ret2;
@@ -790,7 +790,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 else
                 {
                     fprintf(stderr,
-                            "WriteCount for .set_get_field_type %d should be "
+                            "WriteCount for .set_get_field_type %u should be "
                             "1!  %s\n",
                             tSetFieldType, tFieldArray->fields[i].field_name);
                 }
@@ -809,9 +809,10 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 {
                     fprintf(
                         stderr,
-                        "WriteCount for .set_get_field_type %d should be -1 or "
+                        "WriteCount for .set_get_field_type %u should be -1 or "
                         "greater than 1!  %s\n",
-                        tSetFieldType, tFieldArray->fields[i].field_name);
+                        (unsigned)tSetFieldType,
+                        tFieldArray->fields[i].field_name);
                 }
                 else
                 {
@@ -882,7 +883,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 break;
             default:
                 fprintf(stderr,
-                        "SetFieldType %d not defined within writing switch for "
+                        "SetFieldType %u not defined within writing switch for "
                         "%s.\n",
                         tSetFieldType, tFieldName);
         }; /*-- switch() --*/
@@ -896,9 +897,10 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
             if (tWriteCount == 1)
             {
                 fprintf(stderr,
-                        "WriteCount for .set_get_field_type %d should be -1 or "
+                        "WriteCount for .set_get_field_type %u should be -1 or"
                         "greater than 1!  %s\n",
-                        tSetFieldType, tFieldArray->fields[i].field_name);
+                        (unsigned)tSetFieldType,
+                        tFieldArray->fields[i].field_name);
             }
             else
             {
@@ -995,8 +997,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr,
                 "Read value of IMAGEWIDTH %" PRIu32
-                " differs from set value %" PRIu16 "\n",
-                auxUint32, width);
+                " differs from set value %u\n",
+                auxUint32, (unsigned int)width);
     }
     retCode = TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &auxUint32);
     if (!retCode)
@@ -1007,8 +1009,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_IMAGELENGTH %" PRIu32
-                " differs from set value %" PRIu16 "\n",
-                auxUint32, length);
+                " differs from set value %u\n",
+                auxUint32, (unsigned int)length);
     }
 
 #ifdef ADDITIONAL_TAGS
@@ -1670,7 +1672,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 {
                     fprintf(
                         stderr,
-                        "Reading: WriteCount for .set_get_field_type %d should "
+                        "Reading: WriteCount for .set_get_field_type %u should "
                         "be -1 or greater than 1!  %s\n",
                         tSetFieldType, tFieldArray->fields[i].field_name);
                 }
@@ -1795,7 +1797,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 break;
             default:
                 fprintf(stderr,
-                        "SetFieldType %d not defined within writing switch for "
+                        "SetFieldType %u not defined within writing switch for "
                         "%s.\n",
                         tSetFieldType, tFieldName);
                 GOTOFAILURE
@@ -1810,9 +1812,10 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
             if (tWriteCount == 1)
             {
                 fprintf(stderr,
-                        "WriteCount for .set_get_field_type %d should be -1 or "
+                        "WriteCount for .set_get_field_type %u should be -1 or"
                         "greater than 1!  %s\n",
-                        tSetFieldType, tFieldArray->fields[i].field_name);
+                        (unsigned)tSetFieldType,
+                        tFieldArray->fields[i].field_name);
             }
             else
             {
@@ -1938,7 +1941,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                 else
                 {
                     fprintf(stderr,
-                            "SetFieldType %d not defined within switch case "
+                            "SetFieldType %u not defined within switch case "
                             "reading for UINT for %s.\n",
                             tSetFieldType, tFieldName);
                     GOTOFAILURE

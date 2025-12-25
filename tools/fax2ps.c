@@ -252,7 +252,7 @@ void printTIF(TIFF *tif, uint16_t pageNumber)
     creation_time = time(0);
     printf("%%%%CreationDate: %s", ctime(&creation_time));
     printf("%%%%Origin: 0 0\n");
-    printf("%%%%BoundingBox: 0 0 %u %u\n", (int)(pageWidth * points),
+    printf("%%%%BoundingBox: 0 0 %d %d\n", (int)(pageWidth * points),
            (int)(pageHeight * points)); /* XXX */
     printf("%%%%Pages: (atend)\n");
     printf("%%%%EndComments\n");
@@ -460,7 +460,7 @@ int main(int argc, char **argv)
         fclose(fd);
     }
     printf("%%%%Trailer\n");
-    printf("%%%%Pages: %u\n", totalPages);
+    printf("%%%%Pages: %d\n", totalPages);
     printf("%%%%EOF\n");
 
     free(pages);

@@ -191,7 +191,7 @@ static void _XTIFFDefaultDirectory(TIFF *tif)
         (*_ParentExtender)(tif);
 }
 
-int main()
+int main(void)
 {
     static const char filenameClassicTiff[] = "rationalPrecision2Double.tif";
     static const char filenameBigTiff[] = "rationalPrecision2Double_Big.tif";
@@ -648,7 +648,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                         {
                             fprintf(
                                 stderr,
-                                "WriteCount for .set_get_field_type %d should "
+                                "WriteCount for .set_get_field_type %u should "
                                 "be 1!  %s\n",
                                 tSetFieldType,
                                 tFieldArray->fields[i].field_name);
@@ -668,7 +668,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                         {
                             fprintf(
                                 stderr,
-                                "WriteCount for .set_get_field_type %d should "
+                                "WriteCount for .set_get_field_type %u should "
                                 "be -1 or greater than 1!  %s\n",
                                 tSetFieldType,
                                 tFieldArray->fields[i].field_name);
@@ -713,7 +713,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                         break;
                     default:
                         fprintf(stderr,
-                                "SetFieldType %d not defined within writing "
+                                "SetFieldType %u not defined within writing "
                                 "switch for %s.\n",
                                 tSetFieldType, tFieldName);
                 };           /*-- switch() --*/
@@ -756,8 +756,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     if (auxUint32 != width)
     {
         fprintf(stderr,
-                "Read value of IMAGEWIDTH %d differs from set value %d\n",
-                auxUint32, width);
+                "Read value of IMAGEWIDTH %u differs from set value %u\n",
+                auxUint32, (unsigned int)width);
         GOTOFAILURE
     }
     retCode = TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &auxUint32);
@@ -765,8 +765,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     {
         fprintf(
             stderr,
-            "Read value of TIFFTAG_IMAGELENGTH %d differs from set value %d\n",
-            auxUint32, length);
+            "Read value of TIFFTAG_IMAGELENGTH %u differs from set value %u\n",
+            auxUint32, (unsigned int)length);
         GOTOFAILURE
     }
 
@@ -1199,7 +1199,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                             fprintf(
                                 stderr,
                                 "Reading: WriteCount for .set_get_field_type "
-                                "%d should be -1 or greater than 1!  %s\n",
+                                "%u should be -1 or greater than 1!  %s\n",
                                 tSetFieldType,
                                 tFieldArray->fields[i].field_name);
                             GOTOFAILURE
@@ -1308,7 +1308,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                         break;
                     default:
                         fprintf(stderr,
-                                "SetFieldType %d not defined within reading "
+                                "SetFieldType %u not defined within reading "
                                 "switch for %s.\n",
                                 tSetFieldType, tFieldName);
                 }; /*-- switch() --*/
