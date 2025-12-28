@@ -133,7 +133,10 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wc++-compat)
     endif()
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    set(test_flags)
+    set(test_flags
+            # Suppress warnings from system headers (MSVC 16.10+)
+            /external:anglebrackets
+            /external:W0)
     if(extra-warnings)
         list(APPEND test_flags
                 /W4
