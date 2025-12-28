@@ -133,6 +133,10 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wc++-compat)
     endif()
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    # Remove default /W3 from CMake's default flags to avoid D9025 warning
+    string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
     set(test_flags
             # Suppress warnings from system headers (MSVC 16.10+)
             /external:anglebrackets
