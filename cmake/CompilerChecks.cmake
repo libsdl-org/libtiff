@@ -124,12 +124,11 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wvla
                 -Warray-bounds=3
                 -Wstringop-overflow=4
+                -Walloc-zero
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wstringop-truncation
-                -Walloc-zero
                 -Wtrampolines
                 -Wcast-qual
                 -Wcast-align
