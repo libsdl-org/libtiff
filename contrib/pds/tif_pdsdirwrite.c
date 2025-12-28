@@ -59,7 +59,7 @@
  */
 #include "tiffiop.h"
 
-#if HAVE_IEEEFP
+#ifdef HAVE_IEEEFP
 #define TIFFCvtNativeToIEEEFloat(tif, n, fp)
 #define TIFFCvtNativeToIEEEDouble(tif, n, dp)
 #else
