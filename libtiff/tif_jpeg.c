@@ -1435,7 +1435,7 @@ int TIFFJPEGIsFullStripRequired(TIFF *tif)
  * Decode a chunk of pixels.
  * "Standard" case: returned data is not downsampled.
  */
-#if !JPEG_LIB_MK1_OR_12BIT
+#if !defined(JPEG_LIB_MK1_OR_12BIT)
 static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
 {
     JPEGState *sp = JState(tif);
@@ -1493,9 +1493,9 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     return sp->cinfo.d.output_scanline < sp->cinfo.d.output_height ||
            TIFFjpeg_finish_decompress(sp);
 }
-#endif /* !JPEG_LIB_MK1_OR_12BIT */
+#endif /* !defined(JPEG_LIB_MK1_OR_12BIT) */
 
-#if JPEG_LIB_MK1_OR_12BIT
+#if defined(JPEG_LIB_MK1_OR_12BIT)
 /*ARGSUSED*/ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc,
                                    uint16_t s)
 {
@@ -1610,7 +1610,7 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     return sp->cinfo.d.output_scanline < sp->cinfo.d.output_height ||
            TIFFjpeg_finish_decompress(sp);
 }
-#endif /* JPEG_LIB_MK1_OR_12BIT */
+#endif /* defined(JPEG_LIB_MK1_OR_12BIT) */
 
 /*ARGSUSED*/ static int DecodeRowError(TIFF *tif, uint8_t *buf, tmsize_t cc,
                                        uint16_t s)
