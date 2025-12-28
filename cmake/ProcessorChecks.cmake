@@ -24,14 +24,24 @@
 # OF THIS SOFTWARE.
 
 
-include(TestBigEndian)
-
 # CPU endianness
-test_big_endian(HOST_BIG_ENDIAN)
-if(HOST_BIG_ENDIAN)
-    set(WORDS_BIGENDIAN TRUE)
+# Use CMAKE_C_BYTE_ORDER if available (CMake 3.20+), otherwise fall back to test_big_endian()
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.20 AND DEFINED CMAKE_C_BYTE_ORDER)
+    if(CMAKE_C_BYTE_ORDER STREQUAL "BIG_ENDIAN")
+        set(WORDS_BIGENDIAN TRUE)
+        set(HOST_BIG_ENDIAN 1)
+    else()
+        set(WORDS_BIGENDIAN FALSE)
+        set(HOST_BIG_ENDIAN 0)
+    endif()
 else()
-    set(WORDS_BIGENDIAN FALSE)
+    include(TestBigEndian)
+    test_big_endian(WORDS_BIGENDIAN)
+    if(WORDS_BIGENDIAN)
+        set(HOST_BIG_ENDIAN 1)
+    else()
+        set(HOST_BIG_ENDIAN 0)
+    endif()
 endif()
 
 # IEEE floating point
