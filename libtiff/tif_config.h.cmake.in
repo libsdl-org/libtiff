@@ -29,7 +29,7 @@
 #cmakedefine HAVE_ASSERT_H 1
 
 /* Define to 1 if you have the declaration of `optarg', and to 0 if you don't. */
-#cmakedefine HAVE_DECL_OPTARG 1
+#cmakedefine01 HAVE_DECL_OPTARG
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #cmakedefine HAVE_FCNTL_H 1
