@@ -119,11 +119,11 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wunused-macros
                 -Wundef
                 -Wold-style-definition
+                -Wnested-externs
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wnested-externs
                 -Wjump-misses-init
                 -Wunsuffixed-float-constants
                 -Wvla
