@@ -136,7 +136,14 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     set(test_flags)
     if(extra-warnings)
         list(APPEND test_flags
-                /W4)
+                /W4
+                /w44365
+                /w44668
+                /w44062
+                /w44242
+                /w44826
+                /w44905
+                /w44906)
     else()
         list(APPEND test_flags
                 /W3)
