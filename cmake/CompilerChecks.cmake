@@ -122,11 +122,11 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wnested-externs
                 -Wjump-misses-init
                 -Wvla
+                -Warray-bounds=3
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Warray-bounds=2
                 -Wimplicit-fallthrough=3
                 -Wstringop-overflow=4
                 -Wstringop-truncation
