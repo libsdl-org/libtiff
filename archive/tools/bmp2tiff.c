@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
                       strerror(errno));
             goto bad;
         }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
         TIFFSwabLong(&file_hdr.iOffBits);
 #endif
         if (_TIFF_fstat_f(fd, &instat) == -1)
@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
                       strerror(errno));
             goto bad;
         }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
         TIFFSwabLong(&info_hdr.iSize);
 #endif
 
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
                           strerror(errno));
                 goto bad;
             }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
             TIFFSwabLong((uint32_t *)&info_hdr.iWidth);
             TIFFSwabLong((uint32_t *)&info_hdr.iHeight);
             TIFFSwabShort((uint16_t *)&info_hdr.iPlanes);
@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
                           strerror(errno));
                 goto bad;
             }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
             TIFFSwabShort((uint16_t *)&iShort);
 #endif
             info_hdr.iWidth = iShort;
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
                           strerror(errno));
                 goto bad;
             }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
             TIFFSwabShort((uint16_t *)&iShort);
 #endif
             info_hdr.iHeight = iShort;
@@ -436,7 +436,7 @@ int main(int argc, char *argv[])
                           strerror(errno));
                 goto bad;
             }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
             TIFFSwabShort((uint16_t *)&iShort);
 #endif
             info_hdr.iPlanes = iShort;
@@ -446,7 +446,7 @@ int main(int argc, char *argv[])
                           strerror(errno));
                 goto bad;
             }
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
             TIFFSwabShort((uint16_t *)&iShort);
 #endif
             info_hdr.iBitCount = iShort;

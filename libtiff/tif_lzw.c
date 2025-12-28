@@ -325,7 +325,7 @@ static int LZWPreDecode(TIFF *tif, uint16_t s)
  */
 
 /* Get the next 32 or 64-bit from the input data */
-#ifdef WORDS_BIGENDIAN
+#if WORDS_BIGENDIAN
 #define GetNextData(nextdata, bp) memcpy(&nextdata, bp, sizeof(nextdata))
 #elif SIZEOF_WORDTYPE == 8
 #if defined(_M_X64)

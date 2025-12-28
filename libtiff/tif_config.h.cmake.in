@@ -136,10 +136,12 @@
 #if defined AC_APPLE_UNIVERSAL_BUILD
 # if defined __BIG_ENDIAN__
 #  define WORDS_BIGENDIAN 1
+# else
+#  define WORDS_BIGENDIAN 0
 # endif
 #else
 # ifndef WORDS_BIGENDIAN
-#  cmakedefine WORDS_BIGENDIAN 1
+#  cmakedefine01 WORDS_BIGENDIAN
 # endif
 #endif
 
