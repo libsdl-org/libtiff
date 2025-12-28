@@ -120,13 +120,12 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wundef
                 -Wold-style-definition
                 -Wnested-externs
+                -Wjump-misses-init
+                -Wvla
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wjump-misses-init
-                -Wunsuffixed-float-constants
-                -Wvla
                 -Warray-bounds=2
                 -Wimplicit-fallthrough=3
                 -Wstringop-overflow=4
