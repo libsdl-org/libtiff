@@ -116,7 +116,12 @@ if (JPEG_SUPPORT)
 
     # Check if the jpeg12_read_scanlines symbol exists in jpeglib.h
     # This is more reliable than trying to compile code that calls it
-    check_symbol_exists(jpeg12_read_scanlines "stdio.h;jpeglib.h" HAVE_JPEGTURBO_DUAL_MODE_8_12)
+    check_symbol_exists(jpeg_read_scanlines "stdio.h;jpeglib.h" HAVE_JPEGTURBO_DUAL_MODE_8)
+    check_symbol_exists(jpeg12_read_scanlines "stdio.h;jpeglib.h" HAVE_JPEGTURBO_DUAL_MODE_12)
+    set(HAVE_JPEGTURBO_DUAL_MODE_8_12 OFF)
+    if (HAVE_JPEGTURBO_DUAL_MODE_8 AND HAVE_JPEGTURBO_DUAL_MODE_12)
+        set(HAVE_JPEGTURBO_DUAL_MODE_8_12 ON)
+    endif()
 
     cmake_pop_check_state()
 endif()
