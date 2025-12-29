@@ -41,15 +41,31 @@ if(NOT jpeg-prefer-standard)
         if(TARGET libjpeg-turbo::turbojpeg AND NOT TARGET JPEG::JPEG)
             add_library(JPEG::JPEG ALIAS libjpeg-turbo::turbojpeg)
             set(JPEG_FOUND TRUE)
-            # Set variables for compatibility with code that uses them
-            get_target_property(JPEG_INCLUDE_DIRS libjpeg-turbo::turbojpeg INTERFACE_INCLUDE_DIRECTORIES)
+            # Set JPEG_LIBRARIES to the target name - CMake will handle includes automatically
+            # when this is used in CMAKE_REQUIRED_LIBRARIES
             set(JPEG_LIBRARIES libjpeg-turbo::turbojpeg)
+            # For JPEG_INCLUDE_DIRS, try to get the property, but it's OK if it's not set
+            # since the target will provide the includes when used
+            get_target_property(_jpeg_includes libjpeg-turbo::turbojpeg INTERFACE_INCLUDE_DIRECTORIES)
+            if(_jpeg_includes)
+                set(JPEG_INCLUDE_DIRS "${_jpeg_includes}")
+            else()
+                set(JPEG_INCLUDE_DIRS "")
+            endif()
+            unset(_jpeg_includes)
         elseif(TARGET libjpeg-turbo::jpeg AND NOT TARGET JPEG::JPEG)
             add_library(JPEG::JPEG ALIAS libjpeg-turbo::jpeg)
             set(JPEG_FOUND TRUE)
-            # Set variables for compatibility with code that uses them
-            get_target_property(JPEG_INCLUDE_DIRS libjpeg-turbo::jpeg INTERFACE_INCLUDE_DIRECTORIES)
+            # Set JPEG_LIBRARIES to the target name
             set(JPEG_LIBRARIES libjpeg-turbo::jpeg)
+            # For JPEG_INCLUDE_DIRS, try to get the property, but it's OK if it's not set
+            get_target_property(_jpeg_includes libjpeg-turbo::jpeg INTERFACE_INCLUDE_DIRECTORIES)
+            if(_jpeg_includes)
+                set(JPEG_INCLUDE_DIRS "${_jpeg_includes}")
+            else()
+                set(JPEG_INCLUDE_DIRS "")
+            endif()
+            unset(_jpeg_includes)
         endif()
     endif()
 endif()
@@ -77,7 +93,12 @@ if (JPEG_SUPPORT)
     include(CheckCSourceCompiles)
     include(CMakePushCheckState)
     cmake_push_check_state(RESET)
-    set(CMAKE_REQUIRED_INCLUDES "${JPEG_INCLUDE_DIRS}")
+    # When using imported targets (from CONFIG), CMAKE_REQUIRED_LIBRARIES will handle
+    # include directories automatically, so only set CMAKE_REQUIRED_INCLUDES if we
+    # have explicit include dirs (from Find module)
+    if(JPEG_INCLUDE_DIRS AND NOT TARGET ${JPEG_LIBRARIES})
+        set(CMAKE_REQUIRED_INCLUDES "${JPEG_INCLUDE_DIRS}")
+    endif()
     set(CMAKE_REQUIRED_LIBRARIES "${JPEG_LIBRARIES}")
     check_c_source_compiles(
         "
