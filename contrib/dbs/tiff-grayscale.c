@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     }
 
     cmsize = nchunks * nchunks;
-    gray = (uint16_t *)malloc(cmsize * sizeof(uint16_t));
+    gray = (uint16_t *)malloc((size_t)cmsize * sizeof(uint16_t));
 
     gray[0] = 3000;
     for (i = 1; i < cmsize; i++)
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     TIFFSetField(tif, TIFFTAG_TRANSFERFUNCTION, gray);
     TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_NONE);
 
-    scan_line = (unsigned char *)malloc(WIDTH / (8 / bits_per_pixel));
+    scan_line = (unsigned char *)malloc((size_t)(WIDTH / (8 / bits_per_pixel)));
 
     for (i = 0; i < HEIGHT; i++)
     {
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
                     break;
             }
         }
-        TIFFWriteScanline(tif, scan_line, i, 0);
+        TIFFWriteScanline(tif, scan_line, (uint32_t)i, 0);
     }
 
     free(scan_line);

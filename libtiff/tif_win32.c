@@ -73,7 +73,7 @@ static tmsize_t _tiffReadProc(thandle_t fd, void *buf, tmsize_t size)
     DWORD o;
     tmsize_t p;
     ma = (uint8_t *)buf;
-    mb = size;
+    mb = (uint64_t)size;
     p = 0;
     while (mb > 0)
     {
@@ -102,7 +102,7 @@ static tmsize_t _tiffWriteProc(thandle_t fd, void *buf, tmsize_t size)
     DWORD o;
     tmsize_t p;
     ma = (uint8_t *)buf;
-    mb = size;
+    mb = (uint64_t)size;
     p = 0;
     while (mb > 0)
     {
@@ -124,7 +124,7 @@ static uint64_t _tiffSeekProc(thandle_t fd, uint64_t off, int whence)
 {
     LARGE_INTEGER offli;
     DWORD dwMoveMethod;
-    offli.QuadPart = off;
+    offli.QuadPart = (LONGLONG)off;
     switch (whence)
     {
         case SEEK_SET:
@@ -141,11 +141,11 @@ static uint64_t _tiffSeekProc(thandle_t fd, uint64_t off, int whence)
             break;
     }
     offli.LowPart =
-        SetFilePointer(fd, offli.LowPart, &offli.HighPart, dwMoveMethod);
+        SetFilePointer(fd, (LONG)offli.LowPart, &offli.HighPart, dwMoveMethod);
     if ((offli.LowPart == INVALID_SET_FILE_POINTER) &&
         (GetLastError() != NO_ERROR))
         offli.QuadPart = 0;
-    return (offli.QuadPart);
+    return ((uint64_t)offli.QuadPart);
 }
 
 static int _tiffCloseProc(thandle_t fd) { return (CloseHandle(fd) ? 0 : -1); }
@@ -154,7 +154,7 @@ static uint64_t _tiffSizeProc(thandle_t fd)
 {
     LARGE_INTEGER m;
     if (GetFileSizeEx(fd, &m))
-        return (m.QuadPart);
+        return ((uint64_t)m.QuadPart);
     else
         return (0);
 }

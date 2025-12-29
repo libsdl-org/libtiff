@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
                 break;
             case 'l': /* tile length */
                 outtiled = TRUE;
-                deftilelength = atoi(optarg);
+                deftilelength = (uint32_t)atoi(optarg);
                 break;
             case 'o': /* initial directory offset */
                 v = strtol(optarg, NULL, 0);
@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
                     usage(EXIT_FAILURE);
                 break;
             case 'r': /* rows/strip */
-                defrowsperstrip = atol(optarg);
+                defrowsperstrip = (uint32_t)atol(optarg);
                 break;
             case 's': /* generate stripped output */
                 outtiled = FALSE;
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
                 break;
             case 'w': /* tile width */
                 outtiled = TRUE;
-                deftilewidth = atoi(optarg);
+                deftilewidth = (uint32_t)atoi(optarg);
                 break;
             case 'B':
                 if (strlen(mode) < (sizeof(mode) - 1))
@@ -471,7 +471,7 @@ static void processG3Options(char *cp)
         {
             cp++;
             if (strneq(cp, "1d", 2))
-                defg3opts &= ~GROUP3OPT_2DENCODING;
+                defg3opts &= ~(uint32_t)GROUP3OPT_2DENCODING;
             else if (strneq(cp, "2d", 2))
                 defg3opts |= GROUP3OPT_2DENCODING;
             else if (strneq(cp, "fill", 4))

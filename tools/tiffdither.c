@@ -131,7 +131,7 @@ static int fsdither(TIFF *in, TIFF *out)
                 v = 255;
             if (v > threshold)
             {
-                *outptr |= bit;
+                *outptr |= (unsigned char)bit;
                 v -= 255;
             }
             bit >>= 1;
@@ -178,7 +178,7 @@ static void processG3Options(char *cp)
         {
             cp++;
             if (strneq(cp, "1d", 2))
-                group3options &= ~GROUP3OPT_2DENCODING;
+                group3options &= ~(uint32_t)GROUP3OPT_2DENCODING;
             else if (strneq(cp, "2d", 2))
                 group3options |= GROUP3OPT_2DENCODING;
             else if (strneq(cp, "fill", 4))
@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
                     usage(EXIT_FAILURE);
                 break;
             case 'r': /* rows/strip */
-                rowsperstrip = atoi(optarg);
+                rowsperstrip = (uint32_t)atoi(optarg);
                 break;
             case 't':
                 threshold = atoi(optarg);

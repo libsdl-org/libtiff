@@ -120,19 +120,19 @@ int main(int argc, char *argv[])
                     usage(EXIT_FAILURE);
                 break;
             case 'r': /* rows/strip */
-                rowsperstrip = atoi(optarg);
+                rowsperstrip = (uint32_t)atoi(optarg);
                 break;
             case 'H': /* size of input image file header */
                 hdr_size = atoi(optarg);
                 break;
             case 'w': /* input image width */
-                width = atoi(optarg);
+                width = (uint32_t)atoi(optarg);
                 break;
             case 'l': /* input image length */
-                length = atoi(optarg);
+                length = (uint32_t)atoi(optarg);
                 break;
             case 'b': /* number of bands in input image */
-                nbands = atoi(optarg);
+                nbands = (uint32_t)atoi(optarg);
                 break;
             case 'd': /* type of samples in input image */
                 if (strncmp(optarg, "byte", 4) == 0)
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
         return (EXIT_FAILURE);
     }
 
-    temp_limit_check = nbands * depth;
+    temp_limit_check = (uint32_t)depth * nbands;
 
     if (!temp_limit_check || length > (UINT_MAX / temp_limit_check))
     {
@@ -332,15 +332,15 @@ int main(int argc, char *argv[])
     switch (interleaving)
     {
         case BAND: /* band interleaved data */
-            linebytes = width * depth;
+            linebytes = (uint32_t)depth * width;
             buf = (unsigned char *)_TIFFmalloc(linebytes);
             break;
         case PIXEL: /* pixel interleaved data */
         default:
-            linebytes = width * nbands * depth;
+            linebytes = (uint32_t)depth * width * nbands;
             break;
     }
-    bufsize = width * nbands * depth;
+    bufsize = (uint32_t)depth * width * nbands;
     buf1 = (unsigned char *)_TIFFmalloc(bufsize);
 
     rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
@@ -377,8 +377,8 @@ int main(int argc, char *argv[])
                     if (swab) /* Swap bytes if needed */
                         swapBytesInScanline(buf, width, dtype);
                     for (col = 0; col < width; col++)
-                        memcpy(buf1 + (col * nbands + band) * depth,
-                               buf + col * depth, depth);
+                        memcpy(buf1 + (col * nbands + band) * (size_t)depth,
+                               buf + col * (size_t)depth, (size_t)depth);
                 }
                 break;
             case PIXEL: /* pixel interleaved data */
@@ -417,15 +417,15 @@ static void swapBytesInScanline(void *buf, uint32_t width, TIFFDataType dtype)
     {
         case TIFF_SHORT:
         case TIFF_SSHORT:
-            TIFFSwabArrayOfShort((uint16_t *)buf, (unsigned long)width);
+            TIFFSwabArrayOfShort((uint16_t *)buf, (tmsize_t)width);
             break;
         case TIFF_LONG:
         case TIFF_SLONG:
-            TIFFSwabArrayOfLong((uint32_t *)buf, (unsigned long)width);
+            TIFFSwabArrayOfLong((uint32_t *)buf, (tmsize_t)width);
             break;
         /* case TIFF_FLOAT: */ /* FIXME */
         case TIFF_DOUBLE:
-            TIFFSwabArrayOfDouble((double *)buf, (unsigned long)width);
+            TIFFSwabArrayOfDouble((double *)buf, (tmsize_t)width);
             break;
         case TIFF_NOTYPE:
         case TIFF_BYTE:
@@ -452,7 +452,7 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
     char *buf1, *buf2;
     _TIFF_stat_s filestat;
     uint32_t w, h, scanlinesize, imagesize;
-    uint32_t depth = TIFFDataWidth(dtype);
+    uint32_t depth = (uint32_t)TIFFDataWidth(dtype);
     double cor_coef = 0, tmp;
 
     if (_TIFF_fstat_f(fd, &filestat) == -1)
@@ -499,14 +499,14 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
     {
         unsigned int fail = 0;
         fprintf(stderr, "Image width and height are not specified.\n");
-        w = (uint32_t)sqrt(imagesize / longt);
+        w = (uint32_t)sqrt((double)imagesize / longt);
         if (w == 0)
         {
             fprintf(stderr, "Too small image size.\n");
             return -1;
         }
 
-        for (; w < sqrt(imagesize * longt); w++)
+        for (; w < (uint32_t)sqrt((double)imagesize * longt); w++)
         {
             if (imagesize % w == 0)
             {
@@ -522,7 +522,7 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
                 do
                 {
                     if (_TIFF_lseek_f(
-                            fd, hdr_size + (int)((h - 1) / 2) * scanlinesize,
+                            fd, hdr_size + (uint32_t)((h - 1) / 2) * scanlinesize,
                             SEEK_SET) == (_TIFF_off_t)-1)
                     {
                         fprintf(stderr, "seek error.\n");

@@ -369,7 +369,7 @@ static int ContigCompare(int sample, uint32_t row, unsigned char *p1,
     uint32_t pix;
     int samples_to_test;
 
-    if (memcmp(p1, p2, size) == 0)
+    if (memcmp(p1, p2, (size_t)size) == 0)
         return 0;
 
     samples_to_test = (sample == -1) ? samplesperpixel : 1;
@@ -504,12 +504,12 @@ static void PrintIntDiff(uint32_t row, int sample, uint32_t pix, uint32_t w1,
             for (; mask2 && pix < imagewidth;
                  mask2 >>= bitspersample, s -= bitspersample, pix++)
             {
-                if ((w1 & mask2) ^ (w2 & mask2))
+                if ((w1 & (uint32_t)mask2) ^ (w2 & (uint32_t)mask2))
                 {
                     printf("Scanline %" PRIu32 ", pixel %" PRIu32
                            ", sample %d: %01" PRIx32 " %01" PRIx32 "\n",
-                           row, pix, sample, (w1 >> s) & mask1,
-                           (w2 >> s) & mask1);
+                           row, pix, sample, (w1 >> s) & (uint32_t)mask1,
+                           (w2 >> s) & (uint32_t)mask1);
                     if (--stopondiff == 0)
                         exit(1);
                 }
@@ -589,20 +589,27 @@ static int SeparateCompare(int reversed, int sample, uint32_t row,
 static int checkTag(TIFF *tif1, TIFF *tif2, int tag, const char *name, void *p1,
                     void *p2)
 {
+    int r1, r2;
 
-    if (TIFFGetField(tif1, tag, p1))
+    r1 = TIFFGetField(tif1, (uint32_t)tag, p1);
+    if (r1)
     {
-        if (!TIFFGetField(tif2, tag, p2))
+        r2 = TIFFGetField(tif2, (uint32_t)tag, p2);
+        if (!r2)
         {
             printf("%s tag appears only in %s\n", name, TIFFFileName(tif1));
             return (0);
         }
         return (1);
     }
-    else if (TIFFGetField(tif2, tag, p2))
+    else
     {
-        printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
-        return (0);
+        r2 = TIFFGetField(tif2, (uint32_t)tag, p2);
+        if (r2)
+        {
+            printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
+            return (0);
+        }
     }
     return (-1);
 }
@@ -632,10 +639,13 @@ static int CheckShortTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 static int CheckShort2Tag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     uint16_t v11, v12, v21, v22;
+    int r1, r2;
 
-    if (TIFFGetField(tif1, tag, &v11, &v12))
+    r1 = TIFFGetField(tif1, (uint32_t)tag, &v11, &v12);
+    if (r1)
     {
-        if (!TIFFGetField(tif2, tag, &v21, &v22))
+        r2 = TIFFGetField(tif2, (uint32_t)tag, &v21, &v22);
+        if (!r2)
         {
             printf("%s tag appears only in %s\n", name, TIFFFileName(tif1));
             return (0);
@@ -645,10 +655,14 @@ static int CheckShort2Tag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
         printf("%s: <%" PRIu16 ",%" PRIu16 "> <%" PRIu16 ",%" PRIu16 ">\n",
                name, v11, v12, v21, v22);
     }
-    else if (TIFFGetField(tif2, tag, &v21, &v22))
-        printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
     else
-        return (1);
+    {
+        r2 = TIFFGetField(tif2, (uint32_t)tag, &v21, &v22);
+        if (r2)
+            printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
+        else
+            return (1);
+    }
     return (0);
 }
 
@@ -656,10 +670,13 @@ static int CheckShortArrayTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     uint16_t n1, *a1;
     uint16_t n2, *a2;
+    int r1, r2;
 
-    if (TIFFGetField(tif1, tag, &n1, &a1))
+    r1 = TIFFGetField(tif1, (uint32_t)tag, &n1, &a1);
+    if (r1)
     {
-        if (!TIFFGetField(tif2, tag, &n2, &a2))
+        r2 = TIFFGetField(tif2, (uint32_t)tag, &n2, &a2);
+        if (!r2)
         {
             printf("%s tag appears only in %s\n", name, TIFFFileName(tif1));
             return (0);
@@ -685,10 +702,14 @@ static int CheckShortArrayTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
             printf("%s: %" PRIu16 " items in %s, %" PRIu16 " items in %s", name,
                    n1, TIFFFileName(tif1), n2, TIFFFileName(tif2));
     }
-    else if (TIFFGetField(tif2, tag, &n2, &a2))
-        printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
     else
-        return (1);
+    {
+        r2 = TIFFGetField(tif2, (uint32_t)tag, &n2, &a2);
+        if (r2)
+            printf("%s tag appears only in %s\n", name, TIFFFileName(tif2));
+        else
+            return (1);
+    }
     return (0);
 }
 

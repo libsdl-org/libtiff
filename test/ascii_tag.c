@@ -160,7 +160,7 @@ int main(void)
     }
 
     if (!TIFFGetField(tif, TIFFTAG_INKNAMES, &value) ||
-        memcmp(value, ink_names, ink_names_size))
+        memcmp(value, ink_names, (size_t)ink_names_size))
     {
         fprintf(stderr, "Can't get tag %d (INKNAMES).\n", TIFFTAG_INKNAMES);
         goto failure;

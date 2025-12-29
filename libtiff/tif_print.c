@@ -416,7 +416,7 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
              i > 0 && cp < td->td_inknames + td->td_inknameslen;
              cp = strchr(cp, '\0') + 1, i--)
         {
-            size_t max_chars = td->td_inknameslen - (cp - td->td_inknames);
+            size_t max_chars = (size_t)(td->td_inknameslen - (cp - td->td_inknames));
             fputs(sep, fd);
             _TIFFprintAsciiBounded(fd, cp, max_chars);
             sep = ", ";
@@ -664,7 +664,7 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
                 else if (fip->field_readcount == TIFF_SPP)
                     value_count = td->td_samplesperpixel;
                 else
-                    value_count = fip->field_readcount;
+                    value_count = (uint32_t)fip->field_readcount;
                 if (fip->field_tag == TIFFTAG_DOTRANGE &&
                     strcmp(fip->field_name, "DotRange") == 0)
                 {
@@ -689,7 +689,7 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
                      * "set_get_field_type" to determine internal storage size.
                      */
                     int tv_size = TIFFFieldSetGetSize(fip);
-                    raw_data = _TIFFmallocExt(tif, tv_size * value_count);
+                    raw_data = _TIFFmallocExt(tif, (uint32_t)tv_size * value_count);
                     mem_alloc = 1;
                     if (TIFFGetField(tif, tag, raw_data) != 1)
                     {

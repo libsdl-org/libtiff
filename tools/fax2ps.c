@@ -221,13 +221,13 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
         compression < COMPRESSION_CCITTRLE ||
         compression > COMPRESSION_CCITT_T6)
         return;
-    if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) || !xres)
+    if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) || !(xres != 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No x-resolution, assuming %g dpi",
                     defxres);
         xres = defxres;
     }
-    if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) || !yres)
+    if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) || !(yres != 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No y-resolution, assuming %g lpi",
                     defyres);
@@ -240,9 +240,9 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
         yres *= 2.54F;
     }
     if (pageWidth == 0)
-        pageWidth = w / xres;
+        pageWidth = (float)w / xres;
     if (pageHeight == 0)
-        pageHeight = h / yres;
+        pageHeight = (float)h / yres;
 
     printf("%%!PS-Adobe-3.0\n");
     printf("%%%%Creator: fax2ps\n");
@@ -266,12 +266,12 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
     printf("%%%%Page: \"%u\" %u\n", pageNumber, pageNumber);
     printf("/$pageTop save def gsave\n");
     if (scaleToPage)
-        scale = pageHeight / (h / yres) < pageWidth / (w / xres)
-                    ? pageHeight / (h / yres)
-                    : pageWidth / (w / xres);
-    printf("%g %g translate\n", points * (pageWidth - scale * w / xres) * half,
+        scale = pageHeight / ((float)h / yres) < pageWidth / ((float)w / xres)
+                    ? pageHeight / ((float)h / yres)
+                    : pageWidth / ((float)w / xres);
+    printf("%g %g translate\n", points * (pageWidth - scale * (float)w / xres) * half,
            points *
-               (scale * h / yres + (pageHeight - scale * h / yres) * half));
+               (scale * (float)h / yres + (pageHeight - scale * (float)h / yres) * half));
     printf("%g %g scale\n", points / xres * scale, -points / yres * scale);
     printf("0 setgray\n");
     TIFFSetField(tif, TIFFTAG_FAXFILLFUNC, printruns);
@@ -436,9 +436,9 @@ int main(int argc, char **argv)
 #if defined(HAVE_SETMODE) && defined(O_BINARY)
         setmode(fileno(stdin), O_BINARY);
 #endif
-        while ((n = read(fileno(stdin), buf, sizeof(buf))) > 0)
+        while ((n = (int)read(fileno(stdin), buf, sizeof(buf))) > 0)
         {
-            if (write(fileno(fd), buf, n) != n)
+            if (write(fileno(fd), buf, (TIFFIOSize_t)n) != n)
             {
                 fclose(fd);
                 fprintf(stderr, "Could not copy stdin to temporary file.\n");

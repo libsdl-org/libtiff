@@ -633,7 +633,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
 
         /*-- Get array, where GPS tag fields are defined --*/
         tFieldArray = _TIFFGetGpsFields();
-        nTags = tFieldArray->count;
+        nTags = (int32_t)tFieldArray->count;
 
         /*-- TODO: fill in the for / switch part of EXIF writing, when finished
          * and tested!! */
@@ -714,7 +714,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
      *    EXIF tags are written automatically with the defined precision
      * according to its tSetFieldType using the code below  --*/
     tFieldArray = _TIFFGetExifFields();
-    nTags = tFieldArray->count;
+    nTags = (int32_t)tFieldArray->count;
 
     for (i = 0; i < nTags; i++)
     {
@@ -739,7 +739,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     auxInt32 = tWriteCount - 1;
                 else
                     auxInt32 = (int32_t)strlen(auxTextArrayW[i]) - 1;
-                strncpy(auxCharArray, auxTextArrayW[i], auxInt32);
+                strncpy(auxCharArray, auxTextArrayW[i], (size_t)auxInt32);
                 auxCharArray[auxInt32] = 0;
                 if (!TIFFSetField(tif, tTag, auxCharArray))
                 {
@@ -1458,7 +1458,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
 #ifdef READ_ALL_EXIF_TAGS
     /*-- Get array, where EXIF tag fields are defined --*/
     tFieldArray = _TIFFGetExifFields();
-    nTags = tFieldArray->count;
+    nTags = (int32_t)tFieldArray->count;
     /*-- Check, if the TiffLibrary is compiled with the new interface with
      * Rational2Double or still uses the old definitions. */
     /* tif points to EXIF tags, so TIFFFindField() can only access the EXIF tag
@@ -1508,7 +1508,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     auxInt32 = tWriteCount - 1;
                 else
                     auxInt32 = (int32_t)strlen(auxCharArray);
-                retCode2 = strncmp(auxCharArray, auxTextArrayW[i], auxInt32);
+                retCode2 = strncmp(auxCharArray, auxTextArrayW[i], (size_t)auxInt32);
                 if (retCode2 != 0)
                 {
                     fprintf(
@@ -1569,7 +1569,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     break;
                 }
                 /* compare read values with written ones */
-                auxInt32 = auxUint32;
+                auxInt32 = (int32_t)auxUint32;
                 if (auxInt32 != auxInt32ArrayW[i])
                 {
                     fprintf(
@@ -1736,7 +1736,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                         tSetFieldType == TIFF_SETGET_C32_FLOAT)
                     {
                         memcpy(&auxFloatArray, pVoidArray,
-                               (auxInt32 * sizeof(auxFloatArray[0])));
+                               ((size_t)auxInt32 * sizeof(auxFloatArray[0])));
                         /* compare read values with written ones */
                         if (tType == TIFF_RATIONAL || tType == TIFF_SRATIONAL)
                             dblDiffLimit = RATIONAL_EPS * auxDoubleArrayW[i];
@@ -1761,7 +1761,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     else
                     {
                         memcpy(&auxDoubleArray, pVoidArray,
-                               (auxInt32 * sizeof(auxDoubleArray[0])));
+                               ((size_t)auxInt32 * sizeof(auxDoubleArray[0])));
                         /* compare read values with written ones */
                         if (tType == TIFF_RATIONAL || tType == TIFF_SRATIONAL)
                             dblDiffLimit = RATIONAL_EPS * auxDoubleArrayW[i];
@@ -1896,7 +1896,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     tSetFieldType == TIFF_SETGET_C32_SINT8)
                 {
                     memcpy(&auxCharArray, pVoidArray,
-                           (auxInt32 * sizeof(auxCharArray[0])));
+                           ((size_t)auxInt32 * sizeof(auxCharArray[0])));
                     /* Compare and check values  */
                     for (j = 0; j < auxInt32; j++)
                     {
@@ -1936,7 +1936,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                          tSetFieldType == TIFF_SETGET_C32_SINT16)
                 {
                     memcpy(&auxShortArray, pVoidArray,
-                           (auxInt32 * sizeof(auxShortArray[0])));
+                           ((size_t)auxInt32 * sizeof(auxShortArray[0])));
                     /* Compare and check values  */
                     for (j = 0; j < auxInt32; j++)
                     {
@@ -1959,7 +1959,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                          tSetFieldType == TIFF_SETGET_C32_SINT32)
                 {
                     memcpy(&auxInt32Array, pVoidArray,
-                           (auxInt32 * sizeof(auxInt32Array[0])));
+                           ((size_t)auxInt32 * sizeof(auxInt32Array[0])));
                     /* Compare and check values  */
                     for (j = 0; j < auxInt32; j++)
                     {

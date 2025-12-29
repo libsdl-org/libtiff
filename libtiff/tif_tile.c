@@ -221,7 +221,7 @@ uint64_t TIFFVTileSize64(TIFF *tif, uint32_t nrows)
                           ycbcrsubsampling[0], ycbcrsubsampling[1]);
             return 0;
         }
-        samplingblock_samples = ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2;
+        samplingblock_samples = (uint16_t)(ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2);
         samplingblocks_hor =
             TIFFhowmany_32(td->td_tilewidth, ycbcrsubsampling[0]);
         samplingblocks_ver = TIFFhowmany_32(nrows, ycbcrsubsampling[1]);

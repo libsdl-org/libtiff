@@ -125,7 +125,7 @@ uint64_t TIFFVStripSize64(TIFF *tif, uint32_t nrows)
                           ycbcrsubsampling[0], ycbcrsubsampling[1]);
             return 0;
         }
-        samplingblock_samples = ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2;
+        samplingblock_samples = (uint16_t)(ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2);
         samplingblocks_hor =
             TIFFhowmany_32(td->td_imagewidth, ycbcrsubsampling[0]);
         samplingblocks_ver = TIFFhowmany_32(nrows, ycbcrsubsampling[1]);
@@ -286,7 +286,7 @@ uint64_t TIFFScanlineSize64(TIFF *tif)
                 return 0;
             }
             samplingblock_samples =
-                ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2;
+                (uint16_t)(ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2);
             samplingblocks_hor =
                 TIFFhowmany_32(td->td_imagewidth, ycbcrsubsampling[0]);
             samplingrow_samples = _TIFFMultiply64(

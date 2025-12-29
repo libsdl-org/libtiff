@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
                     usage(EXIT_FAILURE);
                 break;
             case 'r':
-                rowsperstrip = atoi(optarg);
+                rowsperstrip = (uint32_t)atoi(optarg);
                 break;
             case 'z': /* CCIR Rec 601-1 w/ headroom/footroom */
                 refBlackWhite[0] = 16.;
@@ -164,13 +164,13 @@ static float *setupLuma(float c)
     float *v = (float *)_TIFFmalloc(256 * sizeof(float));
     int i;
     for (i = 0; i < 256; i++)
-        v[i] = c * i;
+        v[i] = c * (float)i;
     return (v);
 }
 
 static unsigned V2Code(float f, float RB, float RW, int CR)
 {
-    unsigned int c = (unsigned int)((((f) * (RW - RB) / CR) + RB) + .5);
+    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5);
     return (c > 255 ? 255 : c);
 }
 
@@ -181,7 +181,7 @@ static void setupLumaTables(void)
     lumaBlue = setupLuma(LumaBlue);
     D1 = 1.F / (2.F - 2.F * LumaBlue);
     D2 = 1.F / (2.F - 2.F * LumaRed);
-    Yzero = V2Code(0, refBlackWhite[0], refBlackWhite[1], 255);
+    Yzero = (int)V2Code(0, refBlackWhite[0], refBlackWhite[1], 255);
 }
 
 static void cvtClump(unsigned char *op, uint32_t *raster, uint32_t ch,
@@ -201,8 +201,8 @@ static void cvtClump(unsigned char *op, uint32_t *raster, uint32_t ch,
             Y = lumaRed[TIFFGetR(RGB)] + lumaGreen[TIFFGetG(RGB)] +
                 lumaBlue[TIFFGetB(RGB)];
             /* accumulate chrominance */
-            Cb += (TIFFGetB(RGB) - Y) * D1;
-            Cr += (TIFFGetR(RGB) - Y) * D2;
+            Cb += ((float)TIFFGetB(RGB) - Y) * D1;
+            Cr += ((float)TIFFGetR(RGB) - Y) * D2;
             /* emit luminence */
             *op++ = (unsigned char)V2Code(Y, refBlackWhite[0], refBlackWhite[1],
                                           255);
@@ -216,9 +216,9 @@ static void cvtClump(unsigned char *op, uint32_t *raster, uint32_t ch,
             *op++ = (unsigned char)Yzero;
     }
     /* emit sampled chrominance values */
-    *op++ = (unsigned char)V2Code(Cb / (ch * cw), refBlackWhite[2],
+    *op++ = (unsigned char)V2Code(Cb / ((float)ch * (float)cw), refBlackWhite[2],
                                   refBlackWhite[3], 127);
-    *op++ = (unsigned char)V2Code(Cr / (ch * cw), refBlackWhite[4],
+    *op++ = (unsigned char)V2Code(Cr / ((float)ch * (float)cw), refBlackWhite[4],
                                   refBlackWhite[5], 127);
 }
 #undef LumaRed
@@ -326,7 +326,7 @@ static int tiffcvt(TIFF *in, TIFF *out)
         return 0;
     }
 
-    raster = (uint32_t *)_TIFFCheckMalloc(in, pixel_count, sizeof(uint32_t),
+    raster = (uint32_t *)_TIFFCheckMalloc(in, (tmsize_t)pixel_count, sizeof(uint32_t),
                                           "raster buffer");
     if (raster == 0)
     {

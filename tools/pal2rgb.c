@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
                     usage(EXIT_FAILURE);
                 break;
             case 'r': /* rows/strip */
-                rowsperstrip = atoi(optarg);
+                rowsperstrip = (uint32_t)atoi(optarg);
                 break;
             case 'h':
                 usage(EXIT_SUCCESS);
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 
         for (i = (1 << bitspersample) - 1; i >= 0; i--)
         {
-#define CVT(x) (((x)*255) / ((1L << 16) - 1))
+#define CVT(x) ((uint16_t)((((x)*255) / ((1L << 16) - 1))))
             rmap[i] = CVT(rmap[i]);
             gmap[i] = CVT(gmap[i]);
             bmap[i] = CVT(bmap[i]);

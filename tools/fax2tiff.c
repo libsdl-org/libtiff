@@ -124,13 +124,13 @@ int main(int argc, char *argv[])
                 group4options_in |= GROUP4OPT_UNCOMPRESSED;
                 break;
             case '1': /* input is 1d-encoded (g3 only) */
-                group3options_in &= ~GROUP3OPT_2DENCODING;
+                group3options_in &= ~(uint32_t)GROUP3OPT_2DENCODING;
                 break;
             case '2': /* input is 2d-encoded (g3 only) */
                 group3options_in |= GROUP3OPT_2DENCODING;
                 break;
             case 'P': /* input has not-aligned EOL (g3 only) */
-                group3options_in &= ~GROUP3OPT_FILLBITS;
+                group3options_in &= ~(uint32_t)GROUP3OPT_FILLBITS;
                 break;
             case 'A': /* input has aligned EOL (g3 only) */
                 group3options_in |= GROUP3OPT_FILLBITS;
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
                 group4options_out |= GROUP4OPT_UNCOMPRESSED;
                 break;
             case '5': /* generate 1d-encoded output (g3 only) */
-                group3options_out &= ~GROUP3OPT_2DENCODING;
+                group3options_out &= ~(uint32_t)GROUP3OPT_2DENCODING;
                 break;
             case '6': /* generate 2d-encoded output (g3 only) */
                 group3options_out |= GROUP3OPT_2DENCODING;
@@ -203,10 +203,10 @@ int main(int argc, char *argv[])
                 group3options_out |= GROUP3OPT_FILLBITS;
                 break;
             case 'p': /* generate not EOL-aligned output (g3 only) */
-                group3options_out &= ~GROUP3OPT_FILLBITS;
+                group3options_out &= ~(uint32_t)GROUP3OPT_FILLBITS;
                 break;
             case 'r': /* rows/strip */
-                defrowsperstrip = atol(optarg);
+                defrowsperstrip = (uint32_t)atol(optarg);
                 break;
             case 's': /* stretch image by dup'ng scanlines */
                 stretch = 1;
@@ -473,7 +473,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
     if (badrun > badfaxrun)
         badfaxrun = badrun;
     _TIFFfree(tifin->tif_rawdata);
-    return (row);
+    return ((int)row);
 }
 
 static const char usage_info[] =

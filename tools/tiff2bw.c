@@ -69,7 +69,7 @@ static void compresscontig(unsigned char *out, unsigned char *rgb, uint32_t n)
 static void compresssep(unsigned char *out, unsigned char *r, unsigned char *g,
                         unsigned char *b, uint32_t n)
 {
-    uint32_t red = RED, green = GREEN, blue = BLUE;
+    uint32_t red = (uint32_t)RED, green = (uint32_t)GREEN, blue = (uint32_t)BLUE;
 
     while (n-- > 0)
         *out++ =
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
                     usage(EXIT_FAILURE);
                 break;
             case 'r': /* rows/strip */
-                rowsperstrip = atoi(optarg);
+                rowsperstrip = (uint32_t)atoi(optarg);
                 break;
             case 'R':
                 RED = PCT(atoi(optarg));

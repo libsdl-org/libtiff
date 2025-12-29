@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
         newfilename();
 
         path_len = strlen(fname) + sizeof(TIFF_SUFFIX);
-        path = (char *)limitMalloc(path_len);
+        path = (char *)limitMalloc((tmsize_t)path_len);
         if (!path)
         {
             fprintf(stderr,

@@ -230,7 +230,7 @@ static int write_basic_IFD_data(TIFF **ptif, const char *filename, int wrtTransf
 
     /* Setup buffer for image line */
     bufLen = (size_t)width * spp * (bps + 7) / 8;
-    bufLine = (uint8_t *)_TIFFmalloc(bufLen);
+    bufLine = (uint8_t *)_TIFFmalloc((tmsize_t)bufLen);
     if (!bufLine)
     {
         fprintf(stderr, "write_basic_IFD_data(): Can't allocate bufLine buffer.\n");
@@ -242,7 +242,7 @@ static int write_basic_IFD_data(TIFF **ptif, const char *filename, int wrtTransf
     /* Write dummy pixel data. */
     for (int i = 0; i < length; i++)
     {
-        if (TIFFWriteScanline(tif, bufLine, i, 0) == -1)
+        if (TIFFWriteScanline(tif, bufLine, (uint32_t)i, 0) == -1)
         {
             fprintf(stderr, "write_basic_IFD_data(): Can't write image data.\n");
             GOTOFAILURE(1);

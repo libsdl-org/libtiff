@@ -194,7 +194,7 @@ int main(void)
         TIFF *tif =
             TIFFOpen(SOURCE_DIR "/images/test_ifd_loop_to_self.tif", "r");
         assert(tif);
-        int n = TIFFNumberOfDirectories(tif);
+        int n = (int)TIFFNumberOfDirectories(tif);
         if (n != 1)
         {
             fprintf(
@@ -250,7 +250,7 @@ int main(void)
         TIFF *tif =
             TIFFOpen(SOURCE_DIR "/images/test_ifd_loop_to_first.tif", "r");
         assert(tif);
-        int n = TIFFNumberOfDirectories(tif);
+        int n = (int)TIFFNumberOfDirectories(tif);
         if (n != 2)
         {
             fprintf(
@@ -329,7 +329,7 @@ int main(void)
     {
         TIFF *tif = TIFFOpen(SOURCE_DIR "/images/test_two_ifds.tif", "r");
         assert(tif);
-        int n = TIFFNumberOfDirectories(tif);
+        int n = (int)TIFFNumberOfDirectories(tif);
         if (n != 2)
         {
             fprintf(

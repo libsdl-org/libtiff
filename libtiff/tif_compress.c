@@ -271,7 +271,7 @@ TIFFCodec *TIFFGetConfiguredCODECs(void)
     for (cd = registeredCODECS; cd; cd = cd->next)
     {
         new_codecs =
-            (TIFFCodec *)_TIFFreallocExt(NULL, codecs, i * sizeof(TIFFCodec));
+            (TIFFCodec *)_TIFFreallocExt(NULL, codecs, (tmsize_t)((size_t)i * sizeof(TIFFCodec)));
         if (!new_codecs)
         {
             _TIFFfreeExt(NULL, codecs);
@@ -286,7 +286,7 @@ TIFFCodec *TIFFGetConfiguredCODECs(void)
         if (TIFFIsCODECConfigured(c->scheme))
         {
             new_codecs = (TIFFCodec *)_TIFFreallocExt(NULL, codecs,
-                                                      i * sizeof(TIFFCodec));
+                                                      (tmsize_t)((size_t)i * sizeof(TIFFCodec)));
             if (!new_codecs)
             {
                 _TIFFfreeExt(NULL, codecs);
@@ -299,7 +299,7 @@ TIFFCodec *TIFFGetConfiguredCODECs(void)
     }
 
     new_codecs =
-        (TIFFCodec *)_TIFFreallocExt(NULL, codecs, i * sizeof(TIFFCodec));
+        (TIFFCodec *)_TIFFreallocExt(NULL, codecs, (tmsize_t)((size_t)i * sizeof(TIFFCodec)));
     if (!new_codecs)
     {
         _TIFFfreeExt(NULL, codecs);
