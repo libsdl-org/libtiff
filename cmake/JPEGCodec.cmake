@@ -26,7 +26,39 @@
 
 # JPEG
 set(JPEG_SUPPORT FALSE)
-find_package(JPEG)
+
+# Option to prefer standard JPEG over TurboJPEG
+option(jpeg-prefer-standard "prefer standard JPEG library over libjpeg-turbo" OFF)
+
+# Try to find libjpeg-turbo first using CONFIG mode (more reliable, cross-platform)
+# Only do this if we're not explicitly preferring standard JPEG
+if(NOT jpeg-prefer-standard)
+    find_package(libjpeg-turbo CONFIG QUIET)
+    if(libjpeg-turbo_FOUND)
+        # libjpeg-turbo was found via CONFIG
+        # It provides targets like libjpeg-turbo::turbojpeg and libjpeg-turbo::jpeg
+        # Create an alias to JPEG::JPEG for consistent usage throughout the project
+        if(TARGET libjpeg-turbo::turbojpeg AND NOT TARGET JPEG::JPEG)
+            add_library(JPEG::JPEG ALIAS libjpeg-turbo::turbojpeg)
+            set(JPEG_FOUND TRUE)
+            # Set variables for compatibility with code that uses them
+            get_target_property(JPEG_INCLUDE_DIRS libjpeg-turbo::turbojpeg INTERFACE_INCLUDE_DIRECTORIES)
+            set(JPEG_LIBRARIES libjpeg-turbo::turbojpeg)
+        elseif(TARGET libjpeg-turbo::jpeg AND NOT TARGET JPEG::JPEG)
+            add_library(JPEG::JPEG ALIAS libjpeg-turbo::jpeg)
+            set(JPEG_FOUND TRUE)
+            # Set variables for compatibility with code that uses them
+            get_target_property(JPEG_INCLUDE_DIRS libjpeg-turbo::jpeg INTERFACE_INCLUDE_DIRECTORIES)
+            set(JPEG_LIBRARIES libjpeg-turbo::jpeg)
+        endif()
+    endif()
+endif()
+
+# Fall back to Find module if CONFIG didn't work
+if(NOT JPEG_FOUND)
+    find_package(JPEG)
+endif()
+
 option(jpeg "use libjpeg (required for JPEG compression)" ${JPEG_FOUND})
 if (jpeg AND JPEG_FOUND)
     set(JPEG_SUPPORT TRUE)
