@@ -36,9 +36,26 @@ if(NOT jpeg-prefer-standard)
     find_package(libjpeg-turbo CONFIG QUIET)
     if(libjpeg-turbo_FOUND)
         # libjpeg-turbo was found via CONFIG
-        # It provides targets like libjpeg-turbo::turbojpeg and libjpeg-turbo::jpeg
+        # It provides targets like libjpeg-turbo::jpeg and libjpeg-turbo::turbojpeg
+        # IMPORTANT: We need libjpeg-turbo::jpeg (standard libjpeg API), NOT turbojpeg
+        # The turbojpeg target only provides the TurboJPEG API, which libtiff doesn't use
         # Create an alias to JPEG::JPEG for consistent usage throughout the project
-        if(TARGET libjpeg-turbo::turbojpeg AND NOT TARGET JPEG::JPEG)
+        if(TARGET libjpeg-turbo::jpeg AND NOT TARGET JPEG::JPEG)
+            add_library(JPEG::JPEG ALIAS libjpeg-turbo::jpeg)
+            set(JPEG_FOUND TRUE)
+            # Set JPEG_LIBRARIES to the target name
+            set(JPEG_LIBRARIES libjpeg-turbo::jpeg)
+            # For JPEG_INCLUDE_DIRS, try to get the property, but it's OK if it's not set
+            get_target_property(_jpeg_includes libjpeg-turbo::jpeg INTERFACE_INCLUDE_DIRECTORIES)
+            if(_jpeg_includes)
+                set(JPEG_INCLUDE_DIRS "${_jpeg_includes}")
+            else()
+                set(JPEG_INCLUDE_DIRS "")
+            endif()
+            unset(_jpeg_includes)
+        elseif(TARGET libjpeg-turbo::turbojpeg AND NOT TARGET JPEG::JPEG)
+            # Only use turbojpeg as a fallback if jpeg target doesn't exist
+            # This is unlikely to work correctly but better than nothing
             add_library(JPEG::JPEG ALIAS libjpeg-turbo::turbojpeg)
             set(JPEG_FOUND TRUE)
             # Set JPEG_LIBRARIES to the target name - CMake will handle includes automatically
@@ -47,19 +64,6 @@ if(NOT jpeg-prefer-standard)
             # For JPEG_INCLUDE_DIRS, try to get the property, but it's OK if it's not set
             # since the target will provide the includes when used
             get_target_property(_jpeg_includes libjpeg-turbo::turbojpeg INTERFACE_INCLUDE_DIRECTORIES)
-            if(_jpeg_includes)
-                set(JPEG_INCLUDE_DIRS "${_jpeg_includes}")
-            else()
-                set(JPEG_INCLUDE_DIRS "")
-            endif()
-            unset(_jpeg_includes)
-        elseif(TARGET libjpeg-turbo::jpeg AND NOT TARGET JPEG::JPEG)
-            add_library(JPEG::JPEG ALIAS libjpeg-turbo::jpeg)
-            set(JPEG_FOUND TRUE)
-            # Set JPEG_LIBRARIES to the target name
-            set(JPEG_LIBRARIES libjpeg-turbo::jpeg)
-            # For JPEG_INCLUDE_DIRS, try to get the property, but it's OK if it's not set
-            get_target_property(_jpeg_includes libjpeg-turbo::jpeg INTERFACE_INCLUDE_DIRECTORIES)
             if(_jpeg_includes)
                 set(JPEG_INCLUDE_DIRS "${_jpeg_includes}")
             else()
