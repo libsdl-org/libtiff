@@ -90,29 +90,30 @@ endif()
 if (JPEG_SUPPORT)
     # Check for jpeg12_read_scanlines() which has been added in libjpeg-turbo 3.0
     # for dual 8/12 bit mode.
-    include(CheckCSourceCompiles)
+    include(CheckSymbolExists)
     include(CMakePushCheckState)
     cmake_push_check_state(RESET)
-    # When using imported targets (from CONFIG), CMAKE_REQUIRED_LIBRARIES will handle
-    # include directories automatically, so only set CMAKE_REQUIRED_INCLUDES if we
-    # have explicit include dirs (from Find module)
-    if(JPEG_INCLUDE_DIRS AND NOT TARGET ${JPEG_LIBRARIES})
+
+    # Set up includes and libraries for the check
+    # For targets, we need to explicitly get the include directories
+    if(TARGET ${JPEG_LIBRARIES})
+        # It's an imported target - extract properties
+        get_target_property(_jpeg_includes ${JPEG_LIBRARIES} INTERFACE_INCLUDE_DIRECTORIES)
+        if(_jpeg_includes)
+            set(CMAKE_REQUIRED_INCLUDES "${_jpeg_includes}")
+        endif()
+        unset(_jpeg_includes)
+    elseif(JPEG_INCLUDE_DIRS)
+        # It's a plain library - use the provided includes
         set(CMAKE_REQUIRED_INCLUDES "${JPEG_INCLUDE_DIRS}")
     endif()
+
     set(CMAKE_REQUIRED_LIBRARIES "${JPEG_LIBRARIES}")
-    check_c_source_compiles(
-        "
-        #include <stddef.h>
-        #include <stdio.h>
-        #include \"jpeglib.h\"
-        int main()
-        {
-            jpeg_read_scanlines(0,0,0);
-            jpeg12_read_scanlines(0,0,0);
-            return 0;
-        }
-        "
-        HAVE_JPEGTURBO_DUAL_MODE_8_12)
+
+    # Check if the jpeg12_read_scanlines symbol exists in jpeglib.h
+    # This is more reliable than trying to compile code that calls it
+    check_symbol_exists(jpeg12_read_scanlines "stdio.h;jpeglib.h" HAVE_JPEGTURBO_DUAL_MODE_8_12)
+
     cmake_pop_check_state()
 endif()
 
