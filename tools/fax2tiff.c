@@ -422,12 +422,13 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
     _TIFFmemset(refbuf, 0, linesize);
     row = 0;
     badrun = 0; /* current run of bad lines */
+    tmsize_t lastcc = tifin->tif_rawcc;
     while (tifin->tif_rawcc > 0)
     {
         ok = (*tifin->tif_decoderow)(tifin, (uint8_t *)rowbuf, linesize, 0);
         if (ok < 1)
         {
-            if (compression_in == COMPRESSION_CCITTFAX4)
+            if (compression_in == COMPRESSION_CCITTFAX4 || tifin->tif_rawcc == lastcc)
             {
                 /* This is probably EOFB, but if it's corrupt data, then we
                  * can't continue, anyway. */
@@ -446,6 +447,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
             _TIFFmemcpy(refbuf, rowbuf, linesize);
         }
         tifin->tif_row++;
+        lastcc = tifin->tif_rawcc;
 
         if (TIFFWriteScanline(tifout, rowbuf, row, 0) < 0)
         {
