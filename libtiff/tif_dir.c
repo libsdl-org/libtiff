@@ -439,7 +439,18 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
             td->td_halftonehints[1] = (uint16_t)va_arg(ap, uint16_vap);
             break;
         case TIFFTAG_COLORMAP:
-            v32 = (uint32_t)(1L << td->td_bitspersample);
+            /* BitsPerSample is attacker-controlled: enforce sane bounds */
+            if (td->td_bitspersample > 16)
+            {
+                TIFFErrorExtR(tif, module,
+                              "BitsPerSample %u too large for ColorMap",
+                              td->td_bitspersample);
+                status = 0;
+                break;
+            }
+
+            v32 = (uint32_t)(1U << td->td_bitspersample);
+
             _TIFFsetShortArrayExt(tif, &td->td_colormap[0],
                                   va_arg(ap, uint16_t *), v32);
             _TIFFsetShortArrayExt(tif, &td->td_colormap[1],
