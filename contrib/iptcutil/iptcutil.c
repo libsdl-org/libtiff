@@ -87,7 +87,7 @@ static tag_spec tags[] = {{5, "Image Name"},
  * We format the output using HTML conventions
  * to preserve control characters and such.
  */
-void formatString(FILE *ofile, const char *s, int len)
+static void formatString(FILE *ofile, const char *s, int len)
 {
     putc('"', ofile);
     for (; len > 0; --len, ++s)
@@ -139,7 +139,7 @@ static html_code html_codes[] = {
  * back to the original ASCII representation.
  * - returns the number of characters dropped.
  */
-int convertHTMLcodes(char *s, int len)
+static int convertHTMLcodes(char *s, int len)
 {
     if (len <= 0 || s == (char *)NULL || *s == '\0')
         return 0;
@@ -182,7 +182,7 @@ int convertHTMLcodes(char *s, int len)
     return 0;
 }
 
-int formatIPTC(FILE *ifile, FILE *ofile)
+static int formatIPTC(FILE *ifile, FILE *ofile)
 {
     unsigned int foundiptc, tagsfound;
 
@@ -313,7 +313,7 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
               char *brkchar, char *quote, char eschar, char *brkused, int *next,
               char *quoted);
 
-char *super_fgets(char *b, int *blen, FILE *file)
+static char *super_fgets(char *b, int *blen, FILE *file)
 {
     int c, len;
 
@@ -728,7 +728,7 @@ int _p_tokpos;    /* current token pos  */
 
 /* routine to find character in string ... used only by "tokenizer" */
 
-int sindex(char ch, char *string)
+static int sindex(char ch, char *string)
 {
     char *cp;
     for (cp = string; *cp; ++cp)
@@ -739,7 +739,7 @@ int sindex(char ch, char *string)
 
 /* routine to store a character in a string ... used only by "tokenizer" */
 
-void chstore(char *string, int max, char ch)
+static void chstore(char *string, int max, char ch)
 {
     char c;
     if (_p_tokpos >= 0 && _p_tokpos < max - 1)
@@ -799,6 +799,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
                 case IN_QUOTE: /* just keep going */
                     chstore(token, tokmax, c);
                     break;
+                default:
+                    break;
             }
         }
         else if ((qp = sindex(c, quote)) >= 0) /* quote */
@@ -827,6 +829,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
                 case IN_OZONE:
                     *brkused = c; /* uses quote as break char */
                     goto byebye;
+                default:
+                    break;
             }
         }
         else if ((qp = sindex(c, white)) >= 0) /* white */
@@ -843,6 +847,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
 
                 case IN_QUOTE:
                     chstore(token, tokmax, c); /* it's valid here */
+                    break;
+                default:
                     break;
             }
         }
@@ -871,6 +877,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
 
                 case IN_OZONE:
                     goto byebye;
+                default:
+                    break;
             }
         }
         else /* anything else is just a real character */
@@ -888,6 +896,8 @@ int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
 
                 case IN_OZONE:
                     goto byebye;
+                default:
+                    break;
             }
         }
     } /* end of main loop */

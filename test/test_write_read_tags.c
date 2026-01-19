@@ -1187,6 +1187,19 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                     deferredSetField = true;
                 }
                 break;
+            case TIFF_SETGET_SINT64:
+            case TIFF_SETGET_C0_ASCII:
+            case TIFF_SETGET_C0_UINT64:
+            case TIFF_SETGET_C0_SINT64:
+            case TIFF_SETGET_C0_IFD8:
+            case TIFF_SETGET_C16_UINT64:
+            case TIFF_SETGET_C16_SINT64:
+            case TIFF_SETGET_C32_ASCII:
+            case TIFF_SETGET_C32_UINT64:
+            case TIFF_SETGET_C32_SINT64:
+            case TIFF_SETGET_C32_IFD8:
+                /* Not applicable for this test */
+                break;
             case TIFF_SETGET_OTHER:
                 /* Transferfunction and Colormap to be inserted here. */
                 fprintf(stderr,
@@ -1246,7 +1259,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                     }
                 }
             }
-        }
+        } /*-- switch() --*/
     } /*-- for() --*/
 
     *iCnt = i;
@@ -1844,6 +1857,20 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                 }
             } /* case for all arrays */
             break;
+            case TIFF_SETGET_UINT64:
+            case TIFF_SETGET_SINT64:
+            case TIFF_SETGET_C0_ASCII:
+            case TIFF_SETGET_C0_UINT64:
+            case TIFF_SETGET_C0_SINT64:
+            case TIFF_SETGET_C0_IFD8:
+            case TIFF_SETGET_C16_UINT64:
+            case TIFF_SETGET_C16_SINT64:
+            case TIFF_SETGET_C32_ASCII:
+            case TIFF_SETGET_C32_UINT64:
+            case TIFF_SETGET_C32_SINT64:
+            case TIFF_SETGET_C32_IFD8:
+                /* Not applicable for this test */
+                break;
             case TIFF_SETGET_OTHER:
                 /* ToDo: Transferfunction and Colormap to be inserted here. */
                 break;

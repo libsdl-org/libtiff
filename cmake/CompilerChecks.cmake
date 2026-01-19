@@ -84,19 +84,21 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wformat-nonliteral
                 -Wformat-signedness
                 -Wformat-truncation
+                -Wnull-dereference
+                -Wshadow
+                -Wstrict-prototypes
+                -Wmissing-prototypes
+                -Wswitch-default
+                -Wswitch-enum
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wdeclaration-after-statement
                 -Wconversion
                 -Wsign-conversion
-                -Wnull-dereference
                 -Wdouble-promotion
                 -Wmisleading-indentation
                 -Wmissing-include-dirs
-                -Wswitch-default
-                -Wswitch-enum
                 -Wunused-local-typedefs
                 -Wunused-parameter
                 -Wuninitialized
@@ -104,7 +106,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wbool-operation
                 -Wduplicated-branches
                 -Wduplicated-cond
-                -Wshadow
                 -Wunused-macros
                 -Wc99-c11-compat
                 -Wcast-qual
@@ -116,13 +117,11 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wsizeof-pointer-memaccess
                 -Wlogical-op
                 -Wlogical-not-parentheses
-                -Wstrict-prototypes
                 -Wmissing-declarations
                 -Wredundant-decls
                 -Wno-int-to-pointer-cast
                 -Wfloat-equal
                 -Wfloat-conversion
-                -Wmissing-prototypes
                 -Wunreachable-code)
     endif()
     if(fatal-warnings)

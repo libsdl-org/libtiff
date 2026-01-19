@@ -295,6 +295,15 @@ int main(int argc, char *argv[])
         case TIFF_DOUBLE:
             TIFFSetField(out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
             break;
+        case TIFF_NOTYPE:
+        case TIFF_ASCII:
+        case TIFF_RATIONAL:
+        case TIFF_UNDEFINED:
+        case TIFF_SRATIONAL:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             TIFFSetField(out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_VOID);
             break;
@@ -316,6 +325,8 @@ int main(int argc, char *argv[])
         case COMPRESSION_DEFLATE:
             if (predictor != 0)
                 TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
+            break;
+        default:
             break;
     }
     switch (interleaving)
@@ -416,6 +427,18 @@ static void swapBytesInScanline(void *buf, uint32_t width, TIFFDataType dtype)
         case TIFF_DOUBLE:
             TIFFSwabArrayOfDouble((double *)buf, (unsigned long)width);
             break;
+        case TIFF_NOTYPE:
+        case TIFF_BYTE:
+        case TIFF_ASCII:
+        case TIFF_SBYTE:
+        case TIFF_RATIONAL:
+        case TIFF_UNDEFINED:
+        case TIFF_SRATIONAL:
+        case TIFF_FLOAT:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             break;
     }
@@ -580,6 +603,15 @@ static double correlation(void *buf1, void *buf2, uint32_t n_elem,
     switch (dtype)
     {
         case TIFF_BYTE:
+        case TIFF_NOTYPE:
+        case TIFF_ASCII:
+        case TIFF_RATIONAL:
+        case TIFF_UNDEFINED:
+        case TIFF_SRATIONAL:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             for (i = 0; i < n_elem; i++)
             {

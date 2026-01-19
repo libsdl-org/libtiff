@@ -238,6 +238,15 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             CopyField(tag, ifd8);
         }
         break;
+        case TIFF_NOTYPE:
+        case TIFF_BYTE:
+        case TIFF_SBYTE:
+        case TIFF_UNDEFINED:
+        case TIFF_SSHORT:
+        case TIFF_SLONG:
+        case TIFF_SRATIONAL:
+        case TIFF_FLOAT:
+        case TIFF_IFD:
         default:
             TIFFError(TIFFFileName(in),
                       "Data type %u is not supported, tag %d skipped.",
@@ -512,6 +521,8 @@ static void setupCmap(void)
             for (i = 1; i < 256; i++)
                 pct[i] = 1 - ((float)i) / (256 - 1);
             break;
+        default:
+            break;
     }
     switch (photometric)
     {
@@ -522,6 +533,8 @@ static void setupCmap(void)
         case PHOTOMETRIC_MINISBLACK:
             for (i = 0; i < 256; i++)
                 cmap[i] = (uint8_t)clamp(255 * pct[i], 0, 255);
+            break;
+        default:
             break;
     }
 }

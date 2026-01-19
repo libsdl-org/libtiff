@@ -1440,6 +1440,8 @@ TIFFReadDirEntryByteArray(TIFF *tif, TIFFDirEntry *direntry, uint8_t **value)
             *value = (uint8_t *)origdata;
             return (TIFFReadDirEntryErrOk);
         }
+        default:
+            break;
     }
     data = (uint8_t *)_TIFFmallocExt(tif, count);
     if (data == 0)
@@ -1557,6 +1559,8 @@ TIFFReadDirEntryByteArray(TIFF *tif, TIFFDirEntry *direntry, uint8_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -1620,6 +1624,8 @@ TIFFReadDirEntrySbyteArray(TIFF *tif, TIFFDirEntry *direntry, int8_t **value)
         case TIFF_SBYTE:
             *value = (int8_t *)origdata;
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (int8_t *)_TIFFmallocExt(tif, count);
     if (data == 0)
@@ -1737,6 +1743,8 @@ TIFFReadDirEntrySbyteArray(TIFF *tif, TIFFDirEntry *direntry, int8_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -1802,6 +1810,8 @@ TIFFReadDirEntryShortArray(TIFF *tif, TIFFDirEntry *direntry, uint16_t **value)
             *value = (uint16_t *)origdata;
             return (TIFFReadDirEntryErrOk);
         }
+        default:
+            break;
     }
     data = (uint16_t *)_TIFFmallocExt(tif, count * 2);
     if (data == 0)
@@ -1910,6 +1920,8 @@ TIFFReadDirEntryShortArray(TIFF *tif, TIFFDirEntry *direntry, uint16_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -1975,6 +1987,8 @@ TIFFReadDirEntrySshortArray(TIFF *tif, TIFFDirEntry *direntry, int16_t **value)
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabArrayOfShort((uint16_t *)(*value), count);
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (int16_t *)_TIFFmallocExt(tif, count * 2);
     if (data == 0)
@@ -2078,6 +2092,8 @@ TIFFReadDirEntrySshortArray(TIFF *tif, TIFFDirEntry *direntry, int16_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -2143,6 +2159,8 @@ TIFFReadDirEntryLongArray(TIFF *tif, TIFFDirEntry *direntry, uint32_t **value)
             *value = (uint32_t *)origdata;
             return (TIFFReadDirEntryErrOk);
         }
+        default:
+            break;
     }
     data = (uint32_t *)_TIFFmallocExt(tif, count * 4);
     if (data == 0)
@@ -2248,6 +2266,8 @@ TIFFReadDirEntryLongArray(TIFF *tif, TIFFDirEntry *direntry, uint32_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -2313,6 +2333,8 @@ TIFFReadDirEntrySlongArray(TIFF *tif, TIFFDirEntry *direntry, int32_t **value)
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabArrayOfLong((uint32_t *)(*value), count);
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (int32_t *)_TIFFmallocExt(tif, count * 4);
     if (data == 0)
@@ -2410,6 +2432,8 @@ TIFFReadDirEntrySlongArray(TIFF *tif, TIFFDirEntry *direntry, int32_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -2477,6 +2501,8 @@ TIFFReadDirEntryLong8ArrayWithLimit(TIFF *tif, TIFFDirEntry *direntry,
             *value = (uint64_t *)origdata;
             return (TIFFReadDirEntryErrOk);
         }
+        default:
+            break;
     }
     data = (uint64_t *)_TIFFmallocExt(tif, count * 8);
     if (data == 0)
@@ -2579,6 +2605,8 @@ TIFFReadDirEntryLong8ArrayWithLimit(TIFF *tif, TIFFDirEntry *direntry,
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     if (err != TIFFReadDirEntryErrOk)
@@ -2651,6 +2679,8 @@ TIFFReadDirEntrySlong8Array(TIFF *tif, TIFFDirEntry *direntry, int64_t **value)
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabArrayOfLong8((uint64_t *)(*value), count);
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (int64_t *)_TIFFmallocExt(tif, count * 8);
     if (data == 0)
@@ -2742,6 +2772,8 @@ TIFFReadDirEntrySlong8Array(TIFF *tif, TIFFDirEntry *direntry, int64_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     *value = data;
@@ -2787,6 +2819,8 @@ TIFFReadDirEntryFloatArray(TIFF *tif, TIFFDirEntry *direntry, float **value)
             TIFFCvtIEEEFloatToNative(tif, count, (float *)origdata);
             *value = (float *)origdata;
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (float *)_TIFFmallocExt(tif, count * sizeof(float));
     if (data == 0)
@@ -2978,6 +3012,8 @@ TIFFReadDirEntryFloatArray(TIFF *tif, TIFFDirEntry *direntry, float **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     *value = data;
@@ -3023,6 +3059,8 @@ TIFFReadDirEntryDoubleArray(TIFF *tif, TIFFDirEntry *direntry, double **value)
             TIFFCvtIEEEDoubleToNative(tif, count, (double *)origdata);
             *value = (double *)origdata;
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (double *)_TIFFmallocExt(tif, count * sizeof(double));
     if (data == 0)
@@ -3207,6 +3245,8 @@ TIFFReadDirEntryDoubleArray(TIFF *tif, TIFFDirEntry *direntry, double **value)
                 *mb++ = (double)(*ma++);
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     *value = data;
@@ -3244,6 +3284,8 @@ TIFFReadDirEntryIfd8Array(TIFF *tif, TIFFDirEntry *direntry, uint64_t **value)
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabArrayOfLong8(*value, count);
             return (TIFFReadDirEntryErrOk);
+        default:
+            break;
     }
     data = (uint64_t *)_TIFFmallocExt(tif, count * 8);
     if (data == 0)
@@ -3269,6 +3311,8 @@ TIFFReadDirEntryIfd8Array(TIFF *tif, TIFFDirEntry *direntry, uint64_t **value)
             }
         }
         break;
+        default:
+            break;
     }
     _TIFFfreeExt(tif, origdata);
     *value = data;
@@ -3984,6 +4028,7 @@ static void TIFFReadDirEntryOutputErr(TIFF *tif, enum TIFFReadDirEntryErr err,
                 TIFFErrorExtR(tif, module, "Out of memory reading of \"%s\"",
                               tagname);
                 break;
+            case TIFFReadDirEntryErrOk:
             default:
                 assert(0); /* we should never get here */
                 break;
@@ -4030,6 +4075,7 @@ static void TIFFReadDirEntryOutputErr(TIFF *tif, enum TIFFReadDirEntryErr err,
                                 "Out of memory reading of \"%s\"; tag ignored",
                                 tagname);
                 break;
+            case TIFFReadDirEntryErrOk:
             default:
                 assert(0); /* we should never get here */
                 break;
@@ -7660,6 +7706,12 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
             }
         }
         break;
+        case TIFF_SETGET_INT:
+        case TIFF_SETGET_C0_ASCII:
+        case TIFF_SETGET_C0_IFD8:
+        case TIFF_SETGET_OTHER:
+            assert(0); /* these should not arrive here */
+            break;
         default:
             assert(0); /* we should never get here */
             break;

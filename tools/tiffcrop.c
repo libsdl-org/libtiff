@@ -1793,6 +1793,18 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
                 CopyField(tag, doubleav);
             }
             break;
+        case TIFF_NOTYPE:
+        case TIFF_BYTE:
+        case TIFF_SBYTE:
+        case TIFF_UNDEFINED:
+        case TIFF_SSHORT:
+        case TIFF_SLONG:
+        case TIFF_SRATIONAL:
+        case TIFF_FLOAT:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             TIFFError(TIFFFileName(in),
                       "Data type %u is not supported, tag %u skipped",
@@ -2485,6 +2497,8 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 TIFFError("For valid options type", "tiffcrop -h");
                 exit(EXIT_FAILURE);
                 /*NOTREACHED*/
+            default:
+                break;
         }
     }
     /*-- Check for not allowed combinations (e.g. -X, -Y and -Z, -z and -S are
@@ -8518,6 +8532,8 @@ static int writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
             CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
             CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
             CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
+            break;
+        default:
             break;
     }
     {

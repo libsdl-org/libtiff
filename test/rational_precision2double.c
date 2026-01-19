@@ -711,6 +711,52 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                             }
                         }
                         break;
+                    case TIFF_SETGET_UNDEFINED:
+                    case TIFF_SETGET_ASCII:
+                    case TIFF_SETGET_UINT8:
+                    case TIFF_SETGET_SINT8:
+                    case TIFF_SETGET_UINT16:
+                    case TIFF_SETGET_SINT16:
+                    case TIFF_SETGET_UINT32:
+                    case TIFF_SETGET_SINT32:
+                    case TIFF_SETGET_UINT64:
+                    case TIFF_SETGET_SINT64:
+                    case TIFF_SETGET_IFD8:
+                    case TIFF_SETGET_INT:
+                    case TIFF_SETGET_UINT16_PAIR:
+                    case TIFF_SETGET_C0_ASCII:
+                    case TIFF_SETGET_C0_UINT8:
+                    case TIFF_SETGET_C0_SINT8:
+                    case TIFF_SETGET_C0_UINT16:
+                    case TIFF_SETGET_C0_SINT16:
+                    case TIFF_SETGET_C0_UINT32:
+                    case TIFF_SETGET_C0_SINT32:
+                    case TIFF_SETGET_C0_UINT64:
+                    case TIFF_SETGET_C0_SINT64:
+                    case TIFF_SETGET_C0_IFD8:
+                    case TIFF_SETGET_C16_ASCII:
+                    case TIFF_SETGET_C16_UINT8:
+                    case TIFF_SETGET_C16_SINT8:
+                    case TIFF_SETGET_C16_UINT16:
+                    case TIFF_SETGET_C16_SINT16:
+                    case TIFF_SETGET_C16_UINT32:
+                    case TIFF_SETGET_C16_SINT32:
+                    case TIFF_SETGET_C16_UINT64:
+                    case TIFF_SETGET_C16_SINT64:
+                    case TIFF_SETGET_C16_IFD8:
+                    case TIFF_SETGET_C32_ASCII:
+                    case TIFF_SETGET_C32_UINT8:
+                    case TIFF_SETGET_C32_SINT8:
+                    case TIFF_SETGET_C32_UINT16:
+                    case TIFF_SETGET_C32_SINT16:
+                    case TIFF_SETGET_C32_UINT32:
+                    case TIFF_SETGET_C32_SINT32:
+                    case TIFF_SETGET_C32_UINT64:
+                    case TIFF_SETGET_C32_SINT64:
+                    case TIFF_SETGET_C32_IFD8:
+                    case TIFF_SETGET_OTHER:
+                        /* Not applicable for this test */
+                        break;
                     default:
                         fprintf(stderr,
                                 "SetFieldType %u not defined within writing "
@@ -1305,6 +1351,52 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                                 }
                             }
                         }
+                        break;
+                    case TIFF_SETGET_ASCII:
+                    case TIFF_SETGET_C0_ASCII:
+                    case TIFF_SETGET_C0_IFD8:
+                    case TIFF_SETGET_C0_SINT16:
+                    case TIFF_SETGET_C0_SINT32:
+                    case TIFF_SETGET_C0_SINT64:
+                    case TIFF_SETGET_C0_SINT8:
+                    case TIFF_SETGET_C0_UINT16:
+                    case TIFF_SETGET_C0_UINT32:
+                    case TIFF_SETGET_C0_UINT64:
+                    case TIFF_SETGET_C0_UINT8:
+                    case TIFF_SETGET_C16_ASCII:
+                    case TIFF_SETGET_C16_IFD8:
+                    case TIFF_SETGET_C16_SINT16:
+                    case TIFF_SETGET_C16_SINT32:
+                    case TIFF_SETGET_C16_SINT64:
+                    case TIFF_SETGET_C16_SINT8:
+                    case TIFF_SETGET_C16_UINT16:
+                    case TIFF_SETGET_C16_UINT32:
+                    case TIFF_SETGET_C16_UINT64:
+                    case TIFF_SETGET_C16_UINT8:
+                    case TIFF_SETGET_C32_ASCII:
+                    case TIFF_SETGET_C32_IFD8:
+                    case TIFF_SETGET_C32_SINT16:
+                    case TIFF_SETGET_C32_SINT32:
+                    case TIFF_SETGET_C32_SINT64:
+                    case TIFF_SETGET_C32_SINT8:
+                    case TIFF_SETGET_C32_UINT16:
+                    case TIFF_SETGET_C32_UINT32:
+                    case TIFF_SETGET_C32_UINT64:
+                    case TIFF_SETGET_C32_UINT8:
+                    case TIFF_SETGET_IFD8:
+                    case TIFF_SETGET_INT:
+                    case TIFF_SETGET_SINT16:
+                    case TIFF_SETGET_SINT32:
+                    case TIFF_SETGET_SINT64:
+                    case TIFF_SETGET_SINT8:
+                    case TIFF_SETGET_UINT16:
+                    case TIFF_SETGET_UINT16_PAIR:
+                    case TIFF_SETGET_UINT32:
+                    case TIFF_SETGET_UINT64:
+                    case TIFF_SETGET_UINT8:
+                    case TIFF_SETGET_UNDEFINED:
+                    case TIFF_SETGET_OTHER:
+                        /* Not applicable for this test */
                         break;
                     default:
                         fprintf(stderr,

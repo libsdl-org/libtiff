@@ -272,7 +272,7 @@ static int test_TIFFOpenOptionsSetMaxCumulatedMemAlloc(
     return ret;
 }
 
-int test_header_byte_order(TIFF *tif, char *openModeString)
+static int test_header_byte_order(TIFF *tif, char *openModeString)
 {
 
     if (tif->tif_header.common.tiff_magic != TIFF_BIGENDIAN &&
@@ -311,8 +311,8 @@ int test_header_byte_order(TIFF *tif, char *openModeString)
     return 0;
 }
 
-int open_file_and_write(const char *filename, char *openModeString,
-                        int blnWriteIFD, int blnClose, TIFF **tifOut)
+static int open_file_and_write(const char *filename, char *openModeString,
+                               int blnWriteIFD, int blnClose, TIFF **tifOut)
 {
     TIFF *tif = TIFFOpen(filename, openModeString);
     if (tifOut != NULL)
@@ -361,7 +361,7 @@ int open_file_and_write(const char *filename, char *openModeString,
  * behaviour shall be harmonized so that the internal parameters are always in
  * host byte-order.
  */
-int test_TIFFheader_swapping(void)
+static int test_TIFFheader_swapping(void)
 {
 
     /* Provoke swapping and non-swapping on any host. */

@@ -41,8 +41,7 @@
 
 const uint32_t rows_per_strip = 1;
 
-int test_packbits(void)
-
+static int test_packbits(void)
 {
     TIFF *tif;
     int i;
@@ -144,8 +143,8 @@ failure:
 /************************************************************************/
 /*                            rewrite_test()                            */
 /************************************************************************/
-int rewrite_test(const char *filename, uint32_t width, int length, int bigtiff,
-                 uint64_t base_value)
+static int rewrite_test(const char *filename, uint32_t width, int length,
+                        int bigtiff, uint64_t base_value)
 
 {
     TIFF *tif;

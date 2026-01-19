@@ -842,6 +842,34 @@ int TIFFFieldSetGetCountSize(const TIFFField *fip)
         case TIFF_SETGET_C32_DOUBLE:
         case TIFF_SETGET_C32_IFD8:
             return 4;
+        case TIFF_SETGET_UNDEFINED:
+        case TIFF_SETGET_ASCII:
+        case TIFF_SETGET_UINT8:
+        case TIFF_SETGET_SINT8:
+        case TIFF_SETGET_UINT16:
+        case TIFF_SETGET_SINT16:
+        case TIFF_SETGET_UINT32:
+        case TIFF_SETGET_SINT32:
+        case TIFF_SETGET_UINT64:
+        case TIFF_SETGET_SINT64:
+        case TIFF_SETGET_FLOAT:
+        case TIFF_SETGET_DOUBLE:
+        case TIFF_SETGET_IFD8:
+        case TIFF_SETGET_INT:
+        case TIFF_SETGET_UINT16_PAIR:
+        case TIFF_SETGET_C0_ASCII:
+        case TIFF_SETGET_C0_UINT8:
+        case TIFF_SETGET_C0_SINT8:
+        case TIFF_SETGET_C0_UINT16:
+        case TIFF_SETGET_C0_SINT16:
+        case TIFF_SETGET_C0_UINT32:
+        case TIFF_SETGET_C0_SINT32:
+        case TIFF_SETGET_C0_UINT64:
+        case TIFF_SETGET_C0_SINT64:
+        case TIFF_SETGET_C0_FLOAT:
+        case TIFF_SETGET_C0_DOUBLE:
+        case TIFF_SETGET_C0_IFD8:
+        case TIFF_SETGET_OTHER:
         default:
             return 0;
     }
@@ -1011,6 +1039,7 @@ TIFFField *_TIFFCreateAnonField(TIFF *tif, uint32_t tag,
         case TIFF_SLONG8:
             fld->set_get_field_type = TIFF_SETGET_C32_SINT64;
             break;
+        case TIFF_NOTYPE:
         default:
             fld->set_get_field_type = TIFF_SETGET_UNDEFINED;
             break;
@@ -1083,6 +1112,7 @@ static TIFFSetGetFieldType _TIFFSetGetType(TIFFDataType type, short count,
                 return TIFF_SETGET_UINT64;
             case TIFF_SLONG8:
                 return TIFF_SETGET_SINT64;
+            case TIFF_NOTYPE:
             default:
                 return TIFF_SETGET_UNDEFINED;
         }
@@ -1120,6 +1150,7 @@ static TIFFSetGetFieldType _TIFFSetGetType(TIFFDataType type, short count,
                 return TIFF_SETGET_C0_UINT64;
             case TIFF_SLONG8:
                 return TIFF_SETGET_C0_SINT64;
+            case TIFF_NOTYPE:
             default:
                 return TIFF_SETGET_UNDEFINED;
         }
@@ -1157,6 +1188,7 @@ static TIFFSetGetFieldType _TIFFSetGetType(TIFFDataType type, short count,
                 return TIFF_SETGET_C16_UINT64;
             case TIFF_SLONG8:
                 return TIFF_SETGET_C16_SINT64;
+            case TIFF_NOTYPE:
             default:
                 return TIFF_SETGET_UNDEFINED;
         }
@@ -1194,6 +1226,7 @@ static TIFFSetGetFieldType _TIFFSetGetType(TIFFDataType type, short count,
                 return TIFF_SETGET_C32_UINT64;
             case TIFF_SLONG8:
                 return TIFF_SETGET_C32_SINT64;
+            case TIFF_NOTYPE:
             default:
                 return TIFF_SETGET_UNDEFINED;
         }
@@ -1367,6 +1400,8 @@ int _TIFFCheckFieldIsValidForCodec(TIFF *tif, ttag_t tag)
                 case TIFFTAG_JPEGPROC:
                 case TIFFTAG_JPEGRESTARTINTERVAL:
                     return 1;
+                default:
+                    break;
             }
             break;
         case COMPRESSION_CCITTRLE:
@@ -1386,6 +1421,8 @@ int _TIFFCheckFieldIsValidForCodec(TIFF *tif, ttag_t tag)
                 case TIFFTAG_GROUP4OPTIONS:
                     if (tif->tif_dir.td_compression == COMPRESSION_CCITTFAX4)
                         return 1;
+                    break;
+                default:
                     break;
             }
             break;
@@ -1416,6 +1453,8 @@ int _TIFFCheckFieldIsValidForCodec(TIFF *tif, ttag_t tag)
         case COMPRESSION_LERC:
             if (tag == TIFFTAG_LERC_PARAMETERS)
                 return 1;
+            break;
+        default:
             break;
     }
     return 0;

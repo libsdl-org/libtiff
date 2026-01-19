@@ -116,6 +116,9 @@ int main(int argc, char *argv[])
             case '?':
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
+                break;
+            default:
+                break;
         }
     if (argc - optind != 2)
         usage(EXIT_FAILURE);
@@ -173,6 +176,8 @@ int main(int argc, char *argv[])
         case COMPRESSION_DEFLATE:
             if (predictor != 0)
                 TIFFSetField(out, TIFFTAG_PREDICTOR, predictor);
+            break;
+        default:
             break;
     }
     TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photometric);
@@ -255,6 +260,8 @@ int main(int argc, char *argv[])
                     if (!TIFFWriteScanline(out, obuf, row, 0))
                         goto done;
                 }
+                break;
+            default:
                 break;
         }
         _TIFFfree(ibuf);
@@ -385,6 +392,18 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
                 CopyField(tag, doubleav);
             }
             break;
+        case TIFF_NOTYPE:
+        case TIFF_BYTE:
+        case TIFF_SBYTE:
+        case TIFF_UNDEFINED:
+        case TIFF_SSHORT:
+        case TIFF_SLONG:
+        case TIFF_SRATIONAL:
+        case TIFF_FLOAT:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             TIFFError(TIFFFileName(in),
                       "Data type %u is not supported, tag %d skipped.",

@@ -38,8 +38,8 @@
 
 /* Compare 'requested_dir_number' with number written in PageName tag
  * into the IFD to identify that IFD.  */
-int is_requested_directory(TIFF *tif, int requested_dir_number,
-                           const char *filename)
+static int is_requested_directory(TIFF *tif, int requested_dir_number,
+                                  const char *filename)
 {
     char *ptr = NULL;
     char *auxStr = NULL;
@@ -80,7 +80,7 @@ int is_requested_directory(TIFF *tif, int requested_dir_number,
  * SubIFD 2 loops back to SubIFD 1.
  * Within each IFD the tag PageName is filled with a string, indicating the
  * IFD. The main IFDs are numbered 0 to 6 and the SubIFDs 200 to 202. */
-int test_subifd_loop(void)
+static int test_subifd_loop(void)
 {
     const char *filename = SOURCE_DIR "/images/test_ifd_loop_subifd.tif";
     TIFF *tif;

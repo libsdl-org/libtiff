@@ -207,7 +207,7 @@ static void emitFont(FILE *fd)
         fprintf(fd, "%s\n", fontPrologue[i]);
 }
 
-void printTIF(TIFF *tif, uint16_t pageNumber)
+static void printTIF(TIFF *tif, uint16_t pageNumber)
 {
     uint32_t w, h;
     uint16_t unit, compression;
@@ -286,7 +286,7 @@ void printTIF(TIFF *tif, uint16_t pageNumber)
 
 #define GetPageNumber(tif) TIFFGetField(tif, TIFFTAG_PAGENUMBER, &pn, &ptotal)
 
-int findPage(TIFF *tif, uint16_t pageNumber)
+static int findPage(TIFF *tif, uint16_t pageNumber)
 {
     uint16_t pn = (uint16_t)-1;
     uint16_t ptotal = (uint16_t)-1;
@@ -301,7 +301,7 @@ int findPage(TIFF *tif, uint16_t pageNumber)
         return (TIFFSetDirectory(tif, (tdir_t)(pageNumber - 1)));
 }
 
-void fax2ps(TIFF *tif, uint16_t npages, uint16_t *pages, char *filename)
+static void fax2ps(TIFF *tif, uint16_t npages, uint16_t *pages, char *filename)
 {
     if (npages > 0)
     {
@@ -394,6 +394,9 @@ int main(int argc, char **argv)
             case '?':
                 free(pages);
                 usage(EXIT_FAILURE);
+                break;
+            default:
+                break;
         }
     if (npages > 0)
         qsort(pages, npages, sizeof(uint16_t), pcompar);

@@ -1018,6 +1018,8 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
                             _TIFFmemcpy(val, &v2, tv_size);
                         }
                         break;
+                        case TIFF_NOTYPE:
+                        case TIFF_ASCII:
                         default:
                             _TIFFmemset(val, 0, tv_size);
                             status = 0;
@@ -1376,6 +1378,8 @@ static int _TIFFVGetField(TIFF *tif, uint32_t tag, va_list ap)
                 case SAMPLEFORMAT_VOID:
                     *va_arg(ap, uint16_t *) = DATATYPE_VOID;
                     break;
+                default:
+                    break;
             }
             break;
         case TIFFTAG_SAMPLEFORMAT:
@@ -1562,6 +1566,8 @@ static int _TIFFVGetField(TIFF *tif, uint32_t tag, va_list ap)
                                 *va_arg(ap, double *) = *(double *)val;
                                 ret_val = 1;
                                 break;
+                            case TIFF_NOTYPE:
+                            case TIFF_ASCII:
                             default:
                                 ret_val = 0;
                                 break;

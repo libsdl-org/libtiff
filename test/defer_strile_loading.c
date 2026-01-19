@@ -40,7 +40,7 @@
 #include "tiffio.h"
 #include "tifftest.h"
 
-int test(int classictif, int height, int tiled)
+static int test(int classictif, int height, int tiled)
 {
     const char *filename = "defer_strile_loading.tif";
     TIFF *tif;

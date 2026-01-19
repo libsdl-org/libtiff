@@ -350,6 +350,8 @@ int main(int argc, char *argv[])
                 usage(EXIT_FAILURE);
                 /*NOTREACHED*/
                 break;
+            default:
+                break;
         }
     if (argc - optind < 2)
         usage(EXIT_FAILURE);
@@ -774,6 +776,18 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
                 CopyField(tag, doubleav);
             }
             break;
+        case TIFF_NOTYPE:
+        case TIFF_BYTE:
+        case TIFF_SBYTE:
+        case TIFF_UNDEFINED:
+        case TIFF_SSHORT:
+        case TIFF_SLONG:
+        case TIFF_SRATIONAL:
+        case TIFF_FLOAT:
+        case TIFF_IFD:
+        case TIFF_LONG8:
+        case TIFF_SLONG8:
+        case TIFF_IFD8:
         default:
             TIFFError(TIFFFileName(in),
                       "Data type %u is not supported, tag %u skipped.",
@@ -1015,6 +1029,8 @@ static int tiffcp(TIFF *in, TIFF *out)
                             return FALSE;
                         }
                         break;
+                    default:
+                        break;
                 }
             }
             break;
@@ -1059,6 +1075,8 @@ static int tiffcp(TIFF *in, TIFF *out)
                     case COMPRESSION_ZSTD:
                         TIFFSetField(out, TIFFTAG_ZSTD_LEVEL, preset);
                         break;
+                    default:
+                        break;
                 }
             }
             break;
@@ -1096,6 +1114,8 @@ static int tiffcp(TIFF *in, TIFF *out)
             CopyTag(TIFFTAG_FAXRECVPARAMS, 1, TIFF_LONG);
             CopyTag(TIFFTAG_FAXRECVTIME, 1, TIFF_LONG);
             CopyTag(TIFFTAG_FAXSUBADDRESS, 1, TIFF_ASCII);
+            break;
+        default:
             break;
     }
     {
@@ -1246,6 +1266,8 @@ subtract(8) subtract(16) subtract(32)
             return subtract16;
         case 32:
             return subtract32;
+        default:
+            break;
     }
     return NULL;
 }
@@ -2356,6 +2378,8 @@ static copyFunc pickCopyFunc(TIFF *in, TIFF *out, uint16_t bitspersample,
         case pack(PLANARCONFIG_SEPARATE, PLANARCONFIG_SEPARATE, F, F, F):
         case pack(PLANARCONFIG_SEPARATE, PLANARCONFIG_SEPARATE, F, F, T):
             return cpSeparate2SeparateByRow;
+        default:
+            break;
     }
 #undef pack
 #undef F

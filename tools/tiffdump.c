@@ -101,7 +101,7 @@ extern int optind;
 extern char *optarg;
 #endif
 
-void usage(void)
+static void usage(void)
 {
     fprintf(stderr, "\nDisplay directory information from TIFF files\n\n");
     fprintf(stderr, "usage: %s [-h] [-o offset] [-m maxitems] file.tif ...\n",
@@ -538,6 +538,8 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
                         TIFFSwabArrayOfLong8((uint64_t *)datamem,
                                              (tmsize_t)count);
                         break;
+                    default:
+                        break;
                 }
             }
             /* Silence Coverity Scan warning about tainted_data: Passing tainted
@@ -878,6 +880,8 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
             }
             break;
         }
+        default:
+            break;
     }
 }
 
