@@ -137,6 +137,13 @@ int main(int argc, char *argv[])
     c = argc - optind;
     if (c < 1 || c > 2)
         usage(EXIT_FAILURE);
+
+    if (strlen(argv[optind + 1]) > PATH_LENGTH - 2)
+    {
+        fprintf(stderr, "tiffsplit: filename too long\n");
+        return EXIT_FAILURE;
+    }
+
     if (c > 1)
     {
         strncpy(fname, argv[optind + 1], sizeof(fname));
