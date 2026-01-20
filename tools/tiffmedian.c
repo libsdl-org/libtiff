@@ -67,10 +67,10 @@
 #define MAX_COLOR 256
 
 #define B_DEPTH 5 /* # bits/pixel to use */
-#define B_LEN (1L << B_DEPTH)
+#define B_LEN (1 << B_DEPTH)
 
 #define C_DEPTH 2
-#define C_LEN (1L << C_DEPTH) /* # cells/color to use */
+#define C_LEN (1 << C_DEPTH) /* # cells/color to use */
 
 #define COLOR_SHIFT (COLOR_DEPTH - B_DEPTH)
 
@@ -184,14 +184,14 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "%s: Image must have at least 8-bits/sample\n",
                 argv[optind]);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
     if (!TIFFGetField(in, TIFFTAG_PHOTOMETRIC, &photometric) ||
         photometric != PHOTOMETRIC_RGB || samplesperpixel < 3)
     {
         fprintf(stderr, "%s: Image must have RGB data\n", argv[optind]);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
     TIFFGetField(in, TIFFTAG_PLANARCONFIG, &config);
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "%s: Can only handle contiguous data packing\n",
                 argv[optind]);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
 
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
     if (out == NULL)
     {
         _TIFFfree(ColorCells);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
 
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
         /*
          * Scale colormap to TIFF-required 16-bit values.
          */
-#define SCALE(x) (((x) * ((1L << 16) - 1)) / 255)
+#define SCALE(x) (((x) * ((1 << 16) - 1)) / 255)
     for (i = 0; i < MAX_CMAP_SIZE; ++i)
     {
         rm[i] = SCALE(rm[i]);
@@ -330,8 +330,8 @@ int main(int argc, char *argv[])
         bm[i] = SCALE(bm[i]);
     }
     TIFFSetField(out, TIFFTAG_COLORMAP, rm, gm, bm);
-    (void)TIFFClose(out);
-    (void)TIFFClose(in);
+    TIFFClose(out);
+    TIFFClose(in);
     _TIFFfree(ColorCells);
     return (EXIT_SUCCESS);
 }

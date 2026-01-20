@@ -248,7 +248,6 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
 {
     TIFFDirectory *td = &tif->tif_dir;
     const char *sep;
-    long l, n;
 
     fprintf(fd, "TIFF Directory at offset 0x%" PRIx64 " (%" PRIu64 ")\n",
             tif->tif_diroff, tif->tif_diroff);
@@ -559,9 +558,9 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
         if (flags & TIFFPRINT_COLORMAP)
         {
             fprintf(fd, "\n");
-            n = 1L << td->td_bitspersample;
-            for (l = 0; l < n; l++)
-                fprintf(fd, "   %5ld: %5" PRIu16 " %5" PRIu16 " %5" PRIu16 "\n",
+            uint64_t n = 1ULL << td->td_bitspersample;
+            for (uint64_t l = 0u; l < n; l++)
+                fprintf(fd, "   %5" PRIu64": %5" PRIu16 " %5" PRIu16 " %5" PRIu16 "\n",
                         l, td->td_colormap[0][l], td->td_colormap[1][l],
                         td->td_colormap[2][l]);
         }
@@ -587,11 +586,11 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
         if (flags & TIFFPRINT_CURVES)
         {
             fprintf(fd, "\n");
-            n = 1L << td->td_bitspersample;
-            for (l = 0; l < n; l++)
+            uint64_t n = 1ULL << td->td_bitspersample;
+            for (uint64_t l = 0; l < n; l++)
             {
                 uint16_t i;
-                fprintf(fd, "    %2ld: %5" PRIu16, l,
+                fprintf(fd, "    %2" PRIu64 ": %5" PRIu16, l,
                         td->td_transferfunction[0][l]);
                 for (i = 1;
                      i < td->td_samplesperpixel - td->td_extrasamples && i < 3;

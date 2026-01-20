@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
     } while (TIFFReadDirectory(in));
 
     TIFFOpenOptionsFree(opts);
-    (void)TIFFClose(in);
+    TIFFClose(in);
 
     return (EXIT_SUCCESS);
 }

@@ -2033,9 +2033,9 @@ static int JPEGSetupEncode(TIFF *tif)
                 if (!TIFFGetField(tif, TIFFTAG_REFERENCEBLACKWHITE, &ref))
                 {
                     float refbw[6];
-                    long top = 1L << td->td_bitspersample;
+                    uint64_t top = 1UL << td->td_bitspersample;
                     refbw[0] = 0;
-                    refbw[1] = (float)(top - 1L);
+                    refbw[1] = (float)(top - 1);
                     refbw[2] = (float)(top >> 1);
                     refbw[3] = refbw[1];
                     refbw[4] = refbw[2];
@@ -2372,8 +2372,8 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                 unsigned char *in_ptr = ((unsigned char *)buf) + iPair * 3;
                 TIFF_JSAMPLE *out_ptr = (TIFF_JSAMPLE *)(line16 + iPair * 2);
 
-                out_ptr[0] = (JSAMPLE)((in_ptr[0] << 4) | ((in_ptr[1] & 0xf0) >> 4));
-                out_ptr[1] = (JSAMPLE)(((in_ptr[1] & 0x0f) << 8) | in_ptr[2]);
+                out_ptr[0] = (TIFF_JSAMPLE)((in_ptr[0] << 4) | ((in_ptr[1] & 0xf0) >> 4));
+                out_ptr[1] = (TIFF_JSAMPLE)(((in_ptr[1] & 0x0f) << 8) | in_ptr[2]);
             }
         }
         else

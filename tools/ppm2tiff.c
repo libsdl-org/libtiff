@@ -414,14 +414,14 @@ int main(int argc, char *argv[])
     if (linebytes == 0)
     {
         fprintf(stderr, "%s: scanline size overflow\n", infile);
-        (void)TIFFClose(out);
+        TIFFClose(out);
         exit(EXIT_FAILURE);
     }
     scanline_size = TIFFScanlineSize(out);
     if (scanline_size == 0)
     {
         /* overflow - TIFFScanlineSize already printed a message */
-        (void)TIFFClose(out);
+        TIFFClose(out);
         exit(EXIT_FAILURE);
     }
     if (scanline_size < linebytes)
@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
     if (buf == NULL)
     {
         fprintf(stderr, "%s: Not enough memory\n", infile);
-        (void)TIFFClose(out);
+        TIFFClose(out);
         exit(EXIT_FAILURE);
     }
     if (resolution > 0)
@@ -442,7 +442,7 @@ int main(int argc, char *argv[])
     }
     for (row = 0; row < h; row++)
     {
-        if (fread(buf, (size_t)linebytes, 1, in) != 1)
+        if (fread(buf, (size_t)linebytes, 1u, in) != 1u)
         {
             fprintf(stderr, "%s: scanline %u: Read error.\n", infile, row);
             break;
@@ -453,7 +453,7 @@ int main(int argc, char *argv[])
     }
     if (in != stdin)
         fclose(in);
-    (void)TIFFClose(out);
+    TIFFClose(out);
     if (buf)
         _TIFFfree(buf);
     return (EXIT_SUCCESS);
@@ -492,7 +492,7 @@ static int processCompressOptions(char *opt)
         compression = COMPRESSION_JPEG;
         while (cp)
         {
-            if (isdigit((int)cp[1]))
+            if (isdigit((unsigned char)cp[1]))
                 quality = atoi(cp + 1);
             else if (cp[1] == 'r')
                 jpegcolormode = JPEGCOLORMODE_RAW;

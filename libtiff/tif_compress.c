@@ -200,7 +200,7 @@ const TIFFCodec *TIFFFindCODEC(uint16_t scheme)
     for (c = _TIFFBuiltinCODECS; c->name; c++)
         if (c->scheme == scheme)
             return (c);
-    return ((const TIFFCodec *)0);
+    return NULL;
 }
 
 TIFFCodec *TIFFRegisterCODEC(uint16_t scheme, const char *name,
@@ -293,7 +293,7 @@ TIFFCodec *TIFFGetConfiguredCODECs(void)
                 return NULL;
             }
             codecs = new_codecs;
-            _TIFFmemcpy(codecs + i - 1, (const void *)c, sizeof(TIFFCodec));
+            _TIFFmemcpy(codecs + i - 1, c, sizeof(TIFFCodec));
             i++;
         }
     }

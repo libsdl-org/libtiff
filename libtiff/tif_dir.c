@@ -439,7 +439,7 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
             td->td_halftonehints[1] = (uint16_t)va_arg(ap, uint16_vap);
             break;
         case TIFFTAG_COLORMAP:
-            v32 = (uint32_t)(1L << td->td_bitspersample);
+            v32 = (uint32_t)(1UL << td->td_bitspersample);
             _TIFFsetShortArrayExt(tif, &td->td_colormap[0],
                                   va_arg(ap, uint16_t *), v32);
             _TIFFsetShortArrayExt(tif, &td->td_colormap[1],
@@ -794,7 +794,7 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
                     if (fip->field_writecount == TIFF_VARIABLE2)
                         tv->count = (int)va_arg(ap, uint32_t);
                     else
-                        tv->count = (int)va_arg(ap, int);
+                        tv->count = va_arg(ap, int);
                 }
                 else if (fip->field_writecount == TIFF_VARIABLE ||
                          fip->field_writecount == TIFF_VARIABLE2)

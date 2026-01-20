@@ -1726,7 +1726,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
                 return;
             }
             t2p->pdf_colorspace = (t2p_cs_t)(T2P_CS_RGB | T2P_CS_PALETTE);
-            t2p->pdf_palettesize = (uint16_t)(0x0001 << t2p->tiff_bitspersample);
+            t2p->pdf_palettesize = (uint16_t)(1 << t2p->tiff_bitspersample);
             if (!TIFFGetField(input, TIFFTAG_COLORMAP, &r, &g, &b))
             {
                 TIFFError(TIFF2PDF_MODULE,
@@ -1829,7 +1829,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
                 return;
             }
             t2p->pdf_colorspace = (t2p_cs_t)(T2P_CS_CMYK | T2P_CS_PALETTE);
-            t2p->pdf_palettesize = (uint16_t)(0x0001 << t2p->tiff_bitspersample);
+            t2p->pdf_palettesize = (uint16_t)(1 << t2p->tiff_bitspersample);
             if (!TIFFGetField(input, TIFFTAG_COLORMAP, &r, &g, &b, &a))
             {
                 TIFFError(TIFF2PDF_MODULE,
@@ -3949,7 +3949,7 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
     ojpegdata[t2p->pdf_ojpegdatalength++] =
         (unsigned char)(8 + 3 * t2p->tiff_samplesperpixel);
-    ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_bitspersample & 0xff);
+    ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(t2p->tiff_bitspersample & 0xff);
     if (TIFFIsTiled(input))
     {
         ojpegdata[t2p->pdf_ojpegdatalength++] =
@@ -4076,7 +4076,7 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
     ojpegdata[t2p->pdf_ojpegdatalength++] =
         (unsigned char)(6 + 2 * t2p->tiff_samplesperpixel);
-    ojpegdata[t2p->pdf_ojpegdatalength++] = t2p->tiff_samplesperpixel & 0xff;
+    ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(t2p->tiff_samplesperpixel & 0xff);
     for (i = 0; i < t2p->tiff_samplesperpixel; i++)
     {
         ojpegdata[t2p->pdf_ojpegdatalength++] = i & 0xff;

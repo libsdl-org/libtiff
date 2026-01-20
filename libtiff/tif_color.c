@@ -145,7 +145,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
     /* Red */
     dfGamma = 1.0 / cielab->display.d_gammaR;
     cielab->rstep =
-        (float)(cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
+        (cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
     for (i = 0; i <= (size_t)cielab->range; i++)
     {
         cielab->Yr2r[i] = (float)cielab->display.d_Vrwr *
@@ -155,7 +155,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
     /* Green */
     dfGamma = 1.0 / cielab->display.d_gammaG;
     cielab->gstep =
-        (float)(cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
+        (cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
     for (i = 0; i <= (size_t)cielab->range; i++)
     {
         cielab->Yg2g[i] = (float)cielab->display.d_Vrwg *
@@ -165,7 +165,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
     /* Blue */
     dfGamma = 1.0 / cielab->display.d_gammaB;
     cielab->bstep =
-        (float)(cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
+        (cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
     for (i = 0; i <= (size_t)cielab->range; i++)
     {
         cielab->Yb2b[i] = (float)cielab->display.d_Vrwb *
@@ -186,7 +186,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
  * see below for more information on how it works.
  */
 #define SHIFT 16
-#define FIX(x) ((int32_t)((x) * (1L << SHIFT) + 0.5))
+#define FIX(x) ((int32_t)((x) * (1 << SHIFT) + 0.5))
 #define ONE_HALF ((int32_t)(1 << (SHIFT - 1)))
 #define Code2V(c, RB, RW, CR)                                                  \
     (((float)((c) - (int32_t)(RB)) * (float)(CR)) /                            \
@@ -209,7 +209,7 @@ void TIFFYCbCrtoRGB(TIFFYCbCrToRGB *ycbcr, uint32_t Y, int32_t Cb, int32_t Cr,
     i = ycbcr->Y_tab[Y] + ycbcr->Cr_r_tab[Cr];
     *r = (uint32_t)CLAMP(i, 0, 255);
     i = ycbcr->Y_tab[Y] +
-        (int)((ycbcr->Cb_g_tab[Cb] + ycbcr->Cr_g_tab[Cr]) >> SHIFT);
+        ((ycbcr->Cb_g_tab[Cb] + ycbcr->Cr_g_tab[Cr]) >> SHIFT);
     *g = (uint32_t)CLAMP(i, 0, 255);
     i = ycbcr->Y_tab[Y] + ycbcr->Cb_b_tab[Cb];
     *b = (uint32_t)CLAMP(i, 0, 255);
@@ -258,8 +258,8 @@ int TIFFYCbCrToRGBInit(TIFFYCbCrToRGB *ycbcr, float *luma, float *refBlackWhite)
 #define LumaBlue luma[2]
 
     clamptab =
-        (TIFFRGBValue *)((uint8_t *)ycbcr +
-                         TIFFroundup_32(sizeof(TIFFYCbCrToRGB), sizeof(long)));
+        (uint8_t *)ycbcr +
+        TIFFroundup_32(sizeof(TIFFYCbCrToRGB), sizeof(long));
     _TIFFmemset(clamptab, 0, 256); /* v < 0 => 0 */
     ycbcr->clamptab = (clamptab += 256);
     for (i = 0; i < 256; i++)

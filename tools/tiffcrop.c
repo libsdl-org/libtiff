@@ -1399,7 +1399,7 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
 
             stripsize = TIFFVStripSize(out, nrows);
             src = buf + (row * rowsize);
-            memset(obuf, '\0', rowstripsize + NUM_BUFF_OVERSIZE_BYTES);
+            memset(obuf, '\0', (size_t)(rowstripsize + NUM_BUFF_OVERSIZE_BYTES));
             if (extractContigSamplesToBuffer((uint8_t *)obuf, src, nrows, width,
                                              s, spp, bps, dump))
             {
@@ -3017,12 +3017,12 @@ failure:
 
     if (in != NULL)
     {
-        (void)TIFFClose(in);
+        TIFFClose(in);
     }
 
     if (out != NULL)
     {
-        (void)TIFFClose(out);
+        TIFFClose(out);
     }
 
     return (retval);

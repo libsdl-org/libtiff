@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
                 else if (strneq(optarg, "jpeg", 4))
                 {
                     char *cp = strchr(optarg, ':');
-                    if (cp && isdigit(cp[1]))
+                    if (cp && isdigit((unsigned char)cp[1]))
                         quality = atoi(cp + 1);
                     if (cp && strchr(cp, 'r'))
                         jpegcolormode = JPEGCOLORMODE_RAW;
@@ -317,6 +317,6 @@ static void tiffsv(char *name, int x1, int x2, int y1, int y2)
     }
     else
         svGrey(tif, scrbuf, xsize, ysize);
-    (void)TIFFClose(tif);
+    TIFFClose(tif);
     _TIFFfree((char *)scrbuf);
 }

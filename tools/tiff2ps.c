@@ -2089,7 +2089,7 @@ static void PS_Lvl2colorspace(FILE *fd, TIFF *tif)
         /*
          * Convert colormap to 8-bits values.
          */
-#define CVT(x) ((uint16_t)(((x)*255) / ((1L << 16) - 1)))
+#define CVT(x) ((uint16_t)(((x)*255) / ((1 << 16) - 1)))
         for (i = 0; i < num_colors; i++)
         {
             rmap[i] = CVT(rmap[i]);
@@ -2993,7 +2993,7 @@ void PSDataPalette(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
     if (checkcmap(tif, 1 << bitspersample, rmap, gmap, bmap) == 16)
     {
         int i;
-#define CVT(x) ((unsigned short)(((x)*255) / ((1U << 16) - 1)))
+#define CVT(x) ((unsigned short)(((x)*255) / ((1 << 16) - 1)))
         for (i = (1 << bitspersample) - 1; i >= 0; i--)
         {
             rmap[i] = CVT(rmap[i]);

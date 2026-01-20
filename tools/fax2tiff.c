@@ -89,11 +89,11 @@ int main(int argc, char *argv[])
     int compression_out = COMPRESSION_CCITTFAX3;
     int fillorder_in = FILLORDER_LSB2MSB;
     int fillorder_out = FILLORDER_LSB2MSB;
-    uint32_t group3options_in = 0;  /* 1d-encoded */
-    uint32_t group3options_out = 0; /* 1d-encoded */
-    uint32_t group4options_in = 0;  /* compressed */
-    uint32_t group4options_out = 0; /* compressed */
-    uint32_t defrowsperstrip = (uint32_t)0;
+    uint32_t group3options_in = 0u;  /* 1d-encoded */
+    uint32_t group3options_out = 0u; /* 1d-encoded */
+    uint32_t group4options_in = 0u;  /* compressed */
+    uint32_t group4options_out = 0u; /* compressed */
+    uint32_t defrowsperstrip = 0u;
     uint32_t rowsperstrip;
     int photometric_in = PHOTOMETRIC_MINISWHITE;
     int photometric_out = PHOTOMETRIC_MINISWHITE;
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
         client_data.fd = fileno(in);
 #endif
         TIFFSetClientdata(faxTIFF, client_data.fh);
-        TIFFSetFileName(faxTIFF, (const char *)argv[optind]);
+        TIFFSetFileName(faxTIFF, argv[optind]);
         TIFFSetField(out, TIFFTAG_IMAGEWIDTH, xsize);
         TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 1);
         TIFFSetField(out, TIFFTAG_COMPRESSION, compression_out);

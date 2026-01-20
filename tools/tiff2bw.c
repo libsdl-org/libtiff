@@ -69,7 +69,9 @@ static void compresscontig(unsigned char *out, unsigned char *rgb, uint32_t n)
 static void compresssep(unsigned char *out, unsigned char *r, unsigned char *g,
                         unsigned char *b, uint32_t n)
 {
-    uint32_t red = (uint32_t)RED, green = (uint32_t)GREEN, blue = (uint32_t)BLUE;
+    uint32_t red = (uint32_t)RED;
+    uint32_t green = (uint32_t)GREEN;
+    uint32_t blue = (uint32_t)BLUE;
 
     while (n-- > 0)
         *out++ =
@@ -261,7 +263,7 @@ int main(int argc, char *argv[])
             if (checkcmap(in, 1 << bitspersample, red, green, blue) == 16)
             {
                 int i;
-#define CVT(x) (((x)*255L) / ((1L << 16) - 1))
+#define CVT(x) (((x)*255) / ((1 << 16) - 1))
                 for (i = (1 << bitspersample) - 1; i >= 0; i--)
                 {
                     red[i] = CVT(red[i]);

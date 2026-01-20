@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         gray[i] = (uint16_t)(-log10((double)i / (cmsize - 1)) * 1000);
 
     refblackwhite[0] = 0.0;
-    refblackwhite[1] = (float)((1L << bits_per_pixel) - 1);
+    refblackwhite[1] = (float)((1UL << bits_per_pixel) - 1);
 
     if ((tif = TIFFOpen(argv[3], "w")) == NULL)
     {

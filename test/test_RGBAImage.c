@@ -990,29 +990,29 @@ static int test_ReadRGBAImage(const char *filename, unsigned int openMode,
     /*-- row_offset --*/
 testcase:
     if ((ret = testRGBAImageReadWithOffsets(
-             tif, width, length, 0, length - 1, width, length, orientation,
+             tif, width, length, 0, (int)(length - 1), width, length, orientation,
              (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(
-             tif, width, length, 0, length - 4, width, 4, orientation,
+             tif, width, length, 0, (int)(length - 4), width, 4, orientation,
              (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(
-             tif, width, length, 0, length - 4, width, 2, orientation,
+             tif, width, length, 0, (int)(length - 4), width, 2, orientation,
              (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
     /*-- col_offset --*/
     if ((ret = testRGBAImageReadWithOffsets(
-             tif, width, length, width - 2, 0, width, length, orientation,
+             tif, width, length, (int)(width - 2), 0, width, length, orientation,
              (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(
-             tif, width, length, width - 2, 0, 2, length, orientation,
+             tif, width, length, (int)(width - 2), 0, 2, length, orientation,
              (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if ((ret = testRGBAImageReadWithOffsets(
-             tif, width, length, width - 3, 0, 2, length, orientation,
+             tif, width, length, (int)(width - 3), 0, 2, length, orientation,
              (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
 
@@ -1029,11 +1029,11 @@ testcase:
 
     /*-- row_offset --*/
     if (!(ret = testRGBAImageReadWithOffsets(
-              tif, width, length, 0, length, width, length, orientation,
+              tif, width, length, 0, (int)length, width, length, orientation,
               (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(
-              tif, width, length, 0, length + 5, width, length, orientation,
+              tif, width, length, 0, (int)(length + 5), width, length, orientation,
               (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(
@@ -1043,11 +1043,11 @@ testcase:
 
     /*-- col_offset --*/
     if (!(ret = testRGBAImageReadWithOffsets(
-              tif, width, length, width, 0, width, length, orientation,
+              tif, width, length, (int)width, 0, width, length, orientation,
               (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(
-              tif, width, length, width + 5, 0, width, length, orientation,
+              tif, width, length, (int)(width + 5), 0, width, length, orientation,
               (uint16_t)req_orientation, __LINE__)))
         GOTOFAILURE
     if (!(ret = testRGBAImageReadWithOffsets(

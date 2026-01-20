@@ -60,7 +60,7 @@ typedef size_t WordType;
  */
 #define LZW_COMPAT /* include backwards compatibility code */
 
-#define MAXCODE(n) ((1L << (n)) - 1)
+#define MAXCODE(n) ((1 << (n)) - 1)
 /*
  * The TIFF spec specifies that encoded bit
  * strings range from 9 to 12 bits.
@@ -372,7 +372,7 @@ static int LZWPreDecode(TIFF *tif, uint16_t s)
                 nextbits += 8 * SIZEOF_WORDTYPE;                               \
                 dec_bitsleft -= 8 * SIZEOF_WORDTYPE;                           \
                 code = (WordType)((codetmp | (nextdata >> nextbits)) &         \
-                                  (WordType)nbitsmask);                                  \
+                                  (WordType)nbitsmask);                        \
                 break;                                                         \
             }                                                                  \
             else                                                               \
@@ -396,7 +396,7 @@ static int LZWPreDecode(TIFF *tif, uint16_t s)
                 }                                                              \
             }                                                                  \
         }                                                                      \
-        code = (WordType)((nextdata >> nextbits) & (WordType)nbitsmask);                 \
+        code = (WordType)((nextdata >> nextbits) & (WordType)nbitsmask);       \
     } while (0)
 
 static int LZWDecode(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
@@ -790,7 +790,7 @@ error_code:
             nextdata |= (unsigned long)*(bp)++ << nextbits;                    \
             nextbits += 8;                                                     \
         }                                                                      \
-        code = (hcode_t)(nextdata & (unsigned long)nbitsmask);                                \
+        code = (hcode_t)(nextdata & (unsigned long)nbitsmask);                 \
         nextdata >>= nbits;                                                    \
         nextbits -= nbits;                                                     \
     }
@@ -872,18 +872,18 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
     while (occ > 0)
     {
         NextCode(tif, sp, bp, code, GetNextCodeCompat, dec_bitsleft);
-        if ((int)code == CODE_EOI)
+        if (code == CODE_EOI)
             break;
-        if ((uint64_t)code == CODE_CLEAR)
+        if (code == CODE_CLEAR)
         {
             do
             {
-                free_entp = sp->dec_codetab + (unsigned long)CODE_FIRST;
+                free_entp = sp->dec_codetab + CODE_FIRST;
                 _TIFFmemset(free_entp, 0,
                             (CSIZE - CODE_FIRST) * sizeof(code_t));
                 nbits = BITS_MIN;
                 nbitsmask = MAXCODE(BITS_MIN);
-                maxcodep = sp->dec_codetab + (unsigned long)nbitsmask;
+                maxcodep = sp->dec_codetab + nbitsmask;
                 NextCode(tif, sp, bp, code, GetNextCodeCompat, dec_bitsleft);
             } while (code == CODE_CLEAR); /* consecutive CODE_CLEAR codes */
             if (code == CODE_EOI)

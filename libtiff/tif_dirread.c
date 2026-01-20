@@ -5192,7 +5192,7 @@ int TIFFReadDirectory(TIFF *tif)
             tif->tif_dir.td_maxsamplevalue = 0xFFFF;
         else
             tif->tif_dir.td_maxsamplevalue =
-                (uint16_t)((1L << tif->tif_dir.td_bitspersample) - 1);
+                (uint16_t)((1 << tif->tif_dir.td_bitspersample) - 1);
     }
 
 #ifdef STRIPBYTECOUNTSORTED_UNUSED

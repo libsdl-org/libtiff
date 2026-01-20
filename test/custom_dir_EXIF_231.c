@@ -332,7 +332,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     /*  - can be written with Double but has to be read with float parameter */
 #define PIXAR_FOVCOT_VAL 5.123456789123456789
     auxFloat = (float)PIXAR_FOVCOT_VAL;
-    auxDouble = (double)PIXAR_FOVCOT_VAL;
+    auxDouble = PIXAR_FOVCOT_VAL;
     if (!TIFFSetField(tif, TIFFTAG_PIXAR_FOVCOT, auxDouble))
     {
         fprintf(stderr, "Can't set TIFFTAG_PIXAR_FOVCOT tag.\n");

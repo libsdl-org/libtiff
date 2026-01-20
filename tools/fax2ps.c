@@ -278,7 +278,7 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
     ns = TIFFNumberOfStrips(tif);
     row = 0;
     for (s = 0; s < ns; s++)
-        (void)TIFFReadEncodedStrip(tif, s, (tdata_t)NULL, (tsize_t)-1);
+        (void)TIFFReadEncodedStrip(tif, s, NULL, -1);
     printf("p\n");
     printf("grestore $pageTop restore\n");
     totalPages++;

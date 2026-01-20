@@ -200,7 +200,7 @@ static int TIFFDefaultRefBlackWhite(TIFF *tif, TIFFDirectory *td)
         {
             td->td_refblackwhite[2 * i + 0] = 0;
             td->td_refblackwhite[2 * i + 1] =
-                (float)((1L << td->td_bitspersample) - 1L);
+                (float)((1UL << td->td_bitspersample) - 1);
         }
     }
     return 1;

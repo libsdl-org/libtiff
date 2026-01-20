@@ -454,7 +454,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
             goto failure;
     }
     */
-    auxDouble = (double)PIXAR_FOVCOT_VAL;
+    auxDouble = PIXAR_FOVCOT_VAL;
     if (!TIFFSetField(tif, TIFFTAG_PIXAR_FOVCOT, auxDouble))
     {
         fprintf(stderr, "Can't set TIFFTAG_PIXAR_FOVCOT tag.\n");
@@ -892,7 +892,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     /*- TIFFTAG_STONITS is a DOUBLE parameter (TIFF_DOUBLE, TIFF_SETGET_DOUBLE)
      * with field_bit=FIELD_CUSTOM!! -*/
     retCode = TIFFGetField(tif, TIFFTAG_STONITS, &auxDouble);
-    if (auxDouble != (double)STONITS_VAL)
+    if (auxDouble != STONITS_VAL)
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_STONITS %f differs from set value %f\n",
@@ -923,8 +923,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
          */
         auxDblUnion.dbl = 0;
         retCode = TIFFGetField(tif, TIFFTAG_BESTQUALITYSCALE, &auxDblUnion.dbl);
-        dblDiffLimit = RATIONAL_EPS * (double)BESTQUALITYSCALE_VAL;
-        dblDiff = auxDblUnion.dbl - (double)BESTQUALITYSCALE_VAL;
+        dblDiffLimit = RATIONAL_EPS * BESTQUALITYSCALE_VAL;
+        dblDiff = auxDblUnion.dbl - BESTQUALITYSCALE_VAL;
         fltDiff = auxDblUnion.flt1 - (float)BESTQUALITYSCALE_VAL;
         if (!((fabs(dblDiff) > fabs(dblDiffLimit)) &&
               !(fabs(fltDiff) > fabs(dblDiffLimit))))
@@ -950,8 +950,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
          */
         auxDblUnion.dbl = 0;
         retCode = TIFFGetField(tif, TIFFTAG_BASELINEEXPOSURE, &auxDblUnion.dbl);
-        dblDiffLimit = RATIONAL_EPS * (double)BASELINEEXPOSURE_VAL;
-        dblDiff = auxDblUnion.dbl - (double)BASELINEEXPOSURE_VAL;
+        dblDiffLimit = RATIONAL_EPS * BASELINEEXPOSURE_VAL;
+        dblDiff = auxDblUnion.dbl - BASELINEEXPOSURE_VAL;
         fltDiff = auxDblUnion.flt1 - (float)BASELINEEXPOSURE_VAL;
         if (!((fabs(dblDiff) > fabs(dblDiffLimit)) &&
               !(fabs(fltDiff) > fabs(dblDiffLimit))))

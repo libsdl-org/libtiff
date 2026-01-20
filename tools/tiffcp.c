@@ -380,15 +380,15 @@ int main(int argc, char *argv[])
         in = openSrcImage(&imageCursor);
         if (in == NULL)
         {
-            (void)TIFFClose(out);
+            TIFFClose(out);
             return (EXIT_FAILURE);
         }
         if (diroff != 0 && !TIFFSetSubDirectory(in, diroff))
         {
             TIFFError(TIFFFileName(in),
                       "Error, setting subdirectory at %" PRIu64, diroff);
-            (void)TIFFClose(in);
-            (void)TIFFClose(out);
+            TIFFClose(in);
+            TIFFClose(out);
             return (EXIT_FAILURE);
         }
         for (;;)
@@ -404,8 +404,8 @@ int main(int argc, char *argv[])
             g3opts = defg3opts;
             if (!tiffcp(in, out) || !TIFFWriteDirectory(out))
             {
-                (void)TIFFClose(in);
-                (void)TIFFClose(out);
+                TIFFClose(in);
+                TIFFClose(out);
                 return (EXIT_FAILURE);
             }
             if (imageCursor)
@@ -416,10 +416,10 @@ int main(int argc, char *argv[])
             else if (!TIFFReadDirectory(in))
                 break;
         }
-        (void)TIFFClose(in);
+        TIFFClose(in);
     }
 
-    (void)TIFFClose(out);
+    TIFFClose(out);
     return (EXIT_SUCCESS);
 }
 

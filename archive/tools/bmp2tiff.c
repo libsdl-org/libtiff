@@ -937,7 +937,7 @@ static int processCompressOptions(char *opt)
         compression = COMPRESSION_JPEG;
         while (cp)
         {
-            if (isdigit((int)cp[1]))
+            if (isdigit((unsigned char)cp[1]))
                 quality = atoi(cp + 1);
             else if (cp[1] == 'r')
                 jpegcolormode = JPEGCOLORMODE_RAW;

@@ -141,12 +141,12 @@ int main(int argc, char *argv[])
             if (!cpIFD(in, out) || !TIFFWriteDirectory(out))
                 goto bad;
         } while (TIFFReadDirectory(in));
-        (void)TIFFClose(in);
+        TIFFClose(in);
     }
-    (void)TIFFClose(out);
+    TIFFClose(out);
     return EXIT_SUCCESS;
 bad:
-    (void)TIFFClose(out);
+    TIFFClose(out);
     return EXIT_FAILURE;
 }
 

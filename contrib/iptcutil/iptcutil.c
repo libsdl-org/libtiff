@@ -139,26 +139,27 @@ static html_code html_codes[] = {
  * back to the original ASCII representation.
  * - returns the number of characters dropped.
  */
-static int convertHTMLcodes(char *s, int len)
+static size_t convertHTMLcodes(char *s, size_t len)
 {
     if (len <= 0 || s == (char *)NULL || *s == '\0')
         return 0;
 
     if (s[1] == '#')
     {
-        int val, o;
+        int val;
+        size_t o;
 
         if (sscanf(s, "&#%d;", &val) == 1)
         {
-            o = 3;
+            o = 3u;
             while (o < len && s[o] != ';')
             {
                 o++;
                 if (o > 5)
                     break;
             }
-            if (o < 5 && o < len)
-                strcpy(s + 1, s + 1 + o);
+            if (o < 5u && o < len)
+                strcpy(s + 1u, s + 1u + o);
             *s = (char)val;
             return o;
         }
@@ -169,12 +170,12 @@ static int convertHTMLcodes(char *s, int len)
 
         for (i = 0; i < codes; i++)
         {
-            if (html_codes[i].len <= len)
+            if ((size_t)(html_codes[i].len) <= len)
                 if (STRNICMP(s, html_codes[i].code, (size_t)html_codes[i].len) == 0)
                 {
                     strcpy(s + 1, s + html_codes[i].len);
                     *s = html_codes[i].val;
-                    return html_codes[i].len - 1;
+                    return (size_t)(html_codes[i].len - 1);
                 }
         }
     }
@@ -328,12 +329,10 @@ static char *super_fgets(char *b, int *blen, FILE *file)
             break;
         if ((int)(q - b + 1) >= len)
         {
-            long tlen;
-
-            tlen = (long)(q - b);
+            ptrdiff_t tlen = q - b;
             len <<= 1;
-            b = (char *)realloc((char *)b, (size_t)(len + 2));
-            if ((char *)b == (char *)NULL)
+            b = (char *)realloc(b, (size_t)(len + 2));
+            if (b == NULL)
                 break;
             q = b + tlen;
         }
@@ -346,7 +345,7 @@ static char *super_fgets(char *b, int *blen, FILE *file)
 
         tlen = (int)(q - b);
         if (tlen == 0)
-            return (char *)NULL;
+            return NULL;
         b[tlen] = '\0';
         *blen = ++tlen;
     }
@@ -483,12 +482,10 @@ int main(int argc, char *argv[])
                 {
                     int next2;
 
-                    unsigned long len;
-
                     char brkused2, quoted2;
 
                     next2 = 0;
-                    len = (unsigned long)strlen(token);
+                    size_t len = strlen(token);
                     while (tokenizer(0, newstr, inputlen, token, "", "&", "", 0,
                                      &brkused2, &next2, &quoted2) == 0)
                     {
@@ -496,7 +493,7 @@ int main(int argc, char *argv[])
                         {
                             char *s = &token[next2 - 1];
 
-                            len -= (unsigned long)convertHTMLcodes(s, (int)strlen(s));
+                            len -= convertHTMLcodes(s, strlen(s));
                         }
                     }
 
@@ -752,11 +749,11 @@ static void chstore(char *string, int max, char ch)
             switch (_p_flag & 3)
             {
                 case 1: /* convert to upper */
-                    c = (char)toupper((int)ch);
+                    c = (char)toupper((unsigned char)ch);
                     break;
 
                 case 2: /* convert to lower */
-                    c = (char)tolower((int)ch);
+                    c = (char)tolower((unsigned char)ch);
                     break;
 
                 default: /* use as is */

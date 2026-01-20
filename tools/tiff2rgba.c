@@ -162,17 +162,17 @@ int main(int argc, char *argv[])
             {
                 if (!tiffcvt(in, out) || !TIFFWriteDirectory(out))
                 {
-                    (void)TIFFClose(out);
-                    (void)TIFFClose(in);
+                    TIFFClose(out);
+                    TIFFClose(in);
                     TIFFOpenOptionsFree(opts);
                     return (1);
                 }
             } while (TIFFReadDirectory(in));
-            (void)TIFFClose(in);
+            TIFFClose(in);
         }
     }
     TIFFOpenOptionsFree(opts);
-    (void)TIFFClose(out);
+    TIFFClose(out);
     return (EXIT_SUCCESS);
 }
 

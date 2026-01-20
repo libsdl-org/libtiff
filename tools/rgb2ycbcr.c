@@ -141,15 +141,15 @@ int main(int argc, char *argv[])
             {
                 if (!tiffcvt(in, out) || !TIFFWriteDirectory(out))
                 {
-                    (void)TIFFClose(out);
-                    (void)TIFFClose(in);
+                    TIFFClose(out);
+                    TIFFClose(in);
                     return (1);
                 }
             } while (TIFFReadDirectory(in));
-            (void)TIFFClose(in);
+            TIFFClose(in);
         }
     }
-    (void)TIFFClose(out);
+    TIFFClose(out);
     return (EXIT_SUCCESS);
 }
 
