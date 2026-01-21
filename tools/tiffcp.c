@@ -1602,7 +1602,7 @@ static void cpStripToTile(uint8_t *out, uint8_t *in, uint32_t rows,
 }
 
 static void cpContigBufToSeparateBuf(uint8_t *out, uint8_t *in, uint32_t rows,
-                                     uint32_t cols, int outskew, int inskew,
+                                     uint32_t cols, int64_t outskew, int64_t inskew,
                                      tsample_t spp, int bytes_per_sample)
 {
     while (rows-- > 0)
@@ -1624,7 +1624,7 @@ static void cpContigBufToSeparateBuf(uint8_t *out, uint8_t *in, uint32_t rows,
 }
 
 static void cpSeparateBufToContigBuf(uint8_t *out, uint8_t *in, uint32_t rows,
-                                     uint32_t cols, int outskew, int inskew,
+                                     uint32_t cols, int64_t outskew, int64_t inskew,
                                      tsample_t spp, int bytes_per_sample)
 {
     while (rows-- > 0)
@@ -1817,7 +1817,7 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
             if (colb > iskew)
             {
                 uint32_t width = imagew - colb;
-                uint32_t oskew = tilew - width;
+                int64_t oskew = (int64_t)tilew - (int64_t)width;
                 cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, width, oskew + iskew,
                               oskew);
             }
@@ -1839,7 +1839,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                                              "readSeparateTilesIntoBuffer");
     uint32_t tilew = _TIFFCastSSizeToUInt32(TIFFTileRowSize(in),
                                             "readSeparateTilesIntoBuffer");
-    int iskew;
+    int64_t iskew;
     tsize_t tilesize = TIFFTileSize(in);
     tdata_t tilebuf;
     uint8_t *bufp = (uint8_t *)buf;
@@ -1862,7 +1862,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
         return 0;
     }
 
-    iskew = imagew - tilew * spp;
+    iskew = (int64_t)imagew - (int64_t)tilew * (int64_t)spp;
     tilebuf = limitMalloc(tilesize);
     if (tilebuf == 0)
         return 0;
@@ -1915,7 +1915,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                 if (colb + tilew * spp > imagew)
                 {
                     uint32_t width = imagew - colb;
-                    int oskew = tilew * spp - width;
+                    int64_t oskew = (int64_t)tilew * (int64_t)spp - (int64_t)width;
                     cpSeparateBufToContigBuf(
                         bufp + colb + s * bytes_per_sample, (uint8_t *)tilebuf, nrow,
                         width / (spp * bytes_per_sample), oskew + iskew,
@@ -2021,7 +2021,7 @@ DECLAREwriteFunc(writeBufferToContigTiles)
                                              "writeBufferToContigTiles");
     uint32_t tilew = _TIFFCastSSizeToUInt32(TIFFTileRowSize(out),
                                             "writeBufferToContigTiles");
-    int iskew = imagew - tilew;
+    int64_t iskew = (int64_t)imagew - (int64_t)tilew;
     tsize_t tilesize = TIFFTileSize(out);
     tdata_t obuf;
     uint8_t *bufp = (uint8_t *)buf;
@@ -2051,7 +2051,7 @@ DECLAREwriteFunc(writeBufferToContigTiles)
             if (colb + tilew > imagew)
             {
                 uint32_t width = imagew - colb;
-                int oskew = tilew - width;
+                int64_t oskew = (int64_t)tilew - (int64_t)width;
                 cpStripToTile((uint8_t *)obuf, bufp + colb, nrow, width, oskew,
                               oskew + iskew);
             }
@@ -2081,7 +2081,7 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
                                             "writeBufferToSeparateTiles");
     uint32_t iimagew = _TIFFCastSSizeToUInt32(TIFFRasterScanlineSize(out),
                                               "writeBufferToSeparateTiles");
-    int iskew = iimagew - tilew * spp;
+    int64_t iskew = (int64_t)iimagew - (int64_t)tilew * (int64_t)spp;
     tsize_t tilesize = TIFFTileSize(out);
     tdata_t obuf;
     uint8_t *bufp = (uint8_t *)buf;
@@ -2130,7 +2130,7 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
                 if (colb + tilew > imagew)
                 {
                     uint32_t width = (imagew - colb);
-                    int oskew = tilew - width;
+                    int64_t oskew = (int64_t)tilew - (int64_t)width;
 
                     cpContigBufToSeparateBuf((uint8_t *)obuf, bufp + (colb * spp) + s,
                                              nrow, width / bytes_per_sample,
