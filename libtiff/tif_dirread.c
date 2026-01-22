@@ -7743,7 +7743,6 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
         break;
         case TIFF_SETGET_INT:
         case TIFF_SETGET_C0_ASCII:
-        case TIFF_SETGET_C0_IFD8:
         case TIFF_SETGET_OTHER:
             assert(0); /* these should not arrive here */
             break;
