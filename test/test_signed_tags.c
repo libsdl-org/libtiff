@@ -280,6 +280,7 @@ static int writeTestTiff(const char *szFileName, int isBigTiff)
     int ret;
     TIFF *tif;
     int retcode = FAULT_RETURN;
+    uint32_t u32_x;
 
     unlink(szFileName);
     if (isBigTiff)
@@ -373,7 +374,7 @@ static int writeTestTiff(const char *szFileName, int isBigTiff)
     /*---- Writing TIFF_IFD8 data type. ----*/
     /* For x32 compilations cast to uint64_t due to different va_arg integer
      * promotion w.r.t. x64 compilation. */
-    uint32_t u32_x = UINT32_MAX;
+    u32_x = UINT32_MAX;
     ret = TIFFSetField(tif, IFD8_Max32, (uint64_t)UINT32_MAX);
     CHECK_RET_VALUE_SINGLE(ret, "IFD8_Max32", UINT32_MAX, PRIu32);
 
@@ -570,7 +571,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff,
      * within the "extender()" called by TIFFOpen(). */
     TIFFFieldInfo *tiff_field_info2;
     TIFFFieldInfo *tiff_field_info_sav;
-    char *strAux = "";
+    const char *strAux = "";
     if (isIFD8LONG8Exchange)
     {
         tiff_field_info2 = (TIFFFieldInfo *)malloc(sizeof(tiff_field_info));
