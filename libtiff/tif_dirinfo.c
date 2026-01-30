@@ -182,9 +182,9 @@ static const TIFFField tiffFields[] = {
     /*--: EXIFIFD and GPSIFD specified as TIFF_LONG by Aware-Systems and not TIFF_IFD8 as in original LibTiff. However, for IFD-like tags,
      * libtiff uses the data type TIFF_IFD8 in tiffFields[]-tag definition combined with a special handling procedure in order to write either
      * a 32-bit value and the TIFF_IFD type-id into ClassicTIFF files or a 64-bit value and the TIFF_IFD8 type-id into BigTIFF files. */
-    {TIFFTAG_EXIFIFD, 1, 1, TIFF_IFD8, 0, TIFF_SETGET_IFD8,  FIELD_CUSTOM, 1, 0, "EXIFIFDOffset", (TIFFFieldArray *)&exifFieldArray},
+    {TIFFTAG_EXIFIFD, 1, 1, TIFF_LONG8, 0, TIFF_SETGET_UINT64,  FIELD_CUSTOM, 1, 0, "EXIFIFDOffset", (TIFFFieldArray *)&exifFieldArray},
     {TIFFTAG_ICCPROFILE, -3, -3, TIFF_UNDEFINED, 0, TIFF_SETGET_C32_UINT8,  FIELD_CUSTOM, 1, 1, "ICC Profile", NULL},
-    {TIFFTAG_GPSIFD, 1, 1, TIFF_IFD8, 0, TIFF_SETGET_IFD8,  FIELD_CUSTOM, 1, 0, "GPSIFDOffset", (TIFFFieldArray *)&gpsFieldArray},
+    {TIFFTAG_GPSIFD, 1, 1, TIFF_LONG8, 0, TIFF_SETGET_UINT64,  FIELD_CUSTOM, 1, 0, "GPSIFDOffset", (TIFFFieldArray *)&gpsFieldArray},
     {TIFFTAG_FAXRECVPARAMS, 1, 1, TIFF_LONG, 0, TIFF_SETGET_UINT32,  FIELD_CUSTOM, TRUE, FALSE, "FaxRecvParams", NULL},
     {TIFFTAG_FAXSUBADDRESS, -1, -1, TIFF_ASCII, 0, TIFF_SETGET_ASCII,  FIELD_CUSTOM, TRUE, FALSE, "FaxSubAddress", NULL},
     {TIFFTAG_FAXRECVTIME, 1, 1, TIFF_LONG, 0, TIFF_SETGET_UINT32,  FIELD_CUSTOM, TRUE, FALSE, "FaxRecvTime", NULL},
