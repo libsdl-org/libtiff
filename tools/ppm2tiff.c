@@ -160,7 +160,7 @@ static void pack_words(unsigned char *buf, unsigned int smpls, uint16_t bps)
     }
 }
 
-static void BadPPM(char *file)
+static void BadPPM(const char *file)
 {
     fprintf(stderr, "%s: Not a PPM file.\n", file);
     exit(EXIT_FAILURE);
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
     TIFF *out;
     FILE *in;
     unsigned int w, h, prec, row;
-    char *infile;
+    const char *infile;
     int c;
 #if !HAVE_DECL_OPTARG
     extern int optind;

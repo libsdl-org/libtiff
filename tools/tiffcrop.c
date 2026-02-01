@@ -674,12 +674,12 @@ static int combineSeparateTileSamplesBytes(unsigned char *[], unsigned char *,
                                            FILE *, int, int);
 
 /* Dump functions for debugging */
-static void dump_info(FILE *, int, char *, char *, ...);
-static int dump_data(FILE *, int, char *, unsigned char *, uint32_t);
-static int dump_byte(FILE *, int, char *, unsigned char);
-static int dump_short(FILE *, int, char *, uint16_t);
-static int dump_long(FILE *, int, char *, uint32_t);
-static int dump_wide(FILE *, int, char *, uint64_t);
+static void dump_info(FILE *, int, const char *, const char *, ...);
+static int dump_data(FILE *, int, const char *, unsigned char *, uint32_t);
+static int dump_byte(FILE *, int, const char *, unsigned char);
+static int dump_short(FILE *, int, const char *, uint16_t);
+static int dump_long(FILE *, int, const char *, uint32_t);
+static int dump_wide(FILE *, int, const char *, uint64_t);
 static int dump_buffer(FILE *, int, uint32_t, uint32_t, uint32_t,
                        unsigned char *);
 
@@ -710,7 +710,8 @@ static void *limitMalloc(tmsize_t s)
     return _TIFFmalloc(s);
 }
 
-/* Note: Usage info split into multiple chunks to avoid C99 length limit of 4095 chars */
+/* Note: Usage info split into multiple chunks to avoid C99 length limit of 4095
+ * chars */
 static const char usage_info1[] =
     "Copy, crop, convert, extract, and/or process TIFF files\n\n"
     "usage: tiffcrop [options] source1 ... sourceN  destination\n"
@@ -1004,7 +1005,8 @@ static int readContigTilesIntoBuffer(TIFF *in, uint8_t *buf,
                   "Integer overflow when calculating buffer size.");
         exit(EXIT_FAILURE);
     }
-    tilebuf = (unsigned char *)limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
+    tilebuf =
+        (unsigned char *)limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
     if (tilebuf == 0)
         return 0;
     tilebuf[tile_buffsize] = 0;
@@ -1323,7 +1325,7 @@ static int writeBufferToContigStrips(TIFF *out, uint8_t *buf,
     for (row = 0; row < imagelength; row += local_rowsperstrip)
     {
         nrows = (row + local_rowsperstrip > imagelength) ? imagelength - row
-                                                          : local_rowsperstrip;
+                                                         : local_rowsperstrip;
         stripsize = TIFFVStripSize(out, nrows);
         if (TIFFWriteEncodedStrip(out, strip++, buf, stripsize) < 0)
         {
@@ -1372,7 +1374,8 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
     }
     rowsize =
         ((bps * spp * width) + 7U) / 8; /* source has interleaved samples */
-    if (bytes_per_sample == 0 || local_rowsperstrip > UINT32_MAX / bytes_per_sample ||
+    if (bytes_per_sample == 0 ||
+        local_rowsperstrip > UINT32_MAX / bytes_per_sample ||
         local_rowsperstrip * bytes_per_sample > UINT32_MAX / (width + 1))
     {
         TIFFError(TIFFFileName(out),
@@ -1391,13 +1394,14 @@ static int writeBufferToSeparateStrips(TIFF *out, uint8_t *buf, uint32_t length,
     {
         for (row = 0; row < length; row += local_rowsperstrip)
         {
-            nrows = (row + local_rowsperstrip > length) ? length - row : local_rowsperstrip;
+            nrows = (row + local_rowsperstrip > length) ? length - row
+                                                        : local_rowsperstrip;
 
             stripsize = TIFFVStripSize(out, nrows);
             src = buf + (row * rowsize);
             memset(obuf, '\0', rowstripsize + NUM_BUFF_OVERSIZE_BYTES);
-            if (extractContigSamplesToBuffer((uint8_t *)obuf, src, nrows, width, s, spp,
-                                             bps, dump))
+            if (extractContigSamplesToBuffer((uint8_t *)obuf, src, nrows, width,
+                                             s, spp, bps, dump))
             {
                 _TIFFfree(obuf);
                 return 1;
@@ -1496,7 +1500,8 @@ static int writeBufferToContigTiles(TIFF *out, uint8_t *buf,
     src_rowsize = ((imagewidth * spp * bps) + 7U) / 8;
 
     /* Add 3 padding bytes for extractContigSamples32bits */
-    tilebuf = (unsigned char *)limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
+    tilebuf =
+        (unsigned char *)limitMalloc(tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
     if (tilebuf == 0)
         return 1;
     memset(tilebuf, 0, tile_buffsize + NUM_BUFF_OVERSIZE_BYTES);
@@ -1595,9 +1600,9 @@ static int writeBufferToSeparateTiles(TIFF *out, uint8_t *buf,
 
             for (s = 0; s < spp; s++)
             {
-                if (extractContigSamplesToTileBuffer((uint8_t *)obuf, bufp, nrow, ncol,
-                                                     imagewidth, tw, s, 1, spp,
-                                                     bps, dump) > 0)
+                if (extractContigSamplesToTileBuffer((uint8_t *)obuf, bufp,
+                                                     nrow, ncol, imagewidth, tw,
+                                                     s, 1, spp, bps, dump) > 0)
                 {
                     TIFFError("writeBufferToSeparateTiles",
                               "Unable to extract data to tile for row %" PRIu32
@@ -2114,7 +2119,8 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                         /* convert value to lowercase */
                         end = (unsigned int)strlen(opt_offset + 1);
                         for (i = 1; i <= end; i++)
-                            *(opt_offset + i) = (char)tolower((int)*(opt_offset + i));
+                            *(opt_offset + i) =
+                                (char)tolower((int)*(opt_offset + i));
                         /* check dump format value */
                         if (strncmp(opt_offset + 1, "txt", 3) == 0)
                         {
@@ -2994,7 +3000,7 @@ failure:
 } /* end main */
 
 /* Debugging functions */
-static int dump_data(FILE *dumpfile, int format, char *dump_tag,
+static int dump_data(FILE *dumpfile, int format, const char *dump_tag,
                      unsigned char *data, uint32_t count)
 {
     int j, k;
@@ -3035,7 +3041,7 @@ static int dump_data(FILE *dumpfile, int format, char *dump_tag,
     return (0);
 }
 
-static int dump_byte(FILE *dumpfile, int format, char *dump_tag,
+static int dump_byte(FILE *dumpfile, int format, const char *dump_tag,
                      unsigned char data)
 {
     int j, k;
@@ -3071,7 +3077,8 @@ static int dump_byte(FILE *dumpfile, int format, char *dump_tag,
     return (0);
 }
 
-static int dump_short(FILE *dumpfile, int format, char *dump_tag, uint16_t data)
+static int dump_short(FILE *dumpfile, int format, const char *dump_tag,
+                      uint16_t data)
 {
     int j, k;
     char dump_array[20];
@@ -3108,7 +3115,8 @@ static int dump_short(FILE *dumpfile, int format, char *dump_tag, uint16_t data)
     return (0);
 }
 
-static int dump_long(FILE *dumpfile, int format, char *dump_tag, uint32_t data)
+static int dump_long(FILE *dumpfile, int format, const char *dump_tag,
+                     uint32_t data)
 {
     int j, k;
     char dump_array[40];
@@ -3144,7 +3152,8 @@ static int dump_long(FILE *dumpfile, int format, char *dump_tag, uint32_t data)
     return (0);
 }
 
-static int dump_wide(FILE *dumpfile, int format, char *dump_tag, uint64_t data)
+static int dump_wide(FILE *dumpfile, int format, const char *dump_tag,
+                     uint64_t data)
 {
     int j, k;
     char dump_array[80];
@@ -3181,7 +3190,8 @@ static int dump_wide(FILE *dumpfile, int format, char *dump_tag, uint64_t data)
     return (0);
 }
 
-static void dump_info(FILE *dumpfile, int format, char *prefix, char *msg, ...)
+static void dump_info(FILE *dumpfile, int format, const char *prefix,
+                      const char *msg, ...)
 {
     if (format == DUMP_TEXT)
     {
@@ -4289,8 +4299,8 @@ static int extractContigSamplesToBuffer(uint8_t *out, uint8_t *in,
 
 static int extractContigSamplesToTileBuffer(
     uint8_t *out, uint8_t *in, uint32_t rows, uint32_t cols,
-    uint32_t imagewidth, uint32_t local_tilewidth, tsample_t sample, uint16_t count,
-    uint16_t spp, uint16_t bps, struct dump_opts *dump)
+    uint32_t imagewidth, uint32_t local_tilewidth, tsample_t sample,
+    uint16_t count, uint16_t spp, uint16_t bps, struct dump_opts *dump)
 {
     int shift_width, bytes_per_sample, bytes_per_pixel;
     uint32_t src_rowsize, src_offset, row;
@@ -5615,7 +5625,8 @@ static int readSeparateStripsIntoBuffer(TIFF *in, uint8_t *obuf,
     for (s = 0; (s < spp) && (s < MAX_SAMPLES); s++)
     {
         srcbuffs[s] = NULL;
-        buff = (unsigned char *)limitMalloc(stripsize + NUM_BUFF_OVERSIZE_BYTES);
+        buff =
+            (unsigned char *)limitMalloc(stripsize + NUM_BUFF_OVERSIZE_BYTES);
         if (!buff)
         {
             TIFFError(

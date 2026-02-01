@@ -82,7 +82,7 @@ static void printruns(unsigned char *buf, uint32_t *runs, uint32_t *erun,
                  {'g', 'q', 64},  {'h', 'r', 32},  {'i', 's', 16},
                  {'j', 't', 8},   {'k', 'u', 4},   {'l', 'v', 2},
                  {'m', 'w', 1}};
-    static char *svalue =
+    static const char *svalue =
         " !\"#$&'*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abc";
     int colormode = 1; /* 0 for white, 1 for black */
     uint32_t runlength = 0;
@@ -301,7 +301,8 @@ static int findPage(TIFF *tif, uint16_t pageNumber)
         return (TIFFSetDirectory(tif, (tdir_t)(pageNumber - 1)));
 }
 
-static void fax2ps(TIFF *tif, uint16_t npages, uint16_t *pages, char *filename)
+static void fax2ps(TIFF *tif, uint16_t npages, uint16_t *pages,
+                   const char *filename)
 {
     if (npages > 0)
     {

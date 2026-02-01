@@ -79,7 +79,7 @@ static const char sbytefmt[] = "%s%" PRId8;   /* SBYTE */
 static const char shortfmtd[] = "%s%" PRIu16; /* SHORT */
 static const char shortfmth[] = "%s%#" PRIx16;
 static const char sshortfmtd[] = "%s%" PRId16; /* SSHORT */
-static const char longfmtd[] = "%s%" PRIu32; /* LONG */
+static const char longfmtd[] = "%s%" PRIu32;   /* LONG */
 static const char longfmth[] = "%s%#" PRIx32;
 static const char slongfmtd[] = "%s%" PRId32; /* SLONG */
 static const char slongfmth[] = "%s%#" PRIx32;
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 #define ord(e) ((int)e)
 
 static uint64_t ReadDirectory(int, unsigned, uint64_t);
-static void ReadError(char *);
+static void ReadError(const char *);
 static void Error(const char *, ...);
 static void Fatal(const char *, ...);
 
@@ -226,7 +226,8 @@ static void dump(int fd, uint64_t diroff)
                (unsigned)hdr.big.tiff_magic,
                hdr.big.tiff_magic == TIFF_BIGENDIAN ? "big" : "little",
                (unsigned)43, "BigTIFF");
-        printf("OffsetSize: %#x Unused: %#x\n", (unsigned)hdr.big.tiff_offsetsize,
+        printf("OffsetSize: %#x Unused: %#x\n",
+               (unsigned)hdr.big.tiff_offsetsize,
                (unsigned)hdr.big.tiff_unused);
         if (diroff == 0)
             diroff = hdr.big.tiff_diroff;
@@ -722,7 +723,7 @@ static void PrintASCII(FILE *fd, uint32_t cc, const unsigned char *cp)
 static void PrintData(FILE *fd, uint16_t type, uint32_t count,
                       unsigned char *data)
 {
-    char *sep = "";
+    const char *sep = "";
 
     switch (type)
     {
@@ -885,7 +886,10 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
     }
 }
 
-static void ReadError(char *what) { Fatal("Error while reading %s", what); }
+static void ReadError(const char *what)
+{
+    Fatal("Error while reading %s", what);
+}
 
 #include <stdarg.h>
 
