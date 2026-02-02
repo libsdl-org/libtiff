@@ -695,6 +695,7 @@ TIFFReadDirEntryLong(TIFF *tif, TIFFDirEntry *direntry, uint32_t *value)
             return (TIFFReadDirEntryErrOk);
         }
         case TIFF_LONG:
+        case TIFF_IFD:
             TIFFReadDirEntryCheckedLong(tif, direntry, value);
             return (TIFFReadDirEntryErrOk);
         case TIFF_SLONG:
@@ -708,6 +709,7 @@ TIFFReadDirEntryLong(TIFF *tif, TIFFDirEntry *direntry, uint32_t *value)
             return (TIFFReadDirEntryErrOk);
         }
         case TIFF_LONG8:
+        case TIFF_IFD8:
         {
             uint64_t m;
             err = TIFFReadDirEntryCheckedLong8(tif, direntry, &m);
@@ -857,6 +859,7 @@ TIFFReadDirEntryLong8(TIFF *tif, TIFFDirEntry *direntry, uint64_t *value)
             return (TIFFReadDirEntryErrOk);
         }
         case TIFF_LONG:
+        case TIFF_IFD:
         {
             uint32_t m;
             TIFFReadDirEntryCheckedLong(tif, direntry, &m);
@@ -874,6 +877,7 @@ TIFFReadDirEntryLong8(TIFF *tif, TIFFDirEntry *direntry, uint64_t *value)
             return (TIFFReadDirEntryErrOk);
         }
         case TIFF_LONG8:
+        case TIFF_IFD8:
             err = TIFFReadDirEntryCheckedLong8(tif, direntry, value);
             return (err);
         case TIFF_SLONG8:
@@ -2122,6 +2126,8 @@ TIFFReadDirEntryLongArray(TIFF *tif, TIFFDirEntry *direntry, uint32_t **value)
         case TIFF_SLONG:
         case TIFF_LONG8:
         case TIFF_SLONG8:
+        case TIFF_IFD:
+        case TIFF_IFD8:
             break;
         default:
             return (TIFFReadDirEntryErrType);
@@ -2135,6 +2141,7 @@ TIFFReadDirEntryLongArray(TIFF *tif, TIFFDirEntry *direntry, uint32_t **value)
     switch (direntry->tdir_type)
     {
         case TIFF_LONG:
+        case TIFF_IFD:
             *value = (uint32_t *)origdata;
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabArrayOfLong(*value, count);
@@ -2231,6 +2238,7 @@ TIFFReadDirEntryLongArray(TIFF *tif, TIFFDirEntry *direntry, uint32_t **value)
         }
         break;
         case TIFF_LONG8:
+        case TIFF_IFD8:
         {
             uint64_t *ma;
             uint32_t *mb;
@@ -2463,6 +2471,8 @@ TIFFReadDirEntryLong8ArrayWithLimit(TIFF *tif, TIFFDirEntry *direntry,
         case TIFF_SLONG:
         case TIFF_LONG8:
         case TIFF_SLONG8:
+        case TIFF_IFD:
+        case TIFF_IFD8:
             break;
         default:
             return (TIFFReadDirEntryErrType);
@@ -2477,6 +2487,7 @@ TIFFReadDirEntryLong8ArrayWithLimit(TIFF *tif, TIFFDirEntry *direntry,
     switch (direntry->tdir_type)
     {
         case TIFF_LONG8:
+        case TIFF_IFD8:
             *value = (uint64_t *)origdata;
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabArrayOfLong8(*value, count);
@@ -2573,6 +2584,7 @@ TIFFReadDirEntryLong8ArrayWithLimit(TIFF *tif, TIFFDirEntry *direntry,
         }
         break;
         case TIFF_LONG:
+        case TIFF_IFD:
         {
             uint32_t *ma;
             uint64_t *mb;

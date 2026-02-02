@@ -30,9 +30,13 @@
  *    (see https://gitlab.com/libtiff/libtiff/-/issues/532)
  *  - Immediate clearing of the memory for the definition of the additional tags
  *    (allocate memory for TIFFFieldInfo structure and free that memory
- *     immediately after calling TIFFMergeFieldInfo().
+ *    immediately after calling TIFFMergeFieldInfo().
  *  - Handling of TIFF_LONG8 and TIFF_IFD8 tags after alignment of write-
  *    and read-functions. Test for BigTIFF and ClassicTIFF.
+ *  - Tags for TIFF_LONG8 and TIFF_IFD8 can have exchanged field_type
+ *    for reading. E.g: TIFF_LONG, TIFF_LONG8 in the file can be read into a tag
+ *    with field_type TIFF_IFD8. Test for BigTIFF and ClassicTIFF.
+ *
  */
 
 #include <memory.h> /* necessary for linux compiler (memset) */
@@ -549,7 +553,8 @@ failure:
  * Open file with all written, newly defined tags and read
  * and compare the value of the tags with the written value.
  */
-static int readTestTiff(const char *szFileName, int isBigTiff)
+static int readTestTiff(const char *szFileName, int isBigTiff,
+                        int isIFD8LONG8Exchange)
 {
     int ret;
     int i;
@@ -562,12 +567,50 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
     uint32_t count32;
     int retcode = FAULT_RETURN;
 
+    /* Copy const array to be manipulated and freed just after TIFFMergeFields()
+     * within the "extender()" called by TIFFOpen(). */
+    TIFFFieldInfo *tiff_field_info2;
+    TIFFFieldInfo *tiff_field_info_sav;
+    const char *strAux = "";
+    if (isIFD8LONG8Exchange)
+    {
+        tiff_field_info2 = (TIFFFieldInfo *)malloc(sizeof(tiff_field_info));
+        if (tiff_field_info2 == (TIFFFieldInfo *)NULL)
+        {
+            fprintf(stdout,
+                    "Can't allocate memoy for tiff_field_info2 structure.\n");
+            return (FAULT_RETURN);
+        }
+        memcpy(tiff_field_info2, tiff_field_info, sizeof(tiff_field_info));
+        /* Switch field array for extender callback. */
+        tiff_field_info_sav = p_tiff_field_info;
+        p_tiff_field_info = tiff_field_info2;
+
+        /*-- Adapt tiff_field_info array for TIFF_IFD8 with TIFF_LONG8
+         *   (exchange them) to test reading of other types. --*/
+        for (i = 17; i < 17 + 9; i++)
+        {
+            tiff_field_info2[i].field_type = TIFF_LONG8;
+            tiff_field_info2[i + 9].field_type = TIFF_IFD8;
+        }
+        strAux = "with exchanged IFD8, LONG8 field_types";
+    }
+
     fprintf(stdout, "-- Reading signed values ...\n");
     TIFF *tif = TIFFOpen(szFileName, "r");
     if (!tif)
     {
         fprintf(stdout, "Can't open test TIFF file %s.\n", szFileName);
         return (FAULT_RETURN);
+    }
+    if (isIFD8LONG8Exchange)
+    {
+        /* tiff_field_info2 should not be needed anymore, as long as the still
+         * active extender() is not called again. Therefore, the extender
+         * callback should be disabled by resetting it to the saved one. */
+        free(tiff_field_info2);
+        tiff_field_info2 = NULL;
+        p_tiff_field_info = tiff_field_info_sav;
     }
 
     ret = TIFFGetField(tif, SINT8, &s8l);
@@ -841,7 +884,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
     } /*-- if(isBigTiff) --*/
 
     /*---- Reading IFD8 and LONG8 values ----*/
-    fprintf(stdout, "-- Reading IFD8 and Long8 values from %s ...\n",
+    fprintf(stdout, "-- Reading IFD8 and Long8 values %s from %s ...\n", strAux,
             isBigTiff ? "BigTIFF" : "ClassicTIFF");
 
     /* Macros do not attempt to read tags only possible for BigTIFF
@@ -1026,12 +1069,16 @@ int main(void)
     parent = TIFFSetTagExtender(&extender);
     if (writeTestTiff("temp.tif", 0) != OK_RETURN)
         return (-1);
-    if (readTestTiff("temp.tif", 0) != OK_RETURN)
+    if (readTestTiff("temp.tif", 0, 0) != OK_RETURN)
+        return (-1);
+    if (readTestTiff("temp.tif", 0, 1) != OK_RETURN)
         return (-1);
 
     if (writeTestTiff("tempBig.tif", 1) != OK_RETURN)
         return (-1);
-    if (readTestTiff("tempBig.tif", 1) != OK_RETURN)
+    if (readTestTiff("tempBig.tif", 1, 0) != OK_RETURN)
+        return (-1);
+    if (readTestTiff("tempBig.tif", 1, 1) != OK_RETURN)
         return (-1);
 #ifndef DEBUG_TESTING
     unlink("tempBig.tif");
