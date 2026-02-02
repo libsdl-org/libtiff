@@ -79,7 +79,7 @@ static const char sbytefmt[] = "%s%" PRId8;   /* SBYTE */
 static const char shortfmtd[] = "%s%" PRIu16; /* SHORT */
 static const char shortfmth[] = "%s%#" PRIx16;
 static const char sshortfmtd[] = "%s%" PRId16; /* SSHORT */
-static const char longfmtd[] = "%s%" PRIu32; /* LONG */
+static const char longfmtd[] = "%s%" PRIu32;   /* LONG */
 static const char longfmth[] = "%s%#" PRIx32;
 static const char slongfmtd[] = "%s%" PRId32; /* SLONG */
 static const char slongfmth[] = "%s%#" PRIx32;
@@ -226,7 +226,8 @@ static void dump(int fd, uint64_t diroff)
                (unsigned)hdr.big.tiff_magic,
                hdr.big.tiff_magic == TIFF_BIGENDIAN ? "big" : "little",
                (unsigned)43, "BigTIFF");
-        printf("OffsetSize: %#x Unused: %#x\n", (unsigned)hdr.big.tiff_offsetsize,
+        printf("OffsetSize: %#x Unused: %#x\n",
+               (unsigned)hdr.big.tiff_offsetsize,
                (unsigned)hdr.big.tiff_unused);
         if (diroff == 0)
             diroff = hdr.big.tiff_diroff;
@@ -398,7 +399,8 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         uint64_t count;
         uint64_t datasize;
         int datafits;
-        void *datamem;
+        void *datamem = NULL;
+        void *datavalptr = NULL;
         uint64_t dataoffset;
         int datatruncated;
         int datasizeoverflow;
@@ -439,7 +441,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         datasize = TIFFSafeMultiply(tmsize_t, count, typewidth);
         datasizeoverflow = (typewidth > 0 && datasize / typewidth != count);
         datafits = 1;
-        datamem = dp;
+        datavalptr = (void *)dp;
         dataoffset = 0;
         datatruncated = 0;
         if (!bigtiff)
@@ -448,7 +450,6 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
             {
                 uint32_t dataoffset32;
                 datafits = 0;
-                datamem = NULL;
                 dataoffset32 = *(uint32_t *)dp;
                 if (swabflag)
                     TIFFSwabLong(&dataoffset32);
@@ -461,7 +462,6 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
             if (datasizeoverflow || datasize > 8)
             {
                 datafits = 0;
-                datamem = NULL;
                 memcpy(&dataoffset, dp, sizeof(uint64_t));
                 if (swabflag)
                     TIFFSwabLong8(&dataoffset);
@@ -480,10 +480,18 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
             count = maxitems;
             datasize = TIFFSafeMultiply(tmsize_t, count, typewidth);
         }
-        if (!datafits)
+
+        /* Values within IFD-buffer 'dirmem' are either 2 byte-aligned for
+         * ClassicTIFF, or 4-byte aligned for BigTIFF.
+         * Thus, to be on the safe side for "unaligned memory access", the data
+         * values need to be freshly aligned in an extra allocated buffer for
+         * the values.
+         * BTW: malloc() gets memory aligned for every data type.
+         */
+        datamem = _TIFFmalloc((tmsize_t)datasize);
+        if (datamem)
         {
-            datamem = _TIFFmalloc((tmsize_t)datasize);
-            if (datamem)
+            if (!datafits)
             {
                 if (_TIFF_lseek_f(fd, (_TIFF_off_t)dataoffset, 0) !=
                     (_TIFF_off_t)dataoffset)
@@ -501,8 +509,14 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
                 }
             }
             else
-                Error("No space for data for tag %u", tag);
+            {
+                /* Align values from IFD-buffer */
+                memcpy(datamem, datavalptr, (size_t)datasize);
+            }
         }
+        else
+            Error("No space for data for tag %u", tag);
+
         if (datamem)
         {
             if (swabflag)
@@ -550,11 +564,9 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
             PrintData(stdout, type, (uint32_t)count, (unsigned char *)datamem);
             if (datatruncated)
                 printf(" ...");
-            if (!datafits)
-            {
-                _TIFFfree(datamem);
-                datamem = NULL;
-            }
+
+            _TIFFfree(datamem);
+            datamem = NULL;
         }
         printf(">\n");
     }
