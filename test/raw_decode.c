@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 {
     TIFF *tif;
     static const char *srcfilerel = "images/quad-tile.jpg.tiff";
-    char *srcdir = NULL;
+    const char *srcdir = NULL;
     char srcfile[1024];
     unsigned short h, v;
     int status;

@@ -27,7 +27,7 @@ typedef struct _tag_spec
 {
     short id;
 
-    char *name;
+    const char *name;
 } tag_spec;
 
 static tag_spec tags[] = {{5, "Image Name"},
@@ -186,7 +186,8 @@ static int formatIPTC(FILE *ifile, FILE *ofile)
 {
     unsigned int foundiptc, tagsfound;
 
-    char *readable, *str;
+    const char *readable;
+    char *str;
 
     long tagindx, taglen;
 
@@ -309,9 +310,9 @@ static int formatIPTC(FILE *ifile, FILE *ofile)
     return tagsfound;
 }
 
-int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
-              char *brkchar, char *quote, char eschar, char *brkused, int *next,
-              char *quoted);
+int tokenizer(unsigned inflag, char *token, int tokmax, char *line,
+              const char *white, const char *brkchar, const char *quote,
+              char eschar, char *brkused, int *next, char *quoted);
 
 static char *super_fgets(char *b, int *blen, FILE *file)
 {
@@ -366,8 +367,9 @@ int main(int argc, char *argv[])
 
     FILE *ifile = stdin, *ofile = stdout;
 
-    char c,
-        *usage = "usage: iptcutil -t | -b [-i file] [-o file] <input >output";
+    char c;
+    const char *usage =
+        "usage: iptcutil -t | -b [-i file] [-o file] <input >output";
 
     if (argc < 2)
     {
@@ -728,9 +730,9 @@ int _p_tokpos;    /* current token pos  */
 
 /* routine to find character in string ... used only by "tokenizer" */
 
-static int sindex(char ch, char *string)
+static int sindex(char ch, const char *string)
 {
-    char *cp;
+    const char *cp;
     for (cp = string; *cp; ++cp)
         if (ch == *cp)
             return (int)(cp - string); /* return position of character */
@@ -766,9 +768,9 @@ static void chstore(char *string, int max, char ch)
     return;
 }
 
-int tokenizer(unsigned inflag, char *token, int tokmax, char *line, char *white,
-              char *brkchar, char *quote, char eschar, char *brkused, int *next,
-              char *quoted)
+int tokenizer(unsigned inflag, char *token, int tokmax, char *line,
+              const char *white, const char *brkchar, const char *quote,
+              char eschar, char *brkused, int *next, char *quoted)
 {
     int qp;
     char c, nc;

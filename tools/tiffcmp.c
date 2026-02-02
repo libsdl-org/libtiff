@@ -159,12 +159,12 @@ static void usage(int code)
         goto bad;                                                              \
     }
 
-static int CheckShortTag(TIFF *, TIFF *, int, char *);
-static int CheckShort2Tag(TIFF *, TIFF *, int, char *);
-static int CheckShortArrayTag(TIFF *, TIFF *, int, char *);
-static int CheckLongTag(TIFF *, TIFF *, int, char *);
-static int CheckFloatTag(TIFF *, TIFF *, int, char *);
-static int CheckStringTag(TIFF *, TIFF *, int, char *);
+static int CheckShortTag(TIFF *, TIFF *, int, const char *);
+static int CheckShort2Tag(TIFF *, TIFF *, int, const char *);
+static int CheckShortArrayTag(TIFF *, TIFF *, int, const char *);
+static int CheckLongTag(TIFF *, TIFF *, int, const char *);
+static int CheckFloatTag(TIFF *, TIFF *, int, const char *);
+static int CheckStringTag(TIFF *, TIFF *, int, const char *);
 
 static int tiffcmp(TIFF *tif1, TIFF *tif2)
 {
@@ -572,8 +572,8 @@ static int SeparateCompare(int reversed, int sample, uint32_t row,
     {
         if (*cp1 != *p2)
         {
-            printf("Scanline %" PRIu32 ", pixel %d, sample %d: ", row,
-                   pixel, sample);
+            printf("Scanline %" PRIu32 ", pixel %d, sample %d: ", row, pixel,
+                   sample);
             if (reversed)
                 printf("%02x %02x\n", *p2, *cp1);
             else
@@ -586,7 +586,7 @@ static int SeparateCompare(int reversed, int sample, uint32_t row,
     return 0;
 }
 
-static int checkTag(TIFF *tif1, TIFF *tif2, int tag, char *name, void *p1,
+static int checkTag(TIFF *tif1, TIFF *tif2, int tag, const char *name, void *p1,
                     void *p2)
 {
 
@@ -623,13 +623,13 @@ static int checkTag(TIFF *tif1, TIFF *tif2, int tag, char *name, void *p1,
         return (0);                                                            \
     }
 
-static int CheckShortTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
+static int CheckShortTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     uint16_t v1, v2;
     CHECK(v1 == v2, "%s: %" PRIu16 " %" PRIu16 "\n");
 }
 
-static int CheckShort2Tag(TIFF *tif1, TIFF *tif2, int tag, char *name)
+static int CheckShort2Tag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     uint16_t v11, v12, v21, v22;
 
@@ -652,7 +652,7 @@ static int CheckShort2Tag(TIFF *tif1, TIFF *tif2, int tag, char *name)
     return (0);
 }
 
-static int CheckShortArrayTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
+static int CheckShortArrayTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     uint16_t n1, *a1;
     uint16_t n2, *a2;
@@ -666,7 +666,7 @@ static int CheckShortArrayTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
         }
         if (n1 == n2)
         {
-            char *sep;
+            const char *sep;
             uint16_t i;
 
             if (memcmp(a1, a2, n1 * sizeof(uint16_t)) == 0)
@@ -692,19 +692,19 @@ static int CheckShortArrayTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
     return (0);
 }
 
-static int CheckLongTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
+static int CheckLongTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     uint32_t v1, v2;
     CHECK(v1 == v2, "%s: %" PRIu32 " %" PRIu32 "\n");
 }
 
-static int CheckFloatTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
+static int CheckFloatTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     float v1, v2;
     CHECK(v1 == v2, "%s: %g %g\n");
 }
 
-static int CheckStringTag(TIFF *tif1, TIFF *tif2, int tag, char *name)
+static int CheckStringTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     char *v1, *v2;
     CHECK(strcmp(v1, v2) == 0, "%s: \"%s\" \"%s\"\n");

@@ -150,16 +150,17 @@ static void FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
     }
 }
 
-static char *storage_class = "";
-static char *const_class = "";
+static const char *storage_class = "";
+static const char *const_class = "";
 static int packoutput = 1;
-static char *prebrace = "";
-static char *postbrace = "";
+static const char *prebrace = "";
+static const char *postbrace = "";
 
-static void WriteTable(FILE *fd, const TIFFFaxTabEnt *T, int Size, const char *name)
+static void WriteTable(FILE *fd, const TIFFFaxTabEnt *T, int Size,
+                       const char *name)
 {
     int i;
-    char *sep;
+    const char *sep;
 
     fprintf(fd, "%s %s TIFFFaxTabEnt %s[%d] = {", storage_class, const_class,
             name, Size);

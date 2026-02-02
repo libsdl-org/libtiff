@@ -783,7 +783,7 @@ static tsize_t tf_bytesperrow;
 static tsize_t ps_bytesperrow;
 static uint32_t tf_rowsperstrip;
 static uint32_t tf_numberstrips;
-static char *hex = "0123456789abcdef";
+static const char *hex = "0123456789abcdef";
 
 /*
  * Pagewidth and pageheight are the output size in points,
@@ -794,9 +794,10 @@ static char *hex = "0123456789abcdef";
  * Only one of maxPageHeight or maxPageWidth can be used.
  * These are global variables unfortunately.
  */
-static int get_subimage_count(double pagewidth, double pageheight, double imagewidth,
-                       double imageheight, int *ximages, int *yimages,
-                       int rotation, double scale)
+static int get_subimage_count(double pagewidth, double pageheight,
+                              double imagewidth, double imageheight,
+                              int *ximages, int *yimages, int rotation,
+                              double scale)
 {
     int pages = 1;
     double splitheight = 0; /* Requested Max Height in points */
@@ -2642,12 +2643,15 @@ static int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
                         break;
                     case 2:
                         buf_data[j++] = (unsigned char)(buf_data[i] + adjust);
-                        buf_data[j++] = (unsigned char)(buf_data[i + 1] + adjust);
+                        buf_data[j++] =
+                            (unsigned char)(buf_data[i + 1] + adjust);
                         break;
                     case 3:
                         buf_data[j++] = (unsigned char)(buf_data[i] + adjust);
-                        buf_data[j++] = (unsigned char)(buf_data[i + 1] + adjust);
-                        buf_data[j++] = (unsigned char)(buf_data[i + 2] + adjust);
+                        buf_data[j++] =
+                            (unsigned char)(buf_data[i + 1] + adjust);
+                        buf_data[j++] =
+                            (unsigned char)(buf_data[i + 2] + adjust);
                         break;
                     default:
                         break;
@@ -2710,7 +2714,7 @@ static int PS_Lvl2page(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
 
 void PSpage(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
 {
-    char *imageOp = "image";
+    const char *imageOp = "image";
 
     if (useImagemask && (bitspersample == 1))
         imageOp = "imagemask";

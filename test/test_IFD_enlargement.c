@@ -36,7 +36,7 @@
 #define SPP 3 /* samples per pixel */
 #define BPS 8 /* bits per sample */
 
-char *modeStrings[] = {"wl", "wb", "w8l", "w8b"};
+const char *modeStrings[] = {"wl", "wb", "w8l", "w8b"};
 
 /* Writes some pixel data as scanline or tiles to file.
  */

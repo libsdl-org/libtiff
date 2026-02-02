@@ -272,7 +272,7 @@ static int test_TIFFOpenOptionsSetMaxCumulatedMemAlloc(
     return ret;
 }
 
-static int test_header_byte_order(TIFF *tif, char *openModeString)
+static int test_header_byte_order(TIFF *tif, const char *openModeString)
 {
 
     if (tif->tif_header.common.tiff_magic != TIFF_BIGENDIAN &&
@@ -291,8 +291,8 @@ static int test_header_byte_order(TIFF *tif, char *openModeString)
                 "Bad version number %u (0x%4.4x"
                 ") for '%s'. Should be 0x%4.4x.\n",
                 (unsigned int)tif->tif_header.common.tiff_version,
-                (unsigned int)tif->tif_header.common.tiff_version, openModeString,
-                (unsigned int)TIFF_VERSION_CLASSIC);
+                (unsigned int)tif->tif_header.common.tiff_version,
+                openModeString, (unsigned int)TIFF_VERSION_CLASSIC);
         return 1;
     }
     if (TIFFIsBigTIFF(tif))
@@ -311,7 +311,7 @@ static int test_header_byte_order(TIFF *tif, char *openModeString)
     return 0;
 }
 
-static int open_file_and_write(const char *filename, char *openModeString,
+static int open_file_and_write(const char *filename, const char *openModeString,
                                int blnWriteIFD, int blnClose, TIFF **tifOut)
 {
     TIFF *tif = TIFFOpen(filename, openModeString);
@@ -365,8 +365,8 @@ static int test_TIFFheader_swapping(void)
 {
 
     /* Provoke swapping and non-swapping on any host. */
-    char *openModeStrings[2][8] = {{"wb", "ab", "w8b", "a8b", "r"},
-                                   {"wl", "al", "w8l", "a8l", "r"}};
+    const char *openModeStrings[2][8] = {{"wb", "ab", "w8b", "a8b", "r"},
+                                         {"wl", "al", "w8l", "a8l", "r"}};
     const char *filename = "test_TIFFheader_swapping.tif";
     TIFF *tif;
     int ret = 0;

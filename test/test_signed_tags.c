@@ -276,6 +276,7 @@ static int writeTestTiff(const char *szFileName, int isBigTiff)
     int ret;
     TIFF *tif;
     int retcode = FAULT_RETURN;
+    uint32_t u32_x;
 
     unlink(szFileName);
     if (isBigTiff)
@@ -369,7 +370,7 @@ static int writeTestTiff(const char *szFileName, int isBigTiff)
     /*---- Writing TIFF_IFD8 data type. ----*/
     /* For x32 compilations cast to uint64_t due to different va_arg integer
      * promotion w.r.t. x64 compilation. */
-    uint32_t u32_x = UINT32_MAX;
+    u32_x = UINT32_MAX;
     ret = TIFFSetField(tif, IFD8_Max32, (uint64_t)UINT32_MAX);
     CHECK_RET_VALUE_SINGLE(ret, "IFD8_Max32", UINT32_MAX, PRIu32);
 
@@ -502,7 +503,7 @@ failure:
             fprintf(stdout,                                                    \
                     "Error reading %s: ret=%d; count=%" PRIu64                 \
                     "; pointer=%p\n",                                          \
-                    strTag, ret, (uint64_t)count, varArrPtr);                  \
+                    strTag, ret, (uint64_t)count, (void *)varArrPtr);          \
             GOTOFAILURE                                                        \
         }                                                                      \
     }                                                                          \
@@ -681,7 +682,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
     {
         fprintf(stdout,
                 "Error reading C16_SINT8: ret=%d; count=%d; pointer=%p\n", ret,
-                count, (void*)s8p);
+                count, (void *)s8p);
         GOTOFAILURE
     }
     else
@@ -705,7 +706,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
     {
         fprintf(stdout,
                 "Error reading C16_SINT16: ret=%d; count=%d; pointer=%p\n", ret,
-                count, (void*)s16p);
+                count, (void *)s16p);
         GOTOFAILURE
     }
     else
@@ -729,7 +730,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
     {
         fprintf(stdout,
                 "Error reading C16_SINT32: ret=%d; count=%d; pointer=%p\n", ret,
-                count, (void*)s32p);
+                count, (void *)s32p);
         GOTOFAILURE
     }
     else
@@ -796,7 +797,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
         {
             fprintf(stdout,
                     "Error reading C16_SINT64: ret=%d; count=%d; pointer=%p\n",
-                    ret, count, (void*)s64p);
+                    ret, count, (void *)s64p);
             GOTOFAILURE
         }
         else
@@ -820,7 +821,7 @@ static int readTestTiff(const char *szFileName, int isBigTiff)
         {
             fprintf(stdout,
                     "Error reading C32_SINT64: ret=%d; count=%d; pointer=%p\n",
-                    ret, count, (void*)s64p);
+                    ret, count, (void *)s64p);
             GOTOFAILURE
         }
         else
