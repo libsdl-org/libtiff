@@ -166,7 +166,7 @@ windows-cygwin-release:
   stage: build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
-  tags: [windows, docker]
+  tags: [windows, docker, bash]
   image: registry.gitlab.com/codelibre/containers/cygwin-libtiff:latest
   script:
     - bash build/gitlab-ci-cygwin Ninja Release
@@ -175,7 +175,7 @@ windows-cygwin-debug:
   stage: build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
-  tags: [windows, docker]
+  tags: [windows, docker, bash]
   image: registry.gitlab.com/codelibre/containers/cygwin-libtiff:latest
   script:
     - bash build/gitlab-ci-cygwin Ninja Debug
