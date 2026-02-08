@@ -166,39 +166,37 @@ windows-cygwin-release:
   stage: build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
-  tags: [windows, cygwin]
+  tags: [windows, docker]
+  image: registry.gitlab.com/codelibre/containers/cygwin-libtiff:latest
   script:
-    - $cygpath = & "C:\tools\cygwin\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\cygwin\bin\bash.exe" -l -c "cd '$cygpath' && bash build/gitlab-ci-cygwin Ninja Release"
+    - bash build/gitlab-ci-cygwin Ninja Release
 
 windows-cygwin-debug:
   stage: build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
-  tags: [windows, cygwin]
+  tags: [windows, docker]
+  image: registry.gitlab.com/codelibre/containers/cygwin-libtiff:latest
   script:
-    - $cygpath = & "C:\tools\cygwin\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\cygwin\bin\bash.exe" -l -c "cd '$cygpath' && bash build/gitlab-ci-cygwin Ninja Debug"
+    - bash build/gitlab-ci-cygwin Ninja Debug
 
 windows-mingw-release:
   stage: build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
-  tags: [windows, mingw]
-  variables:
-    MSYSTEM: UCRT64
-    CHERE_INVOKING: '1'
+  tags: [windows, docker]
+  image: registry.gitlab.com/codelibre/containers/mingw-libtiff:latest
   script:
-    - $mingwpath = & "C:\tools\msys64\usr\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\msys64\usr\bin\bash.exe" -l -c "cd '$mingwpath' && build/gitlab-ci-mingw Ninja Release"
+    - bash build/gitlab-ci-mingw Ninja Release
 
 windows-mingw-debug:
   stage: build
   rules:
     - if: '$CI_PROJECT_PATH == "libtiff/libtiff"'
-  tags: [windows, mingw]
-  variables:
-    MSYSTEM: UCRT64
-    CHERE_INVOKING: '1'
+  tags: [windows, docker]
+  image: registry.gitlab.com/codelibre/containers/mingw-libtiff:latest
   script:
-    - $mingwpath = & "C:\tools\msys64\usr\bin\cygpath.exe" -u $env:CI_PROJECT_DIR; & "C:\tools\msys64\usr\bin\bash.exe" -l -c "cd '$mingwpath' && bash build/gitlab-ci-mingw Ninja Release"
+    - bash build/gitlab-ci-mingw Ninja Debug
 
 coverity:
   stage: static-analysis
