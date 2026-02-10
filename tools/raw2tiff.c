@@ -91,8 +91,8 @@ int main(int argc, char *argv[])
     uint32_t nbands = 1;      /* number of bands in input image*/
     _TIFF_off_t hdr_size = 0; /* size of the header to skip */
     TIFFDataType dtype = TIFF_BYTE;
-    int16_t depth = 1;                 /* bytes per pixel in input image */
-    int swab = 0;                      /* byte swapping flag */
+    int16_t depth = 1;                     /* bytes per pixel in input image */
+    int swab = 0;                          /* byte swapping flag */
     InterleavingType interleaving = PIXEL; /* interleaving type flag */
     uint32_t rowsperstrip = (uint32_t)-1;
     uint16_t photometric = PHOTOMETRIC_MINISBLACK;

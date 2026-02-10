@@ -1093,7 +1093,8 @@ static int TIFFWriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                     {
                         if (!TIFFWriteDirectoryTagRationalDoubleArray(
                                 tif, &ndir, dir, tag, count,
-                                (double *)tif->tif_dir.td_customValues[m].value))
+                                (double *)tif->tif_dir.td_customValues[m]
+                                    .value))
                             goto bad;
                     }
                     else
@@ -1128,7 +1129,8 @@ static int TIFFWriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                     {
                         if (!TIFFWriteDirectoryTagSrationalDoubleArray(
                                 tif, &ndir, dir, tag, count,
-                                (double *)tif->tif_dir.td_customValues[m].value))
+                                (double *)tif->tif_dir.td_customValues[m]
+                                    .value))
                             goto bad;
                     }
                     else
@@ -1668,7 +1670,8 @@ static int TIFFWriteDirectoryTagShortPerSample(TIFF *tif, uint32_t *ndir,
         return (TIFFWriteDirectoryTagCheckedShortArray(
             tif, ndir, dir, tag, tif->tif_dir.td_samplesperpixel, NULL));
     }
-    m = (uint16_t *)_TIFFmallocExt(tif, tif->tif_dir.td_samplesperpixel * sizeof(uint16_t));
+    m = (uint16_t *)_TIFFmallocExt(tif, tif->tif_dir.td_samplesperpixel *
+                                            sizeof(uint16_t));
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2259,7 +2262,8 @@ static int TIFFWriteDirectoryTagSubifd(TIFF *tif, uint32_t *ndir,
         uint64_t *pa;
         uint32_t *pb;
         uint16_t p;
-        o = (uint32_t *)_TIFFmallocExt(tif, tif->tif_dir.td_nsubifd * sizeof(uint32_t));
+        o = (uint32_t *)_TIFFmallocExt(tif, tif->tif_dir.td_nsubifd *
+                                                sizeof(uint32_t));
         if (o == NULL)
         {
             TIFFErrorExtR(tif, module, "Out of memory");

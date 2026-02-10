@@ -258,12 +258,14 @@ int main(int argc, char **argv)
                     j++;
                     break;
                 case 4:
-                    scan_line[k++] = (unsigned char)((cmap_index << 4) + cmap_index);
+                    scan_line[k++] =
+                        (unsigned char)((cmap_index << 4) + cmap_index);
                     j += 2;
                     break;
                 case 2:
-                    scan_line[k++] = (unsigned char)((cmap_index << 6) + (cmap_index << 4) +
-                                     (cmap_index << 2) + cmap_index);
+                    scan_line[k++] =
+                        (unsigned char)((cmap_index << 6) + (cmap_index << 4) +
+                                        (cmap_index << 2) + cmap_index);
                     j += 4;
                     break;
                 case 1:

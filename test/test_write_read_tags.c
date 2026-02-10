@@ -596,7 +596,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         if (auxUint16 != NINKS)
         {
             fprintf(stderr,
-                    "Read value of TIFFTAG_NUMBEROFINKS %u differs from set value %u.\n",
+                    "Read value of TIFFTAG_NUMBEROFINKS %u differs from set "
+                    "value %u.\n",
                     auxUint16, (unsigned int)NINKS);
             goto failure;
         }

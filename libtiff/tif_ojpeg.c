@@ -1383,8 +1383,8 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
             /* Even if this case is allowed (?), its handling is broken because
              * OJPEGPreDecode() should also likely */
             /* reset subsampling_convert_state to 0 when changing tile. */
-            sp->subsampling_convert_ycbcrbuf =
-                (uint8_t *)_TIFFcallocExt(tif, 1, sp->subsampling_convert_ycbcrbuflen);
+            sp->subsampling_convert_ycbcrbuf = (uint8_t *)_TIFFcallocExt(
+                tif, 1, sp->subsampling_convert_ycbcrbuflen);
             if (sp->subsampling_convert_ycbcrbuf == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");

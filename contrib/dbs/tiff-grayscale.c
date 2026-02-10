@@ -117,12 +117,14 @@ int main(int argc, char **argv)
                     j++;
                     break;
                 case 4:
-                    scan_line[k++] = (unsigned char)((gray_index << 4) + gray_index);
+                    scan_line[k++] =
+                        (unsigned char)((gray_index << 4) + gray_index);
                     j += 2;
                     break;
                 case 2:
-                    scan_line[k++] = (unsigned char)((gray_index << 6) + (gray_index << 4) +
-                                     (gray_index << 2) + gray_index);
+                    scan_line[k++] =
+                        (unsigned char)((gray_index << 6) + (gray_index << 4) +
+                                        (gray_index << 2) + gray_index);
                     j += 4;
                     break;
                 default:

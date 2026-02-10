@@ -406,8 +406,8 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
         case TIFF_IFD8:
         default:
             TIFFError(TIFFFileName(in),
-                      "Data type %u is not supported, tag %d skipped.",
-                      type, tag);
+                      "Data type %u is not supported, tag %d skipped.", type,
+                      tag);
     }
 }
 

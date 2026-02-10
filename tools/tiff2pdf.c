@@ -517,7 +517,8 @@ static uint64_t t2p_seekproc(thandle_t handle, uint64_t offset, int whence)
 {
     T2P *t2p = (T2P *)handle;
     if (t2p->outputdisable <= 0 && t2p->outputfile != stdout && t2p->outputfile)
-        return (uint64_t)_TIFF_fseek_f(t2p->outputfile, (_TIFF_off_t)offset, whence);
+        return (uint64_t)_TIFF_fseek_f(t2p->outputfile, (_TIFF_off_t)offset,
+                                       whence);
     return offset;
 }
 
@@ -2202,8 +2203,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
     if (TIFFGetField(input, TIFFTAG_ICCPROFILE, &(t2p->tiff_iccprofilelength),
                      &(t2p->tiff_iccprofile)) != 0)
     {
-        t2p->pdf_colorspace =
-            (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_ICCBASED);
+        t2p->pdf_colorspace = (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_ICCBASED);
     }
     else
     {
@@ -3943,23 +3943,32 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         ojpegdata[t2p->pdf_ojpegdatalength++] = 0xc3;
     }
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
-    ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(8 + 3 * t2p->tiff_samplesperpixel);
+    ojpegdata[t2p->pdf_ojpegdatalength++] =
+        (unsigned char)(8 + 3 * t2p->tiff_samplesperpixel);
     ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_bitspersample & 0xff);
     if (TIFFIsTiled(input))
     {
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength >> 8) & 0xff);
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength >>
+                             8) &
+                            0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength) & 0xff);
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilelength) &
+                            0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth >> 8) & 0xff);
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth >>
+                             8) &
+                            0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] =
-            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth) & 0xff);
+            (unsigned char)((t2p->tiff_tiles[t2p->pdf_page].tiles_tilewidth) &
+                            0xff);
     }
     else
     {
-        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)((t2p->tiff_length >> 8) & 0xff);
-        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)((t2p->tiff_length) & 0xff);
+        ojpegdata[t2p->pdf_ojpegdatalength++] =
+            (unsigned char)((t2p->tiff_length >> 8) & 0xff);
+        ojpegdata[t2p->pdf_ojpegdatalength++] =
+            (unsigned char)((t2p->tiff_length) & 0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_width >> 8) & 0xff;
         ojpegdata[t2p->pdf_ojpegdatalength++] = (t2p->tiff_width) & 0xff;
     }
@@ -4006,7 +4015,8 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         {
             code_count += ojpegdata[t2p->pdf_ojpegdatalength++];
         }
-        ojpegdata[offset_ms_l] = (unsigned char)(((19 + code_count) >> 8) & 0xff);
+        ojpegdata[offset_ms_l] =
+            (unsigned char)(((19 + code_count) >> 8) & 0xff);
         ojpegdata[offset_ms_l + 1] = (unsigned char)((19 + code_count) & 0xff);
         _TIFFmemcpy(&(ojpegdata[t2p->pdf_ojpegdatalength]),
                     &(((unsigned char *)dc)[offset_table]), code_count);
@@ -4032,8 +4042,10 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
             {
                 code_count += ojpegdata[t2p->pdf_ojpegdatalength++];
             }
-            ojpegdata[offset_ms_l] = (unsigned char)(((19 + code_count) >> 8) & 0xff);
-            ojpegdata[offset_ms_l + 1] = (unsigned char)((19 + code_count) & 0xff);
+            ojpegdata[offset_ms_l] =
+                (unsigned char)(((19 + code_count) >> 8) & 0xff);
+            ojpegdata[offset_ms_l + 1] =
+                (unsigned char)((19 + code_count) & 0xff);
             _TIFFmemcpy(&(ojpegdata[t2p->pdf_ojpegdatalength]),
                         &(((unsigned char *)ac)[offset_table]), code_count);
             offset_table += code_count;
@@ -4051,13 +4063,15 @@ int t2p_process_ojpeg_tables(T2P *t2p, TIFF *input)
         ri = (uint16_t)((t2p->tiff_width + h_samp - 1) / h_samp);
         TIFFGetField(input, TIFFTAG_ROWSPERSTRIP, &rows);
         ri = (uint16_t)(ri * ((rows + v_samp - 1) / v_samp));
-        ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)((ri >> 8) & 0xff);
+        ojpegdata[t2p->pdf_ojpegdatalength++] =
+            (unsigned char)((ri >> 8) & 0xff);
         ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(ri & 0xff);
     }
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0xff;
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0xda;
     ojpegdata[t2p->pdf_ojpegdatalength++] = 0x00;
-    ojpegdata[t2p->pdf_ojpegdatalength++] = (unsigned char)(6 + 2 * t2p->tiff_samplesperpixel);
+    ojpegdata[t2p->pdf_ojpegdatalength++] =
+        (unsigned char)(6 + 2 * t2p->tiff_samplesperpixel);
     ojpegdata[t2p->pdf_ojpegdatalength++] = t2p->tiff_samplesperpixel & 0xff;
     for (i = 0; i < t2p->tiff_samplesperpixel; i++)
     {
@@ -5731,11 +5745,9 @@ tsize_t t2p_write_pdf_xobject_cs(T2P *t2p, TIFF *output)
     {
         add_t2pWriteFile_check(output, (tdata_t) "[ /Indexed ", 11, mod,
                                written);
-        t2p->pdf_colorspace =
-            (t2p_cs_t)(t2p->pdf_colorspace ^ T2P_CS_PALETTE);
+        t2p->pdf_colorspace = (t2p_cs_t)(t2p->pdf_colorspace ^ T2P_CS_PALETTE);
         written += t2p_write_pdf_xobject_cs(t2p, output);
-        t2p->pdf_colorspace =
-            (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_PALETTE);
+        t2p->pdf_colorspace = (t2p_cs_t)(t2p->pdf_colorspace | T2P_CS_PALETTE);
         buflen = snprintf(buffer, sizeof(buffer), "%" PRIu32,
                           (uint32_t)(0x1u << t2p->tiff_bitspersample) - 1u);
         check_snprintf_ret(t2p, buflen, buffer);
