@@ -534,8 +534,9 @@ static void TIFF_DownSample_Subsampled(
                       (nDestY % nVerSubsampling) * nHorSubsampling +
                       (nDestX / nHorSubsampling) * nSampleBlockSize +
                       (nDestX % nHorSubsampling)) =
-                        (unsigned char)((nCummulator + (nCummulatorCount >> 1)) /
-                         nCummulatorCount);
+                        (unsigned char)((nCummulator +
+                                         (nCummulatorCount >> 1)) /
+                                        nCummulatorCount);
                 }
             }
         }
@@ -581,8 +582,9 @@ static void TIFF_DownSample_Subsampled(
                                        (nSourceYSecEnd - nSourceY);
                     *(pabyOTile + nDestY * nDestSampleRowSize +
                       nDestX * nSampleBlockSize + nSampleOffsetInSampleBlock) =
-                        (unsigned char)((nCummulator + (nCummulatorCount >> 1)) /
-                         nCummulatorCount);
+                        (unsigned char)((nCummulator +
+                                         (nCummulatorCount >> 1)) /
+                                        nCummulatorCount);
                 }
             }
         }

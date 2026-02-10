@@ -204,7 +204,8 @@ static void cvtClump(unsigned char *op, uint32_t *raster, uint32_t ch,
             Cb += (TIFFGetB(RGB) - Y) * D1;
             Cr += (TIFFGetR(RGB) - Y) * D2;
             /* emit luminence */
-            *op++ = (unsigned char)V2Code(Y, refBlackWhite[0], refBlackWhite[1], 255);
+            *op++ = (unsigned char)V2Code(Y, refBlackWhite[0], refBlackWhite[1],
+                                          255);
         }
         for (; j < horizSubSampling; j++)
             *op++ = (unsigned char)Yzero;
@@ -215,8 +216,10 @@ static void cvtClump(unsigned char *op, uint32_t *raster, uint32_t ch,
             *op++ = (unsigned char)Yzero;
     }
     /* emit sampled chrominance values */
-    *op++ = (unsigned char)V2Code(Cb / (ch * cw), refBlackWhite[2], refBlackWhite[3], 127);
-    *op++ = (unsigned char)V2Code(Cr / (ch * cw), refBlackWhite[4], refBlackWhite[5], 127);
+    *op++ = (unsigned char)V2Code(Cb / (ch * cw), refBlackWhite[2],
+                                  refBlackWhite[3], 127);
+    *op++ = (unsigned char)V2Code(Cr / (ch * cw), refBlackWhite[4],
+                                  refBlackWhite[5], 127);
 }
 #undef LumaRed
 #undef LumaGreen

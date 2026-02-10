@@ -496,11 +496,17 @@ static int cvt_whole_image(TIFF *in, TIFF *out)
             /* do alpha compositing */
             const int src_alpha = src[3];
             const int background_contribution = background * (0xFF - src_alpha);
-            *(dst++) = (unsigned char)((*(src)*src_alpha + background_contribution) / 0xFF);
+            *(dst++) =
+                (unsigned char)((*(src)*src_alpha + background_contribution) /
+                                0xFF);
             src++;
-            *(dst++) = (unsigned char)((*(src)*src_alpha + background_contribution) / 0xFF);
+            *(dst++) =
+                (unsigned char)((*(src)*src_alpha + background_contribution) /
+                                0xFF);
             src++;
-            *(dst++) = (unsigned char)((*(src)*src_alpha + background_contribution) / 0xFF);
+            *(dst++) =
+                (unsigned char)((*(src)*src_alpha + background_contribution) /
+                                0xFF);
             src++;
             src++;
             count--;

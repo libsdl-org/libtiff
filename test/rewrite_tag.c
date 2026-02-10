@@ -294,8 +294,7 @@ static int rewrite_test(const char *filename, uint32_t width, int length,
                     "%s:STRIPOFFSETS[%u]: Got %X:%08X instead of %X:%08X.\n",
                     filename, (unsigned)i, (unsigned)(rowoffset[i] >> 32),
                     (unsigned)(rowoffset[i] & 0xFFFFFFFF),
-                    (unsigned)(expect >> 32),
-                    (unsigned)(expect & 0xFFFFFFFF));
+                    (unsigned)(expect >> 32), (unsigned)(expect & 0xFFFFFFFF));
             goto failure;
         }
     }
@@ -316,8 +315,7 @@ static int rewrite_test(const char *filename, uint32_t width, int length,
                     "%s:STRIPBYTECOUNTS[%u]: Got %X:%08X instead of %X:%08X.\n",
                     filename, (unsigned)i, (unsigned)(rowbytes[i] >> 32),
                     (unsigned)(rowbytes[i] & 0xFFFFFFFF),
-                    (unsigned)(expect >> 32),
-                    (unsigned)(expect & 0xFFFFFFFF));
+                    (unsigned)(expect >> 32), (unsigned)(expect & 0xFFFFFFFF));
             goto failure;
         }
     }
