@@ -242,7 +242,7 @@ static int SetupBuffers(TIFF *tif, LERCState *sp, const char *module)
     }
 
     if ((td->td_planarconfig == PLANARCONFIG_CONTIG &&
-         td->td_extrasamples > 0 &&
+         td->td_extrasamples > 0 && td->td_sampleinfo &&
          td->td_sampleinfo[td->td_extrasamples - 1] == EXTRASAMPLE_UNASSALPHA &&
          GetLercDataType(tif) == 1) ||
         (td->td_sampleformat == SAMPLEFORMAT_IEEEFP &&
@@ -420,6 +420,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
     /* LERC info has dim == samplesperpixel - 1, then there is a LERC */
     /* mask. */
     if (td->td_planarconfig == PLANARCONFIG_CONTIG && td->td_extrasamples > 0 &&
+        td->td_sampleinfo &&
         td->td_sampleinfo[td->td_extrasamples - 1] == EXTRASAMPLE_UNASSALPHA &&
         GetLercDataType(tif) == 1 &&
         infoArray[2] == td->td_samplesperpixel - 1U)
@@ -863,6 +864,7 @@ static int LERCPostEncode(TIFF *tif)
     /* Extract alpha mask (if containing only 0 and 255 values, */
     /* and compact array of regular bands */
     if (td->td_planarconfig == PLANARCONFIG_CONTIG && td->td_extrasamples > 0 &&
+        td->td_sampleinfo &&
         td->td_sampleinfo[td->td_extrasamples - 1] == EXTRASAMPLE_UNASSALPHA &&
         GetLercDataType(tif) == 1)
     {

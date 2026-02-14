@@ -309,7 +309,7 @@ int TIFFVGetFieldDefaulted(TIFF *tif, uint32_t tag, va_list ap)
             return (1);
         case TIFFTAG_MATTEING:
             *va_arg(ap, uint16_t *) =
-                (td->td_extrasamples == 1 &&
+                (td->td_extrasamples == 1 && td->td_sampleinfo &&
                  td->td_sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
             return (1);
         case TIFFTAG_TILEDEPTH:
