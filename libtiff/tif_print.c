@@ -377,7 +377,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
             }
         }
     }
-    if (TIFFFieldSet(tif, FIELD_EXTRASAMPLES) && td->td_extrasamples)
+    if (TIFFFieldSet(tif, FIELD_EXTRASAMPLES) && td->td_extrasamples &&
+        td->td_sampleinfo)
     {
         uint16_t i;
         fprintf(fd, "  Extra Samples: %" PRIu16 "<", td->td_extrasamples);
@@ -551,7 +552,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
     if (TIFFFieldSet(tif, FIELD_PAGENUMBER))
         fprintf(fd, "  Page Number: %" PRIu16 "-%" PRIu16 "\n",
                 td->td_pagenumber[0], td->td_pagenumber[1]);
-    if (TIFFFieldSet(tif, FIELD_COLORMAP))
+    if (TIFFFieldSet(tif, FIELD_COLORMAP) && td->td_colormap[0] &&
+        td->td_colormap[1] && td->td_colormap[2])
     {
         fprintf(fd, "  Color Map: ");
         if (flags & TIFFPRINT_COLORMAP)
@@ -575,7 +577,11 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
                     td->td_refblackwhite[2 * i + 0],
                     td->td_refblackwhite[2 * i + 1]);
     }
-    if (TIFFFieldSet(tif, FIELD_TRANSFERFUNCTION))
+    if (TIFFFieldSet(tif, FIELD_TRANSFERFUNCTION) &&
+        td->td_transferfunction[0] &&
+        ((td->td_samplesperpixel - td->td_extrasamples > 1 &&
+          td->td_transferfunction[1] && td->td_transferfunction[2]) ||
+         td->td_samplesperpixel - td->td_extrasamples <= 1))
     {
         fprintf(fd, "  Transfer Function: ");
         if (flags & TIFFPRINT_CURVES)
