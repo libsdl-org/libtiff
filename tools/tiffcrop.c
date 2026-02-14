@@ -2292,6 +2292,17 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                    */
                     if (streq(opt_ptr, "odd"))
                     {
+                        unsigned int needed = (MAX_IMAGES + 1) / 2;
+
+                        if (i + needed > MAX_IMAGES)
+                        {
+                            TIFFError("tiffcrop input error",
+                                      "Image selection list exceeds maximum "
+                                      "limit (%d).",
+                                      MAX_IMAGES);
+                            exit(EXIT_FAILURE);
+                        }
+
                         for (j = 1; j <= MAX_IMAGES; j += 2)
                             imagelist[i++] = j;
                         *image_count = (MAX_IMAGES - 1) / 2;
@@ -2301,6 +2312,17 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                     {
                         if (streq(opt_ptr, "even"))
                         {
+                            unsigned int needed = MAX_IMAGES / 2;
+
+                            if (i + needed > MAX_IMAGES)
+                            {
+                                TIFFError("tiffcrop input error",
+                                          "Image selection list exceeds "
+                                          "maximum limit (%d).",
+                                          MAX_IMAGES);
+                                exit(EXIT_FAILURE);
+                            }
+
                             for (j = 2; j <= MAX_IMAGES; j += 2)
                                 imagelist[i++] = j;
                             *image_count = MAX_IMAGES / 2;
