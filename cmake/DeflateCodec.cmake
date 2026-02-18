@@ -26,7 +26,9 @@
 
 # ZLIB
 set(ZLIB_SUPPORT FALSE)
-find_package(ZLIB)
+if(NOT TARGET ZLIB::ZLIB)
+    find_package(ZLIB)
+endif()
 option(zlib "use zlib (required for Deflate compression)" ${ZLIB_FOUND})
 if(zlib AND ZLIB_FOUND)
     set(ZLIB_SUPPORT TRUE)
