@@ -1914,7 +1914,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr44tile)
     uint32* cp1 = cp+w+toskew;
     uint32* cp2 = cp1+w+toskew;
     uint32* cp3 = cp2+w+toskew;
-    int32 incr = 3*w+4*toskew;
+    const tmsize_t incr = 3 * (tmsize_t)w + 4 * (tmsize_t)toskew;
 
     (void) y;
     /* adjust fromskew */
@@ -2018,7 +2018,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr44tile)
 DECLAREContigPutFunc(putcontig8bitYCbCr42tile)
 {
     uint32* cp1 = cp+w+toskew;
-    int32 incr = 2*toskew+w;
+    const tmsize_t incr = 2 * (tmsize_t)toskew + w;
 
     (void) y;
     fromskew = (fromskew / 4) * (4*2+2);
@@ -2144,7 +2144,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr41tile)
 DECLAREContigPutFunc(putcontig8bitYCbCr22tile)
 {
 	uint32* cp2;
-	int32 incr = 2*toskew+w;
+	const tmsize_t incr = 2 * (tmsize_t)toskew + w;
 	(void) y;
 	fromskew = (fromskew / 2) * (2*2+2);
 	cp2 = cp+w+toskew;
@@ -2239,7 +2239,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr21tile)
 DECLAREContigPutFunc(putcontig8bitYCbCr12tile)
 {
 	uint32* cp2;
-	int32 incr = 2*toskew+w;
+	const tmsize_t incr = 2 * (tmsize_t)toskew + w;
 	(void) y;
 	fromskew = (fromskew / 1) * (1 * 2 + 2);
 	cp2 = cp+w+toskew;
