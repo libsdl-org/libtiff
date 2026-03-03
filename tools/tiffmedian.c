@@ -278,8 +278,7 @@ int main(int argc, char *argv[])
     {
         for (i = 0; i < C_LEN * C_LEN * C_LEN; i++)
         {
-            if (ColorCells[i] != NULL)
-                _TIFFfree(ColorCells[i]);
+            _TIFFfree(ColorCells[i]);
         }
         _TIFFfree(ColorCells);
         (void)TIFFClose(in);
@@ -340,8 +339,7 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < C_LEN * C_LEN * C_LEN; i++)
     {
-        if (ColorCells[i] != NULL)
-            _TIFFfree(ColorCells[i]);
+        _TIFFfree(ColorCells[i]);
     }
     _TIFFfree(ColorCells);
     return (EXIT_SUCCESS);
