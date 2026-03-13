@@ -2228,7 +2228,7 @@ DECLAREContigPutFunc(putcontig8bitYCbCr44tile)
 
     (void)y;
     /* adjust fromskew */
-    fromskew = (fromskew / 4) * (4 * 2 + 2);
+    fromskew = (fromskew / 4) * (4 * 4 + 2);
     if ((h & 3) == 0 && (w & 3) == 0)
     {
         for (; h >= 4; h -= 4)
