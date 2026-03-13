@@ -516,7 +516,10 @@ int main(int argc, char *argv[])
         else if (strcmp(argv[arg_index], "-m") == 0)
         {
             arg_index++;
-            maxMalloc = (tmsize_t)strtoul(argv[arg_index], NULL, 0) << 20;
+            long v = strtol(argv[arg_index], NULL, 0);
+            if (v < 0)
+                usage(EXIT_FAILURE);
+            maxMalloc = (tmsize_t)v << 20;
         }
         else if (strcmp(argv[arg_index], "-h") == 0 ||
                  strcmp(argv[arg_index], "--help") == 0)

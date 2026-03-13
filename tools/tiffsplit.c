@@ -110,13 +110,17 @@ int main(int argc, char *argv[])
     extern int optind;
 #endif
     int c;
+    long v;
 
     while ((c = getopt(argc, argv, "M:")) != -1)
     {
         switch (c)
         {
             case 'M':
-                maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                maxMalloc = (tmsize_t)v << 20;
                 if ((maxMalloc == 0) && (optarg[0] != '0'))
                 {
                     fprintf(stderr,

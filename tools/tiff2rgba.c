@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
 {
     TIFF *in, *out;
     int c;
+    long v;
 #if !HAVE_DECL_OPTARG
     extern int optind;
     extern char *optarg;
@@ -80,7 +81,10 @@ int main(int argc, char *argv[])
         switch (c)
         {
             case 'M':
-                maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                maxMalloc = (tmsize_t)v << 20;
                 break;
             case 'b':
                 process_by_block = 1;

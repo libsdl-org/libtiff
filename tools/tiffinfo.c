@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     uint64_t diroff = 0;
     int chopstrips = 0; /* disable strip chopping */
     int warn_about_unknown_tags = FALSE;
+    long v;
 
     while ((c = getopt(argc, argv, "f:o:M:cdDSjilmrsvwz0123456789hW")) != -1)
         switch (c)
@@ -119,10 +120,16 @@ int main(int argc, char *argv[])
                 stoponerr = 0;
                 break;
             case 'M':
-                maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                maxMalloc = (tmsize_t)v << 20;
                 break;
             case 'o':
-                diroff = strtoul(optarg, NULL, 0);
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                diroff = (unsigned long)v;
                 break;
             case 'j':
                 flags |= TIFFPRINT_JPEGQTABLES | TIFFPRINT_JPEGACTABLES |
