@@ -123,7 +123,13 @@ int main(int argc, char *argv[])
     if (in == NULL)
         return 2;
 
-    thumbnail = (uint8_t *)_TIFFmalloc(tnw * tnh);
+    uint32_t thumbsize =
+        _TIFFMultiply32(NULL, tnw, tnh, "allocating thumbnail buffer");
+
+    if (thumbsize == 0)
+        return EXIT_FAILURE;
+
+    thumbnail = (uint8_t *)_TIFFmalloc(thumbsize);
     if (!thumbnail)
     {
         TIFFError(TIFFFileName(in),
