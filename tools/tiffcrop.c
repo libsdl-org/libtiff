@@ -3750,14 +3750,16 @@ static int extractContigSamples32bits(uint8_t *in, uint8_t *out, uint32_t cols,
             matchbits = maskbits << (64 - src_bit - bps);
             if (little_endian)
             {
-                longbuff1 =
-                    (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
+                longbuff1 = ((uint32_t)src[0] << 24) |
+                            ((uint32_t)src[1] << 16) | ((uint32_t)src[2] << 8) |
+                            src[3];
                 longbuff2 = longbuff1;
             }
             else
             {
-                longbuff1 =
-                    (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
+                longbuff1 = ((uint32_t)src[3] << 24) |
+                            ((uint32_t)src[2] << 16) | ((uint32_t)src[1] << 8) |
+                            src[0];
                 longbuff2 = longbuff1;
             }
 
@@ -4921,14 +4923,16 @@ static int combineSeparateSamples32bits(uint8_t *in[], uint8_t *out,
                 src = in[s] + src_offset + src_byte;
                 if (little_endian)
                 {
-                    longbuff1 = (src[0] << 24) | (src[1] << 16) |
-                                (src[2] << 8) | src[3];
+                    longbuff1 = ((uint32_t)src[0] << 24) |
+                                ((uint32_t)src[1] << 16) |
+                                ((uint32_t)src[2] << 8) | src[3];
                     longbuff2 = longbuff1;
                 }
                 else
                 {
-                    longbuff1 = (src[3] << 24) | (src[2] << 16) |
-                                (src[1] << 8) | src[0];
+                    longbuff1 = ((uint32_t)src[3] << 24) |
+                                ((uint32_t)src[2] << 16) |
+                                ((uint32_t)src[1] << 8) | src[0];
                     longbuff2 = longbuff1;
                 }
                 buff3 = ((uint64_t)longbuff1 << 32) | longbuff2;
