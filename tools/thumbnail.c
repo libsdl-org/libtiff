@@ -34,7 +34,7 @@
 #include <unistd.h>
 #endif
 
-#include "tiffio.h"
+#include "tiffiop.h"
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
