@@ -1729,6 +1729,8 @@ DECLAREContigPutFunc(put16bitbwtile)
 {
     int samplesperpixel = img->samplesperpixel;
     uint32_t **BWmap = img->BWmap;
+    /* Convert pixel skew to byte skew (16-bit samples) */
+    fromskew = fromskew * (2 * samplesperpixel);
 
     (void)y;
     for (; h > 0; --h)
