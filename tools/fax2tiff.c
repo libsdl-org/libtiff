@@ -431,7 +431,8 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
         ok = (*tifin->tif_decoderow)(tifin, (uint8_t *)rowbuf, linesize, 0);
         if (ok < 1)
         {
-            if (compression_in == COMPRESSION_CCITTFAX4 || tifin->tif_rawcc == lastcc)
+            if (compression_in == COMPRESSION_CCITTFAX4 ||
+                tifin->tif_rawcc == lastcc)
             {
                 /* This is probably EOFB, but if it's corrupt data, then we
                  * can't continue, anyway. */
