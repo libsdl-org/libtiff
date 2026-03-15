@@ -35,8 +35,8 @@
 #include <unistd.h>
 #endif
 
-#include "test_arrays.h"
 #include "strip.h"
+#include "test_arrays.h"
 
 const char *filename = "strip_test.tiff";
 
