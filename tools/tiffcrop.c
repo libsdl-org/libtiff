@@ -1875,6 +1875,7 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
     char *opt_ptr = NULL;    /* Pointer to next token in option set */
     char *sep = NULL;        /* Pointer to a token separator */
     unsigned int i, j, start, end;
+    long v;
 #if !HAVE_DECL_OPTARG
     extern int optind;
     extern char *optarg;
@@ -1900,7 +1901,10 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 }
                 break;
             case 'd':
-                start = strtoul(optarg, NULL, 0); /* initial IFD offset */
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                start = (unsigned int)v; /* initial IFD offset */
                 if (start == 0)
                 {
                     TIFFError("", "Directory offset must be greater than zero");
@@ -1957,7 +1961,10 @@ void process_command_opts(int argc, char *argv[], char *mp, char *mode,
                 ignore = TRUE; /* ignore errors */
                 break;
             case 'k':
-                maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                maxMalloc = (tmsize_t)v << 20;
                 break;
             case 'l':
                 outtiled = TRUE; /* tile length */

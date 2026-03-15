@@ -81,16 +81,23 @@ int main(int argc, char *argv[])
     TIFF *in;
     TIFF *out;
     int c;
+    long v;
 
     while ((c = getopt(argc, argv, "w:h:c:")) != -1)
     {
         switch (c)
         {
             case 'w':
-                tnw = strtoul(optarg, NULL, 0);
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                tnw = (uint32_t)v;
                 break;
             case 'h':
-                tnh = strtoul(optarg, NULL, 0);
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                tnh = (uint32_t)v;
                 break;
             case 'c':
                 contrast = streq(optarg, "exp50")    ? EXP50

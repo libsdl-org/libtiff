@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
     char mode[10];
     char *mp = mode;
     int c;
+    long v;
 #if !HAVE_DECL_OPTARG
     extern int optind;
     extern char *optarg;
@@ -225,7 +226,10 @@ int main(int argc, char *argv[])
         switch (c)
         {
             case 'm':
-                maxMalloc = (tmsize_t)strtoul(optarg, NULL, 0) << 20;
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                maxMalloc = (tmsize_t)v << 20;
                 break;
             case ',':
                 if (optarg[0] != '=')
@@ -281,7 +285,10 @@ int main(int argc, char *argv[])
                 deftilelength = atoi(optarg);
                 break;
             case 'o': /* initial directory offset */
-                diroff = strtoul(optarg, NULL, 0);
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                diroff = (uint64_t)v;
                 break;
             case 'p': /* planar configuration */
                 if (streq(optarg, "separate"))
@@ -1602,8 +1609,9 @@ static void cpStripToTile(uint8_t *out, uint8_t *in, uint32_t rows,
 }
 
 static void cpContigBufToSeparateBuf(uint8_t *out, uint8_t *in, uint32_t rows,
-                                     uint32_t cols, int64_t outskew, int64_t inskew,
-                                     tsample_t spp, int bytes_per_sample)
+                                     uint32_t cols, int64_t outskew,
+                                     int64_t inskew, tsample_t spp,
+                                     int bytes_per_sample)
 {
     while (rows-- > 0)
     {
@@ -1624,8 +1632,9 @@ static void cpContigBufToSeparateBuf(uint8_t *out, uint8_t *in, uint32_t rows,
 }
 
 static void cpSeparateBufToContigBuf(uint8_t *out, uint8_t *in, uint32_t rows,
-                                     uint32_t cols, int64_t outskew, int64_t inskew,
-                                     tsample_t spp, int bytes_per_sample)
+                                     uint32_t cols, int64_t outskew,
+                                     int64_t inskew, tsample_t spp,
+                                     int bytes_per_sample)
 {
     while (rows-- > 0)
     {
@@ -1818,11 +1827,12 @@ DECLAREreadFunc(readContigTilesIntoBuffer)
             {
                 uint32_t width = imagew - colb;
                 int64_t oskew = (int64_t)tilew - (int64_t)width;
-                cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, width, oskew + iskew,
-                              oskew);
+                cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, width,
+                              oskew + iskew, oskew);
             }
             else
-                cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, tilew, iskew, 0);
+                cpStripToTile(bufp + colb, (uint8_t *)tilebuf, nrow, tilew,
+                              iskew, 0);
             colb += tilew;
         }
         bufp += imagew * nrow;
@@ -1915,16 +1925,17 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                 if (colb + tilew * spp > imagew)
                 {
                     uint32_t width = imagew - colb;
-                    int64_t oskew = (int64_t)tilew * (int64_t)spp - (int64_t)width;
+                    int64_t oskew =
+                        (int64_t)tilew * (int64_t)spp - (int64_t)width;
                     cpSeparateBufToContigBuf(
-                        bufp + colb + s * bytes_per_sample, (uint8_t *)tilebuf, nrow,
-                        width / (spp * bytes_per_sample), oskew + iskew,
+                        bufp + colb + s * bytes_per_sample, (uint8_t *)tilebuf,
+                        nrow, width / (spp * bytes_per_sample), oskew + iskew,
                         oskew / spp, spp, bytes_per_sample);
                 }
                 else
                     cpSeparateBufToContigBuf(bufp + colb + s * bytes_per_sample,
-                                             (uint8_t *)tilebuf, nrow, tw, iskew, 0, spp,
-                                             bytes_per_sample);
+                                             (uint8_t *)tilebuf, nrow, tw,
+                                             iskew, 0, spp, bytes_per_sample);
             }
             colb += tilew * spp;
         }
@@ -1999,9 +2010,9 @@ DECLAREwriteFunc(writeBufferToSeparateStrips)
                                  : rowsperstrip;
             stripsize = TIFFVStripSize(out, nrows);
 
-            cpContigBufToSeparateBuf((uint8_t *)obuf, (uint8_t *)buf + row * rowsize + s,
-                                     nrows, imagewidth, 0, 0, spp,
-                                     bytes_per_sample);
+            cpContigBufToSeparateBuf((uint8_t *)obuf,
+                                     (uint8_t *)buf + row * rowsize + s, nrows,
+                                     imagewidth, 0, 0, spp, bytes_per_sample);
             if (TIFFWriteEncodedStrip(out, strip++, obuf, stripsize) < 0)
             {
                 TIFFError(TIFFFileName(out),
@@ -2056,7 +2067,8 @@ DECLAREwriteFunc(writeBufferToContigTiles)
                               oskew + iskew);
             }
             else
-                cpStripToTile((uint8_t *)obuf, bufp + colb, nrow, tilew, 0, iskew);
+                cpStripToTile((uint8_t *)obuf, bufp + colb, nrow, tilew, 0,
+                              iskew);
             if (TIFFWriteTile(out, obuf, col, row, 0, 0) < 0)
             {
                 TIFFError(TIFFFileName(out),
@@ -2132,15 +2144,15 @@ DECLAREwriteFunc(writeBufferToSeparateTiles)
                     uint32_t width = (imagew - colb);
                     int64_t oskew = (int64_t)tilew - (int64_t)width;
 
-                    cpContigBufToSeparateBuf((uint8_t *)obuf, bufp + (colb * spp) + s,
-                                             nrow, width / bytes_per_sample,
-                                             oskew, (oskew * spp) + iskew, spp,
-                                             bytes_per_sample);
+                    cpContigBufToSeparateBuf(
+                        (uint8_t *)obuf, bufp + (colb * spp) + s, nrow,
+                        width / bytes_per_sample, oskew, (oskew * spp) + iskew,
+                        spp, bytes_per_sample);
                 }
                 else
-                    cpContigBufToSeparateBuf((uint8_t *)obuf, bufp + (colb * spp) + s,
-                                             nrow, tilewidth, 0, iskew, spp,
-                                             bytes_per_sample);
+                    cpContigBufToSeparateBuf(
+                        (uint8_t *)obuf, bufp + (colb * spp) + s, nrow,
+                        tilewidth, 0, iskew, spp, bytes_per_sample);
                 if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0)
                 {
                     TIFFError(TIFFFileName(out),

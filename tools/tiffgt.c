@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
     int c;
     int dirnum = -1;
     uint32_t diroff = 0;
+    long v;
 
     oerror = TIFFSetErrorHandler(NULL);
     owarning = TIFFSetWarningHandler(NULL);
@@ -122,7 +123,10 @@ int main(int argc, char *argv[])
                 order0 = FILLORDER_MSB2LSB;
                 break;
             case 'o':
-                diroff = strtoul(optarg, NULL, 0);
+                v = strtol(optarg, NULL, 0);
+                if (v < 0)
+                    usage(EXIT_FAILURE);
+                diroff = (uint32_t)v;
                 break;
             case 'p':
                 photo0 = photoArg(optarg);
