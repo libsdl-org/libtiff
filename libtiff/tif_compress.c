@@ -160,8 +160,12 @@ void _TIFFSetDefaultPostDecode(TIFF *tif)
             tif->tif_postdecode = _TIFFSwab32BitData;
         else if (td->td_bitspersample == 64)
             tif->tif_postdecode = _TIFFSwab64BitData;
-        else if (td->td_bitspersample == 128) /* two 64's */
+        else if (td->td_bitspersample == 128)
+        {
+            // Used for Complex 64-bit floating point.
+            // The real and imaginary parts are byte-swapped separately.
             tif->tif_postdecode = _TIFFSwab64BitData;
+        }
     }
 }
 
