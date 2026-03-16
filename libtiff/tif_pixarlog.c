@@ -180,7 +180,7 @@ static void horizontalAccumulateF(uint16_t *wp, int n, int stride, float *op,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinearF[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinearF[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -255,9 +255,9 @@ static void horizontalAccumulate12(uint16_t *wp, int n, int stride, int16_t *op,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp;
-                       t0 = ToLinearF[wp[stride] & mask] * SCALE12;
-                       *op = CLAMP12(t0); wp++; op++)
+                REPEAT(stride, *wp += wp[-stride];
+                       t0 = ToLinearF[*wp & mask] * SCALE12; *op = CLAMP12(t0);
+                       wp++; op++)
                 n -= stride;
             }
         }
@@ -312,7 +312,7 @@ static void horizontalAccumulate16(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinear16[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear16[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -379,7 +379,7 @@ static void horizontalAccumulate11(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = *wp & mask; wp++; op++)
+                REPEAT(stride, *wp += wp[-stride]; *op = *wp & mask; wp++; op++)
                 n -= stride;
             }
         }
@@ -434,7 +434,7 @@ static void horizontalAccumulate8(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinear8[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear8[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -508,7 +508,7 @@ static void horizontalAccumulate8abgr(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinear8[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear8[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
