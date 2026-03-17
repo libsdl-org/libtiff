@@ -840,7 +840,7 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     PixarLogState *sp = PixarLogDecoderState(tif);
     tmsize_t i;
     tmsize_t nsamples;
-    int llen;
+    tmsize_t llen;
     uint16_t *up;
 
     switch (sp->user_datafmt)
@@ -865,7 +865,7 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             return 0;
     }
 
-    llen = sp->stride * td->td_imagewidth;
+    llen = (tmsize_t)sp->stride * td->td_imagewidth;
 
     (void)s;
     assert(sp != NULL);
@@ -943,7 +943,8 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     if (nsamples % llen)
     {
         TIFFWarningExtR(tif, module,
-                        "stride %d is not a multiple of sample count, "
+                        "stride %" TIFF_SSIZE_FORMAT
+                        " is not a multiple of sample count, "
                         "%" TIFF_SSIZE_FORMAT ", data truncated.",
                         llen, nsamples);
         nsamples -= nsamples % llen;
@@ -1306,7 +1307,7 @@ static int PixarLogEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     PixarLogState *sp = PixarLogEncoderState(tif);
     tmsize_t i;
     tmsize_t n;
-    int llen;
+    tmsize_t llen;
     unsigned short *up;
 
     (void)s;
@@ -1332,7 +1333,7 @@ static int PixarLogEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
             return 0;
     }
 
-    llen = sp->stride * td->td_imagewidth;
+    llen = (tmsize_t)sp->stride * td->td_imagewidth;
     /* Check against the number of elements (of size uint16_t) of sp->tbuf */
     if (n > ((tmsize_t)td->td_rowsperstrip * llen))
     {
