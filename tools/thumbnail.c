@@ -370,7 +370,12 @@ static int cpStrips(TIFF *in, TIFF *out)
         tstrip_t s, ns = TIFFNumberOfStrips(in);
         uint64_t *bytecounts;
 
-        TIFFGetField(in, TIFFTAG_STRIPBYTECOUNTS, &bytecounts);
+        if (!TIFFGetField(in, TIFFTAG_STRIPBYTECOUNTS, &bytecounts))
+        {
+            TIFFError(TIFFFileName(in), "Strip byte counts are missing.");
+            _TIFFfree(buf);
+            return 0;
+        }
         for (s = 0; s < ns; s++)
         {
             if (bytecounts[s] > (uint64_t)bufsize)
@@ -407,7 +412,12 @@ static int cpTiles(TIFF *in, TIFF *out)
         ttile_t t, nt = TIFFNumberOfTiles(in);
         uint64_t *bytecounts;
 
-        TIFFGetField(in, TIFFTAG_TILEBYTECOUNTS, &bytecounts);
+        if (!TIFFGetField(in, TIFFTAG_TILEBYTECOUNTS, &bytecounts))
+        {
+            TIFFError(TIFFFileName(in), "Tile byte counts are missing.");
+            _TIFFfree(buf);
+            return 0;
+        }
         for (t = 0; t < nt; t++)
         {
             if (bytecounts[t] > (uint64_t)bufsize)
