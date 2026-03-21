@@ -8245,7 +8245,7 @@ static int _TIFFPartialReadStripArray(TIFF *tif, TIFFDirEntry *dirent,
         panVals[strile] = 0;
         return 0;
     }
-    nOffset = nBaseOffset + sizeofval * strile;
+    nOffset = nBaseOffset + (uint64_t)sizeofval * strile;
     nOffsetStartPage = (nOffset / IO_CACHE_PAGE_SIZE) * IO_CACHE_PAGE_SIZE;
     nOffsetEndPage = nOffsetStartPage + IO_CACHE_PAGE_SIZE;
 
