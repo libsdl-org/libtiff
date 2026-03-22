@@ -735,6 +735,11 @@ static int generateThumbnail(TIFF *in, TIFF *out)
     if (spp != 1 || bps != 1)
         return 0;
     rowsize = TIFFScanlineSize(in);
+    if (sh > INT32_MAX / rowsize)
+    {
+        TIFFError(TIFFFileName(in), "Image is too large to fit in memory");
+        return 0;
+    }
     rastersize = sh * rowsize;
     fprintf(stderr, "rastersize=%u\n", (unsigned int)rastersize);
     /* +3 : add a few guard bytes since setrow() can read a bit */
