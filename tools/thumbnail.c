@@ -735,7 +735,7 @@ static int generateThumbnail(TIFF *in, TIFF *out)
     if (spp != 1 || bps != 1)
         return 0;
     rowsize = TIFFScanlineSize(in);
-    if (sh > INT32_MAX / rowsize)
+    if ((uint64_t)rowsize * sh + 3 > INT32_MAX)
     {
         TIFFError(TIFFFileName(in), "Image is too large to fit in memory");
         return 0;
