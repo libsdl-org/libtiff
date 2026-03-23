@@ -8253,7 +8253,7 @@ static int _TIFFPartialReadStripArray(TIFF *tif, TIFFDirEntry *dirent,
         nOffsetEndPage += IO_CACHE_PAGE_SIZE;
 #undef IO_CACHE_PAGE_SIZE
 
-    nLastStripOffset = nBaseOffset + arraySize * sizeofval;
+    nLastStripOffset = nBaseOffset + (uint64_t)arraySize * sizeofval;
     if (nLastStripOffset < nOffsetEndPage)
         nOffsetEndPage = nLastStripOffset;
     if (nOffsetStartPage >= nOffsetEndPage)
