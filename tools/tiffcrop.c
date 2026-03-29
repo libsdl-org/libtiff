@@ -8726,7 +8726,20 @@ static int processCropSelections(struct image_data *image,
 
     if (crop->img_mode == COMPOSITE_IMAGES)
     {
-        cropsize = crop->bufftotal;
+        uint64_t rowsize =
+            ((uint64_t)crop->combined_width * image->bps * image->spp + 7) / 8;
+
+        uint64_t total_size = rowsize * crop->combined_length;
+
+        if (total_size > TIFF_TMSIZE_T_MAX)
+        {
+            TIFFError("processCropSelections",
+                      "Composite buffer size overflow");
+            return (-1);
+        }
+
+        cropsize = (tmsize_t)total_size;
+
         crop_buff = seg_buffs[0].buffer;
         if (!crop_buff)
             crop_buff = (unsigned char *)limitMalloc(cropsize +
