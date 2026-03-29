@@ -32,6 +32,8 @@
 
 #define STRIPINCR 20 /* expansion factor on strip array */
 
+#define NOSTRIP ((uint32_t)(-1)) /* undefined state */
+
 #define WRITECHECKSTRIPS(tif, module)                                          \
     (((tif)->tif_flags & TIFF_BEENWRITING) || TIFFWriteCheck((tif), 0, module))
 #define WRITECHECKTILES(tif, module)                                           \
@@ -768,6 +770,23 @@ static int TIFFAppendToStrip(TIFF *tif, uint32_t strip, uint8_t *data,
     TIFFDirectory *td = &tif->tif_dir;
     uint64_t m;
     int64_t old_byte_count = -1;
+
+    /* Some security checks */
+    if (td->td_stripoffset_p == NULL)
+    {
+        TIFFErrorExtR(tif, module, "Strip offset array pointer is NULL");
+        return (0);
+    }
+    if (td->td_stripbytecount_p == NULL)
+    {
+        TIFFErrorExtR(tif, module, "Strip bytecount array pointer is NULL");
+        return (0);
+    }
+    if (strip == NOSTRIP)
+    {
+        TIFFErrorExtR(tif, module, "Strip number not valid (NOSTRIP)");
+        return (0);
+    }
 
     if (tif->tif_curoff == 0)
         tif->tif_lastvalidoff = 0;
