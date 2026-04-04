@@ -269,8 +269,8 @@ static const char *StateNames[] = {
         {                                                                      \
             TIFFErrorExtR(tif, module, "Buffer overflow at line %d of %s %u",  \
                           sp->line, isTiled(tif) ? "tile" : "strip",           \
-                          isTiled(tif) ? tif->tif_curtile                      \
-                                       : tif->tif_curstrip);                   \
+                          isTiled(tif) ? tif->tif_dir.td_curtile               \
+                                       : tif->tif_dir.td_curstrip);            \
             return (-1);                                                       \
         }                                                                      \
         *pa++ = (uint32_t)((uint32_t)RunLength + (uint32_t)(x));               \
@@ -444,10 +444,11 @@ static const char *StateNames[] = {
             {                                                                  \
                 if (pb + 1 >= sp->refruns + sp->nruns)                         \
                 {                                                              \
-                    TIFFErrorExtR(                                             \
-                        tif, module, "Buffer overflow at line %d of %s %u",    \
-                        sp->line, isTiled(tif) ? "tile" : "strip",             \
-                        isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip);  \
+                    TIFFErrorExtR(tif, module,                                 \
+                                  "Buffer overflow at line %d of %s %u",       \
+                                  sp->line, isTiled(tif) ? "tile" : "strip",   \
+                                  isTiled(tif) ? tif->tif_dir.td_curtile       \
+                                               : tif->tif_dir.td_curstrip);    \
                     return (-1);                                               \
                 }                                                              \
                 b1 += (int)(pb[0] + pb[1]);                                    \
@@ -465,10 +466,11 @@ static const char *StateNames[] = {
         {                                                                      \
             if (pa >= thisrun + sp->nruns)                                     \
             {                                                                  \
-                TIFFErrorExtR(                                                 \
-                    tif, module, "Buffer overflow at line %d of %s %u",        \
-                    sp->line, isTiled(tif) ? "tile" : "strip",                 \
-                    isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip);      \
+                TIFFErrorExtR(tif, module,                                     \
+                              "Buffer overflow at line %d of %s %u", sp->line, \
+                              isTiled(tif) ? "tile" : "strip",                 \
+                              isTiled(tif) ? tif->tif_dir.td_curtile           \
+                                           : tif->tif_dir.td_curstrip);        \
                 return (-1);                                                   \
             }                                                                  \
             LOOKUP8(7, TIFFFaxMainTable, eof2d);                               \
@@ -478,12 +480,12 @@ static const char *StateNames[] = {
                     CHECK_b1;                                                  \
                     if (pb + 1 >= sp->refruns + sp->nruns)                     \
                     {                                                          \
-                        TIFFErrorExtR(tif, module,                             \
-                                      "Buffer overflow at line %d of %s %u",   \
-                                      sp->line,                                \
-                                      isTiled(tif) ? "tile" : "strip",         \
-                                      isTiled(tif) ? tif->tif_curtile          \
-                                                   : tif->tif_curstrip);       \
+                        TIFFErrorExtR(                                         \
+                            tif, module,                                       \
+                            "Buffer overflow at line %d of %s %u", sp->line,   \
+                            isTiled(tif) ? "tile" : "strip",                   \
+                            isTiled(tif) ? tif->tif_dir.td_curtile             \
+                                         : tif->tif_dir.td_curstrip);          \
                         return (-1);                                           \
                     }                                                          \
                     b1 = b1 + (int)*pb++;                                      \
@@ -582,12 +584,12 @@ static const char *StateNames[] = {
                     SETVALUE(b1 - a0);                                         \
                     if (pb >= sp->refruns + sp->nruns)                         \
                     {                                                          \
-                        TIFFErrorExtR(tif, module,                             \
-                                      "Buffer overflow at line %d of %s %u",   \
-                                      sp->line,                                \
-                                      isTiled(tif) ? "tile" : "strip",         \
-                                      isTiled(tif) ? tif->tif_curtile          \
-                                                   : tif->tif_curstrip);       \
+                        TIFFErrorExtR(                                         \
+                            tif, module,                                       \
+                            "Buffer overflow at line %d of %s %u", sp->line,   \
+                            isTiled(tif) ? "tile" : "strip",                   \
+                            isTiled(tif) ? tif->tif_dir.td_curtile             \
+                                         : tif->tif_dir.td_curstrip);          \
                         return (-1);                                           \
                     }                                                          \
                     b1 = b1 + (int)*pb++;                                      \
@@ -597,12 +599,12 @@ static const char *StateNames[] = {
                     SETVALUE((int)((uint32_t)(b1 - a0) + TabEnt->Param));      \
                     if (pb >= sp->refruns + sp->nruns)                         \
                     {                                                          \
-                        TIFFErrorExtR(tif, module,                             \
-                                      "Buffer overflow at line %d of %s %u",   \
-                                      sp->line,                                \
-                                      isTiled(tif) ? "tile" : "strip",         \
-                                      isTiled(tif) ? tif->tif_curtile          \
-                                                   : tif->tif_curstrip);       \
+                        TIFFErrorExtR(                                         \
+                            tif, module,                                       \
+                            "Buffer overflow at line %d of %s %u", sp->line,   \
+                            isTiled(tif) ? "tile" : "strip",                   \
+                            isTiled(tif) ? tif->tif_dir.td_curtile             \
+                                         : tif->tif_dir.td_curstrip);          \
                         return (-1);                                           \
                     }                                                          \
                     b1 = b1 + (int)*pb++;                                      \

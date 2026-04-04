@@ -184,7 +184,7 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         TIFFErrorExtR(tif, module,
                       "ZIPDecode: Scanline %" PRIu32 " cannot be read due to "
                       "previous error",
-                      tif->tif_row);
+                      tif->tif_dir.td_row);
         return 0;
     }
 
@@ -211,7 +211,7 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         }
         else
         {
-            uint32_t strip_height = td->td_imagelength - tif->tif_row;
+            uint32_t strip_height = td->td_imagelength - tif->tif_dir.td_row;
             if (strip_height > td->td_rowsperstrip)
                 strip_height = td->td_rowsperstrip;
             if (TIFFVStripSize64(tif, strip_height) != (uint64_t)occ)
@@ -255,7 +255,7 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             {
                 memset(op, 0, (size_t)occ);
                 TIFFErrorExtR(tif, module, "Decoding error at scanline %lu",
-                              (unsigned long)tif->tif_row);
+                              (unsigned long)tif->tif_dir.td_row);
                 sp->read_error = 1;
                 return 0;
             }
@@ -290,7 +290,7 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         {
             memset(sp->stream.next_out, 0, (size_t)occ);
             TIFFErrorExtR(tif, module, "Decoding error at scanline %lu, %s",
-                          (unsigned long)tif->tif_row, SAFE_MSG(sp));
+                          (unsigned long)tif->tif_dir.td_row, SAFE_MSG(sp));
             sp->read_error = 1;
             return (0);
         }
@@ -307,7 +307,7 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         TIFFErrorExtR(tif, module,
                       "Not enough data at scanline %lu (short %" PRIu64
                       " bytes)",
-                      (unsigned long)tif->tif_row, (uint64_t)occ);
+                      (unsigned long)tif->tif_dir.td_row, (uint64_t)occ);
         memset(sp->stream.next_out, 0, (size_t)occ);
         sp->read_error = 1;
         return (0);
@@ -413,7 +413,7 @@ static int ZIPEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
         }
         else
         {
-            uint32_t strip_height = td->td_imagelength - tif->tif_row;
+            uint32_t strip_height = td->td_imagelength - tif->tif_dir.td_row;
             if (strip_height > td->td_rowsperstrip)
                 strip_height = td->td_rowsperstrip;
             if (TIFFVStripSize64(tif, strip_height) != (uint64_t)cc)
@@ -465,7 +465,7 @@ static int ZIPEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
             if (nCompressedBytes == 0)
             {
                 TIFFErrorExtR(tif, module, "Encoder error at scanline %lu",
-                              (unsigned long)tif->tif_row);
+                              (unsigned long)tif->tif_dir.td_row);
                 return 0;
             }
 

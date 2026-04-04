@@ -420,7 +420,7 @@ static int LZWDecode(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
         TIFFErrorExtR(tif, module,
                       "LZWDecode: Scanline %" PRIu32 " cannot be read due to "
                       "previous error",
-                      tif->tif_row);
+                      tif->tif_dir.td_row);
         return 0;
     }
 
@@ -737,7 +737,7 @@ after_loop:
         TIFFErrorExtR(tif, module,
                       "Not enough data at scanline %" PRIu32 " (short %" PRIu64
                       " bytes)",
-                      tif->tif_row, (uint64_t)occ);
+                      tif->tif_dir.td_row, (uint64_t)occ);
         return (0);
     }
     return (1);
@@ -747,7 +747,7 @@ no_eoi:
     sp->read_error = 1;
     TIFFErrorExtR(tif, module,
                   "LZWDecode: Strip %" PRIu32 " not terminated with EOI code",
-                  tif->tif_curstrip);
+                  tif->tif_dir.td_curstrip);
     return 0;
 error_code:
     memset(op, 0, (size_t)occ);
@@ -769,7 +769,7 @@ error_code:
             TIFFWarningExtR(_tif, module,                                      \
                             "LZWDecode: Strip %" PRIu32                        \
                             " not terminated with EOI code",                   \
-                            _tif->tif_curstrip);                               \
+                            _tif->tif_dir.td_curstrip);                        \
             _code = CODE_EOI;                                                  \
         }                                                                      \
         else                                                                   \
@@ -895,7 +895,7 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
                 TIFFErrorExtR(
                     tif, tif->tif_name,
                     "LZWDecode: Corrupted LZW table at scanline %" PRIu32,
-                    tif->tif_row);
+                    tif->tif_dir.td_row);
                 return (0);
             }
             *op++ = (uint8_t)code;
@@ -913,7 +913,7 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
         {
             TIFFErrorExtR(tif, module,
                           "Corrupted LZW table at scanline %" PRIu32,
-                          tif->tif_row);
+                          tif->tif_dir.td_row);
             return (0);
         }
 
@@ -923,7 +923,7 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
         {
             TIFFErrorExtR(tif, module,
                           "Corrupted LZW table at scanline %" PRIu32,
-                          tif->tif_row);
+                          tif->tif_dir.td_row);
             return (0);
         }
         free_entp->firstchar = free_entp->next->firstchar;
@@ -950,7 +950,7 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
                     tif, module,
                     "Wrong length of decoded "
                     "string: data probably corrupted at scanline %" PRIu32,
-                    tif->tif_row);
+                    tif->tif_dir.td_row);
                 return (0);
             }
             if (codep->length > occ)
@@ -1012,7 +1012,7 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
         TIFFErrorExtR(tif, module,
                       "Not enough data at scanline %" PRIu32 " (short %" PRIu64
                       " bytes)",
-                      tif->tif_row, (uint64_t)occ);
+                      tif->tif_dir.td_row, (uint64_t)occ);
         return (0);
     }
     return (1);

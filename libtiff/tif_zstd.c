@@ -159,7 +159,7 @@ static int ZSTDDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         memset(op + out_buffer.pos, 0, out_buffer.size - out_buffer.pos);
         TIFFErrorExtR(tif, module,
                       "Not enough data at scanline %lu (short %lu bytes)",
-                      (unsigned long)tif->tif_row,
+                      (unsigned long)tif->tif_dir.td_row,
                       (unsigned long)((size_t)occ - out_buffer.pos));
         return 0;
     }

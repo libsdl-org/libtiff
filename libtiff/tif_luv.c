@@ -243,7 +243,7 @@ static int LogL16Decode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             TIFFErrorExtR(tif, module,
                           "Not enough data at row %" PRIu32
                           " (short %" TIFF_SSIZE_FORMAT " pixels)",
-                          tif->tif_row, npixels - i);
+                          tif->tif_dir.td_row, npixels - i);
             tif->tif_rawcp = (uint8_t *)bp;
             tif->tif_rawcc = cc;
             return (0);
@@ -301,7 +301,7 @@ static int LogLuvDecode24(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         TIFFErrorExtR(tif, module,
                       "Not enough data at row %" PRIu32
                       " (short %" TIFF_SSIZE_FORMAT " pixels)",
-                      tif->tif_row, npixels - i);
+                      tif->tif_dir.td_row, npixels - i);
         return (0);
     }
     (*sp->tfunc)(sp, op, npixels);
@@ -373,7 +373,7 @@ static int LogLuvDecode32(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             TIFFErrorExtR(tif, module,
                           "Not enough data at row %" PRIu32
                           " (short %" TIFF_SSIZE_FORMAT " pixels)",
-                          tif->tif_row, npixels - i);
+                          tif->tif_dir.td_row, npixels - i);
             tif->tif_rawcp = (uint8_t *)bp;
             tif->tif_rawcc = cc;
             return (0);
@@ -1764,8 +1764,9 @@ static int LogLuvVSetField(TIFF *tif, uint32_t tag, va_list ap)
             /*
              * Must recalculate sizes should bits/sample change.
              */
-            tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)-1;
-            tif->tif_scanlinesize = TIFFScanlineSize(tif);
+            tif->tif_dir.td_tilesize =
+                isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)-1;
+            tif->tif_dir.td_scanlinesize = TIFFScanlineSize(tif);
             return (1);
         case TIFFTAG_SGILOGENCODE:
             sp->encode_meth = (int)va_arg(ap, int);

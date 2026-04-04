@@ -4407,7 +4407,8 @@ int TIFFReadDirectory(TIFF *tif)
      */
     tif->tif_flags &= ~TIFF_LAZYSTRILELOAD_DONE;
 
-    /* free any old stuff and reinit */
+    /* Free any old stuff and reinit i/o and other parameters within
+     * TIFFDefaultDirectory() since we are starting on a new directory. */
     TIFFFreeDirectory(tif);
     TIFFDefaultDirectory(tif);
 
@@ -5259,16 +5260,10 @@ int TIFFReadDirectory(TIFF *tif)
     tif->tif_flags &= ~TIFF_DIRTYSTRIP;
 
     /*
-     * Reinitialize i/o since we are starting on a new directory.
+     * Reinitialize some further i/o since we are starting on a new directory.
      */
-    tif->tif_row = (uint32_t)-1;
-    tif->tif_curstrip = (uint32_t)-1;
-    tif->tif_col = (uint32_t)-1;
-    tif->tif_curtile = (uint32_t)-1;
-    tif->tif_tilesize = (tmsize_t)-1;
-
-    tif->tif_scanlinesize = TIFFScanlineSize(tif);
-    if (!tif->tif_scanlinesize)
+    tif->tif_dir.td_scanlinesize = TIFFScanlineSize(tif);
+    if (!tif->tif_dir.td_scanlinesize)
     {
         TIFFErrorExtR(tif, module, "Cannot handle zero scanline size");
         return (0);
@@ -5276,8 +5271,8 @@ int TIFFReadDirectory(TIFF *tif)
 
     if (isTiled(tif))
     {
-        tif->tif_tilesize = TIFFTileSize(tif);
-        if (!tif->tif_tilesize)
+        tif->tif_dir.td_tilesize = TIFFTileSize(tif);
+        if (!tif->tif_dir.td_tilesize)
         {
             TIFFErrorExtR(tif, module, "Cannot handle zero tile size");
             return (0);
