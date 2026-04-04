@@ -117,8 +117,8 @@ static float LogK1, LogK2;
         } while (i > 0);                                                       \
     }
 
-static void horizontalAccumulateF(uint16_t *wp, int n, int stride, float *op,
-                                  float *ToLinearF)
+static void horizontalAccumulateF(uint16_t *wp, tmsize_t n, int stride,
+                                  float *op, float *ToLinearF)
 {
     unsigned int cr, cg, cb, ca, mask;
     float t0, t1, t2, t3;
@@ -180,7 +180,7 @@ static void horizontalAccumulateF(uint16_t *wp, int n, int stride, float *op,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinearF[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinearF[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -188,8 +188,8 @@ static void horizontalAccumulateF(uint16_t *wp, int n, int stride, float *op,
     }
 }
 
-static void horizontalAccumulate12(uint16_t *wp, int n, int stride, int16_t *op,
-                                   float *ToLinearF)
+static void horizontalAccumulate12(uint16_t *wp, tmsize_t n, int stride,
+                                   int16_t *op, float *ToLinearF)
 {
     unsigned int cr, cg, cb, ca, mask;
     float t0, t1, t2, t3;
@@ -255,16 +255,16 @@ static void horizontalAccumulate12(uint16_t *wp, int n, int stride, int16_t *op,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp;
-                       t0 = ToLinearF[wp[stride] & mask] * SCALE12;
-                       *op = CLAMP12(t0); wp++; op++)
+                REPEAT(stride, *wp += wp[-stride];
+                       t0 = ToLinearF[*wp & mask] * SCALE12; *op = CLAMP12(t0);
+                       wp++; op++)
                 n -= stride;
             }
         }
     }
 }
 
-static void horizontalAccumulate16(uint16_t *wp, int n, int stride,
+static void horizontalAccumulate16(uint16_t *wp, tmsize_t n, int stride,
                                    uint16_t *op, uint16_t *ToLinear16)
 {
     unsigned int cr, cg, cb, ca, mask;
@@ -312,7 +312,7 @@ static void horizontalAccumulate16(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinear16[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear16[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -324,7 +324,7 @@ static void horizontalAccumulate16(uint16_t *wp, int n, int stride,
  * Returns the log encoded 11-bit values with the horizontal
  * differencing undone.
  */
-static void horizontalAccumulate11(uint16_t *wp, int n, int stride,
+static void horizontalAccumulate11(uint16_t *wp, tmsize_t n, int stride,
                                    uint16_t *op)
 {
     unsigned int cr, cg, cb, ca, mask;
@@ -379,14 +379,14 @@ static void horizontalAccumulate11(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = (uint16_t)(*wp & mask); wp++; op++)
+                REPEAT(stride, *wp += wp[-stride]; *op = (uint16_t)(*wp & mask); wp++; op++)
                 n -= stride;
             }
         }
     }
 }
 
-static void horizontalAccumulate8(uint16_t *wp, int n, int stride,
+static void horizontalAccumulate8(uint16_t *wp, tmsize_t n, int stride,
                                   unsigned char *op, unsigned char *ToLinear8)
 {
     unsigned int cr, cg, cb, ca, mask;
@@ -434,7 +434,7 @@ static void horizontalAccumulate8(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinear8[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear8[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -442,7 +442,7 @@ static void horizontalAccumulate8(uint16_t *wp, int n, int stride,
     }
 }
 
-static void horizontalAccumulate8abgr(uint16_t *wp, int n, int stride,
+static void horizontalAccumulate8abgr(uint16_t *wp, tmsize_t n, int stride,
                                       unsigned char *op,
                                       unsigned char *ToLinear8)
 {
@@ -508,7 +508,7 @@ static void horizontalAccumulate8abgr(uint16_t *wp, int n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, wp[stride] += *wp; *op = ToLinear8[*wp & mask];
+                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear8[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -840,7 +840,7 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     PixarLogState *sp = PixarLogDecoderState(tif);
     tmsize_t i;
     tmsize_t nsamples;
-    int llen;
+    tmsize_t llen;
     uint16_t *up;
 
     switch (sp->user_datafmt)
@@ -865,7 +865,7 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             return 0;
     }
 
-    llen = (int)(sp->stride * td->td_imagewidth);
+    llen = (tmsize_t)sp->stride * td->td_imagewidth;
 
     (void)s;
     assert(sp != NULL);
@@ -943,7 +943,8 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     if (nsamples % llen)
     {
         TIFFWarningExtR(tif, module,
-                        "stride %d is not a multiple of sample count, "
+                        "stride %" TIFF_SSIZE_FORMAT
+                        " is not a multiple of sample count, "
                         "%" TIFF_SSIZE_FORMAT ", data truncated.",
                         llen, nsamples);
         nsamples -= nsamples % llen;
@@ -1065,8 +1066,8 @@ static int PixarLogPreEncode(TIFF *tif, uint16_t s)
     return (deflateReset(&sp->stream) == Z_OK);
 }
 
-static void horizontalDifferenceF(float *ip, int n, int stride, uint16_t *wp,
-                                  uint16_t *FromLT2)
+static void horizontalDifferenceF(float *ip, tmsize_t n, int stride,
+                                  uint16_t *wp, uint16_t *FromLT2)
 {
     int32_t r1, g1, b1, a1, r2, g2, b2, a2, mask;
     float fltsize = Fltsize;
@@ -1145,7 +1146,7 @@ static void horizontalDifferenceF(float *ip, int n, int stride, uint16_t *wp,
     }
 }
 
-static void horizontalDifference16(unsigned short *ip, int n, int stride,
+static void horizontalDifference16(unsigned short *ip, tmsize_t n, int stride,
                                    unsigned short *wp, uint16_t *From14)
 {
     int r1, g1, b1, a1, r2, g2, b2, a2, mask;
@@ -1221,7 +1222,7 @@ static void horizontalDifference16(unsigned short *ip, int n, int stride,
     }
 }
 
-static void horizontalDifference8(unsigned char *ip, int n, int stride,
+static void horizontalDifference8(unsigned char *ip, tmsize_t n, int stride,
                                   unsigned short *wp, uint16_t *From8)
 {
     int r1, g1, b1, a1, r2, g2, b2, a2, mask;
@@ -1306,7 +1307,7 @@ static int PixarLogEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     PixarLogState *sp = PixarLogEncoderState(tif);
     tmsize_t i;
     tmsize_t n;
-    int llen;
+    tmsize_t llen;
     unsigned short *up;
 
     (void)s;
@@ -1332,7 +1333,7 @@ static int PixarLogEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
             return 0;
     }
 
-    llen = (int)(sp->stride * td->td_imagewidth);
+    llen = (tmsize_t)sp->stride * td->td_imagewidth;
     /* Check against the number of elements (of size uint16_t) of sp->tbuf */
     if (n > ((tmsize_t)td->td_rowsperstrip * llen))
     {

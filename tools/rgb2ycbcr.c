@@ -313,10 +313,11 @@ static int tiffcvt(TIFF *in, TIFF *out)
 
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
     TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
-    pixel_count = width * height;
+    pixel_count = (size_t)width * height;
 
-    /* XXX: Check the integer overflow. */
-    if (!width || !height || SIZE_MAX / width < height)
+    /* Check for integer overflow or implausibly large image dimensions. */
+    if (!width || !height || SIZE_MAX / width < height ||
+        pixel_count > (size_t)(INT32_MAX / sizeof(uint32_t)))
     {
         TIFFError(TIFFFileName(in),
                   "Malformed input file; "

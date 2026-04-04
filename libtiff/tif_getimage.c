@@ -787,7 +787,7 @@ static int gtTileContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
     }
     else
     {
-        if (tw > ((int64_t)INT_MAX + w))
+        if (tw > ((int64_t)INT_MAX + w) || w > ((int64_t)INT_MAX + tw))
         {
             TIFFErrorExtR(tif, TIFFFileName(tif), "%s",
                           "unsupported tile size (too wide)");
@@ -962,7 +962,7 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
     }
     else
     {
-        if (tw > ((int64_t)INT_MAX + w))
+        if (tw > ((int64_t)INT_MAX + w) || w > ((int64_t)INT_MAX + tw))
         {
             TIFFErrorExtR(tif, TIFFFileName(tif), "%s",
                           "unsupported tile size (too wide)");

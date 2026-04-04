@@ -3046,10 +3046,22 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
 
         if (t2p->pdf_sample & T2P_SAMPLE_REALIZE_PALETTE)
         {
-            // FIXME: overflow?
-            samplebuffer = (unsigned char *)_TIFFrealloc(
-                (tdata_t)buffer,
-                t2p->tiff_datasize * t2p->tiff_samplesperpixel);
+            tmsize_t new_size = TIFFSafeMultiply(tmsize_t, t2p->tiff_datasize,
+                                        t2p->tiff_samplesperpixel);
+
+            if (new_size == 0)
+            {
+                TIFFError(TIFF2PDF_MODULE,
+                          "Integer overflow while expanding palette for %s",
+                          TIFFFileName(input));
+                t2p->t2p_error = T2P_ERR_ERROR;
+                _TIFFfree(buffer);
+                return (0);
+            }
+
+            samplebuffer =
+                (unsigned char *)_TIFFrealloc((tdata_t)buffer, new_size);
+
             if (samplebuffer == NULL)
             {
                 TIFFError(TIFF2PDF_MODULE,
@@ -3082,8 +3094,28 @@ tsize_t t2p_readwrite_pdf_image(T2P *t2p, TIFF *input, TIFF *output)
 
         if (t2p->pdf_sample & T2P_SAMPLE_YCBCR_TO_RGB)
         {
-            samplebuffer = (unsigned char *)_TIFFrealloc(
-                (tdata_t)buffer, t2p->tiff_width * t2p->tiff_length * 4);
+
+            /* Safe computation of width * height */
+            tmsize_t raster_size =
+                TIFFSafeMultiply(tmsize_t, t2p->tiff_width, t2p->tiff_length);
+
+            /* Safe computation of * 4 (RGBA) */
+            raster_size = TIFFSafeMultiply(tmsize_t, raster_size, 4);
+
+            if (raster_size == 0)
+            {
+                TIFFError(
+                    TIFF2PDF_MODULE,
+                    "Integer overflow while allocating RGBA raster for %s",
+                    TIFFFileName(input));
+
+                t2p->t2p_error = T2P_ERR_ERROR;
+                _TIFFfree(buffer);
+                return (0);
+            }
+
+            samplebuffer =
+                (unsigned char *)_TIFFrealloc((tdata_t)buffer, raster_size);
             if (samplebuffer == NULL)
             {
                 TIFFError(TIFF2PDF_MODULE,

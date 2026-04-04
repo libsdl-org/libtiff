@@ -428,6 +428,7 @@ extern "C"
     extern void _TIFFSwab64BitData(TIFF *tif, uint8_t *buf, tmsize_t cc);
     extern int TIFFFlushData1(TIFF *tif);
     extern int TIFFDefaultDirectory(TIFF *tif);
+    extern void _TIFFSetDefaultPostDecode(TIFF *tif);
     extern void _TIFFSetDefaultCompressionState(TIFF *tif);
     extern int _TIFFRewriteField(TIFF *, uint16_t, TIFFDataType, tmsize_t,
                                  void *);
@@ -475,6 +476,8 @@ extern "C"
     extern uint32_t _TIFFClampDoubleToUInt32(double);
 
     extern void _TIFFCleanupIFDOffsetAndNumberMaps(TIFF *tif);
+
+    extern uint64_t _TIFFStrileSize64(TIFF *tif, uint32_t nrows, int isStrip);
 
     extern tmsize_t _TIFFReadEncodedStripAndAllocBuffer(TIFF *tif,
                                                         uint32_t strip,

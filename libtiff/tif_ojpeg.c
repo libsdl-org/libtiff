@@ -1358,6 +1358,11 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
             /* Check for division by zero. */
             if (sp->subsampling_hor == 0 || sp->subsampling_ver == 0)
                 return (0);
+            /* Check for potential overflow in subsampling_convert_ylinelen
+             * computation.
+             */
+            if (sp->strile_width > UINT32_MAX - (sp->subsampling_hor * 8 - 1))
+                return (0);
             sp->subsampling_convert_ylinelen =
                 ((sp->strile_width + sp->subsampling_hor * 8 - 1) /
                  (sp->subsampling_hor * 8) * sp->subsampling_hor * 8);
@@ -1426,9 +1431,14 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
                 ((sp->strile_width % sp->subsampling_hor) != 0 ? 1 : 0);
             sp->subsampling_convert_state = 0;
             sp->error_in_raw_data_decoding = 0;
-            sp->bytes_per_line =
-                (uint32_t)sp->subsampling_convert_clinelenout *
-                (uint32_t)(sp->subsampling_ver * sp->subsampling_hor + 2);
+
+            const uint64_t bpl =
+                (uint64_t)sp->subsampling_convert_clinelenout *
+                (uint64_t)(sp->subsampling_ver * sp->subsampling_hor + 2);
+            if (bpl > UINT32_MAX)
+                return (0);
+            sp->bytes_per_line = (uint32_t)bpl;
+
             sp->lines_per_strile =
                 sp->strile_length / sp->subsampling_ver +
                 ((sp->strile_length % sp->subsampling_ver) != 0 ? 1 : 0);

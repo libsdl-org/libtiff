@@ -2285,7 +2285,13 @@ static int JPEGPreEncode(TIFF *tif, uint16_t s)
         /* an existing file */
         suppress_huff_table(sp, 0);
         suppress_huff_table(sp, 1);
-        sp->cinfo.c.optimize_coding = FALSE;
+
+        /* We want to keep optimize_coding = TRUE for 12-bit JPEG */
+        /* See lengthy explanation at
+         * https://gitlab.com/libtiff/libtiff/-/work_items/773#note_3009836854
+         */
+        if (sp->cinfo.c.data_precision == 8)
+            sp->cinfo.c.optimize_coding = FALSE;
     }
     else
         sp->cinfo.c.optimize_coding = TRUE;

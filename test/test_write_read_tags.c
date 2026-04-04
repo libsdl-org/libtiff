@@ -1261,7 +1261,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                 }
             }
         } /*-- switch() --*/
-    } /*-- for() --*/
+    }     /*-- for() --*/
 
     *iCnt = i;
     return 0;

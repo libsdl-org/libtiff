@@ -169,7 +169,7 @@ static int CheckStringTag(TIFF *, TIFF *, int, const char *);
 static int tiffcmp(TIFF *tif1, TIFF *tif2)
 {
     uint16_t config1, config2;
-    tsize_t size1;
+    tsize_t size1, size2;
     uint32_t row;
     tsample_t s;
     unsigned char *buf1, *buf2;
@@ -190,17 +190,43 @@ static int tiffcmp(TIFF *tif1, TIFF *tif2)
     (void)TIFFGetField(tif1, TIFFTAG_PLANARCONFIG, &config1);
     (void)TIFFGetField(tif2, TIFFTAG_PLANARCONFIG, &config2);
     buf1 = (unsigned char *)_TIFFmalloc(size1 = TIFFScanlineSize(tif1));
-    buf2 = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif2));
+    buf2 = (unsigned char *)_TIFFmalloc(size2 = TIFFScanlineSize(tif2));
     if (buf1 == NULL || buf2 == NULL)
     {
         fprintf(stderr, "No space for scanline buffers\n");
         exit(2);
     }
-    if (config1 != config2 && bitspersample != 8 && samplesperpixel > 1)
+    if (config1 != config2)
     {
-        fprintf(stderr, "Can't handle different planar configuration w/ "
-                        "different bits/sample\n");
-        goto bad;
+        if (bitspersample != 8 && samplesperpixel > 1)
+        {
+            fprintf(stderr, "Can't handle different planar configuration w/ "
+                            "different bits/sample\n");
+            goto bad;
+        }
+
+        /* buffer size validation */
+        tsize_t contig_size, separate_size;
+
+        if (config1 == PLANARCONFIG_CONTIG)
+        {
+            contig_size = size1;
+            separate_size = size2;
+        }
+        else
+        {
+            contig_size = size2;
+            separate_size = size1;
+        }
+
+        if (contig_size < (tsize_t)imagewidth * samplesperpixel ||
+            separate_size < (tsize_t)imagewidth)
+        {
+            fprintf(
+                stderr,
+                "Inconsistent scanline size for mixed planar configuration\n");
+            goto bad;
+        }
     }
 #define pack(a, b) ((a) << 8) | (b)
     switch (pack(config1, config2))
