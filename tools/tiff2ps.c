@@ -3136,7 +3136,7 @@ void PSDataBW(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
         if (photometric == PHOTOMETRIC_MINISWHITE)
         {
             for (cp += cc; --cp >= tf_buf;)
-                *cp = ~*cp;
+                *cp = (unsigned char)~*cp;
             cp++;
         }
         /*

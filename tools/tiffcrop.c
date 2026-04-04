@@ -10759,7 +10759,7 @@ static int invertImage(uint16_t photometric, uint16_t spp, uint16_t bps,
             for (row = 0; row < length; row++)
                 for (col = 0; col < width; col++)
                 {
-                    *src_uint16 = ~(*src_uint16);
+                    *src_uint16 = (uint16_t)~(*src_uint16);
                     src_uint16++;
                 }
             break;
@@ -10770,7 +10770,7 @@ static int invertImage(uint16_t photometric, uint16_t spp, uint16_t bps,
             for (row = 0; row < length; row++)
                 for (col = 0; col < width; col += 8 / bps)
                 {
-                    *src = ~(*src);
+                    *src = (unsigned char)~(*src);
                     src++;
                 }
             break;
