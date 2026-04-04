@@ -2040,7 +2040,7 @@ static int JPEGSetupEncode(TIFF *tif)
                 if (!TIFFGetField(tif, TIFFTAG_REFERENCEBLACKWHITE, &ref))
                 {
                     float refbw[6];
-                    uint64_t top = 1UL << td->td_bitspersample;
+                    uint32_t top = 1U << td->td_bitspersample;
                     refbw[0] = 0;
                     refbw[1] = (float)(top - 1);
                     refbw[2] = (float)(top >> 1);
