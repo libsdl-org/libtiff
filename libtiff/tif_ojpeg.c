@@ -1361,7 +1361,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
             /* Check for potential overflow in subsampling_convert_ylinelen
              * computation.
              */
-            if (sp->strile_width > UINT32_MAX - (sp->subsampling_hor * 8 - 1))
+            if (sp->strile_width > UINT32_MAX - (uint32_t)(sp->subsampling_hor * 8 - 1))
                 return (0);
             sp->subsampling_convert_ylinelen =
                 ((sp->strile_width + sp->subsampling_hor * 8 - 1) /
