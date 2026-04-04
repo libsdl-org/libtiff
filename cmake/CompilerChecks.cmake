@@ -113,12 +113,12 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wdangling-else
                 -Wunreachable-code
                 -Wbool-operation
+                -Wmissing-include-dirs
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
                 -Wmisleading-indentation
-                -Wmissing-include-dirs
                 -Wunused-local-typedefs
                 -Wunused-macros
                 -Wcast-qual
