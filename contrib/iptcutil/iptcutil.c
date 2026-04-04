@@ -141,7 +141,7 @@ static html_code html_codes[] = {
  */
 static size_t convertHTMLcodes(char *s, size_t len)
 {
-    if (len <= 0 || s == (char *)NULL || *s == '\0')
+    if (len == 0 || s == (char *)NULL || *s == '\0')
         return 0;
 
     if (s[1] == '#')
