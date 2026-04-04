@@ -112,6 +112,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wno-int-to-pointer-cast
                 -Wdangling-else
                 -Wunreachable-code
+                -Wbool-operation
         )
     endif()
     if(broken-warnings)
@@ -119,7 +120,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wmisleading-indentation
                 -Wmissing-include-dirs
                 -Wunused-local-typedefs
-                -Wbool-operation
                 -Wunused-macros
                 -Wcast-qual
                 -Wcast-align
