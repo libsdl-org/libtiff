@@ -1361,7 +1361,8 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
             /* Check for potential overflow in subsampling_convert_ylinelen
              * computation.
              */
-            if (sp->strile_width > UINT32_MAX - (uint32_t)(sp->subsampling_hor * 8 - 1))
+            if (sp->strile_width >
+                UINT32_MAX - (uint32_t)(sp->subsampling_hor * 8 - 1))
                 return (0);
             sp->subsampling_convert_ylinelen =
                 ((sp->strile_width + sp->subsampling_hor * 8 - 1) /
@@ -1614,7 +1615,8 @@ static int OJPEGReadHeaderInfoSec(TIFF *tif)
         sp->sof_marker_id = JPEG_MARKER_SOF0;
         for (o = 0; o < sp->samples_per_pixel; o++)
             sp->sof_c[o] = (uint8_t)o;
-        sp->sof_hv[0] = (uint8_t)((sp->subsampling_hor << 4) | sp->subsampling_ver);
+        sp->sof_hv[0] =
+            (uint8_t)((sp->subsampling_hor << 4) | sp->subsampling_ver);
         for (o = 1; o < sp->samples_per_pixel; o++)
             sp->sof_hv[o] = 17;
         sp->sof_x = sp->strile_width;
@@ -2498,7 +2500,8 @@ static void OJPEGWriteStreamQTable(TIFF *tif, uint8_t table_index, void **mem,
     if (sp->qtable[table_index] != 0)
     {
         *mem = (void *)(sp->qtable[table_index] + sizeof(uint32_t));
-        *len = (uint32_t)(*((uint32_t *)sp->qtable[table_index]) - sizeof(uint32_t));
+        *len = (uint32_t)(*((uint32_t *)sp->qtable[table_index]) -
+                          sizeof(uint32_t));
     }
     sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
@@ -2510,7 +2513,8 @@ static void OJPEGWriteStreamDcTable(TIFF *tif, uint8_t table_index, void **mem,
     if (sp->dctable[table_index] != 0)
     {
         *mem = (void *)(sp->dctable[table_index] + sizeof(uint32_t));
-        *len = (uint32_t)(*((uint32_t *)sp->dctable[table_index]) - sizeof(uint32_t));
+        *len = (uint32_t)(*((uint32_t *)sp->dctable[table_index]) -
+                          sizeof(uint32_t));
     }
     sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
@@ -2522,7 +2526,8 @@ static void OJPEGWriteStreamAcTable(TIFF *tif, uint8_t table_index, void **mem,
     if (sp->actable[table_index] != 0)
     {
         *mem = (void *)(sp->actable[table_index] + sizeof(uint32_t));
-        *len = (uint32_t)(*((uint32_t *)sp->actable[table_index]) - sizeof(uint32_t));
+        *len = (uint32_t)(*((uint32_t *)sp->actable[table_index]) -
+                          sizeof(uint32_t));
     }
     sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }

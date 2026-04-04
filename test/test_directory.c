@@ -988,7 +988,8 @@ static int test_SubIFD_directrory_handling(unsigned int openMode)
         blnRead = TIFFReadDirectory(tif);
         currentDirNumber = TIFFCurrentDirectory(tif);
         if (blnRead)
-            CHECKCURDIRNUM_M(tif, (tdir_t)expected_original_dirnumber, __LINE__);
+            CHECKCURDIRNUM_M(tif, (tdir_t)expected_original_dirnumber,
+                             __LINE__);
         if (blnRead && !is_requested_directory(
                            tif, expected_original_dirnumber++, filename))
             goto failure;
@@ -1703,7 +1704,8 @@ static int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
                 TIFFSetDirectory_M(tif, setdir, filename, __LINE__);
                 TIFFCreateDirectory(tif);
             }
-            if (write_data_to_current_directory(tif, (int)expected_curdir, false))
+            if (write_data_to_current_directory(tif, (int)expected_curdir,
+                                                false))
             {
                 fprintf(
                     stderr,
@@ -1848,7 +1850,8 @@ static int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
         TIFFWriteDirectory_M(tif, filename, __LINE__);
         /* Fails in 4.6.0 only in second loop */
         CHECKCURDIRNUM_M(tif, expected_curdir, __LINE__);
-        if (write_EXIF_data_to_current_directory(tif, (int)i, &offsetEXIFBase[i]))
+        if (write_EXIF_data_to_current_directory(tif, (int)i,
+                                                 &offsetEXIFBase[i]))
         {
             fprintf(stderr,
                     "Can't write EXIF data to current directory in %s. "

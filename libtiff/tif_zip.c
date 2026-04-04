@@ -159,7 +159,8 @@ static int ZIPPreDecode(TIFF *tif, uint16_t s)
          we need to simplify this code to reflect a ZLib that is likely updated
          to deal with 8byte memory sizes, though this code will respond
          appropriately even before we simplify it */
-    sp->stream.avail_in = TIFF_CLAMP_UINT64_TO_INT32_MAX((uint64_t)tif->tif_rawcc);
+    sp->stream.avail_in =
+        TIFF_CLAMP_UINT64_TO_INT32_MAX((uint64_t)tif->tif_rawcc);
     if (inflateReset(&sp->stream) == Z_OK)
     {
         sp->read_error = 0;
@@ -275,7 +276,8 @@ static int ZIPDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     do
     {
         int state;
-        uInt avail_in_before = TIFF_CLAMP_UINT64_TO_INT32_MAX((uint64_t)tif->tif_rawcc);
+        uInt avail_in_before =
+            TIFF_CLAMP_UINT64_TO_INT32_MAX((uint64_t)tif->tif_rawcc);
         uInt avail_out_before = TIFF_CLAMP_UINT64_TO_INT32_MAX((uint64_t)occ);
         sp->stream.avail_in = avail_in_before;
         sp->stream.avail_out = avail_out_before;

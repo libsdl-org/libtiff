@@ -269,9 +269,10 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
         scale = pageHeight / ((float)h / yres) < pageWidth / ((float)w / xres)
                     ? pageHeight / ((float)h / yres)
                     : pageWidth / ((float)w / xres);
-    printf("%g %g translate\n", points * (pageWidth - scale * (float)w / xres) * half,
-           points *
-               (scale * (float)h / yres + (pageHeight - scale * (float)h / yres) * half));
+    printf("%g %g translate\n",
+           points * (pageWidth - scale * (float)w / xres) * half,
+           points * (scale * (float)h / yres +
+                     (pageHeight - scale * (float)h / yres) * half));
     printf("%g %g scale\n", points / xres * scale, -points / yres * scale);
     printf("0 setgray\n");
     TIFFSetField(tif, TIFFTAG_FAXFILLFUNC, printruns);

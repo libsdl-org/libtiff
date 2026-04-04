@@ -135,7 +135,8 @@ uint64_t _TIFFStrileSize64(TIFF *tif, uint32_t nrows, int isStrip)
                           ycbcrsubsampling[0], ycbcrsubsampling[1]);
             return 0;
         }
-        samplingblock_samples = (uint16_t)(ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2);
+        samplingblock_samples =
+            (uint16_t)(ycbcrsubsampling[0] * ycbcrsubsampling[1] + 2);
         const uint32_t width = isStrip ? td->td_imagewidth : td->td_tilewidth;
         samplingblocks_hor = TIFFhowmany_32(width, ycbcrsubsampling[0]);
         samplingblocks_ver = TIFFhowmany_32(nrows, ycbcrsubsampling[1]);

@@ -408,7 +408,8 @@ static bool TIFFHashSetRehash(TIFFHashSet *set)
 
 static void **TIFFHashSetFindPtr(TIFFHashSet *set, const void *elt)
 {
-    const unsigned long nHashVal = set->fnHashFunc(elt) % (unsigned long)set->nAllocatedSize;
+    const unsigned long nHashVal =
+        set->fnHashFunc(elt) % (unsigned long)set->nAllocatedSize;
     TIFFList *cur = set->tabList[nHashVal];
     while (cur)
     {
@@ -464,7 +465,8 @@ bool TIFFHashSetInsert(TIFFHashSet *set, void *elt)
         }
     }
 
-    const unsigned long nHashVal = set->fnHashFunc(elt) % (unsigned long)set->nAllocatedSize;
+    const unsigned long nHashVal =
+        set->fnHashFunc(elt) % (unsigned long)set->nAllocatedSize;
 #ifdef HASH_DEBUG
     if (set->tabList[nHashVal])
         set->nCollisions++;
@@ -532,7 +534,8 @@ static bool TIFFHashSetRemoveInternal(TIFFHashSet *set, const void *elt,
         }
     }
 
-    int nHashVal = (int)(set->fnHashFunc(elt) % (unsigned long)set->nAllocatedSize);
+    int nHashVal =
+        (int)(set->fnHashFunc(elt) % (unsigned long)set->nAllocatedSize);
     TIFFList *cur = set->tabList[nHashVal];
     TIFFList *prev = NULL;
     while (cur)

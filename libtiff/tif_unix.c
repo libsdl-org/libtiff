@@ -108,7 +108,8 @@ static tmsize_t _tiffWriteProc(thandle_t fd, void *buf, tmsize_t size)
         return (tmsize_t)-1;
     }
     fdh.h = fd;
-    for (bytes_written = 0; bytes_written < bytes_total; bytes_written += (size_t)count)
+    for (bytes_written = 0; bytes_written < bytes_total;
+         bytes_written += (size_t)count)
     {
         const char *buf_offset = (char *)buf + bytes_written;
         size_t io_size = (size_t)(bytes_total - bytes_written);

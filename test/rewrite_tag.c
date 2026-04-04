@@ -238,7 +238,8 @@ static int rewrite_test(const char *filename, uint32_t width, int length,
         goto failure;
     }
 
-    upd_rowoffset = (uint64_t *)_TIFFmalloc((tmsize_t)(sizeof(uint64_t) * (size_t)length));
+    upd_rowoffset =
+        (uint64_t *)_TIFFmalloc((tmsize_t)(sizeof(uint64_t) * (size_t)length));
     for (i = 0; i < length; i++)
         upd_rowoffset[i] = base_value + (uint32_t)i * width;
 
@@ -252,7 +253,8 @@ static int rewrite_test(const char *filename, uint32_t width, int length,
     _TIFFfree(upd_rowoffset);
     upd_rowoffset = NULL;
 
-    upd_bytecount = (uint64_t *)_TIFFmalloc((tmsize_t)(sizeof(uint64_t) * (size_t)length));
+    upd_bytecount =
+        (uint64_t *)_TIFFmalloc((tmsize_t)(sizeof(uint64_t) * (size_t)length));
     for (i = 0; i < length; i++)
         upd_bytecount[i] = 100 + (uint64_t)i * width;
 

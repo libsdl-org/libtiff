@@ -636,8 +636,8 @@ int _TIFFMergeFields(TIFF *tif, const TIFFField info[], uint32_t n)
     if (tif->tif_fields && tif->tif_nfields > 0)
     {
         tif->tif_fields = (TIFFField **)_TIFFCheckRealloc(
-            tif, tif->tif_fields, (tmsize_t)(tif->tif_nfields + n), (tmsize_t)sizeof(TIFFField *),
-            reason);
+            tif, tif->tif_fields, (tmsize_t)(tif->tif_nfields + n),
+            (tmsize_t)sizeof(TIFFField *), reason);
     }
     else
     {
@@ -961,7 +961,10 @@ int TIFFFieldReadCount(const TIFFField *fip) { return fip->field_readcount; }
 
 int TIFFFieldWriteCount(const TIFFField *fip) { return fip->field_writecount; }
 
-int TIFFFieldIsAnonymous(const TIFFField *fip) { return (int)fip->field_anonymous; }
+int TIFFFieldIsAnonymous(const TIFFField *fip)
+{
+    return (int)fip->field_anonymous;
+}
 
 const TIFFField *_TIFFFindOrRegisterField(TIFF *tif, uint32_t tag,
                                           TIFFDataType dt)

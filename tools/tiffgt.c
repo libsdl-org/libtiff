@@ -170,13 +170,15 @@ int main(int argc, char *argv[])
     xmax = (uint32_t)(xmax - xmax / 10.0);
     ymax = (uint32_t)(ymax - ymax / 10.0);
 
-    filelist = (char **)_TIFFmalloc((tmsize_t)((size_t)filenum * sizeof(char *)));
+    filelist =
+        (char **)_TIFFmalloc((tmsize_t)((size_t)filenum * sizeof(char *)));
     if (!filelist)
     {
         TIFFError(argv[0], "Can not allocate space for the file list.");
         return EXIT_FAILURE;
     }
-    _TIFFmemcpy(filelist, argv + optind, (tmsize_t)((size_t)filenum * sizeof(char *)));
+    _TIFFmemcpy(filelist, argv + optind,
+                (tmsize_t)((size_t)filenum * sizeof(char *)));
     fileindex = -1;
     if (nextImage() < 0)
     {
@@ -316,8 +318,8 @@ static void setWindowSize(void) { glutReshapeWindow((int)width, (int)height); }
 
 static void raster_draw(void)
 {
-    glDrawPixels((GLsizei)img.width, (GLsizei)img.height, GL_RGBA, GL_UNSIGNED_BYTE,
-                 (const GLvoid *)raster);
+    glDrawPixels((GLsizei)img.width, (GLsizei)img.height, GL_RGBA,
+                 GL_UNSIGNED_BYTE, (const GLvoid *)raster);
     glFlush();
 }
 

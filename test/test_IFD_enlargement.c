@@ -217,8 +217,9 @@ static int write_data_to_current_directory(TIFF *tif, uint16_t width,
     /* Write dummy pixel data. */
     if (write_data)
     {
-        if (write_image_data(tif, width, length, tiled, (unsigned int)ifd_page_num,
-                             plastlinedata, lastlinebytesmax))
+        if (write_image_data(tif, width, length, tiled,
+                             (unsigned int)ifd_page_num, plastlinedata,
+                             lastlinebytesmax))
         {
             fprintf(stderr, "Can't write image data. Testline %d\n", __LINE__);
             return 1;
@@ -429,8 +430,9 @@ static int test_IFD_enlargement(const char *filename, unsigned int openMode,
                 goto failure;
             }
             /* Then write image pixels. */
-            if (write_image_data(tif, width, length, tiled, (unsigned int)(5 * i),
-                                 &bufLine[i][0], sizeof(bufLine[i])))
+            if (write_image_data(tif, width, length, tiled,
+                                 (unsigned int)(5 * i), &bufLine[i][0],
+                                 sizeof(bufLine[i])))
             {
                 fprintf(stderr, "Can't write image data. Testline %d\n",
                         __LINE__);

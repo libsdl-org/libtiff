@@ -1328,10 +1328,11 @@ int TIFFJPEGIsFullStripRequired(TIFF *tif)
             {
                 nRequiredMemory +=
                     (toff_t)((JDIMENSION)(((int)compptr->width_in_blocks +
-                               compptr->h_samp_factor - 1) /
-                              compptr->h_samp_factor)) *
-                    (JDIMENSION)(((int)compptr->height_in_blocks + compptr->v_samp_factor - 1) /
-                     compptr->v_samp_factor) *
+                                           compptr->h_samp_factor - 1) /
+                                          compptr->h_samp_factor)) *
+                    (JDIMENSION)(((int)compptr->height_in_blocks +
+                                  compptr->v_samp_factor - 1) /
+                                 compptr->v_samp_factor) *
                     sizeof(JBLOCK);
             }
         }
@@ -1547,8 +1548,9 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
         if (sp->cinfo.d.data_precision == 12)
         {
             line_work_buf = (TIFF_JSAMPROW)_TIFFmallocExt(
-                tif, (tmsize_t)((size_t)sizeof(short) * (size_t)sp->cinfo.d.output_width *
-                         (size_t)sp->cinfo.d.num_components));
+                tif, (tmsize_t)((size_t)sizeof(short) *
+                                (size_t)sp->cinfo.d.output_width *
+                                (size_t)sp->cinfo.d.num_components));
         }
 
         do
@@ -1570,9 +1572,10 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
 
                 if (sp->cinfo.d.data_precision == 12)
                 {
-                    int value_pairs = (int)((JDIMENSION)sp->cinfo.d.output_width *
-                                       (JDIMENSION)sp->cinfo.d.num_components) /
-                                      2;
+                    int value_pairs =
+                        (int)((JDIMENSION)sp->cinfo.d.output_width *
+                              (JDIMENSION)sp->cinfo.d.num_components) /
+                        2;
                     int iPair;
 
                     for (iPair = 0; iPair < value_pairs; iPair++)
@@ -1591,7 +1594,8 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                 else if (sp->cinfo.d.data_precision == 8)
                 {
                     int value_count =
-                        (int)((JDIMENSION)sp->cinfo.d.output_width * (JDIMENSION)sp->cinfo.d.num_components);
+                        (int)((JDIMENSION)sp->cinfo.d.output_width *
+                              (JDIMENSION)sp->cinfo.d.num_components);
                     int iValue;
 
                     for (iValue = 0; iValue < value_count; iValue++)
@@ -1670,8 +1674,9 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
 
 #if defined(JPEG_LIB_MK1_OR_12BIT)
         tmpbuf = (unsigned short *)_TIFFmallocExt(
-            tif, (tmsize_t)((size_t)sizeof(unsigned short) * (size_t)sp->cinfo.d.output_width *
-                     (size_t)sp->cinfo.d.num_components));
+            tif, (tmsize_t)((size_t)sizeof(unsigned short) *
+                            (size_t)sp->cinfo.d.output_width *
+                            (size_t)sp->cinfo.d.num_components));
         if (tmpbuf == NULL)
         {
             TIFFErrorExtR(tif, "JPEGDecodeRaw", "Out of memory");
@@ -1764,18 +1769,20 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                 if (sp->cinfo.d.data_precision == 8)
                 {
                     int i = 0;
-                    int len =
-                        (int)((JDIMENSION)sp->cinfo.d.output_width * (JDIMENSION)sp->cinfo.d.num_components);
+                    int len = (int)((JDIMENSION)sp->cinfo.d.output_width *
+                                    (JDIMENSION)sp->cinfo.d.num_components);
                     for (i = 0; i < len; i++)
                     {
-                        ((unsigned char *)buf)[i] = (unsigned char)(tmpbuf[i] & 0xff);
+                        ((unsigned char *)buf)[i] =
+                            (unsigned char)(tmpbuf[i] & 0xff);
                     }
                 }
                 else
                 { /* 12-bit */
-                    int value_pairs = (int)((JDIMENSION)sp->cinfo.d.output_width *
-                                       (JDIMENSION)sp->cinfo.d.num_components) /
-                                      2;
+                    int value_pairs =
+                        (int)((JDIMENSION)sp->cinfo.d.output_width *
+                              (JDIMENSION)sp->cinfo.d.num_components) /
+                        2;
                     int iPair;
                     for (iPair = 0; iPair < value_pairs; iPair++)
                     {
@@ -2353,7 +2360,8 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     if (sp->cinfo.c.data_precision == 12)
     {
         line16_count = (int)((sp->bytesperline * 2) / 3);
-        line16 = (short *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(short) * (unsigned long)line16_count));
+        line16 = (short *)_TIFFmallocExt(
+            tif, (tmsize_t)(sizeof(short) * (unsigned long)line16_count));
         if (!line16)
         {
             TIFFErrorExtR(tif, "JPEGEncode", "Failed to allocate memory");
@@ -2378,8 +2386,10 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                 unsigned char *in_ptr = ((unsigned char *)buf) + iPair * 3;
                 TIFF_JSAMPLE *out_ptr = (TIFF_JSAMPLE *)(line16 + iPair * 2);
 
-                out_ptr[0] = (TIFF_JSAMPLE)((in_ptr[0] << 4) | ((in_ptr[1] & 0xf0) >> 4));
-                out_ptr[1] = (TIFF_JSAMPLE)(((in_ptr[1] & 0x0f) << 8) | in_ptr[2]);
+                out_ptr[0] = (TIFF_JSAMPLE)((in_ptr[0] << 4) |
+                                            ((in_ptr[1] & 0xf0) >> 4));
+                out_ptr[1] =
+                    (TIFF_JSAMPLE)(((in_ptr[1] & 0x0f) << 8) | in_ptr[2]);
             }
         }
         else
@@ -2458,8 +2468,9 @@ static int JPEGEncodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
         {
             int hsamp = compptr->h_samp_factor;
             int vsamp = compptr->v_samp_factor;
-            int padding = (int)(compptr->width_in_blocks * DCTSIZE -
-                                (JDIMENSION)clumps_per_line * (JDIMENSION)hsamp);
+            int padding =
+                (int)(compptr->width_in_blocks * DCTSIZE -
+                      (JDIMENSION)clumps_per_line * (JDIMENSION)hsamp);
             for (ypos = 0; ypos < vsamp; ypos++)
             {
                 inptr = ((TIFF_JSAMPLE *)buf) + clumpoffset;

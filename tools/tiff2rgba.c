@@ -391,7 +391,8 @@ static int cvt_by_strip(TIFF *in, TIFF *out)
             uint32_t *top_line, *bottom_line;
 
             top_line = raster + width * (uint32_t)i_row;
-            bottom_line = raster + width * (uint32_t)(rows_to_write - i_row - 1);
+            bottom_line =
+                raster + width * (uint32_t)(rows_to_write - i_row - 1);
 
             _TIFFmemcpy(wrk_line, top_line, 4 * width);
             _TIFFmemcpy(top_line, bottom_line, 4 * width);
@@ -459,8 +460,8 @@ static int cvt_whole_image(TIFF *in, TIFF *out)
     rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
     TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
 
-    raster = (uint32_t *)_TIFFCheckMalloc(in, (tmsize_t)pixel_count, sizeof(uint32_t),
-                                          "raster buffer");
+    raster = (uint32_t *)_TIFFCheckMalloc(in, (tmsize_t)pixel_count,
+                                          sizeof(uint32_t), "raster buffer");
     if (raster == 0)
     {
         TIFFError(TIFFFileName(in),

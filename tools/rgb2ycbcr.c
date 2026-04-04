@@ -216,10 +216,10 @@ static void cvtClump(unsigned char *op, uint32_t *raster, uint32_t ch,
             *op++ = (unsigned char)Yzero;
     }
     /* emit sampled chrominance values */
-    *op++ = (unsigned char)V2Code(Cb / ((float)ch * (float)cw), refBlackWhite[2],
-                                  refBlackWhite[3], 127);
-    *op++ = (unsigned char)V2Code(Cr / ((float)ch * (float)cw), refBlackWhite[4],
-                                  refBlackWhite[5], 127);
+    *op++ = (unsigned char)V2Code(Cb / ((float)ch * (float)cw),
+                                  refBlackWhite[2], refBlackWhite[3], 127);
+    *op++ = (unsigned char)V2Code(Cr / ((float)ch * (float)cw),
+                                  refBlackWhite[4], refBlackWhite[5], 127);
 }
 #undef LumaRed
 #undef LumaGreen
@@ -327,8 +327,8 @@ static int tiffcvt(TIFF *in, TIFF *out)
         return 0;
     }
 
-    raster = (uint32_t *)_TIFFCheckMalloc(in, (tmsize_t)pixel_count, sizeof(uint32_t),
-                                          "raster buffer");
+    raster = (uint32_t *)_TIFFCheckMalloc(in, (tmsize_t)pixel_count,
+                                          sizeof(uint32_t), "raster buffer");
     if (raster == 0)
     {
         TIFFError(TIFFFileName(in),

@@ -50,7 +50,8 @@ static void setByteArray(TIFF *tif, void **vpp, const void *vp, size_t nmemb,
     }
     if (vp)
     {
-        tmsize_t bytes = _TIFFMultiplySSize(NULL, (tmsize_t)nmemb, (tmsize_t)elem_size, NULL);
+        tmsize_t bytes = _TIFFMultiplySSize(NULL, (tmsize_t)nmemb,
+                                            (tmsize_t)elem_size, NULL);
         if (bytes)
             *vpp = (void *)_TIFFmallocExt(tif, bytes);
         if (*vpp)
@@ -121,7 +122,8 @@ static void setDoubleArrayOneValue(TIFF *tif, double **vpp, double value,
 {
     if (*vpp)
         _TIFFfreeExt(tif, *vpp);
-    *vpp = (double *)_TIFFmallocExt(tif, (tmsize_t)nmemb * (tmsize_t)sizeof(double));
+    *vpp = (double *)_TIFFmallocExt(tif,
+                                    (tmsize_t)nmemb * (tmsize_t)sizeof(double));
     if (*vpp)
     {
         while (nmemb--)
@@ -704,7 +706,8 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
 
                 new_customValues = (TIFFTagValue *)_TIFFreallocExt(
                     tif, td->td_customValues,
-                    (tmsize_t)(sizeof(TIFFTagValue) * (size_t)(td->td_customValueCount + 1)));
+                    (tmsize_t)(sizeof(TIFFTagValue) *
+                               (size_t)(td->td_customValueCount + 1)));
                 if (!new_customValues)
                 {
                     TIFFErrorExtR(tif, module,

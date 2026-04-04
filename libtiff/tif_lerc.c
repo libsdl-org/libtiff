@@ -433,7 +433,8 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
         use_mask = 1;
     }
 
-    ndims = (int)(td->td_planarconfig == PLANARCONFIG_CONTIG ? nomask_bands : 1);
+    ndims =
+        (int)(td->td_planarconfig == PLANARCONFIG_CONTIG ? nomask_bands : 1);
 
     /* Info returned in infoArray is { version, dataType, nDim/nDepth, nCols,
         nRows, nBands, nValidPixels, blobSize,
@@ -577,21 +578,22 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
             sp->uncompressed_buffer_multiband_alloc = num_bytes_needed;
         }
         lerc_ret = lerc_decode(lerc_data, lerc_data_size, nRequestedMasks,
-                               sp->mask_buffer, (int)nFoundDims, (int)sp->segment_width,
-                               (int)sp->segment_height, (int)nFoundBands, (unsigned int)lerc_data_type,
+                               sp->mask_buffer, (int)nFoundDims,
+                               (int)sp->segment_width, (int)sp->segment_height,
+                               (int)nFoundBands, (unsigned int)lerc_data_type,
                                sp->uncompressed_buffer_multiband);
     }
     else
 #endif
     {
-        lerc_ret =
-            lerc_decode(lerc_data, lerc_data_size,
+        lerc_ret = lerc_decode(
+            lerc_data, lerc_data_size,
 #if LERC_AT_LEAST_VERSION(3, 0, 0)
-                        nRequestedMasks,
+            nRequestedMasks,
 #endif
-                        use_mask ? sp->mask_buffer : NULL, (int)nFoundDims,
-                        (int)sp->segment_width, (int)sp->segment_height, (int)nFoundBands,
-                        (unsigned int)lerc_data_type, sp->uncompressed_buffer);
+            use_mask ? sp->mask_buffer : NULL, (int)nFoundDims,
+            (int)sp->segment_width, (int)sp->segment_height, (int)nFoundBands,
+            (unsigned int)lerc_data_type, sp->uncompressed_buffer);
     }
     if (lerc_ret != 0)
     {
@@ -602,8 +604,8 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
     /* Interleave alpha mask with other samples. */
     if (use_mask && GetLercDataType(tif) == 1)
     {
-        unsigned src_stride =
-            (unsigned int)((td->td_samplesperpixel - 1) * (td->td_bitspersample / 8));
+        unsigned src_stride = (unsigned int)((td->td_samplesperpixel - 1) *
+                                             (td->td_bitspersample / 8));
         unsigned dst_stride =
             (unsigned int)(td->td_samplesperpixel * (td->td_bitspersample / 8));
         unsigned i = sp->segment_width * sp->segment_height;
@@ -705,7 +707,8 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
                 {
                     for (int j = 0; j < td->td_samplesperpixel; j++)
                     {
-                        if (sp->mask_buffer[i + (unsigned int)j * nb_pixels] == 0)
+                        if (sp->mask_buffer[i + (unsigned int)j * nb_pixels] ==
+                            0)
                             ((float *)sp->uncompressed_buffer)[k] = nan_float32;
                         else
                             ((float *)sp->uncompressed_buffer)[k] =
@@ -722,7 +725,8 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
                 {
                     for (int j = 0; j < td->td_samplesperpixel; j++)
                     {
-                        if (sp->mask_buffer[i + (unsigned int)j * nb_pixels] == 0)
+                        if (sp->mask_buffer[i + (unsigned int)j * nb_pixels] ==
+                            0)
                             ((double *)sp->uncompressed_buffer)[k] =
                                 nan_float64;
                         else
@@ -869,7 +873,8 @@ static int LERCPostEncode(TIFF *tif)
         GetLercDataType(tif) == 1)
     {
         const unsigned dst_stride =
-            (unsigned int)((td->td_samplesperpixel - 1) * (td->td_bitspersample / 8));
+            (unsigned int)((td->td_samplesperpixel - 1) *
+                           (td->td_bitspersample / 8));
         const unsigned src_stride =
             (unsigned int)(td->td_samplesperpixel * (td->td_bitspersample / 8));
         unsigned i = 0;
@@ -1106,7 +1111,8 @@ static int LERCPostEncode(TIFF *tif)
 #if LERC_AT_LEAST_VERSION(3, 0, 0)
     if (mask_count > 1)
     {
-        estimated_compressed_size += (unsigned int)(nb_pixels * (unsigned int)mask_count / 8);
+        estimated_compressed_size +=
+            (unsigned int)(nb_pixels * (unsigned int)mask_count / 8);
     }
 #endif
 
@@ -1127,8 +1133,9 @@ static int LERCPostEncode(TIFF *tif)
     {
         lerc_ret = lerc_encodeForVersion(
             sp->uncompressed_buffer_multiband, sp->lerc_version,
-            (unsigned int)GetLercDataType(tif), 1, (int)sp->segment_width, (int)sp->segment_height,
-            (int)dst_nbands, (int)dst_nbands, sp->mask_buffer, sp->maxzerror,
+            (unsigned int)GetLercDataType(tif), 1, (int)sp->segment_width,
+            (int)sp->segment_height, (int)dst_nbands, (int)dst_nbands,
+            sp->mask_buffer, sp->maxzerror,
             (unsigned char *)sp->compressed_buffer, sp->compressed_size,
             &numBytesWritten);
     }
@@ -1136,7 +1143,8 @@ static int LERCPostEncode(TIFF *tif)
 #endif
     {
         lerc_ret = lerc_encodeForVersion(
-            sp->uncompressed_buffer, sp->lerc_version, (unsigned int)GetLercDataType(tif),
+            sp->uncompressed_buffer, sp->lerc_version,
+            (unsigned int)GetLercDataType(tif),
             (int)(td->td_planarconfig == PLANARCONFIG_CONTIG ? dst_nbands : 1),
             (int)sp->segment_width, (int)sp->segment_height, 1,
 #if LERC_AT_LEAST_VERSION(3, 0, 0)

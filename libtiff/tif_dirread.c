@@ -4173,7 +4173,8 @@ static int ByteCountLooksBad(TIFF *tif)
  */
 static bool EvaluateIFDdatasizeReading(TIFF *tif, TIFFDirEntry *dp)
 {
-    const uint64_t data_width = (uint64_t)TIFFDataWidth((TIFFDataType)dp->tdir_type);
+    const uint64_t data_width =
+        (uint64_t)TIFFDataWidth((TIFFDataType)dp->tdir_type);
     if (data_width != 0 && dp->tdir_count > UINT64_MAX / data_width)
     {
         TIFFErrorExtR(tif, "EvaluateIFDdatasizeReading",

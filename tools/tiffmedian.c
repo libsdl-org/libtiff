@@ -207,8 +207,8 @@ int main(int argc, char *argv[])
      * STEP 1:  create empty boxes
      */
     usedboxes = NULL;
-    box_list = freeboxes =
-        (Colorbox *)_TIFFmalloc((tmsize_t)((size_t)num_colors * sizeof(Colorbox)));
+    box_list = freeboxes = (Colorbox *)_TIFFmalloc(
+        (tmsize_t)((size_t)num_colors * sizeof(Colorbox)));
     freeboxes[0].next = &freeboxes[1];
     freeboxes[0].prev = NULL;
     for (i = 1; i < num_colors - 1; ++i)

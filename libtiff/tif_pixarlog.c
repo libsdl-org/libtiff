@@ -379,7 +379,8 @@ static void horizontalAccumulate11(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride]; *op = (uint16_t)(*wp & mask); wp++; op++)
+                REPEAT(stride, *wp += wp[-stride]; *op = (uint16_t)(*wp & mask);
+                       wp++; op++)
                 n -= stride;
             }
         }
@@ -577,7 +578,8 @@ static int PixarLogMakeTables(TIFF *tif, PixarLogState *sp)
     LogK1 = (float)(1. / c); /* if (v >= 2)  token = k1*log(v*k2) */
     LogK2 = (float)(1. / b);
     lt2size = (int)(2. / linstep) + 1;
-    FromLT2 = (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)((unsigned long)lt2size * sizeof(uint16_t)));
+    FromLT2 = (uint16_t *)_TIFFmallocExt(
+        tif, (tmsize_t)((unsigned long)lt2size * sizeof(uint16_t)));
     From14 = (uint16_t *)_TIFFmallocExt(tif, 16384 * sizeof(uint16_t));
     From8 = (uint16_t *)_TIFFmallocExt(tif, 256 * sizeof(uint16_t));
     ToLinearF = (float *)_TIFFmallocExt(tif, TSIZEP1 * sizeof(float));
@@ -846,12 +848,15 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     switch (sp->user_datafmt)
     {
         case PIXARLOGDATAFMT_FLOAT:
-            nsamples = (tmsize_t)((uint64_t)occ / sizeof(float)); /* XXX float == 32 bits */
+            nsamples = (tmsize_t)((uint64_t)occ /
+                                  sizeof(float)); /* XXX float == 32 bits */
             break;
         case PIXARLOGDATAFMT_16BIT:
         case PIXARLOGDATAFMT_12BITPICIO:
         case PIXARLOGDATAFMT_11BITLOG:
-            nsamples = (tmsize_t)((uint64_t)occ / sizeof(uint16_t)); /* XXX uint16_t == 16 bits */
+            nsamples =
+                (tmsize_t)((uint64_t)occ /
+                           sizeof(uint16_t)); /* XXX uint16_t == 16 bits */
             break;
         case PIXARLOGDATAFMT_8BIT:
         case PIXARLOGDATAFMT_8BITABGR:
@@ -1315,12 +1320,14 @@ static int PixarLogEncode(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     switch (sp->user_datafmt)
     {
         case PIXARLOGDATAFMT_FLOAT:
-            n = (tmsize_t)((unsigned long)cc / sizeof(float)); /* XXX float == 32 bits */
+            n = (tmsize_t)((unsigned long)cc /
+                           sizeof(float)); /* XXX float == 32 bits */
             break;
         case PIXARLOGDATAFMT_16BIT:
         case PIXARLOGDATAFMT_12BITPICIO:
         case PIXARLOGDATAFMT_11BITLOG:
-            n = (tmsize_t)((unsigned long)cc / sizeof(uint16_t)); /* XXX uint16_t == 16 bits */
+            n = (tmsize_t)((unsigned long)cc /
+                           sizeof(uint16_t)); /* XXX uint16_t == 16 bits */
             break;
         case PIXARLOGDATAFMT_8BIT:
         case PIXARLOGDATAFMT_8BITABGR:

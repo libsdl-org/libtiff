@@ -68,7 +68,8 @@ static int test(int classictif, int height, int tiled)
     assert(ret);
     ret = (uint64_t)TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
     assert(ret);
-    ret = (uint64_t)TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    ret =
+        (uint64_t)TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     assert(ret);
     if (tiled)
     {
@@ -81,7 +82,8 @@ static int test(int classictif, int height, int tiled)
         {
             unsigned char tilebuffer[256];
             memset(tilebuffer, (unsigned char)j, 256);
-            ret = (uint64_t)TIFFWriteEncodedTile(tif, (uint32_t)j, tilebuffer, 256);
+            ret = (uint64_t)TIFFWriteEncodedTile(tif, (uint32_t)j, tilebuffer,
+                                                 256);
             assert(ret == 256);
         }
     }
@@ -126,7 +128,8 @@ static int test(int classictif, int height, int tiled)
                 {
                     unsigned char tilebuffer[256];
                     memset(tilebuffer, 0, 256);
-                    ret = (uint64_t)TIFFReadEncodedTile(tif, (uint32_t)j, tilebuffer, 256);
+                    ret = (uint64_t)TIFFReadEncodedTile(tif, (uint32_t)j,
+                                                        tilebuffer, 256);
                     assert(ret == 256);
                     if (tilebuffer[0] != expected_c ||
                         tilebuffer[255] != expected_c)
@@ -149,7 +152,8 @@ static int test(int classictif, int height, int tiled)
                     assert(offset != 0);
                     assert(err == 0);
 
-                    size = TIFFGetStrileByteCountWithErr(tif, (uint32_t)j, &err);
+                    size =
+                        TIFFGetStrileByteCountWithErr(tif, (uint32_t)j, &err);
                     (void)size;
                     assert(size == 256);
                     assert(err == 0);
@@ -170,8 +174,8 @@ static int test(int classictif, int height, int tiled)
                     }
 
                     memset(tilebuffer, 0, 256);
-                    ret = (uint64_t)TIFFReadFromUserBuffer(tif, (uint32_t)j, inputbuffer, 256,
-                                                 tilebuffer, 256);
+                    ret = (uint64_t)TIFFReadFromUserBuffer(
+                        tif, (uint32_t)j, inputbuffer, 256, tilebuffer, 256);
                     assert(ret == 1);
                     if (tilebuffer[0] != expected_c ||
                         tilebuffer[255] != expected_c)
@@ -195,7 +199,8 @@ static int test(int classictif, int height, int tiled)
                 for (retry = 0; retry < 2; retry++)
                 {
                     unsigned char c = 0;
-                    ret = (uint64_t)TIFFReadEncodedStrip(tif, (uint32_t)j, &c, 1);
+                    ret =
+                        (uint64_t)TIFFReadEncodedStrip(tif, (uint32_t)j, &c, 1);
                     assert(ret == 1);
                     if (c != expected_c)
                     {
@@ -217,7 +222,8 @@ static int test(int classictif, int height, int tiled)
                     assert(offset != 0);
                     assert(err == 0);
 
-                    size = TIFFGetStrileByteCountWithErr(tif, (uint32_t)j, &err);
+                    size =
+                        TIFFGetStrileByteCountWithErr(tif, (uint32_t)j, &err);
                     (void)size;
                     assert(size == 1);
                     assert(err == 0);
@@ -237,8 +243,8 @@ static int test(int classictif, int height, int tiled)
                         (void)nread;
                     }
                     memset(tilebuffer, 0, 1);
-                    ret = (uint64_t)TIFFReadFromUserBuffer(tif, (uint32_t)j, inputbuffer, 1,
-                                                 tilebuffer, 1);
+                    ret = (uint64_t)TIFFReadFromUserBuffer(
+                        tif, (uint32_t)j, inputbuffer, 1, tilebuffer, 1);
                     assert(ret == 1);
                     if (tilebuffer[0] != expected_c)
                     {
@@ -302,7 +308,8 @@ static int test(int classictif, int height, int tiled)
                 if (height > 1 && height <= 100000)
                 {
                     assert(offsets[1] == offsets[0] + (toff_t)1);
-                    assert(offsets[height - 1] == offsets[0] + (toff_t)(height - 1));
+                    assert(offsets[height - 1] ==
+                           offsets[0] + (toff_t)(height - 1));
                 }
                 assert(bytecounts[height - 1] == 1);
             }

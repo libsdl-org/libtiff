@@ -472,7 +472,8 @@ static int LZWDecode(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
     }
 
     bp = (uint8_t *)tif->tif_rawcp;
-    sp->dec_bitsleft += (((uint64_t)tif->tif_rawcc - (uint64_t)sp->old_tif_rawcc) << 3);
+    sp->dec_bitsleft +=
+        (((uint64_t)tif->tif_rawcc - (uint64_t)sp->old_tif_rawcc) << 3);
     uint64_t dec_bitsleft = sp->dec_bitsleft;
     nbits = sp->lzw_nbits;
     nextdata = sp->lzw_nextdata;
@@ -858,7 +859,8 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
 
     bp = (uint8_t *)tif->tif_rawcp;
 
-    sp->dec_bitsleft += (((uint64_t)tif->tif_rawcc - (uint64_t)sp->old_tif_rawcc) << 3);
+    sp->dec_bitsleft +=
+        (((uint64_t)tif->tif_rawcc - (uint64_t)sp->old_tif_rawcc) << 3);
     uint64_t dec_bitsleft = sp->dec_bitsleft;
 
     nbits = sp->lzw_nbits;

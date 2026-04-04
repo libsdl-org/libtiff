@@ -358,7 +358,8 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         dircount = (uint16_t)dircount64;
         direntrysize = 20;
     }
-    dirmem = _TIFFmalloc((tmsize_t)TIFFSafeMultiply(size_t, dircount, direntrysize));
+    dirmem =
+        _TIFFmalloc((tmsize_t)TIFFSafeMultiply(size_t, dircount, direntrysize));
     if (dirmem == NULL)
     {
         Fatal("No space for TIFF directory");
@@ -840,11 +841,11 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
                 if (lp[1] == 0)
                 {
                     if (lp[0] == 0)
-                        fprintf(fd, "%sNan (%" PRIu32 "/%" PRIu32 ")", sep, lp[0],
-                                lp[1]);
+                        fprintf(fd, "%sNan (%" PRIu32 "/%" PRIu32 ")", sep,
+                                lp[0], lp[1]);
                     else
-                        fprintf(fd, "%sInf (%" PRIu32 "/%" PRIu32 ")", sep, lp[0],
-                                lp[1]);
+                        fprintf(fd, "%sInf (%" PRIu32 "/%" PRIu32 ")", sep,
+                                lp[0], lp[1]);
                 }
                 else
                     fprintf(fd, rationalfmt, sep,

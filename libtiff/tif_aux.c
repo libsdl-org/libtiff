@@ -295,7 +295,8 @@ int TIFFVGetFieldDefaulted(TIFF *tif, uint32_t tag, va_list ap)
         }
         case TIFFTAG_DOTRANGE:
             *va_arg(ap, uint16_t *) = 0;
-            *va_arg(ap, uint16_t *) = (uint16_t)((1 << td->td_bitspersample) - 1);
+            *va_arg(ap, uint16_t *) =
+                (uint16_t)((1 << td->td_bitspersample) - 1);
             return (1);
         case TIFFTAG_INKSET:
             *va_arg(ap, uint16_t *) = INKSET_CMYK;

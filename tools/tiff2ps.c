@@ -1219,23 +1219,25 @@ int psScaleImage(FILE *fd, double scale, int rotation, int center,
             case 0:
                 fprintf(fd, "%f %f translate\n",
                         (left_offset != 0.0) ? left_offset : 0.0,
-                        (bottom_offset != 0.0) ? bottom_offset
-                                      : reqheight - (psheight * scale));
+                        (bottom_offset != 0.0)
+                            ? bottom_offset
+                            : reqheight - (psheight * scale));
                 fprintf(fd, "%f %f scale\n", pswidth * scale, psheight * scale);
                 break;
             case 90:
                 fprintf(fd, "%f %f translate\n",
                         (left_offset != 0.0) ? left_offset : 0.0,
                         (bottom_offset != 0.0) ? bottom_offset
-                                      : reqheight - (pswidth * scale));
+                                               : reqheight - (pswidth * scale));
                 fprintf(fd, "%f %f scale\n1 0 translate 90 rotate\n",
                         psheight * scale, pswidth * scale);
                 break;
             case 180:
                 fprintf(fd, "%f %f translate\n",
                         (left_offset != 0.0) ? left_offset : 0.0,
-                        (bottom_offset != 0.0) ? bottom_offset
-                                      : reqheight - (psheight * scale));
+                        (bottom_offset != 0.0)
+                            ? bottom_offset
+                            : reqheight - (psheight * scale));
                 fprintf(fd, "%f %f scale\n1 1 translate 180 rotate\n",
                         pswidth * scale, psheight * scale);
                 break;
@@ -1243,7 +1245,7 @@ int psScaleImage(FILE *fd, double scale, int rotation, int center,
                 fprintf(fd, "%f %f translate\n",
                         (left_offset != 0.0) ? left_offset : 0.0,
                         (bottom_offset != 0.0) ? bottom_offset
-                                      : reqheight - (pswidth * scale));
+                                               : reqheight - (pswidth * scale));
                 fprintf(fd, "%f %f scale\n0 1 translate 270 rotate\n",
                         psheight * scale, pswidth * scale);
                 break;
@@ -1281,12 +1283,15 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
             {
                 if (pgwidth != 0 || pgheight != 0)
                 {
-                    xscale = reqwidth / ((splitwidth != 0.0) ? splitwidth : pswidth);
-                    yscale = reqheight / ((splitheight != 0.0) ? splitheight : psheight);
+                    xscale =
+                        reqwidth / ((splitwidth != 0.0) ? splitwidth : pswidth);
+                    yscale = reqheight /
+                             ((splitheight != 0.0) ? splitheight : psheight);
                     scale = (xscale < yscale) ? xscale : yscale;
                 }
                 new_width = (splitwidth != 0.0) ? splitwidth : scale * pswidth;
-                new_height = (splitheight != 0.0) ? splitheight : scale * psheight;
+                new_height =
+                    (splitheight != 0.0) ? splitheight : scale * psheight;
                 /* Check for resonable range of double parameters representing
                  * integer values, before casting to int32_t.
                  * On error return(-1). */
@@ -1363,12 +1368,15 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
             {
                 if (pgwidth != 0 || pgheight != 0)
                 {
-                    xscale = reqwidth / ((splitwidth != 0.0) ? splitwidth : pswidth);
-                    yscale = reqheight / ((splitheight != 0.0) ? splitheight : psheight);
+                    xscale =
+                        reqwidth / ((splitwidth != 0.0) ? splitwidth : pswidth);
+                    yscale = reqheight /
+                             ((splitheight != 0.0) ? splitheight : psheight);
                     scale = (xscale < yscale) ? xscale : yscale;
                 }
                 new_width = (splitwidth != 0.0) ? splitwidth : scale * psheight;
-                new_height = (splitheight != 0.0) ? splitheight : scale * pswidth;
+                new_height =
+                    (splitheight != 0.0) ? splitheight : scale * pswidth;
                 /* Check for resonable range of double parameters representing
                  * integer values, before casting to int32_t.
                  * On error return(-1). */
@@ -1611,8 +1619,10 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
                 else /* Image clipped but not scaled */
                     *scale = 1.0;
 
-                view_width = (splitwidth != 0.0) ? splitwidth : *scale * pswidth;
-                view_height = (splitheight != 0.0) ? splitheight : *scale * psheight;
+                view_width =
+                    (splitwidth != 0.0) ? splitwidth : *scale * pswidth;
+                view_height =
+                    (splitheight != 0.0) ? splitheight : *scale * psheight;
             }
             else /* Viewport not clipped to maxPageHeight or maxPageWidth */
             {
@@ -1650,8 +1660,10 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
                 }
                 else /* Image clipped but not scaled */
                     *scale = 1.0;
-                view_width = (splitwidth != 0.0) ? splitwidth : *scale * psheight;
-                view_height = (splitheight != 0.0) ? splitheight : *scale * pswidth;
+                view_width =
+                    (splitwidth != 0.0) ? splitwidth : *scale * psheight;
+                view_height =
+                    (splitheight != 0.0) ? splitheight : *scale * pswidth;
             }
             else /* Viewport not clipped to maxPageHeight or maxPageWidth */
             {
@@ -1683,7 +1695,8 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
         double pw = ((page_width != 0.0) ? page_width : view_width);
         const char *pwStr = ((page_width != 0.0) ? "page_width" : "view_width");
         double ph = ((page_height != 0.0) ? page_height : view_height);
-        const char *phStr = ((page_height != 0.0) ? "page_height" : "view_height");
+        const char *phStr =
+            ((page_height != 0.0) ? "page_height" : "view_height");
         /* Check for resonable range of double parameters representing
          * integer values, before casting to int32_t within PSHead().
          * On error return(-1). */
@@ -1872,8 +1885,8 @@ int TIFF2PS(FILE *fd, TIFF *tif, double pgwidth, double pgheight, double lm,
             tf_bytesperrow = TIFFScanlineSize(tif);
 
             /* Set viewport clipping and scaling options */
-            if ((maxPageHeight != 0.0) || (maxPageWidth != 0.0) || (pgwidth != 0) ||
-                (pgheight != 0))
+            if ((maxPageHeight != 0.0) || (maxPageWidth != 0.0) ||
+                (pgwidth != 0) || (pgheight != 0))
             {
                 if ((maxPageHeight != 0.0) ||
                     (maxPageWidth != 0.0)) /* used -H or -W  option */
@@ -2725,7 +2738,8 @@ void PSpage(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
 
     if ((level2 || level3) && PS_Lvl2page(fd, tif, w, h))
         return;
-    ps_bytesperrow = tf_bytesperrow - (uint32_t)(extrasamples * bitspersample / 8) * w;
+    ps_bytesperrow =
+        tf_bytesperrow - (uint32_t)(extrasamples * bitspersample / 8) * w;
     switch (photometric)
     {
         case PHOTOMETRIC_RGB:
@@ -3329,7 +3343,8 @@ static char *Ascii85Encode(unsigned char *raw)
     static char encoded[6];
     uint32_t word;
 
-    word = (uint32_t)((((raw[0] << 8) + raw[1]) << 16) + (raw[2] << 8) + raw[3]);
+    word =
+        (uint32_t)((((raw[0] << 8) + raw[1]) << 16) + (raw[2] << 8) + raw[3]);
     if (word != 0L)
     {
         uint32_t q;
