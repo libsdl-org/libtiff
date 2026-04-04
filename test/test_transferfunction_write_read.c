@@ -72,7 +72,7 @@ static int setup_transfer_functions(void)
     /* Setup array with some more values to shift start of the three arrays. */
     nSamplesPerTransferFunction = ((uint32_t)1 << bps);
     pTransferFunctionData = (uint16_t *)_TIFFmalloc(
-        3 * (tmsize_t)nSamplesPerTransferFunction * sizeof(uint16_t));
+        (tmsize_t)(3 * (size_t)nSamplesPerTransferFunction * sizeof(uint16_t)));
     if (!pTransferFunctionData)
         return 1;
 
@@ -114,11 +114,11 @@ static int read_check_transferfunctions(TIFF **ptif, const char *filename, int b
     }
     else
     {
-        if (ptfR0 != NULL && !_TIFFmemcmp(ptfx0, ptfR0, nSamplesPerTransferFunction * sizeof(uint16_t)))
+        if (ptfR0 != NULL && !_TIFFmemcmp(ptfx0, ptfR0, (tmsize_t)((size_t)nSamplesPerTransferFunction * sizeof(uint16_t))))
             retval += 1;
-        if (ptfR1 != NULL && !_TIFFmemcmp(ptfx1, ptfR1, nSamplesPerTransferFunction * sizeof(uint16_t)))
+        if (ptfR1 != NULL && !_TIFFmemcmp(ptfx1, ptfR1, (tmsize_t)((size_t)nSamplesPerTransferFunction * sizeof(uint16_t))))
             retval += 2;
-        if (ptfR2 != NULL && !_TIFFmemcmp(ptfx2, ptfR2, nSamplesPerTransferFunction * sizeof(uint16_t)))
+        if (ptfR2 != NULL && !_TIFFmemcmp(ptfx2, ptfR2, (tmsize_t)((size_t)nSamplesPerTransferFunction * sizeof(uint16_t))))
             retval += 4;
     }
 
@@ -229,7 +229,7 @@ static int write_basic_IFD_data(TIFF **ptif, const char *filename, int wrtTransf
     }
 
     /* Setup buffer for image line */
-    bufLen = (size_t)width * spp * (bps + 7) / 8;
+    bufLen = (size_t)width * spp * (size_t)(bps + 7) / 8;
     bufLine = (uint8_t *)_TIFFmalloc((tmsize_t)bufLen);
     if (!bufLine)
     {
