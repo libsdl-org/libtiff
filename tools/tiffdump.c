@@ -255,7 +255,7 @@ static void dump(int fd, uint64_t diroff)
         }
         {
             size_t alloc_size;
-            alloc_size = TIFFSafeMultiply(tmsize_t, (count_visited_dir + 1),
+            alloc_size = TIFFSafeMultiply(size_t, (count_visited_dir + 1),
                                           sizeof(uint64_t));
             if (alloc_size == 0)
             {
@@ -358,13 +358,13 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         dircount = (uint16_t)dircount64;
         direntrysize = 20;
     }
-    dirmem = _TIFFmalloc(TIFFSafeMultiply(tmsize_t, dircount, direntrysize));
+    dirmem = _TIFFmalloc((tmsize_t)TIFFSafeMultiply(size_t, dircount, direntrysize));
     if (dirmem == NULL)
     {
         Fatal("No space for TIFF directory");
         goto done;
     }
-    n = read(fd, (char *)dirmem, dircount * direntrysize);
+    n = (uint32_t)read(fd, (char *)dirmem, dircount * direntrysize);
     if (n != dircount * direntrysize)
     {
         n /= direntrysize;
@@ -445,7 +445,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
             typewidth = 0;
         else
             typewidth = (uint16_t)datawidth[type];
-        datasize = TIFFSafeMultiply(tmsize_t, count, typewidth);
+        datasize = TIFFSafeMultiply(uint64_t, count, typewidth);
         datasizeoverflow = (typewidth > 0 && datasize / typewidth != count);
         datafits = 1;
         datavalptr = (void *)dp;
@@ -479,13 +479,13 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         {
             datatruncated = 1;
             count = 0x10000 / typewidth;
-            datasize = TIFFSafeMultiply(tmsize_t, count, typewidth);
+            datasize = TIFFSafeMultiply(uint64_t, count, typewidth);
         }
         if (count > maxitems)
         {
             datatruncated = 1;
             count = maxitems;
-            datasize = TIFFSafeMultiply(tmsize_t, count, typewidth);
+            datasize = TIFFSafeMultiply(uint64_t, count, typewidth);
         }
 
         /* Values within IFD-buffer 'dirmem' are either 2 byte-aligned for
@@ -507,7 +507,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
                     _TIFFfree(datamem);
                     datamem = NULL;
                 }
-                else if (read(fd, datamem, (unsigned int)datasize) !=
+                else if (read(fd, datamem, (TIFFIOSize_t)datasize) !=
                          (tmsize_t)datasize)
                 {
                     Error("Read error accessing tag %u value", tag);
@@ -837,9 +837,15 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
             uint32_t *lp = (uint32_t *)data;
             while (count-- > 0)
             {
-                if (lp[1] == 0 || !isfinite((double)lp[1]))
-                    fprintf(fd, "%sNan (%" PRIu32 "/%" PRIu32 ")", sep, lp[0],
-                            lp[1]);
+                if (lp[1] == 0)
+                {
+                    if (lp[0] == 0)
+                        fprintf(fd, "%sNan (%" PRIu32 "/%" PRIu32 ")", sep, lp[0],
+                                lp[1]);
+                    else
+                        fprintf(fd, "%sInf (%" PRIu32 "/%" PRIu32 ")", sep, lp[0],
+                                lp[1]);
+                }
                 else
                     fprintf(fd, rationalfmt, sep,
                             (double)lp[0] / (double)lp[1]);

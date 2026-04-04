@@ -67,10 +67,10 @@
 #define MAX_COLOR 256
 
 #define B_DEPTH 5 /* # bits/pixel to use */
-#define B_LEN (1L << B_DEPTH)
+#define B_LEN (1 << B_DEPTH)
 
 #define C_DEPTH 2
-#define C_LEN (1L << C_DEPTH) /* # cells/color to use */
+#define C_LEN (1 << C_DEPTH) /* # cells/color to use */
 
 #define COLOR_SHIFT (COLOR_DEPTH - B_DEPTH)
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
                 dither = 1;
                 break;
             case 'r': /* rows/strip */
-                rowsperstrip = atoi(optarg);
+                rowsperstrip = (uint32_t)atoi(optarg);
                 break;
             case 'h':
                 usage(EXIT_SUCCESS);
@@ -184,14 +184,14 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "%s: Image must have at least 8-bits/sample\n",
                 argv[optind]);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
     if (!TIFFGetField(in, TIFFTAG_PHOTOMETRIC, &photometric) ||
         photometric != PHOTOMETRIC_RGB || samplesperpixel < 3)
     {
         fprintf(stderr, "%s: Image must have RGB data\n", argv[optind]);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
     TIFFGetField(in, TIFFTAG_PLANARCONFIG, &config);
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "%s: Can only handle contiguous data packing\n",
                 argv[optind]);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
 
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
      */
     usedboxes = NULL;
     box_list = freeboxes =
-        (Colorbox *)_TIFFmalloc(num_colors * sizeof(Colorbox));
+        (Colorbox *)_TIFFmalloc((tmsize_t)((size_t)num_colors * sizeof(Colorbox)));
     freeboxes[0].next = &freeboxes[1];
     freeboxes[0].prev = NULL;
     for (i = 1; i < num_colors - 1; ++i)
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
             _TIFFfree(ColorCells[i]);
         }
         _TIFFfree(ColorCells);
-        (void)TIFFClose(in);
+        TIFFClose(in);
         return (EXIT_FAILURE);
     }
 
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
         /*
          * Scale colormap to TIFF-required 16-bit values.
          */
-#define SCALE(x) (((x) * ((1L << 16) - 1)) / 255)
+#define SCALE(x) (((x) * ((1 << 16) - 1)) / 255)
     for (i = 0; i < MAX_CMAP_SIZE; ++i)
     {
         rm[i] = SCALE(rm[i]);
@@ -334,8 +334,8 @@ int main(int argc, char *argv[])
         bm[i] = SCALE(bm[i]);
     }
     TIFFSetField(out, TIFFTAG_COLORMAP, rm, gm, bm);
-    (void)TIFFClose(out);
-    (void)TIFFClose(in);
+    TIFFClose(out);
+    TIFFClose(in);
 
     for (i = 0; i < C_LEN * C_LEN * C_LEN; i++)
     {
@@ -773,14 +773,14 @@ static C_cell *create_colorcell(int red, int green, int blue)
             bm[i] >> (COLOR_DEPTH - C_DEPTH) == ib)
             continue;
         dist = 0;
-        if ((tmp = red - rm[i]) > 0 ||
-            (tmp = rm[i] - (red + MAX_COLOR / C_LEN - 1)) > 0)
+        if ((tmp = (int)(red - rm[i])) > 0 ||
+            (tmp = (int)(rm[i] - (red + MAX_COLOR / C_LEN - 1))) > 0)
             dist += tmp * tmp;
-        if ((tmp = green - gm[i]) > 0 ||
-            (tmp = gm[i] - (green + MAX_COLOR / C_LEN - 1)) > 0)
+        if ((tmp = (int)(green - gm[i])) > 0 ||
+            (tmp = (int)(gm[i] - (green + MAX_COLOR / C_LEN - 1))) > 0)
             dist += tmp * tmp;
-        if ((tmp = blue - bm[i]) > 0 ||
-            (tmp = bm[i] - (blue + MAX_COLOR / C_LEN - 1)) > 0)
+        if ((tmp = (int)(blue - bm[i])) > 0 ||
+            (tmp = (int)(bm[i] - (blue + MAX_COLOR / C_LEN - 1))) > 0)
             dist += tmp * tmp;
         if (dist < mindist)
         {
@@ -849,7 +849,7 @@ static void map_colortable(void)
                     if (d2 < dist)
                     {
                         dist = d2;
-                        *histp = j;
+                        *histp = (uint32_t)j;
                     }
                 }
             }
@@ -959,7 +959,7 @@ static void quant_fsdither(TIFF *local_in, TIFF *local_out)
             GetComponent(*thisptr++, r2, red);
             GetComponent(*thisptr++, g2, green);
             GetComponent(*thisptr++, b2, blue);
-            oval = histogram[r2][g2][b2];
+            oval = (int)histogram[r2][g2][b2];
             if (oval == -1)
             {
                 int ci;
@@ -989,7 +989,7 @@ static void quant_fsdither(TIFF *local_in, TIFF *local_out)
                         oval = cj;
                     }
                 }
-                histogram[r2][g2][b2] = oval;
+                histogram[r2][g2][b2] = (uint32_t)oval;
             }
             *outptr++ = (unsigned char)oval;
             red -= rm[oval];

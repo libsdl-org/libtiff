@@ -144,7 +144,7 @@ static void FillTable(TIFFFaxTabEnt *T, int Size, struct proto *P, int State)
             TIFFFaxTabEnt *E = T + code;
             E->State = (unsigned char)State;
             E->Width = (unsigned char)width;
-            E->Param = param;
+            E->Param = (uint32_t)param;
         }
         P++;
     }

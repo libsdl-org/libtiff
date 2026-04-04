@@ -183,7 +183,7 @@ static const TIFFFieldInfo tiff_field_info[] = {
 
 /* Global parameter for the field array to be passed to extender, which can be
  * changed during runtime. */
-static TIFFFieldInfo *p_tiff_field_info = (TIFFFieldInfo *)tiff_field_info;
+static TIFFFieldInfo *p_tiff_field_info = (TIFFFieldInfo *)&tiff_field_info[0];
 static uint32_t N_tiff_field_info =
     sizeof(tiff_field_info) / sizeof(tiff_field_info[0]);
 

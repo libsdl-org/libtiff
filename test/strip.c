@@ -102,7 +102,7 @@ int read_strips(TIFF *tif, const tdata_t array, const tsize_t size)
             fprintf(stderr, "Can't read strip %" PRIu32 ".\n", strip);
             return -1;
         }
-        if (memcmp(buf, (char *)array + offset, bufsize) != 0)
+        if (memcmp(buf, (char *)array + offset, (size_t)bufsize) != 0)
         {
             fprintf(stderr, "Wrong data read for strip %" PRIu32 ".\n", strip);
             _TIFFfree(buf);

@@ -90,11 +90,13 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wmissing-prototypes
                 -Wswitch-default
                 -Wswitch-enum
+                -Wwrite-strings
+                -Wc99-c11-compat
+                -Wconversion
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wconversion
                 -Wsign-conversion
                 -Wdouble-promotion
                 -Wmisleading-indentation
@@ -107,10 +109,8 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wduplicated-branches
                 -Wduplicated-cond
                 -Wunused-macros
-                -Wc99-c11-compat
                 -Wcast-qual
                 -Wcast-align
-                -Wwrite-strings
                 -Wdangling-else
                 -Wsizeof-array-div
                 -Wsizeof-pointer-div
