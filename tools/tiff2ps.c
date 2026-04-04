@@ -476,7 +476,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if ((pageWidth != 0.0) && (maxPageWidth > pageWidth))
+    if ((fabs(pageWidth) > 0.0) && (maxPageWidth > pageWidth))
     {
         TIFFError("-W", "Max viewport width cannot exceed page width");
         exit(EXIT_FAILURE);
@@ -763,11 +763,11 @@ static void setupPageState(TIFF *tif, uint32_t *pw, uint32_t *ph, double *pprw,
     /* This is a hack to deal with images that have no meaningful Resolution
      * Size but may have x and/or y resolutions of 1 pixel per undefined unit.
      */
-    if ((xres > 1.0F) && (xres != PS_UNIT_SIZE))
+    if ((xres > 1.0F) && (fabsf(xres - PS_UNIT_SIZE) > 0.0F))
         *pprw = (double)PSUNITS(*pw, xres);
     else
         *pprw = (double)PSUNITS(*pw, PS_UNIT_SIZE);
-    if ((yres > 1.0F) && (yres != PS_UNIT_SIZE))
+    if ((yres > 1.0F) && (fabsf(yres - PS_UNIT_SIZE) > 0.0F))
         *pprh = (double)PSUNITS(*ph, yres);
     else
         *pprh = (double)PSUNITS(*ph, PS_UNIT_SIZE);
@@ -829,7 +829,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                 if (imageheight >
                     splitheight) /* More than one vertical image segment */
                 {
-                    if (pagewidth != 0.0)
+                    if (fabs(pagewidth) > 0.0)
                         *ximages = (int)ceil((scale * imagewidth) /
                                              (pagewidth - overlap));
                     else
@@ -840,7 +840,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                 }
                 else
                 {
-                    if (pagewidth != 0.0)
+                    if (fabs(pagewidth) > 0.0)
                         *ximages = (int)ceil(
                             (scale * imagewidth) /
                             (pagewidth - overlap)); /* Max horz pages needed */
@@ -858,7 +858,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                         *ximages = (int)ceil(
                             (scale * imagewidth) /
                             (splitwidth - overlap)); /* Max horz pages needed */
-                        if (pageheight != 0.0)
+                        if (fabs(pageheight) > 0.0)
                             *yimages = (int)ceil(
                                 (scale * imageheight) /
                                 (pageheight -
@@ -869,7 +869,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                     else
                     {
                         *ximages = 1; /* Max vert pages needed */
-                        if (pageheight != 0.0)
+                        if (fabs(pageheight) > 0.0)
                             *yimages = (int)ceil(
                                 (scale * imageheight) /
                                 (pageheight -
@@ -895,7 +895,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                     *yimages = (int)ceil(
                         (scale * imagewidth) /
                         (splitheight - overlap)); /* Max vert pages needed */
-                    if (pagewidth != 0.0)
+                    if (fabs(pagewidth) > 0.0)
                         *ximages = (int)ceil(
                             (scale * imageheight) /
                             (pagewidth - overlap)); /* Max horz pages needed */
@@ -905,7 +905,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                 else
                 {
                     *yimages = 1; /* Max vert pages needed */
-                    if (pagewidth != 0.0)
+                    if (fabs(pagewidth) > 0.0)
                         *ximages = (int)ceil(
                             (scale * imageheight) /
                             (pagewidth - overlap)); /* Max horz pages needed */
@@ -919,7 +919,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                 {
                     if (imageheight > splitwidth)
                     {
-                        if (pageheight != 0.0)
+                        if (fabs(pageheight) > 0.0)
                             *yimages = (int)ceil(
                                 (scale * imagewidth) /
                                 (pageheight -
@@ -932,7 +932,7 @@ static int get_subimage_count(double pagewidth, double pageheight,
                     }
                     else
                     {
-                        if (pageheight != 0.0)
+                        if (fabs(pageheight) > 0.0)
                             *yimages = (int)ceil(
                                 (scale * imagewidth) /
                                 (pageheight -
@@ -1141,7 +1141,7 @@ int exportMaskedImage(FILE *fp, double pagewidth, double pageheight,
 int psRotateImage(FILE *fd, int rotation, double pswidth, double psheight,
                   double left_offset, double bottom_offset)
 {
-    if ((left_offset != 0.0) || (bottom_offset != 0))
+    if ((fabs(left_offset) > 0.0) || (fabs(bottom_offset) > 0.0))
         fprintf(fd, "%f %f translate\n", left_offset, bottom_offset);
 
     /* Exchange width and height for 90/270 rotations */
@@ -1218,24 +1218,24 @@ int psScaleImage(FILE *fd, double scale, int rotation, int center,
         {
             case 0:
                 fprintf(fd, "%f %f translate\n",
-                        (left_offset != 0.0) ? left_offset : 0.0,
-                        (bottom_offset != 0.0)
+                        (fabs(left_offset) > 0.0) ? left_offset : 0.0,
+                        (fabs(bottom_offset) > 0.0)
                             ? bottom_offset
                             : reqheight - (psheight * scale));
                 fprintf(fd, "%f %f scale\n", pswidth * scale, psheight * scale);
                 break;
             case 90:
                 fprintf(fd, "%f %f translate\n",
-                        (left_offset != 0.0) ? left_offset : 0.0,
-                        (bottom_offset != 0.0) ? bottom_offset
+                        (fabs(left_offset) > 0.0) ? left_offset : 0.0,
+                        (fabs(bottom_offset) > 0.0) ? bottom_offset
                                                : reqheight - (pswidth * scale));
                 fprintf(fd, "%f %f scale\n1 0 translate 90 rotate\n",
                         psheight * scale, pswidth * scale);
                 break;
             case 180:
                 fprintf(fd, "%f %f translate\n",
-                        (left_offset != 0.0) ? left_offset : 0.0,
-                        (bottom_offset != 0.0)
+                        (fabs(left_offset) > 0.0) ? left_offset : 0.0,
+                        (fabs(bottom_offset) > 0.0)
                             ? bottom_offset
                             : reqheight - (psheight * scale));
                 fprintf(fd, "%f %f scale\n1 1 translate 180 rotate\n",
@@ -1243,8 +1243,8 @@ int psScaleImage(FILE *fd, double scale, int rotation, int center,
                 break;
             case 270:
                 fprintf(fd, "%f %f translate\n",
-                        (left_offset != 0.0) ? left_offset : 0.0,
-                        (bottom_offset != 0.0) ? bottom_offset
+                        (fabs(left_offset) > 0.0) ? left_offset : 0.0,
+                        (fabs(bottom_offset) > 0.0) ? bottom_offset
                                                : reqheight - (pswidth * scale));
                 fprintf(fd, "%f %f scale\n0 1 translate 270 rotate\n",
                         psheight * scale, pswidth * scale);
@@ -1281,17 +1281,17 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
         case 180:
             if ((splitheight > 0) || (splitwidth > 0))
             {
-                if (pgwidth != 0 || pgheight != 0)
+                if (fabs(pgwidth) > 0.0 || fabs(pgheight) > 0.0)
                 {
                     xscale =
-                        reqwidth / ((splitwidth != 0.0) ? splitwidth : pswidth);
+                        reqwidth / ((fabs(splitwidth) > 0.0) ? splitwidth : pswidth);
                     yscale = reqheight /
-                             ((splitheight != 0.0) ? splitheight : psheight);
+                             ((fabs(splitheight) > 0.0) ? splitheight : psheight);
                     scale = (xscale < yscale) ? xscale : yscale;
                 }
-                new_width = (splitwidth != 0.0) ? splitwidth : scale * pswidth;
+                new_width = (fabs(splitwidth) > 0.0) ? splitwidth : scale * pswidth;
                 new_height =
-                    (splitheight != 0.0) ? splitheight : scale * psheight;
+                    (fabs(splitheight) > 0.0) ? splitheight : scale * psheight;
                 /* Check for resonable range of double parameters representing
                  * integer values, before casting to int32_t.
                  * On error return(-1). */
@@ -1314,7 +1314,7 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
             }
             else /* No viewport defined with -H or -W */
             {
-                if ((pgwidth == 0) && (pgheight == 0)) /* Image not scaled */
+                if (!(fabs(pgwidth) > 0.0) && !(fabs(pgheight) > 0.0)) /* Image not scaled */
                 {
                     /* Check for resonable range of double parameters
                      * representing integer values, before casting to int32_t.
@@ -1366,17 +1366,17 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
         case 270:
             if ((splitheight > 0) || (splitwidth > 0))
             {
-                if (pgwidth != 0 || pgheight != 0)
+                if (fabs(pgwidth) > 0.0 || fabs(pgheight) > 0.0)
                 {
                     xscale =
-                        reqwidth / ((splitwidth != 0.0) ? splitwidth : pswidth);
+                        reqwidth / ((fabs(splitwidth) > 0.0) ? splitwidth : pswidth);
                     yscale = reqheight /
-                             ((splitheight != 0.0) ? splitheight : psheight);
+                             ((fabs(splitheight) > 0.0) ? splitheight : psheight);
                     scale = (xscale < yscale) ? xscale : yscale;
                 }
-                new_width = (splitwidth != 0.0) ? splitwidth : scale * psheight;
+                new_width = (fabs(splitwidth) > 0.0) ? splitwidth : scale * psheight;
                 new_height =
-                    (splitheight != 0.0) ? splitheight : scale * pswidth;
+                    (fabs(splitheight) > 0.0) ? splitheight : scale * pswidth;
                 /* Check for resonable range of double parameters representing
                  * integer values, before casting to int32_t.
                  * On error return(-1). */
@@ -1399,7 +1399,7 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
             }
             else
             {
-                if ((pgwidth == 0) && (pgheight == 0)) /* Image not scaled */
+                if (!(fabs(pgwidth) > 0.0) && !(fabs(pgheight) > 0.0)) /* Image not scaled */
                 {
                     /* Check for resonable range of double parameters
                      * representing integer values, before casting to int32_t.
@@ -1547,7 +1547,7 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
      * maxPageHeight since this makes life way too complicated. */
     if (auto_rotate)
     {
-        if ((splitheight != 0) || (splitwidth != 0))
+        if ((fabs(splitheight) > 0.0) || (fabs(splitwidth) > 0.0))
         {
             TIFFError("psStart",
                       "Auto-rotate is incompatible with page splitting ");
@@ -1558,8 +1558,8 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
         maxsource = (pswidth >= psheight) ? pswidth : psheight;
         maxtarget = (reqwidth >= reqheight) ? reqwidth : reqheight;
 
-        if (((maxsource == pswidth) && (maxtarget != reqwidth)) ||
-            ((maxsource == psheight) && (maxtarget != reqheight)))
+        if (((!(fabs(maxsource - pswidth) > 0.0)) && (fabs(maxtarget - reqwidth) > 0.0)) ||
+            ((!(fabs(maxsource - psheight) > 0.0)) && (fabs(maxtarget - reqheight) > 0.0)))
         { /* optimal orientation does not match input orientation */
             *rotation = 90;
             xscale = (reqwidth - left_offset) / psheight;
@@ -1602,14 +1602,14 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
     {
         case 0:
         case 180:
-            if ((splitheight != 0) || (splitwidth != 0))
+            if ((fabs(splitheight) > 0.0) || (fabs(splitwidth) > 0.0))
             { /* Viewport clipped to maxPageHeight or maxPageWidth */
-                if ((page_width != 0) || (page_height != 0)) /* Image scaled */
+                if ((fabs(page_width) > 0.0) || (fabs(page_height) > 0.0)) /* Image scaled */
                 {
                     xscale = (reqwidth - left_offset) /
-                             ((page_width != 0.0) ? page_width : pswidth);
+                             ((fabs(page_width) > 0.0) ? page_width : pswidth);
                     yscale = (reqheight - bottom_offset) /
-                             ((page_height != 0.0) ? page_height : psheight);
+                             ((fabs(page_height) > 0.0) ? page_height : psheight);
                     *scale = (xscale < yscale) ? xscale : yscale;
                     /*
                     if (*scale > 1.0)
@@ -1620,13 +1620,13 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
                     *scale = 1.0;
 
                 view_width =
-                    (splitwidth != 0.0) ? splitwidth : *scale * pswidth;
+                    (fabs(splitwidth) > 0.0) ? splitwidth : *scale * pswidth;
                 view_height =
-                    (splitheight != 0.0) ? splitheight : *scale * psheight;
+                    (fabs(splitheight) > 0.0) ? splitheight : *scale * psheight;
             }
             else /* Viewport not clipped to maxPageHeight or maxPageWidth */
             {
-                if ((page_width != 0) || (page_height != 0))
+                if ((fabs(page_width) > 0.0) || (fabs(page_height) > 0.0))
                 { /* Image scaled  */
                     xscale = (reqwidth - left_offset) / pswidth;
                     yscale = (reqheight - bottom_offset) / psheight;
@@ -1646,9 +1646,9 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
             break;
         case 90:
         case 270:
-            if ((splitheight != 0) || (splitwidth != 0))
+            if ((fabs(splitheight) > 0.0) || (fabs(splitwidth) > 0.0))
             { /* Viewport clipped to maxPageHeight or maxPageWidth */
-                if ((page_width != 0) || (page_height != 0)) /* Image scaled */
+                if ((fabs(page_width) > 0.0) || (fabs(page_height) > 0.0)) /* Image scaled */
                 {
                     xscale = (reqwidth - left_offset) / psheight;
                     yscale = (reqheight - bottom_offset) / pswidth;
@@ -1661,13 +1661,13 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
                 else /* Image clipped but not scaled */
                     *scale = 1.0;
                 view_width =
-                    (splitwidth != 0.0) ? splitwidth : *scale * psheight;
+                    (fabs(splitwidth) > 0.0) ? splitwidth : *scale * psheight;
                 view_height =
-                    (splitheight != 0.0) ? splitheight : *scale * pswidth;
+                    (fabs(splitheight) > 0.0) ? splitheight : *scale * pswidth;
             }
             else /* Viewport not clipped to maxPageHeight or maxPageWidth */
             {
-                if ((page_width != 0) || (page_height != 0)) /* Image scaled */
+                if ((fabs(page_width) > 0.0) || (fabs(page_height) > 0.0)) /* Image scaled */
                 {
                     xscale = (reqwidth - left_offset) / psheight;
                     yscale = (reqheight - bottom_offset) / pswidth;
@@ -1692,11 +1692,11 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
 
     if (!npages)
     {
-        double pw = ((page_width != 0.0) ? page_width : view_width);
-        const char *pwStr = ((page_width != 0.0) ? "page_width" : "view_width");
-        double ph = ((page_height != 0.0) ? page_height : view_height);
+        double pw = ((fabs(page_width) > 0.0) ? page_width : view_width);
+        const char *pwStr = ((fabs(page_width) > 0.0) ? "page_width" : "view_width");
+        double ph = ((fabs(page_height) > 0.0) ? page_height : view_height);
         const char *phStr =
-            ((page_height != 0.0) ? "page_height" : "view_height");
+            ((fabs(page_height) > 0.0) ? "page_height" : "view_height");
         /* Check for resonable range of double parameters representing
          * integer values, before casting to int32_t within PSHead().
          * On error return(-1). */
@@ -1719,10 +1719,10 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
                  int rotation)
 {
     /* Only one of maxPageHeight or maxPageWidth can be specified */
-    if (maxPageHeight !=
-        0) /* Clip the viewport to maxPageHeight on each page */
+    if (fabs(maxPageHeight) >
+        0.0) /* Clip the viewport to maxPageHeight on each page */
     {
-        if (pgheight != 0 && pgheight < maxPageHeight)
+        if (fabs(pgheight) > 0.0 && pgheight < maxPageHeight)
             *view_height = (double)pgheight * (double)PS_UNIT_SIZE;
         else
             *view_height = (double)maxPageHeight * (double)PS_UNIT_SIZE;
@@ -1733,7 +1733,7 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
     }
     else
     {
-        if (pgheight != 0) /* User has set PageHeight with -h flag */
+        if (fabs(pgheight) > 0.0) /* User has set PageHeight with -h flag */
         {
             *view_height =
                 (double)pgheight *
@@ -1758,9 +1758,9 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
             }
     }
 
-    if (maxPageWidth != 0) /* Clip the viewport to maxPageWidth on each page */
+    if (fabs(maxPageWidth) > 0.0) /* Clip the viewport to maxPageWidth on each page */
     {
-        if (pgwidth != 0 && pgwidth < maxPageWidth)
+        if (fabs(pgwidth) > 0.0 && pgwidth < maxPageWidth)
             *view_width = (double)pgwidth * (double)PS_UNIT_SIZE;
         else
             *view_width = (double)maxPageWidth * (double)PS_UNIT_SIZE;
@@ -1770,7 +1770,7 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
     }
     else
     {
-        if (pgwidth != 0) /* User has set PageWidth with -w flag */
+        if (fabs(pgwidth) > 0.0) /* User has set PageWidth with -w flag */
         {
             *view_width =
                 (double)pgwidth *
@@ -1885,11 +1885,11 @@ int TIFF2PS(FILE *fd, TIFF *tif, double pgwidth, double pgheight, double lm,
             tf_bytesperrow = TIFFScanlineSize(tif);
 
             /* Set viewport clipping and scaling options */
-            if ((maxPageHeight != 0.0) || (maxPageWidth != 0.0) ||
-                (pgwidth != 0) || (pgheight != 0))
+            if ((fabs(maxPageHeight) > 0.0) || (fabs(maxPageWidth) > 0.0) ||
+                (fabs(pgwidth) > 0.0) || (fabs(pgheight) > 0.0))
             {
-                if ((maxPageHeight != 0.0) ||
-                    (maxPageWidth != 0.0)) /* used -H or -W  option */
+                if ((fabs(maxPageHeight) > 0.0) ||
+                    (fabs(maxPageWidth) > 0.0)) /* used -H or -W  option */
                 {
                     if (psMaskImage(fd, tif, rotation_g, center, &npages,
                                     pixwidth, pixheight, left_offset,
@@ -1899,7 +1899,7 @@ int TIFF2PS(FILE *fd, TIFF *tif, double pgwidth, double pgheight, double lm,
                 }
                 else /* N.B. Setting maxPageHeight no longer sets pgheight */
                 {
-                    if (pgwidth != 0 || pgheight != 0)
+                    if (fabs(pgwidth) > 0.0 || fabs(pgheight) > 0.0)
                     {
                         /* User did not specify a maximum page height or width
                          * using -H or -W flag but did use -h or -w flag to

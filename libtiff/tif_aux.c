@@ -404,7 +404,7 @@ uint32_t _TIFFClampDoubleToUInt32(double val)
 {
     if (val < 0)
         return 0;
-    if (val > 0xFFFFFFFFU || val != val)
+    if (val > 0xFFFFFFFFU || isnan(val))
         return 0xFFFFFFFFU;
     return (uint32_t)val;
 }

@@ -1473,7 +1473,7 @@ static int8_t TIFFClampDoubleToInt8(double val)
 {
     if (val > 127)
         return 127;
-    if (val < -128 || val != val)
+    if (val < -128 || isnan(val))
         return -128;
     return (int8_t)val;
 }
@@ -1482,7 +1482,7 @@ static int16_t TIFFClampDoubleToInt16(double val)
 {
     if (val > 32767)
         return 32767;
-    if (val < -32768 || val != val)
+    if (val < -32768 || isnan(val))
         return -32768;
     return (int16_t)val;
 }
@@ -1491,7 +1491,7 @@ static int32_t TIFFClampDoubleToInt32(double val)
 {
     if (val > 0x7FFFFFFF)
         return 0x7FFFFFFF;
-    if (val < -0x7FFFFFFF - 1 || val != val)
+    if (val < -0x7FFFFFFF - 1 || isnan(val))
         return -0x7FFFFFFF - 1;
     return (int32_t)val;
 }
@@ -1500,7 +1500,7 @@ static uint8_t TIFFClampDoubleToUInt8(double val)
 {
     if (val < 0)
         return 0;
-    if (val > 255 || val != val)
+    if (val > 255 || isnan(val))
         return 255;
     return (uint8_t)val;
 }
@@ -1509,7 +1509,7 @@ static uint16_t TIFFClampDoubleToUInt16(double val)
 {
     if (val < 0)
         return 0;
-    if (val > 65535 || val != val)
+    if (val > 65535 || isnan(val))
         return 65535;
     return (uint16_t)val;
 }
@@ -1518,7 +1518,7 @@ static uint32_t TIFFClampDoubleToUInt32(double val)
 {
     if (val < 0)
         return 0;
-    if (val > 0xFFFFFFFFU || val != val)
+    if (val > 0xFFFFFFFFU || isnan(val))
         return 0xFFFFFFFFU;
     return (uint32_t)val;
 }
@@ -2547,7 +2547,7 @@ static int TIFFWriteDirectoryTagCheckedRational(TIFF *tif, uint32_t *ndir,
         TIFFErrorExtR(tif, module, "Negative value is illegal");
         return 0;
     }
-    else if (value != value)
+    else if (isnan(value))
     {
         TIFFErrorExtR(tif, module, "Not-a-number value is illegal");
         return 0;
@@ -2797,7 +2797,8 @@ static void ToRationalEuclideanGCD(double value, int blnUseSignedRange,
      *the double-value of it reaches an integer number without fractional part.
      */
     bigDenom = 1;
-    while ((value != floor(value)) && (value < fMax) && (bigDenom < nMax))
+    while ((fabs(value - floor(value)) > 0.0) && (value < fMax) &&
+           (bigDenom < nMax))
     {
         bigDenom <<= 1;
         value *= 2;
@@ -2889,7 +2890,7 @@ static void DoubleToRational(double value, uint32_t *num, uint32_t *denom)
         return;
     }
     /*-- Check for easy integer numbers -- */
-    if (value == (uint32_t)(value))
+    if (!(fabs(value - (double)(uint32_t)value) > 0.0))
     {
         *num = (uint32_t)value;
         *denom = 1;
@@ -2964,7 +2965,7 @@ static void DoubleToSrational(double value, int32_t *num, int32_t *denom)
         return;
     }
     /*-- Check for easy numbers -- */
-    if (value == (int32_t)(value))
+    if (!(fabs(value - (double)(int32_t)value) > 0.0))
     {
         *num = (int32_t)(neg * value);
         *denom = 1;

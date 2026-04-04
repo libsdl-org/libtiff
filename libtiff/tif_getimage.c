@@ -29,6 +29,7 @@
  */
 #include "tiffiop.h"
 #include <limits.h>
+#include <math.h>
 #include <stdio.h>
 
 static int gtTileContig(TIFFRGBAImage *, uint32_t *, uint32_t, uint32_t);
@@ -2767,8 +2768,8 @@ static int initYCbCrConversion(TIFFRGBAImage *img)
 
     /* Do some validation to avoid later issues. Detect NaN for now */
     /* and also if lumaGreen is zero since we divide by it later */
-    if (luma[0] != luma[0] || luma[1] != luma[1] || luma[1] == 0.0F ||
-        luma[2] != luma[2])
+    if (isnan(luma[0]) || isnan(luma[1]) || !(fabsf(luma[1]) > 0.0F) ||
+        isnan(luma[2]))
     {
         TIFFErrorExtR(img->tif, module,
                       "Invalid values for YCbCrCoefficients tag");
@@ -2800,7 +2801,7 @@ static tileContigRoutine initCIELabConversion(TIFFRGBAImage *img)
     float refWhite[3];
 
     TIFFGetFieldDefaulted(img->tif, TIFFTAG_WHITEPOINT, &whitePoint);
-    if (whitePoint[1] == 0.0f)
+    if (!(fabsf(whitePoint[1]) > 0.0F))
     {
         TIFFErrorExtR(img->tif, module, "Invalid value for WhitePoint tag.");
         return NULL;

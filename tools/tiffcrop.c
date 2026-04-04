@@ -5954,7 +5954,7 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
     }
     else
     {
-        if (((image->xres == 0) || (image->yres == 0)) &&
+        if ((!(fabsf(image->xres) > 0.0F) || !(fabsf(image->yres) > 0.0F)) &&
             (crop->res_unit != RESUNIT_NONE) &&
             ((crop->crop_mode & CROP_REGIONS) ||
              (crop->crop_mode & CROP_MARGINS) ||

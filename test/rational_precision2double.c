@@ -824,7 +824,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
   */
     dblDiffLimit = RATIONAL_EPS;
     retCode = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &auxFloat);
-    dblDiff = auxFloat - auxFloatArrayResolutions[0];
+    dblDiff = (double)auxFloat - (double)auxFloatArrayResolutions[0];
     if (fabs(dblDiff) > fabs(dblDiffLimit))
     {
         fprintf(
@@ -834,7 +834,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
         GOTOFAILURE
     }
     retCode = TIFFGetField(tif, TIFFTAG_YRESOLUTION, &auxFloat);
-    dblDiff = auxFloat - auxFloatArrayResolutions[1];
+    dblDiff = (double)auxFloat - (double)auxFloatArrayResolutions[1];
     if (fabs(dblDiff) > fabs(dblDiffLimit))
     {
         fprintf(
@@ -844,7 +844,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
         GOTOFAILURE
     }
     retCode = TIFFGetField(tif, TIFFTAG_XPOSITION, &auxFloat);
-    dblDiff = auxFloat - auxFloatArrayResolutions[2];
+    dblDiff = (double)auxFloat - (double)auxFloatArrayResolutions[2];
     if (fabs(dblDiff) > fabs(dblDiffLimit))
     {
         fprintf(
@@ -854,7 +854,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
         GOTOFAILURE
     }
     retCode = TIFFGetField(tif, TIFFTAG_YPOSITION, &auxFloat);
-    dblDiff = auxFloat - auxFloatArrayResolutions[3];
+    dblDiff = (double)auxFloat - (double)auxFloatArrayResolutions[3];
     if (fabs(dblDiff) > fabs(dblDiffLimit))
     {
         fprintf(
@@ -880,7 +880,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
      * TIFF_SETGET_FLOAT) with field_bit=FIELD_CUSTOM !! -*/
     /*  - was written with Double but has to be read with Float */
     retCode = TIFFGetField(tif, TIFFTAG_PIXAR_FOVCOT, &auxFloat);
-    if (auxFloat != (float)PIXAR_FOVCOT_VAL)
+    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0F)
     {
         fprintf(
             stderr,
@@ -892,7 +892,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     /*- TIFFTAG_STONITS is a DOUBLE parameter (TIFF_DOUBLE, TIFF_SETGET_DOUBLE)
      * with field_bit=FIELD_CUSTOM!! -*/
     retCode = TIFFGetField(tif, TIFFTAG_STONITS, &auxDouble);
-    if (auxDouble != STONITS_VAL)
+    if (fabs(auxDouble - (double)STONITS_VAL) > 0.0)
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_STONITS %f differs from set value %f\n",
@@ -927,7 +927,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
         dblDiff = auxDblUnion.dbl - BESTQUALITYSCALE_VAL;
         fltDiff = auxDblUnion.flt1 - (float)BESTQUALITYSCALE_VAL;
         if (!((fabs(dblDiff) > fabs(dblDiffLimit)) &&
-              !(fabs(fltDiff) > fabs(dblDiffLimit))))
+              !(fabs((double)fltDiff) > fabs(dblDiffLimit))))
         {
             fprintf(stderr,
                     "Float-Read value of TIFFTAG_BESTQUALITYSCALE %.12f "
@@ -954,7 +954,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
         dblDiff = auxDblUnion.dbl - BASELINEEXPOSURE_VAL;
         fltDiff = auxDblUnion.flt1 - (float)BASELINEEXPOSURE_VAL;
         if (!((fabs(dblDiff) > fabs(dblDiffLimit)) &&
-              !(fabs(fltDiff) > fabs(dblDiffLimit))))
+              !(fabs((double)fltDiff) > fabs(dblDiffLimit))))
         {
             fprintf(stderr,
                     "Float-Read value of TIFFTAG_BASELINEEXPOSURE %.12f "
@@ -978,8 +978,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                (count16 * sizeof(auxFloatArray[0])));
         for (i = 0; i < count16; i++)
         {
-            dblDiffLimit = RATIONAL_EPS * auxFloatArrayN1[i];
-            dblDiff = auxFloatArray[i] - auxFloatArrayN1[i];
+            dblDiffLimit = RATIONAL_EPS * (double)auxFloatArrayN1[i];
+            dblDiff = (double)auxFloatArray[i] - (double)auxFloatArrayN1[i];
             if (fabs(dblDiff) > fabs(dblDiffLimit))
             {
                 fprintf(stderr,
@@ -997,8 +997,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                (count16 * sizeof(auxFloatArray[0])));
         for (i = 0; i < count16; i++)
         {
-            dblDiffLimit = RATIONAL_EPS * auxFloatArrayN1[i];
-            dblDiff = auxFloatArray[i] - auxFloatArrayN1[i];
+            dblDiffLimit = RATIONAL_EPS * (double)auxFloatArrayN1[i];
+            dblDiff = (double)auxFloatArray[i] - (double)auxFloatArrayN1[i];
             if (fabs(dblDiff) > fabs(dblDiffLimit))
             {
                 fprintf(stderr,
@@ -1153,7 +1153,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                              * values, which are not treated within LibTiff!!
                              */
                             if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
-                                  auxFloat == -1.0))
+                                  !(fabsf(auxFloat - (-1.0F)) > 0.0F)))
                             {
                                 fprintf(stderr,
                                         "%d:Read value of %s %f differs from "
@@ -1218,7 +1218,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                              * of "-1.0" if numerator equals 4294967295
                              * (0xFFFFFFFF) to indicate infinite distance! */
                             if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
-                                  auxDouble == -1.0))
+                                  !(fabs(auxDouble - (-1.0)) > 0.0)))
                             {
                                 fprintf(stderr,
                                         "%d:Read value of %s %f differs from "
@@ -1306,8 +1306,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                                     dblDiffLimit = 1e-6;
                                 for (j = 0; j < auxInt32; j++)
                                 {
-                                    dblDiff = auxFloatArray[j] -
-                                              auxFloatArrayW[i + j];
+                                    dblDiff = (double)auxFloatArray[j] -
+                                              (double)auxFloatArrayW[i + j];
                                     if (fabs(dblDiff) > fabs(dblDiffLimit))
                                     {
                                         /*if (auxFloatArray[j] !=

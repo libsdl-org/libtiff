@@ -970,7 +970,7 @@ static
     int ui;
 
     /* check for NaN */
-    if (u != u || v != v)
+    if (isnan(u) || isnan(v))
     {
         u = U_NEU;
         v = V_NEU;

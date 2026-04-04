@@ -699,7 +699,7 @@ static double correlation(void *buf1, void *buf2, uint32_t n_elem,
     M2 /= n_elem;
     D1 -= M1 * M1 * n_elem;
     D2 -= M2 * M2 * n_elem;
-    if (D1 * D2 == 0.0)
+    if (!(fabs(D1 * D2) > 0.0))
         return 0.0; /* avoid divide by zero */
     K = (K - M1 * M2 * n_elem) / sqrt(D1 * D2);
 

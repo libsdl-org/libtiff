@@ -97,6 +97,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Warith-conversion
                 -Wdouble-promotion
                 -Wfloat-conversion
+                -Wfloat-equal
         )
     endif()
     if(broken-warnings)
@@ -121,7 +122,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wmissing-declarations
                 -Wredundant-decls
                 -Wno-int-to-pointer-cast
-                -Wfloat-equal
                 -Wunreachable-code)
     endif()
     if(fatal-warnings)

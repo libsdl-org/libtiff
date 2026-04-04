@@ -32,6 +32,7 @@
  */
 
 #include "Lerc_c_api.h"
+#include <math.h>
 #include "zlib.h"
 #ifdef ZSTD_SUPPORT
 #include "zstd.h"
@@ -930,7 +931,7 @@ static int LERCPostEncode(TIFF *tif)
                     {
                         const float val = ((float *)sp->uncompressed_buffer)[k];
                         ++k;
-                        if (val != val)
+                        if (isnan(val))
                         {
                             ++count_nan;
                         }
@@ -951,7 +952,7 @@ static int LERCPostEncode(TIFF *tif)
                 for (i = 0; i < nb_pixels; i++)
                 {
                     const float val = ((float *)sp->uncompressed_buffer)[i];
-                    if (val != val)
+                    if (isnan(val))
                     {
                         use_mask = 1;
                         break;
@@ -972,7 +973,7 @@ static int LERCPostEncode(TIFF *tif)
                         const double val =
                             ((double *)sp->uncompressed_buffer)[k];
                         ++k;
-                        if (val != val)
+                        if (isnan(val))
                         {
                             ++count_nan;
                         }
@@ -993,7 +994,7 @@ static int LERCPostEncode(TIFF *tif)
                 for (i = 0; i < nb_pixels; i++)
                 {
                     const double val = ((double *)sp->uncompressed_buffer)[i];
-                    if (val != val)
+                    if (isnan(val))
                     {
                         use_mask = 1;
                         break;
@@ -1035,7 +1036,7 @@ static int LERCPostEncode(TIFF *tif)
                                 [i + (unsigned int)j * nb_pixels] = val;
                             ++k;
                             sp->mask_buffer[i + (unsigned int)j * nb_pixels] =
-                                (val == val) ? 255 : 0;
+                                !isnan(val) ? 255 : 0;
                         }
                     }
                 }
@@ -1051,7 +1052,7 @@ static int LERCPostEncode(TIFF *tif)
                                 [i + (unsigned int)j * nb_pixels] = val;
                             ++k;
                             sp->mask_buffer[i + (unsigned int)j * nb_pixels] =
-                                (val == val) ? 255 : 0;
+                                !isnan(val) ? 255 : 0;
                         }
                     }
                 }
@@ -1071,7 +1072,7 @@ static int LERCPostEncode(TIFF *tif)
                     {
                         const float val =
                             ((float *)sp->uncompressed_buffer)[i * dst_nbands];
-                        sp->mask_buffer[i] = (val == val) ? 255 : 0;
+                        sp->mask_buffer[i] = !isnan(val) ? 255 : 0;
                     }
                 }
                 else
@@ -1080,7 +1081,7 @@ static int LERCPostEncode(TIFF *tif)
                     {
                         const double val =
                             ((double *)sp->uncompressed_buffer)[i * dst_nbands];
-                        sp->mask_buffer[i] = (val == val) ? 255 : 0;
+                        sp->mask_buffer[i] = !isnan(val) ? 255 : 0;
                     }
                 }
             }
@@ -1091,7 +1092,7 @@ static int LERCPostEncode(TIFF *tif)
                     for (i = 0; i < nb_pixels; i++)
                     {
                         const float val = ((float *)sp->uncompressed_buffer)[i];
-                        sp->mask_buffer[i] = (val == val) ? 255 : 0;
+                        sp->mask_buffer[i] = !isnan(val) ? 255 : 0;
                     }
                 }
                 else
@@ -1100,7 +1101,7 @@ static int LERCPostEncode(TIFF *tif)
                     {
                         const double val =
                             ((double *)sp->uncompressed_buffer)[i];
-                        sp->mask_buffer[i] = (val == val) ? 255 : 0;
+                        sp->mask_buffer[i] = !isnan(val) ? 255 : 0;
                     }
                 }
             }

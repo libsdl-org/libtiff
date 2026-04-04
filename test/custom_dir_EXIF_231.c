@@ -1041,7 +1041,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_PIXAR_FOVCOT");
     }
-    if (auxFloat != (float)PIXAR_FOVCOT_VAL)
+    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0F)
     {
         fprintf(
             stderr,
@@ -1056,7 +1056,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_BESTQUALITYSCALE");
     }
-    if (auxFloat != (float)BESTQUALITYSCALE_VAL)
+    if (fabsf(auxFloat - (float)BESTQUALITYSCALE_VAL) > 0.0F)
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_BESTQUALITYSCALE %f differs from set "
@@ -1070,7 +1070,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_BASELINENOISE");
     }
-    if (auxDblUnion.flt1 != (float)BESTQUALITYSCALE_VAL)
+    if (fabsf(auxDblUnion.flt1 - (float)BESTQUALITYSCALE_VAL) > 0.0F)
     {
         fprintf(stderr,
                 "Read float value of TIFFTAG_BASELINENOISE %f differs from set "
@@ -1606,8 +1606,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                      * six other cases where the denominator indicates special
                      * values, which are not treated within LibTiff!!
                      */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
-                          auxFloat == -1.0f))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && !(fabsf(auxFloat - (-1.0F)) > 0.0F)))
                     {
                         fprintf(stderr,
                                 "%d:Read value of %s %f differs from set value "
@@ -1671,7 +1670,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     /*--: EXIFTAG_SUBJECTDISTANCE: LibTiff returns value of
                      * "-1.0" if numerator equals 4294967295 (0xFFFFFFFF) to
                      * indicate infinite distance! */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && auxDouble == -1.0))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && !(fabs(auxDouble - (-1.0)) > 0.0)))
                     {
                         fprintf(stderr,
                                 "%d:Read value of %s %f differs from set value "
