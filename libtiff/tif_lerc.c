@@ -614,7 +614,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
         {
             i--;
             sp->uncompressed_buffer[i * dst_stride + td->td_samplesperpixel -
-                                    1] = 255 * sp->mask_buffer[i];
+                                    1] = (uint8_t)(255 * sp->mask_buffer[i]);
             memcpy(sp->uncompressed_buffer + i * dst_stride,
                    sp->uncompressed_buffer + i * src_stride, src_stride);
         }
@@ -623,7 +623,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
         {
             i--;
             sp->uncompressed_buffer[i * dst_stride + td->td_samplesperpixel -
-                                    1] = 255 * sp->mask_buffer[i];
+                                    1] = (uint8_t)(255 * sp->mask_buffer[i]);
             memmove(sp->uncompressed_buffer + i * dst_stride,
                     sp->uncompressed_buffer + i * src_stride, src_stride);
         }

@@ -568,7 +568,7 @@ static void initScale(void)
     src0 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
     src1 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
     src2 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
-    rowoff = (uint32_t *)_TIFFmalloc(sizeof(uint32_t) * tnw);
+    rowoff = (uint32_t *)_TIFFmalloc((tmsize_t)(sizeof(uint32_t) * tnw));
     filterWidth = 0;
     stepDstWidth = stepSrcWidth = 0;
     setupBitsTables();
@@ -601,7 +601,7 @@ static void setupStepTables(uint32_t sw)
             rowoff[x] = sx0 >> 3;
             fw = (int)(sx - sx0); /* width */
             b = (fw < 8) ? (uint8_t)(0xff << (8 - fw)) : (uint8_t)0xff;
-            src0[x] = b >> (sx0 & 7);
+            src0[x] = (uint8_t)(b >> (sx0 & 7));
             fw -= (int)(8 - (sx0 & 7));
             if (fw < 0)
                 fw = 0;

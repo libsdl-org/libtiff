@@ -280,11 +280,11 @@ static void newfilename(void)
      * start from 0 every 676 times (provided by lastTurn)
      * this keeps us within a-z boundaries
      */
-    fpnt[1] = (char)((fnum - lastTurn) / 26) + 'a';
+    fpnt[1] = (char)((fnum - lastTurn) / 26 + 'a');
     /*
      * cycle last letter every file, from a-z, then repeat
      */
-    fpnt[2] = (char)(fnum % 26) + 'a';
+    fpnt[2] = (char)(fnum % 26 + 'a');
     fpnt[3] = '\0'; /* ensure proper termination */
     fnum++;
 }

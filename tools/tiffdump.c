@@ -479,7 +479,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         if (datasizeoverflow || datasize > 0x10000)
         {
             datatruncated = 1;
-            count = 0x10000 / typewidth;
+            count = (uint64_t)(0x10000 / typewidth);
             datasize = TIFFSafeMultiply(uint64_t, count, typewidth);
         }
         if (count > maxitems)

@@ -797,7 +797,7 @@ static int OJPEGPreDecodeSkipRaw(TIFF *tif)
     {
         if (jpeg_read_raw_data_encap(sp, &(sp->libjpeg_jpeg_decompress_struct),
                                      sp->subsampling_convert_ycbcrimage,
-                                     sp->subsampling_ver * 8) == 0)
+                                     (uint32_t)(sp->subsampling_ver * 8)) == 0)
             return (0);
         m -= sp->subsampling_convert_clines;
     }
@@ -805,7 +805,7 @@ static int OJPEGPreDecodeSkipRaw(TIFF *tif)
     {
         if (jpeg_read_raw_data_encap(sp, &(sp->libjpeg_jpeg_decompress_struct),
                                      sp->subsampling_convert_ycbcrimage,
-                                     sp->subsampling_ver * 8) == 0)
+                                     (uint32_t)(sp->subsampling_ver * 8)) == 0)
             return (0);
         sp->subsampling_convert_state = m;
     }
@@ -913,7 +913,7 @@ static int OJPEGDecodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc)
             if (jpeg_read_raw_data_encap(sp,
                                          &(sp->libjpeg_jpeg_decompress_struct),
                                          sp->subsampling_convert_ycbcrimage,
-                                         sp->subsampling_ver * 8) == 0)
+                                         (uint32_t)(sp->subsampling_ver * 8)) == 0)
             {
                 sp->error_in_raw_data_decoding = 1;
                 return (0);
@@ -1225,7 +1225,7 @@ static int OJPEGReadHeaderInfo(TIFF *tif)
             TIFFErrorExtR(tif, module, "Invalid subsampling values");
             return (0);
         }
-        if (sp->strile_length % (sp->subsampling_ver * 8) != 0)
+        if (sp->strile_length % (uint32_t)(sp->subsampling_ver * 8) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "Incompatible vertical subsampling and image "
@@ -1233,9 +1233,9 @@ static int OJPEGReadHeaderInfo(TIFF *tif)
             return (0);
         }
         sp->restart_interval =
-            (uint16_t)(((sp->strile_width + sp->subsampling_hor * 8 - 1) /
-                        (sp->subsampling_hor * 8)) *
-                       (sp->strile_length / (sp->subsampling_ver * 8)));
+            (uint16_t)(((sp->strile_width + (uint32_t)(sp->subsampling_hor * 8) - 1) /
+                        (uint32_t)(sp->subsampling_hor * 8)) *
+                       (sp->strile_length / (uint32_t)(sp->subsampling_ver * 8)));
     }
     if (OJPEGReadHeaderInfoSec(tif) == 0)
         return (0);
@@ -1365,9 +1365,9 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
                 UINT32_MAX - (uint32_t)(sp->subsampling_hor * 8 - 1))
                 return (0);
             sp->subsampling_convert_ylinelen =
-                ((sp->strile_width + sp->subsampling_hor * 8 - 1) /
-                 (sp->subsampling_hor * 8) * sp->subsampling_hor * 8);
-            sp->subsampling_convert_ylines = sp->subsampling_ver * 8;
+                ((sp->strile_width + (uint32_t)(sp->subsampling_hor * 8) - 1) /
+                 (uint32_t)(sp->subsampling_hor * 8) * (uint32_t)(sp->subsampling_hor * 8));
+            sp->subsampling_convert_ylines = (uint32_t)(sp->subsampling_ver * 8);
             sp->subsampling_convert_clinelen =
                 sp->subsampling_convert_ylinelen / sp->subsampling_hor;
             sp->subsampling_convert_clines = 8;
@@ -1405,7 +1405,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
                 3 + sp->subsampling_convert_ylines +
                 2 * sp->subsampling_convert_clines;
             sp->subsampling_convert_ycbcrimage = (uint8_t **)_TIFFmallocExt(
-                tif, sp->subsampling_convert_ycbcrimagelen * sizeof(uint8_t *));
+                tif, (tmsize_t)((size_t)sp->subsampling_convert_ycbcrimagelen * sizeof(uint8_t *)));
             if (sp->subsampling_convert_ycbcrimage == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
@@ -1571,7 +1571,7 @@ static int OJPEGReadHeaderInfoSec(TIFF *tif)
                     return (0);
                 }
                 if (n > 2)
-                    OJPEGReadSkip(sp, n - 2);
+                    OJPEGReadSkip(sp, (uint16_t)(n - 2));
                 break;
             case JPEG_MARKER_DRI:
                 if (OJPEGReadHeaderInfoSecStreamDri(tif) == 0)
@@ -1671,10 +1671,10 @@ static int OJPEGReadHeaderInfoSecStreamDqt(TIFF *tif)
         return (0);
     }
     if (sp->subsamplingcorrect != 0)
-        OJPEGReadSkip(sp, m - 2);
+        OJPEGReadSkip(sp, (uint16_t)(m - 2));
     else
     {
-        m -= 2;
+        m = (uint16_t)(m - 2);
         do
         {
             if (m < 65)
@@ -1709,7 +1709,7 @@ static int OJPEGReadHeaderInfoSecStreamDqt(TIFF *tif)
             if (sp->qtable[o] != 0)
                 _TIFFfreeExt(tif, sp->qtable[o]);
             sp->qtable[o] = nb;
-            m -= 65;
+            m = (uint16_t)(m - 65);
         } while (m > 0);
     }
     return (1);
@@ -1737,11 +1737,11 @@ static int OJPEGReadHeaderInfoSecStreamDht(TIFF *tif)
     }
     if (sp->subsamplingcorrect != 0)
     {
-        OJPEGReadSkip(sp, m - 2);
+        OJPEGReadSkip(sp, (uint16_t)(m - 2));
     }
     else
     {
-        na = sizeof(uint32_t) + 2 + m;
+        na = (uint32_t)(sizeof(uint32_t) + 2 + m);
         nb = (uint8_t *)_TIFFmallocExt(tif, na);
         if (nb == 0)
         {
@@ -1753,7 +1753,7 @@ static int OJPEGReadHeaderInfoSecStreamDht(TIFF *tif)
         nb[sizeof(uint32_t) + 1] = JPEG_MARKER_DHT;
         nb[sizeof(uint32_t) + 2] = (uint8_t)(m >> 8);
         nb[sizeof(uint32_t) + 3] = (uint8_t)(m & 255);
-        if (OJPEGReadBlock(sp, m - 2, &nb[sizeof(uint32_t) + 4]) == 0)
+        if (OJPEGReadBlock(sp, (uint16_t)(m - 2), &nb[sizeof(uint32_t) + 4]) == 0)
         {
             _TIFFfreeExt(tif, nb);
             return (0);
@@ -1821,7 +1821,7 @@ static int OJPEGReadHeaderInfoSecStreamSof(TIFF *tif, uint8_t marker_id)
             TIFFErrorExtR(tif, module, "Corrupt SOF marker in JPEG data");
         return (0);
     }
-    m -= 8;
+    m = (uint16_t)(m - 8);
     if (m % 3 != 0)
     {
         if (sp->subsamplingcorrect == 0)
@@ -2110,7 +2110,7 @@ static int OJPEGReadHeaderInfoSecTablesDcTable(TIFF *tif)
             q = 0;
             for (n = 0; n < 16; n++)
                 q += o[n];
-            ra = sizeof(uint32_t) + 21 + q;
+            ra = (uint32_t)(sizeof(uint32_t) + 21 + q);
             rb = (uint8_t *)_TIFFmallocExt(tif, ra);
             if (rb == 0)
             {
@@ -2180,7 +2180,7 @@ static int OJPEGReadHeaderInfoSecTablesAcTable(TIFF *tif)
             q = 0;
             for (n = 0; n < 16; n++)
                 q += o[n];
-            ra = sizeof(uint32_t) + 21 + q;
+            ra = (uint32_t)(sizeof(uint32_t) + 21 + q);
             rb = (uint8_t *)_TIFFmallocExt(tif, ra);
             if (rb == 0)
             {
@@ -2372,8 +2372,8 @@ static int OJPEGReadBlock(OJPEGState *sp, uint16_t len, void *mem)
             n = sp->in_buffer_togo;
         _TIFFmemcpy(mmem, sp->in_buffer_cur, n);
         sp->in_buffer_cur += n;
-        sp->in_buffer_togo -= n;
-        mlen -= n;
+        sp->in_buffer_togo = (uint16_t)(sp->in_buffer_togo - n);
+        mlen = (uint16_t)(mlen - n);
         mmem += n;
     } while (mlen > 0);
     return (1);
@@ -2388,8 +2388,8 @@ static void OJPEGReadSkip(OJPEGState *sp, uint16_t len)
     if (n > sp->in_buffer_togo)
         n = sp->in_buffer_togo;
     sp->in_buffer_cur += n;
-    sp->in_buffer_togo -= n;
-    m -= n;
+    sp->in_buffer_togo = (uint16_t)(sp->in_buffer_togo - n);
+    m = (uint16_t)(m - n);
     if (m > 0)
     {
         assert(sp->in_buffer_togo == 0);
@@ -2658,7 +2658,7 @@ static void OJPEGWriteStreamRst(TIFF *tif, void **mem, uint32_t *len)
     OJPEGState *sp = (OJPEGState *)tif->tif_data;
     assert(OJPEG_BUFFER >= 2);
     sp->out_buffer[0] = 255;
-    sp->out_buffer[1] = JPEG_MARKER_RST0 + sp->restart_index;
+    sp->out_buffer[1] = (uint8_t)(JPEG_MARKER_RST0 + sp->restart_index);
     sp->restart_index++;
     if (sp->restart_index == 8)
         sp->restart_index = 0;

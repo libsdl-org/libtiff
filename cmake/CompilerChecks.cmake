@@ -94,6 +94,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wc99-c11-compat
                 -Wconversion
                 -Wsign-conversion
+                -Warith-conversion
         )
     endif()
     if(broken-warnings)
@@ -104,7 +105,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wunused-local-typedefs
                 -Wunused-parameter
                 -Wuninitialized
-                -Warith-conversion
                 -Wbool-operation
                 -Wduplicated-branches
                 -Wduplicated-cond

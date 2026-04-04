@@ -235,7 +235,7 @@ static int LogL16Decode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             {               /* non-run */
                 rc = *bp++; /* nul is noop */
                 while (--cc && rc-- && i < npixels)
-                    tp[i++] |= (int16_t)*bp++ << shft;
+                    tp[i++] |= (int16_t)((int16_t)*bp++ << shft);
             }
         }
         if (i != npixels)

@@ -141,14 +141,15 @@ static int fsdither(TIFF *in, TIFF *out)
                 bit = 0x80;
             }
             if (!lastpixel)
-                thisptr[0] += (short)(v * 7 / 16);
+                thisptr[0] = (short)(thisptr[0] + v * 7 / 16);
             if (!lastline)
             {
                 if (j != 0)
-                    nextptr[-1] += (short)(v * 3 / 16);
-                *nextptr++ += (short)(v * 5 / 16);
+                    nextptr[-1] = (short)(nextptr[-1] + v * 3 / 16);
+                *nextptr = (short)(*nextptr + v * 5 / 16);
+                nextptr++;
                 if (!lastpixel)
-                    nextptr[0] += (short)(v / 16);
+                    nextptr[0] = (short)(nextptr[0] + v / 16);
             }
         }
         if (TIFFWriteScanline(out, outline, i, 0) < 0)

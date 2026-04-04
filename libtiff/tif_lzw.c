@@ -72,7 +72,7 @@ typedef size_t WordType;
 #define CODE_EOI 257   /* end-of-information code */
 #define CODE_FIRST 258 /* first free code entry */
 #define CODE_MAX MAXCODE(BITS_MAX)
-#define HSIZE 9001L /* 91% occupancy */
+#define HSIZE 9001 /* 91% occupancy */
 #define HSHIFT (13 - 8)
 #ifdef LZW_COMPAT
 /* NB: +1024 is for compatibility with old files */
@@ -509,7 +509,7 @@ code_below_256:
         goto error_code;
     free_entp->next = oldcodep;
     free_entp->firstchar = oldcodep->firstchar;
-    free_entp->length = oldcodep->length + 1;
+    free_entp->length = (uint16_t)(oldcodep->length + 1);
     free_entp->value = (uint8_t)code;
     free_entp->repeated =
         (bool)(oldcodep->repeated & (oldcodep->value == code));
@@ -557,7 +557,7 @@ code_above_or_equal_to_258:
     free_entp->next = oldcodep;
 
     free_entp->firstchar = oldcodep->firstchar;
-    free_entp->length = oldcodep->length + 1;
+    free_entp->length = (uint16_t)(oldcodep->length + 1);
     if (++free_entp > maxcodep)
     {
         if (++nbits > BITS_MAX) /* should not happen for a conformant encoder */
@@ -927,7 +927,7 @@ static int LZWDecodeCompat(TIFF *tif, uint8_t *op0, tmsize_t occ0, uint16_t s)
             return (0);
         }
         free_entp->firstchar = free_entp->next->firstchar;
-        free_entp->length = free_entp->next->length + 1;
+        free_entp->length = (uint16_t)(free_entp->next->length + 1);
         free_entp->value =
             (codep < free_entp) ? codep->firstchar : free_entp->firstchar;
         if (++free_entp > maxcodep)

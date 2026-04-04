@@ -1172,8 +1172,8 @@ void t2p_validate(T2P *t2p)
         }
         if (t2p->pdf_defaultcompressionquality % 100 != 0)
         {
-            t2p->pdf_defaultcompressionquality /= 100;
-            t2p->pdf_defaultcompressionquality *= 100;
+            t2p->pdf_defaultcompressionquality = (uint16_t)(t2p->pdf_defaultcompressionquality / 100);
+            t2p->pdf_defaultcompressionquality = (uint16_t)(t2p->pdf_defaultcompressionquality * 100);
             TIFFError(TIFF2PDF_MODULE,
                       "PNG Group predictor differencing not implemented, "
                       "assuming compression quality %" PRIu16,
@@ -1227,7 +1227,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
         t2p->t2p_error = T2P_ERR_ERROR;
         return;
     }
-    _TIFFmemset(t2p->tiff_pages, 0x00, directorycount * sizeof(T2P_PAGE));
+    _TIFFmemset(t2p->tiff_pages, 0x00, (tmsize_t)(directorycount * sizeof(T2P_PAGE)));
     t2p->tiff_tiles = (T2P_TILES *)_TIFFmalloc(
         TIFFSafeMultiply(tmsize_t, directorycount, sizeof(T2P_TILES)));
     if (t2p->tiff_tiles == NULL)
@@ -1239,7 +1239,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
         t2p->t2p_error = T2P_ERR_ERROR;
         return;
     }
-    _TIFFmemset(t2p->tiff_tiles, 0x00, directorycount * sizeof(T2P_TILES));
+    _TIFFmemset(t2p->tiff_tiles, 0x00, (tmsize_t)(directorycount * sizeof(T2P_TILES)));
     for (i = 0; i < directorycount; i++)
     {
         uint32_t subfiletype = 0;
@@ -1783,7 +1783,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
                 t2p->pdf_palette[(i * 3) + 2] =
                     (unsigned char)(b[i] >> palette_shift);
             }
-            t2p->pdf_palettesize *= 3;
+            t2p->pdf_palettesize = (uint16_t)(t2p->pdf_palettesize * 3);
             break;
         case PHOTOMETRIC_SEPARATED:
             if (TIFFGetField(input, TIFFTAG_INDEXED, &xuint16))
@@ -1869,7 +1869,7 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
                 t2p->pdf_palette[(i * 4) + 2] = (unsigned char)(b[i] >> 8);
                 t2p->pdf_palette[(i * 4) + 3] = (unsigned char)(a[i] >> 8);
             }
-            t2p->pdf_palettesize *= 4;
+            t2p->pdf_palettesize = (uint16_t)(t2p->pdf_palettesize * 4);
             break;
         case PHOTOMETRIC_YCBCR:
             t2p->pdf_colorspace = T2P_CS_RGB;
@@ -4226,8 +4226,8 @@ int t2p_process_jpeg_strip(unsigned char *strip, tsize_t *striplength,
                         if ((samp & 0x0f) > v_samp)
                             v_samp = (samp & 0x0f);
                     }
-                    v_samp *= 8;
-                    h_samp *= 8;
+                    v_samp = (uint16_t)(v_samp * 8);
+                    h_samp = (uint16_t)(h_samp * 8);
                     buffer[*bufferoffset + 5] =
                         (unsigned char)((height >> 8) & 0xff);
                     buffer[*bufferoffset + 6] = (unsigned char)(height & 0xff);
@@ -4370,7 +4370,7 @@ tsize_t t2p_sample_realize_palette(T2P *t2p, unsigned char *buffer)
 
     for (i = sample_count; i > 0; i--)
     {
-        palette_offset = buffer[i - 1] * component_count;
+        palette_offset = (uint32_t)(buffer[i - 1] * component_count);
         sample_offset = (i - 1) * component_count;
         if (palette_offset + component_count > t2p->pdf_palettesize)
         {
@@ -4445,9 +4445,9 @@ tsize_t t2p_sample_rgba_to_rgb(tdata_t data, uint32_t samplecount)
     {
         sample = ((uint32_t *)data)[i];
         alpha = (uint8_t)((255 - ((sample >> 24) & 0xff)));
-        ((uint8_t *)data)[i * 3 + 2] = (uint8_t)((sample >> 16) & 0xff) + alpha;
-        ((uint8_t *)data)[i * 3 + 1] = (uint8_t)((sample >> 8) & 0xff) + alpha;
-        ((uint8_t *)data)[i * 3] = (uint8_t)(sample & 0xff) + alpha;
+        ((uint8_t *)data)[i * 3 + 2] = (uint8_t)(((sample >> 16) & 0xff) + alpha);
+        ((uint8_t *)data)[i * 3 + 1] = (uint8_t)(((sample >> 8) & 0xff) + alpha);
+        ((uint8_t *)data)[i * 3] = (uint8_t)((sample & 0xff) + alpha);
     }
 
     return (i * 3);

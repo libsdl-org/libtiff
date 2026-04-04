@@ -241,7 +241,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     }
     for (i = 0; i < N_SIZE; i++)
     {
-        auxShortArrayW[i] = (short)(i + 1) * 7;
+        auxShortArrayW[i] = (short)((i + 1) * 7);
     }
     for (i = 0; i < N_SIZE; i++)
     {
