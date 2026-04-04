@@ -93,11 +93,11 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wwrite-strings
                 -Wc99-c11-compat
                 -Wconversion
+                -Wsign-conversion
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
-                -Wsign-conversion
                 -Wdouble-promotion
                 -Wmisleading-indentation
                 -Wmissing-include-dirs
