@@ -393,9 +393,9 @@ int TIFFGetFieldDefaulted(TIFF *tif, uint32_t tag, ...)
 
 float _TIFFClampDoubleToFloat(double val)
 {
-    if (val > FLT_MAX)
+    if (val > (double)FLT_MAX)
         return FLT_MAX;
-    if (val < -FLT_MAX)
+    if (val < -(double)FLT_MAX)
         return -FLT_MAX;
     return (float)val;
 }

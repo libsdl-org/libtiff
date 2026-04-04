@@ -1062,7 +1062,7 @@ TIFFReadDirEntryFloat(TIFF *tif, TIFFDirEntry *direntry, float *value)
             err = TIFFReadDirEntryCheckedDouble(tif, direntry, &m);
             if (err != TIFFReadDirEntryErrOk)
                 return (err);
-            if ((m > FLT_MAX) || (m < -FLT_MAX))
+            if ((m > (double)FLT_MAX) || (m < -(double)FLT_MAX))
                 return (TIFFReadDirEntryErrRange);
             *value = (float)m;
             return (TIFFReadDirEntryErrOk);
@@ -3016,10 +3016,10 @@ TIFFReadDirEntryFloatArray(TIFF *tif, TIFFDirEntry *direntry, float **value)
             for (n = 0; n < count; n++)
             {
                 double val = *ma++;
-                if (val > FLT_MAX)
-                    val = FLT_MAX;
-                else if (val < -FLT_MAX)
-                    val = -FLT_MAX;
+                if (val > (double)FLT_MAX)
+                    val = (double)FLT_MAX;
+                else if (val < -(double)FLT_MAX)
+                    val = -(double)FLT_MAX;
                 *mb++ = (float)val;
             }
         }
@@ -6593,7 +6593,7 @@ static int TIFFFetchNormalTag(TIFF *tif, TIFFDirEntry *dp, int recover)
             {
                 if (!EvaluateIFDdatasizeReading(tif, dp))
                     return 0;
-                if (!TIFFSetField(tif, dp->tdir_tag, data))
+                if (!TIFFSetField(tif, dp->tdir_tag, (double)data))
                     return (0);
             }
         }

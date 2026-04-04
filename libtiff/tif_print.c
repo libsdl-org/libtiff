@@ -118,10 +118,10 @@ static void _TIFFPrintField(FILE *fd, const TIFFField *fip,
             if (tv_size == 8)
                 fprintf(fd, "%lf", ((double *)raw_data)[j]);
             else
-                fprintf(fd, "%f", ((float *)raw_data)[j]);
+                fprintf(fd, "%f", (double)((float *)raw_data)[j]);
         }
         else if (fip->field_type == TIFF_FLOAT)
-            fprintf(fd, "%f", ((float *)raw_data)[j]);
+            fprintf(fd, "%f", (double)((float *)raw_data)[j]);
         else if (fip->field_type == TIFF_LONG8)
             fprintf(fd, "%" PRIu64, ((uint64_t *)raw_data)[j]);
         else if (fip->field_type == TIFF_SLONG8)
@@ -193,8 +193,8 @@ static int _TIFFPrettyPrintField(TIFF *tif, const TIFFField *fip, FILE *fd,
         case TIFFTAG_WHITEPOINT:
             if (value_count == 2 && fip->field_type == TIFF_RATIONAL)
             {
-                fprintf(fd, "  White Point: %g-%g\n", ((float *)raw_data)[0],
-                        ((float *)raw_data)[1]);
+                fprintf(fd, "  White Point: %g-%g\n", (double)((float *)raw_data)[0],
+                        (double)((float *)raw_data)[1]);
                 return 1;
             }
             return 0;
@@ -288,8 +288,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
     }
     if (TIFFFieldSet(tif, FIELD_RESOLUTION))
     {
-        fprintf(fd, "  Resolution: %g, %g", td->td_xresolution,
-                td->td_yresolution);
+        fprintf(fd, "  Resolution: %g, %g", (double)td->td_xresolution,
+                (double)td->td_yresolution);
         if (TIFFFieldSet(tif, FIELD_RESOLUTIONUNIT))
         {
             switch (td->td_resolutionunit)
@@ -312,7 +312,7 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
         fprintf(fd, "\n");
     }
     if (TIFFFieldSet(tif, FIELD_POSITION))
-        fprintf(fd, "  Position: %g, %g\n", td->td_xposition, td->td_yposition);
+        fprintf(fd, "  Position: %g, %g\n", (double)td->td_xposition, (double)td->td_yposition);
     if (TIFFFieldSet(tif, FIELD_BITSPERSAMPLE))
         fprintf(fd, "  Bits/Sample: %" PRIu16 "\n", td->td_bitspersample);
     if (TIFFFieldSet(tif, FIELD_SAMPLEFORMAT))
@@ -576,8 +576,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
         fprintf(fd, "  Reference Black/White:\n");
         for (i = 0; i < 3; i++)
             fprintf(fd, "    %2d: %5g %5g\n", i,
-                    td->td_refblackwhite[2 * i + 0],
-                    td->td_refblackwhite[2 * i + 1]);
+                    (double)td->td_refblackwhite[2 * i + 0],
+                    (double)td->td_refblackwhite[2 * i + 1]);
     }
     if (TIFFFieldSet(tif, FIELD_TRANSFERFUNCTION) &&
         td->td_transferfunction[0] &&

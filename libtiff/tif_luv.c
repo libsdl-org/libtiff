@@ -855,7 +855,7 @@ static void L16fromY(LogLuvState *sp, uint8_t *op, tmsize_t n)
     float *yp = (float *)op;
 
     while (n-- > 0)
-        *l16++ = (int16_t)(LogL16fromY(*yp++, sp->encode_meth));
+        *l16++ = (int16_t)(LogL16fromY((double)*yp++, sp->encode_meth));
 }
 
 #if !LOGLUV_PUBLIC
@@ -866,9 +866,9 @@ static
 {
     double r, g, b;
     /* assume CCIR-709 primaries */
-    r = 2.690 * xyz[0] + -1.276 * xyz[1] + -0.414 * xyz[2];
-    g = -1.022 * xyz[0] + 1.978 * xyz[1] + 0.044 * xyz[2];
-    b = 0.061 * xyz[0] + -0.224 * xyz[1] + 1.163 * xyz[2];
+    r = 2.690 * (double)xyz[0] + -1.276 * (double)xyz[1] + -0.414 * (double)xyz[2];
+    g = -1.022 * (double)xyz[0] + 1.978 * (double)xyz[1] + 0.044 * (double)xyz[2];
+    b = 0.061 * (double)xyz[0] + -0.224 * (double)xyz[1] + 1.163 * (double)xyz[2];
     /* assume 2.0 gamma for speed */
     /* could use integer sqrt approx., but this is probably faster */
     rgb[0] = (uint8_t)((r <= 0.) ? 0 : (r >= 1.) ? 255 : (int)(256. * sqrt(r)));
@@ -919,13 +919,13 @@ static int oog_encode(double u, double v) /* encode out-of-gamut chroma */
             eps[i] = 2.;
         for (vi = UV_NVS; vi--;)
         {
-            va = UV_VSTART + (vi + .5) * UV_SQSIZ;
+            va = (double)UV_VSTART + ((double)vi + .5) * (double)UV_SQSIZ;
             ustep = uv_row[vi].nus - 1;
             if (vi == UV_NVS - 1 || vi == 0 || ustep <= 0)
                 ustep = 1;
             for (ui = uv_row[vi].nus - 1; ui >= 0; ui -= ustep)
             {
-                ua = uv_row[vi].ustart + (ui + .5) * UV_SQSIZ;
+                ua = (double)uv_row[vi].ustart + ((double)ui + .5) * (double)UV_SQSIZ;
                 ang = uv2ang(ua, va);
                 i = (int)ang;
                 epsa = fabs(ang - (i + .5));
@@ -976,14 +976,14 @@ static
         v = V_NEU;
     }
 
-    if (v < UV_VSTART)
+    if ((double)v < (double)UV_VSTART)
         return oog_encode(u, v);
-    vi = (unsigned int)tiff_itrunc((v - UV_VSTART) * (1. / UV_SQSIZ), em);
+    vi = (unsigned int)tiff_itrunc(((double)v - (double)UV_VSTART) * (1. / (double)UV_SQSIZ), em);
     if (vi >= UV_NVS)
         return oog_encode(u, v);
-    if (u < uv_row[vi].ustart)
+    if ((double)u < (double)uv_row[vi].ustart)
         return oog_encode(u, v);
-    ui = tiff_itrunc((u - uv_row[vi].ustart) * (1. / UV_SQSIZ), em);
+    ui = tiff_itrunc(((double)u - (double)uv_row[vi].ustart) * (1. / (double)UV_SQSIZ), em);
     if (ui >= uv_row[vi].nus)
         return oog_encode(u, v);
 
@@ -1020,8 +1020,8 @@ static
     }
     vi = lower;
     ui = c - uv_row[vi].ncum;
-    *up = uv_row[vi].ustart + (ui + .5) * UV_SQSIZ;
-    *vp = UV_VSTART + (vi + .5) * UV_SQSIZ;
+    *up = (double)uv_row[vi].ustart + ((double)ui + .5) * (double)UV_SQSIZ;
+    *vp = (double)UV_VSTART + ((double)vi + .5) * (double)UV_SQSIZ;
     return (0);
 }
 
@@ -1065,9 +1065,9 @@ static
     int Le, Ce;
     double u, v, s;
     /* encode luminance */
-    Le = LogL10fromY(XYZ[1], em);
+    Le = LogL10fromY((double)XYZ[1], em);
     /* encode color */
-    s = XYZ[0] + 15. * XYZ[1] + 3. * XYZ[2];
+    s = (double)XYZ[0] + 15. * (double)XYZ[1] + 3. * (double)XYZ[2];
     if (!Le || s <= 0.)
     {
         u = U_NEU;
@@ -1075,8 +1075,8 @@ static
     }
     else
     {
-        u = 4. * XYZ[0] / s;
-        v = 9. * XYZ[1] / s;
+        u = 4. * (double)XYZ[0] / s;
+        v = 9. * (double)XYZ[1] / s;
     }
     Ce = uv_encode(u, v, em);
     if (Ce < 0) /* never happens */
@@ -1208,9 +1208,9 @@ static
     unsigned int Le, ue, ve;
     double u, v, s;
     /* encode luminance */
-    Le = (unsigned int)LogL16fromY(XYZ[1], em);
+    Le = (unsigned int)LogL16fromY((double)XYZ[1], em);
     /* encode color */
-    s = XYZ[0] + 15. * XYZ[1] + 3. * XYZ[2];
+    s = (double)XYZ[0] + 15. * (double)XYZ[1] + 3. * (double)XYZ[2];
     if (!Le || s <= 0.)
     {
         u = U_NEU;
@@ -1218,8 +1218,8 @@ static
     }
     else
     {
-        u = 4. * XYZ[0] / s;
-        v = 9. * XYZ[1] / s;
+        u = 4. * (double)XYZ[0] / s;
+        v = 9. * (double)XYZ[1] / s;
     }
     if (u <= 0.)
         ue = 0;

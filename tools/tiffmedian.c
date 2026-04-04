@@ -118,6 +118,9 @@ static int processCompressOptions(char *);
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 
 int main(int argc, char *argv[])
 {
@@ -314,10 +317,10 @@ int main(int argc, char *argv[])
     CopyField(TIFFTAG_MINSAMPLEVALUE, shortv);
     CopyField(TIFFTAG_MAXSAMPLEVALUE, shortv);
     CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
-    CopyField(TIFFTAG_XRESOLUTION, floatv);
-    CopyField(TIFFTAG_YRESOLUTION, floatv);
-    CopyField(TIFFTAG_XPOSITION, floatv);
-    CopyField(TIFFTAG_YPOSITION, floatv);
+    CopyFieldFloat(TIFFTAG_XRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_YRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_XPOSITION, floatv);
+    CopyFieldFloat(TIFFTAG_YPOSITION, floatv);
 
     if (dither)
         quant_fsdither(in, out);

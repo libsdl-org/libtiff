@@ -47,9 +47,12 @@
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 
 #ifndef howmany
-#define howmany(x, y) (((x) + ((y)-1)) / (y))
+#define howmany(x, y) (((uint32_t)(x) + (uint32_t)(y) - 1U) / (uint32_t)(y))
 #endif
 #define roundup(x, y) (howmany(x, y) * ((uint32_t)(y)))
 
@@ -170,7 +173,7 @@ static float *setupLuma(float c)
 
 static unsigned V2Code(float f, float RB, float RW, int CR)
 {
-    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5);
+    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5F);
     return (c > 255 ? 255 : c);
 }
 
@@ -355,8 +358,8 @@ static int tiffcvt(TIFF *in, TIFF *out)
     CopyField(TIFFTAG_FILLORDER, shortv);
     TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, 3);
-    CopyField(TIFFTAG_XRESOLUTION, floatv);
-    CopyField(TIFFTAG_YRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_XRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_YRESOLUTION, floatv);
     CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     {

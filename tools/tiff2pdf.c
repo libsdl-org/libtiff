@@ -5135,19 +5135,19 @@ tsize_t t2p_write_pdf_page(uint32_t object, T2P *t2p, TIFF *output)
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) " 0 R \n", 6, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) "/MediaBox [", 11, mod, written);
-    buflen = snprintf(buffer, sizeof(buffer), "%.4f", t2p->pdf_mediabox.x1);
+    buflen = snprintf(buffer, sizeof(buffer), "%.4f", (double)t2p->pdf_mediabox.x1);
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) " ", 1, mod, written);
-    buflen = snprintf(buffer, sizeof(buffer), "%.4f", t2p->pdf_mediabox.y1);
+    buflen = snprintf(buffer, sizeof(buffer), "%.4f", (double)t2p->pdf_mediabox.y1);
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) " ", 1, mod, written);
-    buflen = snprintf(buffer, sizeof(buffer), "%.4f", t2p->pdf_mediabox.x2);
+    buflen = snprintf(buffer, sizeof(buffer), "%.4f", (double)t2p->pdf_mediabox.x2);
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) " ", 1, mod, written);
-    buflen = snprintf(buffer, sizeof(buffer), "%.4f", t2p->pdf_mediabox.y2);
+    buflen = snprintf(buffer, sizeof(buffer), "%.4f", (double)t2p->pdf_mediabox.y2);
     check_snprintf_ret(t2p, buflen, buffer);
     add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
     add_t2pWriteFile_check(output, (tdata_t) "] \n", 3, mod, written);
@@ -5267,9 +5267,9 @@ void t2p_compose_pdf_page(T2P *t2p)
         t2p->pdf_xres = t2p->pdf_defaultxres;
         t2p->pdf_yres = t2p->pdf_defaultyres;
     }
-    if (t2p->pdf_xres == 0.0)
+    if (t2p->pdf_xres == 0.0F)
         t2p->pdf_xres = t2p->pdf_defaultxres;
-    if (t2p->pdf_yres == 0.0)
+    if (t2p->pdf_yres == 0.0F)
         t2p->pdf_yres = t2p->pdf_defaultyres;
     if (t2p->pdf_image_fillpage)
     {
@@ -5648,8 +5648,9 @@ tsize_t t2p_write_pdf_page_content_stream(T2P *t2p, TIFF *output)
                 buffer, sizeof(buffer),
                 "q %s %.4f %.4f %.4f %.4f %.4f %.4f cm /Im%" PRIu16 "_%" PRIu32
                 " Do Q\n",
-                t2p->tiff_transferfunctioncount ? "/GS1 gs " : "", box.mat[0],
-                box.mat[1], box.mat[3], box.mat[4], box.mat[6], box.mat[7],
+                t2p->tiff_transferfunctioncount ? "/GS1 gs " : "",
+                (double)box.mat[0], (double)box.mat[1], (double)box.mat[3],
+                (double)box.mat[4], (double)box.mat[6], (double)box.mat[7],
                 (uint16_t)(t2p->pdf_page + 1u), i + 1u);
             check_snprintf_ret(t2p, buflen, buffer);
             written += t2p_write_pdf_stream(buffer, buflen, output);
@@ -5661,8 +5662,9 @@ tsize_t t2p_write_pdf_page_content_stream(T2P *t2p, TIFF *output)
         buflen = snprintf(
             buffer, sizeof(buffer),
             "q %s %.4f %.4f %.4f %.4f %.4f %.4f cm /Im%" PRIu16 " Do Q\n",
-            t2p->tiff_transferfunctioncount ? "/GS1 gs " : "", box.mat[0],
-            box.mat[1], box.mat[3], box.mat[4], box.mat[6], box.mat[7],
+            t2p->tiff_transferfunctioncount ? "/GS1 gs " : "",
+            (double)box.mat[0], (double)box.mat[1], (double)box.mat[3],
+            (double)box.mat[4], (double)box.mat[6], (double)box.mat[7],
             (uint16_t)(t2p->pdf_page + 1u));
         check_snprintf_ret(t2p, buflen, buffer);
         written += t2p_write_pdf_stream(buffer, buflen, output);
@@ -5864,8 +5866,8 @@ tsize_t t2p_write_pdf_xobject_cs(T2P *t2p, TIFF *output)
         Y_W = t2p->tiff_whitechromaticities[1];
         Z_W = 1.0F - (X_W + Y_W);
         normalizePoint(X_W, Y_W, Z_W);
-        buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n", X_W,
-                          Y_W, Z_W);
+        buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n",
+                          (double)X_W, (double)Y_W, (double)Z_W);
         check_snprintf_ret(t2p, buflen, buffer);
         add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
         add_t2pWriteFile_check(output, (tdata_t) "/Range ", 7, mod, written);
@@ -6044,8 +6046,8 @@ tsize_t t2p_write_pdf_xobject_calcs(T2P *t2p, TIFF *output)
     {
         add_t2pWriteFile_check(output, (tdata_t) "/WhitePoint ", 12, mod,
                                written);
-        buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n", X_W,
-                          Y_W, Z_W);
+        buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n",
+                          (double)X_W, (double)Y_W, (double)Z_W);
         check_snprintf_ret(t2p, buflen, buffer);
         add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
         add_t2pWriteFile_check(output, (tdata_t) "/Gamma 2.2 \n", 12, mod,
@@ -6055,14 +6057,16 @@ tsize_t t2p_write_pdf_xobject_calcs(T2P *t2p, TIFF *output)
     {
         add_t2pWriteFile_check(output, (tdata_t) "/WhitePoint ", 12, mod,
                                written);
-        buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n", X_W,
-                          Y_W, Z_W);
+        buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n",
+                          (double)X_W, (double)Y_W, (double)Z_W);
         check_snprintf_ret(t2p, buflen, buffer);
         add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
         add_t2pWriteFile_check(output, (tdata_t) "/Matrix ", 8, mod, written);
         buflen = snprintf(buffer, sizeof(buffer),
                           "[%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f] \n",
-                          X_R, Y_R, Z_R, X_G, Y_G, Z_G, X_B, Y_B, Z_B);
+                          (double)X_R, (double)Y_R, (double)Z_R, (double)X_G,
+                          (double)Y_G, (double)Z_G, (double)X_B, (double)Y_B,
+                          (double)Z_B);
         check_snprintf_ret(t2p, buflen, buffer);
         add_t2pWriteFile_check(output, (tdata_t)buffer, buflen, mod, written);
         add_t2pWriteFile_check(output, (tdata_t) "/Gamma [2.2 2.2 2.2] \n", 22,

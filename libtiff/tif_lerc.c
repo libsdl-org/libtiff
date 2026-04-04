@@ -652,7 +652,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
             }
             else
             {
-                const double nan_float64 = nan_float32;
+                const double nan_float64 = (double)nan_float32;
                 for (i = 0; i < nb_pixels; i++)
                 {
                     if (sp->mask_buffer[i] == 0)
@@ -680,7 +680,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
             }
             else
             {
-                const double nan_float64 = nan_float32;
+                const double nan_float64 = (double)nan_float32;
                 for (i = 0; i < nb_pixels; i++)
                 {
                     for (int j = 0; j < td->td_samplesperpixel; j++)
@@ -720,7 +720,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
             }
             else
             {
-                const double nan_float64 = nan_float32;
+                const double nan_float64 = (double)nan_float32;
                 for (i = 0; i < nb_pixels; i++)
                 {
                     for (int j = 0; j < td->td_samplesperpixel; j++)

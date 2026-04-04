@@ -1726,6 +1726,9 @@ static void usage(int code)
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 #define CopyField2(tag, v1, v2)                                                \
     if (TIFFGetField(in, tag, &v1, &v2))                                       \
     TIFFSetField(out, tag, v1, v2)
@@ -1774,7 +1777,7 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             if (count == 1)
             {
                 float floatv;
-                CopyField(tag, floatv);
+                CopyFieldFloat(tag, floatv);
             }
             else if (count == (uint16_t)-1)
             {
@@ -5994,13 +5997,13 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
                 (crop->res_unit == RESUNIT_CENTIMETER))
             {
                 x1 = _TIFFClampDoubleToUInt32(crop->corners[i].X1 * scale *
-                                              xres);
+                                              (double)xres);
                 x2 = _TIFFClampDoubleToUInt32(crop->corners[i].X2 * scale *
-                                              xres);
+                                              (double)xres);
                 y1 = _TIFFClampDoubleToUInt32(crop->corners[i].Y1 * scale *
-                                              yres);
+                                              (double)yres);
                 y2 = _TIFFClampDoubleToUInt32(crop->corners[i].Y2 * scale *
-                                              yres);
+                                              (double)yres);
             }
             else
             {
@@ -6118,10 +6121,10 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
         }
         else
         { /* inches or centimeters specified */
-            tmargin = _TIFFClampDoubleToUInt32(crop->margins[0] * scale * yres);
-            lmargin = _TIFFClampDoubleToUInt32(crop->margins[1] * scale * xres);
-            bmargin = _TIFFClampDoubleToUInt32(crop->margins[2] * scale * yres);
-            rmargin = _TIFFClampDoubleToUInt32(crop->margins[3] * scale * xres);
+            tmargin = _TIFFClampDoubleToUInt32(crop->margins[0] * scale * (double)yres);
+            lmargin = _TIFFClampDoubleToUInt32(crop->margins[1] * scale * (double)xres);
+            bmargin = _TIFFClampDoubleToUInt32(crop->margins[2] * scale * (double)yres);
+            rmargin = _TIFFClampDoubleToUInt32(crop->margins[3] * scale * (double)xres);
         }
 
         if (lmargin == 0xFFFFFFFFU || rmargin == 0xFFFFFFFFU ||
@@ -6167,13 +6170,13 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
     else
     {
         if (crop->crop_mode & CROP_WIDTH)
-            width = _TIFFClampDoubleToUInt32(crop->width * scale * image->xres);
+            width = _TIFFClampDoubleToUInt32(crop->width * scale * (double)image->xres);
         else
             width = image->width - lmargin - rmargin;
 
         if (crop->crop_mode & CROP_LENGTH)
             length =
-                _TIFFClampDoubleToUInt32(crop->length * scale * image->yres);
+                _TIFFClampDoubleToUInt32(crop->length * scale * (double)image->yres);
         else
             length = image->length - tmargin - bmargin;
     }
@@ -6710,9 +6713,9 @@ static int computeOutputPixelOffsets(struct crop_mask *crop,
         ilength = image->length;
 
     if (page->hres <= 1.0)
-        page->hres = image->xres;
+        page->hres = (double)image->xres;
     if (page->vres <= 1.0)
-        page->vres = image->yres;
+        page->vres = (double)image->yres;
 
     if ((page->hres < 1.0) || (page->vres < 1.0))
     {
@@ -8630,8 +8633,8 @@ static int writeSingleSection(TIFF *in, TIFF *out, struct image_data *image,
         CopyTag(p->tag, p->count, p->type);
 
     /* Update these since they are overwritten from input res by loop above */
-    TIFFSetField(out, TIFFTAG_XRESOLUTION, (float)hres);
-    TIFFSetField(out, TIFFTAG_YRESOLUTION, (float)vres);
+    TIFFSetField(out, TIFFTAG_XRESOLUTION, hres);
+    TIFFSetField(out, TIFFTAG_YRESOLUTION, vres);
 
     /* Compute the tile or strip dimensions and write to disk */
     if (outtiled)

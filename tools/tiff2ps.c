@@ -736,10 +736,10 @@ static void setupPageState(TIFF *tif, uint32_t *pw, uint32_t *ph, double *pprw,
      * Calculate printable area.
      */
     if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) ||
-        fabs(xres) < 0.0000001)
+        fabs((double)xres) < 0.0000001)
         xres = PS_UNIT_SIZE;
     if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) ||
-        fabs(yres) < 0.0000001)
+        fabs((double)yres) < 0.0000001)
         yres = PS_UNIT_SIZE;
     switch (res_unit)
     {
@@ -763,14 +763,14 @@ static void setupPageState(TIFF *tif, uint32_t *pw, uint32_t *ph, double *pprw,
     /* This is a hack to deal with images that have no meaningful Resolution
      * Size but may have x and/or y resolutions of 1 pixel per undefined unit.
      */
-    if ((xres > 1.0) && (xres != PS_UNIT_SIZE))
-        *pprw = PSUNITS(*pw, xres);
+    if ((xres > 1.0F) && (xres != PS_UNIT_SIZE))
+        *pprw = (double)PSUNITS(*pw, xres);
     else
-        *pprw = PSUNITS(*pw, PS_UNIT_SIZE);
-    if ((yres > 1.0) && (yres != PS_UNIT_SIZE))
-        *pprh = PSUNITS(*ph, yres);
+        *pprw = (double)PSUNITS(*pw, PS_UNIT_SIZE);
+    if ((yres > 1.0F) && (yres != PS_UNIT_SIZE))
+        *pprh = (double)PSUNITS(*ph, yres);
     else
-        *pprh = PSUNITS(*ph, PS_UNIT_SIZE);
+        *pprh = (double)PSUNITS(*ph, PS_UNIT_SIZE);
 }
 
 static int isCCITTCompression(TIFF *tif)
@@ -808,11 +808,11 @@ static int get_subimage_count(double pagewidth, double pageheight,
     double splitwidth = 0;  /* Requested Max Width in points */
     double overlap = 0;     /* Repeated edge width in points */
 
-    splitheight = maxPageHeight * PS_UNIT_SIZE;
-    splitwidth = maxPageWidth * PS_UNIT_SIZE;
-    overlap = splitOverlap * PS_UNIT_SIZE;
-    pagewidth *= PS_UNIT_SIZE;
-    pageheight *= PS_UNIT_SIZE;
+    splitheight = (double)maxPageHeight * (double)PS_UNIT_SIZE;
+    splitwidth = (double)maxPageWidth * (double)PS_UNIT_SIZE;
+    overlap = (double)splitOverlap * (double)PS_UNIT_SIZE;
+    pagewidth *= (double)PS_UNIT_SIZE;
+    pageheight *= (double)PS_UNIT_SIZE;
 
     if ((imagewidth < 1.0) || (imageheight < 1.0))
     {
@@ -976,9 +976,9 @@ int exportMaskedImage(FILE *fp, double pagewidth, double pageheight,
     double overlap = 0;     /* Repeated edge width in points */
     double subimage_height = 0.0;
 
-    splitheight = maxPageHeight * PS_UNIT_SIZE;
-    splitwidth = maxPageWidth * PS_UNIT_SIZE;
-    overlap = splitOverlap * PS_UNIT_SIZE;
+    splitheight = (double)maxPageHeight * (double)PS_UNIT_SIZE;
+    splitwidth = (double)maxPageWidth * (double)PS_UNIT_SIZE;
+    overlap = (double)splitOverlap * (double)PS_UNIT_SIZE;
     xscale = scale * imagewidth;
     yscale = scale * imageheight;
 
@@ -1272,8 +1272,8 @@ int psPageSize(FILE *fd, int rotation, double pgwidth, double pgheight,
     double new_width;
     double new_height;
 
-    splitheight = maxPageHeight * PS_UNIT_SIZE;
-    splitwidth = maxPageWidth * PS_UNIT_SIZE;
+    splitheight = (double)maxPageHeight * (double)PS_UNIT_SIZE;
+    splitwidth = (double)maxPageWidth * (double)PS_UNIT_SIZE;
 
     switch (rotation)
     {
@@ -1534,11 +1534,11 @@ int psStart(FILE *fd, int npages, int auto_rotate, int *rotation, double *scale,
     double page_width = 0.0, page_height = 0.0;
 
     /* Splitheight and splitwidth are in inches */
-    splitheight = maxPageHeight * PS_UNIT_SIZE;
-    splitwidth = maxPageWidth * PS_UNIT_SIZE;
+    splitheight = (double)maxPageHeight * (double)PS_UNIT_SIZE;
+    splitwidth = (double)maxPageWidth * (double)PS_UNIT_SIZE;
 
-    page_width = pgwidth * PS_UNIT_SIZE;
-    page_height = pgheight * PS_UNIT_SIZE;
+    page_width = (double)pgwidth * (double)PS_UNIT_SIZE;
+    page_height = (double)pgheight * (double)PS_UNIT_SIZE;
 
     /* If user has specified a page width and height and requested the
      * image to be auto-rotated to fit on that media, we match the
@@ -1723,9 +1723,9 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
         0) /* Clip the viewport to maxPageHeight on each page */
     {
         if (pgheight != 0 && pgheight < maxPageHeight)
-            *view_height = pgheight * PS_UNIT_SIZE;
+            *view_height = (double)pgheight * (double)PS_UNIT_SIZE;
         else
-            *view_height = maxPageHeight * PS_UNIT_SIZE;
+            *view_height = (double)maxPageHeight * (double)PS_UNIT_SIZE;
         /*
          * if (res_unit == RESUNIT_CENTIMETER)
          * *view_height /= 2.54F;
@@ -1736,8 +1736,8 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
         if (pgheight != 0) /* User has set PageHeight with -h flag */
         {
             *view_height =
-                pgheight *
-                PS_UNIT_SIZE; /* Postscript size for Page Height in inches */
+                (double)pgheight *
+                (double)PS_UNIT_SIZE; /* Postscript size for Page Height in inches */
             /* if (res_unit == RESUNIT_CENTIMETER)
              *  *view_height /= 2.54F;
              */
@@ -1761,9 +1761,9 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
     if (maxPageWidth != 0) /* Clip the viewport to maxPageWidth on each page */
     {
         if (pgwidth != 0 && pgwidth < maxPageWidth)
-            *view_width = pgwidth * PS_UNIT_SIZE;
+            *view_width = (double)pgwidth * (double)PS_UNIT_SIZE;
         else
-            *view_width = maxPageWidth * PS_UNIT_SIZE;
+            *view_width = (double)maxPageWidth * (double)PS_UNIT_SIZE;
         /* if (res_unit == RESUNIT_CENTIMETER)
          *  *view_width /= 2.54F;
          */
@@ -1773,8 +1773,8 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
         if (pgwidth != 0) /* User has set PageWidth with -w flag */
         {
             *view_width =
-                pgwidth *
-                PS_UNIT_SIZE; /* Postscript size for Page Width in inches */
+                (double)pgwidth *
+                (double)PS_UNIT_SIZE; /* Postscript size for Page Width in inches */
             /* if (res_unit == RESUNIT_CENTIMETER)
              * *view_width /= 2.54F;
              */
@@ -1814,8 +1814,8 @@ int TIFF2PS(FILE *fd, TIFF *tif, double pgwidth, double pgheight, double lm,
         psheight; /* Original raw image width and height in points */
     double view_width, view_height; /* Viewport width and height in points */
     double scale = 1.0;
-    double left_offset = lm * PS_UNIT_SIZE;
-    double bottom_offset = bm * PS_UNIT_SIZE;
+    double left_offset = (double)lm * (double)PS_UNIT_SIZE;
+    double bottom_offset = (double)bm * (double)PS_UNIT_SIZE;
     uint32_t subfiletype;
     uint16_t *sampleinfo;
     static int npages = 0;

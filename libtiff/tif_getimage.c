@@ -2767,7 +2767,7 @@ static int initYCbCrConversion(TIFFRGBAImage *img)
 
     /* Do some validation to avoid later issues. Detect NaN for now */
     /* and also if lumaGreen is zero since we divide by it later */
-    if (luma[0] != luma[0] || luma[1] != luma[1] || luma[1] == 0.0 ||
+    if (luma[0] != luma[0] || luma[1] != luma[1] || luma[1] == 0.0F ||
         luma[2] != luma[2])
     {
         TIFFErrorExtR(img->tif, module,

@@ -222,7 +222,7 @@ static void TIFF_GetSourceSamples(double *padfSamples, unsigned char *pabySrc,
             }
             else if (nSampleFormat == SAMPLEFORMAT_IEEEFP && nPixelBytes == 4)
             {
-                padfSamples[iSample++] = ((float *)pabyData)[0];
+                padfSamples[iSample++] = (double)((float *)pabyData)[0];
             }
             else if (nSampleFormat == SAMPLEFORMAT_IEEEFP && nPixelBytes == 8)
             {

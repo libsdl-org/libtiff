@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
                         case TIFF_SRATIONAL:
                         case TIFF_FLOAT:
                             ret = TIFFSetField(tiff, TIFFFieldTag(fip),
-                                               (float)atof(argv[arg_index++]));
+                                               atof(argv[arg_index++]));
                             break;
                         case TIFF_NOTYPE:
                         case TIFF_ASCII:

@@ -499,14 +499,14 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
     {
         unsigned int fail = 0;
         fprintf(stderr, "Image width and height are not specified.\n");
-        w = (uint32_t)sqrt((double)imagesize / longt);
+        w = (uint32_t)sqrt((double)imagesize / (double)longt);
         if (w == 0)
         {
             fprintf(stderr, "Too small image size.\n");
             return -1;
         }
 
-        for (; w < (uint32_t)sqrt((double)imagesize * longt); w++)
+        for (; w < (uint32_t)sqrt((double)imagesize * (double)longt); w++)
         {
             if (imagesize % w == 0)
             {
@@ -676,8 +676,8 @@ static double correlation(void *buf1, void *buf2, uint32_t n_elem,
         case TIFF_FLOAT:
             for (i = 0; i < n_elem; i++)
             {
-                X = ((float *)buf1)[i];
-                Y = ((float *)buf2)[i];
+                X = (double)((float *)buf1)[i];
+                Y = (double)((float *)buf2)[i];
                 M1 += X, M2 += Y;
                 D1 += X * X, D2 += Y * Y;
                 K += X * Y;

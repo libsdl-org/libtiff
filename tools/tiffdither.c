@@ -49,6 +49,9 @@
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 
 uint32_t imagewidth;
 uint32_t imagelength;
@@ -316,8 +319,8 @@ int main(int argc, char *argv[])
         TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
         CopyField(TIFFTAG_PHOTOMETRIC, shortv);
         CopyField(TIFFTAG_ORIENTATION, shortv);
-        CopyField(TIFFTAG_XRESOLUTION, floatv);
-        CopyField(TIFFTAG_YRESOLUTION, floatv);
+        CopyFieldFloat(TIFFTAG_XRESOLUTION, floatv);
+        CopyFieldFloat(TIFFTAG_YRESOLUTION, floatv);
         CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
         rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
         TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);

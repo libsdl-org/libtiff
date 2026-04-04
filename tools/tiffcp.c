@@ -700,6 +700,12 @@ static void usage(int code)
         if (TIFFGetField(in, tag, &v))                                         \
             TIFFSetField(out, tag, v);                                         \
     } while (0)
+#define CopyFieldFloat(tag, v)                                                 \
+    do                                                                         \
+    {                                                                          \
+        if (TIFFGetField(in, tag, &v))                                         \
+            TIFFSetField(out, tag, (double)(v));                               \
+    } while (0)
 #define CopyField2(tag, v1, v2)                                                \
     do                                                                         \
     {                                                                          \
@@ -757,7 +763,7 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             if (count == 1)
             {
                 float floatv;
-                CopyField(tag, floatv);
+                CopyFieldFloat(tag, floatv);
             }
             else if (count == (uint16_t)-1)
             {

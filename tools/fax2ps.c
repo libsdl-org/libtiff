@@ -224,13 +224,13 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
     if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) || !(xres != 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No x-resolution, assuming %g dpi",
-                    defxres);
+                    (double)defxres);
         xres = defxres;
     }
     if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) || !(yres != 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No y-resolution, assuming %g lpi",
-                    defyres);
+                    (double)defyres);
         yres = defyres; /* XXX */
     }
     if (TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &unit) &&
@@ -270,10 +270,10 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
                     ? pageHeight / ((float)h / yres)
                     : pageWidth / ((float)w / xres);
     printf("%g %g translate\n",
-           points * (pageWidth - scale * (float)w / xres) * half,
-           points * (scale * (float)h / yres +
-                     (pageHeight - scale * (float)h / yres) * half));
-    printf("%g %g scale\n", points / xres * scale, -points / yres * scale);
+           (double)(points * (pageWidth - scale * (float)w / xres) * half),
+           (double)(points * (scale * (float)h / yres +
+                     (pageHeight - scale * (float)h / yres) * half)));
+    printf("%g %g scale\n", (double)(points / xres * scale), (double)(-points / yres * scale));
     printf("0 setgray\n");
     TIFFSetField(tif, TIFFTAG_FAXFILLFUNC, printruns);
     ns = TIFFNumberOfStrips(tif);

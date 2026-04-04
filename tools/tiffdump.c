@@ -875,7 +875,7 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
         {
             float *fp = (float *)data;
             while (count-- > 0)
-                fprintf(fd, floatfmt, sep, *fp++), sep = " ";
+                fprintf(fd, floatfmt, sep, (double)*fp++), sep = " ";
             break;
         }
         case TIFF_DOUBLE:

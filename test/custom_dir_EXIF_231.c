@@ -293,22 +293,26 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         goto failure;
     }
 
-    if (!TIFFSetField(tif, TIFFTAG_XRESOLUTION, auxFloatArrayResolutions[0]))
+    if (!TIFFSetField(tif, TIFFTAG_XRESOLUTION,
+                      (double)auxFloatArrayResolutions[0]))
     {
         fprintf(stderr, "Can't set TIFFTAG_XRESOLUTION tag.\n");
         goto failure;
     }
-    if (!TIFFSetField(tif, TIFFTAG_YRESOLUTION, auxFloatArrayResolutions[1]))
+    if (!TIFFSetField(tif, TIFFTAG_YRESOLUTION,
+                      (double)auxFloatArrayResolutions[1]))
     {
         fprintf(stderr, "Can't set TIFFTAG_YRESOLUTION tag.\n");
         goto failure;
     }
-    if (!TIFFSetField(tif, TIFFTAG_XPOSITION, auxFloatArrayResolutions[2]))
+    if (!TIFFSetField(tif, TIFFTAG_XPOSITION,
+                      (double)auxFloatArrayResolutions[2]))
     {
         fprintf(stderr, "Can't set TIFFTAG_XPOSITION tag.\n");
         goto failure;
     }
-    if (!TIFFSetField(tif, TIFFTAG_YPOSITION, auxFloatArrayResolutions[3]))
+    if (!TIFFSetField(tif, TIFFTAG_YPOSITION,
+                      (double)auxFloatArrayResolutions[3]))
     {
         fprintf(stderr, "Can't set TIFFTAG_YPOSITION tag.\n");
         goto failure;
@@ -620,7 +624,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
          * TIFF_SETGET_DOUBLE  but here written in float-precision */
 #define GPSHPOSITIONINGERROR_VAL 0.369
         auxFloat = (float)GPSHPOSITIONINGERROR_VAL;
-        if (!TIFFSetField(tif, GPSTAG_GPSHPOSITIONINGERROR, auxFloat))
+        if (!TIFFSetField(tif, GPSTAG_GPSHPOSITIONINGERROR, (double)auxFloat))
         {
             fprintf(stderr, "Can't write GPSTAG_GPSHPOSITIONINGERROR\n");
             goto failure;
@@ -1042,7 +1046,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         fprintf(
             stderr,
             "Read value of TIFFTAG_PIXAR_FOVCOT %f differs from set value %f\n",
-            auxFloat, PIXAR_FOVCOT_VAL);
+            (double)auxFloat, PIXAR_FOVCOT_VAL);
     }
 
     /* - TIFFTAG_BESTQUALITYSCALE is a Rational parameter, FIELD_CUSTOM and
@@ -1057,7 +1061,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         fprintf(stderr,
                 "Read value of TIFFTAG_BESTQUALITYSCALE %f differs from set "
                 "value %f\n",
-                auxFloat, BESTQUALITYSCALE_VAL);
+                (double)auxFloat, BESTQUALITYSCALE_VAL);
     }
 
     /* - TIFFTAG_BASELINENOISE, 1, 1, TIFF_RATIONAL, 0, TIFF_SETGET_FLOAT */
@@ -1071,7 +1075,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         fprintf(stderr,
                 "Read float value of TIFFTAG_BASELINENOISE %f differs from set "
                 "value %f\n",
-                auxDblUnion.flt1, BESTQUALITYSCALE_VAL);
+                (double)auxDblUnion.flt1, BESTQUALITYSCALE_VAL);
     }
 
     /*- Variable Array: TIFFTAG_DECODE is a SRATIONAL parameter
@@ -1087,14 +1091,14 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     memcpy(&auxFloatArray, pVoidArray, (count16 * sizeof(auxFloatArray[0])));
     for (i = 0; i < count16; i++)
     {
-        dblDiffLimit = RATIONAL_EPS * auxFloatArrayN2[i];
-        dblDiff = auxFloatArray[i] - auxFloatArrayN2[i];
+        dblDiffLimit = RATIONAL_EPS * (double)auxFloatArrayN2[i];
+        dblDiff = (double)auxFloatArray[i] - (double)auxFloatArrayN2[i];
         if (fabs(dblDiff) > fabs(dblDiffLimit))
         {
             fprintf(stderr,
                     "Read value %d of TIFFTAG_DECODE Array %f differs from set "
                     "value %f\n",
-                    i, auxFloatArray[i], auxFloatArrayN2[i]);
+                    i, (double)auxFloatArray[i], (double)auxFloatArrayN2[i]);
         }
     }
 
@@ -1108,14 +1112,14 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     memcpy(&auxFloatArray, pVoidArray, (count16 * sizeof(auxFloatArray[0])));
     for (i = 0; i < count16; i++)
     {
-        dblDiffLimit = RATIONAL_EPS * auxFloatArrayN1[i];
-        dblDiff = auxFloatArray[i] - auxFloatArrayN1[i];
+        dblDiffLimit = RATIONAL_EPS * (double)auxFloatArrayN1[i];
+        dblDiff = (double)auxFloatArray[i] - (double)auxFloatArrayN1[i];
         if (fabs(dblDiff) > fabs(dblDiffLimit))
         {
             fprintf(stderr,
                     "Read value %d of TIFFTAG_BLACKLEVEL Array %f differs from "
                     "set value %f\n",
-                    i, auxFloatArray[i], auxFloatArrayN1[i]);
+                    i, (double)auxFloatArray[i], (double)auxFloatArrayN1[i]);
         }
     }
 
@@ -1131,14 +1135,14 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     memcpy(&auxFloatArray, pVoidArray, (2 * sizeof(auxFloatArray[0])));
     for (i = 0; i < 2; i++)
     {
-        dblDiffLimit = RATIONAL_EPS * auxFloatArrayW[i];
-        dblDiff = auxFloatArray[i] - auxFloatArrayW[i];
+        dblDiffLimit = RATIONAL_EPS * (double)auxFloatArrayW[i];
+        dblDiff = (double)auxFloatArray[i] - (double)auxFloatArrayW[i];
         if (fabs(dblDiff) > fabs(dblDiffLimit))
         {
             fprintf(stderr,
                     "Read value %d of TIFFTAG_DEFAULTCROPSIZE Array %f differs "
                     "from set value %f\n",
-                    i, auxFloatArray[i], auxFloatArrayW[i]);
+                    i, (double)auxFloatArray[i], (double)auxFloatArrayW[i]);
         }
     }
 
@@ -1423,14 +1427,14 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     }
     /* compare read values with written ones */
     auxFloat = (float)GPSHPOSITIONINGERROR_VAL;
-    dblDiffLimit = RATIONAL_EPS * auxFloat;
-    dblDiff = auxDouble - auxFloat;
+    dblDiffLimit = RATIONAL_EPS * (double)auxFloat;
+    dblDiff = auxDouble - (double)auxFloat;
     if (fabs(dblDiff) > fabs(dblDiffLimit))
     {
         fprintf(stderr,
                 "Read value of GPSTAG_GPSHPOSITIONINGERROR %f differs from set "
                 "value %f\n",
-                auxDouble, auxFloat);
+                auxDouble, (double)auxFloat);
         GOTOFAILURE_GPS
     }
 
@@ -1592,7 +1596,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     dblDiffLimit = RATIONAL_EPS * auxDoubleArrayW[i];
                 else
                     dblDiffLimit = 1e-6;
-                dblDiff = auxFloat - auxDoubleArrayW[i];
+                dblDiff = (double)auxFloat - auxDoubleArrayW[i];
                 if (fabs(dblDiff) > fabs(dblDiffLimit))
                 {
                     /*--: EXIFTAG_SUBJECTDISTANCE: LibTiff returns value of
@@ -1602,12 +1606,14 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                      * six other cases where the denominator indicates special
                      * values, which are not treated within LibTiff!!
                      */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && auxFloat == -1.0))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
+                          auxFloat == -1.0f))
                     {
                         fprintf(stderr,
                                 "%d:Read value of %s %f differs from set value "
                                 "%f\n",
-                                i, tFieldName, auxFloat, auxDoubleArrayW[i]);
+                                i, tFieldName, (double)auxFloat,
+                                auxDoubleArrayW[i]);
                         GOTOFAILURE_ALL_EXIF
                     }
                 }
@@ -1745,7 +1751,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                             dblDiffLimit = 1e-6;
                         for (j = 0; j < auxInt32; j++)
                         {
-                            dblDiff = auxFloatArray[j] - auxFloatArrayW[i + j];
+                            dblDiff = (double)auxFloatArray[j] -
+                                      (double)auxFloatArrayW[i + j];
                             if (fabs(dblDiff) > fabs(dblDiffLimit))
                             {
                                 /*if (auxFloatArray[j] !=
@@ -1753,8 +1760,9 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                                 fprintf(stderr,
                                         "Read value %d of %s #%d %f differs "
                                         "from set value %f\n",
-                                        i, tFieldName, j, auxFloatArray[j],
-                                        auxFloatArrayW[i + j]);
+                                        i, tFieldName, j,
+                                        (double)auxFloatArray[j],
+                                        (double)auxFloatArrayW[i + j]);
                                 GOTOFAILURE_ALL_EXIF
                             }
                         }

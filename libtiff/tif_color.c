@@ -82,7 +82,7 @@ void TIFFCIELab16ToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a,
         *Z = cielab->Z0 * tmp * tmp * tmp;
 }
 
-#define RINT(R) ((uint32_t)((R) > 0 ? ((R) + 0.5) : ((R)-0.5)))
+#define RINT(R) ((uint32_t)((R) > 0 ? ((R) + 0.5F) : ((R)-0.5F)))
 /*
  * Convert color value from the XYZ space to RGB.
  */
@@ -143,7 +143,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
     _TIFFmemcpy(&cielab->display, display, sizeof(TIFFDisplay));
 
     /* Red */
-    dfGamma = 1.0 / cielab->display.d_gammaR;
+    dfGamma = 1.0 / (double)cielab->display.d_gammaR;
     cielab->rstep =
         (cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
     for (i = 0; i <= (size_t)cielab->range; i++)
@@ -153,7 +153,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
     }
 
     /* Green */
-    dfGamma = 1.0 / cielab->display.d_gammaG;
+    dfGamma = 1.0 / (double)cielab->display.d_gammaG;
     cielab->gstep =
         (cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
     for (i = 0; i <= (size_t)cielab->range; i++)
@@ -163,7 +163,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
     }
 
     /* Blue */
-    dfGamma = 1.0 / cielab->display.d_gammaB;
+    dfGamma = 1.0 / (double)cielab->display.d_gammaB;
     cielab->bstep =
         (cielab->display.d_YCR - cielab->display.d_Y0R) / (float)cielab->range;
     for (i = 0; i <= (size_t)cielab->range; i++)
@@ -186,7 +186,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
  * see below for more information on how it works.
  */
 #define SHIFT 16
-#define FIX(x) ((int32_t)((x) * (1 << SHIFT) + 0.5))
+#define FIX(x) ((int32_t)((double)(x) * (1L << SHIFT) + 0.5))
 #define ONE_HALF ((int32_t)(1 << (SHIFT - 1)))
 #define Code2V(c, RB, RW, CR)                                                  \
     (((float)((c) - (int32_t)(RB)) * (float)(CR)) /                            \
