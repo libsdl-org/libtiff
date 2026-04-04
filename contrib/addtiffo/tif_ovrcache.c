@@ -84,13 +84,16 @@ TIFFOvrCache *TIFFCreateOvrCache(TIFF *hTIFF, toff_t nDirOffset)
     /* -------------------------------------------------------------------- */
 
     psCache->nBlocksPerRow =
-        (int)((psCache->nXSize + psCache->nBlockXSize - 1) / psCache->nBlockXSize);
+        (int)((psCache->nXSize + psCache->nBlockXSize - 1) /
+              psCache->nBlockXSize);
     psCache->nBlocksPerColumn =
-        (int)((psCache->nYSize + psCache->nBlockYSize - 1) / psCache->nBlockYSize);
+        (int)((psCache->nYSize + psCache->nBlockYSize - 1) /
+              psCache->nBlockYSize);
 
     if (psCache->nPlanarConfig == PLANARCONFIG_SEPARATE)
         psCache->nBytesPerRow = psCache->nBytesPerBlock *
-                                (toff_t)psCache->nBlocksPerRow * psCache->nSamples;
+                                (toff_t)psCache->nBlocksPerRow *
+                                psCache->nSamples;
     else
         psCache->nBytesPerRow =
             psCache->nBytesPerBlock * (toff_t)psCache->nBlocksPerRow;
@@ -255,7 +258,8 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
                 {
                     nTileID = TIFFComputeTile(
                         psCache->hTIFF, (uint32_t)iTileX * psCache->nBlockXSize,
-                        (uint32_t)iTileY * psCache->nBlockYSize, 0, (tsample_t)iSample);
+                        (uint32_t)iTileY * psCache->nBlockYSize, 0,
+                        (tsample_t)iSample);
                     if (TIFFWriteEncodedTile(psCache->hTIFF, nTileID, pabyData,
                                              TIFFTileSize(psCache->hTIFF)) < 0)
                     {
@@ -264,13 +268,14 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
                 }
                 else
                 {
-                    nTileID = TIFFComputeStrip(psCache->hTIFF,
-                                               (uint32_t)iTileY * psCache->nBlockYSize,
-                                               (tsample_t)iSample);
+                    nTileID = TIFFComputeStrip(
+                        psCache->hTIFF, (uint32_t)iTileY * psCache->nBlockYSize,
+                        (tsample_t)iSample);
                     RowsInStrip = psCache->nBlockYSize;
-                    if (((uint32_t)iTileY + 1) * psCache->nBlockYSize > psCache->nYSize)
-                        RowsInStrip =
-                            psCache->nYSize - (uint32_t)iTileY * psCache->nBlockYSize;
+                    if (((uint32_t)iTileY + 1) * psCache->nBlockYSize >
+                        psCache->nYSize)
+                        RowsInStrip = psCache->nYSize -
+                                      (uint32_t)iTileY * psCache->nBlockYSize;
                     if (TIFFWriteEncodedStrip(
                             psCache->hTIFF, nTileID, pabyData,
                             TIFFVStripSize(psCache->hTIFF, RowsInStrip)) < 0)
@@ -286,9 +291,9 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
 
             if (psCache->bTiled)
             {
-                nTileID = TIFFComputeTile(psCache->hTIFF,
-                                          (uint32_t)iTileX * psCache->nBlockXSize,
-                                          (uint32_t)iTileY * psCache->nBlockYSize, 0, 0);
+                nTileID = TIFFComputeTile(
+                    psCache->hTIFF, (uint32_t)iTileX * psCache->nBlockXSize,
+                    (uint32_t)iTileY * psCache->nBlockYSize, 0, 0);
                 if (TIFFWriteEncodedTile(psCache->hTIFF, nTileID, pabyData,
                                          TIFFTileSize(psCache->hTIFF)) < 0)
                 {
@@ -297,12 +302,13 @@ static void TIFFWriteOvrRow(TIFFOvrCache *psCache)
             }
             else
             {
-                nTileID = TIFFComputeStrip(psCache->hTIFF,
-                                           (uint32_t)iTileY * psCache->nBlockYSize, 0);
+                nTileID = TIFFComputeStrip(
+                    psCache->hTIFF, (uint32_t)iTileY * psCache->nBlockYSize, 0);
                 RowsInStrip = psCache->nBlockYSize;
-                if (((uint32_t)iTileY + 1) * psCache->nBlockYSize > psCache->nYSize)
-                    RowsInStrip =
-                        psCache->nYSize - (uint32_t)iTileY * psCache->nBlockYSize;
+                if (((uint32_t)iTileY + 1) * psCache->nBlockYSize >
+                    psCache->nYSize)
+                    RowsInStrip = psCache->nYSize -
+                                  (uint32_t)iTileY * psCache->nBlockYSize;
                 if (TIFFWriteEncodedStrip(
                         psCache->hTIFF, nTileID, pabyData,
                         TIFFVStripSize(psCache->hTIFF, RowsInStrip)) < 0)
@@ -359,8 +365,9 @@ unsigned char *TIFFGetOvrBlock(TIFFOvrCache *psCache, int iTileX, int iTileY,
         nRowOffset = ((((toff_t)iTileX * psCache->nSamples) + (toff_t)iSample) *
                       psCache->nBytesPerBlock);
     else
-        nRowOffset = (toff_t)iTileX * psCache->nBytesPerBlock +
-                     (toff_t)((psCache->nBitsPerPixel + 7) / 8 * (uint16_t)iSample);
+        nRowOffset =
+            (toff_t)iTileX * psCache->nBytesPerBlock +
+            (toff_t)((psCache->nBitsPerPixel + 7) / 8 * (uint16_t)iSample);
 
     if (iTileY == psCache->nBlockOffset)
         return psCache->pabyRow1Blocks + nRowOffset;

@@ -84,9 +84,10 @@ static int TWebPDatasetWriter(const uint8_t *data, size_t data_size,
 
     if ((tif->tif_rawcc + (tmsize_t)data_size) > tif->tif_rawdatasize)
     {
-        TIFFErrorExtR(
-            tif, module, "Buffer too small by %" TIFF_SIZE_FORMAT " bytes.",
-            (size_t)((uint64_t)tif->tif_rawcc + (uint64_t)data_size - (uint64_t)tif->tif_rawdatasize));
+        TIFFErrorExtR(tif, module,
+                      "Buffer too small by %" TIFF_SIZE_FORMAT " bytes.",
+                      (size_t)((uint64_t)tif->tif_rawcc + (uint64_t)data_size -
+                               (uint64_t)tif->tif_rawdatasize));
         return 0;
     }
     else

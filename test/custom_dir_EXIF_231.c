@@ -1508,7 +1508,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     auxInt32 = tWriteCount - 1;
                 else
                     auxInt32 = (int32_t)strlen(auxCharArray);
-                retCode2 = strncmp(auxCharArray, auxTextArrayW[i], (size_t)auxInt32);
+                retCode2 =
+                    strncmp(auxCharArray, auxTextArrayW[i], (size_t)auxInt32);
                 if (retCode2 != 0)
                 {
                     fprintf(

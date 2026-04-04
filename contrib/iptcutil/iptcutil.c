@@ -171,7 +171,8 @@ static size_t convertHTMLcodes(char *s, size_t len)
         for (i = 0; i < codes; i++)
         {
             if ((size_t)(html_codes[i].len) <= len)
-                if (STRNICMP(s, html_codes[i].code, (size_t)html_codes[i].len) == 0)
+                if (STRNICMP(s, html_codes[i].code,
+                             (size_t)html_codes[i].len) == 0)
                 {
                     strcpy(s + 1, s + html_codes[i].len);
                     *s = html_codes[i].val;

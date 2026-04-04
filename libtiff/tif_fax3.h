@@ -338,7 +338,7 @@ static const char *StateNames[] = {
         {                                                                      \
             badlength(a0, lastx);                                              \
             while (a0 > (int)lastx && pa > thisrun)                            \
-                a0 -= (int)*--pa;                                                   \
+                a0 -= (int)*--pa;                                              \
             if (a0 < (int)lastx)                                               \
             {                                                                  \
                 if (a0 < 0)                                                    \
@@ -386,7 +386,8 @@ static const char *StateNames[] = {
                     case S_MakeUpW:                                            \
                     case S_MakeUp:                                             \
                         a0 = (int)((uint32_t)a0 + TabEnt->Param);              \
-                        RunLength = (int)((uint32_t)RunLength + TabEnt->Param); \
+                        RunLength =                                            \
+                            (int)((uint32_t)RunLength + TabEnt->Param);        \
                         break;                                                 \
                     default:                                                   \
                         unexpected("WhiteTable", a0);                          \
@@ -394,7 +395,7 @@ static const char *StateNames[] = {
                 }                                                              \
             }                                                                  \
         doneWhite1d:                                                           \
-            if (a0 >= (int)lastx)                                                   \
+            if (a0 >= (int)lastx)                                              \
                 goto done1d;                                                   \
             for (;;)                                                           \
             {                                                                  \
@@ -418,7 +419,7 @@ static const char *StateNames[] = {
                 }                                                              \
             }                                                                  \
         doneBlack1d:                                                           \
-            if (a0 >= (int)lastx)                                                   \
+            if (a0 >= (int)lastx)                                              \
                 goto done1d;                                                   \
             if (*(pa - 1) == 0 && *(pa - 2) == 0)                              \
                 pa -= 2;                                                       \
@@ -439,7 +440,7 @@ static const char *StateNames[] = {
     do                                                                         \
     {                                                                          \
         if (pa != thisrun)                                                     \
-            while (b1 <= a0 && b1 < (int)lastx)                                     \
+            while (b1 <= a0 && b1 < (int)lastx)                                \
             {                                                                  \
                 if (pb + 1 >= sp->refruns + sp->nruns)                         \
                 {                                                              \
@@ -486,7 +487,8 @@ static const char *StateNames[] = {
                         return (-1);                                           \
                     }                                                          \
                     b1 = b1 + (int)*pb++;                                      \
-                    RunLength = (int)((uint32_t)RunLength + (uint32_t)(b1 - a0)); \
+                    RunLength =                                                \
+                        (int)((uint32_t)RunLength + (uint32_t)(b1 - a0));      \
                     a0 = b1;                                                   \
                     b1 = b1 + (int)*pb++;                                      \
                     break;                                                     \
@@ -504,7 +506,8 @@ static const char *StateNames[] = {
                                 case S_MakeUpB:                                \
                                 case S_MakeUp:                                 \
                                     a0 = (int)((uint32_t)a0 + TabEnt->Param);  \
-                                    RunLength = (int)((uint32_t)RunLength + TabEnt->Param); \
+                                    RunLength = (int)((uint32_t)RunLength +    \
+                                                      TabEnt->Param);          \
                                     break;                                     \
                                 default:                                       \
                                     goto badBlack2d;                           \
@@ -522,7 +525,8 @@ static const char *StateNames[] = {
                                 case S_MakeUpW:                                \
                                 case S_MakeUp:                                 \
                                     a0 = (int)((uint32_t)a0 + TabEnt->Param);  \
-                                    RunLength = (int)((uint32_t)RunLength + TabEnt->Param); \
+                                    RunLength = (int)((uint32_t)RunLength +    \
+                                                      TabEnt->Param);          \
                                     break;                                     \
                                 default:                                       \
                                     goto badWhite2d;                           \
@@ -543,7 +547,8 @@ static const char *StateNames[] = {
                                 case S_MakeUpW:                                \
                                 case S_MakeUp:                                 \
                                     a0 = (int)((uint32_t)a0 + TabEnt->Param);  \
-                                    RunLength = (int)((uint32_t)RunLength + TabEnt->Param); \
+                                    RunLength = (int)((uint32_t)RunLength +    \
+                                                      TabEnt->Param);          \
                                     break;                                     \
                                 default:                                       \
                                     goto badWhite2d;                           \
@@ -561,7 +566,8 @@ static const char *StateNames[] = {
                                 case S_MakeUpB:                                \
                                 case S_MakeUp:                                 \
                                     a0 = (int)((uint32_t)a0 + TabEnt->Param);  \
-                                    RunLength = (int)((uint32_t)RunLength + TabEnt->Param); \
+                                    RunLength = (int)((uint32_t)RunLength +    \
+                                                      TabEnt->Param);          \
                                     break;                                     \
                                 default:                                       \
                                     goto badBlack2d;                           \
@@ -588,7 +594,7 @@ static const char *StateNames[] = {
                     break;                                                     \
                 case S_VR:                                                     \
                     CHECK_b1;                                                  \
-                    SETVALUE((int)((uint32_t)(b1 - a0) + TabEnt->Param));                         \
+                    SETVALUE((int)((uint32_t)(b1 - a0) + TabEnt->Param));      \
                     if (pb >= sp->refruns + sp->nruns)                         \
                     {                                                          \
                         TIFFErrorExtR(tif, module,                             \
@@ -609,14 +615,14 @@ static const char *StateNames[] = {
                         goto eol2d;                                            \
                     }                                                          \
                     SETVALUE((int)((uint32_t)(b1 - a0) - TabEnt->Param));      \
-                    b1 = b1 - (int)*--pb;                                               \
+                    b1 = b1 - (int)*--pb;                                      \
                     break;                                                     \
                 case S_Ext:                                                    \
                     *pa++ = (uint32_t)((int)lastx - a0);                       \
                     extension(a0);                                             \
                     goto eol2d;                                                \
                 case S_EOL:                                                    \
-                    *pa++ = (uint32_t)((int)lastx - a0);                                        \
+                    *pa++ = (uint32_t)((int)lastx - a0);                       \
                     NeedBits8(4, eof2d);                                       \
                     if (GetBits(4))                                            \
                         unexpected("EOL", a0);                                 \

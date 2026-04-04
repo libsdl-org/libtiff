@@ -415,7 +415,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
              i > 0 && cp < td->td_inknames + td->td_inknameslen;
              cp = strchr(cp, '\0') + 1, i--)
         {
-            size_t max_chars = (size_t)(td->td_inknameslen - (cp - td->td_inknames));
+            size_t max_chars =
+                (size_t)(td->td_inknameslen - (cp - td->td_inknames));
             fputs(sep, fd);
             _TIFFprintAsciiBounded(fd, cp, max_chars);
             sep = ", ";
@@ -560,7 +561,9 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
             fprintf(fd, "\n");
             uint64_t n = 1ULL << td->td_bitspersample;
             for (uint64_t l = 0u; l < n; l++)
-                fprintf(fd, "   %5" PRIu64": %5" PRIu16 " %5" PRIu16 " %5" PRIu16 "\n",
+                fprintf(fd,
+                        "   %5" PRIu64 ": %5" PRIu16 " %5" PRIu16 " %5" PRIu16
+                        "\n",
                         l, td->td_colormap[0][l], td->td_colormap[1][l],
                         td->td_colormap[2][l]);
         }
@@ -688,7 +691,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
                      * "set_get_field_type" to determine internal storage size.
                      */
                     int tv_size = TIFFFieldSetGetSize(fip);
-                    raw_data = _TIFFmallocExt(tif, (uint32_t)tv_size * value_count);
+                    raw_data =
+                        _TIFFmallocExt(tif, (uint32_t)tv_size * value_count);
                     mem_alloc = 1;
                     if (TIFFGetField(tif, tag, raw_data) != 1)
                     {

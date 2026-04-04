@@ -867,7 +867,8 @@ static int TIFFWriteDirectorySec(TIFF *tif, int isimage, int imagedone,
             {
                 if (!TIFFWriteDirectoryTagAscii(
                         tif, &ndir, dir, TIFFTAG_INKNAMES,
-                        (uint32_t)tif->tif_dir.td_inknameslen, tif->tif_dir.td_inknames))
+                        (uint32_t)tif->tif_dir.td_inknameslen,
+                        tif->tif_dir.td_inknames))
                     goto bad;
             }
             if (TIFFFieldSet(tif, FIELD_NUMBEROFINKS))
@@ -3810,7 +3811,8 @@ int _TIFFRewriteField(TIFF *tif, uint16_t tag, TIFFDataType in_datatype,
         if (count * TIFFDataWidth(datatype) == 4)
         {
             uint32_t value;
-            memcpy(&value, buf_to_write, (size_t)(count * TIFFDataWidth(datatype)));
+            memcpy(&value, buf_to_write,
+                   (size_t)(count * TIFFDataWidth(datatype)));
             entry_offset = value;
         }
         else

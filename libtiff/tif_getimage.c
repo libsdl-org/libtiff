@@ -829,14 +829,16 @@ static int gtTileContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
         while (tocol < wmin)
         {
             if (_TIFFReadTileAndAllocBuffer(tif, (void **)&buf, bufsize, col,
-                                            (uint32_t)row + (uint32_t)img->row_offset, 0,
-                                            0) == (tmsize_t)(-1) &&
+                                            (uint32_t)row +
+                                                (uint32_t)img->row_offset,
+                                            0, 0) == (tmsize_t)(-1) &&
                 (buf == NULL || img->stoponerr))
             {
                 ret = 0;
                 break;
             }
-            pos = (((uint32_t)row + (uint32_t)img->row_offset) % th) * TIFFTileRowSize(tif) +
+            pos = (((uint32_t)row + (uint32_t)img->row_offset) % th) *
+                      TIFFTileRowSize(tif) +
                   ((tmsize_t)fromskew * img->samplesperpixel);
             if (tocol + this_tw > wmin)
             {
@@ -861,7 +863,8 @@ static int gtTileContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
             this_toskew = toskew;
         }
 
-        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow : (int32_t)nrow);
+        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow
+                                                 : (int32_t)nrow);
     }
     _TIFFfreeExt(img->tif, buf);
 
@@ -1018,9 +1021,10 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
         {
             if (buf == NULL)
             {
-                if (_TIFFReadTileAndAllocBuffer(tif, (void **)&buf, bufsize,
-                                                col, (uint32_t)((int32_t)row + img->row_offset), 0,
-                                                0) == (tmsize_t)(-1) &&
+                if (_TIFFReadTileAndAllocBuffer(
+                        tif, (void **)&buf, bufsize, col,
+                        (uint32_t)((int32_t)row + img->row_offset), 0,
+                        0) == (tmsize_t)(-1) &&
                     (buf == NULL || img->stoponerr))
                 {
                     ret = 0;
@@ -1039,31 +1043,35 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
                     pa = (alpha ? (p2 + tilesize) : NULL);
                 }
             }
-            else if (TIFFReadTile(tif, p0, col, (uint32_t)((int32_t)row + img->row_offset), 0, 0) ==
-                         (tmsize_t)(-1) &&
+            else if (TIFFReadTile(tif, p0, col,
+                                  (uint32_t)((int32_t)row + img->row_offset), 0,
+                                  0) == (tmsize_t)(-1) &&
                      img->stoponerr)
             {
                 ret = 0;
                 break;
             }
             if (colorchannels > 1 &&
-                TIFFReadTile(tif, p1, col, (uint32_t)((int32_t)row + img->row_offset), 0, (uint16_t)1) ==
-                    (tmsize_t)(-1) &&
+                TIFFReadTile(tif, p1, col,
+                             (uint32_t)((int32_t)row + img->row_offset), 0,
+                             (uint16_t)1) == (tmsize_t)(-1) &&
                 img->stoponerr)
             {
                 ret = 0;
                 break;
             }
             if (colorchannels > 1 &&
-                TIFFReadTile(tif, p2, col, (uint32_t)((int32_t)row + img->row_offset), 0, (uint16_t)2) ==
-                    (tmsize_t)(-1) &&
+                TIFFReadTile(tif, p2, col,
+                             (uint32_t)((int32_t)row + img->row_offset), 0,
+                             (uint16_t)2) == (tmsize_t)(-1) &&
                 img->stoponerr)
             {
                 ret = 0;
                 break;
             }
             if (alpha &&
-                TIFFReadTile(tif, pa, col, (uint32_t)((int32_t)row + img->row_offset), 0,
+                TIFFReadTile(tif, pa, col,
+                             (uint32_t)((int32_t)row + img->row_offset), 0,
                              (uint16_t)colorchannels) == (tmsize_t)(-1) &&
                 img->stoponerr)
             {
@@ -1073,7 +1081,8 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
             /* For SEPARATE the pos-offset is per sample and should not be
              * multiplied by img->samplesperpixel. */
-            pos = (tmsize_t)((uint32_t)((int32_t)row + img->row_offset) % th) * TIFFTileRowSize(tif) +
+            pos = (tmsize_t)((uint32_t)((int32_t)row + img->row_offset) % th) *
+                      TIFFTileRowSize(tif) +
                   (tmsize_t)fromskew;
             if (tocol + this_tw > wmin)
             {
@@ -1099,7 +1108,8 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
             this_toskew = toskew;
         }
 
-        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow : (int32_t)nrow);
+        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow
+                                                 : (int32_t)nrow);
     }
 
     if (flip & FLIP_HORIZONTALLY)
@@ -1212,12 +1222,14 @@ static int gtStripContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
     for (row = 0; row < h; row += nrow)
     {
         uint32_t temp;
-        rowstoread = rowsperstrip - (uint32_t)((int32_t)row + img->row_offset) % rowsperstrip;
+        rowstoread = rowsperstrip -
+                     (uint32_t)((int32_t)row + img->row_offset) % rowsperstrip;
         nrow = (row + rowstoread > h ? h - row : rowstoread);
         nrowsub = nrow;
         if ((nrowsub % subsamplingver) != 0)
             nrowsub += subsamplingver - nrowsub % subsamplingver;
-        temp = (uint32_t)((int32_t)row + img->row_offset) % rowsperstrip + nrowsub;
+        temp =
+            (uint32_t)((int32_t)row + img->row_offset) % rowsperstrip + nrowsub;
         if (scanline > 0 && temp > (size_t)(TIFF_TMSIZE_T_MAX / scanline))
         {
             TIFFErrorExtR(tif, TIFFFileName(tif),
@@ -1225,21 +1237,27 @@ static int gtStripContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
             return 0;
         }
         if (_TIFFReadEncodedStripAndAllocBuffer(
-                tif, TIFFComputeStrip(tif, (uint32_t)((int32_t)row + img->row_offset), 0),
+                tif,
+                TIFFComputeStrip(tif,
+                                 (uint32_t)((int32_t)row + img->row_offset), 0),
                 (void **)(&buf), maxstripsize,
-                (tmsize_t)((size_t)temp * (size_t)scanline)) == (tmsize_t)(-1) &&
+                (tmsize_t)((size_t)temp * (size_t)scanline)) ==
+                (tmsize_t)(-1) &&
             (buf == NULL || img->stoponerr))
         {
             ret = 0;
             break;
         }
 
-        pos = (tmsize_t)((uint32_t)((int32_t)row + img->row_offset) % rowsperstrip) * scanline +
+        pos = (tmsize_t)((uint32_t)((int32_t)row + img->row_offset) %
+                         rowsperstrip) *
+                  scanline +
               ((tmsize_t)img->col_offset * img->samplesperpixel);
         tmsize_t roffset = (tmsize_t)y * w;
         (*put)(img, raster + roffset, 0, y, wmin, nrow, fromskew, toskew,
                buf + pos);
-        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow : (int32_t)nrow);
+        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow
+                                                 : (int32_t)nrow);
     }
 
     if (flip & FLIP_HORIZONTALLY)
@@ -1367,7 +1385,9 @@ static int gtStripSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
     for (row = 0; row < h; row += nrow)
     {
         uint32_t temp;
-        rowstoread = rowsperstrip - ((uint32_t)((int32_t)row + img->row_offset) % rowsperstrip);
+        rowstoread =
+            rowsperstrip -
+            ((uint32_t)((int32_t)row + img->row_offset) % rowsperstrip);
         nrow = (row + rowstoread > h ? h - row : rowstoread);
         offset_row = (uint32_t)((int32_t)row + img->row_offset);
         temp = (uint32_t)((int32_t)row + img->row_offset) % rowsperstrip + nrow;
@@ -1437,12 +1457,15 @@ static int gtStripSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         /* For SEPARATE the pos-offset is per sample and should not be
          * multiplied by img->samplesperpixel. */
-        pos = (tmsize_t)((uint32_t)((int32_t)row + img->row_offset) % rowsperstrip) * scanline +
+        pos = (tmsize_t)((uint32_t)((int32_t)row + img->row_offset) %
+                         rowsperstrip) *
+                  scanline +
               (tmsize_t)img->col_offset;
         tmsize_t roffset = (tmsize_t)y * w;
         (*put)(img, raster + roffset, 0, y, wmin, nrow, fromskew, toskew,
                p0 + pos, p1 + pos, p2 + pos, (alpha ? (pa + pos) : NULL));
-        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow : (int32_t)nrow);
+        y += (uint32_t)((flip & FLIP_VERTICALLY) ? -(int32_t)nrow
+                                                 : (int32_t)nrow);
     }
 
     if (flip & FLIP_HORIZONTALLY)
@@ -1963,8 +1986,10 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKtile)
     fromskew *= samplesperpixel;
     for (; h > 0; --h)
     {
-        UNROLL8(w, NOP, k = (uint16_t)(255 - pp[3]); r = (uint16_t)((k * (uint16_t)(255 - pp[0])) / 255);
-                g = (uint16_t)((k * (uint16_t)(255 - pp[1])) / 255); b = (uint16_t)((k * (uint16_t)(255 - pp[2])) / 255);
+        UNROLL8(w, NOP, k = (uint16_t)(255 - pp[3]);
+                r = (uint16_t)((k * (uint16_t)(255 - pp[0])) / 255);
+                g = (uint16_t)((k * (uint16_t)(255 - pp[1])) / 255);
+                b = (uint16_t)((k * (uint16_t)(255 - pp[2])) / 255);
                 *cp++ = PACK(r, g, b); pp += samplesperpixel);
         cp += toskew;
         pp += fromskew;
@@ -2832,7 +2857,8 @@ static int makebwmap(TIFFRGBAImage *img)
 
     img->BWmap = (uint32_t **)_TIFFmallocExt(
         img->tif,
-        (tmsize_t)((size_t)256 * sizeof(uint32_t *) + ((size_t)256 * (size_t)nsamples * sizeof(uint32_t))));
+        (tmsize_t)((size_t)256 * sizeof(uint32_t *) +
+                   ((size_t)256 * (size_t)nsamples * sizeof(uint32_t))));
     if (img->BWmap == NULL)
     {
         TIFFErrorExtR(img->tif, TIFFFileName(img->tif),
@@ -2980,7 +3006,8 @@ static int makecmap(TIFFRGBAImage *img)
 
     img->PALmap = (uint32_t **)_TIFFmallocExt(
         img->tif,
-        (tmsize_t)((size_t)256 * sizeof(uint32_t *) + ((size_t)256 * (size_t)nsamples * sizeof(uint32_t))));
+        (tmsize_t)((size_t)256 * sizeof(uint32_t *) +
+                   ((size_t)256 * (size_t)nsamples * sizeof(uint32_t))));
     if (img->PALmap == NULL)
     {
         TIFFErrorExtR(img->tif, TIFFFileName(img->tif),

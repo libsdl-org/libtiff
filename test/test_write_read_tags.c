@@ -1724,7 +1724,8 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                             dblDiffLimit = 1e-6;
                         for (j = 0; j < auxInt32; j++)
                         {
-                            dblDiff = auxFloatArray[j] - auxFloatArrayW[i + (uint32_t)j];
+                            dblDiff = auxFloatArray[j] -
+                                      auxFloatArrayW[i + (uint32_t)j];
                             if (fabs(dblDiff) > fabs(dblDiffLimit))
                             {
                                 fprintf(stderr,
@@ -1749,8 +1750,8 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                             dblDiffLimit = 1e-6;
                         for (j = 0; j < auxInt32; j++)
                         {
-                            dblDiff =
-                                auxDoubleArray[j] - auxDoubleArrayW[i + (uint32_t)j];
+                            dblDiff = auxDoubleArray[j] -
+                                      auxDoubleArrayW[i + (uint32_t)j];
                             if (fabs(dblDiff) > fabs(dblDiffLimit))
                             {
                                 fprintf(stderr,
@@ -1811,7 +1812,8 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                         /* Compare and check values  */
                         for (j = 0; j < auxInt32; j++)
                         {
-                            if (auxShortArray[j] != auxShortArrayW[i + (uint32_t)j])
+                            if (auxShortArray[j] !=
+                                auxShortArrayW[i + (uint32_t)j])
                             {
                                 fprintf(stderr,
                                         "Read value %u of %s #%d %d "
@@ -1835,7 +1837,8 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                         /* Compare and check values  */
                         for (j = 0; j < auxInt32; j++)
                         {
-                            if (auxInt32Array[j] != auxInt32ArrayW[i + (uint32_t)j])
+                            if (auxInt32Array[j] !=
+                                auxInt32ArrayW[i + (uint32_t)j])
                             {
                                 fprintf(stderr,
                                         "Read value %u of %s #%d %d "

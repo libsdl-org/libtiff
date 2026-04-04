@@ -1303,9 +1303,10 @@ static void Luv32fromLuv48(LogLuvState *sp, uint8_t *op, tmsize_t n)
     {
         while (n-- > 0)
         {
-            *luv++ = (uint32_t)luv3[0] << 16 |
-                     ((uint32_t)luv3[1] * (uint32_t)(UVSCALE + .5) >> 7 & 0xff00) |
-                     ((uint32_t)luv3[2] * (uint32_t)(UVSCALE + .5) >> 15 & 0xff);
+            *luv++ =
+                (uint32_t)luv3[0] << 16 |
+                ((uint32_t)luv3[1] * (uint32_t)(UVSCALE + .5) >> 7 & 0xff00) |
+                ((uint32_t)luv3[2] * (uint32_t)(UVSCALE + .5) >> 15 & 0xff);
             luv3 += 3;
         }
         return;

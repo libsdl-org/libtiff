@@ -100,7 +100,9 @@ static int TIFFReadAndRealloc(TIFF *tif, tmsize_t size, tmsize_t rawdata_offset,
             uint8_t *new_rawdata;
             assert((tif->tif_flags & TIFF_MYBUFFER) != 0);
             tif->tif_rawdatasize = (tmsize_t)TIFFroundup_64(
-                (uint64_t)already_read + (uint64_t)to_read + (uint64_t)rawdata_offset, 1024);
+                (uint64_t)already_read + (uint64_t)to_read +
+                    (uint64_t)rawdata_offset,
+                1024);
             if (tif->tif_rawdatasize == 0)
             {
                 TIFFErrorExtR(tif, module, "Invalid buffer size");
@@ -131,8 +133,9 @@ static int TIFFReadAndRealloc(TIFF *tif, tmsize_t size, tmsize_t rawdata_offset,
         already_read += bytes_read;
         if (bytes_read != to_read)
         {
-            memset(tif->tif_rawdata + rawdata_offset + already_read, 0,
-                   (size_t)(tif->tif_rawdatasize - rawdata_offset - already_read));
+            memset(
+                tif->tif_rawdata + rawdata_offset + already_read, 0,
+                (size_t)(tif->tif_rawdatasize - rawdata_offset - already_read));
             if (is_strip)
             {
                 TIFFErrorExtR(tif, module,
@@ -223,14 +226,16 @@ static int TIFFFillStripPartial(TIFF *tif, int strip, tmsize_t read_ahead,
     */
     read_offset = TIFFGetStrileOffset(tif, (uint32_t)strip);
     if (read_offset > UINT64_MAX - (uint64_t)tif->tif_rawdataoff ||
-        read_offset + (uint64_t)tif->tif_rawdataoff > UINT64_MAX - (uint64_t)tif->tif_rawdataloaded)
+        read_offset + (uint64_t)tif->tif_rawdataoff >
+            UINT64_MAX - (uint64_t)tif->tif_rawdataloaded)
     {
         TIFFErrorExtR(tif, module,
                       "Seek error at scanline %" PRIu32 ", strip %d",
                       tif->tif_row, strip);
         return 0;
     }
-    read_offset += (uint64_t)tif->tif_rawdataoff + (uint64_t)tif->tif_rawdataloaded;
+    read_offset +=
+        (uint64_t)tif->tif_rawdataoff + (uint64_t)tif->tif_rawdataloaded;
 
     if (!SeekOK(tif, read_offset))
     {
@@ -248,10 +253,12 @@ static int TIFFFillStripPartial(TIFF *tif, int strip, tmsize_t read_ahead,
     else
         to_read = tif->tif_rawdatasize - unused_data;
     if ((uint64_t)to_read > TIFFGetStrileByteCount(tif, (uint32_t)strip) -
-                                (uint64_t)tif->tif_rawdataoff - (uint64_t)tif->tif_rawdataloaded)
+                                (uint64_t)tif->tif_rawdataoff -
+                                (uint64_t)tif->tif_rawdataloaded)
     {
         to_read = (tmsize_t)(TIFFGetStrileByteCount(tif, (uint32_t)strip) -
-                  (uint64_t)tif->tif_rawdataoff - (uint64_t)tif->tif_rawdataloaded);
+                             (uint64_t)tif->tif_rawdataoff -
+                             (uint64_t)tif->tif_rawdataloaded);
     }
 
     assert((tif->tif_flags & TIFF_BUFFERMMAP) == 0);
@@ -290,7 +297,8 @@ static int TIFFFillStripPartial(TIFF *tif, int strip, tmsize_t read_ahead,
         /* For JPEG, if there are multiple scans (can generally be known */
         /* with the  read_ahead used), we need to read the whole strip */
         if (tif->tif_dir.td_compression == COMPRESSION_JPEG &&
-            (uint64_t)tif->tif_rawcc < TIFFGetStrileByteCount(tif, (uint32_t)strip))
+            (uint64_t)tif->tif_rawcc <
+                TIFFGetStrileByteCount(tif, (uint32_t)strip))
         {
             if (TIFFJPEGIsFullStripRequired(tif))
             {

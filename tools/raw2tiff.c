@@ -521,9 +521,10 @@ static int guessSize(int fd, TIFFDataType dtype, _TIFF_off_t hdr_size,
                 buf2 = (char *)_TIFFmalloc(scanlinesize);
                 do
                 {
-                    if (_TIFF_lseek_f(
-                            fd, hdr_size + (uint32_t)((h - 1) / 2) * scanlinesize,
-                            SEEK_SET) == (_TIFF_off_t)-1)
+                    if (_TIFF_lseek_f(fd,
+                                      hdr_size + (uint32_t)((h - 1) / 2) *
+                                                     scanlinesize,
+                                      SEEK_SET) == (_TIFF_off_t)-1)
                     {
                         fprintf(stderr, "seek error.\n");
                         fail = 1;

@@ -1295,7 +1295,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                                 tSetFieldType == TIFF_SETGET_C32_FLOAT)
                             {
                                 memcpy(&auxFloatArray, pVoidArray,
-                                       ((size_t)auxInt32 * sizeof(auxFloatArray[0])));
+                                       ((size_t)auxInt32 *
+                                        sizeof(auxFloatArray[0])));
                                 /* compare read values with written ones */
                                 if (tType == TIFF_RATIONAL ||
                                     tType == TIFF_SRATIONAL)
@@ -1324,7 +1325,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                             else
                             {
                                 memcpy(&auxDoubleArray, pVoidArray,
-                                       ((size_t)auxInt32 * sizeof(auxDoubleArray[0])));
+                                       ((size_t)auxInt32 *
+                                        sizeof(auxDoubleArray[0])));
                                 /* compare read values with written ones */
                                 if (tType == TIFF_RATIONAL ||
                                     tType == TIFF_SRATIONAL)

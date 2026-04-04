@@ -229,9 +229,11 @@ int main(int argc, char **argv)
      * Hence, use ranges of expected values.  The ranges may need to be
      * widened over time as more versions of libjpeg appear.
      */
-    pixel_status |= (unsigned int)check_rgb_pixel(0, 15, 18, 0, 0, 18, 41, buffer);
+    pixel_status |=
+        (unsigned int)check_rgb_pixel(0, 15, 18, 0, 0, 18, 41, buffer);
     pixel_status |= (unsigned int)check_rgb_pixel(64, 0, 0, 0, 0, 0, 2, buffer);
-    pixel_status |= (unsigned int)check_rgb_pixel(512, 5, 6, 34, 36, 182, 196, buffer);
+    pixel_status |=
+        (unsigned int)check_rgb_pixel(512, 5, 6, 34, 36, 182, 196, buffer);
 
     free(buffer);
 
@@ -257,12 +259,12 @@ int main(int argc, char **argv)
      * accomplish it from the YCbCr subsampled buffer ourselves in which
      * case the results may be subtly different but similar.
      */
-    pixel_status |=
-        (unsigned int)check_rgba_pixel(0, 15, 18, 0, 0, 18, 41, 255, 255, rgba_buffer);
-    pixel_status |=
-        (unsigned int)check_rgba_pixel(64, 0, 0, 0, 0, 0, 2, 255, 255, rgba_buffer);
-    pixel_status |=
-        (unsigned int)check_rgba_pixel(512, 5, 6, 34, 36, 182, 196, 255, 255, rgba_buffer);
+    pixel_status |= (unsigned int)check_rgba_pixel(0, 15, 18, 0, 0, 18, 41, 255,
+                                                   255, rgba_buffer);
+    pixel_status |= (unsigned int)check_rgba_pixel(64, 0, 0, 0, 0, 0, 2, 255,
+                                                   255, rgba_buffer);
+    pixel_status |= (unsigned int)check_rgba_pixel(512, 5, 6, 34, 36, 182, 196,
+                                                   255, 255, rgba_buffer);
 
     free(rgba_buffer);
     TIFFClose(tif);

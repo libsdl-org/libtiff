@@ -231,7 +231,8 @@ static void Fax3Extension(const char *module, TIFF *tif, uint32_t line,
                   line, isTiled(tif) ? "tile" : "strip",
                   (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip), a0);
 }
-#define extension(a0) Fax3Extension(module, tif, (uint32_t)sp->line, (uint32_t)(a0))
+#define extension(a0)                                                          \
+    Fax3Extension(module, tif, (uint32_t)sp->line, (uint32_t)(a0))
 
 static void Fax3BadLength(const char *module, TIFF *tif, uint32_t line,
                           uint32_t a0, uint32_t lastx)
@@ -247,7 +248,8 @@ static void Fax3BadLength(const char *module, TIFF *tif, uint32_t line,
 #define badlength(a0, lastx)                                                   \
     do                                                                         \
     {                                                                          \
-        Fax3BadLength(module, tif, (uint32_t)sp->line, (uint32_t)(a0), (uint32_t)(lastx)); \
+        Fax3BadLength(module, tif, (uint32_t)sp->line, (uint32_t)(a0),         \
+                      (uint32_t)(lastx));                                      \
         ++sp->eolReachedCount;                                                 \
     } while (0)
 
@@ -731,7 +733,8 @@ static const int _msbmask[9] = {0x00, 0x01, 0x03, 0x07, 0x0f,
             _FlushBits(tif);                                                   \
         }                                                                      \
         assert(length < 9);                                                    \
-        data |= (int)(((unsigned int)bits & (unsigned int)_msbmask[length]) << (unsigned int)(bit - length)); \
+        data |= (int)(((unsigned int)bits & (unsigned int)_msbmask[length])    \
+                      << (unsigned int)(bit - length));                        \
         bit -= length;                                                         \
         if (bit == 0)                                                          \
             _FlushBits(tif);                                                   \
@@ -1163,13 +1166,18 @@ static int Fax3Encode2DRow(TIFF *tif, unsigned char *bp, unsigned char *rp,
 {
 #define PIXEL(buf, ix) ((((buf)[(ix) >> 3]) >> (7 - ((ix)&7))) & 1)
     uint32_t a0 = 0;
-    uint32_t a1 = (PIXEL(bp, 0) != 0 ? 0 : (uint32_t)finddiff(bp, (int32_t)0, (int32_t)bits, 0));
-    uint32_t b1 = (PIXEL(rp, 0) != 0 ? 0 : (uint32_t)finddiff(rp, (int32_t)0, (int32_t)bits, 0));
+    uint32_t a1 = (PIXEL(bp, 0) != 0
+                       ? 0
+                       : (uint32_t)finddiff(bp, (int32_t)0, (int32_t)bits, 0));
+    uint32_t b1 = (PIXEL(rp, 0) != 0
+                       ? 0
+                       : (uint32_t)finddiff(rp, (int32_t)0, (int32_t)bits, 0));
     uint32_t a2, b2;
 
     for (;;)
     {
-        b2 = (uint32_t)finddiff2(rp, (int32_t)b1, (int32_t)bits, (int32_t)PIXEL(rp, b1));
+        b2 = (uint32_t)finddiff2(rp, (int32_t)b1, (int32_t)bits,
+                                 (int32_t)PIXEL(rp, b1));
         if (b2 >= a1)
         {
             /* Naive computation triggers
@@ -1182,7 +1190,8 @@ static int Fax3Encode2DRow(TIFF *tif, unsigned char *bp, unsigned char *rp,
                                                      : 0x7FFFFFFF;
             if (!(-3 <= d && d <= 3))
             { /* horizontal mode */
-                a2 = (uint32_t)finddiff2(bp, (int32_t)a1, (int32_t)bits, (int32_t)PIXEL(bp, a1));
+                a2 = (uint32_t)finddiff2(bp, (int32_t)a1, (int32_t)bits,
+                                         (int32_t)PIXEL(bp, a1));
                 if (!putcode(tif, &horizcode))
                     return 0;
                 if (a0 + a1 == 0 || PIXEL(bp, a0) == 0)
@@ -1216,9 +1225,12 @@ static int Fax3Encode2DRow(TIFF *tif, unsigned char *bp, unsigned char *rp,
         }
         if (a0 >= bits)
             break;
-        a1 = (uint32_t)finddiff(bp, (int32_t)a0, (int32_t)bits, (int32_t)PIXEL(bp, a0));
-        b1 = (uint32_t)finddiff(rp, (int32_t)a0, (int32_t)bits, (int32_t)!PIXEL(bp, a0));
-        b1 = (uint32_t)finddiff(rp, (int32_t)b1, (int32_t)bits, (int32_t)PIXEL(bp, a0));
+        a1 = (uint32_t)finddiff(bp, (int32_t)a0, (int32_t)bits,
+                                (int32_t)PIXEL(bp, a0));
+        b1 = (uint32_t)finddiff(rp, (int32_t)a0, (int32_t)bits,
+                                (int32_t)!PIXEL(bp, a0));
+        b1 = (uint32_t)finddiff(rp, (int32_t)b1, (int32_t)bits,
+                                (int32_t)PIXEL(bp, a0));
     }
     return (1);
 #undef PIXEL
