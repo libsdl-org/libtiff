@@ -103,6 +103,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wduplicated-cond
                 -Wunused-parameter
                 -Wmissing-declarations
+                -Wredundant-decls
         )
     endif()
     if(broken-warnings)
@@ -120,7 +121,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wsizeof-pointer-memaccess
                 -Wlogical-op
                 -Wlogical-not-parentheses
-                -Wredundant-decls
                 -Wno-int-to-pointer-cast
                 -Wunreachable-code)
     endif()
