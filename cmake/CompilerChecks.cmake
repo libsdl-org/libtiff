@@ -101,6 +101,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wuninitialized
                 -Wduplicated-branches
                 -Wduplicated-cond
+                -Wunused-parameter
         )
     endif()
     if(broken-warnings)
@@ -108,7 +109,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wmisleading-indentation
                 -Wmissing-include-dirs
                 -Wunused-local-typedefs
-                -Wunused-parameter
                 -Wbool-operation
                 -Wunused-macros
                 -Wcast-qual
