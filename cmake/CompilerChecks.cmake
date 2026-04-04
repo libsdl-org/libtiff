@@ -99,6 +99,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wfloat-conversion
                 -Wfloat-equal
                 -Wuninitialized
+                -Wduplicated-branches
         )
     endif()
     if(broken-warnings)
@@ -108,7 +109,6 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wunused-local-typedefs
                 -Wunused-parameter
                 -Wbool-operation
-                -Wduplicated-branches
                 -Wduplicated-cond
                 -Wunused-macros
                 -Wcast-qual
