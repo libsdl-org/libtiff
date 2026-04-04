@@ -286,7 +286,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     }
     for (i = 0; i < N_SIZE; i++)
     {
-        auxShortArrayW[i] = (short)(i + 1) * 7;
+        auxShortArrayW[i] = (short)((i + 1) * 7);
     }
     for (i = 0; i < N_SIZE; i++)
     {
@@ -596,8 +596,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         if (auxUint16 != NINKS)
         {
             fprintf(stderr,
-                    "Read value of TIFFTAG_NUMBEROFINKS %u differs from set "
-                    "value %u.\n",
+                    "Read value of TIFFTAG_NUMBEROFINKS %u differs from set value %u.\n",
                     auxUint16, (unsigned int)NINKS);
             goto failure;
         }
@@ -1261,7 +1260,7 @@ int write_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                 }
             }
         } /*-- switch() --*/
-    }     /*-- for() --*/
+    } /*-- for() --*/
 
     *iCnt = i;
     return 0;
@@ -1563,7 +1562,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                     dblDiffLimit = RATIONAL_EPS * auxDoubleArrayW[i];
                 else
                     dblDiffLimit = 1e-3;
-                dblDiff = auxFloat - auxDoubleArrayW[i];
+                dblDiff = (double)auxFloat - auxDoubleArrayW[i];
                 if (fabs(dblDiff) > fabs(dblDiffLimit))
                 {
                     /*--: EXIFTAG_SUBJECTDISTANCE: LibTiff returns value of
@@ -1579,7 +1578,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                         fprintf(stderr,
                                 "%u:Read value of %s %f differs from set value "
                                 "%f\n",
-                                i, tFieldName, auxFloat, auxDoubleArrayW[i]);
+                                i, tFieldName, (double)auxFloat, auxDoubleArrayW[i]);
                         GOTOFAILURE
                     }
                 }
@@ -1731,8 +1730,8 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                                 fprintf(stderr,
                                         "Read value %u of %s #%d %f differs "
                                         "from set value %f\n",
-                                        i, tFieldName, j, auxFloatArray[j],
-                                        auxFloatArrayW[i + (uint32_t)j]);
+                                        i, tFieldName, j, (double)auxFloatArray[j],
+                                        (double)auxFloatArrayW[i + (uint32_t)j]);
                                 GOTOFAILURE
                             }
                         }
