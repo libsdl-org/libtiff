@@ -178,7 +178,6 @@
 #define EDGE_LEFT 2
 #define EDGE_BOTTOM 3
 #define EDGE_RIGHT 4
-#define EDGE_CENTER 5
 
 #define MIRROR_HORIZ 1
 #define MIRROR_VERT 2
@@ -220,7 +219,6 @@
     2048              /* number of images in discrete list, not in the file    \
                        */
 #define MAX_SAMPLES 8 /* maximum number of samples per pixel supported */
-#define MAX_BITS_PER_SAMPLE 64  /* maximum bit depth supported */
 #define MAX_EXPORT_PAGES 999999 /* maximum number of export pages per file */
 
 #define DUMP_NONE 0
@@ -345,16 +343,10 @@ struct crop_mask
     (sizeof(PaperTable) / sizeof(PaperTable[0])) /* was 49                     \
                                                   */
 #define MAX_PAPERNAME_LENGTH 15
-#define DEFAULT_RESUNIT RESUNIT_INCH
-#define DEFAULT_PAGE_HEIGHT 14.0
-#define DEFAULT_PAGE_WIDTH 8.5
-#define DEFAULT_RESOLUTION 300
-#define DEFAULT_PAPER_SIZE "legal"
 
 #define ORIENTATION_NONE 0
 #define ORIENTATION_PORTRAIT 1
 #define ORIENTATION_LANDSCAPE 2
-#define ORIENTATION_SEASCAPE 4
 #define ORIENTATION_AUTO 16
 
 #define PAGE_MODE_NONE 0
@@ -1732,9 +1724,6 @@ static void usage(int code)
 #define CopyField2(tag, v1, v2)                                                \
     if (TIFFGetField(in, tag, &v1, &v2))                                       \
     TIFFSetField(out, tag, v1, v2)
-#define CopyField3(tag, v1, v2, v3)                                            \
-    if (TIFFGetField(in, tag, &v1, &v2, &v3))                                  \
-    TIFFSetField(out, tag, v1, v2, v3)
 #define CopyField4(tag, v1, v2, v3, v4)                                        \
     if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4))                             \
     TIFFSetField(out, tag, v1, v2, v3, v4)

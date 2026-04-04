@@ -30,8 +30,6 @@
 #include "tiffiop.h"
 #include <stdio.h>
 
-#define STRIPINCR 20 /* expansion factor on strip array */
-
 #define NOSTRIP ((uint32_t)(-1)) /* undefined state */
 
 #define WRITECHECKSTRIPS(tif, module)                                          \

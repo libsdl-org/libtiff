@@ -712,12 +712,6 @@ static void usage(int code)
         if (TIFFGetField(in, tag, &v1, &v2))                                   \
             TIFFSetField(out, tag, v1, v2);                                    \
     } while (0)
-#define CopyField3(tag, v1, v2, v3)                                            \
-    do                                                                         \
-    {                                                                          \
-        if (TIFFGetField(in, tag, &v1, &v2, &v3))                              \
-            TIFFSetField(out, tag, v1, v2, v3);                                \
-    } while (0)
 #define CopyField4(tag, v1, v2, v3, v4)                                        \
     do                                                                         \
     {                                                                          \

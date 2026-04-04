@@ -58,13 +58,6 @@ static int checkcmap(int n, uint16_t *r, uint16_t *g, uint16_t *b)
     return (8);
 }
 
-#define CopyField(tag, v)                                                      \
-    if (TIFFGetField(in, tag, &v))                                             \
-    TIFFSetField(out, tag, v)
-#define CopyField3(tag, v1, v2, v3)                                            \
-    if (TIFFGetField(in, tag, &v1, &v2, &v3))                                  \
-    TIFFSetField(out, tag, v1, v2, v3)
-
 static uint16_t compression = (uint16_t)-1;
 static uint16_t predictor = 0;
 static int quality = 75; /* JPEG quality */
@@ -324,9 +317,6 @@ static int processCompressOptions(char *opt)
 #define CopyField2(tag, v1, v2)                                                \
     if (TIFFGetField(in, tag, &v1, &v2))                                       \
     TIFFSetField(out, tag, v1, v2)
-#define CopyField3(tag, v1, v2, v3)                                            \
-    if (TIFFGetField(in, tag, &v1, &v2, &v3))                                  \
-    TIFFSetField(out, tag, v1, v2, v3)
 #define CopyField4(tag, v1, v2, v3, v4)                                        \
     if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4))                             \
     TIFFSetField(out, tag, v1, v2, v3, v4)

@@ -22,9 +22,6 @@
  * OF THIS SOFTWARE.
  */
 
-#define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN
-
 #include "tiffiop.h"
 #include <stdlib.h>
 
@@ -146,20 +143,9 @@ int TIFFJPEGIsFullStripRequired_12(TIFF *tif);
 #define LONGJMP(jbuf, code) longjmp(jbuf, code)
 #define JMP_BUF jmp_buf
 
-#ifndef TIFF_jpeg_destination_mgr_defined
-#define TIFF_jpeg_destination_mgr_defined
-typedef struct jpeg_destination_mgr jpeg_destination_mgr;
-#endif
-
-#ifndef TIFF_jpeg_source_mgr_defined
-#define TIFF_jpeg_source_mgr_defined
-typedef struct jpeg_source_mgr jpeg_source_mgr;
-#endif
-
-#ifndef TIFF_jpeg_error_mgr_defined
-#define TIFF_jpeg_error_mgr_defined
-typedef struct jpeg_error_mgr jpeg_error_mgr;
-#endif
+typedef struct jpeg_destination_mgr tiff_jpeg_destination_mgr;
+typedef struct jpeg_source_mgr tiff_jpeg_source_mgr;
+typedef struct jpeg_error_mgr tiff_jpeg_error_mgr;
 
 /*
  * State block for each open TIFF file using
@@ -188,7 +174,7 @@ typedef struct
     } cinfo; /* NB: must be first */
     int cinfo_initialized;
 
-    jpeg_error_mgr err;  /* libjpeg error manager */
+    tiff_jpeg_error_mgr err;  /* libjpeg error manager */
     JMP_BUF exit_jmpbuf; /* for catching libjpeg failures */
 
     struct jpeg_progress_mgr progress;
@@ -196,8 +182,8 @@ typedef struct
      * The following two members could be a union, but
      * they're small enough that it's not worth the effort.
      */
-    jpeg_destination_mgr dest; /* data dest for compression */
-    jpeg_source_mgr src;       /* data source for decompression */
+    tiff_jpeg_destination_mgr dest; /* data dest for compression */
+    tiff_jpeg_source_mgr src;       /* data source for decompression */
                                /* private state */
     TIFF *tif;                 /* back link needed by some code */
     uint16_t photometric;      /* copy of PhotometricInterpretation */

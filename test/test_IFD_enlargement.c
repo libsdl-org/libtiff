@@ -28,7 +28,6 @@
 #endif
 
 #ifndef TIFFmin
-#define TIFFmax(A, B) ((A) > (B) ? (A) : (B))
 #define TIFFmin(A, B) ((A) < (B) ? (A) : (B))
 #endif
 

@@ -1613,13 +1613,6 @@ static int gtStripSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 #define PACK4(r, g, b, a)                                                      \
     ((uint32_t)(r) | ((uint32_t)(g) << 8) | ((uint32_t)(b) << 16) |            \
      ((uint32_t)(a) << 24))
-#define W2B(v) (((v) >> 8) & 0xff)
-/* TODO: PACKW should have be made redundant in favor of Bitdepth16To8 LUT */
-#define PACKW(r, g, b)                                                         \
-    ((uint32_t)W2B(r) | ((uint32_t)W2B(g) << 8) | ((uint32_t)W2B(b) << 16) | A1)
-#define PACKW4(r, g, b, a)                                                     \
-    ((uint32_t)W2B(r) | ((uint32_t)W2B(g) << 8) | ((uint32_t)W2B(b) << 16) |   \
-     ((uint32_t)W2B(a) << 24))
 
 #define DECLAREContigPutFunc(name)                                             \
     static void name(TIFFRGBAImage *img, uint32_t *cp, uint32_t x, uint32_t y, \

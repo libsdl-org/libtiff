@@ -164,8 +164,6 @@ int main(int argc, char *argv[])
     return (EXIT_SUCCESS);
 }
 
-#define ord(e) ((int)e)
-
 static uint64_t ReadDirectory(int, unsigned, uint64_t);
 static void ReadError(const char *);
 static void Error(const char *, ...);

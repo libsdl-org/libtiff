@@ -54,7 +54,6 @@
 #ifndef howmany
 #define howmany(x, y) (((x) + ((y)-1)) / (y))
 #endif
-#define roundup(x, y) (howmany(x, y) * ((uint32_t)(y)))
 
 static uint16_t compression = COMPRESSION_PACKBITS;
 static uint32_t rowsperstrip = (uint32_t)-1;

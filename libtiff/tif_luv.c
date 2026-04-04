@@ -767,10 +767,6 @@ static int LogLuvEncodeTile(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-#undef log2 /* Conflict with C'99 function */
-#define log2(x) ((1. / M_LN2) * log(x))
-#undef exp2 /* Conflict with C'99 function */
-#define exp2(x) exp(M_LN2 *(x))
 
 #define TIFF_RAND_MAX 32767
 

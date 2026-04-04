@@ -285,8 +285,6 @@ static void Fax3TryG3WithoutEOL(const char *module, TIFF *tif, uint32_t line,
         Fax3TryG3WithoutEOL(module, tif, (uint32_t)sp->line, (uint32_t)(a0));  \
     } while (0)
 
-#define Nop
-
 static int CheckReachedCounters(TIFF *tif, const char *module,
                                 Fax3CodecState *sp)
 {
