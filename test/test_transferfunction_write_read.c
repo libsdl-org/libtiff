@@ -114,11 +114,11 @@ static int read_check_transferfunctions(TIFF **ptif, const char *filename, int b
     }
     else
     {
-        if (ptfR0 != NULL && !_TIFFmemcmp(ptfx0, ptfR0, (tmsize_t)((size_t)nSamplesPerTransferFunction * sizeof(uint16_t))))
+        if (ptfR0 != NULL && !_TIFFmemcmp(ptfx0, ptfR0, (tmsize_t)(nSamplesPerTransferFunction * sizeof(uint16_t))))
             retval += 1;
-        if (ptfR1 != NULL && !_TIFFmemcmp(ptfx1, ptfR1, (tmsize_t)((size_t)nSamplesPerTransferFunction * sizeof(uint16_t))))
+        if (ptfR1 != NULL && !_TIFFmemcmp(ptfx1, ptfR1, (tmsize_t)(nSamplesPerTransferFunction * sizeof(uint16_t))))
             retval += 2;
-        if (ptfR2 != NULL && !_TIFFmemcmp(ptfx2, ptfR2, (tmsize_t)((size_t)nSamplesPerTransferFunction * sizeof(uint16_t))))
+        if (ptfR2 != NULL && !_TIFFmemcmp(ptfx2, ptfR2, (tmsize_t)(nSamplesPerTransferFunction * sizeof(uint16_t))))
             retval += 4;
     }
 

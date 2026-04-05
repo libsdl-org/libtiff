@@ -2834,7 +2834,7 @@ TIFFReadDirEntryFloatArray(TIFF *tif, TIFFDirEntry *direntry, float **value)
         default:
             break;
     }
-    data = (float *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(float)));
+    data = (float *)_TIFFmallocExt(tif, (tmsize_t)(count * sizeof(float)));
     if (data == 0)
     {
         _TIFFfreeExt(tif, origdata);
@@ -3074,7 +3074,7 @@ TIFFReadDirEntryDoubleArray(TIFF *tif, TIFFDirEntry *direntry, double **value)
         default:
             break;
     }
-    data = (double *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(double)));
+    data = (double *)_TIFFmallocExt(tif, (tmsize_t)(count * sizeof(double)));
     if (data == 0)
     {
         _TIFFfreeExt(tif, origdata);
@@ -4420,7 +4420,7 @@ int TIFFReadDirectory(TIFF *tif)
      * checking. Note: Counter are reset within TIFFFreeDirectory(). */
     tif->tif_dir.td_dirdatasize_offsets =
         (TIFFEntryOffsetAndLength *)_TIFFmallocExt(
-            tif, (tmsize_t)((size_t)dircount * sizeof(TIFFEntryOffsetAndLength)));
+            tif, (tmsize_t)(dircount * sizeof(TIFFEntryOffsetAndLength)));
     if (tif->tif_dir.td_dirdatasize_offsets == NULL)
     {
         TIFFErrorExtR(
@@ -5428,7 +5428,7 @@ int TIFFReadCustomDirectory(TIFF *tif, toff_t diroff,
      * checking. Note: Counter are reset within TIFFFreeDirectory(). */
     tif->tif_dir.td_dirdatasize_offsets =
         (TIFFEntryOffsetAndLength *)_TIFFmallocExt(
-            tif, (tmsize_t)((size_t)dircount * sizeof(TIFFEntryOffsetAndLength)));
+            tif, (tmsize_t)(dircount * sizeof(TIFFEntryOffsetAndLength)));
     if (tif->tif_dir.td_dirdatasize_offsets == NULL)
     {
         TIFFErrorExtR(
@@ -7837,7 +7837,7 @@ static int TIFFFetchStripThing(TIFF *tif, TIFFDirEntry *dir, uint32_t nstrips,
             _TIFFmemcpy(resizeddata, data,
                         (tmsize_t)((uint32_t)dir->tdir_count * sizeof(uint64_t)));
         _TIFFmemset(resizeddata + (uint32_t)dir->tdir_count, 0,
-                    (tmsize_t)((size_t)(nstrips - (uint32_t)dir->tdir_count) * sizeof(uint64_t)));
+                    (tmsize_t)((nstrips - (uint32_t)dir->tdir_count) * sizeof(uint64_t)));
         _TIFFfreeExt(tif, data);
         data = resizeddata;
     }
