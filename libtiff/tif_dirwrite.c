@@ -365,7 +365,7 @@ static int TIFFRewriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                 }
                 if (tif->tif_flags & TIFF_SWAB)
                     TIFFSwabShort(&dircount);
-                (void)TIFFSeekFile(tif, nextdir + 2 + (uint32_t)(dircount * 12), SEEK_SET);
+                (void)TIFFSeekFile(tif, nextdir + 2 + dircount * 12U, SEEK_SET);
                 if (!ReadOK(tif, &nextnextdir, 4))
                 {
                     TIFFErrorExtR(tif, module, "Error fetching directory link");
@@ -377,7 +377,7 @@ static int TIFFRewriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                 {
                     uint32_t m;
                     m = 0;
-                    (void)TIFFSeekFile(tif, nextdir + 2 + (uint32_t)(dircount * 12),
+                    (void)TIFFSeekFile(tif, nextdir + 2 + dircount * 12U,
                                        SEEK_SET);
                     if (!WriteOK(tif, &m, 4))
                     {
@@ -2156,7 +2156,7 @@ static int TIFFWriteDirectoryTagColormap(TIFF *tif, uint32_t *ndir,
     uint32_t m;
     uint16_t *n;
     int o;
-    m = (uint32_t)(1 << tif->tif_dir.td_bitspersample);
+    m = 1U << tif->tif_dir.td_bitspersample;
     if (dir == NULL) /* Just evaluate IFD data size and increment ndir. */
     {
         EvaluateIFDdatasizeWrite(tif, 3 * m, sizeof(uint16_t), ndir);
@@ -2189,7 +2189,7 @@ static int TIFFWriteDirectoryTagTransferfunction(TIFF *tif, uint32_t *ndir,
     /* TIFFTAG_TRANSFERFUNCTION expects (1 or 3) pointer to arrays with
      *  (1 << BitsPerSample) * uint16_t values.
      */
-    m = (uint32_t)(1 << tif->tif_dir.td_bitspersample);
+    m = 1U << tif->tif_dir.td_bitspersample;
     /* clang-format off */
     n = (tif->tif_dir.td_samplesperpixel - tif->tif_dir.td_extrasamples) > 1 ? 3 : 1;
     /* clang-format on */
@@ -3292,7 +3292,7 @@ static int TIFFLinkDirectory(TIFF *tif)
             }
             if (tif->tif_flags & TIFF_SWAB)
                 TIFFSwabShort(&dircount);
-            (void)TIFFSeekFile(tif, nextdir + 2 + (uint32_t)(dircount * 12), SEEK_SET);
+            (void)TIFFSeekFile(tif, nextdir + 2 + dircount * 12U, SEEK_SET);
             if (!ReadOK(tif, &nextnextdir, 4))
             {
                 TIFFErrorExtR(tif, module, "Error fetching directory link");
@@ -3302,7 +3302,7 @@ static int TIFFLinkDirectory(TIFF *tif)
                 TIFFSwabLong(&nextnextdir);
             if (nextnextdir == 0)
             {
-                (void)TIFFSeekFile(tif, nextdir + 2 + (uint32_t)(dircount * 12), SEEK_SET);
+                (void)TIFFSeekFile(tif, nextdir + 2 + dircount * 12U, SEEK_SET);
                 if (!WriteOK(tif, &m, 4))
                 {
                     TIFFErrorExtR(tif, module, "Error writing directory link");

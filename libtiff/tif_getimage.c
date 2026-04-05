@@ -1999,7 +1999,7 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKMaptile)
 {
     int samplesperpixel = img->samplesperpixel;
     TIFFRGBValue *Map = img->Map;
-    uint16_t r, g, b, k;
+    unsigned int r, g, b, k;
 
     (void)y;
     fromskew *= samplesperpixel;
@@ -2007,10 +2007,10 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKMaptile)
     {
         for (x = w; x > 0; --x)
         {
-            k = (uint16_t)(255 - pp[3]);
-            r = (uint16_t)((k * (255 - pp[0])) / 255);
-            g = (uint16_t)((k * (255 - pp[1])) / 255);
-            b = (uint16_t)((k * (255 - pp[2])) / 255);
+            k = 255U - pp[3];
+            r = (k * (255U - pp[0])) / 255U;
+            g = (k * (255U - pp[1])) / 255U;
+            b = (k * (255U - pp[2])) / 255U;
             *cp++ = PACK(Map[r], Map[g], Map[b]);
             pp += samplesperpixel;
         }
@@ -2067,13 +2067,13 @@ DECLARESepPutFunc(putCMYKseparate8bittile)
     (void)y;
     for (; h > 0; --h)
     {
-        uint32_t rv, gv, bv, kv;
+        unsigned int rv, gv, bv, kv;
         for (x = w; x > 0; --x)
         {
-            kv = (uint32_t)(255 - *a++);
-            rv = (uint32_t)((kv * (uint32_t)(255 - *r++)) / 255);
-            gv = (uint32_t)((kv * (uint32_t)(255 - *g++)) / 255);
-            bv = (uint32_t)((kv * (uint32_t)(255 - *b++)) / 255);
+            kv = 255U - *a++;
+            rv = (kv * (255U - *r++)) / 255U;
+            gv = (kv * (255U - *g++)) / 255U;
+            bv = (kv * (255U - *b++)) / 255U;
             *cp++ = PACK4(rv, gv, bv, 255);
         }
         SKEW4(r, g, b, a, fromskew);

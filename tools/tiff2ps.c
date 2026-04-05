@@ -808,9 +808,9 @@ static int get_subimage_count(double pagewidth, double pageheight,
     double splitwidth = 0;  /* Requested Max Width in points */
     double overlap = 0;     /* Repeated edge width in points */
 
-    splitheight = (double)maxPageHeight * (double)PS_UNIT_SIZE;
-    splitwidth = (double)maxPageWidth * (double)PS_UNIT_SIZE;
-    overlap = (double)splitOverlap * (double)PS_UNIT_SIZE;
+    splitheight = maxPageHeight * (double)PS_UNIT_SIZE;
+    splitwidth = maxPageWidth * (double)PS_UNIT_SIZE;
+    overlap = splitOverlap * (double)PS_UNIT_SIZE;
     pagewidth *= (double)PS_UNIT_SIZE;
     pageheight *= (double)PS_UNIT_SIZE;
 

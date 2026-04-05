@@ -5315,7 +5315,7 @@ static void TIFFReadDirectoryCheckOrder(TIFF *tif, TIFFDirEntry *dir,
                             "ascending order");
             break;
         }
-        m = (uint32_t)(o->tdir_tag + 1);
+        m = o->tdir_tag + 1U;
     }
 }
 
@@ -7835,7 +7835,7 @@ static int TIFFFetchStripThing(TIFF *tif, TIFFDirEntry *dir, uint32_t nstrips,
         }
         if (dir->tdir_count)
             _TIFFmemcpy(resizeddata, data,
-                        (tmsize_t)((size_t)((uint32_t)dir->tdir_count) * sizeof(uint64_t)));
+                        (tmsize_t)((uint32_t)dir->tdir_count * sizeof(uint64_t)));
         _TIFFmemset(resizeddata + (uint32_t)dir->tdir_count, 0,
                     (tmsize_t)((size_t)(nstrips - (uint32_t)dir->tdir_count) * sizeof(uint64_t)));
         _TIFFfreeExt(tif, data);
