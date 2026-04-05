@@ -880,7 +880,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
      * TIFF_SETGET_FLOAT) with field_bit=FIELD_CUSTOM !! -*/
     /*  - was written with Double but has to be read with Float */
     retCode = TIFFGetField(tif, TIFFTAG_PIXAR_FOVCOT, &auxFloat);
-    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0f)
+    if (!TIFF_FLOAT_EQ(auxFloat, (float)PIXAR_FOVCOT_VAL))
     {
         fprintf(
             stderr,
@@ -892,7 +892,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     /*- TIFFTAG_STONITS is a DOUBLE parameter (TIFF_DOUBLE, TIFF_SETGET_DOUBLE)
      * with field_bit=FIELD_CUSTOM!! -*/
     retCode = TIFFGetField(tif, TIFFTAG_STONITS, &auxDouble);
-    if (fabs(auxDouble - (double)STONITS_VAL) > 0.0)
+    if (!TIFF_DOUBLE_EQ(auxDouble, (double)STONITS_VAL))
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_STONITS %f differs from set value %f\n",
@@ -1153,7 +1153,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                              * values, which are not treated within LibTiff!!
                              */
                             if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
-                                  !(fabsf(auxFloat - (-1.0f)) > 0.0f)))
+                                  TIFF_FLOAT_EQ(auxFloat, -1.0f)))
                             {
                                 fprintf(stderr,
                                         "%d:Read value of %s %f differs from "
@@ -1218,7 +1218,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                              * of "-1.0" if numerator equals 4294967295
                              * (0xFFFFFFFF) to indicate infinite distance! */
                             if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
-                                  !(fabs(auxDouble - (-1.0)) > 0.0)))
+                                  TIFF_DOUBLE_EQ(auxDouble, -1.0)))
                             {
                                 fprintf(stderr,
                                         "%d:Read value of %s %f differs from "

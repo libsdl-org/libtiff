@@ -2761,7 +2761,7 @@ static int initYCbCrConversion(TIFFRGBAImage *img)
 
     /* Do some validation to avoid later issues. Detect NaN for now */
     /* and also if lumaGreen is zero since we divide by it later */
-    if (isnan(luma[0]) || isnan(luma[1]) || !(fabsf(luma[1]) > 0.0f) ||
+    if (isnan(luma[0]) || isnan(luma[1]) || TIFF_FLOAT_EQ(luma[1], 0.0f) ||
         isnan(luma[2]))
     {
         TIFFErrorExtR(img->tif, module,
@@ -2794,7 +2794,7 @@ static tileContigRoutine initCIELabConversion(TIFFRGBAImage *img)
     float refWhite[3];
 
     TIFFGetFieldDefaulted(img->tif, TIFFTAG_WHITEPOINT, &whitePoint);
-    if (!(fabsf(whitePoint[1]) > 0.0f))
+    if (TIFF_FLOAT_EQ(whitePoint[1], 0.0f))
     {
         TIFFErrorExtR(img->tif, module, "Invalid value for WhitePoint tag.");
         return NULL;

@@ -38,6 +38,7 @@
 #include <sys/types.h>
 #endif
 
+#include <math.h>
 #include <string.h>
 
 #ifdef HAVE_ASSERT_H
@@ -339,6 +340,10 @@ struct TIFFOpenOptions
 #define TIFFmin(A, B) ((A) < (B) ? (A) : (B))
 
 #define TIFFArrayCount(a) (sizeof(a) / sizeof((a)[0]))
+
+/* Float/double equality macros that suppress -Wfloat-equal warnings */
+#define TIFF_FLOAT_EQ(x, y) (!(fabsf((x) - (y)) > 0.0f))
+#define TIFF_DOUBLE_EQ(x, y) (!(fabs((x) - (y)) > 0.0))
 
 /*
   Support for large files.

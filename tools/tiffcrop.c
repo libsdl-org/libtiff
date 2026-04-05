@@ -5943,7 +5943,7 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
     }
     else
     {
-        if ((!(fabsf(image->xres) > 0.0f) || !(fabsf(image->yres) > 0.0f)) &&
+        if ((TIFF_FLOAT_EQ(image->xres, 0.0f) || TIFF_FLOAT_EQ(image->yres, 0.0f)) &&
             (crop->res_unit != RESUNIT_NONE) &&
             ((crop->crop_mode & CROP_REGIONS) ||
              (crop->crop_mode & CROP_MARGINS) ||

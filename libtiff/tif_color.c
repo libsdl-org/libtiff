@@ -190,7 +190,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
 #define ONE_HALF ((int32_t)(1 << (SHIFT - 1)))
 #define Code2V(c, RB, RW, CR)                                                  \
     (((float)((c) - (int32_t)(RB)) * (float)(CR)) /                            \
-     ((fabsf((RW) - (RB)) > 0.0f) ? ((RW) - (RB)) : 1.0f))
+     ((!TIFF_FLOAT_EQ((RW), (RB))) ? ((RW) - (RB)) : 1.0f))
 /* !((f)>=(min)) written that way to deal with NaN */
 #define CLAMP(f, min, max)                                                     \
     ((!((f) >= (min))) ? (min) : (f) > (max) ? (max) : (f))

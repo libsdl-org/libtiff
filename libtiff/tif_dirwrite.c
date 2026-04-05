@@ -2797,7 +2797,7 @@ static void ToRationalEuclideanGCD(double value, int blnUseSignedRange,
      *the double-value of it reaches an integer number without fractional part.
      */
     bigDenom = 1;
-    while ((fabs(value - floor(value)) > 0.0) && (value < fMax) &&
+    while ((!TIFF_DOUBLE_EQ(value, floor(value))) && (value < fMax) &&
            (bigDenom < nMax))
     {
         bigDenom <<= 1;
@@ -2890,7 +2890,7 @@ static void DoubleToRational(double value, uint32_t *num, uint32_t *denom)
         return;
     }
     /*-- Check for easy integer numbers -- */
-    if (!(fabs(value - (double)(uint32_t)value) > 0.0))
+    if (TIFF_DOUBLE_EQ(value, (double)(uint32_t)value))
     {
         *num = (uint32_t)value;
         *denom = 1;
@@ -2965,7 +2965,7 @@ static void DoubleToSrational(double value, int32_t *num, int32_t *denom)
         return;
     }
     /*-- Check for easy numbers -- */
-    if (!(fabs(value - (double)(int32_t)value) > 0.0))
+    if (TIFF_DOUBLE_EQ(value, (double)(int32_t)value))
     {
         *num = (int32_t)(neg * value);
         *denom = 1;

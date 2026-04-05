@@ -24,6 +24,7 @@
 
 #include "libport.h"
 #include "tif_config.h"
+#include "tiffiop.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -764,7 +765,7 @@ static int CheckLongTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 static int CheckFloatTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     float v1, v2;
-    CHECK_FLOAT(!(fabsf(v1 - v2) > 0.0f), "%s: %g %g\n");
+    CHECK_FLOAT(TIFF_FLOAT_EQ(v1, v2), "%s: %g %g\n");
 }
 
 static int CheckStringTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)

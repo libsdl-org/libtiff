@@ -1573,7 +1573,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                      * indicates special values, which are not treated
                      * within LibTiff!!
                      */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && !(fabsf(auxFloat - (-1.0f)) > 0.0f)))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && TIFF_FLOAT_EQ(auxFloat, -1.0f)))
                     {
                         fprintf(stderr,
                                 "%u:Read value of %s %f differs from set value "
@@ -1603,7 +1603,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                      * "-1.0" if numerator equals 4294967295 (0xFFFFFFFF) to
                      * indicate infinite distance!
                      */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && !(fabs(auxDouble - (-1.0)) > 0.0)))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && TIFF_DOUBLE_EQ(auxDouble, -1.0)))
                     {
                         fprintf(stderr,
                                 "%u:Read value of %s %f differs from set value "

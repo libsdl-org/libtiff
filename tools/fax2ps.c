@@ -222,14 +222,14 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
         compression > COMPRESSION_CCITT_T6)
         return;
     if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) ||
-        !(fabsf(xres) > 0.0f))
+        TIFF_FLOAT_EQ(xres, 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No x-resolution, assuming %g dpi",
                     (double)defxres);
         xres = defxres;
     }
     if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) ||
-        !(fabsf(yres) > 0.0f))
+        TIFF_FLOAT_EQ(yres, 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No y-resolution, assuming %g lpi",
                     (double)defyres);
@@ -241,9 +241,9 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
         xres *= 2.54f;
         yres *= 2.54f;
     }
-    if (!(fabsf(pageWidth) > 0.0f))
+    if (TIFF_FLOAT_EQ(pageWidth, 0.0f))
         pageWidth = (float)w / xres;
-    if (!(fabsf(pageHeight) > 0.0f))
+    if (TIFF_FLOAT_EQ(pageHeight, 0.0f))
         pageHeight = (float)h / yres;
 
     printf("%%!PS-Adobe-3.0\n");

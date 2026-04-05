@@ -5268,9 +5268,9 @@ void t2p_compose_pdf_page(T2P *t2p)
         t2p->pdf_xres = t2p->pdf_defaultxres;
         t2p->pdf_yres = t2p->pdf_defaultyres;
     }
-    if (!(fabsf(t2p->pdf_xres) > 0.0f))
+    if (TIFF_FLOAT_EQ(t2p->pdf_xres, 0.0f))
         t2p->pdf_xres = t2p->pdf_defaultxres;
-    if (!(fabsf(t2p->pdf_yres) > 0.0f))
+    if (TIFF_FLOAT_EQ(t2p->pdf_yres, 0.0f))
         t2p->pdf_yres = t2p->pdf_defaultyres;
     if (t2p->pdf_image_fillpage)
     {
@@ -5775,7 +5775,7 @@ tsize_t t2p_write_pdf_xobject_stream_dict(ttile_t tile, T2P *t2p, TIFF *output)
 #define normalizePoint(x, y, z)                                                \
     do                                                                         \
     {                                                                          \
-        if (fabsf(y) > 0.0f)                                                   \
+        if (!TIFF_FLOAT_EQ(y, 0.0f))                                             \
         {                                                                      \
             x /= y;                                                            \
             z /= y;                                                            \
