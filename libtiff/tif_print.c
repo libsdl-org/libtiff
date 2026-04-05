@@ -193,7 +193,8 @@ static int _TIFFPrettyPrintField(TIFF *tif, const TIFFField *fip, FILE *fd,
         case TIFFTAG_WHITEPOINT:
             if (value_count == 2 && fip->field_type == TIFF_RATIONAL)
             {
-                fprintf(fd, "  White Point: %g-%g\n", (double)((float *)raw_data)[0],
+                fprintf(fd, "  White Point: %g-%g\n",
+                        (double)((float *)raw_data)[0],
                         (double)((float *)raw_data)[1]);
                 return 1;
             }
@@ -312,7 +313,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
         fprintf(fd, "\n");
     }
     if (TIFFFieldSet(tif, FIELD_POSITION))
-        fprintf(fd, "  Position: %g, %g\n", (double)td->td_xposition, (double)td->td_yposition);
+        fprintf(fd, "  Position: %g, %g\n", (double)td->td_xposition,
+                (double)td->td_yposition);
     if (TIFFFieldSet(tif, FIELD_BITSPERSAMPLE))
         fprintf(fd, "  Bits/Sample: %" PRIu16 "\n", td->td_bitspersample);
     if (TIFFFieldSet(tif, FIELD_SAMPLEFORMAT))
@@ -692,7 +694,7 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
                      */
                     int tv_size = TIFFFieldSetGetSize(fip);
                     raw_data = _TIFFCheckMalloc(tif, value_count, tv_size,
-                                               "for tag data");
+                                                "for tag data");
                     mem_alloc = 1;
                     if (TIFFGetField(tif, tag, raw_data) != 1)
                     {

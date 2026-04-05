@@ -326,9 +326,9 @@ int main(int argc, char *argv[])
         quant_fsdither(in, out);
     else
         quant(in, out);
-        /*
-         * Scale colormap to TIFF-required 16-bit values.
-         */
+    /*
+     * Scale colormap to TIFF-required 16-bit values.
+     */
 #define SCALE(x) ((uint16_t)(((x) * ((1 << 16) - 1)) / 255))
     for (i = 0; i < MAX_CMAP_SIZE; ++i)
     {

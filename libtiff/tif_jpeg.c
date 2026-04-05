@@ -174,8 +174,8 @@ typedef struct
     } cinfo; /* NB: must be first */
     int cinfo_initialized;
 
-    tiff_jpeg_error_mgr err;  /* libjpeg error manager */
-    JMP_BUF exit_jmpbuf; /* for catching libjpeg failures */
+    tiff_jpeg_error_mgr err; /* libjpeg error manager */
+    JMP_BUF exit_jmpbuf;     /* for catching libjpeg failures */
 
     struct jpeg_progress_mgr progress;
     /*
@@ -184,10 +184,10 @@ typedef struct
      */
     tiff_jpeg_destination_mgr dest; /* data dest for compression */
     tiff_jpeg_source_mgr src;       /* data source for decompression */
-                               /* private state */
-    TIFF *tif;                 /* back link needed by some code */
-    uint16_t photometric;      /* copy of PhotometricInterpretation */
-    uint16_t h_sampling;       /* luminance sampling factors */
+                                    /* private state */
+    TIFF *tif;                      /* back link needed by some code */
+    uint16_t photometric;           /* copy of PhotometricInterpretation */
+    uint16_t h_sampling;            /* luminance sampling factors */
     uint16_t v_sampling;
     tmsize_t bytesperline; /* decompressed bytes per scanline */
     /* pointers to intermediate buffers when processing downsampled data */

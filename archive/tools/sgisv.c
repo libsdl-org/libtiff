@@ -233,7 +233,7 @@ static void svRGBContig(TIFF *tif, uint32_t *ss, int xsize, int ysize)
 #undef RED
 #undef GREEN
 #undef BLUE
-#define CVT(x) (((x)*255) / 100)
+#define CVT(x) (((x) * 255) / 100)
 #define RED CVT(28)   /* 28% */
 #define GREEN CVT(59) /* 59% */
 #define BLUE CVT(11)  /* 11% */

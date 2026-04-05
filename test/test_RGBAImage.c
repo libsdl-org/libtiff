@@ -295,8 +295,8 @@ static int write_image_data(TIFF *tif, uint32_t width, uint32_t length,
                                TIFFmin(bufLen, (size_t)lastlinebytesmax));
                     }
                 } /* rowtile */
-            }     /* coltile */
-        }         /* s sample in pixel */
+            } /* coltile */
+        } /* s sample in pixel */
     }
     else
     {
@@ -1155,7 +1155,8 @@ int main(void)
         {
             if (blnMultipleLogFiles)
             {
-                unsigned int n = (unsigned int)tiled * 2 + (unsigned int)(planarconfig - 1);
+                unsigned int n =
+                    (unsigned int)tiled * 2 + (unsigned int)(planarconfig - 1);
                 assert(n <
                        (sizeof(arrLogFilenames) / sizeof(arrLogFilenames[0])));
                 logFilename = arrLogFilenames[n];

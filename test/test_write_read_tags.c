@@ -596,7 +596,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
         if (auxUint16 != NINKS)
         {
             fprintf(stderr,
-                    "Read value of TIFFTAG_NUMBEROFINKS %u differs from set value %u.\n",
+                    "Read value of TIFFTAG_NUMBEROFINKS %u differs from set "
+                    "value %u.\n",
                     auxUint16, (unsigned int)NINKS);
             goto failure;
         }
@@ -1578,7 +1579,8 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                         fprintf(stderr,
                                 "%u:Read value of %s %f differs from set value "
                                 "%f\n",
-                                i, tFieldName, (double)auxFloat, auxDoubleArrayW[i]);
+                                i, tFieldName, (double)auxFloat,
+                                auxDoubleArrayW[i]);
                         GOTOFAILURE
                     }
                 }
@@ -1727,11 +1729,12 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                                       (double)auxFloatArrayW[i + (uint32_t)j];
                             if (fabs(dblDiff) > fabs(dblDiffLimit))
                             {
-                                fprintf(stderr,
-                                        "Read value %u of %s #%d %f differs "
-                                        "from set value %f\n",
-                                        i, tFieldName, j, (double)auxFloatArray[j],
-                                        (double)auxFloatArrayW[i + (uint32_t)j]);
+                                fprintf(
+                                    stderr,
+                                    "Read value %u of %s #%d %f differs "
+                                    "from set value %f\n",
+                                    i, tFieldName, j, (double)auxFloatArray[j],
+                                    (double)auxFloatArrayW[i + (uint32_t)j]);
                                 GOTOFAILURE
                             }
                         }
@@ -1887,7 +1890,7 @@ int read_all_tags(TIFF *tif, const TIFFFieldArray *tFieldArray,
                         tSetFieldType, tFieldName);
                 GOTOFAILURE
         }; /*-- switch(tSetFieldType) --*/
-    }      /*-- for(t to nTags) --*/
+    } /*-- for(t to nTags) --*/
 
     *iCnt = i;
     return 0;

@@ -1735,9 +1735,9 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
     {
         if (!TIFF_DOUBLE_EQ(pgheight, 0.0)) /* User has set PageHeight with -h flag */
         {
-            *view_height =
-                (double)pgheight *
-                (double)PS_UNIT_SIZE; /* Postscript size for Page Height in inches */
+            *view_height = (double)pgheight *
+                           (double)PS_UNIT_SIZE; /* Postscript size for Page
+                                                    Height in inches */
             /* if (res_unit == RESUNIT_CENTIMETER)
              *  *view_height /= 2.54f;
              */
@@ -1774,7 +1774,8 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
         {
             *view_width =
                 (double)pgwidth *
-                (double)PS_UNIT_SIZE; /* Postscript size for Page Width in inches */
+                (double)
+                    PS_UNIT_SIZE; /* Postscript size for Page Width in inches */
             /* if (res_unit == RESUNIT_CENTIMETER)
              * *view_width /= 2.54f;
              */
@@ -2102,7 +2103,7 @@ static void PS_Lvl2colorspace(FILE *fd, TIFF *tif)
         /*
          * Convert colormap to 8-bits values.
          */
-#define CVT(x) ((uint16_t)(((x)*255) / ((1 << 16) - 1)))
+#define CVT(x) ((uint16_t)(((x) * 255) / ((1 << 16) - 1)))
         for (i = 0; i < num_colors; i++)
         {
             rmap[i] = CVT(rmap[i]);
@@ -2846,7 +2847,7 @@ void PSColorSeparatePreamble(FILE *fd, uint32_t w, uint32_t h, int nc)
 static inline void puthex(unsigned int c, FILE *fd)
 {
     putc(hex[((c) >> 4) & 0xf], fd);
-    putc(hex[(c)&0xf], fd);
+    putc(hex[(c) & 0xf], fd);
 }
 
 void PSDataColorContig(FILE *fd, TIFF *tif, uint32_t w, uint32_t h, int nc)
@@ -3007,7 +3008,7 @@ void PSDataPalette(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
     if (checkcmap(tif, 1 << bitspersample, rmap, gmap, bmap) == 16)
     {
         int i;
-#define CVT(x) ((unsigned short)(((x)*255) / ((1 << 16) - 1)))
+#define CVT(x) ((unsigned short)(((x) * 255) / ((1 << 16) - 1)))
         for (i = (1 << bitspersample) - 1; i >= 0; i--)
         {
             rmap[i] = CVT(rmap[i]);
@@ -3468,10 +3469,10 @@ tsize_t Ascii85EncodeBlock(uint8_t *ascii85_p, unsigned f_eod,
 
         for (; raw_l > 3; raw_l -= 4)
         {
-            val32 = (uint32_t) * (++raw_p) << 24;
-            val32 += (uint32_t) * (++raw_p) << 16;
-            val32 += (uint32_t) * (++raw_p) << 8;
-            val32 += (uint32_t) * (++raw_p);
+            val32 = (uint32_t)*(++raw_p) << 24;
+            val32 += (uint32_t)*(++raw_p) << 16;
+            val32 += (uint32_t)*(++raw_p) << 8;
+            val32 += (uint32_t)*(++raw_p);
 
             if (val32 == 0) /* Special case */
             {
@@ -3516,7 +3517,7 @@ tsize_t Ascii85EncodeBlock(uint8_t *ascii85_p, unsigned f_eod,
             tsize_t len; /* Output this many bytes */
 
             len = raw_l + 1;
-            val32 = (uint32_t) * ++raw_p << 24; /* Prime the pump */
+            val32 = (uint32_t)*++raw_p << 24; /* Prime the pump */
 
             if (--raw_l > 0)
                 val32 += (uint32_t)(*(++raw_p) << 16);

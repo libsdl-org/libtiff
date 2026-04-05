@@ -243,7 +243,7 @@ extern void _TIFFResetTifDirAndInitStrileCounters(TIFFDirectory *td);
 
 #define FIELD_LAST (32 * FIELDSET_ITEMS - 1)
 
-#define BITn(n) (1U << ((n)&0x1f))
+#define BITn(n) (1U << ((n) & 0x1f))
 #define BITFIELDn(tif, n) ((tif)->tif_dir.td_fieldsset[(n) / 32])
 #define TIFFFieldSet(tif, field) (BITFIELDn(tif, field) & BITn(field))
 #define TIFFSetFieldBit(tif, field) (BITFIELDn(tif, field) |= BITn(field))

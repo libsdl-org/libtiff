@@ -1256,7 +1256,7 @@ typedef void biasFn(void *image, void *bias, uint32_t pixels);
         uint##bits##_t *biasx = (uint##bits##_t *)b;                           \
         while (pixels--)                                                       \
         {                                                                      \
-            *image = (uint##bits##_t)(*image > *biasx ? *image - *biasx : 0);   \
+            *image = (uint##bits##_t)(*image > *biasx ? *image - *biasx : 0);  \
             image++, biasx++;                                                  \
         }                                                                      \
     }
@@ -1929,8 +1929,8 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                         (int64_t)tilew * (int64_t)spp - (int64_t)width;
                     cpSeparateBufToContigBuf(
                         bufp + colb + s * bytes_per_sample, (uint8_t *)tilebuf,
-                        nrow, width / (uint32_t)(spp * bytes_per_sample), oskew + iskew,
-                        oskew / spp, spp, bytes_per_sample);
+                        nrow, width / (uint32_t)(spp * bytes_per_sample),
+                        oskew + iskew, oskew / spp, spp, bytes_per_sample);
                 }
                 else
                     cpSeparateBufToContigBuf(bufp + colb + s * bytes_per_sample,

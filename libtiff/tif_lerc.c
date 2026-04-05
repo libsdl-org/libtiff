@@ -32,8 +32,8 @@
  */
 
 #include "Lerc_c_api.h"
-#include <math.h>
 #include "zlib.h"
+#include <math.h>
 #ifdef ZSTD_SUPPORT
 #include "zstd.h"
 #endif

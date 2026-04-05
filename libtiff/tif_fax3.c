@@ -1168,7 +1168,7 @@ static const tableentry vcodes[7] = {
 static int Fax3Encode2DRow(TIFF *tif, unsigned char *bp, unsigned char *rp,
                            uint32_t bits)
 {
-#define PIXEL(buf, ix) ((((buf)[(ix) >> 3]) >> (7 - ((ix)&7))) & 1)
+#define PIXEL(buf, ix) ((((buf)[(ix) >> 3]) >> (7 - ((ix) & 7))) & 1)
     uint32_t a0 = 0;
     uint32_t a1 = (PIXEL(bp, 0) != 0
                        ? 0

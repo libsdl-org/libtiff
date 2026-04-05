@@ -42,7 +42,7 @@
 #include "tiffio.h"
 
 #ifndef howmany
-#define howmany(x, y) (((x) + ((y)-1)) / (y))
+#define howmany(x, y) (((x) + ((y) - 1)) / (y))
 #endif
 #define streq(a, b) (strcmp(a, b) == 0)
 #define strneq(a, b, n) (strncmp(a, b, n) == 0)

@@ -352,10 +352,10 @@ static int TIFFSeek(TIFF *tif, uint32_t row, uint16_t sample)
     else
         strip = row / td->td_rowsperstrip;
 
-        /*
-         * Do we want to treat this strip as one whole chunk or
-         * read it a few lines at a time?
-         */
+    /*
+     * Do we want to treat this strip as one whole chunk or
+     * read it a few lines at a time?
+     */
 #if defined(CHUNKY_STRIP_READ_SUPPORT)
     whole_strip = TIFFGetStrileByteCount(tif, strip) < 10 || isMapped(tif);
     if (td->td_compression == COMPRESSION_LERC ||

@@ -56,7 +56,7 @@ static const int threebitdeltas[8] = {0, 1, 2, 3, 0, -3, -2, -1};
 
 #define SETPIXEL(op, v)                                                        \
     {                                                                          \
-        lastpixel = (v)&0xf;                                                   \
+        lastpixel = (v) & 0xf;                                                 \
         if (npixels < maxpixels)                                               \
         {                                                                      \
             if (npixels++ & 1)                                                 \

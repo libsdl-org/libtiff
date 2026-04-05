@@ -778,7 +778,7 @@ static uint32_t _TIFFRand(void)
         nCounter = (uint32_t)(time(NULL) & UINT32_MAX);
     ++nCounter;
     uint32_t nCounterLocal =
-        (uint32_t)(((uint64_t)(nCounter)*1103515245U + 12345U) & UINT32_MAX);
+        (uint32_t)(((uint64_t)(nCounter) * 1103515245U + 12345U) & UINT32_MAX);
     nCounter = nCounterLocal;
     return (nCounterLocal / 65536U) % (TIFF_RAND_MAX + 1);
 }
@@ -793,8 +793,7 @@ static int tiff_itrunc(double x, int m)
 #if !LOGLUV_PUBLIC
 static
 #endif
-    double
-    LogL16toY(int p16) /* compute luminance from 16-bit LogL */
+    double LogL16toY(int p16) /* compute luminance from 16-bit LogL */
 {
     int Le = p16 & 0x7fff;
     double Y;
@@ -808,8 +807,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    int
-    LogL16fromY(double Y, int em) /* get 16-bit LogL from Y */
+    int LogL16fromY(double Y, int em) /* get 16-bit LogL from Y */
 {
     if (Y >= 1.8371976e19)
         return (0x7fff);
@@ -857,14 +855,16 @@ static void L16fromY(LogLuvState *sp, uint8_t *op, tmsize_t n)
 #if !LOGLUV_PUBLIC
 static
 #endif
-    void
-    XYZtoRGB24(float *xyz, uint8_t *rgb)
+    void XYZtoRGB24(float *xyz, uint8_t *rgb)
 {
     double r, g, b;
     /* assume CCIR-709 primaries */
-    r = 2.690 * (double)xyz[0] + -1.276 * (double)xyz[1] + -0.414 * (double)xyz[2];
-    g = -1.022 * (double)xyz[0] + 1.978 * (double)xyz[1] + 0.044 * (double)xyz[2];
-    b = 0.061 * (double)xyz[0] + -0.224 * (double)xyz[1] + 1.163 * (double)xyz[2];
+    r = 2.690 * (double)xyz[0] + -1.276 * (double)xyz[1] +
+        -0.414 * (double)xyz[2];
+    g = -1.022 * (double)xyz[0] + 1.978 * (double)xyz[1] +
+        0.044 * (double)xyz[2];
+    b = 0.061 * (double)xyz[0] + -0.224 * (double)xyz[1] +
+        1.163 * (double)xyz[2];
     /* assume 2.0 gamma for speed */
     /* could use integer sqrt approx., but this is probably faster */
     rgb[0] = (uint8_t)((r <= 0.) ? 0 : (r >= 1.) ? 255 : (int)(256. * sqrt(r)));
@@ -875,8 +875,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    double
-    LogL10toY(int p10) /* compute luminance from 10-bit LogL */
+    double LogL10toY(int p10) /* compute luminance from 10-bit LogL */
 {
     if (p10 == 0)
         return (0.);
@@ -886,8 +885,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    int
-    LogL10fromY(double Y, int em) /* get 10-bit LogL from Y */
+    int LogL10fromY(double Y, int em) /* get 10-bit LogL from Y */
 {
     if (Y >= 15.742)
         return (0x3ff);
@@ -899,7 +897,8 @@ static
 
 #define NANGLES 100
 #define uv2ang(u, v)                                                           \
-    ((NANGLES * .499999999 / M_PI) * atan2((v)-V_NEU, (u)-U_NEU) + .5 * NANGLES)
+    ((NANGLES * .499999999 / M_PI) * atan2((v) - V_NEU, (u) - U_NEU) +         \
+     .5 * NANGLES)
 
 static int oog_encode(double u, double v) /* encode out-of-gamut chroma */
 {
@@ -921,7 +920,8 @@ static int oog_encode(double u, double v) /* encode out-of-gamut chroma */
                 ustep = 1;
             for (ui = uv_row[vi].nus - 1; ui >= 0; ui -= ustep)
             {
-                ua = (double)uv_row[vi].ustart + ((double)ui + .5) * (double)UV_SQSIZ;
+                ua = (double)uv_row[vi].ustart +
+                     ((double)ui + .5) * (double)UV_SQSIZ;
                 ang = uv2ang(ua, va);
                 i = (int)ang;
                 epsa = fabs(ang - (i + .5));
@@ -959,8 +959,7 @@ static int oog_encode(double u, double v) /* encode out-of-gamut chroma */
 #if !LOGLUV_PUBLIC
 static
 #endif
-    int
-    uv_encode(double u, double v, int em) /* encode (u',v') coordinates */
+    int uv_encode(double u, double v, int em) /* encode (u',v') coordinates */
 {
     unsigned int vi;
     int ui;
@@ -974,12 +973,14 @@ static
 
     if ((double)v < (double)UV_VSTART)
         return oog_encode(u, v);
-    vi = (unsigned int)tiff_itrunc(((double)v - (double)UV_VSTART) * (1. / (double)UV_SQSIZ), em);
+    vi = (unsigned int)tiff_itrunc(
+        ((double)v - (double)UV_VSTART) * (1. / (double)UV_SQSIZ), em);
     if (vi >= UV_NVS)
         return oog_encode(u, v);
     if ((double)u < (double)uv_row[vi].ustart)
         return oog_encode(u, v);
-    ui = tiff_itrunc(((double)u - (double)uv_row[vi].ustart) * (1. / (double)UV_SQSIZ), em);
+    ui = tiff_itrunc(
+        ((double)u - (double)uv_row[vi].ustart) * (1. / (double)UV_SQSIZ), em);
     if (ui >= uv_row[vi].nus)
         return oog_encode(u, v);
 
@@ -989,8 +990,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    int
-    uv_decode(double *up, double *vp, int c) /* decode (u',v') index */
+    int uv_decode(double *up, double *vp, int c) /* decode (u',v') index */
 {
     unsigned int upper, lower;
     int ui;
@@ -1024,8 +1024,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    void
-    LogLuv24toXYZ(uint32_t p, float *XYZ)
+    void LogLuv24toXYZ(uint32_t p, float *XYZ)
 {
     int Ce;
     double L, u, v, s, x, y;
@@ -1055,8 +1054,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    uint32_t
-    LogLuv24fromXYZ(float *XYZ, int em)
+    uint32_t LogLuv24fromXYZ(float *XYZ, int em)
 {
     int Le, Ce;
     double u, v, s;
@@ -1172,8 +1170,7 @@ static void Luv24fromLuv48(LogLuvState *sp, uint8_t *op, tmsize_t n)
 #if !LOGLUV_PUBLIC
 static
 #endif
-    void
-    LogLuv32toXYZ(uint32_t p, float *XYZ)
+    void LogLuv32toXYZ(uint32_t p, float *XYZ)
 {
     double L, u, v, s, x, y;
     /* decode luminance */
@@ -1198,8 +1195,7 @@ static
 #if !LOGLUV_PUBLIC
 static
 #endif
-    uint32_t
-    LogLuv32fromXYZ(float *XYZ, int em)
+    uint32_t LogLuv32fromXYZ(float *XYZ, int em)
 {
     unsigned int Le, ue, ve;
     double u, v, s;

@@ -274,8 +274,9 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
     printf("%g %g translate\n",
            (double)(points * (pageWidth - scale * (float)w / xres) * half),
            (double)(points * (scale * (float)h / yres +
-                     (pageHeight - scale * (float)h / yres) * half)));
-    printf("%g %g scale\n", (double)(points / xres * scale), (double)(-points / yres * scale));
+                              (pageHeight - scale * (float)h / yres) * half)));
+    printf("%g %g scale\n", (double)(points / xres * scale),
+           (double)(-points / yres * scale));
     printf("0 setgray\n");
     TIFFSetField(tif, TIFFTAG_FAXFILLFUNC, printruns);
     ns = TIFFNumberOfStrips(tif);
