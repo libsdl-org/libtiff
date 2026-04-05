@@ -59,7 +59,7 @@
 
 #define TIFF2PDF_MODULE "tiff2pdf"
 
-#define PS_UNIT_SIZE 72.0F
+#define PS_UNIT_SIZE 72.0f
 
 #define TIFF_DIR_MAX 65534
 
@@ -778,23 +778,23 @@ int main(int argc, char **argv)
                 break;
             case 'x':
                 t2p->pdf_defaultxres =
-                    (float)atof(optarg) / (t2p->pdf_centimeters ? 2.54F : 1.0F);
+                    (float)atof(optarg) / (t2p->pdf_centimeters ? 2.54f : 1.0f);
                 break;
             case 'y':
                 t2p->pdf_defaultyres =
-                    (float)atof(optarg) / (t2p->pdf_centimeters ? 2.54F : 1.0F);
+                    (float)atof(optarg) / (t2p->pdf_centimeters ? 2.54f : 1.0f);
                 break;
             case 'w':
                 t2p->pdf_overridepagesize = 1;
                 t2p->pdf_defaultpagewidth =
                     ((float)atof(optarg) * PS_UNIT_SIZE) /
-                    (t2p->pdf_centimeters ? 2.54F : 1.0F);
+                    (t2p->pdf_centimeters ? 2.54f : 1.0f);
                 break;
             case 'l':
                 t2p->pdf_overridepagesize = 1;
                 t2p->pdf_defaultpagelength =
                     ((float)atof(optarg) * PS_UNIT_SIZE) /
-                    (t2p->pdf_centimeters ? 2.54F : 1.0F);
+                    (t2p->pdf_centimeters ? 2.54f : 1.0f);
                 break;
             case 'r':
                 if (optarg[0] == 'o')
@@ -2015,13 +2015,13 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
     TIFFGetFieldDefaulted(input, TIFFTAG_RESOLUTIONUNIT, &(t2p->tiff_resunit));
     if (t2p->tiff_resunit == RESUNIT_CENTIMETER)
     {
-        t2p->tiff_xres *= 2.54F;
-        t2p->tiff_yres *= 2.54F;
+        t2p->tiff_xres *= 2.54f;
+        t2p->tiff_yres *= 2.54f;
     }
     else if (t2p->tiff_resunit != RESUNIT_INCH && t2p->pdf_centimeters != 0)
     {
-        t2p->tiff_xres *= 2.54F;
-        t2p->tiff_yres *= 2.54F;
+        t2p->tiff_xres *= 2.54f;
+        t2p->tiff_yres *= 2.54f;
     }
 
     t2p_compose_pdf_page(t2p);
@@ -2202,8 +2202,8 @@ void t2p_read_tiff_data(T2P *t2p, TIFF *input)
         }
         else
         {
-            t2p->tiff_whitechromaticities[0] = 0.3457F; /* 0.3127F; */
-            t2p->tiff_whitechromaticities[1] = 0.3585F; /* 0.3290F; */
+            t2p->tiff_whitechromaticities[0] = 0.3457f; /* 0.3127f; */
+            t2p->tiff_whitechromaticities[1] = 0.3585f; /* 0.3290f; */
         }
     }
     if (TIFFGetField(input, TIFFTAG_ICCPROFILE, &(t2p->tiff_iccprofilelength),
@@ -5268,9 +5268,9 @@ void t2p_compose_pdf_page(T2P *t2p)
         t2p->pdf_xres = t2p->pdf_defaultxres;
         t2p->pdf_yres = t2p->pdf_defaultyres;
     }
-    if (!(fabsf(t2p->pdf_xres) > 0.0F))
+    if (!(fabsf(t2p->pdf_xres) > 0.0f))
         t2p->pdf_xres = t2p->pdf_defaultxres;
-    if (!(fabsf(t2p->pdf_yres) > 0.0F))
+    if (!(fabsf(t2p->pdf_yres) > 0.0f))
         t2p->pdf_yres = t2p->pdf_defaultyres;
     if (t2p->pdf_image_fillpage)
     {
@@ -5321,13 +5321,13 @@ void t2p_compose_pdf_page(T2P *t2p)
     if (t2p->pdf_overridepagesize != 0)
     {
         t2p->pdf_imagebox.x1 +=
-            ((t2p->pdf_pagewidth - t2p->pdf_imagewidth) / 2.0F);
+            ((t2p->pdf_pagewidth - t2p->pdf_imagewidth) / 2.0f);
         t2p->pdf_imagebox.y1 +=
-            ((t2p->pdf_pagelength - t2p->pdf_imagelength) / 2.0F);
+            ((t2p->pdf_pagelength - t2p->pdf_imagelength) / 2.0f);
         t2p->pdf_imagebox.x2 +=
-            ((t2p->pdf_pagewidth - t2p->pdf_imagewidth) / 2.0F);
+            ((t2p->pdf_pagewidth - t2p->pdf_imagewidth) / 2.0f);
         t2p->pdf_imagebox.y2 +=
-            ((t2p->pdf_pagelength - t2p->pdf_imagelength) / 2.0F);
+            ((t2p->pdf_pagelength - t2p->pdf_imagelength) / 2.0f);
     }
     if (t2p->tiff_orientation > 4)
     {
@@ -5515,45 +5515,45 @@ void t2p_compose_pdf_page_orient(T2P_BOX *boxp, uint16_t orientation)
         case 1:
             break;
         case 2:
-            boxp->mat[0] = 0.0F - m1[0];
+            boxp->mat[0] = 0.0f - m1[0];
             boxp->mat[6] += m1[0];
             break;
         case 3:
-            boxp->mat[0] = 0.0F - m1[0];
-            boxp->mat[4] = 0.0F - m1[4];
+            boxp->mat[0] = 0.0f - m1[0];
+            boxp->mat[4] = 0.0f - m1[4];
             boxp->mat[6] += m1[0];
             boxp->mat[7] += m1[4];
             break;
         case 4:
-            boxp->mat[4] = 0.0F - m1[4];
+            boxp->mat[4] = 0.0f - m1[4];
             boxp->mat[7] += m1[4];
             break;
         case 5:
-            boxp->mat[0] = 0.0F;
-            boxp->mat[1] = 0.0F - m1[0];
-            boxp->mat[3] = 0.0F - m1[4];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[0] = 0.0f;
+            boxp->mat[1] = 0.0f - m1[0];
+            boxp->mat[3] = 0.0f - m1[4];
+            boxp->mat[4] = 0.0f;
             boxp->mat[6] += m1[4];
             boxp->mat[7] += m1[0];
             break;
         case 6:
-            boxp->mat[0] = 0.0F;
-            boxp->mat[1] = 0.0F - m1[0];
+            boxp->mat[0] = 0.0f;
+            boxp->mat[1] = 0.0f - m1[0];
             boxp->mat[3] = m1[4];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[4] = 0.0f;
             boxp->mat[7] += m1[0];
             break;
         case 7:
-            boxp->mat[0] = 0.0F;
+            boxp->mat[0] = 0.0f;
             boxp->mat[1] = m1[0];
             boxp->mat[3] = m1[4];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[4] = 0.0f;
             break;
         case 8:
-            boxp->mat[0] = 0.0F;
+            boxp->mat[0] = 0.0f;
             boxp->mat[1] = m1[0];
-            boxp->mat[3] = 0.0F - m1[4];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[3] = 0.0f - m1[4];
+            boxp->mat[4] = 0.0f;
             boxp->mat[6] += m1[4];
             break;
         default:
@@ -5582,42 +5582,42 @@ void t2p_compose_pdf_page_orient_flip(T2P_BOX *boxp, uint16_t orientation)
         boxp->y2 = f;
     }
     boxp->mat[0] = m1[0] = boxp->x2 - boxp->x1;
-    boxp->mat[1] = m1[1] = 0.0F;
-    boxp->mat[2] = m1[2] = 0.0F;
-    boxp->mat[3] = m1[3] = 0.0F;
+    boxp->mat[1] = m1[1] = 0.0f;
+    boxp->mat[2] = m1[2] = 0.0f;
+    boxp->mat[3] = m1[3] = 0.0f;
     boxp->mat[4] = m1[4] = boxp->y2 - boxp->y1;
-    boxp->mat[5] = m1[5] = 0.0F;
+    boxp->mat[5] = m1[5] = 0.0f;
     boxp->mat[6] = m1[6] = boxp->x1;
     boxp->mat[7] = m1[7] = boxp->y1;
-    boxp->mat[8] = m1[8] = 1.0F;
+    boxp->mat[8] = m1[8] = 1.0f;
     switch (orientation)
     {
         case 5:
-            boxp->mat[0] = 0.0F;
-            boxp->mat[1] = 0.0F - m1[4];
-            boxp->mat[3] = 0.0F - m1[0];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[0] = 0.0f;
+            boxp->mat[1] = 0.0f - m1[4];
+            boxp->mat[3] = 0.0f - m1[0];
+            boxp->mat[4] = 0.0f;
             boxp->mat[6] += m1[0];
             boxp->mat[7] += m1[4];
             break;
         case 6:
-            boxp->mat[0] = 0.0F;
-            boxp->mat[1] = 0.0F - m1[4];
+            boxp->mat[0] = 0.0f;
+            boxp->mat[1] = 0.0f - m1[4];
             boxp->mat[3] = m1[0];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[4] = 0.0f;
             boxp->mat[7] += m1[4];
             break;
         case 7:
-            boxp->mat[0] = 0.0F;
+            boxp->mat[0] = 0.0f;
             boxp->mat[1] = m1[4];
             boxp->mat[3] = m1[0];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[4] = 0.0f;
             break;
         case 8:
-            boxp->mat[0] = 0.0F;
+            boxp->mat[0] = 0.0f;
             boxp->mat[1] = m1[4];
-            boxp->mat[3] = 0.0F - m1[0];
-            boxp->mat[4] = 0.0F;
+            boxp->mat[3] = 0.0f - m1[0];
+            boxp->mat[4] = 0.0f;
             boxp->mat[6] += m1[0];
             break;
         default:
@@ -5775,11 +5775,11 @@ tsize_t t2p_write_pdf_xobject_stream_dict(ttile_t tile, T2P *t2p, TIFF *output)
 #define normalizePoint(x, y, z)                                                \
     do                                                                         \
     {                                                                          \
-        if (fabsf(y) > 0.0F)                                                   \
+        if (fabsf(y) > 0.0f)                                                   \
         {                                                                      \
             x /= y;                                                            \
             z /= y;                                                            \
-            y = 1.0F;                                                          \
+            y = 1.0f;                                                          \
         }                                                                      \
     } while (0)
 
@@ -5865,7 +5865,7 @@ tsize_t t2p_write_pdf_xobject_cs(T2P *t2p, TIFF *output)
                                written);
         X_W = t2p->tiff_whitechromaticities[0];
         Y_W = t2p->tiff_whitechromaticities[1];
-        Z_W = 1.0F - (X_W + Y_W);
+        Z_W = 1.0f - (X_W + Y_W);
         normalizePoint(X_W, Y_W, Z_W);
         buflen = snprintf(buffer, sizeof(buffer), "[%.4f %.4f %.4f] \n",
                           (double)X_W, (double)Y_W, (double)Z_W);
@@ -6010,7 +6010,7 @@ tsize_t t2p_write_pdf_xobject_calcs(T2P *t2p, TIFF *output)
         add_t2pWriteFile_check(output, (tdata_t) "/CalGray ", 9, mod, written);
         X_W = t2p->tiff_whitechromaticities[0];
         Y_W = t2p->tiff_whitechromaticities[1];
-        Z_W = 1.0F - (X_W + Y_W);
+        Z_W = 1.0f - (X_W + Y_W);
         normalizePoint(X_W, Y_W, Z_W);
     }
     if (t2p->pdf_colorspace & T2P_CS_CALRGB)
@@ -6029,7 +6029,7 @@ tsize_t t2p_write_pdf_xobject_calcs(T2P *t2p, TIFF *output)
               ((x_g - x_b) * y_w - (x_w - x_b) * y_g + (x_w - x_g) * y_b) / z_w;
         X_R = Y_R * x_r / y_r;
         Z_R = Y_R * (((1 - x_r) / y_r) - 1);
-        Y_G = ((0.0F - (y_g)) / G) *
+        Y_G = ((0.0f - (y_g)) / G) *
               ((x_r - x_b) * y_w - (x_w - x_b) * y_r + (x_w - x_r) * y_b) / z_w;
         X_G = Y_G * x_g / y_g;
         Z_G = Y_G * (((1 - x_g) / y_g) - 1);

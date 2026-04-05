@@ -58,21 +58,21 @@ static const char photoTag[] = "PhotometricInterpretation";
 
 static const TIFFDisplay display_sRGB = {
     {/* XYZ -> luminance matrix */
-     {3.2410F, -1.5374F, -0.4986F},
-     {-0.9692F, 1.8760F, 0.0416F},
-     {0.0556F, -0.2040F, 1.0570F}},
-    100.0F,
-    100.0F,
-    100.0F, /* Light o/p for reference white */
+     {3.2410f, -1.5374f, -0.4986f},
+     {-0.9692f, 1.8760f, 0.0416f},
+     {0.0556f, -0.2040f, 1.0570f}},
+    100.0f,
+    100.0f,
+    100.0f, /* Light o/p for reference white */
     255,
     255,
     255, /* Pixel values for ref. white */
-    1.0F,
-    1.0F,
-    1.0F, /* Residual light o/p for black pixel */
-    2.4F,
-    2.4F,
-    2.4F, /* Gamma values for the three guns */
+    1.0f,
+    1.0f,
+    1.0f, /* Residual light o/p for black pixel */
+    2.4f,
+    2.4f,
+    2.4f, /* Gamma values for the three guns */
 };
 
 /*
@@ -2761,7 +2761,7 @@ static int initYCbCrConversion(TIFFRGBAImage *img)
 
     /* Do some validation to avoid later issues. Detect NaN for now */
     /* and also if lumaGreen is zero since we divide by it later */
-    if (isnan(luma[0]) || isnan(luma[1]) || !(fabsf(luma[1]) > 0.0F) ||
+    if (isnan(luma[0]) || isnan(luma[1]) || !(fabsf(luma[1]) > 0.0f) ||
         isnan(luma[2]))
     {
         TIFFErrorExtR(img->tif, module,
@@ -2794,7 +2794,7 @@ static tileContigRoutine initCIELabConversion(TIFFRGBAImage *img)
     float refWhite[3];
 
     TIFFGetFieldDefaulted(img->tif, TIFFTAG_WHITEPOINT, &whitePoint);
-    if (!(fabsf(whitePoint[1]) > 0.0F))
+    if (!(fabsf(whitePoint[1]) > 0.0f))
     {
         TIFFErrorExtR(img->tif, module, "Invalid value for WhitePoint tag.");
         return NULL;
@@ -2812,10 +2812,10 @@ static tileContigRoutine initCIELabConversion(TIFFRGBAImage *img)
         }
     }
 
-    refWhite[1] = 100.0F;
+    refWhite[1] = 100.0f;
     refWhite[0] = whitePoint[0] / whitePoint[1] * refWhite[1];
     refWhite[2] =
-        (1.0F - whitePoint[0] - whitePoint[1]) / whitePoint[1] * refWhite[1];
+        (1.0f - whitePoint[0] - whitePoint[1]) / whitePoint[1] * refWhite[1];
     if (TIFFCIELabToRGBInit(img->cielab, &display_sRGB, refWhite) < 0)
     {
         TIFFErrorExtR(img->tif, module,

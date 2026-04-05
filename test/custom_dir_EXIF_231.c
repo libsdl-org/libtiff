@@ -1041,7 +1041,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_PIXAR_FOVCOT");
     }
-    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0F)
+    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0f)
     {
         fprintf(
             stderr,
@@ -1056,7 +1056,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_BESTQUALITYSCALE");
     }
-    if (fabsf(auxFloat - (float)BESTQUALITYSCALE_VAL) > 0.0F)
+    if (fabsf(auxFloat - (float)BESTQUALITYSCALE_VAL) > 0.0f)
     {
         fprintf(stderr,
                 "Read value of TIFFTAG_BESTQUALITYSCALE %f differs from set "
@@ -1070,7 +1070,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
     {
         fprintf(stderr, "Can't read %s\n", "TIFFTAG_BASELINENOISE");
     }
-    if (fabsf(auxDblUnion.flt1 - (float)BESTQUALITYSCALE_VAL) > 0.0F)
+    if (fabsf(auxDblUnion.flt1 - (float)BESTQUALITYSCALE_VAL) > 0.0f)
     {
         fprintf(stderr,
                 "Read float value of TIFFTAG_BASELINENOISE %f differs from set "
@@ -1606,7 +1606,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                      * six other cases where the denominator indicates special
                      * values, which are not treated within LibTiff!!
                      */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && !(fabsf(auxFloat - (-1.0F)) > 0.0F)))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && !(fabsf(auxFloat - (-1.0f)) > 0.0f)))
                     {
                         fprintf(stderr,
                                 "%d:Read value of %s %f differs from set value "

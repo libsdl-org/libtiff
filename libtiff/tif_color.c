@@ -55,34 +55,34 @@ void TIFFCIELabToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a, int32_t b,
 void TIFFCIELab16ToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a,
                        int32_t b, float *X, float *Y, float *Z)
 {
-    float L = (float)l * 100.0F / 65535.0F;
+    float L = (float)l * 100.0f / 65535.0f;
     float cby, tmp;
 
-    if (L < 8.856F)
+    if (L < 8.856f)
     {
-        *Y = (L * cielab->Y0) / 903.292F;
-        cby = 7.787F * (*Y / cielab->Y0) + 16.0F / 116.0F;
+        *Y = (L * cielab->Y0) / 903.292f;
+        cby = 7.787f * (*Y / cielab->Y0) + 16.0f / 116.0f;
     }
     else
     {
-        cby = (L + 16.0F) / 116.0F;
+        cby = (L + 16.0f) / 116.0f;
         *Y = cielab->Y0 * cby * cby * cby;
     }
 
-    tmp = (float)a / 256.0F / 500.0F + cby;
-    if (tmp < 0.2069F)
-        *X = cielab->X0 * (tmp - 0.13793F) / 7.787F;
+    tmp = (float)a / 256.0f / 500.0f + cby;
+    if (tmp < 0.2069f)
+        *X = cielab->X0 * (tmp - 0.13793f) / 7.787f;
     else
         *X = cielab->X0 * tmp * tmp * tmp;
 
-    tmp = cby - (float)b / 256.0F / 200.0F;
-    if (tmp < 0.2069F)
-        *Z = cielab->Z0 * (tmp - 0.13793F) / 7.787F;
+    tmp = cby - (float)b / 256.0f / 200.0f;
+    if (tmp < 0.2069f)
+        *Z = cielab->Z0 * (tmp - 0.13793f) / 7.787f;
     else
         *Z = cielab->Z0 * tmp * tmp * tmp;
 }
 
-#define RINT(R) ((uint32_t)((R) > 0 ? ((R) + 0.5F) : ((R)-0.5F)))
+#define RINT(R) ((uint32_t)((R) > 0 ? ((R) + 0.5f) : ((R)-0.5f)))
 /*
  * Convert color value from the XYZ space to RGB.
  */
@@ -190,7 +190,7 @@ int TIFFCIELabToRGBInit(TIFFCIELabToRGB *cielab, const TIFFDisplay *display,
 #define ONE_HALF ((int32_t)(1 << (SHIFT - 1)))
 #define Code2V(c, RB, RW, CR)                                                  \
     (((float)((c) - (int32_t)(RB)) * (float)(CR)) /                            \
-     ((fabsf((RW) - (RB)) > 0.0F) ? ((RW) - (RB)) : 1.0F))
+     ((fabsf((RW) - (RB)) > 0.0f) ? ((RW) - (RB)) : 1.0f))
 /* !((f)>=(min)) written that way to deal with NaN */
 #define CLAMP(f, min, max)                                                     \
     ((!((f) >= (min))) ? (min) : (f) > (max) ? (max) : (f))
@@ -272,13 +272,13 @@ int TIFFYCbCrToRGBInit(TIFFYCbCrToRGB *ycbcr, float *luma, float *refBlackWhite)
 
     {
         float f1 = 2 - 2 * LumaRed;
-        int32_t D1 = FIX(CLAMP(f1, 0.0F, 2.0F));
+        int32_t D1 = FIX(CLAMP(f1, 0.0f, 2.0f));
         float f2 = LumaRed * f1 / LumaGreen;
-        int32_t D2 = -FIX(CLAMP(f2, 0.0F, 2.0F));
+        int32_t D2 = -FIX(CLAMP(f2, 0.0f, 2.0f));
         float f3 = 2 - 2 * LumaBlue;
-        int32_t D3 = FIX(CLAMP(f3, 0.0F, 2.0F));
+        int32_t D3 = FIX(CLAMP(f3, 0.0f, 2.0f));
         float f4 = LumaBlue * f3 / LumaGreen;
-        int32_t D4 = -FIX(CLAMP(f4, 0.0F, 2.0F));
+        int32_t D4 = -FIX(CLAMP(f4, 0.0f, 2.0f));
         int x;
 
 #undef LumaBlue
@@ -294,12 +294,12 @@ int TIFFYCbCrToRGBInit(TIFFYCbCrToRGB *ycbcr, float *luma, float *refBlackWhite)
          */
         for (i = 0, x = -128; i < 256; i++, x++)
         {
-            int32_t Cr = (int32_t)CLAMPw(Code2V(x, refBlackWhite[4] - 128.0F,
-                                                refBlackWhite[5] - 128.0F, 127),
-                                         -128.0F * 32, 128.0F * 32);
-            int32_t Cb = (int32_t)CLAMPw(Code2V(x, refBlackWhite[2] - 128.0F,
-                                                refBlackWhite[3] - 128.0F, 127),
-                                         -128.0F * 32, 128.0F * 32);
+            int32_t Cr = (int32_t)CLAMPw(Code2V(x, refBlackWhite[4] - 128.0f,
+                                                refBlackWhite[5] - 128.0f, 127),
+                                         -128.0f * 32, 128.0f * 32);
+            int32_t Cb = (int32_t)CLAMPw(Code2V(x, refBlackWhite[2] - 128.0f,
+                                                refBlackWhite[3] - 128.0f, 127),
+                                         -128.0f * 32, 128.0f * 32);
 
             ycbcr->Cr_r_tab[i] = (int32_t)((D1 * Cr + ONE_HALF) >> SHIFT);
             ycbcr->Cb_b_tab[i] = (int32_t)((D3 * Cb + ONE_HALF) >> SHIFT);
@@ -307,7 +307,7 @@ int TIFFYCbCrToRGBInit(TIFFYCbCrToRGB *ycbcr, float *luma, float *refBlackWhite)
             ycbcr->Cb_g_tab[i] = D4 * Cb + ONE_HALF;
             ycbcr->Y_tab[i] = (int32_t)CLAMPw(
                 Code2V(x + 128, refBlackWhite[0], refBlackWhite[1], 255),
-                -128.0F * 32, 128.0F * 32);
+                -128.0f * 32, 128.0f * 32);
         }
     }
 

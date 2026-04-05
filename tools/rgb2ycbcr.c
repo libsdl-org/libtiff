@@ -65,9 +65,9 @@ uint32_t rowsperstrip = (uint32_t)-1;
 
 uint16_t horizSubSampling = 2; /* YCbCr horizontal subsampling */
 uint16_t vertSubSampling = 2;  /* YCbCr vertical subsampling */
-float ycbcrCoeffs[3] = {.299F, .587F, .114F};
+float ycbcrCoeffs[3] = {.299f, .587f, .114f};
 /* default coding range is CCIR Rec 601-1 with no headroom/footroom */
-float refBlackWhite[6] = {0.F, 255.F, 128.F, 255.F, 128.F, 255.F};
+float refBlackWhite[6] = {0.f, 255.f, 128.f, 255.f, 128.f, 255.f};
 
 static int tiffcvt(TIFF *in, TIFF *out);
 static void usage(int code);
@@ -173,7 +173,7 @@ static float *setupLuma(float c)
 
 static unsigned V2Code(float f, float RB, float RW, int CR)
 {
-    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5F);
+    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5f);
     return (c > 255 ? 255 : c);
 }
 
@@ -182,8 +182,8 @@ static void setupLumaTables(void)
     lumaRed = setupLuma(LumaRed);
     lumaGreen = setupLuma(LumaGreen);
     lumaBlue = setupLuma(LumaBlue);
-    D1 = 1.F / (2.F - 2.F * LumaBlue);
-    D2 = 1.F / (2.F - 2.F * LumaRed);
+    D1 = 1.f / (2.f - 2.f * LumaBlue);
+    D2 = 1.f / (2.f - 2.f * LumaRed);
     Yzero = (int)V2Code(0, refBlackWhite[0], refBlackWhite[1], 255);
 }
 

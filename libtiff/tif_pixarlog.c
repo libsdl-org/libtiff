@@ -194,7 +194,7 @@ static void horizontalAccumulate12(uint16_t *wp, tmsize_t n, int stride,
     unsigned int cr, cg, cb, ca, mask;
     float t0, t1, t2, t3;
 
-#define SCALE12 2048.0F
+#define SCALE12 2048.0f
 #define CLAMP12(t) (((t) < 3071) ? (int16_t)(uint16_t)(t) : (int16_t)3071)
 
     if (n >= stride)

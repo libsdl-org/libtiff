@@ -764,7 +764,7 @@ static int CheckLongTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 static int CheckFloatTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)
 {
     float v1, v2;
-    CHECK_FLOAT(!(fabsf(v1 - v2) > 0.0F), "%s: %g %g\n");
+    CHECK_FLOAT(!(fabsf(v1 - v2) > 0.0f), "%s: %g %g\n");
 }
 
 static int CheckStringTag(TIFF *tif1, TIFF *tif2, int tag, const char *name)

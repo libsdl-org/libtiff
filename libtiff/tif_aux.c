@@ -186,10 +186,10 @@ static int TIFFDefaultRefBlackWhite(TIFF *tif, TIFFDirectory *td)
          * YCbCr (Class Y) images must have the ReferenceBlackWhite
          * tag set. Fix the broken images, which lacks that tag.
          */
-        td->td_refblackwhite[0] = 0.0F;
+        td->td_refblackwhite[0] = 0.0f;
         td->td_refblackwhite[1] = td->td_refblackwhite[3] =
-            td->td_refblackwhite[5] = 255.0F;
-        td->td_refblackwhite[2] = td->td_refblackwhite[4] = 128.0F;
+            td->td_refblackwhite[5] = 255.0f;
+        td->td_refblackwhite[2] = td->td_refblackwhite[4] = 128.0f;
     }
     else
     {

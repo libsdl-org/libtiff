@@ -880,7 +880,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
      * TIFF_SETGET_FLOAT) with field_bit=FIELD_CUSTOM !! -*/
     /*  - was written with Double but has to be read with Float */
     retCode = TIFFGetField(tif, TIFFTAG_PIXAR_FOVCOT, &auxFloat);
-    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0F)
+    if (fabsf(auxFloat - (float)PIXAR_FOVCOT_VAL) > 0.0f)
     {
         fprintf(
             stderr,
@@ -1153,7 +1153,7 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                              * values, which are not treated within LibTiff!!
                              */
                             if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
-                                  !(fabsf(auxFloat - (-1.0F)) > 0.0F)))
+                                  !(fabsf(auxFloat - (-1.0f)) > 0.0f)))
                             {
                                 fprintf(stderr,
                                         "%d:Read value of %s %f differs from "

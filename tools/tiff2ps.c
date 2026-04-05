@@ -659,7 +659,7 @@ static int checkImage(TIFF *tif)
     return (1);
 }
 
-#define PS_UNIT_SIZE 72.0F
+#define PS_UNIT_SIZE 72.0f
 #define PSUNITS(npix, res) ((float)(npix) * (PS_UNIT_SIZE / (float)(res)))
 
 static const char RGBcolorimage[] = "\
@@ -725,7 +725,7 @@ static void TIFF_ATTRIBUTE((__format__(__printf__, 6, 0)))
 static void setupPageState(TIFF *tif, uint32_t *pw, uint32_t *ph, double *pprw,
                            double *pprh)
 {
-    float xres = 0.0F, yres = 0.0F;
+    float xres = 0.0f, yres = 0.0f;
 
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, pw);
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, ph);
@@ -744,7 +744,7 @@ static void setupPageState(TIFF *tif, uint32_t *pw, uint32_t *ph, double *pprw,
     switch (res_unit)
     {
         case RESUNIT_CENTIMETER:
-            xres *= 2.54F, yres *= 2.54F;
+            xres *= 2.54f, yres *= 2.54f;
             break;
         case RESUNIT_INCH:
             break;
@@ -763,11 +763,11 @@ static void setupPageState(TIFF *tif, uint32_t *pw, uint32_t *ph, double *pprw,
     /* This is a hack to deal with images that have no meaningful Resolution
      * Size but may have x and/or y resolutions of 1 pixel per undefined unit.
      */
-    if ((xres > 1.0F) && (fabsf(xres - PS_UNIT_SIZE) > 0.0F))
+    if ((xres > 1.0f) && (fabsf(xres - PS_UNIT_SIZE) > 0.0f))
         *pprw = (double)PSUNITS(*pw, xres);
     else
         *pprw = (double)PSUNITS(*pw, PS_UNIT_SIZE);
-    if ((yres > 1.0F) && (fabsf(yres - PS_UNIT_SIZE) > 0.0F))
+    if ((yres > 1.0f) && (fabsf(yres - PS_UNIT_SIZE) > 0.0f))
         *pprh = (double)PSUNITS(*ph, yres);
     else
         *pprh = (double)PSUNITS(*ph, PS_UNIT_SIZE);
@@ -1728,7 +1728,7 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
             *view_height = (double)maxPageHeight * (double)PS_UNIT_SIZE;
         /*
          * if (res_unit == RESUNIT_CENTIMETER)
-         * *view_height /= 2.54F;
+         * *view_height /= 2.54f;
          */
     }
     else
@@ -1739,7 +1739,7 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
                 (double)pgheight *
                 (double)PS_UNIT_SIZE; /* Postscript size for Page Height in inches */
             /* if (res_unit == RESUNIT_CENTIMETER)
-             *  *view_height /= 2.54F;
+             *  *view_height /= 2.54f;
              */
         }
         else /* If no width or height are specified, use the original size from
@@ -1765,7 +1765,7 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
         else
             *view_width = (double)maxPageWidth * (double)PS_UNIT_SIZE;
         /* if (res_unit == RESUNIT_CENTIMETER)
-         *  *view_width /= 2.54F;
+         *  *view_width /= 2.54f;
          */
     }
     else
@@ -1776,7 +1776,7 @@ int get_viewport(double pgwidth, double pgheight, double pswidth,
                 (double)pgwidth *
                 (double)PS_UNIT_SIZE; /* Postscript size for Page Width in inches */
             /* if (res_unit == RESUNIT_CENTIMETER)
-             * *view_width /= 2.54F;
+             * *view_width /= 2.54f;
              */
         }
         else /* If no width or height are specified, use the original size from
