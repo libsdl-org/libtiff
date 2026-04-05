@@ -588,8 +588,8 @@ int TIFFSetupStrips(TIFF *tif)
      * Place data at the end-of-file
      * (by setting offsets to zero).
      */
-    _TIFFmemset(td->td_stripoffset_p, 0, (tmsize_t)(td->td_nstrips * sizeof(uint64_t)));
-    _TIFFmemset(td->td_stripbytecount_p, 0, (tmsize_t)(td->td_nstrips * sizeof(uint64_t)));
+    _TIFFmemset(td->td_stripoffset_p, 0, (tmsize_t)((size_t)td->td_nstrips * sizeof(uint64_t)));
+    _TIFFmemset(td->td_stripbytecount_p, 0, (tmsize_t)((size_t)td->td_nstrips * sizeof(uint64_t)));
     TIFFSetFieldBit(tif, FIELD_STRIPOFFSETS);
     TIFFSetFieldBit(tif, FIELD_STRIPBYTECOUNTS);
     return (1);
@@ -732,10 +732,10 @@ static int TIFFGrowStrips(TIFF *tif, uint32_t delta, const char *module)
 
     assert(td->td_planarconfig == PLANARCONFIG_CONTIG);
     new_stripoffset = (uint64_t *)_TIFFreallocExt(
-        tif, td->td_stripoffset_p, (tmsize_t)((td->td_nstrips + delta) * sizeof(uint64_t)));
+        tif, td->td_stripoffset_p, (tmsize_t)(((size_t)td->td_nstrips + (size_t)delta) * sizeof(uint64_t)));
     new_stripbytecount = (uint64_t *)_TIFFreallocExt(
         tif, td->td_stripbytecount_p,
-        (tmsize_t)((td->td_nstrips + delta) * sizeof(uint64_t)));
+        (tmsize_t)(((size_t)td->td_nstrips + (size_t)delta) * sizeof(uint64_t)));
     if (new_stripoffset == NULL || new_stripbytecount == NULL)
     {
         if (new_stripoffset)
@@ -749,9 +749,9 @@ static int TIFFGrowStrips(TIFF *tif, uint32_t delta, const char *module)
     td->td_stripoffset_p = new_stripoffset;
     td->td_stripbytecount_p = new_stripbytecount;
     _TIFFmemset(td->td_stripoffset_p + td->td_nstrips, 0,
-                (tmsize_t)(delta * sizeof(uint64_t)));
+                (tmsize_t)((size_t)delta * sizeof(uint64_t)));
     _TIFFmemset(td->td_stripbytecount_p + td->td_nstrips, 0,
-                (tmsize_t)(delta * sizeof(uint64_t)));
+                (tmsize_t)((size_t)delta * sizeof(uint64_t)));
     td->td_nstrips += delta;
     tif->tif_flags |= TIFF_DIRTYDIRECT;
 

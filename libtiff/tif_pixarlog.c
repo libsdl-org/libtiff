@@ -579,7 +579,7 @@ static int PixarLogMakeTables(TIFF *tif, PixarLogState *sp)
     LogK2 = (float)(1. / b);
     lt2size = (int)(2. / linstep) + 1;
     FromLT2 = (uint16_t *)_TIFFmallocExt(
-        tif, (tmsize_t)((unsigned long)lt2size * sizeof(uint16_t)));
+        tif, (tmsize_t)((size_t)lt2size * sizeof(uint16_t)));
     From14 = (uint16_t *)_TIFFmallocExt(tif, 16384 * sizeof(uint16_t));
     From8 = (uint16_t *)_TIFFmallocExt(tif, 256 * sizeof(uint16_t));
     ToLinearF = (float *)_TIFFmallocExt(tif, TSIZEP1 * sizeof(float));
@@ -773,7 +773,7 @@ static int PixarLogSetupDecode(TIFF *tif)
         multiply_ms(multiply_ms(sp->stride, td->td_imagewidth), strip_height),
         sizeof(uint16_t));
     /* add one more stride in case input ends mid-stride */
-    tbuf_size = add_ms(tbuf_size, (tmsize_t)(sizeof(uint16_t) * sp->stride));
+    tbuf_size = add_ms(tbuf_size, (tmsize_t)(sizeof(uint16_t) * (size_t)sp->stride));
     if (tbuf_size == 0)
         return (0); /* TODO: this is an error return without error report
                        through TIFFErrorExt */

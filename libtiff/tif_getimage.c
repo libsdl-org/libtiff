@@ -426,11 +426,11 @@ int TIFFRGBAImageBegin(TIFFRGBAImage *img, TIFF *tif, int stop,
             /* copy the colormaps so we can modify them */
             n_color = (uint32_t)(1U << img->bitspersample);
             img->redcmap =
-                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * n_color));
+                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * (size_t)n_color));
             img->greencmap =
-                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * n_color));
+                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * (size_t)n_color));
             img->bluecmap =
-                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * n_color));
+                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * (size_t)n_color));
             if (!img->redcmap || !img->greencmap || !img->bluecmap)
             {
                 snprintf(emsg, EMSG_BUF_SIZE,
@@ -3591,13 +3591,13 @@ int TIFFReadRGBATileExt(TIFF *tif, uint32_t col, uint32_t row, uint32_t *raster,
                 read_xsize * sizeof(uint32_t));
         _TIFFmemset(raster + (size_t)(tile_ysize - i_row - 1) * tile_xsize +
                         read_xsize,
-                    0, (tmsize_t)(sizeof(uint32_t) * (tile_xsize - read_xsize)));
+                    0, (tmsize_t)(sizeof(uint32_t) * (size_t)(tile_xsize - read_xsize)));
     }
 
     for (i_row = read_ysize; i_row < tile_ysize; i_row++)
     {
         _TIFFmemset(raster + (size_t)(tile_ysize - i_row - 1) * tile_xsize, 0,
-                    (tmsize_t)(sizeof(uint32_t) * tile_xsize));
+                    (tmsize_t)(sizeof(uint32_t) * (size_t)tile_xsize));
     }
 
     return (ok);

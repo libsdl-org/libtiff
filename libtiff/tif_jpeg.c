@@ -2347,7 +2347,7 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     {
         line16_count = (int)((sp->bytesperline * 2) / 3);
         line16 = (short *)_TIFFmallocExt(
-            tif, (tmsize_t)(sizeof(short) * (unsigned long)line16_count));
+            tif, (tmsize_t)(sizeof(short) * (size_t)line16_count));
         if (!line16)
         {
             TIFFErrorExtR(tif, "JPEGEncode", "Failed to allocate memory");

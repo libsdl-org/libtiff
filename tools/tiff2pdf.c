@@ -1228,7 +1228,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
         t2p->t2p_error = T2P_ERR_ERROR;
         return;
     }
-    _TIFFmemset(t2p->tiff_pages, 0x00, (tmsize_t)(directorycount * sizeof(T2P_PAGE)));
+    _TIFFmemset(t2p->tiff_pages, 0x00, (tmsize_t)((size_t)directorycount * sizeof(T2P_PAGE)));
     t2p->tiff_tiles = (T2P_TILES *)_TIFFmalloc(
         TIFFSafeMultiply(tmsize_t, directorycount, sizeof(T2P_TILES)));
     if (t2p->tiff_tiles == NULL)
@@ -1240,7 +1240,7 @@ void t2p_read_tiff_init(T2P *t2p, TIFF *input)
         t2p->t2p_error = T2P_ERR_ERROR;
         return;
     }
-    _TIFFmemset(t2p->tiff_tiles, 0x00, (tmsize_t)(directorycount * sizeof(T2P_TILES)));
+    _TIFFmemset(t2p->tiff_tiles, 0x00, (tmsize_t)((size_t)directorycount * sizeof(T2P_TILES)));
     for (i = 0; i < directorycount; i++)
     {
         uint32_t subfiletype = 0;

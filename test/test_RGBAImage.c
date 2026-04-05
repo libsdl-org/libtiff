@@ -746,10 +746,10 @@ static int testRGBAImageReadFunctions(TIFF *tif, uint32_t imgWidth,
     /* Just for debugging output in printRaster() */
     bool tiledlocal = TIFFIsTiled(tif);
 
-    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * rWidth * rHeight);
+    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)rWidth * (size_t)rHeight);
     if (rasterSize == 0)
     {
-        rasterSize = (tmsize_t)(sizeof(uint32_t) * imgWidth * imgLength);
+        rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)imgWidth * (size_t)imgLength);
     }
     raster1 = (uint32_t *)_TIFFmalloc(rasterSize);
     raster2 = (uint32_t *)_TIFFmalloc(rasterSize);
@@ -814,10 +814,10 @@ static int testRGBAImageReadWithOffsets(TIFF *tif, uint32_t imgWidth,
     /* Just for debugging output in printRaster() */
     bool tiledlocal = TIFFIsTiled(tif);
 
-    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * rWidth * rHeight);
+    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)rWidth * (size_t)rHeight);
     if (rasterSize == 0)
     {
-        rasterSize = (tmsize_t)(sizeof(uint32_t) * imgWidth * imgLength);
+        rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)imgWidth * (size_t)imgLength);
     }
     raster1 = (uint32_t *)_TIFFmalloc(rasterSize);
     if (raster1 == NULL)

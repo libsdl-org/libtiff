@@ -2834,7 +2834,7 @@ TIFFReadDirEntryFloatArray(TIFF *tif, TIFFDirEntry *direntry, float **value)
         default:
             break;
     }
-    data = (float *)_TIFFmallocExt(tif, (tmsize_t)(count * sizeof(float)));
+    data = (float *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(float)));
     if (data == 0)
     {
         _TIFFfreeExt(tif, origdata);
@@ -3074,7 +3074,7 @@ TIFFReadDirEntryDoubleArray(TIFF *tif, TIFFDirEntry *direntry, double **value)
         default:
             break;
     }
-    data = (double *)_TIFFmallocExt(tif, (tmsize_t)(count * sizeof(double)));
+    data = (double *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(double)));
     if (data == 0)
     {
         _TIFFfreeExt(tif, origdata);
@@ -4261,9 +4261,9 @@ static void CalcFinalIFDdatasizeReading(TIFF *tif, uint16_t dircount)
     /* Get offset of end of IFD entry space. */
     uint64_t IFDendoffset;
     if (!(tif->tif_flags & TIFF_BIGTIFF))
-        IFDendoffset = tif->tif_diroff + (uint64_t)(2 + dircount * 12 + 4);
+        IFDendoffset = tif->tif_diroff + 2 + (uint64_t)dircount * 12 + 4;
     else
-        IFDendoffset = tif->tif_diroff + (uint64_t)(8 + dircount * 20 + 8);
+        IFDendoffset = tif->tif_diroff + 8 + (uint64_t)dircount * 20 + 8;
 
     /* Check which offsets are right behind IFD entries. However, LibTIFF
      * increments the writing address for every external data to an even offset.
@@ -4420,7 +4420,7 @@ int TIFFReadDirectory(TIFF *tif)
      * checking. Note: Counter are reset within TIFFFreeDirectory(). */
     tif->tif_dir.td_dirdatasize_offsets =
         (TIFFEntryOffsetAndLength *)_TIFFmallocExt(
-            tif, (tmsize_t)(dircount * sizeof(TIFFEntryOffsetAndLength)));
+            tif, (tmsize_t)((size_t)dircount * sizeof(TIFFEntryOffsetAndLength)));
     if (tif->tif_dir.td_dirdatasize_offsets == NULL)
     {
         TIFFErrorExtR(
@@ -5428,7 +5428,7 @@ int TIFFReadCustomDirectory(TIFF *tif, toff_t diroff,
      * checking. Note: Counter are reset within TIFFFreeDirectory(). */
     tif->tif_dir.td_dirdatasize_offsets =
         (TIFFEntryOffsetAndLength *)_TIFFmallocExt(
-            tif, (tmsize_t)(dircount * sizeof(TIFFEntryOffsetAndLength)));
+            tif, (tmsize_t)((size_t)dircount * sizeof(TIFFEntryOffsetAndLength)));
     if (tif->tif_dir.td_dirdatasize_offsets == NULL)
     {
         TIFFErrorExtR(
@@ -5610,9 +5610,9 @@ static int EstimateStripByteCounts(TIFF *tif, TIFFDirEntry *dir,
         uint64_t space;
         uint16_t n;
         if (!(tif->tif_flags & TIFF_BIGTIFF))
-            space = sizeof(TIFFHeaderClassic) + (unsigned long)(2 + dircount * 12 + 4);
+            space = sizeof(TIFFHeaderClassic) + 2 + (unsigned long)dircount * 12 + 4;
         else
-            space = sizeof(TIFFHeaderBig) + (unsigned long)(8 + dircount * 20 + 8);
+            space = sizeof(TIFFHeaderBig) + 8 + (unsigned long)dircount * 20 + 8;
         /* calculate amount of space used by indirect values */
         for (dp = dir, n = dircount; n > 0; n--, dp++)
         {
@@ -7835,9 +7835,9 @@ static int TIFFFetchStripThing(TIFF *tif, TIFFDirEntry *dir, uint32_t nstrips,
         }
         if (dir->tdir_count)
             _TIFFmemcpy(resizeddata, data,
-                        (tmsize_t)((uint32_t)dir->tdir_count * sizeof(uint64_t)));
+                        (tmsize_t)((size_t)dir->tdir_count * sizeof(uint64_t)));
         _TIFFmemset(resizeddata + (uint32_t)dir->tdir_count, 0,
-                    (tmsize_t)((nstrips - (uint32_t)dir->tdir_count) * sizeof(uint64_t)));
+                    (tmsize_t)((size_t)(nstrips - (uint32_t)dir->tdir_count) * sizeof(uint64_t)));
         _TIFFfreeExt(tif, data);
         data = resizeddata;
     }

@@ -1396,7 +1396,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
                 3 + sp->subsampling_convert_ylines +
                 2 * sp->subsampling_convert_clines;
             sp->subsampling_convert_ycbcrimage = (uint8_t **)_TIFFmallocExt(
-                tif, (tmsize_t)(sp->subsampling_convert_ycbcrimagelen * sizeof(uint8_t *)));
+                tif, (tmsize_t)((size_t)sp->subsampling_convert_ycbcrimagelen * sizeof(uint8_t *)));
             if (sp->subsampling_convert_ycbcrimage == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
