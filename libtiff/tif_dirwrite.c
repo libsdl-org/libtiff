@@ -417,7 +417,6 @@ static int TIFFRewriteDirectorySec(TIFF *tif, int isimage, int imagedone,
             while (1)
             {
                 uint64_t dircount64;
-                uint16_t dircount;
                 uint64_t nextnextdir;
 
                 if (!SeekOK(tif, nextdir) || !ReadOK(tif, &dircount64, 8))
@@ -435,8 +434,7 @@ static int TIFFRewriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                                   "corrupt TIFF");
                     return (0);
                 }
-                dircount = (uint16_t)dircount64;
-                (void)TIFFSeekFile(tif, nextdir + 8 + (uint64_t)(dircount * 20), SEEK_SET);
+                (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20, SEEK_SET);
                 if (!ReadOK(tif, &nextnextdir, 8))
                 {
                     TIFFErrorExtR(tif, module, "Error fetching directory link");
@@ -448,7 +446,7 @@ static int TIFFRewriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                 {
                     uint64_t m;
                     m = 0;
-                    (void)TIFFSeekFile(tif, nextdir + 8 + (uint64_t)(dircount * 20),
+                    (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20,
                                        SEEK_SET);
                     if (!WriteOK(tif, &m, 8))
                     {
@@ -3360,7 +3358,6 @@ static int TIFFLinkDirectory(TIFF *tif)
         while (1)
         {
             uint64_t dircount64;
-            uint16_t dircount;
             uint64_t nextnextdir;
 
             if (!SeekOK(tif, nextdir) || !ReadOK(tif, &dircount64, 8))
@@ -3377,8 +3374,7 @@ static int TIFFLinkDirectory(TIFF *tif)
                               "likely corrupt TIFF");
                 return (0);
             }
-            dircount = (uint16_t)dircount64;
-            (void)TIFFSeekFile(tif, nextdir + 8 + (uint64_t)(dircount * 20), SEEK_SET);
+            (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20, SEEK_SET);
             if (!ReadOK(tif, &nextnextdir, 8))
             {
                 TIFFErrorExtR(tif, module, "Error fetching directory link");
@@ -3388,7 +3384,7 @@ static int TIFFLinkDirectory(TIFF *tif)
                 TIFFSwabLong8(&nextnextdir);
             if (nextnextdir == 0)
             {
-                (void)TIFFSeekFile(tif, nextdir + 8 + (uint64_t)(dircount * 20), SEEK_SET);
+                (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20, SEEK_SET);
                 if (!WriteOK(tif, &m, 8))
                 {
                     TIFFErrorExtR(tif, module, "Error writing directory link");
