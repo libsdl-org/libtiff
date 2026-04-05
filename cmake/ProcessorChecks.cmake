@@ -25,8 +25,8 @@
 
 
 # CPU endianness
-# Use CMAKE_C_BYTE_ORDER if available (CMake 3.20+), otherwise fall back to test_big_endian()
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.20 AND DEFINED CMAKE_C_BYTE_ORDER)
+# Use CMAKE_C_BYTE_ORDER if available, otherwise fall back to test_big_endian()
+if(DEFINED CMAKE_C_BYTE_ORDER)
     if(CMAKE_C_BYTE_ORDER STREQUAL "BIG_ENDIAN")
         set(WORDS_BIGENDIAN TRUE)
         set(HOST_BIG_ENDIAN 1)
