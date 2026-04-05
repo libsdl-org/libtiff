@@ -5775,7 +5775,7 @@ tsize_t t2p_write_pdf_xobject_stream_dict(ttile_t tile, T2P *t2p, TIFF *output)
 #define normalizePoint(x, y, z)                                                \
     do                                                                         \
     {                                                                          \
-        if (!TIFF_FLOAT_EQ(y, 0.0f))                                             \
+        if (!TIFF_FLOAT_EQ(y, 0.0f))                                           \
         {                                                                      \
             x /= y;                                                            \
             z /= y;                                                            \
