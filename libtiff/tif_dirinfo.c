@@ -633,23 +633,26 @@ int _TIFFMergeFields(TIFF *tif, const TIFFField info[], uint32_t n)
 
     tif->tif_foundfield = NULL;
 
+    TIFFField ** tif_newfields = NULL;
+
     if (tif->tif_fields && tif->tif_nfields > 0)
     {
-        tif->tif_fields = (TIFFField **)_TIFFCheckRealloc(
+        tif_newfields = (TIFFField **)_TIFFCheckRealloc(
             tif, tif->tif_fields, (tmsize_t)(tif->tif_nfields + n),
             (tmsize_t)sizeof(TIFFField *), reason);
     }
     else
     {
-        tif->tif_fields =
+        tif_newfields =
             (TIFFField **)_TIFFCheckMalloc(tif, n, sizeof(TIFFField *), reason);
     }
-    if (!tif->tif_fields)
+    if (!tif_newfields)
     {
         tif->tif_nfields = 0;
         TIFFErrorExtR(tif, module, "Failed to allocate fields array");
         return 0;
     }
+    tif->tif_fields = tif_newfields;
 
     /* tp = tif->tif_fields + tif->tif_nfields; */
     for (i = 0; i < n; i++)
@@ -1246,22 +1249,25 @@ int TIFFMergeFieldInfo(TIFF *tif, const TIFFFieldInfo info[], uint32_t n)
     size_t nfields;
     uint32_t i;
 
+    TIFFFieldArray * tif_newfieldscompat = NULL;
+
     if (tif->tif_nfieldscompat > 0)
     {
-        tif->tif_fieldscompat = (TIFFFieldArray *)_TIFFCheckRealloc(
+        tif_newfieldscompat = (TIFFFieldArray *)_TIFFCheckRealloc(
             tif, tif->tif_fieldscompat, (tmsize_t)(tif->tif_nfieldscompat + 1),
             (tmsize_t)sizeof(TIFFFieldArray), reason);
     }
     else
     {
-        tif->tif_fieldscompat = (TIFFFieldArray *)_TIFFCheckMalloc(
+        tif_newfieldscompat = (TIFFFieldArray *)_TIFFCheckMalloc(
             tif, 1, sizeof(TIFFFieldArray), reason);
     }
-    if (!tif->tif_fieldscompat)
+    if (!tif_newfieldscompat)
     {
         TIFFErrorExtR(tif, module, "Failed to allocate fields array");
         return -1;
     }
+    tif->tif_fieldscompat = tif_newfieldscompat;
     nfields = tif->tif_nfieldscompat++;
 
     tif->tif_fieldscompat[nfields].type = tfiatOther;
