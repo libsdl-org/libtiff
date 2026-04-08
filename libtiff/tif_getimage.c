@@ -875,7 +875,7 @@ static int gtTileContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1119,7 +1119,7 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1271,7 +1271,7 @@ static int gtStripContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1475,7 +1475,7 @@ static int gtStripSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
