@@ -636,7 +636,7 @@ int _TIFFMergeFields(TIFF *tif, const TIFFField info[], uint32_t n)
     if (tif->tif_fields && tif->tif_nfields > 0)
     {
         tif->tif_fields = (TIFFField **)_TIFFCheckRealloc(
-            tif, tif->tif_fields, (tmsize_t)(tif->tif_nfields + n),
+            tif, tif->tif_fields, (tmsize_t)tif->tif_nfields + n,
             (tmsize_t)sizeof(TIFFField *), reason);
     }
     else
@@ -1249,7 +1249,7 @@ int TIFFMergeFieldInfo(TIFF *tif, const TIFFFieldInfo info[], uint32_t n)
     if (tif->tif_nfieldscompat > 0)
     {
         tif->tif_fieldscompat = (TIFFFieldArray *)_TIFFCheckRealloc(
-            tif, tif->tif_fieldscompat, (tmsize_t)(tif->tif_nfieldscompat + 1),
+            tif, tif->tif_fieldscompat, (tmsize_t)tif->tif_nfieldscompat + 1,
             (tmsize_t)sizeof(TIFFFieldArray), reason);
     }
     else

@@ -6143,7 +6143,7 @@ static uint16_t TIFFFetchDirectory(TIFF *tif, uint64_t diroff,
                                    "to read TIFF directory");
         if (origdir == NULL)
             return 0;
-        if (!ReadOK(tif, origdir, (tmsize_t)(dircount16 * dirsize)))
+        if (!ReadOK(tif, origdir, (tmsize_t)dircount16 * dirsize))
         {
             TIFFErrorExtR(tif, module, "%.100s: Can not read TIFF directory",
                           tif->tif_name);
@@ -6272,7 +6272,7 @@ static uint16_t TIFFFetchDirectory(TIFF *tif, uint64_t diroff,
         if (origdir == NULL)
             return 0;
         m = off + dircount16 * dirsize;
-        if ((m < off) || (m < (tmsize_t)(dircount16 * dirsize)) ||
+        if ((m < off) || (m < (tmsize_t)dircount16 * dirsize) ||
             (m > tif->tif_size))
         {
             TIFFErrorExtR(tif, module, "Can not read TIFF directory");
@@ -6281,7 +6281,7 @@ static uint16_t TIFFFetchDirectory(TIFF *tif, uint64_t diroff,
         }
         else
         {
-            _TIFFmemcpy(origdir, tif->tif_base + off, dircount16 * dirsize);
+            _TIFFmemcpy(origdir, tif->tif_base + off, (tmsize_t)dircount16 * dirsize);
         }
         if (nextdiroff)
         {

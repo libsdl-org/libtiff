@@ -2739,7 +2739,7 @@ void PSpage(FILE *fd, TIFF *tif, uint32_t w, uint32_t h)
     if ((level2 || level3) && PS_Lvl2page(fd, tif, w, h))
         return;
     ps_bytesperrow =
-        tf_bytesperrow - (uint32_t)(extrasamples * bitspersample / 8) * w;
+        tf_bytesperrow - (uint32_t)extrasamples * bitspersample / 8 * w;
     switch (photometric)
     {
         case PHOTOMETRIC_RGB:

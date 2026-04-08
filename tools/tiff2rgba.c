@@ -205,7 +205,7 @@ static int cvt_by_tile(TIFF *in, TIFF *out)
     /*
      * Allocate tile buffer
      */
-    rastersize = (uint32_t)(tile_width * tile_height * sizeof(uint32_t));
+    rastersize = (uint32_t)((size_t)tile_width * tile_height * sizeof(uint32_t));
     if (tile_width != (rastersize / tile_height) / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),
@@ -321,7 +321,7 @@ static int cvt_by_strip(TIFF *in, TIFF *out)
     /*
      * Allocate strip buffer
      */
-    rastersize = (uint32_t)(width * rowsperstrip * sizeof(uint32_t));
+    rastersize = (uint32_t)((size_t)width * rowsperstrip * sizeof(uint32_t));
     if (width != (rastersize / rowsperstrip) / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),

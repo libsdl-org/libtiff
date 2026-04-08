@@ -788,7 +788,7 @@ static int OJPEGPreDecodeSkipRaw(TIFF *tif)
     {
         if (jpeg_read_raw_data_encap(sp, &(sp->libjpeg_jpeg_decompress_struct),
                                      sp->subsampling_convert_ycbcrimage,
-                                     (uint32_t)(sp->subsampling_ver * 8)) == 0)
+                                     (uint32_t)sp->subsampling_ver * 8) == 0)
             return (0);
         m -= sp->subsampling_convert_clines;
     }
@@ -796,7 +796,7 @@ static int OJPEGPreDecodeSkipRaw(TIFF *tif)
     {
         if (jpeg_read_raw_data_encap(sp, &(sp->libjpeg_jpeg_decompress_struct),
                                      sp->subsampling_convert_ycbcrimage,
-                                     (uint32_t)(sp->subsampling_ver * 8)) == 0)
+                                     (uint32_t)sp->subsampling_ver * 8) == 0)
             return (0);
         sp->subsampling_convert_state = m;
     }
@@ -904,7 +904,7 @@ static int OJPEGDecodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc)
             if (jpeg_read_raw_data_encap(sp,
                                          &(sp->libjpeg_jpeg_decompress_struct),
                                          sp->subsampling_convert_ycbcrimage,
-                                         (uint32_t)(sp->subsampling_ver * 8)) == 0)
+                                         (uint32_t)sp->subsampling_ver * 8) == 0)
             {
                 sp->error_in_raw_data_decoding = 1;
                 return (0);
@@ -1216,7 +1216,7 @@ static int OJPEGReadHeaderInfo(TIFF *tif)
             TIFFErrorExtR(tif, module, "Invalid subsampling values");
             return (0);
         }
-        if (sp->strile_length % (uint32_t)(sp->subsampling_ver * 8) != 0)
+        if (sp->strile_length % ((uint32_t)sp->subsampling_ver * 8) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "Incompatible vertical subsampling and image "
@@ -1224,9 +1224,9 @@ static int OJPEGReadHeaderInfo(TIFF *tif)
             return (0);
         }
         sp->restart_interval =
-            (uint16_t)(((sp->strile_width + (uint32_t)(sp->subsampling_hor * 8) - 1) /
-                        (uint32_t)(sp->subsampling_hor * 8)) *
-                       (sp->strile_length / (uint32_t)(sp->subsampling_ver * 8)));
+            (uint16_t)(((sp->strile_width + (uint32_t)sp->subsampling_hor * 8 - 1) /
+                        ((uint32_t)sp->subsampling_hor * 8)) *
+                       (sp->strile_length / ((uint32_t)sp->subsampling_ver * 8)));
     }
     if (OJPEGReadHeaderInfoSec(tif) == 0)
         return (0);
@@ -1353,12 +1353,12 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
              * computation.
              */
             if (sp->strile_width >
-                UINT32_MAX - (uint32_t)(sp->subsampling_hor * 8 - 1))
+                UINT32_MAX - ((uint32_t)sp->subsampling_hor * 8 - 1))
                 return (0);
             sp->subsampling_convert_ylinelen =
-                ((sp->strile_width + (uint32_t)(sp->subsampling_hor * 8) - 1) /
-                 (uint32_t)(sp->subsampling_hor * 8) * (uint32_t)(sp->subsampling_hor * 8));
-            sp->subsampling_convert_ylines = (uint32_t)(sp->subsampling_ver * 8);
+                ((sp->strile_width + (uint32_t)sp->subsampling_hor * 8 - 1) /
+                 ((uint32_t)sp->subsampling_hor * 8) * ((uint32_t)sp->subsampling_hor * 8));
+            sp->subsampling_convert_ylines = (uint32_t)sp->subsampling_ver * 8;
             sp->subsampling_convert_clinelen =
                 sp->subsampling_convert_ylinelen / sp->subsampling_hor;
             sp->subsampling_convert_clines = 8;
@@ -1426,7 +1426,7 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
 
             const uint64_t bpl =
                 (uint64_t)sp->subsampling_convert_clinelenout *
-                (uint64_t)(sp->subsampling_ver * sp->subsampling_hor + 2);
+                ((uint64_t)sp->subsampling_ver * sp->subsampling_hor + 2);
             if (bpl > UINT32_MAX)
                 return (0);
             sp->bytes_per_line = (uint32_t)bpl;
@@ -2573,7 +2573,7 @@ static void OJPEGWriteStreamSof(TIFF *tif, void **mem, uint32_t *len)
         sp->out_buffer[10 + m * 3 + 2] =
             sp->sof_tq[sp->plane_sample_offset + m];
     }
-    *len = (uint32_t)(10 + sp->samples_per_pixel_per_plane * 3);
+    *len = 10 + (uint32_t)sp->samples_per_pixel_per_plane * 3;
     *mem = (void *)sp->out_buffer;
     sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }
@@ -2605,7 +2605,7 @@ static void OJPEGWriteStreamSos(TIFF *tif, void **mem, uint32_t *len)
     sp->out_buffer[5 + sp->samples_per_pixel_per_plane * 2 + 1] = 63;
     /* Ah and Al */
     sp->out_buffer[5 + sp->samples_per_pixel_per_plane * 2 + 2] = 0;
-    *len = (uint32_t)(8 + sp->samples_per_pixel_per_plane * 2);
+    *len = 8 + (uint32_t)sp->samples_per_pixel_per_plane * 2;
     *mem = (void *)sp->out_buffer;
     sp->out_state = (OJPEGStateOutState)(sp->out_state + 1);
 }

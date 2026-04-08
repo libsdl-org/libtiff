@@ -861,9 +861,9 @@ void TIFFBuildOverviews(TIFF *hTIFF, int nOverviews, int *panOvList,
         panGreen2 = (uint16_t *)_TIFFmalloc(2 * nColorCount);
         panBlue2 = (uint16_t *)_TIFFmalloc(2 * nColorCount);
 
-        memcpy(panRed2, panRedMap, (size_t)(2 * nColorCount));
-        memcpy(panGreen2, panGreenMap, (size_t)(2 * nColorCount));
-        memcpy(panBlue2, panBlueMap, (size_t)(2 * nColorCount));
+        memcpy(panRed2, panRedMap, 2 * (size_t)nColorCount);
+        memcpy(panGreen2, panGreenMap, 2 * (size_t)nColorCount);
+        memcpy(panBlue2, panBlueMap, 2 * (size_t)nColorCount);
 
         panRedMap = panRed2;
         panGreenMap = panGreen2;

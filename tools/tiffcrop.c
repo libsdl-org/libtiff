@@ -6047,7 +6047,7 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
             if (zlength > max_length)
                 max_length = zlength;
 
-            buffsize = (uint32_t)(((zwidth * image->bps * image->spp + 7) / 8) *
+            buffsize = (uint32_t)(((uint64_t)zwidth * image->bps * image->spp + 7) / 8 *
                                   (zlength + 1));
 
             crop->regionlist[i].buffsize = buffsize;
@@ -6633,7 +6633,7 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                 break;
         } /* end switch statement */
 
-        buffsize = (uint32_t)((((zwidth * image->bps * image->spp) + 7) / 8) *
+        buffsize = (uint32_t)(((uint64_t)zwidth * image->bps * image->spp + 7) / 8 *
                               (zlength + 1));
         crop->regionlist[i].width = (uint32_t)zwidth;
         crop->regionlist[i].length = (uint32_t)zlength;
@@ -7164,7 +7164,7 @@ static int loadImage(TIFF *in, struct image_data *image, struct dump_opts *dump,
                       "Integer overflow when calculating buffer size");
             exit(EXIT_FAILURE);
         }
-        if (buffsize < (tmsize_t)(ntiles * tl * tile_rowsize))
+        if (buffsize < (tmsize_t)ntiles * tl * tile_rowsize)
         {
             buffsize = ntiles * tl * tile_rowsize;
 

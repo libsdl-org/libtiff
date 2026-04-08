@@ -2016,7 +2016,7 @@ static int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
         uint64_t rr = TIFFReadFile_M(tif, &cnt, 2);
         if (TIFFIsByteSwapped(tif))
             TIFFSwabShort(&cnt);
-        ss = TIFFSeekFile_M(tif, offsetBase[2] + (uint64_t)(cnt * 12 + 2), 0);
+        ss = TIFFSeekFile_M(tif, offsetBase[2] + (uint64_t)cnt * 12 + 2, 0);
         uint32_t wt = (uint32_t)ss;
         if (TIFFIsByteSwapped(tif))
             TIFFSwabLong(&wt);
@@ -2059,7 +2059,7 @@ static int test_current_dirnum_incrementing(int testcase, unsigned int openMode)
         /* Point IFD3 to a location within the file, where it has now for
          * little-endian TIFF files a non-valid dircount=0, which leads also to
          * an error and the IFD is not read in. */
-        ss = TIFFSeekFile_M(tif, offsetBase[2] + (uint64_t)(cnt * 12 + 2), 0);
+        ss = TIFFSeekFile_M(tif, offsetBase[2] + (uint64_t)cnt * 12 + 2, 0);
         wt = (uint32_t)(offsetBase[1] + 8);
         // wt = (uint32_t)(ss + 400);
         if (TIFFIsByteSwapped(tif))

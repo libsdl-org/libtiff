@@ -3655,7 +3655,7 @@ int _TIFFRewriteField(TIFF *tif, uint16_t tag, TIFFDataType in_datatype,
         return 0;
 
     if (datatype == in_datatype)
-        memcpy(buf_to_write, data, (size_t)(count * TIFFDataWidth(datatype)));
+        memcpy(buf_to_write, data, (size_t)count * (size_t)TIFFDataWidth(datatype));
     else if (datatype == TIFF_SLONG && in_datatype == TIFF_SLONG8)
     {
         tmsize_t i;
@@ -3807,13 +3807,13 @@ int _TIFFRewriteField(TIFF *tif, uint16_t tag, TIFFDataType in_datatype,
         {
             uint32_t value;
             memcpy(&value, buf_to_write,
-                   (size_t)(count * TIFFDataWidth(datatype)));
+                   (size_t)count * (size_t)TIFFDataWidth(datatype));
             entry_offset = value;
         }
         else
         {
             memcpy(&entry_offset, buf_to_write,
-                   (size_t)(count * TIFFDataWidth(datatype)));
+                   (size_t)count * (size_t)TIFFDataWidth(datatype));
         }
     }
 

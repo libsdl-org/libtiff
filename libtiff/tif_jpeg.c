@@ -552,7 +552,7 @@ static boolean tables_empty_output_buffer(j_compress_ptr cinfo)
     /* the entire buffer has been filled; enlarge it by 1000 bytes */
     newbuf =
         _TIFFreallocExt(sp->tif, (void *)sp->otherSettings.jpegtables,
-                        (tmsize_t)(sp->otherSettings.jpegtables_length + 1000));
+                        (tmsize_t)sp->otherSettings.jpegtables_length + 1000);
     if (newbuf == NULL)
         ERREXIT1(cinfo, JERR_OUT_OF_MEMORY, 100);
     sp->dest.next_output_byte =
@@ -2076,30 +2076,30 @@ static int JPEGSetupEncode(TIFF *tif)
 #endif
     if (isTiled(tif))
     {
-        if ((td->td_tilelength % (uint32_t)(sp->v_sampling * DCTSIZE)) != 0)
+        if ((td->td_tilelength % ((uint32_t)sp->v_sampling * DCTSIZE)) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "JPEG tile height must be multiple of %" PRIu32,
-                          (uint32_t)(sp->v_sampling * DCTSIZE));
+                          (uint32_t)sp->v_sampling * DCTSIZE);
             return (0);
         }
-        if ((td->td_tilewidth % (uint32_t)(sp->h_sampling * DCTSIZE)) != 0)
+        if ((td->td_tilewidth % ((uint32_t)sp->h_sampling * DCTSIZE)) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "JPEG tile width must be multiple of %" PRIu32,
-                          (uint32_t)(sp->h_sampling * DCTSIZE));
+                          (uint32_t)sp->h_sampling * DCTSIZE);
             return (0);
         }
     }
     else
     {
         if (td->td_rowsperstrip < td->td_imagelength &&
-            (td->td_rowsperstrip % (uint32_t)(sp->v_sampling * DCTSIZE)) != 0)
+            (td->td_rowsperstrip % ((uint32_t)sp->v_sampling * DCTSIZE)) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "RowsPerStrip must be multiple of %" PRIu32
                           " for JPEG",
-                          (uint32_t)(sp->v_sampling * DCTSIZE));
+                          (uint32_t)sp->v_sampling * DCTSIZE);
             return (0);
         }
     }
