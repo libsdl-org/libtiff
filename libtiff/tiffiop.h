@@ -195,7 +195,6 @@ struct tiff
     /* SubIFD support */
     uint16_t tif_nsubifd;   /* remaining subifds to write */
     uint64_t tif_subifdoff; /* offset for patching SubIFD link */
-    /* tiling support */
     /* compression scheme hooks */
     int tif_decodestatus;
     TIFFBoolMethod tif_fixuptags;   /* called in TIFFReadDirectory */

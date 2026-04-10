@@ -104,21 +104,16 @@ typedef struct
     uint16_t td_halftonehints[2];
     uint16_t td_extrasamples;
     uint16_t *td_sampleinfo;
-
-    /* Some parameters moved from tif-level to tif_dir-level, because they
-     * belong to an IFD only and need to be reset when a new IFD is setup
-     * or freed. (v4.7.2) */
     /* strip support */
-    uint32_t td_row;          /* current scanline */
-    uint32_t td_curstrip;     /* current strip for read/write */
-    tmsize_t td_scanlinesize; /* # of bytes in a scanline */
-    /* tiling support */
-    uint32_t td_col;             /* current column (offset by row too) */
-    uint32_t td_curtile;         /* current tile for read/write */
-    tmsize_t td_tilesize;        /* # of bytes in a tile */
+    uint32_t td_row;             /* current scanline */
+    uint32_t td_curstrip;        /* current strip for read/write */
+    tmsize_t td_scanlinesize;    /* # of bytes in a scanline */
 #define NOSTRIP ((uint32_t)(-1)) /* undefined state */
-#define NOTILE ((uint32_t)(-1))  /* undefined state */
-
+    /* tiling support */
+    uint32_t td_col;            /* current column (offset by row too) */
+    uint32_t td_curtile;        /* current tile for read/write */
+    tmsize_t td_tilesize;       /* # of bytes in a tile */
+#define NOTILE ((uint32_t)(-1)) /* undefined state */
     /* even though the name is misleading, td_stripsperimage is the number
      * of striles (=strips or tiles) per plane, and td_nstrips the total
      * number of striles */
