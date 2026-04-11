@@ -167,7 +167,6 @@ struct tiff
         tif_customdir; /* custom IFDs are separated from the main ones */
     TIFFHeaderUnion tif_header; /* file's header block Classic/BigTIFF union */
     uint16_t tif_header_size;   /* file's header block and its length */
-    uint32_t tif_row;           /* current scanline */
 
     /* There are IFDs in the file and an "active" IFD in memory,
      * from which fields are "set" and "get".
@@ -189,7 +188,6 @@ struct tiff
      * - TIFF_NON_EXISTENT_DIR_NUMBER means 'dont know number of IFDs'.
      * - 0 means 'empty file opened for writing, but no IFD written yet' */
     tdir_t tif_curdircount;
-    uint32_t tif_curstrip;     /* current strip for read/write */
     uint64_t tif_curoff;       /* current offset for read/write */
     uint64_t tif_lastvalidoff; /* last valid offset allowed for rewrite in
                                   place. Used only by TIFFAppendToStrip() */
@@ -197,10 +195,6 @@ struct tiff
     /* SubIFD support */
     uint16_t tif_nsubifd;   /* remaining subifds to write */
     uint64_t tif_subifdoff; /* offset for patching SubIFD link */
-    /* tiling support */
-    uint32_t tif_col;      /* current column (offset by row too) */
-    uint32_t tif_curtile;  /* current tile for read/write */
-    tmsize_t tif_tilesize; /* # of bytes in a tile */
     /* compression scheme hooks */
     int tif_decodestatus;
     TIFFBoolMethod tif_fixuptags;   /* called in TIFFReadDirectory */
@@ -223,8 +217,6 @@ struct tiff
     TIFFTileMethod tif_deftilesize;   /* calculate/constrain tile size */
     uint8_t *tif_data;                /* compression scheme private data */
     /* input/output buffering */
-    tmsize_t tif_scanlinesize;  /* # of bytes in a scanline */
-    tmsize_t tif_scanlineskew;  /* scanline skew for reading strips */
     uint8_t *tif_rawdata;       /* raw data buffer */
     tmsize_t tif_rawdatasize;   /* # of bytes in raw data buffer */
     tmsize_t tif_rawdataoff;    /* rawdata offset within strip */

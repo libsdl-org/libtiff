@@ -188,7 +188,7 @@ static int SetupBuffers(TIFF *tif, LERCState *sp, const char *module)
     else
     {
         sp->segment_width = td->td_imagewidth;
-        sp->segment_height = td->td_imagelength - tif->tif_row;
+        sp->segment_height = td->td_imagelength - tif->tif_dir.td_row;
         if (sp->segment_height > td->td_rowsperstrip)
             sp->segment_height = td->td_rowsperstrip;
     }
@@ -343,7 +343,7 @@ static int LERCPreDecode(TIFF *tif, uint16_t s)
         if (res != LIBDEFLATE_SUCCESS)
         {
             TIFFErrorExtR(tif, module, "Decoding error at scanline %lu",
-                          (unsigned long)tif->tif_row);
+                          (unsigned long)tif->tif_dir.td_row);
             return 0;
         }
         assert(lerc_data_sizet == (unsigned int)lerc_data_sizet);
@@ -1196,7 +1196,7 @@ static int LERCPostEncode(TIFF *tif)
         if (tif->tif_rawcc == 0)
         {
             TIFFErrorExtR(tif, module, "Encoder error at scanline %lu",
-                          (unsigned long)tif->tif_row);
+                          (unsigned long)tif->tif_dir.td_row);
             return 0;
         }
 #else

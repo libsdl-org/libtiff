@@ -106,14 +106,14 @@ int TIFFWriteScanline(TIFF *tif, void *buf, uint32_t row, uint16_t sample)
      */
     if (strip >= td->td_nstrips && !TIFFGrowStrips(tif, 1, module))
         return (-1);
-    if (strip != tif->tif_curstrip)
+    if (strip != tif->tif_dir.td_curstrip)
     {
         /*
          * Changing strips -- flush any data present.
          */
         if (!TIFFFlushData(tif))
             return (-1);
-        tif->tif_curstrip = strip;
+        tif->tif_dir.td_curstrip = strip;
         /*
          * Watch out for a growing image.  The value of strips/image
          * will initially be 1 (since it can't be deduced until the
@@ -127,7 +127,8 @@ int TIFFWriteScanline(TIFF *tif, void *buf, uint32_t row, uint16_t sample)
             TIFFErrorExtR(tif, module, "Zero strips per image");
             return (-1);
         }
-        tif->tif_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
+        tif->tif_dir.td_row =
+            (strip % td->td_stripsperimage) * td->td_rowsperstrip;
         if ((tif->tif_flags & TIFF_CODERSETUP) == 0)
         {
             if (!(*tif->tif_setupencode)(tif))
@@ -150,35 +151,35 @@ int TIFFWriteScanline(TIFF *tif, void *buf, uint32_t row, uint16_t sample)
      * beginning of a strip (or that we can randomly
      * access the data -- i.e. no encoding).
      */
-    if (row != tif->tif_row)
+    if (row != tif->tif_dir.td_row)
     {
-        if (row < tif->tif_row)
+        if (row < tif->tif_dir.td_row)
         {
             /*
              * Moving backwards within the same strip:
              * backup to the start and then decode
              * forward (below).
              */
-            tif->tif_row =
+            tif->tif_dir.td_row =
                 (strip % td->td_stripsperimage) * td->td_rowsperstrip;
             tif->tif_rawcp = tif->tif_rawdata;
         }
         /*
          * Seek forward to the desired row.
          */
-        if (!(*tif->tif_seek)(tif, row - tif->tif_row))
+        if (!(*tif->tif_seek)(tif, row - tif->tif_dir.td_row))
             return (-1);
-        tif->tif_row = row;
+        tif->tif_dir.td_row = row;
     }
 
     /* swab if needed - note that source buffer will be altered */
-    tif->tif_postdecode(tif, (uint8_t *)buf, tif->tif_scanlinesize);
+    tif->tif_postdecode(tif, (uint8_t *)buf, tif->tif_dir.td_scanlinesize);
 
-    status = (*tif->tif_encoderow)(tif, (uint8_t *)buf, tif->tif_scanlinesize,
-                                   sample);
+    status = (*tif->tif_encoderow)(tif, (uint8_t *)buf,
+                                   tif->tif_dir.td_scanlinesize, sample);
 
     /* we are now poised at the beginning of the next row */
-    tif->tif_row = row + 1;
+    tif->tif_dir.td_row = row + 1;
     return (status);
 }
 
@@ -256,7 +257,7 @@ tmsize_t TIFFWriteEncodedStrip(TIFF *tif, uint32_t strip, void *data,
 
     tif->tif_flags |= TIFF_BUF4WRITE;
 
-    tif->tif_curstrip = strip;
+    tif->tif_dir.td_curstrip = strip;
 
     /* this informs TIFFAppendToStrip() we have changed or reset strip */
     tif->tif_curoff = 0;
@@ -275,7 +276,7 @@ tmsize_t TIFFWriteEncodedStrip(TIFF *tif, uint32_t strip, void *data,
         return ((tmsize_t)-1);
     }
 
-    tif->tif_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
+    tif->tif_dir.td_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
     if ((tif->tif_flags & TIFF_CODERSETUP) == 0)
     {
         if (!(*tif->tif_setupencode)(tif))
@@ -364,9 +365,9 @@ tmsize_t TIFFWriteRawStrip(TIFF *tif, uint32_t strip, void *data, tmsize_t cc)
             return ((tmsize_t)-1);
     }
 
-    if (tif->tif_curstrip != strip)
+    if (tif->tif_dir.td_curstrip != strip)
     {
-        tif->tif_curstrip = strip;
+        tif->tif_dir.td_curstrip = strip;
 
         /* this informs TIFFAppendToStrip() we have changed or reset strip */
         tif->tif_curoff = 0;
@@ -377,7 +378,7 @@ tmsize_t TIFFWriteRawStrip(TIFF *tif, uint32_t strip, void *data, tmsize_t cc)
         TIFFErrorExtR(tif, module, "Zero strips per image");
         return ((tmsize_t)-1);
     }
-    tif->tif_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
+    tif->tif_dir.td_row = (strip % td->td_stripsperimage) * td->td_rowsperstrip;
     return (TIFFAppendToStrip(tif, strip, (uint8_t *)data, cc) ? cc
                                                                : (tmsize_t)-1);
 }
@@ -439,7 +440,7 @@ tmsize_t TIFFWriteEncodedTile(TIFF *tif, uint32_t tile, void *data, tmsize_t cc)
 
     tif->tif_flags |= TIFF_BUF4WRITE;
 
-    tif->tif_curtile = tile;
+    tif->tif_dir.td_curtile = tile;
 
     /* this informs TIFFAppendToStrip() we have changed or reset tile */
     tif->tif_curoff = 0;
@@ -462,14 +463,14 @@ tmsize_t TIFFWriteEncodedTile(TIFF *tif, uint32_t tile, void *data, tmsize_t cc)
         TIFFErrorExtR(tif, module, "Zero tiles");
         return ((tmsize_t)(-1));
     }
-    tif->tif_row = (tile % howmany32) * td->td_tilelength;
+    tif->tif_dir.td_row = (tile % howmany32) * td->td_tilelength;
     howmany32 = TIFFhowmany_32(td->td_imagewidth, td->td_tilewidth);
     if (howmany32 == 0)
     {
         TIFFErrorExtR(tif, module, "Zero tiles");
         return ((tmsize_t)(-1));
     }
-    tif->tif_col = (tile % howmany32) * td->td_tilewidth;
+    tif->tif_dir.td_col = (tile % howmany32) * td->td_tilewidth;
 
     if ((tif->tif_flags & TIFF_CODERSETUP) == 0)
     {
@@ -484,8 +485,8 @@ tmsize_t TIFFWriteEncodedTile(TIFF *tif, uint32_t tile, void *data, tmsize_t cc)
      * done so that callers can pass in some large number
      * (e.g. -1) and have the tile size used instead.
      */
-    if (cc < 1 || cc > tif->tif_tilesize)
-        cc = tif->tif_tilesize;
+    if (cc < 1 || cc > tif->tif_dir.td_tilesize)
+        cc = tif->tif_dir.td_tilesize;
 
     /* shortcut to avoid an extra memcpy() */
     if (td->td_compression == COMPRESSION_NONE)
@@ -646,14 +647,14 @@ int TIFFWriteCheck(TIFF *tif, int tiles, const char *module)
     }
     if (isTiled(tif))
     {
-        tif->tif_tilesize = TIFFTileSize(tif);
-        if (tif->tif_tilesize == 0)
+        tif->tif_dir.td_tilesize = TIFFTileSize(tif);
+        if (tif->tif_dir.td_tilesize == 0)
             return (0);
     }
     else
-        tif->tif_tilesize = (tmsize_t)(-1);
-    tif->tif_scanlinesize = TIFFScanlineSize(tif);
-    if (tif->tif_scanlinesize == 0)
+        tif->tif_dir.td_tilesize = (tmsize_t)(-1);
+    tif->tif_dir.td_scanlinesize = TIFFScanlineSize(tif);
+    if (tif->tif_dir.td_scanlinesize == 0)
         return (0);
     tif->tif_flags |= TIFF_BEENWRITING;
 
@@ -691,7 +692,7 @@ int TIFFWriteBufferSetup(TIFF *tif, void *bp, tmsize_t size)
     }
     if (size == (tmsize_t)(-1))
     {
-        size = (isTiled(tif) ? tif->tif_tilesize : TIFFStripSize(tif));
+        size = (isTiled(tif) ? tif->tif_dir.td_tilesize : TIFFStripSize(tif));
 
         /* Adds 10% margin for cases where compression would expand a bit */
         if (size < TIFF_TMSIZE_T_MAX - size / 10)
@@ -809,7 +810,7 @@ static int TIFFAppendToStrip(TIFF *tif, uint32_t strip, uint8_t *data,
             if (!SeekOK(tif, td->td_stripoffset_p[strip]))
             {
                 TIFFErrorExtR(tif, module, "Seek error at scanline %lu",
-                              (unsigned long)tif->tif_row);
+                              (unsigned long)tif->tif_dir.td_row);
                 return (0);
             }
 
@@ -930,7 +931,7 @@ static int TIFFAppendToStrip(TIFF *tif, uint32_t strip, uint8_t *data,
     if (!WriteOK(tif, data, cc))
     {
         TIFFErrorExtR(tif, module, "Write error at scanline %lu",
-                      (unsigned long)tif->tif_row);
+                      (unsigned long)tif->tif_dir.td_row);
         return (0);
     }
     tif->tif_curoff = m;
@@ -954,9 +955,10 @@ int TIFFFlushData1(TIFF *tif)
         if (!isFillOrder(tif, tif->tif_dir.td_fillorder) &&
             (tif->tif_flags & TIFF_NOBITREV) == 0)
             TIFFReverseBits((uint8_t *)tif->tif_rawdata, tif->tif_rawcc);
-        if (!TIFFAppendToStrip(
-                tif, isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip,
-                tif->tif_rawdata, tif->tif_rawcc))
+        if (!TIFFAppendToStrip(tif,
+                               isTiled(tif) ? tif->tif_dir.td_curtile
+                                            : tif->tif_dir.td_curstrip,
+                               tif->tif_rawdata, tif->tif_rawcc))
         {
             /* We update those variables even in case of error since there's */
             /* code that doesn't really check the return code of this */

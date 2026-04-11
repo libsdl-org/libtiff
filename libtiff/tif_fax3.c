@@ -209,11 +209,12 @@ static int Fax3PreDecode(TIFF *tif, uint16_t s)
 static void Fax3Unexpected(const char *module, TIFF *tif, uint32_t line,
                            uint32_t a0)
 {
-    TIFFErrorExtR(tif, module,
-                  "Bad code word at line %" PRIu32 " of %s %" PRIu32
-                  " (x %" PRIu32 ")",
-                  line, isTiled(tif) ? "tile" : "strip",
-                  (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip), a0);
+    TIFFErrorExtR(
+        tif, module,
+        "Bad code word at line %" PRIu32 " of %s %" PRIu32 " (x %" PRIu32 ")",
+        line, isTiled(tif) ? "tile" : "strip",
+        (isTiled(tif) ? tif->tif_dir.td_curtile : tif->tif_dir.td_curstrip),
+        a0);
 }
 #define unexpected(table, a0)                                                  \
     do                                                                         \
@@ -225,11 +226,13 @@ static void Fax3Unexpected(const char *module, TIFF *tif, uint32_t line,
 static void Fax3Extension(const char *module, TIFF *tif, uint32_t line,
                           uint32_t a0)
 {
-    TIFFErrorExtR(tif, module,
-                  "Uncompressed data (not supported) at line %" PRIu32
-                  " of %s %" PRIu32 " (x %" PRIu32 ")",
-                  line, isTiled(tif) ? "tile" : "strip",
-                  (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip), a0);
+    TIFFErrorExtR(
+        tif, module,
+        "Uncompressed data (not supported) at line %" PRIu32 " of %s %" PRIu32
+        " (x %" PRIu32 ")",
+        line, isTiled(tif) ? "tile" : "strip",
+        (isTiled(tif) ? tif->tif_dir.td_curtile : tif->tif_dir.td_curstrip),
+        a0);
 }
 #define extension(a0)                                                          \
     Fax3Extension(module, tif, (uint32_t)sp->line, (uint32_t)(a0))
@@ -237,13 +240,14 @@ static void Fax3Extension(const char *module, TIFF *tif, uint32_t line,
 static void Fax3BadLength(const char *module, TIFF *tif, uint32_t line,
                           uint32_t a0, uint32_t lastx)
 {
-    TIFFWarningExtR(tif, module,
-                    "%s at line %" PRIu32 " of %s %" PRIu32 " (got %" PRIu32
-                    ", expected %" PRIu32 ")",
-                    a0 < lastx ? "Premature EOL" : "Line length mismatch", line,
-                    isTiled(tif) ? "tile" : "strip",
-                    (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip), a0,
-                    lastx);
+    TIFFWarningExtR(
+        tif, module,
+        "%s at line %" PRIu32 " of %s %" PRIu32 " (got %" PRIu32
+        ", expected %" PRIu32 ")",
+        a0 < lastx ? "Premature EOL" : "Line length mismatch", line,
+        isTiled(tif) ? "tile" : "strip",
+        (isTiled(tif) ? tif->tif_dir.td_curtile : tif->tif_dir.td_curstrip), a0,
+        lastx);
 }
 #define badlength(a0, lastx)                                                   \
     do                                                                         \
@@ -256,11 +260,12 @@ static void Fax3BadLength(const char *module, TIFF *tif, uint32_t line,
 static void Fax3PrematureEOF(const char *module, TIFF *tif, uint32_t line,
                              uint32_t a0)
 {
-    TIFFWarningExtR(tif, module,
-                    "Premature EOF at line %" PRIu32 " of %s %" PRIu32
-                    " (x %" PRIu32 ")",
-                    line, isTiled(tif) ? "tile" : "strip",
-                    (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip), a0);
+    TIFFWarningExtR(
+        tif, module,
+        "Premature EOF at line %" PRIu32 " of %s %" PRIu32 " (x %" PRIu32 ")",
+        line, isTiled(tif) ? "tile" : "strip",
+        (isTiled(tif) ? tif->tif_dir.td_curtile : tif->tif_dir.td_curstrip),
+        a0);
 }
 #define prematureEOF(a0)                                                       \
     do                                                                         \
@@ -277,7 +282,8 @@ static void Fax3TryG3WithoutEOL(const char *module, TIFF *tif, uint32_t line,
         "Try to decode (read) fax Group 3 data without EOL at line %" PRIu32
         " of %s %" PRIu32 " (x %" PRIu32 "). Please check result",
         line, isTiled(tif) ? "tile" : "strip",
-        (isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip), a0);
+        (isTiled(tif) ? tif->tif_dir.td_curtile : tif->tif_dir.td_curstrip),
+        a0);
 }
 #define tryG3WithoutEOL(a0)                                                    \
     do                                                                         \
@@ -346,7 +352,7 @@ RETRY_WITHOUT_EOL_1D:
         pa = thisrun;
 #ifdef FAX3_DEBUG
         printf("\nBitAcc=%08" PRIX32 ", BitsAvail = %d\n", BitAcc, BitsAvail);
-        printf("-------------------- %" PRIu32 "\n", tif->tif_row);
+        printf("-------------------- %" PRIu32 "\n", tif->tif_dir.td_row);
         fflush(stdout);
 #endif
         SYNC_EOL(EOF1D, RETRY_WITHOUT_EOL_1D);
@@ -406,7 +412,7 @@ RETRY_WITHOUT_EOL_2D:
         ClrBits(1);
 #ifdef FAX3_DEBUG
         printf(" %s\n-------------------- %" PRIu32 "\n", is1D ? "1D" : "2D",
-               tif->tif_row);
+               tif->tif_dir.td_row);
         fflush(stdout);
 #endif
         pb = sp->refruns;
@@ -1643,7 +1649,7 @@ static int Fax4Decode(TIFF *tif, uint8_t *buf, tmsize_t occ, uint16_t s)
         b1 = (int)*pb++;
 #ifdef FAX3_DEBUG
         printf("\nBitAcc=%08" PRIX32 ", BitsAvail = %d\n", BitAcc, BitsAvail);
-        printf("-------------------- %d\n", tif->tif_row);
+        printf("-------------------- %d\n", tif->tif_dir.td_row);
         fflush(stdout);
 #endif
         EXPAND2D(EOFG4);
@@ -1787,7 +1793,7 @@ static int Fax3DecodeRLE(TIFF *tif, uint8_t *buf, tmsize_t occ, uint16_t s)
         pa = thisrun;
 #ifdef FAX3_DEBUG
         printf("\nBitAcc=%08" PRIX32 ", BitsAvail = %d\n", BitAcc, BitsAvail);
-        printf("-------------------- %" PRIu32 "\n", tif->tif_row);
+        printf("-------------------- %" PRIu32 "\n", tif->tif_dir.td_row);
         fflush(stdout);
 #endif
         EXPAND1D(EOFRLE);

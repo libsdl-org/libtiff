@@ -1606,6 +1606,21 @@ int TIFFVGetField(TIFF *tif, uint32_t tag, va_list ap)
     }
 
 /*
+ * Reset tif->tif_dir structure to zero and
+ * initialize some IFD strile counter and index parameters.
+ */
+void _TIFFResetTifDirAndInitStrileCounters(TIFFDirectory *td)
+{
+    _TIFFmemset(td, 0, sizeof(*td));
+    td->td_curstrip = NOSTRIP;      /* invalid strip = NOSTRIP */
+    td->td_row = (uint32_t)-1;      /* read/write pre-increment */
+    td->td_col = (uint32_t)-1;      /* read/write pre-increment */
+    td->td_scanlinesize = 0;        /* initialize to zero */
+    td->td_curtile = NOTILE;        /* invalid tile = NOTILE */
+    td->td_tilesize = (tmsize_t)-1; /* invalidate tilezize */
+}
+
+/*
  * Release storage associated with a directory.
  */
 void TIFFFreeDirectory(TIFF *tif)
@@ -1656,6 +1671,7 @@ void TIFFFreeDirectory(TIFF *tif)
         tif->tif_dir.td_dirdatasize_Noffsets = 0;
     }
     tif->tif_dir.td_iswrittentofile = FALSE;
+    /* Note: tif->tif_dir structure is set to zero in TIFFDefaultDirectory() */
 }
 #undef CleanupField
 
@@ -1686,10 +1702,7 @@ int TIFFCreateDirectory(TIFF *tif)
     tif->tif_diroff = 0;
     tif->tif_nextdiroff = 0;
     tif->tif_curoff = 0;
-    tif->tif_row = (uint32_t)-1;
-    tif->tif_curstrip = (uint32_t)-1;
     tif->tif_dir.td_iswrittentofile = FALSE;
-
     return 0;
 }
 
@@ -1709,15 +1722,12 @@ int TIFFCreateCustomDirectory(TIFF *tif, const TIFFFieldArray *infoarray)
     tif->tif_diroff = 0;
     tif->tif_nextdiroff = 0;
     tif->tif_curoff = 0;
-    tif->tif_row = (uint32_t)-1;
-    tif->tif_curstrip = (uint32_t)-1;
     /* invalidate directory index */
     tif->tif_curdir = TIFF_NON_EXISTENT_DIR_NUMBER;
     /* invalidate IFD loop lists */
     _TIFFCleanupIFDOffsetAndNumberMaps(tif);
     /* To be able to return from SubIFD or custom-IFD to main-IFD */
     tif->tif_setdirectory_force_absolute = TRUE;
-
     return 0;
 }
 
@@ -1748,8 +1758,9 @@ int TIFFDefaultDirectory(TIFF *tif)
 
     tiffFieldArray = _TIFFGetFields();
     _TIFFSetupFields(tif, tiffFieldArray);
-
-    _TIFFmemset(td, 0, sizeof(*td));
+    /* Reset tif->tif_dir structure to zero and
+     * initialize some IFD strile counter and index parameters. */
+    _TIFFResetTifDirAndInitStrileCounters(td);
     td->td_fillorder = FILLORDER_MSB2LSB;
     td->td_bitspersample = 1;
     td->td_threshholding = THRESHHOLD_BILEVEL;
@@ -2346,8 +2357,6 @@ int TIFFUnlinkDirectory(TIFF *tif, tdir_t dirn)
     tif->tif_nextdiroff = 0; /* next write must be at end */
     tif->tif_lastdiroff = 0; /* will be updated on next link */
     tif->tif_curoff = 0;
-    tif->tif_row = (uint32_t)-1;
-    tif->tif_curstrip = (uint32_t)-1;
     tif->tif_curdir = TIFF_NON_EXISTENT_DIR_NUMBER;
     if (tif->tif_curdircount > 0)
         tif->tif_curdircount--;
