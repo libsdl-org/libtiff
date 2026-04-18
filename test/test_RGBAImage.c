@@ -160,22 +160,6 @@ const char *orientationStrings[] = {
         goto failure;                                                          \
     }
 
-#define TIFFCheckpointDirectory_M(tif, dirnum, filename, line)                 \
-    if (!TIFFCheckpointDirectory(tif))                                         \
-    {                                                                          \
-        fprintf(stdXOut, "Can't checkpoint directory %d of %s at line %d\n",   \
-                dirnum, filename, line);                                       \
-        goto failure;                                                          \
-    }
-
-#define TIFFSetDirectory_M(tif, dirnum, filename, line)                        \
-    if (!TIFFSetDirectory(tif, dirnum))                                        \
-    {                                                                          \
-        fprintf(stdXOut, "Can't set directory %d of %s at line %d\n", dirnum,  \
-                filename, line);                                               \
-        goto failure;                                                          \
-    }
-
 #define TIFFWriteScanline_M(tif, buf, row, sample, filename, line)             \
     if (TIFFWriteScanline(tif, buf, row, sample) == -1)                        \
     {                                                                          \
@@ -762,10 +746,10 @@ static int testRGBAImageReadFunctions(TIFF *tif, uint32_t imgWidth,
     /* Just for debugging output in printRaster() */
     bool tiledlocal = TIFFIsTiled(tif);
 
-    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * rWidth * rHeight);
+    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)rWidth * (size_t)rHeight);
     if (rasterSize == 0)
     {
-        rasterSize = (tmsize_t)(sizeof(uint32_t) * imgWidth * imgLength);
+        rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)imgWidth * (size_t)imgLength);
     }
     raster1 = (uint32_t *)_TIFFmalloc(rasterSize);
     raster2 = (uint32_t *)_TIFFmalloc(rasterSize);
@@ -830,10 +814,10 @@ static int testRGBAImageReadWithOffsets(TIFF *tif, uint32_t imgWidth,
     /* Just for debugging output in printRaster() */
     bool tiledlocal = TIFFIsTiled(tif);
 
-    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * rWidth * rHeight);
+    tmsize_t rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)rWidth * (size_t)rHeight);
     if (rasterSize == 0)
     {
-        rasterSize = (tmsize_t)(sizeof(uint32_t) * imgWidth * imgLength);
+        rasterSize = (tmsize_t)(sizeof(uint32_t) * (size_t)imgWidth * (size_t)imgLength);
     }
     raster1 = (uint32_t *)_TIFFmalloc(rasterSize);
     if (raster1 == NULL)
@@ -1171,7 +1155,7 @@ int main(void)
         {
             if (blnMultipleLogFiles)
             {
-                unsigned int n = (unsigned int)tiled * 2 + (planarconfig - 1);
+                unsigned int n = (unsigned int)tiled * 2 + (unsigned int)(planarconfig - 1);
                 assert(n <
                        (sizeof(arrLogFilenames) / sizeof(arrLogFilenames[0])));
                 logFilename = arrLogFilenames[n];

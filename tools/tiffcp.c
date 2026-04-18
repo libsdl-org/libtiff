@@ -700,17 +700,17 @@ static void usage(int code)
         if (TIFFGetField(in, tag, &v))                                         \
             TIFFSetField(out, tag, v);                                         \
     } while (0)
+#define CopyFieldFloat(tag, v)                                                 \
+    do                                                                         \
+    {                                                                          \
+        if (TIFFGetField(in, tag, &v))                                         \
+            TIFFSetField(out, tag, (double)(v));                               \
+    } while (0)
 #define CopyField2(tag, v1, v2)                                                \
     do                                                                         \
     {                                                                          \
         if (TIFFGetField(in, tag, &v1, &v2))                                   \
             TIFFSetField(out, tag, v1, v2);                                    \
-    } while (0)
-#define CopyField3(tag, v1, v2, v3)                                            \
-    do                                                                         \
-    {                                                                          \
-        if (TIFFGetField(in, tag, &v1, &v2, &v3))                              \
-            TIFFSetField(out, tag, v1, v2, v3);                                \
     } while (0)
 #define CopyField4(tag, v1, v2, v3, v4)                                        \
     do                                                                         \
@@ -757,7 +757,7 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             if (count == 1)
             {
                 float floatv;
-                CopyField(tag, floatv);
+                CopyFieldFloat(tag, floatv);
             }
             else if (count == (uint16_t)-1)
             {
@@ -1256,7 +1256,7 @@ typedef void biasFn(void *image, void *bias, uint32_t pixels);
         uint##bits##_t *biasx = (uint##bits##_t *)b;                           \
         while (pixels--)                                                       \
         {                                                                      \
-            *image = *image > *biasx ? *image - *biasx : 0;                    \
+            *image = (uint##bits##_t)(*image > *biasx ? *image - *biasx : 0);   \
             image++, biasx++;                                                  \
         }                                                                      \
     }
@@ -1929,7 +1929,7 @@ DECLAREreadFunc(readSeparateTilesIntoBuffer)
                         (int64_t)tilew * (int64_t)spp - (int64_t)width;
                     cpSeparateBufToContigBuf(
                         bufp + colb + s * bytes_per_sample, (uint8_t *)tilebuf,
-                        nrow, width / (spp * bytes_per_sample), oskew + iskew,
+                        nrow, width / (uint32_t)(spp * bytes_per_sample), oskew + iskew,
                         oskew / spp, spp, bytes_per_sample);
                 }
                 else

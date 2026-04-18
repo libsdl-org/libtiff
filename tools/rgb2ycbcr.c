@@ -47,9 +47,12 @@
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 
 #ifndef howmany
-#define howmany(x, y) (((x) + ((y)-1)) / (y))
+#define howmany(x, y) (((uint32_t)(x) + (uint32_t)(y) - 1U) / (uint32_t)(y))
 #endif
 #define roundup(x, y) (howmany(x, y) * ((uint32_t)(y)))
 
@@ -62,9 +65,9 @@ uint32_t rowsperstrip = (uint32_t)-1;
 
 uint16_t horizSubSampling = 2; /* YCbCr horizontal subsampling */
 uint16_t vertSubSampling = 2;  /* YCbCr vertical subsampling */
-float ycbcrCoeffs[3] = {.299F, .587F, .114F};
+float ycbcrCoeffs[3] = {.299f, .587f, .114f};
 /* default coding range is CCIR Rec 601-1 with no headroom/footroom */
-float refBlackWhite[6] = {0.F, 255.F, 128.F, 255.F, 128.F, 255.F};
+float refBlackWhite[6] = {0.f, 255.f, 128.f, 255.f, 128.f, 255.f};
 
 static int tiffcvt(TIFF *in, TIFF *out);
 static void usage(int code);
@@ -170,7 +173,7 @@ static float *setupLuma(float c)
 
 static unsigned V2Code(float f, float RB, float RW, int CR)
 {
-    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5);
+    unsigned int c = (unsigned int)((((f) * (RW - RB) / (float)CR) + RB) + .5f);
     return (c > 255 ? 255 : c);
 }
 
@@ -179,8 +182,8 @@ static void setupLumaTables(void)
     lumaRed = setupLuma(LumaRed);
     lumaGreen = setupLuma(LumaGreen);
     lumaBlue = setupLuma(LumaBlue);
-    D1 = 1.F / (2.F - 2.F * LumaBlue);
-    D2 = 1.F / (2.F - 2.F * LumaRed);
+    D1 = 1.f / (2.f - 2.f * LumaBlue);
+    D2 = 1.f / (2.f - 2.f * LumaRed);
     Yzero = (int)V2Code(0, refBlackWhite[0], refBlackWhite[1], 255);
 }
 
@@ -280,7 +283,7 @@ static int cvtRaster(TIFF *tif, uint32_t *raster, uint32_t width,
     uint32_t rnrows = roundup(nrows, vertSubSampling);
 
     cc = (tsize_t)rnrows * rwidth +
-         2 * ((rnrows * rwidth) / (horizSubSampling * vertSubSampling));
+         2 * ((tsize_t)rnrows * rwidth / ((uint32_t)horizSubSampling * vertSubSampling));
     buf = (unsigned char *)_TIFFmalloc(cc);
     // FIXME unchecked malloc
     for (y = height; (int32_t)y > 0; y -= nrows)
@@ -289,7 +292,7 @@ static int cvtRaster(TIFF *tif, uint32_t *raster, uint32_t width,
         cvtStrip(buf, raster + (y - 1) * width, nr, width);
         nr = roundup(nr, vertSubSampling);
         acc = (tsize_t)nr * rwidth +
-              2 * ((nr * rwidth) / (horizSubSampling * vertSubSampling));
+              2 * ((tsize_t)nr * rwidth / ((uint32_t)horizSubSampling * vertSubSampling));
         if (!TIFFWriteEncodedStrip(tif, strip++, buf, acc))
         {
             _TIFFfree(buf);
@@ -355,8 +358,8 @@ static int tiffcvt(TIFF *in, TIFF *out)
     CopyField(TIFFTAG_FILLORDER, shortv);
     TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, 3);
-    CopyField(TIFFTAG_XRESOLUTION, floatv);
-    CopyField(TIFFTAG_YRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_XRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_YRESOLUTION, floatv);
     CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     {

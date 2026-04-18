@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
     TIFFSetField(faxTIFF, TIFFTAG_FILLORDER, fillorder_in);
     TIFFSetField(faxTIFF, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     TIFFSetField(faxTIFF, TIFFTAG_PHOTOMETRIC, photometric_in);
-    TIFFSetField(faxTIFF, TIFFTAG_YRESOLUTION, resY);
+    TIFFSetField(faxTIFF, TIFFTAG_YRESOLUTION, (double)resY);
     TIFFSetField(faxTIFF, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
 
     /* NB: this must be done after directory info is setup */
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
         if (!stretch)
         {
             TIFFGetField(faxTIFF, TIFFTAG_YRESOLUTION, &resY);
-            TIFFSetField(out, TIFFTAG_YRESOLUTION, resY);
+            TIFFSetField(out, TIFFTAG_YRESOLUTION, (double)resY);
         }
         else
             TIFFSetField(out, TIFFTAG_YRESOLUTION, 196.);

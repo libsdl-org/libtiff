@@ -93,36 +93,36 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wwrite-strings
                 -Wc99-c11-compat
                 -Wconversion
-        )
-    endif()
-    if(broken-warnings)
-        list(APPEND test_flags
                 -Wsign-conversion
-                -Wdouble-promotion
-                -Wmisleading-indentation
-                -Wmissing-include-dirs
-                -Wunused-local-typedefs
-                -Wunused-parameter
-                -Wuninitialized
                 -Warith-conversion
-                -Wbool-operation
+                -Wdouble-promotion
+                -Wfloat-conversion
+                -Wfloat-equal
+                -Wuninitialized
                 -Wduplicated-branches
                 -Wduplicated-cond
-                -Wunused-macros
-                -Wcast-qual
-                -Wcast-align
-                -Wdangling-else
+                -Wunused-parameter
+                -Wmissing-declarations
+                -Wredundant-decls
                 -Wsizeof-array-div
                 -Wsizeof-pointer-div
                 -Wsizeof-pointer-memaccess
                 -Wlogical-op
                 -Wlogical-not-parentheses
-                -Wmissing-declarations
-                -Wredundant-decls
                 -Wno-int-to-pointer-cast
-                -Wfloat-equal
-                -Wfloat-conversion
-                -Wunreachable-code)
+                -Wdangling-else
+                -Wunreachable-code
+                -Wbool-operation
+                -Wmissing-include-dirs
+                -Wunused-local-typedefs
+                -Wmisleading-indentation
+                -Wunused-macros
+        )
+    endif()
+    if(broken-warnings)
+        list(APPEND test_flags
+                -Wcast-qual
+                -Wcast-align)
     endif()
     if(fatal-warnings)
         list(APPEND test_flags

@@ -28,7 +28,6 @@
 #endif
 
 #ifndef TIFFmin
-#define TIFFmax(A, B) ((A) > (B) ? (A) : (B))
 #define TIFFmin(A, B) ((A) < (B) ? (A) : (B))
 #endif
 
@@ -108,7 +107,7 @@ static int write_image_data(TIFF *tif, uint16_t width, uint16_t length,
                        TIFFmin(bufLen, (size_t)lastlinebytesmax));
             }
             /* Change something for next row. */
-            pbufLine[0] = (unsigned char)((pbufLine[0] + 35) % bpsmod);
+            pbufLine[0] = (unsigned char)(((unsigned int)pbufLine[0] + 35) % bpsmod);
         }
     }
     else
@@ -128,7 +127,7 @@ static int write_image_data(TIFF *tif, uint16_t width, uint16_t length,
                        TIFFmin(bufLen, (size_t)lastlinebytesmax));
             }
             /* Change something for next row. */
-            pbufLine[0] = (unsigned char)((pbufLine[0] + 30) % bpsmod);
+            pbufLine[0] = (unsigned char)(((unsigned int)pbufLine[0] + 30) % bpsmod);
         }
     }
     _TIFFfree(pbufLine);
@@ -847,7 +846,7 @@ static int test_IFD_enlargement(const char *filename, unsigned int openMode,
                 goto failure;
             }
             bytesRead =
-                TIFFReadScanline(tif, &bufLine[NUMIFDsMAX][0], length - 1, 0);
+                TIFFReadScanline(tif, &bufLine[NUMIFDsMAX][0], (uint32_t)(length - 1), 0);
         }
         if (bytesRead > 0)
         {

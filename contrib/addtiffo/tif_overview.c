@@ -67,18 +67,6 @@
 
 #define TIFF_DIR_MAX 65534
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-    void TIFFBuildOverviews(TIFF *, int, int *, int, const char *,
-                            int (*)(double, void *), void *);
-
-#ifdef __cplusplus
-}
-#endif
-
 /************************************************************************/
 /*                         TIFF_WriteOverview()                         */
 /*                                                                      */
@@ -222,7 +210,7 @@ static void TIFF_GetSourceSamples(double *padfSamples, unsigned char *pabySrc,
             }
             else if (nSampleFormat == SAMPLEFORMAT_IEEEFP && nPixelBytes == 4)
             {
-                padfSamples[iSample++] = ((float *)pabyData)[0];
+                padfSamples[iSample++] = (double)((float *)pabyData)[0];
             }
             else if (nSampleFormat == SAMPLEFORMAT_IEEEFP && nPixelBytes == 8)
             {
@@ -873,9 +861,9 @@ void TIFFBuildOverviews(TIFF *hTIFF, int nOverviews, int *panOvList,
         panGreen2 = (uint16_t *)_TIFFmalloc(2 * nColorCount);
         panBlue2 = (uint16_t *)_TIFFmalloc(2 * nColorCount);
 
-        memcpy(panRed2, panRedMap, (size_t)(2 * nColorCount));
-        memcpy(panGreen2, panGreenMap, (size_t)(2 * nColorCount));
-        memcpy(panBlue2, panBlueMap, (size_t)(2 * nColorCount));
+        memcpy(panRed2, panRedMap, 2 * (size_t)nColorCount);
+        memcpy(panGreen2, panGreenMap, 2 * (size_t)nColorCount);
+        memcpy(panBlue2, panBlueMap, 2 * (size_t)nColorCount);
 
         panRedMap = panRed2;
         panGreenMap = panGreen2;

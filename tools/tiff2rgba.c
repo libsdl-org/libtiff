@@ -47,11 +47,13 @@
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 
 #ifndef howmany
 #define howmany(x, y) (((x) + ((y)-1)) / (y))
 #endif
-#define roundup(x, y) (howmany(x, y) * ((uint32_t)(y)))
 
 static uint16_t compression = COMPRESSION_PACKBITS;
 static uint32_t rowsperstrip = (uint32_t)-1;
@@ -203,7 +205,7 @@ static int cvt_by_tile(TIFF *in, TIFF *out)
     /*
      * Allocate tile buffer
      */
-    rastersize = tile_width * tile_height * sizeof(uint32_t);
+    rastersize = (uint32_t)((size_t)tile_width * tile_height * sizeof(uint32_t));
     if (tile_width != (rastersize / tile_height) / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),
@@ -221,7 +223,7 @@ static int cvt_by_tile(TIFF *in, TIFF *out)
      * Allocate a scanline buffer for swapping during the vertical
      * mirroring pass.
      */
-    wrk_linesize = tile_width * sizeof(uint32_t);
+    wrk_linesize = (uint32_t)(tile_width * sizeof(uint32_t));
     if (tile_width != wrk_linesize / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),
@@ -319,7 +321,7 @@ static int cvt_by_strip(TIFF *in, TIFF *out)
     /*
      * Allocate strip buffer
      */
-    rastersize = width * rowsperstrip * sizeof(uint32_t);
+    rastersize = (uint32_t)((size_t)width * rowsperstrip * sizeof(uint32_t));
     if (width != (rastersize / rowsperstrip) / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),
@@ -337,7 +339,7 @@ static int cvt_by_strip(TIFF *in, TIFF *out)
      * Allocate a scanline buffer for swapping during the vertical
      * mirroring pass.
      */
-    wrk_linesize = width * sizeof(uint32_t);
+    wrk_linesize = (uint32_t)(width * sizeof(uint32_t));
     if (width != wrk_linesize / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),
@@ -590,8 +592,8 @@ static int tiffcvt(TIFF *in, TIFF *out)
         TIFFSetField(out, TIFFTAG_EXTRASAMPLES, 1, v);
     }
 
-    CopyField(TIFFTAG_XRESOLUTION, floatv);
-    CopyField(TIFFTAG_YRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_XRESOLUTION, floatv);
+    CopyFieldFloat(TIFFTAG_YRESOLUTION, floatv);
     CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
     TIFFSetField(out, TIFFTAG_SOFTWARE, TIFFGetVersion());

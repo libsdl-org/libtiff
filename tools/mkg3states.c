@@ -40,8 +40,6 @@
 
 #include "tif_fax3.h"
 
-#define streq(a, b) (strcmp(a, b) == 0)
-
 /* NB: can't use names in tif_fax3.h 'cuz they are declared const */
 TIFFFaxTabEnt MainTable[128];
 TIFFFaxTabEnt WhiteTable[4096];

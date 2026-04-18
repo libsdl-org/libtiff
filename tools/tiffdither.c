@@ -49,6 +49,9 @@
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 
 uint32_t imagewidth;
 uint32_t imagelength;
@@ -141,14 +144,15 @@ static int fsdither(TIFF *in, TIFF *out)
                 bit = 0x80;
             }
             if (!lastpixel)
-                thisptr[0] += (short)(v * 7 / 16);
+                thisptr[0] = (short)(thisptr[0] + v * 7 / 16);
             if (!lastline)
             {
                 if (j != 0)
-                    nextptr[-1] += (short)(v * 3 / 16);
-                *nextptr++ += (short)(v * 5 / 16);
+                    nextptr[-1] = (short)(nextptr[-1] + v * 3 / 16);
+                *nextptr = (short)(*nextptr + v * 5 / 16);
+                nextptr++;
                 if (!lastpixel)
-                    nextptr[0] += (short)(v / 16);
+                    nextptr[0] = (short)(nextptr[0] + v / 16);
             }
         }
         if (TIFFWriteScanline(out, outline, i, 0) < 0)
@@ -315,8 +319,8 @@ int main(int argc, char *argv[])
         TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, thing);
         CopyField(TIFFTAG_PHOTOMETRIC, shortv);
         CopyField(TIFFTAG_ORIENTATION, shortv);
-        CopyField(TIFFTAG_XRESOLUTION, floatv);
-        CopyField(TIFFTAG_YRESOLUTION, floatv);
+        CopyFieldFloat(TIFFTAG_XRESOLUTION, floatv);
+        CopyFieldFloat(TIFFTAG_YRESOLUTION, floatv);
         CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
         rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
         TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);

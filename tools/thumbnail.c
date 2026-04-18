@@ -160,12 +160,12 @@ bad:
 #define CopyField(tag, v)                                                      \
     if (TIFFGetField(in, tag, &v))                                             \
     TIFFSetField(out, tag, v)
+#define CopyFieldFloat(tag, v)                                                 \
+    if (TIFFGetField(in, tag, &v))                                             \
+    TIFFSetField(out, tag, (double)(v))
 #define CopyField2(tag, v1, v2)                                                \
     if (TIFFGetField(in, tag, &v1, &v2))                                       \
     TIFFSetField(out, tag, v1, v2)
-#define CopyField3(tag, v1, v2, v3)                                            \
-    if (TIFFGetField(in, tag, &v1, &v2, &v3))                                  \
-    TIFFSetField(out, tag, v1, v2, v3)
 #define CopyField4(tag, v1, v2, v3, v4)                                        \
     if (TIFFGetField(in, tag, &v1, &v2, &v3, &v4))                             \
     TIFFSetField(out, tag, v1, v2, v3, v4)
@@ -220,7 +220,7 @@ static void cpTag(TIFF *in, TIFF *out, uint16_t tag, uint16_t count,
             if (count == 1)
             {
                 float floatv;
-                CopyField(tag, floatv);
+                CopyFieldFloat(tag, floatv);
             }
             else if (count == (uint16_t)-1)
             {
@@ -568,7 +568,7 @@ static void initScale(void)
     src0 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
     src1 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
     src2 = (uint8_t *)_TIFFmalloc(sizeof(uint8_t) * tnw);
-    rowoff = (uint32_t *)_TIFFmalloc(sizeof(uint32_t) * tnw);
+    rowoff = (uint32_t *)_TIFFmalloc((tmsize_t)(sizeof(uint32_t) * (size_t)tnw));
     filterWidth = 0;
     stepDstWidth = stepSrcWidth = 0;
     setupBitsTables();
@@ -601,7 +601,7 @@ static void setupStepTables(uint32_t sw)
             rowoff[x] = sx0 >> 3;
             fw = (int)(sx - sx0); /* width */
             b = (fw < 8) ? (uint8_t)(0xff << (8 - fw)) : (uint8_t)0xff;
-            src0[x] = b >> (sx0 & 7);
+            src0[x] = (uint8_t)(b >> (sx0 & 7));
             fw -= (int)(8 - (sx0 & 7));
             if (fw < 0)
                 fw = 0;

@@ -180,7 +180,7 @@ static void horizontalAccumulateF(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride]; *op = ToLinearF[*wp & mask];
+                REPEAT(stride, *wp = (uint16_t)(*wp + wp[-stride]); *op = ToLinearF[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -194,7 +194,7 @@ static void horizontalAccumulate12(uint16_t *wp, tmsize_t n, int stride,
     unsigned int cr, cg, cb, ca, mask;
     float t0, t1, t2, t3;
 
-#define SCALE12 2048.0F
+#define SCALE12 2048.0f
 #define CLAMP12(t) (((t) < 3071) ? (int16_t)(uint16_t)(t) : (int16_t)3071)
 
     if (n >= stride)
@@ -255,7 +255,7 @@ static void horizontalAccumulate12(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride];
+                REPEAT(stride, *wp = (uint16_t)(*wp + wp[-stride]);
                        t0 = ToLinearF[*wp & mask] * SCALE12; *op = CLAMP12(t0);
                        wp++; op++)
                 n -= stride;
@@ -312,7 +312,7 @@ static void horizontalAccumulate16(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear16[*wp & mask];
+                REPEAT(stride, *wp = (uint16_t)(*wp + wp[-stride]); *op = ToLinear16[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -379,7 +379,7 @@ static void horizontalAccumulate11(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride]; *op = (uint16_t)(*wp & mask);
+                REPEAT(stride, *wp = (uint16_t)(*wp + wp[-stride]); *op = (uint16_t)(*wp & mask);
                        wp++; op++)
                 n -= stride;
             }
@@ -435,7 +435,7 @@ static void horizontalAccumulate8(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear8[*wp & mask];
+                REPEAT(stride, *wp = (uint16_t)(*wp + wp[-stride]); *op = ToLinear8[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -509,7 +509,7 @@ static void horizontalAccumulate8abgr(uint16_t *wp, tmsize_t n, int stride,
             n -= stride;
             while (n > 0)
             {
-                REPEAT(stride, *wp += wp[-stride]; *op = ToLinear8[*wp & mask];
+                REPEAT(stride, *wp = (uint16_t)(*wp + wp[-stride]); *op = ToLinear8[*wp & mask];
                        wp++; op++)
                 n -= stride;
             }
@@ -579,7 +579,7 @@ static int PixarLogMakeTables(TIFF *tif, PixarLogState *sp)
     LogK2 = (float)(1. / b);
     lt2size = (int)(2. / linstep) + 1;
     FromLT2 = (uint16_t *)_TIFFmallocExt(
-        tif, (tmsize_t)((unsigned long)lt2size * sizeof(uint16_t)));
+        tif, (tmsize_t)((size_t)lt2size * sizeof(uint16_t)));
     From14 = (uint16_t *)_TIFFmallocExt(tif, 16384 * sizeof(uint16_t));
     From8 = (uint16_t *)_TIFFmallocExt(tif, 256 * sizeof(uint16_t));
     ToLinearF = (float *)_TIFFmallocExt(tif, TSIZEP1 * sizeof(float));
@@ -625,16 +625,16 @@ static int PixarLogMakeTables(TIFF *tif, PixarLogState *sp)
 
     for (i = 0; i < TSIZEP1; i++)
     {
-        v = ToLinearF[i] * 65535.0 + 0.5;
+        v = (double)ToLinearF[i] * 65535.0 + 0.5;
         ToLinear16[i] = (v > 65535.0) ? 65535 : (uint16_t)v;
-        v = ToLinearF[i] * 255.0 + 0.5;
+        v = (double)ToLinearF[i] * 255.0 + 0.5;
         ToLinear8[i] = (v > 255.0) ? 255 : (unsigned char)v;
     }
 
     j = 0;
     for (i = 0; i < lt2size; i++)
     {
-        if ((i * linstep) * (i * linstep) > ToLinearF[j] * ToLinearF[j + 1])
+        if ((i * linstep) * (i * linstep) > (double)ToLinearF[j] * (double)ToLinearF[j + 1])
             j++;
         FromLT2[i] = (uint16_t)j;
     }
@@ -647,7 +647,7 @@ static int PixarLogMakeTables(TIFF *tif, PixarLogState *sp)
     j = 0;
     for (i = 0; i < 16384; i++)
     {
-        while ((i / 16383.) * (i / 16383.) > ToLinearF[j] * ToLinearF[j + 1])
+        while ((i / 16383.) * (i / 16383.) > (double)ToLinearF[j] * (double)ToLinearF[j + 1])
             j++;
         From14[i] = (uint16_t)j;
     }
@@ -655,7 +655,7 @@ static int PixarLogMakeTables(TIFF *tif, PixarLogState *sp)
     j = 0;
     for (i = 0; i < 256; i++)
     {
-        while ((i / 255.) * (i / 255.) > ToLinearF[j] * ToLinearF[j + 1])
+        while ((i / 255.) * (i / 255.) > (double)ToLinearF[j] * (double)ToLinearF[j + 1])
             j++;
         From8[i] = (uint16_t)j;
     }
@@ -773,7 +773,7 @@ static int PixarLogSetupDecode(TIFF *tif)
         multiply_ms(multiply_ms(sp->stride, td->td_imagewidth), strip_height),
         sizeof(uint16_t));
     /* add one more stride in case input ends mid-stride */
-    tbuf_size = add_ms(tbuf_size, sizeof(uint16_t) * sp->stride);
+    tbuf_size = add_ms(tbuf_size, (tmsize_t)(sizeof(uint16_t) * (size_t)sp->stride));
     if (tbuf_size == 0)
         return (0); /* TODO: this is an error return without error report
                        through TIFFErrorExt */
@@ -1082,7 +1082,7 @@ static void horizontalDifferenceF(float *ip, tmsize_t n, int stride,
     ((v < (float)0.)     ? 0                                                   \
      : (v < (float)2.)   ? FromLT2[(int)(v * fltsize)]                         \
      : (v > (float)24.2) ? 2047                                                \
-                         : LogK1 * log(v * LogK2) + 0.5)
+                         : (double)LogK1 * log((double)v * (double)LogK2) + 0.5)
 
     mask = CODE_MASK;
     if (n >= stride)

@@ -291,8 +291,6 @@ static void Fax3TryG3WithoutEOL(const char *module, TIFF *tif, uint32_t line,
         Fax3TryG3WithoutEOL(module, tif, (uint32_t)sp->line, (uint32_t)(a0));  \
     } while (0)
 
-#define Nop
-
 static int CheckReachedCounters(TIFF *tif, const char *module,
                                 Fax3CodecState *sp)
 {
@@ -487,7 +485,7 @@ void _TIFFFax3fillruns(unsigned char *buf, uint32_t *runs, uint32_t *erun,
             {
                 if (bx)
                 { /* align to byte boundary */
-                    *cp++ &= 0xff << (8 - bx);
+                    *cp++ &= (unsigned char)(0xff << (8 - bx));
                     run -= 8 - bx;
                 }
                 if ((n = (int32_t)(run >> 3)) != 0)
@@ -512,7 +510,7 @@ void _TIFFFax3fillruns(unsigned char *buf, uint32_t *runs, uint32_t *erun,
                     run &= 7;
                 }
                 if (run)
-                    cp[0] &= 0xff >> run;
+                    cp[0] &= (unsigned char)(0xff >> run);
             }
             else
                 cp[0] &= (unsigned char)~(_fillmasks[run] >> bx);
@@ -529,7 +527,7 @@ void _TIFFFax3fillruns(unsigned char *buf, uint32_t *runs, uint32_t *erun,
             {
                 if (bx)
                 { /* align to byte boundary */
-                    *cp++ |= 0xff >> bx;
+                    *cp++ |= (unsigned char)(0xff >> bx);
                     run -= 8 - bx;
                 }
                 if ((n = (int32_t)(run >> 3)) != 0)
@@ -558,7 +556,7 @@ void _TIFFFax3fillruns(unsigned char *buf, uint32_t *runs, uint32_t *erun,
                     cp[0] = (unsigned char)((cp[0] | (0xff00 >> run)) & 0xff);
             }
             else
-                cp[0] |= _fillmasks[run] >> bx;
+                cp[0] |= (unsigned char)(_fillmasks[run] >> bx);
             x += runs[1];
         }
     }

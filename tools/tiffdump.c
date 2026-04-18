@@ -164,8 +164,6 @@ int main(int argc, char *argv[])
     return (EXIT_SUCCESS);
 }
 
-#define ord(e) ((int)e)
-
 static uint64_t ReadDirectory(int, unsigned, uint64_t);
 static void ReadError(const char *);
 static void Error(const char *, ...);
@@ -479,7 +477,7 @@ static uint64_t ReadDirectory(int fd, unsigned int ix, uint64_t off)
         if (datasizeoverflow || datasize > 0x10000)
         {
             datatruncated = 1;
-            count = 0x10000 / typewidth;
+            count = (uint64_t)(0x10000 / typewidth);
             datasize = TIFFSafeMultiply(uint64_t, count, typewidth);
         }
         if (count > maxitems)
@@ -875,7 +873,7 @@ static void PrintData(FILE *fd, uint16_t type, uint32_t count,
         {
             float *fp = (float *)data;
             while (count-- > 0)
-                fprintf(fd, floatfmt, sep, *fp++), sep = " ";
+                fprintf(fd, floatfmt, sep, (double)*fp++), sep = " ";
             break;
         }
         case TIFF_DOUBLE:

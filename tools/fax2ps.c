@@ -221,27 +221,29 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
         compression < COMPRESSION_CCITTRLE ||
         compression > COMPRESSION_CCITT_T6)
         return;
-    if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) || !(xres != 0.0f))
+    if (!TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xres) ||
+        TIFF_FLOAT_EQ(xres, 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No x-resolution, assuming %g dpi",
-                    defxres);
+                    (double)defxres);
         xres = defxres;
     }
-    if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) || !(yres != 0.0f))
+    if (!TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yres) ||
+        TIFF_FLOAT_EQ(yres, 0.0f))
     {
         TIFFWarning(TIFFFileName(tif), "No y-resolution, assuming %g lpi",
-                    defyres);
+                    (double)defyres);
         yres = defyres; /* XXX */
     }
     if (TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &unit) &&
         unit == RESUNIT_CENTIMETER)
     {
-        xres *= 2.54F;
-        yres *= 2.54F;
+        xres *= 2.54f;
+        yres *= 2.54f;
     }
-    if (pageWidth == 0)
+    if (TIFF_FLOAT_EQ(pageWidth, 0.0f))
         pageWidth = (float)w / xres;
-    if (pageHeight == 0)
+    if (TIFF_FLOAT_EQ(pageHeight, 0.0f))
         pageHeight = (float)h / yres;
 
     printf("%%!PS-Adobe-3.0\n");
@@ -270,10 +272,10 @@ static void printTIF(TIFF *tif, uint16_t pageNumber)
                     ? pageHeight / ((float)h / yres)
                     : pageWidth / ((float)w / xres);
     printf("%g %g translate\n",
-           points * (pageWidth - scale * (float)w / xres) * half,
-           points * (scale * (float)h / yres +
-                     (pageHeight - scale * (float)h / yres) * half));
-    printf("%g %g scale\n", points / xres * scale, -points / yres * scale);
+           (double)(points * (pageWidth - scale * (float)w / xres) * half),
+           (double)(points * (scale * (float)h / yres +
+                     (pageHeight - scale * (float)h / yres) * half)));
+    printf("%g %g scale\n", (double)(points / xres * scale), (double)(-points / yres * scale));
     printf("0 setgray\n");
     TIFFSetField(tif, TIFFTAG_FAXFILLFUNC, printruns);
     ns = TIFFNumberOfStrips(tif);
@@ -366,7 +368,7 @@ int main(int argc, char **argv)
             case 'p': /* print specific page */
                 pageNumber = (uint16_t)atoi(optarg);
                 if (pages)
-                    pages = (uint16_t *)realloc(pages, (npages + 1) *
+                    pages = (uint16_t *)realloc(pages, (size_t)(npages + 1) *
                                                            sizeof(uint16_t));
                 else
                     pages = (uint16_t *)malloc(sizeof(uint16_t));

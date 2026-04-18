@@ -22,9 +22,6 @@
  * OF THIS SOFTWARE.
  */
 
-#define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN
-
 #include "tiffiop.h"
 #include <stdlib.h>
 
@@ -146,20 +143,9 @@ int TIFFJPEGIsFullStripRequired_12(TIFF *tif);
 #define LONGJMP(jbuf, code) longjmp(jbuf, code)
 #define JMP_BUF jmp_buf
 
-#ifndef TIFF_jpeg_destination_mgr_defined
-#define TIFF_jpeg_destination_mgr_defined
-typedef struct jpeg_destination_mgr jpeg_destination_mgr;
-#endif
-
-#ifndef TIFF_jpeg_source_mgr_defined
-#define TIFF_jpeg_source_mgr_defined
-typedef struct jpeg_source_mgr jpeg_source_mgr;
-#endif
-
-#ifndef TIFF_jpeg_error_mgr_defined
-#define TIFF_jpeg_error_mgr_defined
-typedef struct jpeg_error_mgr jpeg_error_mgr;
-#endif
+typedef struct jpeg_destination_mgr tiff_jpeg_destination_mgr;
+typedef struct jpeg_source_mgr tiff_jpeg_source_mgr;
+typedef struct jpeg_error_mgr tiff_jpeg_error_mgr;
 
 /*
  * State block for each open TIFF file using
@@ -188,7 +174,7 @@ typedef struct
     } cinfo; /* NB: must be first */
     int cinfo_initialized;
 
-    jpeg_error_mgr err;  /* libjpeg error manager */
+    tiff_jpeg_error_mgr err;  /* libjpeg error manager */
     JMP_BUF exit_jmpbuf; /* for catching libjpeg failures */
 
     struct jpeg_progress_mgr progress;
@@ -196,8 +182,8 @@ typedef struct
      * The following two members could be a union, but
      * they're small enough that it's not worth the effort.
      */
-    jpeg_destination_mgr dest; /* data dest for compression */
-    jpeg_source_mgr src;       /* data source for decompression */
+    tiff_jpeg_destination_mgr dest; /* data dest for compression */
+    tiff_jpeg_source_mgr src;       /* data source for decompression */
                                /* private state */
     TIFF *tif;                 /* back link needed by some code */
     uint16_t photometric;      /* copy of PhotometricInterpretation */
@@ -566,7 +552,7 @@ static boolean tables_empty_output_buffer(j_compress_ptr cinfo)
     /* the entire buffer has been filled; enlarge it by 1000 bytes */
     newbuf =
         _TIFFreallocExt(sp->tif, (void *)sp->otherSettings.jpegtables,
-                        (tmsize_t)(sp->otherSettings.jpegtables_length + 1000));
+                        (tmsize_t)sp->otherSettings.jpegtables_length + 1000);
     if (newbuf == NULL)
         ERREXIT1(cinfo, JERR_OUT_OF_MEMORY, 100);
     sp->dest.next_output_byte =
@@ -919,7 +905,7 @@ JPEGFixupTagsSubsamplingSec(struct JPEGFixupTagsSubsamplingData *data)
                         return (0);
                     if (n < 2)
                         return (0);
-                    n -= 2;
+                    n = (uint16_t)(n - 2);
                     if (n > 0)
                         JPEGFixupTagsSubsamplingSkip(data, n);
                 }
@@ -2092,30 +2078,30 @@ static int JPEGSetupEncode(TIFF *tif)
 #endif
     if (isTiled(tif))
     {
-        if ((td->td_tilelength % (sp->v_sampling * DCTSIZE)) != 0)
+        if ((td->td_tilelength % ((uint32_t)sp->v_sampling * DCTSIZE)) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "JPEG tile height must be multiple of %" PRIu32,
-                          (uint32_t)(sp->v_sampling * DCTSIZE));
+                          (uint32_t)sp->v_sampling * DCTSIZE);
             return (0);
         }
-        if ((td->td_tilewidth % (sp->h_sampling * DCTSIZE)) != 0)
+        if ((td->td_tilewidth % ((uint32_t)sp->h_sampling * DCTSIZE)) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "JPEG tile width must be multiple of %" PRIu32,
-                          (uint32_t)(sp->h_sampling * DCTSIZE));
+                          (uint32_t)sp->h_sampling * DCTSIZE);
             return (0);
         }
     }
     else
     {
         if (td->td_rowsperstrip < td->td_imagelength &&
-            (td->td_rowsperstrip % (sp->v_sampling * DCTSIZE)) != 0)
+            (td->td_rowsperstrip % ((uint32_t)sp->v_sampling * DCTSIZE)) != 0)
         {
             TIFFErrorExtR(tif, module,
                           "RowsPerStrip must be multiple of %" PRIu32
                           " for JPEG",
-                          (uint32_t)(sp->v_sampling * DCTSIZE));
+                          (uint32_t)sp->v_sampling * DCTSIZE);
             return (0);
         }
     }
@@ -2364,7 +2350,7 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     {
         line16_count = (int)((sp->bytesperline * 2) / 3);
         line16 = (short *)_TIFFmallocExt(
-            tif, (tmsize_t)(sizeof(short) * (unsigned long)line16_count));
+            tif, (tmsize_t)(sizeof(short) * (size_t)line16_count));
         if (!line16)
         {
             TIFFErrorExtR(tif, "JPEGEncode", "Failed to allocate memory");

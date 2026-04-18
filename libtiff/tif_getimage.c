@@ -29,6 +29,7 @@
  */
 #include "tiffiop.h"
 #include <limits.h>
+#include <math.h>
 #include <stdio.h>
 
 static int gtTileContig(TIFFRGBAImage *, uint32_t *, uint32_t, uint32_t);
@@ -57,21 +58,21 @@ static const char photoTag[] = "PhotometricInterpretation";
 
 static const TIFFDisplay display_sRGB = {
     {/* XYZ -> luminance matrix */
-     {3.2410F, -1.5374F, -0.4986F},
-     {-0.9692F, 1.8760F, 0.0416F},
-     {0.0556F, -0.2040F, 1.0570F}},
-    100.0F,
-    100.0F,
-    100.0F, /* Light o/p for reference white */
+     {3.2410f, -1.5374f, -0.4986f},
+     {-0.9692f, 1.8760f, 0.0416f},
+     {0.0556f, -0.2040f, 1.0570f}},
+    100.0f,
+    100.0f,
+    100.0f, /* Light o/p for reference white */
     255,
     255,
     255, /* Pixel values for ref. white */
-    1.0F,
-    1.0F,
-    1.0F, /* Residual light o/p for black pixel */
-    2.4F,
-    2.4F,
-    2.4F, /* Gamma values for the three guns */
+    1.0f,
+    1.0f,
+    1.0f, /* Residual light o/p for black pixel */
+    2.4f,
+    2.4f,
+    2.4f, /* Gamma values for the three guns */
 };
 
 /*
@@ -425,11 +426,11 @@ int TIFFRGBAImageBegin(TIFFRGBAImage *img, TIFF *tif, int stop,
             /* copy the colormaps so we can modify them */
             n_color = (uint32_t)(1U << img->bitspersample);
             img->redcmap =
-                (uint16_t *)_TIFFmallocExt(tif, sizeof(uint16_t) * n_color);
+                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * (size_t)n_color));
             img->greencmap =
-                (uint16_t *)_TIFFmallocExt(tif, sizeof(uint16_t) * n_color);
+                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * (size_t)n_color));
             img->bluecmap =
-                (uint16_t *)_TIFFmallocExt(tif, sizeof(uint16_t) * n_color);
+                (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(sizeof(uint16_t) * (size_t)n_color));
             if (!img->redcmap || !img->greencmap || !img->bluecmap)
             {
                 snprintf(emsg, EMSG_BUF_SIZE,
@@ -874,7 +875,7 @@ static int gtTileContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1118,7 +1119,7 @@ static int gtTileSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1270,7 +1271,7 @@ static int gtStripContig(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1474,7 +1475,7 @@ static int gtStripSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 
         for (line = 0; line < h; line++)
         {
-            uint32_t *left = raster + (line * w);
+            uint32_t *left = raster + (size_t)line * w;
             /* Use wmin to only flip horizontally data in place and not complete
              * raster-row. */
             uint32_t *right = left + wmin - 1;
@@ -1612,13 +1613,6 @@ static int gtStripSeparate(TIFFRGBAImage *img, uint32_t *raster, uint32_t w,
 #define PACK4(r, g, b, a)                                                      \
     ((uint32_t)(r) | ((uint32_t)(g) << 8) | ((uint32_t)(b) << 16) |            \
      ((uint32_t)(a) << 24))
-#define W2B(v) (((v) >> 8) & 0xff)
-/* TODO: PACKW should have be made redundant in favor of Bitdepth16To8 LUT */
-#define PACKW(r, g, b)                                                         \
-    ((uint32_t)W2B(r) | ((uint32_t)W2B(g) << 8) | ((uint32_t)W2B(b) << 16) | A1)
-#define PACKW4(r, g, b, a)                                                     \
-    ((uint32_t)W2B(r) | ((uint32_t)W2B(g) << 8) | ((uint32_t)W2B(b) << 16) |   \
-     ((uint32_t)W2B(a) << 24))
 
 #define DECLAREContigPutFunc(name)                                             \
     static void name(TIFFRGBAImage *img, uint32_t *cp, uint32_t x, uint32_t y, \
@@ -2005,7 +1999,7 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKMaptile)
 {
     int samplesperpixel = img->samplesperpixel;
     TIFFRGBValue *Map = img->Map;
-    uint16_t r, g, b, k;
+    unsigned int r, g, b, k;
 
     (void)y;
     fromskew *= samplesperpixel;
@@ -2013,10 +2007,10 @@ DECLAREContigPutFunc(putRGBcontig8bitCMYKMaptile)
     {
         for (x = w; x > 0; --x)
         {
-            k = 255 - pp[3];
-            r = (uint16_t)((k * (255 - pp[0])) / 255);
-            g = (uint16_t)((k * (255 - pp[1])) / 255);
-            b = (uint16_t)((k * (255 - pp[2])) / 255);
+            k = 255U - pp[3];
+            r = (k * (255U - pp[0])) / 255U;
+            g = (k * (255U - pp[1])) / 255U;
+            b = (k * (255U - pp[2])) / 255U;
             *cp++ = PACK(Map[r], Map[g], Map[b]);
             pp += samplesperpixel;
         }
@@ -2073,13 +2067,13 @@ DECLARESepPutFunc(putCMYKseparate8bittile)
     (void)y;
     for (; h > 0; --h)
     {
-        uint32_t rv, gv, bv, kv;
+        unsigned int rv, gv, bv, kv;
         for (x = w; x > 0; --x)
         {
-            kv = 255 - *a++;
-            rv = (kv * (255 - *r++)) / 255;
-            gv = (kv * (255 - *g++)) / 255;
-            bv = (kv * (255 - *b++)) / 255;
+            kv = 255U - *a++;
+            rv = (kv * (255U - *r++)) / 255U;
+            gv = (kv * (255U - *g++)) / 255U;
+            bv = (kv * (255U - *b++)) / 255U;
             *cp++ = PACK4(rv, gv, bv, 255);
         }
         SKEW4(r, g, b, a, fromskew);
@@ -2767,8 +2761,8 @@ static int initYCbCrConversion(TIFFRGBAImage *img)
 
     /* Do some validation to avoid later issues. Detect NaN for now */
     /* and also if lumaGreen is zero since we divide by it later */
-    if (luma[0] != luma[0] || luma[1] != luma[1] || luma[1] == 0.0 ||
-        luma[2] != luma[2])
+    if (isnan(luma[0]) || isnan(luma[1]) || TIFF_FLOAT_EQ(luma[1], 0.0f) ||
+        isnan(luma[2]))
     {
         TIFFErrorExtR(img->tif, module,
                       "Invalid values for YCbCrCoefficients tag");
@@ -2800,7 +2794,7 @@ static tileContigRoutine initCIELabConversion(TIFFRGBAImage *img)
     float refWhite[3];
 
     TIFFGetFieldDefaulted(img->tif, TIFFTAG_WHITEPOINT, &whitePoint);
-    if (whitePoint[1] == 0.0f)
+    if (TIFF_FLOAT_EQ(whitePoint[1], 0.0f))
     {
         TIFFErrorExtR(img->tif, module, "Invalid value for WhitePoint tag.");
         return NULL;
@@ -2818,10 +2812,10 @@ static tileContigRoutine initCIELabConversion(TIFFRGBAImage *img)
         }
     }
 
-    refWhite[1] = 100.0F;
+    refWhite[1] = 100.0f;
     refWhite[0] = whitePoint[0] / whitePoint[1] * refWhite[1];
     refWhite[2] =
-        (1.0F - whitePoint[0] - whitePoint[1]) / whitePoint[1] * refWhite[1];
+        (1.0f - whitePoint[0] - whitePoint[1]) / whitePoint[1] * refWhite[1];
     if (TIFFCIELabToRGBInit(img->cielab, &display_sRGB, refWhite) < 0)
     {
         TIFFErrorExtR(img->tif, module,
@@ -3597,13 +3591,13 @@ int TIFFReadRGBATileExt(TIFF *tif, uint32_t col, uint32_t row, uint32_t *raster,
                 read_xsize * sizeof(uint32_t));
         _TIFFmemset(raster + (size_t)(tile_ysize - i_row - 1) * tile_xsize +
                         read_xsize,
-                    0, sizeof(uint32_t) * (tile_xsize - read_xsize));
+                    0, (tmsize_t)(sizeof(uint32_t) * (size_t)(tile_xsize - read_xsize)));
     }
 
     for (i_row = read_ysize; i_row < tile_ysize; i_row++)
     {
         _TIFFmemset(raster + (size_t)(tile_ysize - i_row - 1) * tile_xsize, 0,
-                    sizeof(uint32_t) * tile_xsize);
+                    (tmsize_t)(sizeof(uint32_t) * (size_t)tile_xsize));
     }
 
     return (ok);
