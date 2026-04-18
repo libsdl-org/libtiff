@@ -378,8 +378,6 @@ TIFF *TIFFClientOpenExt(const char *name, const char *mode,
     tif->tif_curdir = TIFF_NON_EXISTENT_DIR_NUMBER; /* non-existent directory */
     tif->tif_curdircount = TIFF_NON_EXISTENT_DIR_NUMBER;
     tif->tif_curoff = 0;
-    tif->tif_curstrip = (uint32_t)-1; /* invalid strip */
-    tif->tif_row = (uint32_t)-1;      /* read/write pre-increment */
     tif->tif_clientdata = clientdata;
     tif->tif_readproc = readproc;
     tif->tif_writeproc = writeproc;
@@ -398,6 +396,10 @@ TIFF *TIFFClientOpenExt(const char *name, const char *mode,
         tif->tif_max_cumulated_mem_alloc = opts->max_cumulated_mem_alloc;
         tif->tif_warn_about_unknown_tags = opts->warn_about_unknown_tags;
     }
+
+    /* Reset tif->tif_dir structure to zero and
+     * initialize some IFD strile counter and index parameters. */
+    _TIFFResetTifDirAndInitStrileCounters(&tif->tif_dir);
 
     if (!readproc || !writeproc || !seekproc || !closeproc || !sizeproc)
     {
@@ -866,7 +868,7 @@ int TIFFIsTiled(TIFF *tif) { return (isTiled(tif)); }
 /*
  * Return current row being read/written.
  */
-uint32_t TIFFCurrentRow(TIFF *tif) { return (tif->tif_row); }
+uint32_t TIFFCurrentRow(TIFF *tif) { return (tif->tif_dir.td_row); }
 
 /*
  * Return index of the current directory.
@@ -876,12 +878,12 @@ tdir_t TIFFCurrentDirectory(TIFF *tif) { return (tif->tif_curdir); }
 /*
  * Return current strip.
  */
-uint32_t TIFFCurrentStrip(TIFF *tif) { return (tif->tif_curstrip); }
+uint32_t TIFFCurrentStrip(TIFF *tif) { return (tif->tif_dir.td_curstrip); }
 
 /*
  * Return current tile.
  */
-uint32_t TIFFCurrentTile(TIFF *tif) { return (tif->tif_curtile); }
+uint32_t TIFFCurrentTile(TIFF *tif) { return (tif->tif_dir.td_curtile); }
 
 /*
  * Return nonzero if the file has byte-swapped data.

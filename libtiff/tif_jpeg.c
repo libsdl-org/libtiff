@@ -1200,7 +1200,7 @@ int TIFFJPEGIsFullStripRequired(TIFF *tif)
     else
     {
         segment_width = td->td_imagewidth;
-        segment_height = td->td_imagelength - tif->tif_row;
+        segment_height = td->td_imagelength - tif->tif_dir.td_row;
         if (segment_height > td->td_rowsperstrip)
             segment_height = td->td_rowsperstrip;
         sp->bytesperline = TIFFScanlineSize(tif);
@@ -1231,7 +1231,8 @@ int TIFFJPEGIsFullStripRequired(TIFF *tif)
     }
     if (sp->cinfo.d.image_width == segment_width &&
         sp->cinfo.d.image_height > segment_height &&
-        tif->tif_row + segment_height == td->td_imagelength && !isTiled(tif))
+        tif->tif_dir.td_row + segment_height == td->td_imagelength &&
+        !isTiled(tif))
     {
         /* Some files have a last strip, that should be truncated, */
         /* but their JPEG codestream has still the maximum strip */
@@ -1478,7 +1479,7 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                 return (0);
             }
 
-            ++tif->tif_row;
+            ++tif->tif_dir.td_row;
             buf += sp->bytesperline;
             cc -= sp->bytesperline;
         } while (--nrows > 0);
@@ -1592,7 +1593,7 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
                 }
             }
 
-            ++tif->tif_row;
+            ++tif->tif_dir.td_row;
             buf += sp->bytesperline;
             cc -= sp->bytesperline;
         } while (--nrows > 0);
@@ -1643,8 +1644,9 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
     /* For last strip, limit number of rows to its truncated height */
     /* even if the codestream height is larger (which is not compliant, */
     /* but that we tolerate) */
-    if ((uint32_t)nrows > td->td_imagelength - tif->tif_row && !isTiled(tif))
-        nrows = td->td_imagelength - tif->tif_row;
+    if ((uint32_t)nrows > td->td_imagelength - tif->tif_dir.td_row &&
+        !isTiled(tif))
+        nrows = td->td_imagelength - tif->tif_dir.td_row;
 
 #if defined(JPEG_LIB_MK1_OR_12BIT)
     unsigned short *tmpbuf = NULL;
@@ -1787,7 +1789,7 @@ static int JPEGDecode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
 #endif
 
             sp->scancount++;
-            tif->tif_row += sp->v_sampling;
+            tif->tif_dir.td_row += sp->v_sampling;
 
             buf += sp->bytesperline;
             cc -= sp->bytesperline;
@@ -2178,7 +2180,7 @@ static int JPEGPreEncode(TIFF *tif, uint16_t s)
     else
     {
         segment_width = td->td_imagewidth;
-        segment_height = td->td_imagelength - tif->tif_row;
+        segment_height = td->td_imagelength - tif->tif_dir.td_row;
         if (segment_height > td->td_rowsperstrip)
             segment_height = td->td_rowsperstrip;
         sp->bytesperline = TIFFScanlineSize(tif);
@@ -2340,8 +2342,9 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
         TIFFWarningExtR(tif, tif->tif_name, "fractional scanline discarded");
 
     /* The last strip will be limited to image size */
-    if (!isTiled(tif) && tif->tif_row + nrows > tif->tif_dir.td_imagelength)
-        nrows = tif->tif_dir.td_imagelength - tif->tif_row;
+    if (!isTiled(tif) &&
+        tif->tif_dir.td_row + nrows > tif->tif_dir.td_imagelength)
+        nrows = tif->tif_dir.td_imagelength - tif->tif_dir.td_row;
 
     if (sp->cinfo.c.data_precision == 12)
     {
@@ -2385,7 +2388,7 @@ static int JPEGEncode(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
         if (TIFFjpeg_write_scanlines(sp, bufptr, 1) != 1)
             return (0);
         if (nrows > 0)
-            tif->tif_row++;
+            tif->tif_dir.td_row++;
         buf += sp->bytesperline;
     }
 
@@ -2500,7 +2503,7 @@ static int JPEGEncodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc, uint16_t s)
             }
             sp->scancount = 0;
         }
-        tif->tif_row += sp->v_sampling;
+        tif->tif_dir.td_row += sp->v_sampling;
         buf += bytesperclumpline;
         nrows -= sp->v_sampling;
     }
@@ -2594,10 +2597,11 @@ static void JPEGResetUpsampled(TIFF *tif)
      * Must recalculate cached tile size in case sampling state changed.
      * Should we really be doing this now if image size isn't set?
      */
-    if (tif->tif_tilesize > 0)
-        tif->tif_tilesize = isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)(-1);
-    if (tif->tif_scanlinesize > 0)
-        tif->tif_scanlinesize = TIFFScanlineSize(tif);
+    if (tif->tif_dir.td_tilesize > 0)
+        tif->tif_dir.td_tilesize =
+            isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)(-1);
+    if (tif->tif_dir.td_scanlinesize > 0)
+        tif->tif_dir.td_scanlinesize = TIFFScanlineSize(tif);
 }
 
 static int JPEGVSetField(TIFF *tif, uint32_t tag, va_list ap)

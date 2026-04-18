@@ -2588,7 +2588,7 @@ static int TIFFWriteDirectoryTagCheckedRationalArray(TIFF *tif, uint32_t *ndir,
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(uint32_t), ndir);
         return 1;
     }
-    m = (uint32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * 2 * sizeof(uint32_t)));
+    m = (uint32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(uint32_t), "for rational array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2624,7 +2624,7 @@ static int TIFFWriteDirectoryTagCheckedSrationalArray(TIFF *tif, uint32_t *ndir,
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(int32_t), ndir);
         return 1;
     }
-    m = (int32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * 2 * sizeof(int32_t)));
+    m = (int32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(int32_t), "for srational array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2661,7 +2661,7 @@ TIFFWriteDirectoryTagCheckedRationalDoubleArray(TIFF *tif, uint32_t *ndir,
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(uint32_t), ndir);
         return 1;
     }
-    m = (uint32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * 2 * sizeof(uint32_t)));
+    m = (uint32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(uint32_t), "for rational double array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2696,7 +2696,7 @@ static int TIFFWriteDirectoryTagCheckedSrationalDoubleArray(
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(int32_t), ndir);
         return 1;
     }
-    m = (int32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * 2 * sizeof(int32_t)));
+    m = (int32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(int32_t), "for srational double array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");

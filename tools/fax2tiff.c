@@ -418,7 +418,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
 
     (*tifin->tif_setupdecode)(tifin);
     (*tifin->tif_predecode)(tifin, (tsample_t)0);
-    tifin->tif_row = 0;
+    tifin->tif_dir.td_row = 0;
     badfaxlines = 0;
     badfaxrun = 0;
 
@@ -450,7 +450,7 @@ int copyFaxFile(TIFF *tifin, TIFF *tifout)
             badrun = 0;
             _TIFFmemcpy(refbuf, rowbuf, linesize);
         }
-        tifin->tif_row++;
+        tifin->tif_dir.td_row++;
         lastcc = tifin->tif_rawcc;
 
         if (TIFFWriteScanline(tifout, rowbuf, row, 0) < 0)

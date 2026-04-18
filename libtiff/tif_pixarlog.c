@@ -906,9 +906,10 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         }
         if (state == Z_DATA_ERROR)
         {
-            TIFFErrorExtR(
-                tif, module, "Decoding error at scanline %" PRIu32 ", %s",
-                tif->tif_row, sp->stream.msg ? sp->stream.msg : "(null)");
+            TIFFErrorExtR(tif, module,
+                          "Decoding error at scanline %" PRIu32 ", %s",
+                          tif->tif_dir.td_row,
+                          sp->stream.msg ? sp->stream.msg : "(null)");
             memset(op, 0, (size_t)occ);
             return (0);
         }
@@ -927,7 +928,7 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
         TIFFErrorExtR(tif, module,
                       "Not enough data at scanline %" PRIu32
                       " (short %u bytes)",
-                      tif->tif_row, sp->stream.avail_out);
+                      tif->tif_dir.td_row, sp->stream.avail_out);
         memset(op, 0, (size_t)occ);
         return (0);
     }
@@ -1578,9 +1579,9 @@ static int PixarLogVSetField(TIFF *tif, uint32_t tag, va_list ap)
             /*
              * Must recalculate sizes should bits/sample change.
              */
-            tif->tif_tilesize =
+            tif->tif_dir.td_tilesize =
                 isTiled(tif) ? TIFFTileSize(tif) : (tmsize_t)(-1);
-            tif->tif_scanlinesize = TIFFScanlineSize(tif);
+            tif->tif_dir.td_scanlinesize = TIFFScanlineSize(tif);
             result = 1; /* NB: pseudo tag */
             break;
         default:

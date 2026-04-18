@@ -691,8 +691,8 @@ void TIFFPrintDirectory(TIFF *tif, FILE *fd, long flags)
                      * "set_get_field_type" to determine internal storage size.
                      */
                     int tv_size = TIFFFieldSetGetSize(fip);
-                    raw_data =
-                        _TIFFmallocExt(tif, (uint32_t)tv_size * value_count);
+                    raw_data = _TIFFCheckMalloc(tif, value_count, tv_size,
+                                               "for tag data");
                     mem_alloc = 1;
                     if (TIFFGetField(tif, tag, raw_data) != 1)
                     {
