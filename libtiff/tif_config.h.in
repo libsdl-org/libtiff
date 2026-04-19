@@ -143,9 +143,7 @@
 # endif
 #else
 # undef WORDS_BIGENDIAN
-# ifndef WORDS_BIGENDIAN
-#  define WORDS_BIGENDIAN 0
-# endif
+# define WORDS_BIGENDIAN 0
 #endif
 
 /* Support zstd compression */
