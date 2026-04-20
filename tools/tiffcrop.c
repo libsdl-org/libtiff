@@ -5943,7 +5943,8 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
     }
     else
     {
-        if ((TIFF_FLOAT_EQ(image->xres, 0.0f) || TIFF_FLOAT_EQ(image->yres, 0.0f)) &&
+        if ((TIFF_FLOAT_EQ(image->xres, 0.0f) ||
+             TIFF_FLOAT_EQ(image->yres, 0.0f)) &&
             (crop->res_unit != RESUNIT_NONE) &&
             ((crop->crop_mode & CROP_REGIONS) ||
              (crop->crop_mode & CROP_MARGINS) ||
@@ -6047,8 +6048,9 @@ static int computeInputPixelOffsets(struct crop_mask *crop,
             if (zlength > max_length)
                 max_length = zlength;
 
-            buffsize = (uint32_t)(((uint64_t)zwidth * image->bps * image->spp + 7) / 8 *
-                                  (zlength + 1));
+            buffsize =
+                (uint32_t)(((uint64_t)zwidth * image->bps * image->spp + 7) /
+                           8 * (zlength + 1));
 
             crop->regionlist[i].buffsize = buffsize;
             crop->bufftotal += buffsize;
@@ -6638,8 +6640,8 @@ static int getCropOffsets(struct image_data *image, struct crop_mask *crop,
                 break;
         } /* end switch statement */
 
-        buffsize = (uint32_t)(((uint64_t)zwidth * image->bps * image->spp + 7) / 8 *
-                              (zlength + 1));
+        buffsize = (uint32_t)(((uint64_t)zwidth * image->bps * image->spp + 7) /
+                              8 * (zlength + 1));
         crop->regionlist[i].width = (uint32_t)zwidth;
         crop->regionlist[i].length = (uint32_t)zlength;
         crop->regionlist[i].buffsize = buffsize;

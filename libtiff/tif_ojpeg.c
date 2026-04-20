@@ -906,10 +906,10 @@ static int OJPEGDecodeRaw(TIFF *tif, uint8_t *buf, tmsize_t cc)
     {
         if (sp->subsampling_convert_state == 0)
         {
-            if (jpeg_read_raw_data_encap(sp,
-                                         &(sp->libjpeg_jpeg_decompress_struct),
-                                         sp->subsampling_convert_ycbcrimage,
-                                         (uint32_t)sp->subsampling_ver * 8) == 0)
+            if (jpeg_read_raw_data_encap(
+                    sp, &(sp->libjpeg_jpeg_decompress_struct),
+                    sp->subsampling_convert_ycbcrimage,
+                    (uint32_t)sp->subsampling_ver * 8) == 0)
             {
                 sp->error_in_raw_data_decoding = 1;
                 return (0);
@@ -1229,9 +1229,11 @@ static int OJPEGReadHeaderInfo(TIFF *tif)
             return (0);
         }
         sp->restart_interval =
-            (uint16_t)(((sp->strile_width + (uint32_t)sp->subsampling_hor * 8 - 1) /
+            (uint16_t)(((sp->strile_width + (uint32_t)sp->subsampling_hor * 8 -
+                         1) /
                         ((uint32_t)sp->subsampling_hor * 8)) *
-                       (sp->strile_length / ((uint32_t)sp->subsampling_ver * 8)));
+                       (sp->strile_length /
+                        ((uint32_t)sp->subsampling_ver * 8)));
     }
     if (OJPEGReadHeaderInfoSec(tif) == 0)
         return (0);
@@ -1362,7 +1364,8 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
                 return (0);
             sp->subsampling_convert_ylinelen =
                 ((sp->strile_width + (uint32_t)sp->subsampling_hor * 8 - 1) /
-                 ((uint32_t)sp->subsampling_hor * 8) * ((uint32_t)sp->subsampling_hor * 8));
+                 ((uint32_t)sp->subsampling_hor * 8) *
+                 ((uint32_t)sp->subsampling_hor * 8));
             sp->subsampling_convert_ylines = (uint32_t)sp->subsampling_ver * 8;
             sp->subsampling_convert_clinelen =
                 sp->subsampling_convert_ylinelen / sp->subsampling_hor;
@@ -1401,7 +1404,8 @@ static int OJPEGWriteHeaderInfo(TIFF *tif)
                 3 + sp->subsampling_convert_ylines +
                 2 * sp->subsampling_convert_clines;
             sp->subsampling_convert_ycbcrimage = (uint8_t **)_TIFFmallocExt(
-                tif, (tmsize_t)((size_t)sp->subsampling_convert_ycbcrimagelen * sizeof(uint8_t *)));
+                tif, (tmsize_t)((size_t)sp->subsampling_convert_ycbcrimagelen *
+                                sizeof(uint8_t *)));
             if (sp->subsampling_convert_ycbcrimage == 0)
             {
                 TIFFErrorExtR(tif, module, "Out of memory");
