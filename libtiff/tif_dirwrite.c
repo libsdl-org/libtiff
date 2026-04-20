@@ -434,7 +434,8 @@ static int TIFFRewriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                                   "corrupt TIFF");
                     return (0);
                 }
-                (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20, SEEK_SET);
+                (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20,
+                                   SEEK_SET);
                 if (!ReadOK(tif, &nextnextdir, 8))
                 {
                     TIFFErrorExtR(tif, module, "Error fetching directory link");
@@ -1194,7 +1195,8 @@ static int TIFFWriteDirectorySec(TIFF *tif, int isimage, int imagedone,
             tif->tif_dir.td_dirdatasize_write += 8 + ndir * 20 + 8;
 
         /* Setup a new directory within first pass. */
-        dir = (TIFFDirEntry *)_TIFFmallocExt(tif, (tmsize_t)((size_t)ndir * sizeof(TIFFDirEntry)));
+        dir = (TIFFDirEntry *)_TIFFmallocExt(
+            tif, (tmsize_t)((size_t)ndir * sizeof(TIFFDirEntry)));
         if (dir == NULL)
         {
             TIFFErrorExtR(tif, module, "Out of memory");
@@ -1669,7 +1671,9 @@ static int TIFFWriteDirectoryTagShortPerSample(TIFF *tif, uint32_t *ndir,
         return (TIFFWriteDirectoryTagCheckedShortArray(
             tif, ndir, dir, tag, tif->tif_dir.td_samplesperpixel, NULL));
     }
-    m = (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)tif->tif_dir.td_samplesperpixel * sizeof(uint16_t)));
+    m = (uint16_t *)_TIFFmallocExt(
+        tif,
+        (tmsize_t)((size_t)tif->tif_dir.td_samplesperpixel * sizeof(uint16_t)));
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -1739,7 +1743,8 @@ static int TIFFWriteDirectoryTagLong8Array(TIFF *tif, uint32_t *ndir,
     ** For classic tiff we want to verify everything is in range for long
     ** and convert to long format.
     */
-    p = (uint32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
+    p = (uint32_t *)_TIFFmallocExt(
+        tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
     if (p == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -1792,7 +1797,8 @@ static int TIFFWriteDirectoryTagSlong8Array(TIFF *tif, uint32_t *ndir,
     ** For classic tiff we want to verify everything is in range for signed-long
     ** and convert to signed-long format.
     */
-    p = (int32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
+    p = (int32_t *)_TIFFmallocExt(tif,
+                                  (tmsize_t)((size_t)count * sizeof(uint32_t)));
     if (p == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2011,7 +2017,8 @@ static int TIFFWriteDirectoryTagLongLong8Array(TIFF *tif, uint32_t *ndir,
         ** and convert to long format.
         */
 
-        uint32_t *p = (uint32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
+        uint32_t *p = (uint32_t *)_TIFFmallocExt(
+            tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
         uint32_t *q;
         uint64_t *ma;
         uint32_t mb;
@@ -2041,7 +2048,8 @@ static int TIFFWriteDirectoryTagLongLong8Array(TIFF *tif, uint32_t *ndir,
     }
     else
     {
-        uint16_t *p = (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(uint16_t)));
+        uint16_t *p = (uint16_t *)_TIFFmallocExt(
+            tif, (tmsize_t)((size_t)count * sizeof(uint16_t)));
         uint16_t *q;
         uint64_t *ma;
         uint32_t mb;
@@ -2101,7 +2109,8 @@ static int TIFFWriteDirectoryTagIfdIfd8Array(TIFF *tif, uint32_t *ndir,
     ** and convert to long format.
     */
 
-    p = (uint32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
+    p = (uint32_t *)_TIFFmallocExt(
+        tif, (tmsize_t)((size_t)count * sizeof(uint32_t)));
     if (p == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2161,15 +2170,19 @@ static int TIFFWriteDirectoryTagColormap(TIFF *tif, uint32_t *ndir,
         return 1;
     }
 
-    n = (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)(3U * (size_t)m * sizeof(uint16_t)));
+    n = (uint16_t *)_TIFFmallocExt(
+        tif, (tmsize_t)(3U * (size_t)m * sizeof(uint16_t)));
     if (n == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
         return (0);
     }
-    _TIFFmemcpy(&n[0], tif->tif_dir.td_colormap[0], (tmsize_t)((size_t)m * sizeof(uint16_t)));
-    _TIFFmemcpy(&n[m], tif->tif_dir.td_colormap[1], (tmsize_t)((size_t)m * sizeof(uint16_t)));
-    _TIFFmemcpy(&n[2 * m], tif->tif_dir.td_colormap[2], (tmsize_t)((size_t)m * sizeof(uint16_t)));
+    _TIFFmemcpy(&n[0], tif->tif_dir.td_colormap[0],
+                (tmsize_t)((size_t)m * sizeof(uint16_t)));
+    _TIFFmemcpy(&n[m], tif->tif_dir.td_colormap[1],
+                (tmsize_t)((size_t)m * sizeof(uint16_t)));
+    _TIFFmemcpy(&n[2 * m], tif->tif_dir.td_colormap[2],
+                (tmsize_t)((size_t)m * sizeof(uint16_t)));
     o = TIFFWriteDirectoryTagCheckedShortArray(tif, ndir, dir, TIFFTAG_COLORMAP,
                                                3 * m, n);
     _TIFFfreeExt(tif, n);
@@ -2225,7 +2238,8 @@ static int TIFFWriteDirectoryTagTransferfunction(TIFF *tif, uint32_t *ndir,
         return 1;
     }
 
-    o = (uint16_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)n * m * sizeof(uint16_t)));
+    o = (uint16_t *)_TIFFmallocExt(
+        tif, (tmsize_t)((size_t)n * m * sizeof(uint16_t)));
     if (o == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2260,7 +2274,9 @@ static int TIFFWriteDirectoryTagSubifd(TIFF *tif, uint32_t *ndir,
         uint64_t *pa;
         uint32_t *pb;
         uint16_t p;
-        o = (uint32_t *)_TIFFmallocExt(tif, (tmsize_t)((size_t)tif->tif_dir.td_nsubifd * sizeof(uint32_t)));
+        o = (uint32_t *)_TIFFmallocExt(
+            tif,
+            (tmsize_t)((size_t)tif->tif_dir.td_nsubifd * sizeof(uint32_t)));
         if (o == NULL)
         {
             TIFFErrorExtR(tif, module, "Out of memory");
@@ -2588,7 +2604,8 @@ static int TIFFWriteDirectoryTagCheckedRationalArray(TIFF *tif, uint32_t *ndir,
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(uint32_t), ndir);
         return 1;
     }
-    m = (uint32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(uint32_t), "for rational array");
+    m = (uint32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(uint32_t),
+                                     "for rational array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2624,7 +2641,8 @@ static int TIFFWriteDirectoryTagCheckedSrationalArray(TIFF *tif, uint32_t *ndir,
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(int32_t), ndir);
         return 1;
     }
-    m = (int32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(int32_t), "for srational array");
+    m = (int32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(int32_t),
+                                    "for srational array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2661,7 +2679,8 @@ TIFFWriteDirectoryTagCheckedRationalDoubleArray(TIFF *tif, uint32_t *ndir,
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(uint32_t), ndir);
         return 1;
     }
-    m = (uint32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(uint32_t), "for rational double array");
+    m = (uint32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(uint32_t),
+                                     "for rational double array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -2696,7 +2715,8 @@ static int TIFFWriteDirectoryTagCheckedSrationalDoubleArray(
         EvaluateIFDdatasizeWrite(tif, count * 2, sizeof(int32_t), ndir);
         return 1;
     }
-    m = (int32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(int32_t), "for srational double array");
+    m = (int32_t *)_TIFFCheckMalloc(tif, count, 2 * sizeof(int32_t),
+                                    "for srational double array");
     if (m == NULL)
     {
         TIFFErrorExtR(tif, module, "Out of memory");
@@ -3384,7 +3404,8 @@ static int TIFFLinkDirectory(TIFF *tif)
                 TIFFSwabLong8(&nextnextdir);
             if (nextnextdir == 0)
             {
-                (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20, SEEK_SET);
+                (void)TIFFSeekFile(tif, nextdir + 8 + dircount64 * 20,
+                                   SEEK_SET);
                 if (!WriteOK(tif, &m, 8))
                 {
                     TIFFErrorExtR(tif, module, "Error writing directory link");
@@ -3655,7 +3676,8 @@ int _TIFFRewriteField(TIFF *tif, uint16_t tag, TIFFDataType in_datatype,
         return 0;
 
     if (datatype == in_datatype)
-        memcpy(buf_to_write, data, (size_t)count * (size_t)TIFFDataWidth(datatype));
+        memcpy(buf_to_write, data,
+               (size_t)count * (size_t)TIFFDataWidth(datatype));
     else if (datatype == TIFF_SLONG && in_datatype == TIFF_SLONG8)
     {
         tmsize_t i;

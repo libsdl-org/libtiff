@@ -205,7 +205,8 @@ static int cvt_by_tile(TIFF *in, TIFF *out)
     /*
      * Allocate tile buffer
      */
-    rastersize = (uint32_t)((size_t)tile_width * tile_height * sizeof(uint32_t));
+    rastersize =
+        (uint32_t)((size_t)tile_width * tile_height * sizeof(uint32_t));
     if (tile_width != (rastersize / tile_height) / sizeof(uint32_t))
     {
         TIFFError(TIFFFileName(in),

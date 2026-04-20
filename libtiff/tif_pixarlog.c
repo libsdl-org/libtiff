@@ -776,7 +776,8 @@ static int PixarLogSetupDecode(TIFF *tif)
         multiply_ms(multiply_ms(sp->stride, td->td_imagewidth), strip_height),
         sizeof(uint16_t));
     /* add one more stride in case input ends mid-stride */
-    tbuf_size = add_ms(tbuf_size, (tmsize_t)(sizeof(uint16_t) * (size_t)sp->stride));
+    tbuf_size =
+        add_ms(tbuf_size, (tmsize_t)(sizeof(uint16_t) * (size_t)sp->stride));
     if (tbuf_size == 0)
         return (0); /* TODO: this is an error return without error report
                        through TIFFErrorExt */
