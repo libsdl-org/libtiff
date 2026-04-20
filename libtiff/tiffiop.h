@@ -293,13 +293,15 @@ struct TIFFOpenOptions
  * Default Read/Seek/Write definitions.
  */
 #ifndef ReadOK
-#define ReadOK(tif, buf, size) (TIFFReadFile((tif), (buf), (size)) == (size))
+#define ReadOK(tif, buf, size)                                                 \
+    (TIFFReadFile((tif), (buf), (size)) == (tmsize_t)(size))
 #endif
 #ifndef SeekOK
 #define SeekOK(tif, off) _TIFFSeekOK(tif, off)
 #endif
 #ifndef WriteOK
-#define WriteOK(tif, buf, size) (TIFFWriteFile((tif), (buf), (size)) == (size))
+#define WriteOK(tif, buf, size)                                                \
+    (TIFFWriteFile((tif), (buf), (size)) == (tmsize_t)(size))
 #endif
 
 /* NB: the uint32_t casts are to silence certain ANSI-C compilers */
