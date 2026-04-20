@@ -484,9 +484,11 @@ static int ContigCompare(int sample, uint32_t row, unsigned char *p1,
 
                     for (s = 0; s < samples_to_test; s++)
                     {
-                        if (fabs((double)*pix1 - (double)*pix2) < 0.000000000001)
+                        if (fabs((double)*pix1 - (double)*pix2) <
+                            0.000000000001)
                         {
-                            PrintFloatDiff(row, sample, pix, (double)*pix1, (double)*pix2);
+                            PrintFloatDiff(row, sample, pix, (double)*pix1,
+                                           (double)*pix2);
                         }
 
                         pix1++;

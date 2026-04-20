@@ -52,7 +52,7 @@
     TIFFSetField(out, tag, (double)(v))
 
 #ifndef howmany
-#define howmany(x, y) (((x) + ((y)-1)) / (y))
+#define howmany(x, y) (((x) + ((y) - 1)) / (y))
 #endif
 
 static uint16_t compression = COMPRESSION_PACKBITS;

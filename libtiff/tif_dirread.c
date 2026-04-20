@@ -4386,7 +4386,8 @@ int TIFFReadDirectory(TIFF *tif)
         {
             TIFFDirEntry *na;
             uint16_t nb;
-            for (na = ma + 1, nb = (uint16_t)(mb + 1); nb < dircount; na++, nb++)
+            for (na = ma + 1, nb = (uint16_t)(mb + 1); nb < dircount;
+                 na++, nb++)
             {
                 if (ma->tdir_tag == na->tdir_tag)
                 {
@@ -4884,8 +4885,8 @@ int TIFFReadDirectory(TIFF *tif)
                     (void)TIFFFetchNormalTag(tif, dp, TRUE);
                     break;
             } /* -- switch (dp->tdir_tag) -- */
-        }     /* -- if (!dp->tdir_ignore) */
-    }         /* -- for-loop -- */
+        } /* -- if (!dp->tdir_ignore) */
+    } /* -- for-loop -- */
 
     /* Evaluate final IFD data size. */
     CalcFinalIFDdatasizeReading(tif, dircount);
@@ -5398,7 +5399,8 @@ int TIFFReadCustomDirectory(TIFF *tif, toff_t diroff,
         {
             TIFFDirEntry *na;
             uint16_t nb;
-            for (na = ma + 1, nb = (uint16_t)(mb + 1); nb < dircount; na++, nb++)
+            for (na = ma + 1, nb = (uint16_t)(mb + 1); nb < dircount;
+                 na++, nb++)
             {
                 if (ma->tdir_tag == na->tdir_tag)
                 {

@@ -405,7 +405,8 @@ static void OJPEGWriteStreamEoi(TIFF *tif, void **mem, uint32_t *len);
 #ifdef LIBJPEG_ENCAP_EXTERNAL
 extern int jpeg_create_decompress_encap(OJPEGState *sp,
                                         tiff_ojpeg_decompress_struct *cinfo);
-extern int jpeg_read_header_encap(OJPEGState *sp, tiff_ojpeg_decompress_struct *cinfo,
+extern int jpeg_read_header_encap(OJPEGState *sp,
+                                  tiff_ojpeg_decompress_struct *cinfo,
                                   uint8_t require_image);
 extern int jpeg_start_decompress_encap(OJPEGState *sp,
                                        tiff_ojpeg_decompress_struct *cinfo);
@@ -413,13 +414,14 @@ extern int jpeg_read_scanlines_encap(OJPEGState *sp,
                                      tiff_ojpeg_decompress_struct *cinfo,
                                      void *scanlines, uint32_t max_lines);
 extern int jpeg_read_raw_data_encap(OJPEGState *sp,
-                                    tiff_ojpeg_decompress_struct *cinfo, void *data,
-                                    uint32_t max_lines);
+                                    tiff_ojpeg_decompress_struct *cinfo,
+                                    void *data, uint32_t max_lines);
 extern void jpeg_encap_unwind(TIFF *tif);
 #else
 static int jpeg_create_decompress_encap(OJPEGState *sp,
                                         tiff_ojpeg_decompress_struct *j);
-static int jpeg_read_header_encap(OJPEGState *sp, tiff_ojpeg_decompress_struct *cinfo,
+static int jpeg_read_header_encap(OJPEGState *sp,
+                                  tiff_ojpeg_decompress_struct *cinfo,
                                   uint8_t require_image);
 static int jpeg_start_decompress_encap(OJPEGState *sp,
                                        tiff_ojpeg_decompress_struct *cinfo);
@@ -427,14 +429,16 @@ static int jpeg_read_scanlines_encap(OJPEGState *sp,
                                      tiff_ojpeg_decompress_struct *cinfo,
                                      void *scanlines, uint32_t max_lines);
 static int jpeg_read_raw_data_encap(OJPEGState *sp,
-                                    tiff_ojpeg_decompress_struct *cinfo, void *data,
-                                    uint32_t max_lines);
+                                    tiff_ojpeg_decompress_struct *cinfo,
+                                    void *data, uint32_t max_lines);
 static void jpeg_encap_unwind(TIFF *tif);
 #endif
 
-static void OJPEGLibjpegJpegErrorMgrOutputMessage(tiff_ojpeg_common_struct *cinfo);
+static void
+OJPEGLibjpegJpegErrorMgrOutputMessage(tiff_ojpeg_common_struct *cinfo);
 static void OJPEGLibjpegJpegErrorMgrErrorExit(tiff_ojpeg_common_struct *cinfo);
-static void OJPEGLibjpegJpegSourceMgrInitSource(tiff_ojpeg_decompress_struct *cinfo);
+static void
+OJPEGLibjpegJpegSourceMgrInitSource(tiff_ojpeg_decompress_struct *cinfo);
 static boolean
 OJPEGLibjpegJpegSourceMgrFillInputBuffer(tiff_ojpeg_decompress_struct *cinfo);
 static void
@@ -443,7 +447,8 @@ OJPEGLibjpegJpegSourceMgrSkipInputData(tiff_ojpeg_decompress_struct *cinfo,
 static boolean
 OJPEGLibjpegJpegSourceMgrResyncToRestart(tiff_ojpeg_decompress_struct *cinfo,
                                          int desired);
-static void OJPEGLibjpegJpegSourceMgrTermSource(tiff_ojpeg_decompress_struct *cinfo);
+static void
+OJPEGLibjpegJpegSourceMgrTermSource(tiff_ojpeg_decompress_struct *cinfo);
 
 int TIFFInitOJPEG(TIFF *tif, int scheme)
 {
@@ -1480,7 +1485,8 @@ static void OJPEGLibjpegSessionAbort(TIFF *tif)
 {
     OJPEGState *sp = (OJPEGState *)tif->tif_data;
     assert(sp->libjpeg_session_active != 0);
-    jpeg_destroy((tiff_ojpeg_common_struct *)(&(sp->libjpeg_jpeg_decompress_struct)));
+    jpeg_destroy(
+        (tiff_ojpeg_common_struct *)(&(sp->libjpeg_jpeg_decompress_struct)));
     sp->libjpeg_session_active = 0;
 }
 
@@ -1744,7 +1750,8 @@ static int OJPEGReadHeaderInfoSecStreamDht(TIFF *tif)
         nb[sizeof(uint32_t) + 1] = JPEG_MARKER_DHT;
         nb[sizeof(uint32_t) + 2] = (uint8_t)(m >> 8);
         nb[sizeof(uint32_t) + 3] = (uint8_t)(m & 255);
-        if (OJPEGReadBlock(sp, (uint16_t)(m - 2), &nb[sizeof(uint32_t) + 4]) == 0)
+        if (OJPEGReadBlock(sp, (uint16_t)(m - 2), &nb[sizeof(uint32_t) + 4]) ==
+            0)
         {
             _TIFFfreeExt(tif, nb);
             return (0);
@@ -2683,7 +2690,8 @@ static int jpeg_create_decompress_encap(OJPEGState *sp,
 #endif
 
 #ifndef LIBJPEG_ENCAP_EXTERNAL
-static int jpeg_read_header_encap(OJPEGState *sp, tiff_ojpeg_decompress_struct *cinfo,
+static int jpeg_read_header_encap(OJPEGState *sp,
+                                  tiff_ojpeg_decompress_struct *cinfo,
                                   uint8_t require_image)
 {
     if (SETJMP(sp->exit_jmpbuf))
@@ -2727,8 +2735,8 @@ static int jpeg_read_scanlines_encap(OJPEGState *sp,
 
 #ifndef LIBJPEG_ENCAP_EXTERNAL
 static int jpeg_read_raw_data_encap(OJPEGState *sp,
-                                    tiff_ojpeg_decompress_struct *cinfo, void *data,
-                                    uint32_t max_lines)
+                                    tiff_ojpeg_decompress_struct *cinfo,
+                                    void *data, uint32_t max_lines)
 {
     if (SETJMP(sp->exit_jmpbuf))
         return 0;
@@ -2748,7 +2756,8 @@ static void jpeg_encap_unwind(TIFF *tif)
 }
 #endif
 
-static void OJPEGLibjpegJpegErrorMgrOutputMessage(tiff_ojpeg_common_struct *cinfo)
+static void
+OJPEGLibjpegJpegErrorMgrOutputMessage(tiff_ojpeg_common_struct *cinfo)
 {
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
@@ -2763,7 +2772,8 @@ static void OJPEGLibjpegJpegErrorMgrErrorExit(tiff_ojpeg_common_struct *cinfo)
     jpeg_encap_unwind((TIFF *)(cinfo->client_data));
 }
 
-static void OJPEGLibjpegJpegSourceMgrInitSource(tiff_ojpeg_decompress_struct *cinfo)
+static void
+OJPEGLibjpegJpegSourceMgrInitSource(tiff_ojpeg_decompress_struct *cinfo)
 {
     (void)cinfo;
 }
@@ -2813,7 +2823,8 @@ OJPEGLibjpegJpegSourceMgrResyncToRestart(tiff_ojpeg_decompress_struct *cinfo,
 #pragma warning(pop)
 #endif
 
-static void OJPEGLibjpegJpegSourceMgrTermSource(tiff_ojpeg_decompress_struct *cinfo)
+static void
+OJPEGLibjpegJpegSourceMgrTermSource(tiff_ojpeg_decompress_struct *cinfo)
 {
     (void)cinfo;
 }

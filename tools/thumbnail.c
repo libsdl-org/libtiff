@@ -48,7 +48,7 @@
 
 #ifndef TIFFhowmany8
 #define TIFFhowmany8(x)                                                        \
-    ((int)((((x)&0x07) ? ((uint32_t)(x) >> 3) + 1 : (uint32_t)(x) >> 3)))
+    ((int)((((x) & 0x07) ? ((uint32_t)(x) >> 3) + 1 : (uint32_t)(x) >> 3)))
 #endif
 
 typedef enum
@@ -499,7 +499,7 @@ static void setupBitsTables(void)
 
 static int clamp(float v, int low, int high)
 {
-    return (v < (float)low ? low : v > (float)high ? high : (int)v);
+    return (v<(float)low ? low : v>(float) high ? high : (int)v);
 }
 
 #ifndef M_E

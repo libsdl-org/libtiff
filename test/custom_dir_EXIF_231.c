@@ -1606,7 +1606,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                      * six other cases where the denominator indicates special
                      * values, which are not treated within LibTiff!!
                      */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && TIFF_FLOAT_EQ(auxFloat, -1.0f)))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
+                          TIFF_FLOAT_EQ(auxFloat, -1.0f)))
                     {
                         fprintf(stderr,
                                 "%d:Read value of %s %f differs from set value "
@@ -1670,7 +1671,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead)
                     /*--: EXIFTAG_SUBJECTDISTANCE: LibTiff returns value of
                      * "-1.0" if numerator equals 4294967295 (0xFFFFFFFF) to
                      * indicate infinite distance! */
-                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE && TIFF_DOUBLE_EQ(auxDouble, -1.0)))
+                    if (!(tTag == EXIFTAG_SUBJECTDISTANCE &&
+                          TIFF_DOUBLE_EQ(auxDouble, -1.0)))
                     {
                         fprintf(stderr,
                                 "%d:Read value of %s %f differs from set value "

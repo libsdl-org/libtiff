@@ -82,7 +82,7 @@ void TIFFCIELab16ToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a,
         *Z = cielab->Z0 * tmp * tmp * tmp;
 }
 
-#define RINT(R) ((uint32_t)((R) > 0 ? ((R) + 0.5f) : ((R)-0.5f)))
+#define RINT(R) ((uint32_t)((R) > 0 ? ((R) + 0.5f) : ((R) - 0.5f)))
 /*
  * Convert color value from the XYZ space to RGB.
  */

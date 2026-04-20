@@ -590,24 +590,24 @@ static int TIFFWriteDirectorySec(TIFF *tif, int isimage, int imagedone,
             }
             if (TIFFFieldSet(tif, FIELD_RESOLUTION))
             {
-                if (!TIFFWriteDirectoryTagRational(tif, &ndir, dir,
-                                                   TIFFTAG_XRESOLUTION,
-                                                   (double)tif->tif_dir.td_xresolution))
+                if (!TIFFWriteDirectoryTagRational(
+                        tif, &ndir, dir, TIFFTAG_XRESOLUTION,
+                        (double)tif->tif_dir.td_xresolution))
                     goto bad;
-                if (!TIFFWriteDirectoryTagRational(tif, &ndir, dir,
-                                                   TIFFTAG_YRESOLUTION,
-                                                   (double)tif->tif_dir.td_yresolution))
+                if (!TIFFWriteDirectoryTagRational(
+                        tif, &ndir, dir, TIFFTAG_YRESOLUTION,
+                        (double)tif->tif_dir.td_yresolution))
                     goto bad;
             }
             if (TIFFFieldSet(tif, FIELD_POSITION))
             {
-                if (!TIFFWriteDirectoryTagRational(tif, &ndir, dir,
-                                                   TIFFTAG_XPOSITION,
-                                                   (double)tif->tif_dir.td_xposition))
+                if (!TIFFWriteDirectoryTagRational(
+                        tif, &ndir, dir, TIFFTAG_XPOSITION,
+                        (double)tif->tif_dir.td_xposition))
                     goto bad;
-                if (!TIFFWriteDirectoryTagRational(tif, &ndir, dir,
-                                                   TIFFTAG_YPOSITION,
-                                                   (double)tif->tif_dir.td_yposition))
+                if (!TIFFWriteDirectoryTagRational(
+                        tif, &ndir, dir, TIFFTAG_YPOSITION,
+                        (double)tif->tif_dir.td_yposition))
                     goto bad;
             }
             if (TIFFFieldSet(tif, FIELD_SUBFILETYPE))

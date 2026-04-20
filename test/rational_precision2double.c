@@ -411,7 +411,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
     using float.
     --------------------------------------------------------------------------------------------
   */
-    if (!TIFFSetField(tif, TIFFTAG_XRESOLUTION, (double)auxFloatArrayResolutions[0]))
+    if (!TIFFSetField(tif, TIFFTAG_XRESOLUTION,
+                      (double)auxFloatArrayResolutions[0]))
     {
         fprintf(stderr, "Can't set TIFFTAG_XRESOLUTION tag.\n");
         goto failure;
@@ -423,12 +424,14 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
         fprintf(stderr, "Can't set TIFFTAG_YRESOLUTION tag.\n");
         goto failure;
     }
-    if (!TIFFSetField(tif, TIFFTAG_XPOSITION, (double)auxFloatArrayResolutions[2]))
+    if (!TIFFSetField(tif, TIFFTAG_XPOSITION,
+                      (double)auxFloatArrayResolutions[2]))
     {
         fprintf(stderr, "Can't set TIFFTAG_XPOSITION tag.\n");
         goto failure;
     }
-    if (!TIFFSetField(tif, TIFFTAG_YPOSITION, (double)auxFloatArrayResolutions[3]))
+    if (!TIFFSetField(tif, TIFFTAG_YPOSITION,
+                      (double)auxFloatArrayResolutions[3]))
     {
         fprintf(stderr, "Can't set TIFFTAG_YPOSITION tag.\n");
         goto failure;
@@ -762,9 +765,9 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                                 "SetFieldType %u not defined within writing "
                                 "switch for %s.\n",
                                 tSetFieldType, tFieldName);
-                };           /*-- switch() --*/
-            }                /* if () */
-        }                    /*-- for() --*/
+                }; /*-- switch() --*/
+            } /* if () */
+        } /*-- for() --*/
     } /* blnAllCustomTags */ /*==== END END - Automatically check all custom
                                 rational tags  == WRITING END ===*/
 
@@ -985,7 +988,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                 fprintf(stderr,
                         "Read value %d of TIFFTAG_DECODE Array %f differs from "
                         "set value %f\n",
-                        i, (double)auxFloatArray[i], (double)auxFloatArrayN1[i]);
+                        i, (double)auxFloatArray[i],
+                        (double)auxFloatArrayN1[i]);
                 GOTOFAILURE
             }
         }
@@ -1004,7 +1008,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                 fprintf(stderr,
                         "Read value %d of TIFFTAG_BLACKLEVEL Array %f differs "
                         "from set value %f\n",
-                        i, (double)auxFloatArray[i], (double)auxFloatArrayN1[i]);
+                        i, (double)auxFloatArray[i],
+                        (double)auxFloatArrayN1[i]);
                 GOTOFAILURE
             }
         }
@@ -1406,8 +1411,8 @@ int write_test_tiff(TIFF *tif, const char *filenameRead, int blnAllCustomTags)
                                 "switch for %s.\n",
                                 tSetFieldType, tFieldName);
                 }; /*-- switch() --*/
-            }      /* if () */
-        }          /*-- for() --*/
+            } /* if () */
+        } /*-- for() --*/
 
     } /* blnAllCustomTags */ /*==== END END - Automatically check all custom
                                 rational tags == READING  END ===*/

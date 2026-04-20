@@ -30,7 +30,7 @@
 
 #define WIDTH 512
 #define HEIGHT WIDTH
-#define SCALE(x) ((x)*257L)
+#define SCALE(x) ((x) * 257L)
 
 char *programName;
 void Usage(void);

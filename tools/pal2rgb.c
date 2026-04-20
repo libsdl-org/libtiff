@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 
         for (i = (1 << bitspersample) - 1; i >= 0; i--)
         {
-#define CVT(x) ((uint16_t)((((x)*255) / ((1 << 16) - 1))))
+#define CVT(x) ((uint16_t)((((x) * 255) / ((1 << 16) - 1))))
             rmap[i] = CVT(rmap[i]);
             gmap[i] = CVT(gmap[i]);
             bmap[i] = CVT(bmap[i]);

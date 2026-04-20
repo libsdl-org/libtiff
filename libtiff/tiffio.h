@@ -254,7 +254,7 @@ struct _TIFFRGBAImage
  * Macros for extracting components from the
  * packed ABGR form returned by TIFFReadRGBAImage.
  */
-#define TIFFGetR(abgr) ((abgr)&0xff)
+#define TIFFGetR(abgr) ((abgr) & 0xff)
 #define TIFFGetG(abgr) (((abgr) >> 8) & 0xff)
 #define TIFFGetB(abgr) (((abgr) >> 16) & 0xff)
 #define TIFFGetA(abgr) (((abgr) >> 24) & 0xff)

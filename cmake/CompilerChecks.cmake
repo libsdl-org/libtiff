@@ -117,12 +117,24 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wunused-local-typedefs
                 -Wmisleading-indentation
                 -Wunused-macros
+                -Wundef
+                -Wold-style-definition
+                -Wnested-externs
+                -Wjump-misses-init
+                -Wvla
+                -Warray-bounds=3
+                -Wstringop-overflow=4
+                -Walloc-zero
+                -Wtrampolines
         )
     endif()
     if(broken-warnings)
         list(APPEND test_flags
                 -Wcast-qual
-                -Wcast-align)
+                -Wcast-align
+                -Wpadded
+                -Wstack-usage=N
+                -Wunsafe-loop-optimizations)
     endif()
     if(fatal-warnings)
         list(APPEND test_flags
@@ -133,10 +145,24 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
                 -Wc++-compat)
     endif()
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-    set(test_flags)
+    # Remove default /W3 from CMake's default flags to avoid D9025 warning
+    string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+    set(test_flags
+            # Suppress warnings from system headers (MSVC 16.10+)
+            /external:anglebrackets
+            /external:W0)
     if(extra-warnings)
         list(APPEND test_flags
-                /W4)
+                /W4
+                /w44365
+                /w44668
+                /w44062
+                /w44242
+                /w44826
+                /w44905
+                /w44906)
     else()
         list(APPEND test_flags
                 /W3)

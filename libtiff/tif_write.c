@@ -38,7 +38,7 @@
     (((tif)->tif_flags & TIFF_BEENWRITING) || TIFFWriteCheck((tif), 1, module))
 #define BUFFERCHECK(tif)                                                       \
     ((((tif)->tif_flags & TIFF_BUFFERSETUP) && tif->tif_rawdata) ||            \
-     TIFFWriteBufferSetup((tif), NULL, (tmsize_t)-1))
+     TIFFWriteBufferSetup((tif), NULL, (tmsize_t)(-1)))
 
 static int TIFFGrowStrips(TIFF *tif, uint32_t delta, const char *module);
 static int TIFFAppendToStrip(TIFF *tif, uint32_t strip, uint8_t *data,
