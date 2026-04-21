@@ -8866,7 +8866,33 @@ static int processCropSelections(struct image_data *image,
         for (i = 0; i < crop->selections; i++)
         {
 
-            cropsize = crop->bufftotal;
+            uint64_t rowsize, total_size;
+
+            /*
+             * crop->bufftotal is only an accumulated estimate of all regions
+             * and is not guaranteed to match the size required for this
+             * individual region. Compute the required buffer size from the
+             * actual dimensions of the current region instead.
+             */
+            width = crop->regionlist[i].x2 - crop->regionlist[i].x1 + 1;
+            length = crop->regionlist[i].y2 - crop->regionlist[i].y1 + 1;
+
+            rowsize = ((uint64_t)width * image->bps * image->spp + 7) / 8;
+
+            total_size = rowsize * length;
+            if (total_size > TIFF_TMSIZE_T_MAX)
+            {
+                TIFFError("processCropSelections",
+                          "Region buffer size overflow");
+                return (-1);
+            }
+
+            cropsize = (tmsize_t)total_size;
+
+            /* Keep the region dimensions in sync with the allocated buffer. */
+            crop->regionlist[i].width = width;
+            crop->regionlist[i].length = length;
+
             crop_buff = seg_buffs[i].buffer;
             if (!crop_buff)
                 crop_buff = (unsigned char *)limitMalloc(
