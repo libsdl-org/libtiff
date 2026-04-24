@@ -1004,6 +1004,9 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             case PIXARLOGDATAFMT_8BITABGR:
                 horizontalAccumulate8abgr(up, llen, sp->stride,
                                           (unsigned char *)op, sp->ToLinear8);
+
+                /* For stride == 3 (RGB), horizontalAccumulate8abgr expands to 4
+                 * bytes/pixel (ABGR) */
                 if (sp->stride == 3)
                     op += (unsigned long)td->td_imagewidth * 4;
                 else
