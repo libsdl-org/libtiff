@@ -662,8 +662,7 @@ static int combineSeparateTileSamples32bits(uint8_t *[], uint8_t *, uint32_t,
                                             int);
 static int combineSeparateTileSamplesBytes(unsigned char *[], unsigned char *,
                                            uint32_t, uint32_t, uint32_t,
-                                           uint32_t, tsample_t, uint16_t,
-                                           FILE *, int, int);
+                                           uint32_t, tsample_t, uint16_t);
 
 /* Dump functions for debugging */
 static void dump_info(FILE *, int, const char *, const char *, ...);
@@ -1230,8 +1229,7 @@ static int readSeparateTilesIntoBuffer(TIFF *in, uint8_t *obuf,
             if ((bps % 8) == 0)
             {
                 if (combineSeparateTileSamplesBytes(srcbuffs, bufp, ncol, nrow,
-                                                    imagewidth, tw, spp, bps,
-                                                    NULL, 0, 0))
+                                                    imagewidth, tw, spp, bps))
                 {
                     status = 0;
                     break;
@@ -5014,9 +5012,7 @@ static int combineSeparateSamples32bits(uint8_t *in[], uint8_t *out,
 static int combineSeparateTileSamplesBytes(unsigned char *srcbuffs[],
                                            unsigned char *out, uint32_t cols,
                                            uint32_t rows, uint32_t imagewidth,
-                                           uint32_t tw, uint16_t spp,
-                                           uint16_t bps, FILE *dumpfile,
-                                           int format, int level)
+                                           uint32_t tw, uint16_t spp, uint16_t bps)
 {
     int i, bytes_per_sample;
     uint32_t row, col, col_offset, src_rowsize, dst_rowsize, src_offset;
@@ -5037,16 +5033,6 @@ static int combineSeparateTileSamplesBytes(unsigned char *srcbuffs[],
     dst_rowsize = (uint32_t)imagewidth * (uint32_t)bytes_per_sample * spp;
     for (row = 0; row < rows; row++)
     {
-        if ((dumpfile != NULL) && (level == 2))
-        {
-            for (s = 0; s < spp; s++)
-            {
-                dump_info(dumpfile, format, "combineSeparateTileSamplesBytes",
-                          "Input data, Sample %" PRIu16, s);
-                dump_buffer(dumpfile, format, 1, cols, row,
-                            srcbuffs[s] + (row * src_rowsize));
-            }
-        }
         dst = out + (row * dst_rowsize);
         src_offset = row * src_rowsize;
 #ifdef DEVELMODE
@@ -5063,14 +5049,6 @@ static int combineSeparateTileSamplesBytes(unsigned char *srcbuffs[],
                     *(dst + i) = *(src + i);
                 dst += bytes_per_sample;
             }
-        }
-
-        if ((dumpfile != NULL) && (level == 2))
-        {
-            dump_info(dumpfile, format, "combineSeparateTileSamplesBytes",
-                      "Output data, combined samples");
-            dump_buffer(dumpfile, format, 1, dst_rowsize, row,
-                        out + (row * dst_rowsize));
         }
     }
 
