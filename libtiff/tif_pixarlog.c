@@ -876,6 +876,19 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
 
     llen = (tmsize_t)sp->stride * td->td_imagewidth;
 
+    /* Fix: ABGR with stride=3 expands 3 samples to 4 output bytes per pixel */
+    if (sp->user_datafmt == PIXARLOGDATAFMT_8BITABGR && sp->stride == 3)
+    {
+        tmsize_t required = (tmsize_t)td->td_imagewidth * 4;
+        if (occ < required)
+        {
+            TIFFErrorExtR(tif, module,
+                          "Output buffer too small for PixarLog ABGR data");
+            memset(op, 0, (size_t)occ);
+            return (0);
+        }
+    }
+
     (void)s;
     assert(sp != NULL);
 
@@ -991,7 +1004,13 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             case PIXARLOGDATAFMT_8BITABGR:
                 horizontalAccumulate8abgr(up, llen, sp->stride,
                                           (unsigned char *)op, sp->ToLinear8);
-                op += (unsigned long)llen * sizeof(unsigned char);
+
+                /* For stride == 3 (RGB), horizontalAccumulate8abgr expands to 4
+                 * bytes/pixel (ABGR) */
+                if (sp->stride == 3)
+                    op += (unsigned long)td->td_imagewidth * 4;
+                else
+                    op += (unsigned long)llen * sizeof(unsigned char);
                 break;
             default:
                 TIFFErrorExtR(tif, module, "Unsupported bits/sample: %" PRIu16,
