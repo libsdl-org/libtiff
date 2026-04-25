@@ -220,13 +220,13 @@ macro(set_framework_properties target_name headers_var)
     set_target_properties(${target_name} PROPERTIES
       FRAMEWORK TRUE
       FRAMEWORK_VERSION "A"
-      PRODUCT_BUNDLE_IDENTIFIER "gitlab.com/libtiff/libtiff_${target_name}"
+      PRODUCT_BUNDLE_IDENTIFIER "com.gitlab.libtiff.libtiff_${target_name}"
       PUBLIC_HEADER "${${headers_var}}"
       XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
       XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
       XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
       XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO"
-      MACOSX_FRAMEWORK_IDENTIFIER "gitlab.com/libtiff/libtiff_${target_name}"
+      MACOSX_FRAMEWORK_IDENTIFIER "com.gitlab.libtiff.libtiff_${target_name}"
       MACOSX_FRAMEWORK_BUNDLE_VERSION "${LIBTIFF_VERSION_FULL}"
       MACOSX_FRAMEWORK_SHORT_VERSION_STRING "${LIBTIFF_RELEASE_VERSION}"
       MACOSX_RPATH TRUE)
