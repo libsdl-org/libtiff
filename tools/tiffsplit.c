@@ -70,6 +70,8 @@ static int cpTiles(TIFF *, TIFF *);
 
 static void usage(int);
 
+#define	MAXFILES	9999999U
+
 /**
  * This custom malloc function enforce a maximum allocation size
  */
@@ -145,7 +147,7 @@ int main(int argc, char *argv[])
     if (c < 1 || c > 2)
         usage(EXIT_FAILURE);
 
-    if (strlen(argv[optind + 1]) > sizeof(fname) - 4)
+    if (c > 1 && strlen(argv[optind + 1]) > sizeof(fname) - 8)
     {
         fprintf(stderr, "tiffsplit: filename too long\n");
         return EXIT_FAILURE;
@@ -204,6 +206,7 @@ int main(int argc, char *argv[])
             TIFFOpenOptionsFree(opts);
             return (EXIT_FAILURE);
         }
+        printf("%s\n", path);
         _TIFFfree(path);
         if (!tiffcp(in, out))
         {
@@ -226,8 +229,7 @@ int main(int argc, char *argv[])
 static void newfilename(void)
 {
     static int first = 1;
-    static long lastTurn;
-    static long fnum;
+    static unsigned int fnum;
     static short defname;
     static char *fpnt;
 
@@ -246,7 +248,6 @@ static void newfilename(void)
         }
         first = 0;
     }
-#define MAXFILES 17576
     if (fnum == MAXFILES)
     {
         if (!defname || fname[0] == 'z')
@@ -257,39 +258,8 @@ static void newfilename(void)
         fname[0]++;
         fnum = 0;
     }
-    if (fnum % 676 == 0)
-    {
-        if (fnum != 0)
-        {
-            /*
-             * advance to next letter every 676 pages
-             * condition for 'z'++ will be covered above
-             */
-            fpnt[0]++;
-        }
-        else
-        {
-            /*
-             * set to 'a' if we are on the very first file
-             */
-            fpnt[0] = 'a';
-        }
-        /*
-         * set the value of the last turning point
-         */
-        lastTurn = fnum;
-    }
-    /*
-     * start from 0 every 676 times (provided by lastTurn)
-     * this keeps us within a-z boundaries
-     */
-    fpnt[1] = (char)((fnum - lastTurn) / 26 + 'a');
-    /*
-     * cycle last letter every file, from a-z, then repeat
-     */
-    fpnt[2] = (char)(fnum % 26 + 'a');
-    fpnt[3] = '\0'; /* ensure proper termination */
     fnum++;
+    snprintf(fpnt, 8, "%07u", fnum);
 }
 
 static int tiffcp(TIFF *in, TIFF *out)
