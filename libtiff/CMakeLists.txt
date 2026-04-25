@@ -216,11 +216,9 @@ if(HAVE_LD_VERSION_SCRIPT)
 endif()
 
 if(tiff-framework)
-  set(OPENGL_SUPPORT OFF) # Limited Support for OpenGL on Apple products
-
-  set_target_properties(tiff PROPERTIES 
+  set_target_properties(tiff PROPERTIES
     FRAMEWORK TRUE
-    FRAMEWORK_VERSION "${LIBTIFF_VERSION_FULL}"
+    FRAMEWORK_VERSION "A"
     PRODUCT_BUNDLE_IDENTIFIER "gitlab.com/libtiff/libtiff"
     PUBLIC_HEADER "${tiff_public_HEADERS}"
     XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
@@ -293,11 +291,28 @@ if(CXX_SUPPORT)
                           "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiffxx.map")
   endif()
 
+  if(tiff-framework)
+    set_target_properties(tiffxx PROPERTIES
+      FRAMEWORK TRUE
+      FRAMEWORK_VERSION "A"
+      PRODUCT_BUNDLE_IDENTIFIER "gitlab.com/libtiff/libtiffxx"
+      PUBLIC_HEADER "${tiffxx_HEADERS}"
+      XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
+      XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
+      XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
+      XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO"
+      MACOSX_FRAMEWORK_IDENTIFIER "gitlab.com/libtiff/libtiffxx"
+      MACOSX_FRAMEWORK_BUNDLE_VERSION "${LIBTIFF_VERSION_FULL}"
+      MACOSX_FRAMEWORK_SHORT_VERSION_STRING "${LIBTIFF_RELEASE_VERSION}"
+      MACOSX_RPATH TRUE)
+  endif()
+
   if(tiff-install)
     install(TARGETS tiffxx EXPORT TiffTargets
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
     install(FILES ${tiffxx_HEADERS}
             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
