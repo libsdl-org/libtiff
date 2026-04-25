@@ -239,6 +239,17 @@ JPEG Support
 
     Enable IJG JPEG library usage (required for JPEG compression, enabled by default)
 
+``jpeg-prefer-standard[=ON|OFF]``
+
+    Prefer standard JPEG library over libjpeg-turbo (default is ``OFF``)
+
+    By default, the CMake script will first attempt to find libjpeg-turbo
+    using its CONFIG file, which is more reliable and cross-platform. If
+    libjpeg-turbo is not found via CONFIG, it falls back to using the
+    Find module to locate any JPEG library. Setting this option to ``ON``
+    will skip the libjpeg-turbo CONFIG search and go directly to the
+    Find module, which may find a different JPEG implementation.
+
 ``JPEG_INCLUDE_DIR=DIR``:
 
     Location of IJG JPEG library headers
