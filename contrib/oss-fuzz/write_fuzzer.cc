@@ -24,11 +24,6 @@
 
 #include <fuzzer/FuzzedDataProvider.h>
 
-
-#define __TIFFSafeMultiply(t,v,m) ((((t)(m) != (t)0) && (((t)(((v)*(m))/(m))) == (t)(v))) ? (t)((v)*(m)) : (t)0)
-
-const uint64_t MAX_SIZE = 500000000;
-
 extern "C" void handle_error(const char *, const char *, va_list) {
     return;
 }
