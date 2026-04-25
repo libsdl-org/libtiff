@@ -58,17 +58,21 @@ cmake . -DCMAKE_INSTALL_PREFIX=$WORK -DBUILD_SHARED_LIBS=off
 make -j$(nproc)
 make install
 
-if [ "$ARCHITECTURE" = "i386" ]; then
-    $CXX $CXXFLAGS -std=c++11 -I$WORK/include \
-        $SRC/libtiff/contrib/oss-fuzz/tiff_read_rgba_fuzzer.cc -o $OUT/tiff_read_rgba_fuzzer \
-        $LIB_FUZZING_ENGINE $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
-        $WORK/lib/libjbig.a $WORK/lib/libjbig85.a
-else
-    $CXX $CXXFLAGS -std=c++11 -I$WORK/include \
-        $SRC/libtiff/contrib/oss-fuzz/tiff_read_rgba_fuzzer.cc -o $OUT/tiff_read_rgba_fuzzer \
-        $LIB_FUZZING_ENGINE $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
-        $WORK/lib/libjbig.a $WORK/lib/libjbig85.a -Wl,-Bstatic -llzma -Wl,-Bdynamic
-fi
+for fuzzer in $(ls $SRC/libtiff/contrib/oss-fuzz/*fuzzer.cc); do
+    name=$(basename $fuzzer | cut -f1 -d'.')
+
+    if [ "$ARCHITECTURE" = "i386" ]; then
+        $CXX $CXXFLAGS -std=c++11 -I$WORK/include \
+            $SRC/libtiff/contrib/oss-fuzz/$name.cc -o $OUT/$name \
+            $LIB_FUZZING_ENGINE $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
+            $WORK/lib/libjbig.a $WORK/lib/libjbig85.a
+    else
+        $CXX $CXXFLAGS -std=c++11 -I$WORK/include \
+            $SRC/libtiff/contrib/oss-fuzz/$name.cc -o $OUT/$name \
+            $LIB_FUZZING_ENGINE $WORK/lib/libtiffxx.a $WORK/lib/libtiff.a $WORK/lib/libz.a $WORK/lib/libjpeg.a \
+            $WORK/lib/libjbig.a $WORK/lib/libjbig85.a -Wl,-Bstatic -llzma -Wl,-Bdynamic
+    fi
+done
 
 mkdir afl_testcases
 (cd afl_testcases; tar xf "$SRC/afl_testcases.tgz")
