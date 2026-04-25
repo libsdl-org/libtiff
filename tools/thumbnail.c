@@ -698,12 +698,12 @@ static void setImage1(const uint8_t *br, uint32_t rw, uint32_t rh)
             sy++;
             if (err >= limit)
             {
-                /* We should perhaps error loudly, but I can't make sense of
-                 * that */
-                /* code... */
-                if (nrows == 256)
-                    break;
-                rows[nrows++] = br + bpr * sy;
+                /* Cap at 256 rows but keep draining err so the Bresenham
+                 * accumulator stays in [0, limit).  A premature break here
+                 * would leave err >= limit and cause it to grow by
+                 * (step - 255*limit) each outer iteration, overflowing. */
+                if (nrows < 256)
+                    rows[nrows++] = br + bpr * sy;
             }
         }
         setrow(row, nrows, rows);
@@ -736,6 +736,11 @@ static int generateThumbnail(TIFF *in, TIFF *out)
     if (spp != 1 || bps != 1)
         return 0;
     rowsize = TIFFScanlineSize(in);
+    if ((uint64_t)rowsize * sh + 3 > INT32_MAX)
+    {
+        TIFFError(TIFFFileName(in), "Image is too large to fit in memory");
+        return 0;
+    }
     rastersize = sh * rowsize;
     fprintf(stderr, "rastersize=%u\n", (unsigned int)rastersize);
     /* +3 : add a few guard bytes since setrow() can read a bit */
