@@ -17,6 +17,8 @@ config/test-driver
 *.o
 *.la
 *.lo
+*.framework
+*.xcframework
 .deps
 .libs
 config.log
@@ -79,3 +81,4 @@ test/o-*
 .idea
 .vs
 cmake-build*
+build*

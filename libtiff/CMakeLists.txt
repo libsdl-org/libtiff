@@ -215,12 +215,33 @@ if(HAVE_LD_VERSION_SCRIPT)
   endif()
 endif()
 
+macro(set_framework_properties target_name headers_var)
+  if(tiff-framework)
+    set_target_properties(${target_name} PROPERTIES
+      FRAMEWORK TRUE
+      FRAMEWORK_VERSION "A"
+      PRODUCT_BUNDLE_IDENTIFIER "com.gitlab.libtiff.libtiff_${target_name}"
+      PUBLIC_HEADER "${${headers_var}}"
+      XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
+      XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
+      XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
+      XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO"
+      MACOSX_FRAMEWORK_IDENTIFIER "com.gitlab.libtiff.libtiff_${target_name}"
+      MACOSX_FRAMEWORK_BUNDLE_VERSION "${LIBTIFF_VERSION_FULL}"
+      MACOSX_FRAMEWORK_SHORT_VERSION_STRING "${LIBTIFF_RELEASE_VERSION}"
+      MACOSX_RPATH TRUE)
+  endif()
+endmacro()
+
+set_framework_properties(tiff tiff_public_HEADERS)
+
 if(tiff-install)
   export(TARGETS tiff NAMESPACE TIFF:: FILE "${CMAKE_CURRENT_BINARY_DIR}/libtiffTargets.cmake")
   install(TARGETS tiff EXPORT TiffTargets
           RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
           LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+          FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
   install(FILES ${tiff_public_HEADERS}
           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
@@ -274,11 +295,14 @@ if(CXX_SUPPORT)
                           "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/libtiffxx.map")
   endif()
 
+  set_framework_properties(tiffxx tiffxx_HEADERS)
+
   if(tiff-install)
     install(TARGETS tiffxx EXPORT TiffTargets
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
     install(FILES ${tiffxx_HEADERS}
             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")

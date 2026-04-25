@@ -68,6 +68,16 @@ option(tiff-contrib "build TIFF contrib" ON)
 option(tiff-docs "build TIFF documentation" ON)
 option(tiff-deprecated "build TIFF deprecated features" OFF)
 option(tiff-install "install TIFF targets" ${TIFF_INSTALL_DEFAULT})
+if(APPLE)
+  if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    # On embedded Apple platforms (iOS, tvOS, watchOS, visionOS) .dylib is not
+    # App Store-permitted; framework is the correct default for shared libraries.
+    option(tiff-framework "Build as Apple Frameworks" ON)
+  else()
+    # On macOS, .dylib + flat headers is the conventional layout; framework is opt-in.
+    option(tiff-framework "Build as Apple Frameworks" OFF)
+  endif()
+endif()
 
 if (tiff-static)
   set(TIFF_BUILD_LIB_VALUE STATIC)
@@ -144,6 +154,11 @@ include(CXXLibrary)
 
 # Checks for OpenGL support
 include(OpenGLChecks)
+# OpenGL is unavailable on non-macOS Apple platforms (iOS, tvOS, watchOS, visionOS)
+if(APPLE AND NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  set(HAVE_OPENGL FALSE)
+  set(OPENGL_SUPPORT FALSE)
+endif()
 
 # Windows support
 include(WindowsSupport)
@@ -193,6 +208,9 @@ message(STATUS "  Documentation directory:            ${LIBTIFF_DOCDIR}")
 message(STATUS "  C compiler:                         ${CMAKE_C_COMPILER}")
 message(STATUS "  C++ compiler:                       ${CMAKE_CXX_COMPILER}")
 message(STATUS "  Build shared libraries:             ${BUILD_SHARED_LIBS}")
+if(APPLE)
+  message(STATUS "  Build MacOS framework:              ${tiff-framework}")
+endif()
 message(STATUS "  Build tools:                        ${tiff-tools}")
 message(STATUS "  Build tests:                        ${tiff-tests}")
 message(STATUS "  Build contrib:                      ${tiff-contrib}")
