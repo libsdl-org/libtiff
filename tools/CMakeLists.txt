@@ -145,24 +145,28 @@ endif()
 
 # rgb2ycbcr and thumbnail are intended to *NOT* be installed. They are for
 # testing purposes only.
-install(TARGETS fax2ps
-                fax2tiff
-                pal2rgb
-                ppm2tiff
-                raw2tiff
-                tiff2bw
-                tiff2pdf
-                tiff2ps
-                tiff2rgba
-                tiffcmp
-                tiffcp
-                tiffcrop
-                tiffdither
-                tiffdump
-                tiffinfo
-                tiffmedian
-                tiffset
-                tiffsplit
+set(libtiff_tools
+    fax2ps
+    fax2tiff
+    pal2rgb
+    ppm2tiff
+    raw2tiff
+    tiff2bw
+    tiff2pdf
+    tiff2ps
+    tiff2rgba
+    tiffcmp
+    tiffcp
+    tiffcrop
+    tiffdither
+    tiffdump
+    tiffinfo
+    tiffmedian
+    tiffset
+    tiffsplit
+)
+
+install(TARGETS ${libtiff_tools}
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
 if(OPENGL_SUPPORT)

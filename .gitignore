@@ -81,3 +81,4 @@ test/o-*
 .idea
 .vs
 cmake-build*
+build*
