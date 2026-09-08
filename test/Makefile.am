@@ -93,7 +93,7 @@ if TIFF_TESTS
 check_PROGRAMS = \
 	ascii_tag long_tag short_tag strip_rw rewrite custom_dir custom_dir_EXIF_231 \
 	defer_strile_loading defer_strile_writing test_directory test_IFD_enlargement test_open_options \
-	test_append_to_strip test_ifd_loop_detection test_RGBAImage testtypes test_signed_tags $(JPEG_DEPENDENT_CHECK_PROG) $(STATIC_CHECK_PROGS)
+	test_append_to_strip test_ifd_loop_detection test_RGBAImage testtypes test_signed_tags test_fax_fill $(JPEG_DEPENDENT_CHECK_PROG) $(STATIC_CHECK_PROGS)
 endif
 
 # Test scripts to execute
@@ -258,6 +258,9 @@ noinst_HEADERS = tifftest.h
 
 test_signed_tags_SOURCES = test_signed_tags.c
 test_signed_tags_LDADD = $(LIBTIFF)
+
+test_fax_fill_SOURCES = test_fax_fill.c
+test_fax_fill_LDADD = $(LIBTIFF)
 ascii_tag_SOURCES = ascii_tag.c
 ascii_tag_LDADD = $(LIBTIFF)
 long_tag_SOURCES = long_tag.c check_tag.c check_tag.h

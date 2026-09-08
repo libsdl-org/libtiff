@@ -105,6 +105,12 @@ set(noinst_HEADERS tifftest.h)
 set(simple_tests)
 
 # Test programs
+add_executable(test_fax_fill ../placeholder.h)
+target_sources(test_fax_fill PRIVATE test_fax_fill.c)
+set_target_properties(test_fax_fill PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(test_fax_fill PRIVATE tiff tiff_port)
+list(APPEND simple_tests test_fax_fill)
+
 add_executable(test_signed_tags ../placeholder.h)
 target_sources(test_signed_tags PRIVATE test_signed_tags.c)
 set_target_properties(test_signed_tags PROPERTIES LINKER_LANGUAGE CXX)

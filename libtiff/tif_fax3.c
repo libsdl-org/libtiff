@@ -356,7 +356,9 @@ RETRY_WITHOUT_EOL_1D:
         SYNC_EOL(EOF1D, RETRY_WITHOUT_EOL_1D);
         EXPAND1D(EOF1Da);
         (*sp->fill)(buf, thisrun, pa, (uint32_t)lastx);
-        buf += sp->b.rowbytes;
+        /* Custom fill functions may consume runs without an output buffer. */
+        if (buf)
+            buf += sp->b.rowbytes;
         occ -= sp->b.rowbytes;
         sp->line++;
         continue;
@@ -425,7 +427,9 @@ RETRY_WITHOUT_EOL_2D:
             SETVALUE(0); /* imaginary change for reference */
         }
         SWAP(uint32_t *, sp->curruns, sp->refruns);
-        buf += sp->b.rowbytes;
+        /* Custom fill functions may consume runs without an output buffer. */
+        if (buf)
+            buf += sp->b.rowbytes;
         occ -= sp->b.rowbytes;
         sp->line++;
         continue;
@@ -1681,7 +1685,9 @@ static int Fax4Decode(TIFF *tif, uint8_t *buf, tmsize_t occ, uint16_t s)
         (*sp->fill)(buf, thisrun, pa, (uint32_t)lastx);
         SETVALUE(0); /* imaginary change for reference */
         SWAP(uint32_t *, sp->curruns, sp->refruns);
-        buf += sp->b.rowbytes;
+        /* Custom fill functions may consume runs without an output buffer. */
+        if (buf)
+            buf += sp->b.rowbytes;
         occ -= sp->b.rowbytes;
         sp->line++;
         continue;
@@ -1839,7 +1845,9 @@ static int Fax3DecodeRLE(TIFF *tif, uint8_t *buf, tmsize_t occ, uint16_t s)
             if (BitsAvail == 0 && !isAligned(cp, uint16_t))
                 cp++;
         }
-        buf += sp->b.rowbytes;
+        /* Custom fill functions may consume runs without an output buffer. */
+        if (buf)
+            buf += sp->b.rowbytes;
         occ -= sp->b.rowbytes;
         sp->line++;
         continue;
