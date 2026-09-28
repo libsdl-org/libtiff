@@ -830,7 +830,7 @@ static int PixarLogSetupDecode(TIFF *tif)
     TIFFDirectory *td = &tif->tif_dir;
     PixarLogState *sp = PixarLogDecoderState(tif);
     tmsize_t tbuf_size;
-    uint32_t strip_height;
+    uint32_t segment_width, segment_height;
 
     assert(sp != NULL);
 
@@ -840,9 +840,18 @@ static int PixarLogSetupDecode(TIFF *tif)
     if ((sp->state & PLSTATE_INIT) != 0)
         return 1;
 
-    strip_height = td->td_rowsperstrip;
-    if (strip_height > td->td_imagelength)
-        strip_height = td->td_imagelength;
+    if (isTiled(tif))
+    {
+        segment_width = td->td_tilewidth;
+        segment_height = td->td_tilelength;
+    }
+    else
+    {
+        segment_width = td->td_imagewidth;
+        segment_height = td->td_rowsperstrip;
+        if (segment_height > td->td_imagelength)
+            segment_height = td->td_imagelength;
+    }
 
     /* Make sure no byte swapping happens on the data
      * after decompression. */
@@ -854,7 +863,7 @@ static int PixarLogSetupDecode(TIFF *tif)
         (td->td_planarconfig == PLANARCONFIG_CONTIG ? td->td_samplesperpixel
                                                     : 1);
     tbuf_size = multiply_ms(
-        multiply_ms(multiply_ms(sp->stride, td->td_imagewidth), strip_height),
+        multiply_ms(multiply_ms(sp->stride, segment_width), segment_height),
         sizeof(uint16_t));
     /* add one more stride in case input ends mid-stride */
     tbuf_size =
@@ -928,7 +937,9 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
     tmsize_t i;
     tmsize_t nsamples;
     tmsize_t llen;
+    uint32_t row_width;
     uint16_t *up;
+    uint8_t *op_start = op;
 
     switch (sp->user_datafmt)
     {
@@ -955,14 +966,15 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
             return 0;
     }
 
-    /* stride (≤ td_samplesperpixel, max 65535) × imagewidth: fits tmsize_t */
-    llen = (tmsize_t)sp->stride * td->td_imagewidth;
+    row_width = isTiled(tif) ? td->td_tilewidth : td->td_imagewidth;
+    /* stride (≤ td_samplesperpixel, max 65535) × row_width: fits tmsize_t */
+    llen = (tmsize_t)sp->stride * row_width;
 
     /* Fix: ABGR with stride=3 expands 3 samples to 4 output bytes per pixel */
     if (sp->user_datafmt == PIXARLOGDATAFMT_8BITABGR && sp->stride == 3)
     {
-        /* imagewidth × 4: fits tmsize_t (imagewidth is uint32) */
-        tmsize_t required = (tmsize_t)td->td_imagewidth * 4;
+        /* row_width × 4: fits tmsize_t (row_width is uint32) */
+        tmsize_t required = (tmsize_t)row_width * 4;
         tmsize_t max_rows;
         tmsize_t max_nsamples;
 
@@ -1124,7 +1136,7 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
                 /* For stride == 3 (RGB), horizontalAccumulate8abgr expands to 4
                  * bytes/pixel (ABGR) */
                 if (sp->stride == 3)
-                    op += (unsigned long)td->td_imagewidth * 4;
+                    op += (unsigned long)row_width * 4;
                 else
                     op += (unsigned long)llen * sizeof(unsigned char);
                 break;
@@ -1135,6 +1147,10 @@ static int PixarLogDecode(TIFF *tif, uint8_t *op, tmsize_t occ, uint16_t s)
                 return (0);
         }
     }
+
+    /* A partial final row was not reconstructed. Do not expose its old data. */
+    if (op - op_start < occ)
+        memset(op, 0, (size_t)(occ - (op - op_start)));
 
     return (1);
 }
