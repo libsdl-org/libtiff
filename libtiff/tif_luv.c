@@ -396,13 +396,20 @@ static int LogLuvDecodeStrip(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     if (rowlen == 0)
         return 0;
 
-    assert(cc % rowlen == 0);
-    while (cc && (*tif->tif_decoderow)(tif, bp, rowlen, s))
+    /* Only whole rows while they fit in the caller buffer.  A non-row-multiple
+     * size is valid: TIFFReadEncodedStrip() promises to place "up to size"
+     * bytes, so clip the trailing row instead of writing past the buffer end
+     * (and never let cc underflow). */
+    while (cc >= rowlen)
     {
+        if (!(*tif->tif_decoderow)(tif, bp, rowlen, s))
+            return 0;
         bp += rowlen;
         cc -= rowlen;
     }
-    return (cc == 0);
+    if (cc > 0 && !(*tif->tif_decoderow)(tif, bp, cc, s))
+        return 0;
+    return 1;
 }
 
 /*
@@ -417,13 +424,18 @@ static int LogLuvDecodeTile(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     if (rowlen == 0)
         return 0;
 
-    assert(cc % rowlen == 0);
-    while (cc && (*tif->tif_decoderow)(tif, bp, rowlen, s))
+    /* See LogLuvDecodeStrip(): clip a trailing partial row instead of
+     * overrunning the caller buffer. */
+    while (cc >= rowlen)
     {
+        if (!(*tif->tif_decoderow)(tif, bp, rowlen, s))
+            return 0;
         bp += rowlen;
         cc -= rowlen;
     }
-    return (cc == 0);
+    if (cc > 0 && !(*tif->tif_decoderow)(tif, bp, cc, s))
+        return 0;
+    return 1;
 }
 
 /*
@@ -713,13 +725,18 @@ static int LogLuvEncodeStrip(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     if (rowlen == 0)
         return 0;
 
-    assert(cc % rowlen == 0);
-    while (cc && (*tif->tif_encoderow)(tif, bp, rowlen, s) == 1)
+    /* Symmetric with LogLuvDecodeStrip(): a non-row-multiple size is valid,
+     * so clip the trailing row instead of reading past the caller buffer. */
+    while (cc >= rowlen)
     {
+        if ((*tif->tif_encoderow)(tif, bp, rowlen, s) != 1)
+            return 0;
         bp += rowlen;
         cc -= rowlen;
     }
-    return (cc == 0);
+    if (cc > 0 && (*tif->tif_encoderow)(tif, bp, cc, s) != 1)
+        return 0;
+    return 1;
 }
 
 /*
@@ -733,13 +750,18 @@ static int LogLuvEncodeTile(TIFF *tif, uint8_t *bp, tmsize_t cc, uint16_t s)
     if (rowlen == 0)
         return 0;
 
-    assert(cc % rowlen == 0);
-    while (cc && (*tif->tif_encoderow)(tif, bp, rowlen, s) == 1)
+    /* See LogLuvEncodeStrip(): clip a trailing partial row instead of
+     * overrunning the caller buffer. */
+    while (cc >= rowlen)
     {
+        if ((*tif->tif_encoderow)(tif, bp, rowlen, s) != 1)
+            return 0;
         bp += rowlen;
         cc -= rowlen;
     }
-    return (cc == 0);
+    if (cc > 0 && (*tif->tif_encoderow)(tif, bp, cc, s) != 1)
+        return 0;
+    return 1;
 }
 
 /*
