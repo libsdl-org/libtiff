@@ -1429,6 +1429,7 @@ static int JPEGComputeStrileWidthHeightBytesPerLine(TIFF *tif, uint16_t s)
         if (sp->cinfo.d.comp_info[0].h_samp_factor != sp->h_sampling ||
             sp->cinfo.d.comp_info[0].v_samp_factor != sp->v_sampling)
         {
+            /*
             TIFFErrorExtR(tif, module,
                           "Improper JPEG sampling factors %d,%d\n"
                           "Apparently should be %" PRIu16 ",%" PRIu16 ".",
@@ -1436,6 +1437,11 @@ static int JPEGComputeStrileWidthHeightBytesPerLine(TIFF *tif, uint16_t s)
                           sp->cinfo.d.comp_info[0].v_samp_factor,
                           sp->h_sampling, sp->v_sampling);
             return (0);
+            */
+
+            /* Ignore JPEG sampling factor mismatches for better compatibility * with TIFF files that can still be decoded correctly. */
+            TIFFWarningExtR(tif, module,
+                            "JPEG sampling factors mismatch...");
         }
         /* Rest should have sampling factors 1,1 */
         for (ci = 1; ci < sp->cinfo.d.num_components; ci++)
